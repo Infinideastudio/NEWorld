@@ -2,17 +2,17 @@
 #define NEWORLD_USE_WINAPI
 #define NERDMODE1
 #ifdef NEWORLD_USE_WINAPI
-	#ifdef NEWORLD_SERVER
-	#include <thread>
-	#include <mutex>
-	using std::thread;
-	using std::mutex;
-	#endif
-	#include <WinSock2.h>
-	#include <Windows.h>
+#ifdef NEWORLD_SERVER
+#include <thread>
+#include <mutex>
+using std::thread;
+using std::mutex;
+#endif
+#include <WinSock2.h>
+#include <Windows.h>
 #else
-	#include <thread>
-	#include <mutex>
+#include <thread>
+#include <mutex>
 #endif
 #define _USE_MATH_DEFINES
 #include <math.h>

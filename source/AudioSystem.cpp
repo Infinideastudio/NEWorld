@@ -1,205 +1,217 @@
 #include"AudioSystem.h"
-namespace AudioSystem {
-	ALDevice Device;
-	//Gain
-	ALfloat BGMGain =0.1f;//±≥æ∞“Ù¿÷
-	ALfloat SoundGain = 0.17f;//“Ù–ß
-	//Set
-	ALenum DopplerModel = AL_INVERSE_DISTANCE_CLAMPED;//…Ë÷√OpenALµƒæ‡¿Îƒ£–Õ
-	ALfloat DopplerFactor = 1.0f;//∂‡∆’¿’“Ú◊”
-	ALfloat SpeedOfSound = Air_SpeedOfSound;//…˘ÀŸ
-	//Update
-	bool FallBefore = false;//OnGround
-	bool DownWaterBefore = false;//InWater
-	int BGMNum = 0;
-	//Buffer
-	ALuint BGM[10];
-	ALuint Run = -1;
-	ALuint Click = -1;
-	ALuint Fall = -1;
-	ALuint BlockClick = -1;
-	ALuint DownWater = -1;
-	//Source
-	ALuint SBGM = -1;
-	ALuint SRun = -1;
-	ALuint SClick = -1;
-	ALuint SFall = -1;
-	ALuint SBlockClick = -1;
-	ALuint SDownWater = -1;
-	void Init() {
-		//≥ı ºªØ…Ë±∏
-		ALDeviceList *DL = Device.GetALDeviceList();
-		Device.InitAL(DL->GetDeviceName(DL->GetDefaultDevice()));
-		delete DL;
-		//ø™∆ÙÀ˘”–π¶ƒ‹
-		alEnable(AL_DOPPLER_FACTOR);
-		alEnable(AL_DISTANCE_MODEL);
-		alEnable(AL_SPEED_OF_SOUND);
-		//±≥æ∞“Ù¿÷
-		char BGMName[256];
-		for (size_t i = 0; i < 10; i++)
-		{
-			BGM[i] = -1;
-		}
-		for (size_t i = 0; i < 10; i++)
-		{
-			sprintf_s(BGMName, "Audio\\BGM%d.wav", i);
-			if (Device.load(BGMName, &BGM[BGMNum])) {
-				BGMNum++;
-			}
-		}
-		//––◊ﬂand≈‹≤Ω…˘“Ù
-		if (!Device.load("Audio\\Run.wav", &Run))Run = -1;
-		// Û±Íµ•ª˜
-		if (!Device.load("Audio\\Click.wav", &Click))Click = -1;
-		//µÙ¬‰
-		if (!Device.load("Audio\\Fall.wav", &Fall))Fall = -1;
-		//ª˜¥Ú∑ΩøÈ
-		if (!Device.load("Audio\\BlockClick.wav", &BlockClick))BlockClick = -1;
-		//œ¬ÀÆ
-		if (!Device.load("Audio\\DownWater.wav", &DownWater))DownWater = -1;
-		//≤•∑≈BGM
-		if (BGMNum > 0) {
-			int size = GetTickCount64() % BGMNum;
-			ALfloat Pos[] = { 0.0,0.0,0.0 };
-			ALfloat Vel[] = { 0.0,0.0,0.0 };
-			SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
-		}
-	}
-	void Update(ALfloat PlayerPos[3],bool BFall, bool BBlockClick, ALfloat BlockPos[3], int BRun,bool BDownWater) {
-		//…Ë÷√»´æ÷≥£¡ø
-		alDopplerFactor(DopplerFactor);
-		alDistanceModel(DopplerModel);
-		alSpeedOfSound(SpeedOfSound);
-		//∏¸–¬“Ù¡ø
-		if (SBGM != -1)alSourcef(SBGM,AL_GAIN,BGMGain);
-		if (SRun != -1)alSourcef(SRun, AL_GAIN, SoundGain);
-		if (SClick != -1)alSourcef(SClick, AL_GAIN, SoundGain);
-		if (SFall != -1)alSourcef(SFall, AL_GAIN, SoundGain);
-		if (SBlockClick != -1)alSourcef(SBlockClick, AL_GAIN, SoundGain);
-		if (SDownWater != -1)alSourcef(SDownWater, AL_GAIN, SoundGain);
-		//∏¸–¬ª∑æ≥
-		if (SBGM != -1)EFX::set(SBGM);
-		if (SRun != -1)EFX::set(SRun);
-		if (SClick != -1)EFX::set(SClick);
-		if (SFall != -1)EFX::set(SFall);
-		if (SBlockClick != -1)EFX::set(SBlockClick);
-		if (SDownWater != -1)EFX::set(SDownWater);
-		//∏¸–¬ÕÊº“Œª÷√
-		PlayerPos[1] += 0.74;
-		ALfloat Vel[] = { 0.0,0.0,0.0 };
-		ALfloat Ori[] = { 0.0,0.0,-1.0, 0.0,1.0,0.0 };
-		Device.Updatelistener(PlayerPos, Vel, Ori);
-		//∏¸–¬BGMŒª÷√
-		if (SBGM!=-1)
-		{
-			ALint state;
-			alGetSourcei(SBGM, AL_SOURCE_STATE, &state);
-			if (state == AL_STOPPED)
-			{
-				Device.Stop(SBGM);
-				if (BGMNum>0) {
-				int size = GetTickCount64() % BGMNum;
-				ALfloat Pos[] = { 0.0,0.0,0.0 };
-				ALfloat Vel[] = { 0.0,0.0,0.0 };
-				SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
-			}
-			}
-			Device.Updatesource(SBGM, PlayerPos, Vel);
-		}
-		//œ¬¬‰
-		PlayerPos[1] -= 1.54;
-		if (BFall != FallBefore)
-		{
-			if (BFall) {
-				SFall = Device.Play(Fall, false, SoundGain, PlayerPos, Vel);
-			}
-			FallBefore = BFall;
-		}
-		else
-		{
-			if(SFall!=-1)Device.Stop(SFall);
-			SFall = -1;
-		}
-		//ª˜¥Ú∑ΩøÈ
-		if (BBlockClick)
-		{
-			if (SBlockClick==-1) {
-				SBlockClick = Device.Play(BlockClick, true, SoundGain, BlockPos, Vel);
-			}
-		}
-		else
-		{
-			if(SBlockClick!=-1)Device.Stop(SBlockClick);
-			SBlockClick = -1;
-		}
-		//±º≈‹
-		if ((BRun!=0)&&BFall)
-		{
-			if (SRun == -1)
-			{
-				SRun = Device.Play(Run, true, SoundGain, PlayerPos, Vel);
-			}
-			Device.Updatesource(SRun, PlayerPos, Vel);
-			alSourcef(SRun, AL_PITCH, BRun*0.5f);
-		}
-		else
-		{
-			if(SRun!=-1)Device.Stop(SRun);
-			SRun = -1;
-		}
-		//œ¬ÀÆ
-		if (BDownWater != DownWaterBefore)
-		{
-			if (SDownWater == -1)SDownWater = Device.Play(DownWater, false, SoundGain, PlayerPos, Vel);
-			DownWaterBefore = BDownWater;
-		}
-		else
-		{
-			if (SDownWater != -1) {
-				ALint state;
-				alGetSourcei(SDownWater, AL_SOURCE_STATE, &state);
-				if (state == AL_STOPPED)
-				{
-					Device.Stop(SDownWater);
-					SDownWater = -1;
-				}
-			}
-		}
-	}
-	void ClickEvent() {
-		ALfloat Pos[] = { 0.0,0.0,0.0 };
-		ALfloat Vel[] = { 0.0,0.0,0.0 };
-		SClick = Device.Play(Click, false, SoundGain, Pos, Vel);
-		Sleep(50);
-		Device.Stop(SClick);
-		SClick = -1;
-	}
-	void GUIUpdate() {
-		SpeedOfSound = Air_SpeedOfSound;
-		EFX::EAXprop = Generic;
-		EFX::UpdateEAXprop();
-		float Pos[] = { 0.0f,0.0f,0.0f };
-		Update(Pos, false, false, Pos, false, false);
-	}
-	void UnInit() {
-		if (SBGM != -1)Device.Stop(SBGM);
-		if (SRun != -1)Device.Stop(SRun);
-		if (SClick != -1)Device.Stop(SClick);
-		if (SFall != -1)Device.Stop(SFall);
-		if (SBlockClick != -1)Device.Stop(SBlockClick);
-		if (SDownWater != -1)Device.Stop(SDownWater);
+namespace AudioSystem
+{
+ALDevice Device;
+//Gain
+ALfloat BGMGain =0.1f;//ËÉåÊôØÈü≥‰πê
+ALfloat SoundGain = 0.17f;//Èü≥Êïà
+//Set
+ALenum DopplerModel = AL_INVERSE_DISTANCE_CLAMPED;//ËÆæÁΩÆOpenALÁöÑË∑ùÁ¶ªÊ®°Âûã
+ALfloat DopplerFactor = 1.0f;//Â§öÊôÆÂãíÂõ†Â≠ê
+ALfloat SpeedOfSound = Air_SpeedOfSound;//Â£∞ÈÄü
+//Update
+bool FallBefore = false;//OnGround
+bool DownWaterBefore = false;//InWater
+int BGMNum = 0;
+//Buffer
+ALuint BGM[10];
+ALuint Run = -1;
+ALuint Click = -1;
+ALuint Fall = -1;
+ALuint BlockClick = -1;
+ALuint DownWater = -1;
+//Source
+ALuint SBGM = -1;
+ALuint SRun = -1;
+ALuint SClick = -1;
+ALuint SFall = -1;
+ALuint SBlockClick = -1;
+ALuint SDownWater = -1;
+void Init()
+{
+    //ÂàùÂßãÂåñËÆæÂ§á
+    ALDeviceList *DL = Device.GetALDeviceList();
+    Device.InitAL(DL->GetDeviceName(DL->GetDefaultDevice()));
+    delete DL;
+    //ÂºÄÂêØÊâÄÊúâÂäüËÉΩ
+    alEnable(AL_DOPPLER_FACTOR);
+    alEnable(AL_DISTANCE_MODEL);
+    alEnable(AL_SPEED_OF_SOUND);
+    //ËÉåÊôØÈü≥‰πê
+    char BGMName[256];
+    for (size_t i = 0; i < 10; i++)
+    {
+        BGM[i] = -1;
+    }
+    for (size_t i = 0; i < 10; i++)
+    {
+        sprintf_s(BGMName, "Audio\\BGM%d.wav", i);
+        if (Device.load(BGMName, &BGM[BGMNum]))
+        {
+            BGMNum++;
+        }
+    }
+    //Ë°åËµ∞andË∑ëÊ≠•Â£∞Èü≥
+    if (!Device.load("Audio\\Run.wav", &Run))Run = -1;
+    //Èº†Ê†áÂçïÂáª
+    if (!Device.load("Audio\\Click.wav", &Click))Click = -1;
+    //ÊéâËêΩ
+    if (!Device.load("Audio\\Fall.wav", &Fall))Fall = -1;
+    //ÂáªÊâìÊñπÂùó
+    if (!Device.load("Audio\\BlockClick.wav", &BlockClick))BlockClick = -1;
+    //‰∏ãÊ∞¥
+    if (!Device.load("Audio\\DownWater.wav", &DownWater))DownWater = -1;
+    //Êí≠ÊîæBGM
+    if (BGMNum > 0)
+    {
+        int size = GetTickCount64() % BGMNum;
+        ALfloat Pos[] = { 0.0,0.0,0.0 };
+        ALfloat Vel[] = { 0.0,0.0,0.0 };
+        SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
+    }
+}
+void Update(ALfloat PlayerPos[3],bool BFall, bool BBlockClick, ALfloat BlockPos[3], int BRun,bool BDownWater)
+{
+    //ËÆæÁΩÆÂÖ®Â±ÄÂ∏∏Èáè
+    alDopplerFactor(DopplerFactor);
+    alDistanceModel(DopplerModel);
+    alSpeedOfSound(SpeedOfSound);
+    //Êõ¥Êñ∞Èü≥Èáè
+    if (SBGM != -1)alSourcef(SBGM,AL_GAIN,BGMGain);
+    if (SRun != -1)alSourcef(SRun, AL_GAIN, SoundGain);
+    if (SClick != -1)alSourcef(SClick, AL_GAIN, SoundGain);
+    if (SFall != -1)alSourcef(SFall, AL_GAIN, SoundGain);
+    if (SBlockClick != -1)alSourcef(SBlockClick, AL_GAIN, SoundGain);
+    if (SDownWater != -1)alSourcef(SDownWater, AL_GAIN, SoundGain);
+    //Êõ¥Êñ∞ÁéØÂ¢É
+    if (SBGM != -1)EFX::set(SBGM);
+    if (SRun != -1)EFX::set(SRun);
+    if (SClick != -1)EFX::set(SClick);
+    if (SFall != -1)EFX::set(SFall);
+    if (SBlockClick != -1)EFX::set(SBlockClick);
+    if (SDownWater != -1)EFX::set(SDownWater);
+    //Êõ¥Êñ∞Áé©ÂÆ∂‰ΩçÁΩÆ
+    PlayerPos[1] += 0.74;
+    ALfloat Vel[] = { 0.0,0.0,0.0 };
+    ALfloat Ori[] = { 0.0,0.0,-1.0, 0.0,1.0,0.0 };
+    Device.Updatelistener(PlayerPos, Vel, Ori);
+    //Êõ¥Êñ∞BGM‰ΩçÁΩÆ
+    if (SBGM!=-1)
+    {
+        ALint state;
+        alGetSourcei(SBGM, AL_SOURCE_STATE, &state);
+        if (state == AL_STOPPED)
+        {
+            Device.Stop(SBGM);
+            if (BGMNum>0)
+            {
+                int size = GetTickCount64() % BGMNum;
+                ALfloat Pos[] = { 0.0,0.0,0.0 };
+                ALfloat Vel[] = { 0.0,0.0,0.0 };
+                SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
+            }
+        }
+        Device.Updatesource(SBGM, PlayerPos, Vel);
+    }
+    //‰∏ãËêΩ
+    PlayerPos[1] -= 1.54;
+    if (BFall != FallBefore)
+    {
+        if (BFall)
+        {
+            SFall = Device.Play(Fall, false, SoundGain, PlayerPos, Vel);
+        }
+        FallBefore = BFall;
+    }
+    else
+    {
+        if(SFall!=-1)Device.Stop(SFall);
+        SFall = -1;
+    }
+    //ÂáªÊâìÊñπÂùó
+    if (BBlockClick)
+    {
+        if (SBlockClick==-1)
+        {
+            SBlockClick = Device.Play(BlockClick, true, SoundGain, BlockPos, Vel);
+        }
+    }
+    else
+    {
+        if(SBlockClick!=-1)Device.Stop(SBlockClick);
+        SBlockClick = -1;
+    }
+    //Â•îË∑ë
+    if ((BRun!=0)&&BFall)
+    {
+        if (SRun == -1)
+        {
+            SRun = Device.Play(Run, true, SoundGain, PlayerPos, Vel);
+        }
+        Device.Updatesource(SRun, PlayerPos, Vel);
+        alSourcef(SRun, AL_PITCH, BRun*0.5f);
+    }
+    else
+    {
+        if(SRun!=-1)Device.Stop(SRun);
+        SRun = -1;
+    }
+    //‰∏ãÊ∞¥
+    if (BDownWater != DownWaterBefore)
+    {
+        if (SDownWater == -1)SDownWater = Device.Play(DownWater, false, SoundGain, PlayerPos, Vel);
+        DownWaterBefore = BDownWater;
+    }
+    else
+    {
+        if (SDownWater != -1)
+        {
+            ALint state;
+            alGetSourcei(SDownWater, AL_SOURCE_STATE, &state);
+            if (state == AL_STOPPED)
+            {
+                Device.Stop(SDownWater);
+                SDownWater = -1;
+            }
+        }
+    }
+}
+void ClickEvent()
+{
+    ALfloat Pos[] = { 0.0,0.0,0.0 };
+    ALfloat Vel[] = { 0.0,0.0,0.0 };
+    SClick = Device.Play(Click, false, SoundGain, Pos, Vel);
+    Sleep(50);
+    Device.Stop(SClick);
+    SClick = -1;
+}
+void GUIUpdate()
+{
+    SpeedOfSound = Air_SpeedOfSound;
+    EFX::EAXprop = Generic;
+    EFX::UpdateEAXprop();
+    float Pos[] = { 0.0f,0.0f,0.0f };
+    Update(Pos, false, false, Pos, false, false);
+}
+void UnInit()
+{
+    if (SBGM != -1)Device.Stop(SBGM);
+    if (SRun != -1)Device.Stop(SRun);
+    if (SClick != -1)Device.Stop(SClick);
+    if (SFall != -1)Device.Stop(SFall);
+    if (SBlockClick != -1)Device.Stop(SBlockClick);
+    if (SDownWater != -1)Device.Stop(SDownWater);
 
-		for (size_t i = 0; i < 10; i++)
-		{
-			if (BGM[i] != -1)Device.unload(BGM[i]);
-		}
-		if (Run != -1)Device.unload(Run);
-		if (Click != -1)Device.unload(Click);
-		if (Fall != -1)Device.unload(Fall);
-		if (BlockClick != -1)Device.unload(BlockClick);
-		if (DownWater != -1)Device.unload(DownWater);
+    for (size_t i = 0; i < 10; i++)
+    {
+        if (BGM[i] != -1)Device.unload(BGM[i]);
+    }
+    if (Run != -1)Device.unload(Run);
+    if (Click != -1)Device.unload(Click);
+    if (Fall != -1)Device.unload(Fall);
+    if (BlockClick != -1)Device.unload(BlockClick);
+    if (DownWater != -1)Device.unload(DownWater);
 
-		Device.ShutdownAL();
-	}
+    Device.ShutdownAL();
+}
 }
