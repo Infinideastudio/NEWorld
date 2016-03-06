@@ -2,8 +2,8 @@
 class MyClass
 {
 public:
-	MyClass() {}
-	~MyClass() {}
+    MyClass() {}
+    ~MyClass() {}
 
 private:
 
