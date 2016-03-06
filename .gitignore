@@ -203,3 +203,4 @@ FakesAssemblies/
 *.lib
 *.dll
 *.exe
+*.a
