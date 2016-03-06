@@ -82,7 +82,7 @@ namespace World {
 	void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr = nullptr);
 	inline void putblock(int x, int y, int z, block Block) { setblock(x, y, z, Block); }
 	inline void pickleaf(){
-		if (rnd() < 0.2) {
+		if (rnd() < 0.05) {
 			if (rnd() < 0.5)Player::addItem(APPLE);
 			else Player::addItem(STICK);
 		}
@@ -116,7 +116,7 @@ namespace World {
 			((getblock(x, y+1, z) == Blocks::WOOD)|| (getblock(x, y + 1, z) == Blocks::LEAF)) &&
 			(getblock(x, y, z + 1) == Blocks::AIR) && (getblock(x, y, z - 1) == Blocks::AIR) &&
 			(getblock(x + 1, y, z) == Blocks::AIR) && (getblock(x - 1, y, z) == Blocks::AIR) &&
-			(getblock(x, y - 1, z) != Blocks::AIR)
+			((getblock(x, y - 1, z) == Blocks::WOOD) || (getblock(x, y - 1, z) == Blocks::DIRT))
 			) { picktree(x, y + 1, z); }//触发砍树模式
 		//击打树叶
 		if (getblock(x, y, z)!=Blocks::LEAF)Player::addItem(getblock(x, y, z));

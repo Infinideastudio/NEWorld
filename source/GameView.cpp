@@ -299,10 +299,12 @@ public:
 						if (selx != oldselx || sely != oldsely || selz != oldselz) seldes = 0.0;
 						else { 
 							float Factor=1.0;
-							if (Player::inventory[3][Player::indexInHand] == STICK)Factor = 4;
-							else Factor = 30.0 / (BlockInfo(Player::inventory[3][Player::indexInHand]).getHardness() + 0.1);
-							if (Factor < 1.0)Factor = 1.0;
-							if (Factor > 1.7)Factor = 1.7;
+							if (Player::inventory[3][Player::indexInHand] == STICK)Factor = 4.0;
+							else {
+								Factor = 30.0 / (BlockInfo(Player::inventory[3][Player::indexInHand]).getHardness() + 0.1);
+								if (Factor < 1.0)Factor = 1.0;
+								if (Factor > 1.7)Factor = 1.7;
+							}
 							seldes += BlockInfo(selb).getHardness()*((Player::gamemode == Player::Creative) ? 10.0f : 0.3f)*Factor; 
 							BlockClick = true;
 							BlockPos[0] = x; BlockPos[1] = y; BlockPos[2] = z;

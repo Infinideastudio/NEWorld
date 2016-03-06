@@ -15,11 +15,7 @@ namespace Menus {
 			registerControls(5, &title, &startbtn, &optionsbtn, &info, &quitbtn);
 		}
 		void onUpdate() {
-			AudioSystem::SpeedOfSound = AudioSystem::Air_SpeedOfSound;
-			EFX::EAXprop = Generic;
-			EFX::UpdateEAXprop();
-			float Pos[] = { 0.0f,0.0f,0.0f };
-			AudioSystem::Update(Pos, false, false, Pos, false, false);
+			AudioSystem::GUIUpdate();
 			if (startbtn.clicked) worldmenu();
 			if (gamebegin) GUI::PopPage();
 			if (optionsbtn.clicked) {
