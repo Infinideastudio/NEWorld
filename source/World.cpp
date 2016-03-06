@@ -899,10 +899,7 @@ namespace World {
 				}
 			}
 		}
-		//终于可以开始生成了
-		//设置泥土
-		setblock(x, y, z, Blocks::DIRT);
-		//设置树干
+		//高度判定
 		int h = 0;//高度
 				  //测算泥土数量
 		int Dirt = 0;//泥土数
@@ -917,14 +914,18 @@ namespace World {
 			}
 		}
 		//测算最高高度
-		for (int i = y + 1; i < y + 16; i++)
+		for (int i = y + 1; i < y + 13; i++)
 		{
-			if (getblock(x, i, z) == Blocks::AIR) { h++; }
-			else { break; };
+			if (getblock(x, i, z) == Blocks::AIR) h++;
+			else break;
 		}
 		//取最小值
-		h = min(h, Dirt * 15 / 268 * max(rnd(), 0.8));
+		h = min(h, Dirt * 12 / 268 *( 0.8+rnd()*0.2));
 		if (h < 7)return;
+
+		//开始生成
+		//设置泥土
+		setblock(x, y, z, Blocks::DIRT);
 		//开始生成树干
 		for (int i = y + 1; i < y + h + 1; i++)
 		{
@@ -932,15 +933,15 @@ namespace World {
 		}
 		//设置树叶及枝杈
 		//计算树叶起始生成高度
-		int leafh = int(double(h)*0.618) + 1;//黄金分割比大法好！！！
-		int distancen2 = int(double((h - leafh + 1)*(h - leafh + 1))) + 1;
-		for (int iy = y + leafh; iy < y + int(double(h)*1.382) + 2; iy++)
+		int leafh = int(double(h)*0.618);//黄金分割比大法好！！！
+		int distancen2 = int(double(h*h)*0.382*0.382)+3;
+		for (int iy = y + leafh+3; iy < y + int(double(h)*1.382)+3; iy++)
 		{
-			for (int ix = x - 6; ix < x + 6; ix++)
+			for (int ix = x - 10; ix < x + 10; ix++)
 			{
-				for (int iz = z - 6; iz < z + 6; iz++)
+				for (int iz = z - 10; iz < z + 10; iz++)
 				{
-					int distancen = Distancen(ix, iy, iz, x, y + leafh + 1, z);
+					int distancen = Distancen(ix, iy, iz, x, y + h + 1, z);
 					if ((getblock(ix, iy, iz) == Blocks::AIR) && (distancen <distancen2)) {
 						if ((distancen <= distancen2 / 9) && (rnd()>0.3))//生成枝杈
 						{
