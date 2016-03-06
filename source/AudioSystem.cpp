@@ -52,17 +52,19 @@ namespace AudioSystem {
 		if (!Device.load("Audio\\Run.wav", &Run))Run = -1;
 		//鼠标单击
 		if (!Device.load("Audio\\Click.wav", &Click))Click = -1;
-	    //掉落
+		//掉落
 		if (!Device.load("Audio\\Fall.wav", &Fall))Fall = -1;
-	    //击打方块
+		//击打方块
 		if (!Device.load("Audio\\BlockClick.wav", &BlockClick))BlockClick = -1;
 		//下水
 		if (!Device.load("Audio\\DownWater.wav", &DownWater))DownWater = -1;
-	    //播放BGM
-		int size = GetTickCount64() % BGMNum;
-		ALfloat Pos[] = { 0.0,0.0,0.0 };
-		ALfloat Vel[] = { 0.0,0.0,0.0 };
-		SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
+		//播放BGM
+		if (BGMNum > 0) {
+			int size = GetTickCount64() % BGMNum;
+			ALfloat Pos[] = { 0.0,0.0,0.0 };
+			ALfloat Vel[] = { 0.0,0.0,0.0 };
+			SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
+		}
 	}
 	void Update(ALfloat PlayerPos[3],bool BFall, bool BBlockClick, ALfloat BlockPos[3], int BRun,bool BDownWater) {
 		//设置全局常量
@@ -89,17 +91,22 @@ namespace AudioSystem {
 		ALfloat Ori[] = { 0.0,0.0,-1.0, 0.0,1.0,0.0 };
 		Device.Updatelistener(PlayerPos, Vel, Ori);
 		//更新BGM位置
-		ALint state;
-		alGetSourcei(SBGM, AL_SOURCE_STATE, &state);
-		if (state == AL_STOPPED)
+		if (SBGM!=-1)
 		{
-			Device.Stop(SBGM);
-			int size = GetTickCount64() % BGMNum;
-			ALfloat Pos[] = { 0.0,0.0,0.0 };
-			ALfloat Vel[] = { 0.0,0.0,0.0 };
-			SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
+			ALint state;
+			alGetSourcei(SBGM, AL_SOURCE_STATE, &state);
+			if (state == AL_STOPPED)
+			{
+				Device.Stop(SBGM);
+				if (BGMNum>0) {
+				int size = GetTickCount64() % BGMNum;
+				ALfloat Pos[] = { 0.0,0.0,0.0 };
+				ALfloat Vel[] = { 0.0,0.0,0.0 };
+				SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
+			}
+			}
+			Device.Updatesource(SBGM, PlayerPos, Vel);
 		}
-		Device.Updatesource(SBGM, PlayerPos, Vel);
 		//下落
 		PlayerPos[1] -= 1.54;
 		if (BFall != FallBefore)
@@ -167,6 +174,13 @@ namespace AudioSystem {
 		Sleep(50);
 		Device.Stop(SClick);
 		SClick = -1;
+	}
+	void GUIUpdate() {
+		SpeedOfSound = Air_SpeedOfSound;
+		EFX::EAXprop = Generic;
+		EFX::UpdateEAXprop();
+		float Pos[] = { 0.0f,0.0f,0.0f };
+		Update(Pos, false, false, Pos, false, false);
 	}
 	void UnInit() {
 		if (SBGM != -1)Device.Stop(SBGM);

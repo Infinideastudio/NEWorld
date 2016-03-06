@@ -72,12 +72,6 @@
     <Filter Include="Source\Renderer\Shader">
       <UniqueIdentifier>{033d1b67-aa91-4782-ac09-87d8bffaafd4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Common\NVIDIA OptiX">
-      <UniqueIdentifier>{468e6c59-5d34-42c4-b586-a8d60615028c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Renderer\RTRTR">
-      <UniqueIdentifier>{e6556745-c575-4503-9736-25026f9aca3b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Object.h">
@@ -276,45 +270,6 @@
     <ClInclude Include="source\AudioSystem.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="include\OptiX\optix.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_cuda.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_cuda_interop.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_d3d9_interop.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_d3d10_interop.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_d3d11_interop.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_device.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_gl_interop.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_host.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_math.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_sizet.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="include\OptiX\optix_world.h">
-      <Filter>Source\Common\NVIDIA OptiX</Filter>
-    </ClInclude>
-    <ClInclude Include="source\RTDevice.h">
-      <Filter>Source\Renderer\RTRTR</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\NEWorld.cpp">
@@ -490,9 +445,6 @@
     </ClCompile>
     <ClCompile Include="source\SoundMenu.cpp">
       <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="source\RTDevice.cpp">
-      <Filter>Source\Renderer\RTRTR</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
