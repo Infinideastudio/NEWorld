@@ -24,11 +24,7 @@ namespace Menus {
 			Musicbar.text = GetStrbyKey("NEWorld.Sound.MusicGain") + text;
 			sprintf_s(text, ":%d%%", SoundBar.barpos/3);
 			SoundBar.text = GetStrbyKey("NEWorld.Sound.SoundGain") + text;
-			AudioSystem::SpeedOfSound = AudioSystem::Air_SpeedOfSound;
-			EFX::EAXprop = Generic;
-			EFX::UpdateEAXprop();
-			float Pos[] = { 0.0f,0.0f,0.0f };
-			AudioSystem::Update(Pos, false, false, Pos, false, false);
+			AudioSystem::GUIUpdate();
 			if (backbtn.clicked) GUI::PopPage();
 		}
 	};
