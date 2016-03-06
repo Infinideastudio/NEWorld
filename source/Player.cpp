@@ -88,7 +88,7 @@ void Player::spawn() {
 	memset(inventory, 0, sizeof(inventory));
 	memset(inventoryAmount, 0, sizeof(inventoryAmount));
 	
-	//×ÜµÃ¼ÓµãÎïÆ·°É
+	//æ€»å¾—åŠ ç‚¹ç‰©å“å§
 	for (size_t i = 0; i < 255; i++)
 	{
 		addItem(Blocks::ROCK);
@@ -97,7 +97,7 @@ void Player::spawn() {
 		addItem(Blocks::STONE);
 		addItem(Blocks::PLANK);
 		addItem(Blocks::WOOD);
-		//addItem(Blocks::BEDROCK);TMDÕâ¸öÊÇ»ùÑÒ
+		//addItem(Blocks::BEDROCK);TMDè¿™ä¸ªæ˜¯åŸºå²©
 		addItem(Blocks::LEAF);
 		addItem(Blocks::GLASS);
 		addItem(Blocks::WATER);
@@ -151,7 +151,7 @@ void Player::updatePosition() {
 	if (ya != yal && yal > 0.0) jump = 0.0;
 	if (xa != xal || za != zal) NearWall = true; else NearWall = false;
 
-	//Ïû³ı¸¡µãÊı¾«¶È´øÀ´µÄÓ°Ïì£¨²éÁËºÃ¾ÃµÄ´©Ç½bug²Å·¢ÏÖÊÇÔÚÕâÀïÓĞÎÊÌâ(¨s¨F¡õ¡ä)¨s¦à©ß©¥©ß£©
+	//æ¶ˆé™¤æµ®ç‚¹æ•°ç²¾åº¦å¸¦æ¥çš„å½±å“ï¼ˆæŸ¥äº†å¥½ä¹…çš„ç©¿å¢™bugæ‰å‘ç°æ˜¯åœ¨è¿™é‡Œæœ‰é—®é¢˜(â•¯â€µâ–¡â€²)â•¯ï¸µâ”»â”â”»ï¼‰
 	//  --qiaozhanrong
 	xa = (double)((int)(xa * 100000)) / 100000.0;
 	ya = (double)((int)(ya * 100000)) / 100000.0;
@@ -240,12 +240,12 @@ bool Player::load(string worldn) {
 }
 
 bool Player::addItem(item itemname, short amount) {
-	//Ïò±³°üÀï¼ÓÈëÎïÆ·
+	//å‘èƒŒåŒ…é‡ŒåŠ å…¥ç‰©å“
 	const int InvMaxStack = 255;
 	for (int i = 3; i >= 0; i--) {
 		for (int j = 0; j != 10; j++) {
 			if (inventory[i][j] == itemname && inventoryAmount[i][j] < InvMaxStack) {
-				//ÕÒµ½Ò»¸öÍ¬Àà¸ñ×Ó
+				//æ‰¾åˆ°ä¸€ä¸ªåŒç±»æ ¼å­
 				if (amount + inventoryAmount[i][j] <= InvMaxStack) {
 					inventoryAmount[i][j] += amount;
 					return true;
@@ -260,7 +260,7 @@ bool Player::addItem(item itemname, short amount) {
 	for (int i = 3; i >= 0; i--) {
 		for (int j = 0; j != 10; j++) {
 			if (inventory[i][j] == Blocks::AIR) {
-				//ÕÒµ½Ò»¸ö¿Õ°×¸ñ×Ó
+				//æ‰¾åˆ°ä¸€ä¸ªç©ºç™½æ ¼å­
 				inventory[i][j] = itemname;
 				if (amount <= InvMaxStack) {
 					inventoryAmount[i][j] = amount;

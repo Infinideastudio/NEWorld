@@ -12,7 +12,7 @@ Shader::Shader(string vshPath, string fshPath, bool bindLocation, std::set<strin
 	}
 	glLinkProgramARB(shaderProgram);
 
-	//¼ì²é´íÎó
+	//æ£€æŸ¥é”™è¯¯
 	checkErrors(shaderProgram, GL_LINK_STATUS, "Shader linking error!");
 }
 
@@ -66,7 +66,7 @@ GLhandleARB Shader::loadShader(string filename, unsigned int mode, std::set<stri
 	while (!filein.eof()) {
 		std::getline(filein, cur);
 		if (cur.empty()) continue;
-		if (beginWith(cur, "#")) { //´¦ÀíNEWorldÔ¤´¦ÀíÆ÷±êÖ¾
+		if (beginWith(cur, "#")) { //å¤„ç†NEWorldé¢„å¤„ç†å™¨æ ‡å¿—
 			ss.str(cur);
 			ss >> macro;
 			if (macro == "##NEWORLD_SHADER_DEFINES") {
@@ -85,14 +85,14 @@ GLhandleARB Shader::loadShader(string filename, unsigned int mode, std::set<stri
 	}
 	filein.close();
 
-	//´´½¨shader
+	//åˆ›å»ºshader
 	res = glCreateShaderObjectARB(mode);
 	glShaderSourceARB(res, lines, (const GLchar**)source.data(), length.data());
 	glCompileShaderARB(res);
-	//ÊÍ·ÅÄÚ´æ
+	//é‡Šæ”¾å†…å­˜
 	for (int i = 0; i < lines; i++) delete[] source[i];
 
-	//¼ì²é´íÎó
+	//æ£€æŸ¥é”™è¯¯
 	checkErrors(res, GL_COMPILE_STATUS, "Shader compilation error! File: " + filename);
 	return res;
 }

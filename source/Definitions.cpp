@@ -1,38 +1,38 @@
 #include "Definitions.h"
 
 //Global Vars
-float FOVyNormal = 60.0f;       //ÊÓÒ°½Ç¶È
-float mousemove = 0.2f;         //Êó±êÁéÃô¶È
-int viewdistance = 8;           //ÊÓÒ°¾àÀë
-int cloudwidth = 10;            //ÔÆµÄ¿í¶È
-int selectPrecision = 32;       //Ñ¡Ôñ·½¿éµÄ¾«¶È
-int selectDistance = 8;         //Ñ¡Ôñ·½¿éµÄ¾àÀë
-float walkspeed = 0.15f;        //Íæ¼ÒÇ°½øËÙ¶È
-float runspeed = 0.3f;          //Íæ¼ÒÅÜ²½ËÙ¶È
-int MaxAirJumps = 3 - 1;        //¿ÕÖĞN¶ÎÁ¬Ìø
-bool SmoothLighting = true;     //Æ½»¬¹âÕÕ
-bool NiceGrass = true;          //²İµØ²ÄÖÊÁ¬½Ó
-bool MergeFace = false;         //ºÏ²¢ÃæäÖÈ¾
-bool GUIScreenBlur = false;     //GUI±³¾°Ä£ºı  Void:Õâ¸öËã·¨ÂıËÀÁË£¬ÎÒ¹ØµôÁË  qiaozhanrong:23333ÎÒÒ²Ïë¹Øµô
-int linelength = 10;            //¸úF3µÄ×¼ĞÇÓĞ¹Ø¡£¡£¡£
-int linedist = 30;              //¸úF3µÄ×¼ĞÇÓĞ¹Ø¡£¡£¡£
-bool ppistretch = false;        //ÊÔÑé¹¦ÄÜ£¬Ä¬ÈÏ¹Ø±Õ
-float skycolorR = 0.7f;         //Ìì¿ÕÑÕÉ«Red
-float skycolorG = 1.0f;         //Ìì¿ÕÑÕÉ«Green
-float skycolorB = 1.0f;         //Ìì¿ÕÑÕÉ«Blue
+float FOVyNormal = 60.0f;       //è§†é‡è§’åº¦
+float mousemove = 0.2f;         //é¼ æ ‡çµæ•åº¦
+int viewdistance = 8;           //è§†é‡è·ç¦»
+int cloudwidth = 10;            //äº‘çš„å®½åº¦
+int selectPrecision = 32;       //é€‰æ‹©æ–¹å—çš„ç²¾åº¦
+int selectDistance = 8;         //é€‰æ‹©æ–¹å—çš„è·ç¦»
+float walkspeed = 0.15f;        //ç©å®¶å‰è¿›é€Ÿåº¦
+float runspeed = 0.3f;          //ç©å®¶è·‘æ­¥é€Ÿåº¦
+int MaxAirJumps = 3 - 1;        //ç©ºä¸­Næ®µè¿è·³
+bool SmoothLighting = true;     //å¹³æ»‘å…‰ç…§
+bool NiceGrass = true;          //è‰åœ°æè´¨è¿æ¥
+bool MergeFace = false;         //åˆå¹¶é¢æ¸²æŸ“
+bool GUIScreenBlur = false;     //GUIèƒŒæ™¯æ¨¡ç³Š  Void:è¿™ä¸ªç®—æ³•æ…¢æ­»äº†ï¼Œæˆ‘å…³æ‰äº†  qiaozhanrong:23333æˆ‘ä¹Ÿæƒ³å…³æ‰
+int linelength = 10;            //è·ŸF3çš„å‡†æ˜Ÿæœ‰å…³ã€‚ã€‚ã€‚
+int linedist = 30;              //è·ŸF3çš„å‡†æ˜Ÿæœ‰å…³ã€‚ã€‚ã€‚
+bool ppistretch = false;        //è¯•éªŒåŠŸèƒ½ï¼Œé»˜è®¤å…³é—­
+float skycolorR = 0.7f;         //å¤©ç©ºé¢œè‰²Red
+float skycolorG = 1.0f;         //å¤©ç©ºé¢œè‰²Green
+float skycolorB = 1.0f;         //å¤©ç©ºé¢œè‰²Blue
 float FOVyRunning = 8.0f;
 float FOVyExt;
-double stretch = 1.0f;          //ppiËõ·Å±ÈÀı£¨¹©gui»æÖÆÊ¹ÓÃ£©
-int Multisample = 0;            //¶àÖØ²ÉÑù¿¹¾â³İ
-bool vsync = false;             //´¹Ö±Í¬²½
-int gametime = 0;				//ÓÎÏ·Ê±¼ä 0~2592000
+double stretch = 1.0f;          //ppiç¼©æ”¾æ¯”ä¾‹ï¼ˆä¾›guiç»˜åˆ¶ä½¿ç”¨ï¼‰
+int Multisample = 0;            //å¤šé‡é‡‡æ ·æŠ—é”¯é½¿
+bool vsync = false;             //å‚ç›´åŒæ­¥
+int gametime = 0;				//æ¸¸æˆæ—¶é—´ 0~2592000
 //float daylight;
 
-int windowwidth;     //´°¿Ú¿í¶È
-int windowheight;    //´°¿Ú¿í¶È
+int windowwidth;     //çª—å£å®½åº¦
+int windowheight;    //çª—å£å®½åº¦
 bool gamebegin, gameexit, bagOpened;
 
-//¶àÈËÓÎÏ·
+//å¤šäººæ¸¸æˆ
 bool multiplayer = false;
 string serverip;
 unsigned short port = 30001;
@@ -42,7 +42,7 @@ TextureID tex_select, tex_unselect, tex_title, tex_mainmenu[6];
 TextureID DestroyImage[11];
 TextureID DefaultSkin;
 
-//Ïß³Ì
+//çº¿ç¨‹
 Mutex_t Mutex;
 Thread_t updateThread;
 double lastupdate, updateTimer;
@@ -65,11 +65,11 @@ int GLVersionMajor, GLVersionMinor, GLVersionRev;
 GLFWwindow* MainWindow;
 GLFWcursor* MouseCursor;
 
-//Êó±êÊäÈëÊı¾İ
+//é¼ æ ‡è¾“å…¥æ•°æ®
 double mx, my, mxl, myl;
 int mw, mb, mbp, mbl, mwl;
 double mxdelta, mydelta;
-//¼üÅÌÊäÈëÊı¾İ
+//é”®ç›˜è¾“å…¥æ•°æ®
 string inputstr;
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC

@@ -6,7 +6,7 @@ vector<OnlinePlayer> players;
 
 void OnlinePlayer::GenVAOVBO(int skinID) {
 	return;
-	if (skinID != -1) { //默认皮肤
+	if (skinID != -1) { //榛樿鐨偆
 		using Renderer::TexCoord2d;
 		using Renderer::Vertex3f;
 		using Renderer::Color3f;
@@ -281,7 +281,7 @@ void OnlinePlayer::buildRenderIfNeed() {
 		else {
 			VBO = 0;
 			vtxs = 0;
-			GenVAOVBO(_skinID); //生成玩家的VAO/VBO
+			GenVAOVBO(_skinID); //鐢熸垚鐜╁鐨刅AO/VBO
 			playerSkins[_skinID] = std::make_pair(VBO, vtxs);
 		}
 	}

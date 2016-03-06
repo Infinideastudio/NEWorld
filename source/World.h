@@ -100,15 +100,15 @@ namespace World {
 				float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
 		}
 		setblock(x, y, z, Blocks::AIR);
-		//ÉÏ
+		//ä¸Š
 		if ((getblock(x, y + 1, z) == Blocks::WOOD) || (getblock(x, y + 1, z) == Blocks::LEAF))picktree(x, y + 1, z);
-		//Ç°
+		//å‰
 		if ((getblock(x, y , z + 1) == Blocks::WOOD) || (getblock(x, y , z + 1) == Blocks::LEAF))picktree(x, y, z + 1); 
-		//ºó
+		//å
 		if ((getblock(x, y, z - 1) == Blocks::WOOD) || (getblock(x, y, z - 1) == Blocks::LEAF))picktree(x, y, z - 1); 
-		//×ó
+		//å·¦
 		if ((getblock(x+1, y, z) == Blocks::WOOD) || (getblock(x+1, y, z) == Blocks::LEAF))picktree(x+1, y, z); 
-		//ÓÒ
+		//å³
 		if ((getblock(x - 1, y, z) == Blocks::WOOD) || (getblock(x - 1, y, z) == Blocks::LEAF))picktree(x - 1, y, z);
 	}
 	inline void pickblock(int x, int y, int z) {
@@ -117,8 +117,8 @@ namespace World {
 			(getblock(x, y, z + 1) == Blocks::AIR) && (getblock(x, y, z - 1) == Blocks::AIR) &&
 			(getblock(x + 1, y, z) == Blocks::AIR) && (getblock(x - 1, y, z) == Blocks::AIR) &&
 			((getblock(x, y - 1, z) == Blocks::WOOD) || (getblock(x, y - 1, z) == Blocks::DIRT))
-			) { picktree(x, y + 1, z); }//´¥·¢¿³Ê÷Ä£Ê½
-		//»÷´òÊ÷Ò¶
+			) { picktree(x, y + 1, z); }//è§¦å‘ç æ ‘æ¨¡å¼
+		//å‡»æ‰“æ ‘å¶
 		if (getblock(x, y, z)!=Blocks::LEAF)Player::addItem(getblock(x, y, z));
 		else pickleaf();
 
@@ -127,7 +127,7 @@ namespace World {
 
 
 	inline bool chunkInRange(int x, int y, int z, int px, int py, int pz, int dist) {
-		//¼ì²â¸ø³öµÄchunk×ø±êÊÇ·ñÔÚäÖÈ¾·¶Î§ÄÚ
+		//æ£€æµ‹ç»™å‡ºçš„chunkåæ ‡æ˜¯å¦åœ¨æ¸²æŸ“èŒƒå›´å†…
 		if (x<px - dist || x>px + dist - 1 || y<py - dist || y>py + dist - 1 || z<pz - dist || z>pz + dist - 1) return false;
 		return true;
 	}

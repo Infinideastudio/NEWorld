@@ -59,7 +59,7 @@ PFNGLUNIFORMMATRIX4FVARBPROC glUniformMatrix4fvARB;
 PFNGLGETUNIFORMFVARBPROC glGetUniformfvARB;
 PFNGLGETUNIFORMIVARBPROC glGetUniformivARB;
 
-//获取OpenGL函数地址
+//鑾峰彇OpenGL鍑芥暟鍦板潃
 void InitGLProc() {
 
 	glTexImage3D = (PFNGLTEXIMAGE3DPROC)glfwGetProcAddress("glTexImage3DEXT");

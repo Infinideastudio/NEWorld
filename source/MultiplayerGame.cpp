@@ -14,11 +14,11 @@ namespace Menus {
 		GUI::textbox serveriptb;
 		GUI::button runbtn, okbtn, backbtn;
 		void onLoad() {
-			title = GUI::label("==============<  ¶à ÈË ÓÎ Ï·  >==============", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			serveriptb = GUI::textbox("ÊäÈë·şÎñÆ÷IP", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			runbtn = GUI::button("ÔËĞĞ·şÎñÆ÷£¨¿ª·ş£©", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			okbtn = GUI::button("È·¶¨", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button("<< ·µ»Ø", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			title = GUI::label("==============<  å¤š äºº æ¸¸ æˆ  >==============", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			serveriptb = GUI::textbox("è¾“å…¥æœåŠ¡å™¨IP", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			runbtn = GUI::button("è¿è¡ŒæœåŠ¡å™¨ï¼ˆå¼€æœï¼‰", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			okbtn = GUI::button("ç¡®å®š", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button("<< è¿”å›", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 			inputstr = "";
 			okbtn.enabled = false;
 			registerControls(4, &title, &serveriptb, &runbtn, &okbtn, &backbtn);

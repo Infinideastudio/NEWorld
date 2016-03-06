@@ -6,7 +6,7 @@ namespace ChunkRenderer {
 	using World::getbrightness;
 
 	/*
-	ºÏ²¢ÃæµÄ¶¥µãË³Ðò£¨ÒÔ0µ½3±ê³ö£©£º
+	åˆå¹¶é¢çš„é¡¶ç‚¹é¡ºåºï¼ˆä»¥0åˆ°3æ ‡å‡ºï¼‰ï¼š
 
 	The vertex order of merge face render
 	Numbered from 0 to 3:
@@ -253,9 +253,9 @@ namespace ChunkRenderer {
 		Renderer::Flush(c->vbuffer[2], c->vertexes[2]);
 	}
 
-	//ºÏ²¢Ãæ´ó·¨ºÃ£¡£¡£¡
+	//åˆå¹¶é¢å¤§æ³•å¥½ï¼ï¼ï¼
 	void MergeFaceRender(World::chunk* c) {
-		//»°ËµÎÒ×¢ÊÍÒ»»áÖÐÎÄÒ»»áÓ¢ÎÄÊÇ²»ÊÇÓÐµãÆæ¹Ö¡£¡£¡£
+		//è¯è¯´æˆ‘æ³¨é‡Šä¸€ä¼šä¸­æ–‡ä¸€ä¼šè‹±æ–‡æ˜¯ä¸æ˜¯æœ‰ç‚¹å¥‡æ€ªã€‚ã€‚ã€‚
 		// -- qiaozhanrong
 
 		int cx = c->cx, cy = c->cy, cz = c->cz;

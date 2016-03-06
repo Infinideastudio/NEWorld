@@ -297,7 +297,7 @@ namespace NNN {
 	{
 		std::string::size_type pos;
 		std::vector<std::string> result;
-		str += pattern;//扩展字符串以方便操作
+		str += pattern;//鎵╁睍瀛楃涓蹭互鏂逛究鎿嶄綔
 		size_t size = str.size();
 
 		for (size_t i = 0; i<size; i++)

@@ -48,14 +48,14 @@ void createWindow() {
 
 void setupScreen() {
 
-	//»ñÈ¡OpenGL°æ±¾
+	//è·å–OpenGLç‰ˆæœ¬
 	GLVersionMajor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MAJOR);
 	GLVersionMinor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MINOR);
 	GLVersionRev = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_REVISION);
-	//»ñÈ¡OpenGLº¯ÊıµØÖ·
+	//è·å–OpenGLå‡½æ•°åœ°å€
 	InitGLProc();
 
-	//äÖÈ¾²ÎÊıÉèÖÃ
+	//æ¸²æŸ“å‚æ•°è®¾ç½®
 	glViewport(0, 0, windowwidth, windowheight);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -70,7 +70,7 @@ void setupScreen() {
 	glEnable(GL_BLEND);
 	glEnable(GL_LINE_SMOOTH);
 	glDepthFunc(GL_LEQUAL);
-	glAlphaFunc(GL_GREATER, 0.0); //<--Õâ¼Ò»ïÔÚÂôÃÈ£¿(ÍùºóÃæ¿´¿´£¬ÂôÃÈµÄ¶à×ÅÄØ)
+	glAlphaFunc(GL_GREATER, 0.0); //<--è¿™å®¶ä¼™åœ¨å–èŒï¼Ÿ(å¾€åé¢çœ‹çœ‹ï¼Œå–èŒçš„å¤šç€å‘¢)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 	glHint(GL_FOG_HINT, GL_FASTEST);
@@ -99,7 +99,7 @@ void setupNormalFog() {
 }
 
 void loadTextures() {
-	//ÔØÈëÎÆÀí
+	//è½½å…¥çº¹ç†
 	Textures::Init();
 
 	tex_select = Textures::LoadRGBATexture("Textures/GUI/select.bmp", "");
