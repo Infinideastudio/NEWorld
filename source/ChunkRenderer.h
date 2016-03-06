@@ -8,24 +8,24 @@ namespace World { class chunk; }
 namespace ChunkRenderer {
 	const int delta[6][3] = { { 1,0,0 },{ -1,0,0 },{ 0,1,0 },{ 0,-1,0 },{ 0,0,1 },{ 0,0,-1 } };
 
-	//ºÏ²¢ÃæµÄÒ»Õû¸öÃæ | One face in merge face
+	//åˆå¹¶é¢çš„ä¸€æ•´ä¸ªé¢ | One face in merge face
 	struct QuadPrimitive {
 		int x, y, z, length, direction;
 		/*
-		* Èç¹û¶¥µãÑÕÉ«²»Í¬£¨Æ½»¬¹âÕÕÆôÓÃÊ±£©£¬Õâ¸ö·½ĞÎ¾Í²»ÄÜºÍ±ğµÄ·½ĞÎÆ´ºÏÆğÀ´¡£
-		* Õâ¸ö±äÁ¿Í¬Ê±ÒâÎ¶×ÅËÄ¸ö¶¥µãÑÕÉ«ÊÇ·ñ²»Í¬¡£
+		* å¦‚æœé¡¶ç‚¹é¢œè‰²ä¸åŒï¼ˆå¹³æ»‘å…‰ç…§å¯ç”¨æ—¶ï¼‰ï¼Œè¿™ä¸ªæ–¹å½¢å°±ä¸èƒ½å’Œåˆ«çš„æ–¹å½¢æ‹¼åˆèµ·æ¥ã€‚
+		* è¿™ä¸ªå˜é‡åŒæ—¶æ„å‘³ç€å››ä¸ªé¡¶ç‚¹é¢œè‰²æ˜¯å¦ä¸åŒã€‚
 		* If the vertexes have different colors (smoothed lighting), the primitive cannot connect with others.
 		* This variable also means whether the vertexes have different colors.
 		*/
 		bool once;
-		//¶¥µãÑÕÉ« | Vertex colors
+		//é¡¶ç‚¹é¢œè‰² | Vertex colors
 		int col0, col1, col2, col3;
-		//ÎÆÀíID | Texture ID
+		//çº¹ç†ID | Texture ID
 		TextureID tex;
 		QuadPrimitive() : x(0), y(0), z(0), length(0), direction(0), once(false),
 			tex(Textures::NULLBLOCK), col0(0), col1(0), col2(0), col3(0) {}
 	};
-	//Éî¶ÈÄ£ĞÍµÄÃæ | Face in depth model
+	//æ·±åº¦æ¨¡å‹çš„é¢ | Face in depth model
 	struct QuadPrimitive_Depth {
 		int x, y, z, length, direction;
 		QuadPrimitive_Depth() : x(0), y(0), z(0), length(0), direction(0) {}

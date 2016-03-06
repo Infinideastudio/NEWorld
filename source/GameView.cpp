@@ -146,12 +146,12 @@ public:
 		static bool WP;
 		//bool chunkupdated = false;
 
-		//ÓÃÓÚÒôĞ§¸üĞÂ
+		//ç”¨äºéŸ³æ•ˆæ›´æ–°
 		bool BlockClick = false;
 		ALfloat BlockPos[3];
 
 		Player::BlockInHand = Player::inventory[3][Player::indexInHand];
-		//ÉúÃüÖµÏà¹Ø
+		//ç”Ÿå‘½å€¼ç›¸å…³
 		if (Player::health > 0 || Player::gamemode == Player::Creative) {
 			if (Player::ypos < -100) Player::health -= ((-100) - Player::ypos) / 100;
 			if (Player::health < Player::healthMax) Player::health += Player::healSpeed;
@@ -159,7 +159,7 @@ public:
 		}
 		else Player::spawn();
 
-		//Ê±¼ä
+		//æ—¶é—´
 		gametime++;
 		if (glfwGetKey(MainWindow, GLFW_KEY_F8)) gametime += 30;
 		if (gametime > gameTimeMax) gametime = 0;
@@ -180,7 +180,7 @@ public:
 		if (FirstUpdateThisFrame) {
 			World::sortChunkLoadUnloadList(RoundInt(Player::xpos), RoundInt(Player::ypos), RoundInt(Player::zpos));
 
-			//Ğ¶ÔØÇø¿é(Unload chunks)
+			//å¸è½½åŒºå—(Unload chunks)
 			int sumUnload;
 			sumUnload = World::chunkUnloads > World::MaxChunkUnloads ? World::MaxChunkUnloads : World::chunkUnloads;
 			for (int i = 0; i < sumUnload; i++) {
@@ -193,7 +193,7 @@ public:
 				World::DeleteChunk(cx, cy, cz);
 			}
 
-			//¼ÓÔØÇø¿é(Load chunks)
+			//åŠ è½½åŒºå—(Load chunks)
 			int sumLoad;
 			sumLoad = World::chunkLoads > World::MaxChunkLoads ? World::MaxChunkLoads : World::chunkLoads;
 			for (int i = 0; i < sumLoad; i++) {
@@ -210,14 +210,14 @@ public:
 
 		}
 
-		//¼ÓÔØ¶¯»­
+		//åŠ è½½åŠ¨ç”»
 		for (int i = 0; i < World::loadedChunks; i++) {
 			World::chunk* cp = World::chunks[i];
 			if (cp->loadAnim <= 0.3f) cp->loadAnim = 0.0f;
 			else cp->loadAnim *= 0.6f;
 		}
 
-		//Ëæ»ú×´Ì¬¸üĞÂ
+		//éšæœºçŠ¶æ€æ›´æ–°
 		for (int i = 0; i < World::loadedChunks; i++) {
 			int x, y, z, gx, gy, gz;
 			int cx = World::chunks[i]->cx;
@@ -240,13 +240,13 @@ public:
 					World::getblock(gx - 1, gy - 1, gz, Blocks::AIR) == Blocks::GRASS ||
 					World::getblock(gx, gy - 1, gz + 1, Blocks::AIR) == Blocks::GRASS ||
 					World::getblock(gx, gy - 1, gz - 1, Blocks::AIR) == Blocks::GRASS)) {
-				//³¤²İ
+				//é•¿è‰
 				World::chunks[i]->setblock(x, y, z, Blocks::GRASS);
 				World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
 				World::setChunkUpdated(cx, cy, cz, true);
 			}
 			if (World::chunks[i]->getblock(x, y, z) == Blocks::GRASS && World::getblock(gx, gy + 1, gz, Blocks::AIR) != Blocks::AIR) {
-				//²İ±»¸²¸Ç
+				//è‰è¢«è¦†ç›–
 				World::chunks[i]->setblock(x, y, z, Blocks::DIRT);
 				World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
 			}
@@ -348,7 +348,7 @@ public:
 			*/
 		}
 
-		//ÅĞ¶ÏÑ¡ÖĞµÄ·½¿é
+		//åˆ¤æ–­é€‰ä¸­çš„æ–¹å—
 		double lx, ly, lz, lxl, lyl, lzl;
 		lx = Player::xpos; ly = Player::ypos + Player::height + Player::heightExt; lz = Player::zpos;
 
@@ -357,16 +357,16 @@ public:
 
 		if (!bagOpened) {
 
-			//´ÓÍæ¼ÒÎ»ÖÃ·¢ÉäÒ»ÌõÏß¶Î
+			//ä»ç©å®¶ä½ç½®å‘å°„ä¸€æ¡çº¿æ®µ
 			for (int i = 0; i < selectPrecision*selectDistance; i++) {
 				lxl = lx; lyl = ly; lzl = lz;
 
-				//Ïß¶ÎÑÓÉì
+				//çº¿æ®µå»¶ä¼¸
 				lx += sin(M_PI / 180 * (Player::heading - 180))*sin(M_PI / 180 * (Player::lookupdown + 90)) / (double)selectPrecision;
 				ly += cos(M_PI / 180 * (Player::lookupdown + 90)) / (double)selectPrecision;
 				lz += cos(M_PI / 180 * (Player::heading - 180))*sin(M_PI / 180 * (Player::lookupdown + 90)) / (double)selectPrecision;
 
-				//Åöµ½·½¿é
+				//ç¢°åˆ°æ–¹å—
 				if (BlockInfo(World::getblock(RoundInt(lx), RoundInt(ly), RoundInt(lz))).isSolid()) {
 					int x, y, z, xl, yl, zl;
 					x = RoundInt(lx); y = RoundInt(ly); z = RoundInt(lz);
@@ -375,7 +375,7 @@ public:
 					selx = x; sely = y; selz = z;
 					sel = true;
 
-					//ÕÒ·½¿éËùÔÚÇø¿é¼°Î»ÖÃ
+					//æ‰¾æ–¹å—æ‰€åœ¨åŒºå—åŠä½ç½®
 					selcx = getchunkpos(x); selcy = getchunkpos(y); selcz = getchunkpos(z);
 					selbx = getblockpos(x); selby = getblockpos(y); selbz = getblockpos(z);
 
@@ -419,9 +419,9 @@ public:
 							BlockPos[0] = x; BlockPos[1] = y; BlockPos[2] = z;
 						}
 					}
-					if (((mb == 2 && mbp == false) || (!chatmode&&isPressed(GLFW_KEY_TAB)))) { //Êó±êÓÒ¼ü
+					if (((mb == 2 && mbp == false) || (!chatmode&&isPressed(GLFW_KEY_TAB)))) { //é¼ æ ‡å³é”®
 						if (Player::inventoryAmount[3][Player::indexInHand] > 0 && isBlock(Player::inventory[3][Player::indexInHand])) {
-							//·ÅÖÃ·½¿é
+							//æ”¾ç½®æ–¹å—
 							if (Player::putBlock(xl, yl, zl, Player::BlockInHand)) {
 								Player::inventoryAmount[3][Player::indexInHand]--;
 								if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = Blocks::AIR;
@@ -431,7 +431,7 @@ public:
 							}
 						}
 						else {
-							//Ê¹ÓÃÎïÆ·
+							//ä½¿ç”¨ç‰©å“
 							if (Player::inventory[3][Player::indexInHand] == APPLE) {
 								Player::inventoryAmount[3][Player::indexInHand]--;
 								if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = Blocks::AIR;
@@ -452,13 +452,13 @@ public:
 			Player::intypos = RoundInt(Player::ypos);
 			Player::intzpos = RoundInt(Player::zpos);
 
-			//¸üĞÂ·½Ïò
+			//æ›´æ–°æ–¹å‘
 			Player::heading += Player::xlookspeed;
 			Player::lookupdown += Player::ylookspeed;
 			Player::xlookspeed = Player::ylookspeed = 0.0;
 
 			if (!chatmode) {
-				//ÒÆ¶¯£¡(ÉúÃüÔÚÓÚÔË¶¯)
+				//ç§»åŠ¨ï¼(ç”Ÿå‘½åœ¨äºè¿åŠ¨)
 				if (glfwGetKey(MainWindow, GLFW_KEY_W) || Player::glidingNow) {
 					if (!WP) {
 						if (Wprstm == 0.0) {
@@ -540,7 +540,7 @@ public:
 					}
 				}
 
-				//ÇĞ»»·½¿é
+				//åˆ‡æ¢æ–¹å—
 				if (isPressed(GLFW_KEY_Z) && Player::indexInHand > 0) Player::indexInHand--;
 				if (isPressed(GLFW_KEY_X) && Player::indexInHand < 9) Player::indexInHand++;
 				if ((int)Player::indexInHand + (mwl - mw) < 0)Player::indexInHand = 0;
@@ -548,7 +548,7 @@ public:
 				else Player::indexInHand += (char)(mwl - mw);
 				mwl = mw;
 
-				//ÆğÌø£¡
+				//èµ·è·³ï¼
 				if (isPressed(GLFW_KEY_SPACE)) {
 					if (!Player::inWater) {
 						if ((Player::OnGround || Player::AirJumps < MaxAirJumps) && Player::Flying == false && Player::CrossWall == false) {
@@ -585,7 +585,7 @@ public:
 					Player::glidingNow = true;
 				}
 
-				//¸÷ÖÖÉèÖÃÇĞ»»
+				//å„ç§è®¾ç½®åˆ‡æ¢
 				if (isPressed(GLFW_KEY_F1)) {
 					Player::changeGameMode(Player::gamemode == Player::Creative ?
 						Player::Survival : Player::Creative);
@@ -612,15 +612,15 @@ public:
 				if (isPressed(GLFW_KEY_F5)) GUIrenderswitch = !GUIrenderswitch;
 				if (isPressed(GLFW_KEY_F6)) Player::Glide = !Player::Glide;
 				if (isPressed(GLFW_KEY_F7)) Player::spawn();
-				if (isPressed(GLFW_KEY_SLASH)) chatmode = true; //Ğ±¸Ü½«»áÔÚÏÂÃæµÄif(chatmode)ÀïÌí¼Ó
+				if (isPressed(GLFW_KEY_SLASH)) chatmode = true; //æ–œæ å°†ä¼šåœ¨ä¸‹é¢çš„if(chatmode)é‡Œæ·»åŠ 
 			}
 
 			if (isPressed(GLFW_KEY_ENTER) == GLFW_PRESS) {
 				chatmode = !chatmode;
-				if (chatword != "") { //Ö¸ÁîµÄÖ´ĞĞ£¬»ò·¢³öÁÄÌìÎÄ±¾
-					if (chatword.substr(0, 1) == "/") { //Ö¸Áî
+				if (chatword != "") { //æŒ‡ä»¤çš„æ‰§è¡Œï¼Œæˆ–å‘å‡ºèŠå¤©æ–‡æœ¬
+					if (chatword.substr(0, 1) == "/") { //æŒ‡ä»¤
 						vector<string> command = split(chatword, " ");
-						if (!doCommand(command)) { //Ö´ĞĞÊ§°Ü
+						if (!doCommand(command)) { //æ‰§è¡Œå¤±è´¥
 							DebugWarning("Fail to execute the command: " + chatword);
 							chatMessages.push_back("Fail to execute the command: " + chatword);
 						}
@@ -642,7 +642,7 @@ public:
 				else {
 					chatword += inputstr;
 				}
-				//×Ô¶¯²¹È«
+				//è‡ªåŠ¨è¡¥å…¨
 				if (isPressed(GLFW_KEY_TAB) && chatmode && chatword.size() > 0 && chatword.substr(0, 1) == "/") {
 					for (unsigned int i = 0; i != commands.size(); i++) {
 						if (beginWith(commands[i].identifier, chatword)) {
@@ -671,7 +671,7 @@ public:
 			if (isPressed(GLFW_KEY_L))World::saveAllChunks();
 		}
 
-		//ÌøÔ¾
+		//è·³è·ƒ
 		if (!Player::glidingNow) {
 			if (!Player::inWater) {
 				if (!Player::Flying && !Player::CrossWall) {
@@ -682,7 +682,7 @@ public:
 						isPressed(GLFW_KEY_SPACE, true);
 					}
 					else {
-						//×ÔÓÉÂäÌå¼ÆËã
+						//è‡ªç”±è½ä½“è®¡ç®—
 						Player::jump -= 0.025;
 						Player::ya = Player::jump + 0.5 * 0.6 / 900.0;
 					}
@@ -703,7 +703,7 @@ public:
 			}
 		}
 
-		//ÅÀÇ½
+		//çˆ¬å¢™
 		//if (Player::NearWall && Player::Flying == false && Player::CrossWall == false){
 		//	Player::ya += walkspeed
 		//	Player::jump = 0.0
@@ -713,7 +713,7 @@ public:
 			double& E = Player::glidingEnergy;
 			double oldh = Player::ypos + Player::height + Player::heightExt + Player::ya;
 			double h = oldh;
-			if (E - Player::glidingMinimumSpeed < h*g) {  //Ğ¡ÓÚ×îĞ¡ËÙ¶È
+			if (E - Player::glidingMinimumSpeed < h*g) {  //å°äºæœ€å°é€Ÿåº¦
 				h = (E - Player::glidingMinimumSpeed) / g;
 			}
 			Player::glidingSpeed = sqrt(2 * (E - g*h));
@@ -722,7 +722,7 @@ public:
 		}
 
 
-		//ÒôĞ§¸üĞÂ
+		//éŸ³æ•ˆæ›´æ–°
 		int Run = 0;
 		if (WP)Run = Player::Running ? 2 : 1;
 		ALfloat PlayerPos[3];
@@ -732,9 +732,9 @@ public:
 		bool Fall = Player::OnGround
 			&& (!Player::inWater)
 			&& (Player::jump == 0);
-		//¸üĞÂÉùËÙ
+		//æ›´æ–°å£°é€Ÿ
 		AudioSystem::SpeedOfSound = Player::inWater ? AudioSystem::Water_SpeedOfSound : AudioSystem::Air_SpeedOfSound;
-		//¸üĞÂ»·¾³
+		//æ›´æ–°ç¯å¢ƒ
 		if (Player::inWater)
 		{
 			EFX::EAXprop = UnderWater;
@@ -782,13 +782,13 @@ public:
 	}
 
 	void Grender() {
-		//»­³¡¾°
+		//ç”»åœºæ™¯
 		double curtime = timer();
 		double TimeDelta;
 		double xpos, ypos, zpos;
 		int renderedChunk = 0;
 
-		//¼ì²âÖ¡ËÙÂÊ
+		//æ£€æµ‹å¸§é€Ÿç‡
 		if (timer() - fctime >= 1.0) {
 			fps = fpsc;
 			fpsc = 0;
@@ -817,7 +817,7 @@ public:
 		SpeedupAnimTimer = curtime;
 
 		if (Player::OnGround) {
-			//°ë¶×ÌØĞ§
+			//åŠè¹²ç‰¹æ•ˆ
 			if (Player::jump < -0.005) {
 				if (Player::jump <= -(Player::height - 0.5f))
 					Player::heightExt = -(Player::height - 0.5f);
@@ -838,14 +838,14 @@ public:
 		zpos = Player::zpos - Player::zd + (curtime - lastupdate) * 30.0 * Player::zd;
 
 		if (!bagOpened) {
-			//×ªÍ·£¡ÄãÖÎºÃÁËÎÒ¶àÄêµÄ¾±×µ²¡£¡
+			//è½¬å¤´ï¼ä½ æ²»å¥½äº†æˆ‘å¤šå¹´çš„é¢ˆæ¤ç—…ï¼
 			if (mx != mxl) Player::xlookspeed -= (mx - mxl)*mousemove;
 			if (my != myl) Player::ylookspeed += (my - myl)*mousemove;
 			if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1) Player::xlookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
 			if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1) Player::xlookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
 			if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1) Player::ylookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
 			if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1) Player::ylookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
-			//ÏŞÖÆ½Ç¶È£¬±ğ°ÑÍ·×ªµôÏÂÀ´ÁË ¡û_¡û
+			//é™åˆ¶è§’åº¦ï¼Œåˆ«æŠŠå¤´è½¬æ‰ä¸‹æ¥äº† â†_â†
 			if (Player::lookupdown + Player::ylookspeed < -90.0) Player::ylookspeed = -90.0 - Player::lookupdown;
 			if (Player::lookupdown + Player::ylookspeed > 90.0) Player::ylookspeed = 90.0 - Player::lookupdown;
 		}
@@ -854,7 +854,7 @@ public:
 		Player::cyt = getchunkpos((int)Player::ypos);
 		Player::czt = getchunkpos((int)Player::zpos);
 
-		//¸üĞÂÇø¿éVBO
+		//æ›´æ–°åŒºå—VBO
 		World::sortChunkBuildRenderList(RoundInt(Player::xpos), RoundInt(Player::ypos), RoundInt(Player::zpos));
 		int brl = World::chunkBuildRenders > World::MaxChunkRenders ? World::MaxChunkRenders : World::chunkBuildRenders;
 		for (int i = 0; i < brl; i++) {
@@ -862,7 +862,7 @@ public:
 			World::chunks[ci]->buildRender();
 		}
 
-		//É¾³ıÒÑĞ¶ÔØÇø¿éµÄVBO
+		//åˆ é™¤å·²å¸è½½åŒºå—çš„VBO
 		if (World::vbuffersShouldDelete.size() > 0) {
 			glDeleteBuffersARB(World::vbuffersShouldDelete.size(), World::vbuffersShouldDelete.data());
 			World::vbuffersShouldDelete.clear();
@@ -1084,7 +1084,7 @@ public:
 			timeinfo = new tm;
 			localtime_s(timeinfo, &t);
 #endif
-			strftime(tmp, sizeof(tmp), "%YÄê%mÔÂ%dÈÕ%HÊ±%M·Ö%SÃë", timeinfo);
+			strftime(tmp, sizeof(tmp), "%Yå¹´%mæœˆ%dæ—¥%Hæ—¶%Måˆ†%Sç§’", timeinfo);
 			delete timeinfo;
 			std::stringstream ss;
 			ss << "Screenshots/" << tmp << ".bmp";
@@ -1095,7 +1095,7 @@ public:
 			createThumbnail();
 		}
 
-		//ÆÁÄ»Ë¢ĞÂ£¬Ç§Íò±ğÉ¾£¬ºó¹û×Ô¸º£¡£¡£¡
+		//å±å¹•åˆ·æ–°ï¼Œåƒä¸‡åˆ«åˆ ï¼Œåæœè‡ªè´Ÿï¼ï¼ï¼
 		//====refresh====//
 		MutexUnlock(Mutex);
 	}
@@ -1106,8 +1106,8 @@ public:
 	}
 
 	void drawBorder(int x, int y, int z) {
-		//»æÖÆÑ¡Ôñ±ß¿ò
-		static float eps = 0.002f; //Êµ¼ÊÉÏÕâ¸ö±ß¿òÓ¦¸Ã±È·½¿é´óÒ»Ğ©£¬·ñÔòºÜÄÑ¿´
+		//ç»˜åˆ¶é€‰æ‹©è¾¹æ¡†
+		static float eps = 0.002f; //å®é™…ä¸Šè¿™ä¸ªè¾¹æ¡†åº”è¯¥æ¯”æ–¹å—å¤§ä¸€äº›ï¼Œå¦åˆ™å¾ˆéš¾çœ‹
 		glEnable(GL_LINE_SMOOTH);
 		glLineWidth(1);
 		glColor3f(0.2f, 0.2f, 0.2f);
@@ -1461,7 +1461,7 @@ public:
 	}
 
 	void drawBagRow(int row, int itemid, int xbase, int ybase, int spac, float alpha) {
-		//»­³ö±³°üµÄÒ»ĞĞ
+		//ç”»å‡ºèƒŒåŒ…çš„ä¸€è¡Œ
 		for (int i = 0; i < 10; i++) {
 			if (i == itemid) glBindTexture(GL_TEXTURE_2D, tex_select);
 			else glBindTexture(GL_TEXTURE_2D, tex_unselect);
@@ -1495,7 +1495,7 @@ public:
 	}
 
 	void drawBag() {
-		//±³°ü½çÃæÓë¸üĞÂ
+		//èƒŒåŒ…ç•Œé¢ä¸æ›´æ–°
 		static int si, sj, sf;
 		int csi = -1, csj = -1;
 		int leftp = (windowwidth / stretch - 392) / 2;
@@ -1779,7 +1779,7 @@ public:
 			Player::onlineID = rand();
 			Network::init(serverip, port);
 		}
-		//³õÊ¼»¯ÓÎÏ·×´Ì¬
+		//åˆå§‹åŒ–æ¸¸æˆçŠ¶æ€
 		printf("[Console][Game]Init player...\n");
 		if (loadGame()) Player::init(Player::xpos, Player::ypos, Player::zpos);
 		else Player::spawn();
@@ -1798,7 +1798,7 @@ public:
 		glfwPollEvents();
 		printf("[Console][Game]Game start!\n");
 
-		//Õâ²ÅÊÇÓÎÏ·¿ªÊ¼!
+		//è¿™æ‰æ˜¯æ¸¸æˆå¼€å§‹!
 		glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		mxl = mx; myl = my;
 		printf("[Console][Game]Main loop started\n");

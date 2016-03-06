@@ -55,13 +55,13 @@ namespace Network {
 				buffer.write((void*)&r._signal, sizeof(int));
 				getClientSocket().send(buffer);
 			}
-			if (r._callback) { //判断有无回调函数
+			if (r._callback) { //鍒ゆ柇鏈夋棤鍥炶皟鍑芥暟
 				auto callback = r._callback;
 				MutexUnlock(mutex);
-				int len = getClientSocket().recvInt();   //获得数据长度
+				int len = getClientSocket().recvInt();   //鑾峰緱鏁版嵁闀垮害
 				Net::Buffer buffer(len);
 				getClientSocket().recv(buffer, Net::BufferConditionExactLength(len));
-				if (len > 0) callback(buffer.getData(), len); //调用回调函数
+				if (len > 0) callback(buffer.getData(), len); //璋冪敤鍥炶皟鍑芥暟
 				MutexLock(mutex);
 			}
 			reqs.pop();
@@ -71,10 +71,10 @@ namespace Network {
 	}
 
 	void pushRequest(Request& r) {
-		if (reqs.size() + 1 > networkRequestMax) {  //超过请求队列长度，试图精简队列
+		if (reqs.size() + 1 > networkRequestMax) {  //瓒呰繃璇锋眰闃熷垪闀垮害锛岃瘯鍥剧簿绠�闃熷垪
 			if (!reqs.front().isImportant()) reqs.pop();
 		}
-		if (reqs.size() + 1 > networkRequestMax * 2) {  //大量超过请求队列长度，只保留重要请求
+		if (reqs.size() + 1 > networkRequestMax * 2) {  //澶ч噺瓒呰繃璇锋眰闃熷垪闀垮害锛屽彧淇濈暀閲嶈璇锋眰
 			std::queue<Request> q;
 			while (reqs.size() != 0) {
 				if (reqs.front().isImportant()) q.push(reqs.front());

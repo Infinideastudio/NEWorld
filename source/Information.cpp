@@ -9,7 +9,7 @@ string Str[] = {
 "Welcome to develope with us!",
 "Contributers:" ,
 "qiaozhanrong,Null,SuperSodaSea,Null,DREAMWORLDVOID," ,
-"jacky8399,0u0,jelawatµØÊó,HydroH,Michael R,dtcxzyw" ,
+"jacky8399,0u0,jelawatåœ°é¼ ,HydroH,Michael R,dtcxzyw" ,
 "" ,
 "PS:Since this is a In-Develop Version, we welcome any types of suggestions or questions.",
 "Anyone is welcomed to send Issues on the following project site:",

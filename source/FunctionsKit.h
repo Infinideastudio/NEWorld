@@ -4,7 +4,7 @@
 
 extern double stretch;
 
-//³£ÓÃº¯Êý
+//å¸¸ç”¨å‡½æ•°
 vector<string> split(string str, string pattern);
 
 inline void UITrans(double x, double y) {
@@ -112,7 +112,7 @@ inline unsigned int wstrlen(const wchar_t* wstr) { return wcslen(wstr); }
 inline void Sleep(unsigned int ms) { unsigned int fr = clock(); while (clock() - fr <= ms); }
 inline double timer() { return (double)clock() / CLOCKS_PER_SEC; }
 #endif
-inline int Distancen(int ix, int iy, int iz, int x, int y, int z)//¼ÆËã¾àÀëµÄÆ½·½
+inline int Distancen(int ix, int iy, int iz, int x, int y, int z)//è®¡ç®—è·ç¦»çš„å¹³æ–¹
 {
 	return (ix - x)*(ix - x) + (iy - y)*(iy - y) + (iz - z)*(iz - z);
 }

@@ -29,7 +29,7 @@ namespace WorldGen{
 	double InterpolatedNoise(double x, double y){
 		int int_X, int_Y;
 		double fractional_X, fractional_Y, v1, v2, v3, v4, i1, i2;
-		int_X = (int)floor(x); //²»ÒªÎÊÎÒÎªÃ«ÓÃfloor£¬c++Ä¬ÈÏ¾ÓÈ»TMµÄÊÇÏòÁãÈ¡ÕûµÄ
+		int_X = (int)floor(x); //ä¸è¦é—®æˆ‘ä¸ºæ¯›ç”¨floorï¼Œc++é»˜è®¤å±…ç„¶TMçš„æ˜¯å‘é›¶å–æ•´çš„
 		fractional_X = x - int_X;
 		int_Y = (int)floor(y);
 		fractional_Y = y - int_Y;
