@@ -192,7 +192,7 @@ namespace World {
 			for (int y = 0; y < 16; y++) {
 				for (int z = 0; z < 16; z++) {
 					//Tree
-					if (pblocks[index] == Blocks::GRASS && rnd() < 0.005) {
+					if ((pblocks[index] == Blocks::GRASS) && (rnd() < 0.001)) {
 						buildtree(cx * 16 + x, cy * 16 + y, cz * 16 + z);
 					}
 					index++;

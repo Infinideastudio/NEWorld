@@ -250,6 +250,102 @@ public:
 				World::chunks[i]->setblock(x, y, z, Blocks::DIRT);
 				World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
 			}
+			//水流
+			for (size_t i = 0; i < 100; i++)
+			{
+				x = int(rnd() * 16); gx = x + cx * 16;
+				y = int(rnd() * 16); gy = y + cy * 16;
+				z = int(rnd() * 16); gz = z + cz * 16;
+				if (World::getblock(gx, gy, gz) == Blocks::WATER)
+				{
+					//流动
+					//前
+					if (World::getblock(gx, gy, gz + 1) == Blocks::AIR)World::setblock(gx, gy, gz + 1,Blocks::WATER);
+					//后
+					if (World::getblock(gx, gy, gz - 1) == Blocks::AIR)World::setblock(gx, gy, gz - 1, Blocks::WATER);
+					//左
+					if (World::getblock(gx + 1, gy, gz) == Blocks::AIR)World::setblock(gx+1, gy, gz, Blocks::WATER);
+					//右
+					if (World::getblock(gx - 1, gy, gz) == Blocks::AIR)World::setblock(gx-1, gy, gz, Blocks::WATER);
+					//下
+					if (World::getblock(gx, gy-1, gz) == Blocks::AIR)World::setblock(gx, gy-1, gz , Blocks::WATER);
+					//遇到岩浆
+					if (World::getblock(gx, gy, gz + 1) == Blocks::LAVA)World::setblock(gx, gy, gz + 1, Blocks::ROCK);
+					//后
+					if (World::getblock(gx, gy, gz - 1) == Blocks::LAVA)World::setblock(gx, gy, gz - 1, Blocks::ROCK);
+					//左
+					if (World::getblock(gx + 1, gy, gz) == Blocks::LAVA)World::setblock(gx + 1, gy, gz, Blocks::ROCK);
+					//右
+					if (World::getblock(gx - 1, gy, gz) == Blocks::LAVA)World::setblock(gx - 1, gy, gz, Blocks::ROCK);
+					//下
+					if (World::getblock(gx, gy - 1, gz) == Blocks::LAVA)World::setblock(gx, gy - 1, gz, Blocks::ROCK);
+				}
+			}
+			//岩浆
+			for (size_t i = 0; i < 80; i++)
+			{
+				x = int(rnd() * 16); gx = x + cx * 16;
+				y = int(rnd() * 16); gy = y + cy * 16;
+				z = int(rnd() * 16); gz = z + cz * 16;
+				if (World::getblock(gx, gy, gz) == Blocks::LAVA)
+				{
+					//流动
+					//前
+					if (World::getblock(gx, gy, gz + 1) == Blocks::AIR)World::setblock(gx, gy, gz + 1, Blocks::LAVA);
+					//后
+					if (World::getblock(gx, gy, gz - 1) == Blocks::AIR)World::setblock(gx, gy, gz - 1, Blocks::LAVA);
+					//左
+					if (World::getblock(gx + 1, gy, gz) == Blocks::AIR)World::setblock(gx + 1, gy, gz, Blocks::LAVA);
+					//右
+					if (World::getblock(gx - 1, gy, gz) == Blocks::AIR)World::setblock(gx - 1, gy, gz, Blocks::LAVA);
+					//下
+					if (World::getblock(gx, gy - 1, gz) == Blocks::AIR)World::setblock(gx, gy - 1, gz, Blocks::LAVA);
+					//遇到水
+					if (World::getblock(gx, gy, gz + 1) == Blocks::WATER)World::setblock(gx, gy, gz + 1, Blocks::ROCK);
+					//后
+					if (World::getblock(gx, gy, gz - 1) == Blocks::WATER)World::setblock(gx, gy, gz - 1, Blocks::ROCK);
+					//左
+					if (World::getblock(gx + 1, gy, gz) == Blocks::WATER)World::setblock(gx + 1, gy, gz, Blocks::ROCK);
+					//右
+					if (World::getblock(gx - 1, gy, gz) == Blocks::WATER)World::setblock(gx - 1, gy, gz, Blocks::ROCK);
+					//下
+					if (World::getblock(gx, gy - 1, gz) == Blocks::WATER)World::setblock(gx, gy - 1, gz, Blocks::ROCK);
+				}
+			}
+			//树的生长
+			/*
+			for (size_t i = 0; i < 10; i++)
+			{
+				x = int(rnd() * 16); gx = x + cx * 16;
+				y = int(rnd() * 16); gy = y + cy * 16;
+				z = int(rnd() * 16); gz = z + cz * 16;
+				if (World::getblock(gx, gy, gz) == Blocks::WOOD)
+				{
+					if (World::getblock(gx, gy + 1, gz) == Blocks::LEAF)World::setblock(gx, gy + 1, gz, Blocks::WOOD);
+				}
+			}
+			for (size_t i = 0; i < 10; i++)
+			{
+				x = int(rnd() * 16); gx = x + cx * 16;
+				y = int(rnd() * 16); gy = y + cy * 16;
+				z = int(rnd() * 16); gz = z + cz * 16;
+				if (World::getblock(gx, gy, gz) == Blocks::LEAF)
+				{
+					//生长
+					int a = int(rnd() * 4.0);
+					//前
+					if ((World::getblock(gx, gy, gz + 1) == Blocks::AIR) && (a=0))World::setblock(gx, gy, gz + 1, Blocks::LEAF);
+					//后
+					if ((World::getblock(gx, gy, gz - 1) == Blocks::AIR) && (a = 1))World::setblock(gx, gy, gz - 1, Blocks::LEAF);
+					//左
+					if ((World::getblock(gx + 1, gy, gz) == Blocks::AIR) && (a = 2))World::setblock(gx + 1, gy, gz, Blocks::LEAF);
+					//右
+					if ((World::getblock(gx - 1, gy, gz) == Blocks::AIR) && (a = 3))World::setblock(gx - 1, gy, gz, Blocks::LEAF);
+					//上
+					if ((World::getblock(gx, gy + 1, gz) == Blocks::AIR) && (a = 4))World::setblock(gx, gy + 1, gz, Blocks::LEAF);
+				}
+			}
+			*/
 		}
 
 		//判断选中的方块
