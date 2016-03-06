@@ -1,0 +1,531 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Netycat">
+      <UniqueIdentifier>{19ae8c3a-70c1-4ddb-8bbd-237232e9e9e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source\Network">
+      <UniqueIdentifier>{b6623145-3e33-48a1-be11-1cf4ad2065bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI">
+      <UniqueIdentifier>{92f24a42-2d77-4317-9cd7-04a69e43c2fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Menus">
+      <UniqueIdentifier>{a3b20020-88a5-471c-8536-f09a7af5af56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Globalization">
+      <UniqueIdentifier>{a9cb3744-03b3-4b6d-af7a-a84d6f4b36d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer">
+      <UniqueIdentifier>{a448efda-cf30-4017-8d62-e5feed0408dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\GUIRenderer">
+      <UniqueIdentifier>{bf28355f-5546-46a9-b6d5-c273483456e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Common">
+      <UniqueIdentifier>{2942a024-6889-447e-9918-2cd547c7a601}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Common\OpenGL">
+      <UniqueIdentifier>{f6aa1cb9-6009-404f-b1cc-68775a8f0ece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game">
+      <UniqueIdentifier>{ef7833db-0c84-4c19-a567-6c4833d0e663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\World">
+      <UniqueIdentifier>{0873facd-4fad-448a-a88b-afa8accfd800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\World\TerrainGen">
+      <UniqueIdentifier>{6d859d87-a9b9-43d4-9dc7-49bb51e82557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Objects">
+      <UniqueIdentifier>{fd42ef38-5e12-4c31-bc56-4f954b4953d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Player">
+      <UniqueIdentifier>{40ea1808-71f0-4c4c-a9ee-d3c04da07f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Textures">
+      <UniqueIdentifier>{1302ac14-18ec-431c-a891-8bbfe96b9099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Hitbox">
+      <UniqueIdentifier>{e671892d-d7a8-41a7-81ad-57abd5613c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\DataStorage">
+      <UniqueIdentifier>{949e684e-b65c-4015-82ab-e4bb1972035c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Mod">
+      <UniqueIdentifier>{f2eb1263-1080-487c-afb0-6d937680ea10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source\Common\BaseEngine">
+      <UniqueIdentifier>{514ad253-19e5-49bd-910a-f07db8e67836}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Common\OpenAL">
+      <UniqueIdentifier>{756831cf-7167-4c1f-9d20-e33d38861d08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Shader">
+      <UniqueIdentifier>{033d1b67-aa91-4782-ac09-87d8bffaafd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Common\NVIDIA OptiX">
+      <UniqueIdentifier>{468e6c59-5d34-42c4-b586-a8d60615028c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\RTRTR">
+      <UniqueIdentifier>{e6556745-c575-4503-9736-25026f9aca3b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\Object.h">
+      <Filter>Source\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Chunk.h">
+      <Filter>Source\Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ChunkPtrArray.h">
+      <Filter>Source\Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="source\World.h">
+      <Filter>Source\Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Definitions.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Frustum.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Renderer.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GUI.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Menus.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Player.h">
+      <Filter>Source\Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Mob.h">
+      <Filter>Source\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Network.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="source\PlayerPacket.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ChunkPacket.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Particles.h">
+      <Filter>Source\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Netycat\include\Netycat\Core\Buffer.h">
+      <Filter>Netycat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Netycat\include\Netycat\Core\BufferCondition.h">
+      <Filter>Netycat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Netycat\include\Netycat\Core\Core.h">
+      <Filter>Netycat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Netycat\include\Netycat\Core\Exception.h">
+      <Filter>Netycat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Netycat\include\Netycat\Core\InetAddress.h">
+      <Filter>Netycat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Netycat\include\Netycat\Core\Socket.h">
+      <Filter>Netycat</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Netycat\include\Netycat\Netycat.h">
+      <Filter>Netycat</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GUI.h">
+      <Filter>源代码\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Menus.h">
+      <Filter>源代码\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\StdInclude.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ChunkRenderer.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\OnlinePlayer.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Command.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Globalization.h">
+      <Filter>Source\GUI\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="source\TextRenderer.h">
+      <Filter>Source\Renderer\GUIRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Effect.h">
+      <Filter>Source\Renderer\GUIRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\HeightMap.h">
+      <Filter>Source\Game\World\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="source\WorldGen.h">
+      <Filter>Source\Game\World\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Textures.h">
+      <Filter>Source\Game\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Items.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Blocks.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ShadowMaps.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\WorldRenderer.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Hitbox.h">
+      <Filter>Source\Game\Hitbox</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Blocks.h">
+      <Filter>源代码\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GLProc.h">
+      <Filter>Source\Common\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ModLoader.h">
+      <Filter>Source\Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="source\API.h">
+      <Filter>Source\Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Hitbox.h">
+      <Filter>源代码\Game\Hitbox</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ModSupport.h">
+      <Filter>Source\Mod</Filter>
+    </ClInclude>
+    <ClInclude Include="source\NNN.h">
+      <Filter>Source\DataStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ByteOrder.h">
+      <Filter>Source\DataStorage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Setup.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Shader.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Typedefs.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FunctionsKit.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GameView.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="source\resource.h" />
+    <ClInclude Include="include\AL\al.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\alc.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\ALDevice.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\aldlist.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\AL-EFX.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\CWaves.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\efx.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\efx-creative.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\EFX-Util.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\Framework.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\LoadOAL.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\xram.h">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AudioSystem.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_cuda.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_cuda_interop.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_d3d9_interop.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_d3d10_interop.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_d3d11_interop.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_device.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_gl_interop.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_host.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_math.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_sizet.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OptiX\optix_world.h">
+      <Filter>Source\Common\NVIDIA OptiX</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RTDevice.h">
+      <Filter>Source\Renderer\RTRTR</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\NEWorld.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Chunk.cpp">
+      <Filter>Source\Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ChunkPtrArray.cpp">
+      <Filter>Source\Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="source\World.cpp">
+      <Filter>Source\Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Definitions.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Frustum.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Renderer.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GUI.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Player.cpp">
+      <Filter>Source\Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Particles.cpp">
+      <Filter>Source\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Netycat\src\Netycat\Core\Buffer.cpp">
+      <Filter>Netycat</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Netycat\src\Netycat\Core\BufferCondition.cpp">
+      <Filter>Netycat</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Netycat\src\Netycat\Core\Core.cpp">
+      <Filter>Netycat</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Netycat\src\Netycat\Core\Exception.cpp">
+      <Filter>Netycat</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Netycat\src\Netycat\Core\InetAddress.cpp">
+      <Filter>Netycat</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Netycat\src\Netycat\Core\Socket.cpp">
+      <Filter>Netycat</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GUI.cpp">
+      <Filter>源代码\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderOptionsMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CreateWorldMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GUIOptionsMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MainMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\MultiplayerGame.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\OptionsMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ChunkRenderer.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\OnlinePlayer.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Network.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Globalization.cpp">
+      <Filter>Source\GUI\Globalization</Filter>
+    </ClCompile>
+    <ClCompile Include="source\LanguageMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ShaderOptionsMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TextRenderer.cpp">
+      <Filter>Source\Renderer\GUIRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Effect.cpp">
+      <Filter>Source\Renderer\GUIRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HeightMap.cpp">
+      <Filter>Source\Game\World\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WorldGen.cpp">
+      <Filter>Source\Game\World\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Textures.cpp">
+      <Filter>Source\Game\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Items.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ShadowMaps.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WorldRenderer.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Hitbox.cpp">
+      <Filter>Source\Game\Hitbox</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Hitbox.cpp">
+      <Filter>源代码\Game\Hitbox</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GLProc.cpp">
+      <Filter>Source\Common\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ModLoader.cpp">
+      <Filter>Source\Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="source\API.cpp">
+      <Filter>Source\Mod</Filter>
+    </ClCompile>
+    <ClCompile Include="source\NNN.cpp">
+      <Filter>Source\DataStorage</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Setup.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FunctionsKit.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Shader.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\WorldMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GameView.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Information.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="include\AL\ALDevice.cpp">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClCompile>
+    <ClCompile Include="include\AL\aldlist.cpp">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClCompile>
+    <ClCompile Include="include\AL\AL-EFX.cpp">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClCompile>
+    <ClCompile Include="include\AL\CWaves.cpp">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClCompile>
+    <ClCompile Include="include\AL\Framework.cpp">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClCompile>
+    <ClCompile Include="include\AL\LoadOAL.cpp">
+      <Filter>Source\Common\OpenAL</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AudioSystem.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SoundMenu.cpp">
+      <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RTDevice.cpp">
+      <Filter>Source\Renderer\RTRTR</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="source\resource.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="source\Icon.ico">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="source\neworld.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Depth.fsh">
+      <Filter>Source\Renderer\Shader</Filter>
+    </None>
+    <None Include="Shaders\Main.fsh">
+      <Filter>Source\Renderer\Shader</Filter>
+    </None>
+    <None Include="Shaders\Shadow.fsh">
+      <Filter>Source\Renderer\Shader</Filter>
+    </None>
+    <None Include="Shaders\Depth.vsh">
+      <Filter>Source\Renderer\Shader</Filter>
+    </None>
+    <None Include="Shaders\Main.vsh">
+      <Filter>Source\Renderer\Shader</Filter>
+    </None>
+    <None Include="Shaders\Shadow.vsh">
+      <Filter>Source\Renderer\Shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>
