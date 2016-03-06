@@ -17,6 +17,8 @@ Welcome to develop with us!
 
 全新的NEWorld!
 
+请下载libraries并放到NEWorld项目根目录(Libraries)[http://pan.baidu.com/s/1jHz7rAe]
+
 最新进度在0.5.0分支
 
 Git协作协议(试行)
