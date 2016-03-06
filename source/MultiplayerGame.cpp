@@ -1,49 +1,59 @@
 #include "Menus.h"
 
-namespace Menus {
-	int getDotCount(string s) {
-		int ret = 0;
-		for (unsigned int i = 0; i != s.size(); i++)
-			if (s[i] == '.') ret++;
-		return ret;
-	}
+namespace Menus
+{
+int getDotCount(string s)
+{
+    int ret = 0;
+    for (unsigned int i = 0; i != s.size(); i++)
+        if (s[i] == '.') ret++;
+    return ret;
+}
 
-	class MultiplayerMenu :public GUI::Form {
-	private:
-		GUI::label title;
-		GUI::textbox serveriptb;
-		GUI::button runbtn, okbtn, backbtn;
-		void onLoad() {
-			title = GUI::label("==============<  ¶à ÈË ÓÎ Ï·  >==============", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			serveriptb = GUI::textbox("ÊäÈë·şÎñÆ÷IP", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			runbtn = GUI::button("ÔËĞĞ·şÎñÆ÷£¨¿ª·ş£©", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			okbtn = GUI::button("È·¶¨", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button("<< ·µ»Ø", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			inputstr = "";
-			okbtn.enabled = false;
-			registerControls(4, &title, &serveriptb, &runbtn, &okbtn, &backbtn);
-		}
-		void onUpdate() {
-			static bool serveripChanged = false;
+class MultiplayerMenu :public GUI::Form
+{
+private:
+    GUI::label title;
+    GUI::textbox serveriptb;
+    GUI::button runbtn, okbtn, backbtn;
+    void onLoad()
+    {
+        title = GUI::label("==============<  å¤š äºº æ¸¸ æˆ  >==============", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+        serveriptb = GUI::textbox("è¾“å…¥æœåŠ¡å™¨IP", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+        runbtn = GUI::button("è¿è¡ŒæœåŠ¡å™¨ï¼ˆå¼€æœï¼‰", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+        okbtn = GUI::button("ç¡®å®š", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+        backbtn = GUI::button("<< è¿”å›", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+        inputstr = "";
+        okbtn.enabled = false;
+        registerControls(4, &title, &serveriptb, &runbtn, &okbtn, &backbtn);
+    }
+    void onUpdate()
+    {
+        static bool serveripChanged = false;
 #ifdef NEWORLD_USE_WINAPI
-			if (runbtn.clicked) WinExec("NEWorldServer.exe", SW_SHOWDEFAULT);
+        if (runbtn.clicked) WinExec("NEWorldServer.exe", SW_SHOWDEFAULT);
 #endif
-			if (okbtn.clicked) {
-				serverip = serveriptb.text;
-				gamebegin = true;
-				multiplayer = true;
-			}
+        if (okbtn.clicked)
+        {
+            serverip = serveriptb.text;
+            gamebegin = true;
+            multiplayer = true;
+        }
 
-			AudioSystem::GUIUpdate();
-			if (backbtn.clicked) GUI::PopPage();
-			if (serveriptb.pressed && !serveripChanged) {
-				serveriptb.text = "";
-				serveripChanged = true;
-			}
-			if (serveriptb.text == "" || !serveripChanged || getDotCount(serveriptb.text) != 3) okbtn.enabled = false;
-			else okbtn.enabled = true;
-			inputstr = "";
-		}
-	};
-	void multiplayermenu() { GUI::PushPage(new MultiplayerMenu); }
+        AudioSystem::GUIUpdate();
+        if (backbtn.clicked) GUI::PopPage();
+        if (serveriptb.pressed && !serveripChanged)
+        {
+            serveriptb.text = "";
+            serveripChanged = true;
+        }
+        if (serveriptb.text == "" || !serveripChanged || getDotCount(serveriptb.text) != 3) okbtn.enabled = false;
+        else okbtn.enabled = true;
+        inputstr = "";
+    }
+};
+void multiplayermenu()
+{
+    GUI::PushPage(new MultiplayerMenu);
+}
 }

@@ -10,9 +10,10 @@
 #include "ModSupport.h"
 extern vector<Command> commands;
 
-namespace Mod {
+namespace Mod
+{
 
-	extern std::map<std::string, void*> sharedData;
+extern std::map<std::string, void*> sharedData;
 
-	APIPackage getPackage();
+APIPackage getPackage();
 }
