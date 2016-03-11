@@ -11,11 +11,11 @@
 
 extern int viewdistance;
 class Frsutum;
-void MarkBlockUpdate(Blocks::BUDDP Block);
 
 namespace World
 {
 
+void MarkBlockUpdate(Blocks::BUDDP Block);
 extern string worldname;
 const int worldsize = 134217728;
 const int worldheight = 128;
@@ -84,7 +84,7 @@ bool inWater(const Hitbox::AABB& box);
 
 void renderblock(int x, int y, int z, chunk* chunkptr);
 void updateblock(int x, int y, int z, bool blockchanged, int depth = 0);
-block getblock(int x, int y, int z, block mask = block(Blocks::AIR), chunk* cptr = nullptr);
+block& getblock(int x, int y, int z, block mask = block(Blocks::AIR), chunk* cptr = nullptr);
 brightness getbrightness(int x, int y, int z, chunk* cptr = nullptr);
 void setblock(int x, int y, int z, block Block, chunk* cptr = nullptr);
 void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr = nullptr);

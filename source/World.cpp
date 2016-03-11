@@ -724,7 +724,7 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth)
     }
 }
 
-block getblock(int x, int y, int z, block mask, chunk* cptr)
+block& getblock(int x, int y, int z, block mask, chunk* cptr)
 {
     //获取方块
     int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
@@ -1179,8 +1179,47 @@ void explode(int x, int y, int z, int r, chunk* c)
         }
     }
 }
-}
+
+vector<Blocks::BUDDP> blockupdatequery;
 
 void MarkBlockUpdate(Blocks::BUDDP Block)
 {
+	int x = Block.cp >> 8;
+	int y = (Block.cp >> 4) % 16;
+	int z = Block.cp % 16;
+	long long bx = Block.cx * 16 + x;
+	long long by = Block.cy * 16 + y;
+	long long bz = Block.cz * 16 + z;
+
+	block* b = new block;
+	*b = getblock(bx - 1, by, bz);
+	if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd ,b, Block.dudp, nullptr, (bx - 1) % 16 , by % 16 , bz % 16 , ((((bx - 1) % 16) << 8) + (by % 16) << 4) + bz % 16 });  else delete b;
+	b = new block;
+	*b = getblock(bx + 1, by, bz);
+	if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd ,b, Block.dudp, nullptr, (bx + 1) % 16 , by % 16 , bz % 16 , ((((bx + 1) % 16) << 8) + (by % 16) << 4) + bz % 16 });  else delete b;
+	b = new block;
+	*b = getblock(bx, by - 1, bz);
+	if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd ,b, Block.dudp, nullptr, bx % 16 , (by - 1) % 16 , bz % 16 , (((bx % 16) << 8) + ((by - 1) % 16) << 4) + bz % 16 });  else delete b;
+	b = new block;
+	*b = getblock(bx, by + 1, bz);
+	if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd ,b, Block.dudp, nullptr, bx % 16 , (by - 1) % 16 , bz % 16 , (((bx % 16) << 8) + ((by + 1) % 16) << 4) + bz % 16 });  else delete b;
+	b = new block;
+	*b = getblock(bx, by, bz - 1);
+	if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd ,b, Block.dudp, nullptr, bx % 16 , by % 16 , (bz - 1) % 16 , (((bx % 16) << 8) + (by % 16) << 4) + (bz - 1) % 16 });  else delete b;
+	b = new block;
+	*b = getblock(bx, by, bz + 1);
+	if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd ,b, Block.dudp, nullptr, bx % 16 , by % 16 , (bz - 1) % 16 , (((bx % 16) << 8) + (by % 16) << 4) + (bz + 1) % 16 });  else delete b;
 }
+
+void ProcessBuq() {
+	vector<Blocks::BUDDP> swap;
+	swap.swap(blockupdatequery);
+	blockupdatequery.clear();
+	for (Blocks::BUDDP B : blockupdatequery) {
+		if (BlockInfo((*B.slf)).ExecBUF(B)) MarkBlockUpdate({ B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz, B.cp });
+		
+	}
+}
+
+}
+
