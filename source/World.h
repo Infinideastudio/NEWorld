@@ -11,6 +11,7 @@
 
 extern int viewdistance;
 class Frsutum;
+void MarkBlockUpdate(Blocks::BUDDP Block);
 
 namespace World
 {
