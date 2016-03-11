@@ -146,9 +146,9 @@ void chunk::buildTerrain(bool initIfEmpty)
     }
     if (cy < cur.low)
     {
-        for (int i = 0; i < 4096; i++) pblocks[i] = Blocks::ROCK;
+        for (int i = 0; i < 4096; i++) pblocks[i] = block(Blocks::ROCK);
         memset(pbrightness, 0, 4096 * sizeof(brightness));
-        if (cy == 0) for (int x = 0; x < 16; x++) for (int z = 0; z < 16; z++) pblocks[x * 256 + z] = Blocks::BEDROCK;
+        if (cy == 0) for (int x = 0; x < 16; x++) for (int z = 0; z < 16; z++) pblocks[x * 256 + z] = block(Blocks::BEDROCK);
         Empty = false;
         return;
     }
@@ -175,16 +175,16 @@ void chunk::buildTerrain(bool initIfEmpty)
             if (h > sh && h > wh + 1)
             {
                 //Grass layer
-                if (h >= 0 && h < 16) pblocks[(h << 4) + base] = Blocks::GRASS;
+                if (h >= 0 && h < 16) pblocks[(h << 4) + base] = block(Blocks::GRASS);
                 //Dirt layer
                 maxh = min(max(0, h), 16);
-                for (int y = min(max(0, h - 5), 16); y < maxh; ++y) pblocks[(y << 4) + base] = Blocks::DIRT;
+                for (int y = min(max(0, h - 5), 16); y < maxh; ++y) pblocks[(y << 4) + base] = block(Blocks::DIRT);
             }
             else
             {
                 //Sand layer
                 maxh = min(max(0, h + 1), 16);
-                for (int y = min(max(0, h - 5), 16); y < maxh; ++y) pblocks[(y << 4) + base] = Blocks::SAND;
+                for (int y = min(max(0, h - 5), 16); y < maxh; ++y) pblocks[(y << 4) + base] = block(Blocks::SAND);
                 //Water layer
                 minh = min(max(0, h + 1), 16);
                 maxh = min(max(0, wh + 1), 16);
@@ -192,7 +192,7 @@ void chunk::buildTerrain(bool initIfEmpty)
                 if (cur_br < BRIGHTNESSMIN) cur_br = BRIGHTNESSMIN;
                 for (int y = maxh - 1; y >= minh; --y)
                 {
-                    pblocks[(y << 4) + base] = Blocks::WATER;
+                    pblocks[(y << 4) + base] = block(Blocks::WATER);
                     pbrightness[(y << 4) + base] = (brightness)cur_br;
                     cur_br -= 2;
                     if (cur_br < BRIGHTNESSMIN) cur_br = BRIGHTNESSMIN;
@@ -200,15 +200,15 @@ void chunk::buildTerrain(bool initIfEmpty)
             }
             //Rock layer
             maxh = min(max(0, h - 5), 16);
-            for (int y = 0; y < maxh; ++y) pblocks[(y << 4) + base] = Blocks::ROCK;
+            for (int y = 0; y < maxh; ++y) pblocks[(y << 4) + base] = block(Blocks::ROCK);
             //Air layer
             for (int y = min(max(0, max(h + 1, wh + 1)), 16); y < 16; ++y)
             {
-                pblocks[(y << 4) + base] = Blocks::AIR;
+                pblocks[(y << 4) + base] = block(Blocks::AIR);
                 pbrightness[(y << 4) + base] = skylight;
             }
             //Bedrock layer (overwrite)
-            if (cy == 0) pblocks[base] = Blocks::BEDROCK;
+            if (cy == 0) pblocks[base] = block(Blocks::BEDROCK);
         }
     }
 }
@@ -223,7 +223,7 @@ void chunk::buildDetail()
             for (int z = 0; z < 16; z++)
             {
                 //Tree
-                if (pblocks[index] == Blocks::GRASS && rnd() < 0.005)
+                if (pblocks[index] == block(Blocks::GRASS) && rnd() < 0.005)
                 {
                     buildtree(cx * 16 + x, cy * 16 + y, cz * 16 + z);
                 }

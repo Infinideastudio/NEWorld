@@ -5,10 +5,9 @@
 #include "Frustum.h"
 #include "Command.h"
 #include "Chunk.h"
+#include "Typedefs.h"
 typedef unsigned char ubyte;
 typedef unsigned int onlineid;
-typedef unsigned short item;
-typedef unsigned short block;
 
 struct ModInfo
 {

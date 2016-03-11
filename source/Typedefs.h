@@ -9,17 +9,48 @@ typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned long uint32;
 typedef unsigned long long uint64;
-
 typedef unsigned char blockprop;
 typedef unsigned char brightness;
 typedef unsigned int TextureID;
-typedef unsigned short block;
-typedef unsigned short item;
 typedef unsigned int VBOID;
 typedef int vtxCount;
 typedef int SkinID;
 typedef uint64 chunkid;
 typedef unsigned int onlineid;
+
+struct block {
+	unsigned short ID;
+	union 
+	{
+		struct {
+			unsigned int Oriention : 5;
+			unsigned int Oct : 3;
+			unsigned int Hex1 : 4;
+			unsigned int Hex4 : 4;
+		};
+		struct {
+			unsigned int Oriention : 5;
+			unsigned int Oct : 3;
+			unsigned int Data8 : 8;
+		};
+		struct {
+			unsigned int Data81 : 8;
+			unsigned int Data82 : 8;
+		};
+		unsigned short Data16;
+	};
+	block() {};
+	block(unsigned short iID) :ID(iID) {}
+	block(unsigned short iID, int iOriention) :ID(iID), Oriention(iOriention) {};
+	bool operator == (const block i) {
+		return i.ID == ID;
+	}
+	bool operator != (const block i) {
+		return i.ID != ID;
+	}
+};
+typedef block item;
+
 #ifdef NEWORLD_GAME
 #ifdef NEWORLD_USE_WINAPI
 typedef HANDLE Mutex_t;

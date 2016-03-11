@@ -115,7 +115,7 @@ public:
     }
     inline void setblock(int x, int y, int z, block iblock)
     {
-        if (iblock == Blocks::TNT)
+        if (iblock == block(Blocks::TNT))
         {
             World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
             return;
