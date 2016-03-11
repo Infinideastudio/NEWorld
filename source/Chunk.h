@@ -121,6 +121,7 @@ public:
             return;
         }
         pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
+		MarkBlockUpdate({pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx, cy, cz, (x << 8) ^ (y << 4) ^ z });
         Modified = true;
     }
     inline void setbrightness(int x, int y, int z, brightness ibrightness)
