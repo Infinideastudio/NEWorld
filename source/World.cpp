@@ -1180,3 +1180,7 @@ void explode(int x, int y, int z, int r, chunk* c)
     }
 }
 }
+
+void MarkBlockUpdate(Blocks::BUDDP Block)
+{
+}

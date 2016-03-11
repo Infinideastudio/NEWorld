@@ -36,6 +36,8 @@ struct TILDP{
 
 const block NONEMPTY = block(1);
 
+typedef bool(*BUDF)(BUDDP* arg);
+typedef bool(*TILF)(TILDP* arg);
 class SingleBlock
 {
 private:
@@ -49,6 +51,10 @@ private:
 	int MineType;
 
 public:
+
+	BUDF BlockUpdateFunc = nullptr;
+	TILF BlockTickUpdateFunc = nullptr;
+
     SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _canexplode, float _hardness) :
         name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), canexplode(_canexplode), Hardness(_hardness) {};
 
