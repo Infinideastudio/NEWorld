@@ -209,12 +209,12 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
     int cx = chunkptr->cx, cy = chunkptr->cy, cz = chunkptr->cz;
     int gx = cx * 16 + x, gy = cy * 16 + y, gz = cz * 16 + z;
     block blk[7] = { chunkptr->getblock(x,y,z) ,
-                     z < 15 ? chunkptr->getblock(x, y, z + 1) : getblock(gx, gy, gz + 1, Blocks::ROCK),
-                     z>0 ? chunkptr->getblock(x, y, z - 1) : getblock(gx, gy, gz - 1, Blocks::ROCK),
-                     x < 15 ? chunkptr->getblock(x + 1, y, z) : getblock(gx + 1, gy, gz, Blocks::ROCK),
-                     x>0 ? chunkptr->getblock(x - 1, y, z) : getblock(gx - 1, gy, gz, Blocks::ROCK),
-                     y < 15 ? chunkptr->getblock(x, y + 1, z) : getblock(gx, gy + 1, gz, Blocks::ROCK),
-                     y>0 ? chunkptr->getblock(x, y - 1, z) : getblock(gx, gy - 1, gz, Blocks::ROCK)
+                     z < 15 ? chunkptr->getblock(x, y, z + 1) : getblock(gx, gy, gz + 1, block(Blocks::ROCK)),
+                     z>0 ? chunkptr->getblock(x, y, z - 1) : getblock(gx, gy, gz - 1, block(Blocks::ROCK)),
+                     x < 15 ? chunkptr->getblock(x + 1, y, z) : getblock(gx + 1, gy, gz, block(Blocks::ROCK)),
+                     x>0 ? chunkptr->getblock(x - 1, y, z) : getblock(gx - 1, gy, gz, block(Blocks::ROCK)),
+                     y < 15 ? chunkptr->getblock(x, y + 1, z) : getblock(gx, gy + 1, gz, block(Blocks::ROCK)),
+                     y>0 ? chunkptr->getblock(x, y - 1, z) : getblock(gx, gy - 1, gz, block(Blocks::ROCK))
                    };
 
     brightness brt[7] = { chunkptr->getbrightness(x,y,z) ,
@@ -228,7 +228,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
 
     size = 1 / 8.0f - EPS;
 
-    if (NiceGrass && blk[0] == Blocks::GRASS && getblock(gx, gy - 1, gz + 1, Blocks::ROCK, chunkptr) == Blocks::GRASS)
+    if (NiceGrass && blk[0] == block(Blocks::GRASS) && getblock(gx, gy - 1, gz + 1, block(Blocks::ROCK), chunkptr) == block(Blocks::GRASS))
     {
         tcx = Textures::getTexcoordX(blk[0], 1) + EPS;
         tcy = Textures::getTexcoordY(blk[0], 1) + EPS;
@@ -240,7 +240,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
     }
 
     // Front Face
-    if (!(BlockInfo(blk[1]).isOpaque() || (blk[1] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == Blocks::LEAF)
+    if (!(BlockInfo(blk[1]).isOpaque() || (blk[1] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == block(Blocks::LEAF))
     {
 
         colors = brt[1];
@@ -249,7 +249,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color3 = colors;
         color4 = colors;
 
-        if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)
+        if (blk[0] != block(Blocks::GLOWSTONE) && SmoothLighting)
         {
             color1 = (colors + getbrightness(gx, gy - 1, gz + 1) + getbrightness(gx - 1, gy, gz + 1) + getbrightness(gx - 1, gy - 1, gz + 1)) / 4.0;
             color2 = (colors + getbrightness(gx, gy - 1, gz + 1) + getbrightness(gx + 1, gy, gz + 1) + getbrightness(gx + 1, gy - 1, gz + 1)) / 4.0;
@@ -261,7 +261,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color2 /= BRIGHTNESSMAX;
         color3 /= BRIGHTNESSMAX;
         color4 /= BRIGHTNESSMAX;
-        if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender)
+        if (blk[0] != block(Blocks::GLOWSTONE) && !Renderer::AdvancedRender)
         {
             color1 *= 0.5;
             color2 *= 0.5;
@@ -285,7 +285,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
 
     }
 
-    if (NiceGrass && blk[0] == Blocks::GRASS && getblock(gx, gy - 1, gz - 1, Blocks::ROCK, chunkptr) == Blocks::GRASS)
+    if (NiceGrass && blk[0] == block(Blocks::GRASS) && getblock(gx, gy - 1, gz - 1, block(Blocks::ROCK), chunkptr) == block(Blocks::GRASS))
     {
         tcx = Textures::getTexcoordX(blk[0], 1) + EPS;
         tcy = Textures::getTexcoordY(blk[0], 1) + EPS;
@@ -297,7 +297,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
     }
 
     // Back Face
-    if (!(BlockInfo(blk[2]).isOpaque() || (blk[2] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == Blocks::LEAF)
+    if (!(BlockInfo(blk[2]).isOpaque() || (blk[2] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == block(Blocks::LEAF))
     {
 
         colors = brt[2];
@@ -306,7 +306,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color3 = colors;
         color4 = colors;
 
-        if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)
+        if (blk[0] != block(Blocks::GLOWSTONE) && SmoothLighting)
         {
             color1 = (colors + getbrightness(gx, gy - 1, gz - 1) + getbrightness(gx - 1, gy, gz - 1) + getbrightness(gx - 1, gy - 1, gz - 1)) / 4.0;
             color2 = (colors + getbrightness(gx, gy + 1, gz - 1) + getbrightness(gx - 1, gy, gz - 1) + getbrightness(gx - 1, gy + 1, gz - 1)) / 4.0;
@@ -318,7 +318,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color2 /= BRIGHTNESSMAX;
         color3 /= BRIGHTNESSMAX;
         color4 /= BRIGHTNESSMAX;
-        if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender)
+        if (blk[0] != block(Blocks::GLOWSTONE) && !Renderer::AdvancedRender)
         {
             color1 *= 0.5;
             color2 *= 0.5;
@@ -342,7 +342,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
 
     }
 
-    if (NiceGrass && blk[0] == Blocks::GRASS && getblock(gx + 1, gy - 1, gz, Blocks::ROCK, chunkptr) == Blocks::GRASS)
+    if (NiceGrass && blk[0] == block(Blocks::GRASS) && getblock(gx + 1, gy - 1, gz, block(Blocks::ROCK), chunkptr) == block(Blocks::GRASS))
     {
         tcx = Textures::getTexcoordX(blk[0], 1) + EPS;
         tcy = Textures::getTexcoordY(blk[0], 1) + EPS;
@@ -354,7 +354,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
     }
 
     // Right face
-    if (!(BlockInfo(blk[3]).isOpaque() || (blk[3] == blk[0] && !BlockInfo(blk[0]).isOpaque())) || blk[0] == Blocks::LEAF)
+    if (!(BlockInfo(blk[3]).isOpaque() || (blk[3] == blk[0] && !BlockInfo(blk[0]).isOpaque())) || blk[0] == block(Blocks::LEAF))
     {
 
         colors = brt[3];
@@ -363,7 +363,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color3 = colors;
         color4 = colors;
 
-        if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)
+        if (blk[0] != block(Blocks::GLOWSTONE) && SmoothLighting)
         {
             color1 = (colors + getbrightness(gx + 1, gy - 1, gz) + getbrightness(gx + 1, gy, gz - 1) + getbrightness(gx + 1, gy - 1, gz - 1)) / 4.0;
             color2 = (colors + getbrightness(gx + 1, gy + 1, gz) + getbrightness(gx + 1, gy, gz - 1) + getbrightness(gx + 1, gy + 1, gz - 1)) / 4.0;
@@ -375,7 +375,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color2 /= BRIGHTNESSMAX;
         color3 /= BRIGHTNESSMAX;
         color4 /= BRIGHTNESSMAX;
-        if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender)
+        if (blk[0] != block(Blocks::GLOWSTONE) && !Renderer::AdvancedRender)
         {
             color1 *= 0.7;
             color2 *= 0.7;
@@ -399,7 +399,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
 
     }
 
-    if (NiceGrass && blk[0] == Blocks::GRASS && getblock(gx - 1, gy - 1, gz, Blocks::ROCK, chunkptr) == Blocks::GRASS)
+    if (NiceGrass && blk[0] == block(Blocks::GRASS) && getblock(gx - 1, gy - 1, gz, block(Blocks::ROCK), chunkptr) == block(Blocks::GRASS))
     {
         tcx = Textures::getTexcoordX(blk[0], 1) + EPS;
         tcy = Textures::getTexcoordY(blk[0], 1) + EPS;
@@ -411,7 +411,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
     }
 
     // Left Face
-    if (!(BlockInfo(blk[4]).isOpaque() || (blk[4] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == Blocks::LEAF)
+    if (!(BlockInfo(blk[4]).isOpaque() || (blk[4] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == block(Blocks::LEAF))
     {
 
         colors = brt[4];
@@ -420,7 +420,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color3 = colors;
         color4 = colors;
 
-        if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)
+        if (blk[0] != block(Blocks::GLOWSTONE) && SmoothLighting)
         {
             color1 = (colors + getbrightness(gx - 1, gy - 1, gz) + getbrightness(gx - 1, gy, gz - 1) + getbrightness(gx - 1, gy - 1, gz - 1)) / 4.0;
             color2 = (colors + getbrightness(gx - 1, gy - 1, gz) + getbrightness(gx - 1, gy, gz + 1) + getbrightness(gx - 1, gy - 1, gz + 1)) / 4.0;
@@ -432,7 +432,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color2 /= BRIGHTNESSMAX;
         color3 /= BRIGHTNESSMAX;
         color4 /= BRIGHTNESSMAX;
-        if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender)
+        if (blk[0] != block(Blocks::GLOWSTONE) && !Renderer::AdvancedRender)
         {
             color1 *= 0.7;
             color2 *= 0.7;
@@ -460,7 +460,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
     tcy = Textures::getTexcoordY(blk[0], 1);
 
     // Top Face
-    if (!(BlockInfo(blk[5]).isOpaque() || (blk[5] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == Blocks::LEAF)
+    if (!(BlockInfo(blk[5]).isOpaque() || (blk[5] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == block(Blocks::LEAF))
     {
 
         colors = brt[5];
@@ -469,7 +469,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color3 = colors;
         color4 = colors;
 
-        if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)
+        if (blk[0] != block(Blocks::GLOWSTONE) && SmoothLighting)
         {
             color1 = (color1 + getbrightness(gx, gy + 1, gz - 1) + getbrightness(gx - 1, gy + 1, gz) + getbrightness(gx - 1, gy + 1, gz - 1)) / 4.0;
             color2 = (color2 + getbrightness(gx, gy + 1, gz + 1) + getbrightness(gx - 1, gy + 1, gz) + getbrightness(gx - 1, gy + 1, gz + 1)) / 4.0;
@@ -502,7 +502,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
     tcy = Textures::getTexcoordY(blk[0], 3);
 
     // Bottom Face
-    if (!(BlockInfo(blk[6]).isOpaque() || (blk[6] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == Blocks::LEAF)
+    if (!(BlockInfo(blk[6]).isOpaque() || (blk[6] == blk[0] && BlockInfo(blk[0]).isOpaque() == false)) || blk[0] == block(Blocks::LEAF))
     {
 
         colors = brt[6];
@@ -511,7 +511,7 @@ void renderblock(int x, int y, int z, chunk* chunkptr)
         color3 = colors;
         color4 = colors;
 
-        if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)
+        if (blk[0] != block(Blocks::GLOWSTONE) && SmoothLighting)
         {
             color1 = (colors + getbrightness(gx, gy - 1, gz - 1) + getbrightness(gx - 1, gy - 1, gz) + getbrightness(gx - 1, gy - 1, gz - 1)) / 4.0;
             color2 = (colors + getbrightness(gx, gy - 1, gz - 1) + getbrightness(gx + 1, gy - 1, gz) + getbrightness(gx + 1, gy - 1, gz - 1)) / 4.0;
@@ -579,7 +579,7 @@ bool inWater(const Hitbox::AABB& box)
         {
             for (int c = int(box.zmin + 0.5) - 1; c <= int(box.zmax + 0.5); c++)
             {
-                if (getblock(a, b, c) == Blocks::WATER || getblock(a, b, c) == Blocks::LAVA)
+                if (getblock(a, b, c) == block(Blocks::WATER) || getblock(a, b, c) == block(Blocks::LAVA))
                 {
                     blockbox.xmin = a - 0.5;
                     blockbox.xmax = a + 0.5;
@@ -633,7 +633,7 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth)
         {
             while (!chunkOutOfBound(cx, cyi + 1, cz) && chunkLoaded(cx, cyi + 1, cz) && skylighted)
             {
-                if (BlockInfo(getblock(x, yi, z)).isOpaque() || getblock(x, yi, z) == Blocks::WATER)
+                if (BlockInfo(getblock(x, yi, z)).isOpaque() || getblock(x, yi, z) == block(Blocks::WATER))
                 {
                     skylighted = false;
                 }
@@ -669,7 +669,7 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth)
                 if (brts[maxbrightness] < brts[i]) maxbrightness = i;
             }
             br = brts[maxbrightness];
-            if (blks[maxbrightness] == Blocks::WATER)
+            if (blks[maxbrightness] == block(Blocks::WATER))
             {
                 if (br - 2 < BRIGHTNESSMIN) br = BRIGHTNESSMIN;
                 else br -= 2;
@@ -694,7 +694,7 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth)
 
             //Opaque block
             cptr->setbrightness(bx, by, bz, 0);
-            if (getblock(x, y, z) == Blocks::GLOWSTONE || getblock(x, y, z) == Blocks::LAVA)
+            if (getblock(x, y, z) == block(Blocks::GLOWSTONE) || getblock(x, y, z) == block(Blocks::LAVA))
             {
                 cptr->setbrightness(bx, by, bz, BRIGHTNESSMAX);
             }
@@ -728,14 +728,14 @@ block getblock(int x, int y, int z, block mask, chunk* cptr)
 {
     //获取方块
     int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-    if (chunkOutOfBound(cx, cy, cz)) return Blocks::AIR;
+    if (chunkOutOfBound(cx, cy, cz)) return block(Blocks::AIR);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
     if (cptr != nullptr && cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
     {
         return cptr->getblock(bx, by, bz);
     }
     chunk* ci = getChunkPtr(cx, cy, cz);
-    if (ci == EmptyChunkPtr) return Blocks::AIR;
+    if (ci == EmptyChunkPtr) return block(Blocks::AIR);
     if (ci != nullptr) return ci->getblock(bx, by, bz);
     return mask;
 }
@@ -1026,18 +1026,18 @@ void buildtree(int x, int y, int z)
     /*
     block trblock = getblock(x, y+1, z), tublock = getblock(x, y , z);
     ubyte th = ubyte(rnd() * 3) + 4;
-    if (trblock != Blocks::AIR || tublock != Blocks::GRASS) { return; }
+    if (trblock != block(Blocks::AIR) || tublock != block(Blocks::GRASS)) { return; }
 
     for (ubyte yt = 0; yt != th; yt++) {
-    setblock(x, y + yt, z, Blocks::WOOD);
+    setblock(x, y + yt, z, block(Blocks::WOOD));
     }
 
-    setblock(x, y - 1, z, Blocks::DIRT);
+    setblock(x, y - 1, z, block(Blocks::DIRT));
 
     for (ubyte xt = 0; xt != 5; xt++) {
     for (ubyte zt = 0; zt != 5; zt++) {
     for (ubyte yt = 0; yt != 2; yt++) {
-    if (getblock(x + xt - 2, y + th - 3 + yt, z + zt - 2) == Blocks::AIR) setblock(x + xt - 2, y + th - 3 + yt, z + zt - 2, Blocks::LEAF);
+    if (getblock(x + xt - 2, y + th - 3 + yt, z + zt - 2) == block(Blocks::AIR)) setblock(x + xt - 2, y + th - 3 + yt, z + zt - 2, block(Blocks::LEAF));
     }
     }
     }
@@ -1045,12 +1045,12 @@ void buildtree(int x, int y, int z)
     for (ubyte xt = 0; xt != 3; xt++) {
     for (ubyte zt = 0; zt != 3; zt++) {
     for (ubyte yt = 0; yt != 2; yt++) {
-    if (getblock(x + xt - 1, y + th - 1 + yt, z + zt - 1) == Blocks::AIR && abs(xt - 1) != abs(zt - 1)) setblock(x + xt - 1, y + th - 1 + yt, z + zt - 1, Blocks::LEAF);
+    if (getblock(x + xt - 1, y + th - 1 + yt, z + zt - 1) == block(Blocks::AIR) && abs(xt - 1) != abs(zt - 1)) setblock(x + xt - 1, y + th - 1 + yt, z + zt - 1, block(Blocks::LEAF));
     }
     }
     }
 
-    setblock(x, y + th, z, Blocks::LEAF);
+    setblock(x, y + th, z, block(Blocks::LEAF));
 
     }
 
@@ -1060,7 +1060,7 @@ void buildtree(int x, int y, int z)
     //一：正上方五格必须为空气
     for (int i = y + 1; i < y + 6; i++)
     {
-        if (getblock(x, i, z) != Blocks::AIR)return;
+        if (getblock(x, i, z) != block(Blocks::AIR))return;
     }
     //二：周围五格不能有树
     for (int ix = x - 4; ix < x + 4; ix++)
@@ -1069,13 +1069,13 @@ void buildtree(int x, int y, int z)
         {
             for (int iz = z - 4; iz < z + 4; iz++)
             {
-                if (getblock(ix, iy, iz) == Blocks::WOOD || getblock(ix, iy, iz) == Blocks::LEAF)return;
+                if (getblock(ix, iy, iz) == block(Blocks::WOOD) || getblock(ix, iy, iz) == block(Blocks::LEAF))return;
             }
         }
     }
     //终于可以开始生成了
     //设置泥土
-    setblock(x, y, z, Blocks::DIRT);
+    setblock(x, y, z, block(Blocks::DIRT));
     //设置树干
     int h = 0;//高度
     //测算泥土数量
@@ -1086,14 +1086,14 @@ void buildtree(int x, int y, int z)
         {
             for (int iz = z - 4; iz < z + 4; iz++)
             {
-                if (getblock(ix, iy, iz) == Blocks::DIRT)Dirt++;
+                if (getblock(ix, iy, iz) == block(Blocks::DIRT))Dirt++;
             }
         }
     }
     //测算最高高度
     for (int i = y + 1; i < y + 16; i++)
     {
-        if (getblock(x, i, z) == Blocks::AIR)
+        if (getblock(x, i, z) == block(Blocks::AIR))
         {
             h++;
         }
@@ -1108,7 +1108,7 @@ void buildtree(int x, int y, int z)
     //开始生成树干
     for (int i = y + 1; i < y + h + 1; i++)
     {
-        setblock(x, i, z, Blocks::WOOD);
+        setblock(x, i, z, block(Blocks::WOOD));
     }
     //设置树叶及枝杈
     //计算树叶起始生成高度
@@ -1121,11 +1121,11 @@ void buildtree(int x, int y, int z)
             for (int iz = z - 6; iz < z + 6; iz++)
             {
                 int distancen = Distancen(ix, iy, iz, x, y + leafh + 1, z);
-                if ((getblock(ix, iy, iz) == Blocks::AIR) && (distancen <distancen2))
+                if ((getblock(ix, iy, iz) == block(Blocks::AIR)) && (distancen <distancen2))
                 {
                     if ((distancen <= distancen2 / 9) && (rnd()>0.3))//生成枝杈
                     {
-                        setblock(ix, iy, iz, Blocks::WOOD);
+                        setblock(ix, iy, iz, block(Blocks::WOOD));
                     }
                     else//生成树叶
                     {
@@ -1133,10 +1133,10 @@ void buildtree(int x, int y, int z)
                         /*
                         if (rnd() < (double)Dirt / 250.0)//树叶密度
                         {
-                        setblock(ix, iy, iz, Blocks::LEAF);
+                        setblock(ix, iy, iz, block(Blocks::LEAF));
                         }
                         */
-                        setblock(ix, iy, iz, Blocks::LEAF);
+                        setblock(ix, iy, iz, block(Blocks::LEAF));
                     }
                 }
             }
@@ -1165,7 +1165,7 @@ void explode(int x, int y, int z, int r, chunk* c)
                         distsqr <= maxdistsqr && rnd() > (distsqr - maxdistsqr*0.6) / (maxdistsqr*0.4))
                 {
                     block e = World::getblock(fx, fy, fz);
-                    if (e == Blocks::AIR) continue;
+                    if (e == block(Blocks::AIR)) continue;
                     for (int j = 1; j <= 12; j++)
                     {
                         Particles::throwParticle(e,
@@ -1173,7 +1173,7 @@ void explode(int x, int y, int z, int r, chunk* c)
                                                  float(rnd()*0.2f - 0.1f), float(rnd()*0.2f - 0.1f), float(rnd()*0.2f - 0.1f),
                                                  float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
                     }
-                    setblock(fx, fy, fz, Blocks::AIR, c);
+                    setblock(fx, fy, fz, block(Blocks::AIR), c);
                 }
             }
         }

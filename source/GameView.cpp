@@ -1,4 +1,4 @@
-#include "GameView.h"
+﻿#include "GameView.h"
 #include "Blocks.h"
 #include "Textures.h"
 #include "GLProc.h"
@@ -269,30 +269,30 @@ public:
             gy = y + cy * 16;
             z = int(rnd() * 16);
             gz = z + cz * 16;
-            if (World::chunks[i]->getblock(x, y, z) == Blocks::DIRT &&
-                    World::getblock(gx, gy + 1, gz, Blocks::NONEMPTY) == Blocks::AIR && (
-                        World::getblock(gx + 1, gy, gz, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx - 1, gy, gz, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx, gy, gz + 1, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx, gy, gz - 1, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx + 1, gy + 1, gz, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx - 1, gy + 1, gz, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx, gy + 1, gz + 1, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx, gy + 1, gz - 1, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx + 1, gy - 1, gz, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx - 1, gy - 1, gz, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx, gy - 1, gz + 1, Blocks::AIR) == Blocks::GRASS ||
-                        World::getblock(gx, gy - 1, gz - 1, Blocks::AIR) == Blocks::GRASS))
+            if (World::chunks[i]->getblock(x, y, z) == block(Blocks::DIRT) &&
+                    World::getblock(gx, gy + 1, gz, Blocks::NONEMPTY) == block(Blocks::AIR) && (
+                        World::getblock(gx + 1, gy, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx - 1, gy, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx, gy, gz + 1, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx, gy, gz - 1, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx + 1, gy + 1, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx - 1, gy + 1, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx, gy + 1, gz + 1, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx, gy + 1, gz - 1, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx + 1, gy - 1, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx - 1, gy - 1, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx, gy - 1, gz + 1, block(Blocks::AIR)) == block(Blocks::GRASS) ||
+                        World::getblock(gx, gy - 1, gz - 1, block(Blocks::AIR)) == block(Blocks::GRASS)))
             {
                 //长草
-                World::chunks[i]->setblock(x, y, z, Blocks::GRASS);
+                World::chunks[i]->setblock(x, y, z, block(Blocks::GRASS));
                 World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
                 World::setChunkUpdated(cx, cy, cz, true);
             }
-            if (World::chunks[i]->getblock(x, y, z) == Blocks::GRASS && World::getblock(gx, gy + 1, gz, Blocks::AIR) != Blocks::AIR)
+            if (World::chunks[i]->getblock(x, y, z) == block(Blocks::GRASS) && World::getblock(gx, gy + 1, gz, block(Blocks::AIR)) != block(Blocks::AIR))
             {
                 //草被覆盖
-                World::chunks[i]->setblock(x, y, z, Blocks::DIRT);
+                World::chunks[i]->setblock(x, y, z, block(Blocks::DIRT));
                 World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
             }
         }
@@ -304,7 +304,8 @@ public:
         lz = Player::zpos;
 
         sel = false;
-        selx = sely = selz = selbx = selby = selbz = selcx = selcy = selcz = selb = selbr = 0;
+        selx = sely = selz = selbx = selby = selbz = selcx = selcy = selcz = selbr = 0;
+		selb = block(0);
 
         if (!bagOpened)
         {
@@ -403,7 +404,7 @@ public:
                             if (Player::putBlock(xl, yl, zl, Player::BlockInHand))
                             {
                                 Player::inventoryAmount[3][Player::indexInHand]--;
-                                if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = Blocks::AIR;
+                                if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = block(Blocks::AIR);
 
                                 BlockClick = true;
                                 BlockPos[0] = x;
@@ -417,7 +418,7 @@ public:
                             if (Player::inventory[3][Player::indexInHand] == APPLE)
                             {
                                 Player::inventoryAmount[3][Player::indexInHand]--;
-                                if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = Blocks::AIR;
+                                if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = block(Blocks::AIR);
                                 Player::health = Player::healthMax;
                             }
                         }
@@ -1118,12 +1119,12 @@ public:
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        if (World::getblock(RoundInt(xpos), RoundInt(ypos), RoundInt(zpos)) == Blocks::WATER)
+        if (World::getblock(RoundInt(xpos), RoundInt(ypos), RoundInt(zpos)) == block(Blocks::WATER))
         {
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
             glBindTexture(GL_TEXTURE_2D, BlockTextures);
-            double tcX = Textures::getTexcoordX(Blocks::WATER, 1);
-            double tcY = Textures::getTexcoordY(Blocks::WATER, 1);
+            double tcX = Textures::getTexcoordX(block(Blocks::WATER), 1);
+            double tcY = Textures::getTexcoordY(block(Blocks::WATER), 1);
             glBegin(GL_QUADS);
             glTexCoord2d(tcX, tcY + 1 / 8.0);
             glVertex2i(0, 0);
@@ -1251,7 +1252,7 @@ public:
         if (DebugMode)
         {
 
-            if (selb != Blocks::AIR)
+            if (selb != block(Blocks::AIR))
             {
                 glLineWidth(1);
                 glBegin(GL_LINES);
@@ -1265,7 +1266,7 @@ public:
                 glEnable(GL_TEXTURE_2D);
                 glDisable(GL_CULL_FACE);
                 std::stringstream ss;
-                ss << BlockInfo(selb).getBlockName() << " (ID " << (int)selb << ")";
+                ss << BlockInfo(selb).getBlockName() << " (ID " << selb.ID << ")";
                 TextRenderer::renderString(windowuswidth / 2 + 50, windowusheight / 2 + 50 - 16, ss.str());
                 glDisable(GL_TEXTURE_2D);
                 glEnable(GL_CULL_FACE);
@@ -1629,7 +1630,7 @@ public:
             UIVertex(xbase + i * (32 + spac), ybase + 32);
             glEnd();
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-            if (Player::inventory[row][i] != Blocks::AIR)
+            if (Player::inventory[row][i] != block(Blocks::AIR))
             {
                 glBindTexture(GL_TEXTURE_2D, BlockTextures);
                 double tcX = Textures::getTexcoordX(Player::inventory[row][i], 1);
@@ -1659,7 +1660,7 @@ public:
         int leftp = (windowwidth / stretch - 392) / 2;
         int upp = windowheight / stretch - 152 - 16;
         static int mousew, mouseb, mousebl;
-        static block indexselected = Blocks::AIR;
+        static block indexselected = block(Blocks::AIR);
         static short Amountselected = 0;
         double curtime = timer();
         double TimeDelta = curtime - bagAnimTimer;
@@ -1724,23 +1725,23 @@ public:
                                 Amountselected--;
                                 Player::inventoryAmount[i][j]++;
                             }
-                            if (mousebl == 0 && mouseb == 2 && Player::inventory[i][j] == Blocks::AIR)
+                            if (mousebl == 0 && mouseb == 2 && Player::inventory[i][j] == block(Blocks::AIR))
                             {
                                 Amountselected--;
                                 Player::inventoryAmount[i][j] = 1;
                                 Player::inventory[i][j] = indexselected;
                             }
 
-                            if (Amountselected == 0) indexselected = Blocks::AIR;
-                            if (indexselected == Blocks::AIR) Amountselected = 0;
-                            if (Player::inventoryAmount[i][j] == 0) Player::inventory[i][j] = Blocks::AIR;
-                            if (Player::inventory[i][j] == Blocks::AIR) Player::inventoryAmount[i][j] = 0;
+                            if (Amountselected == 0) indexselected = block(Blocks::AIR);
+                            if (indexselected == block(Blocks::AIR)) Amountselected = 0;
+                            if (Player::inventoryAmount[i][j] == 0) Player::inventory[i][j] = block(Blocks::AIR);
+                            if (Player::inventory[i][j] == block(Blocks::AIR)) Player::inventoryAmount[i][j] = 0;
                         }
                     }
                     drawBagRow(i, (csi == i ? csj : -1), (windowwidth / stretch - 392) / 2, windowheight / stretch - 152 - 16 + i * 40, 8, 1.0f);
                 }
             }
-            if (indexselected != Blocks::AIR)
+            if (indexselected != block(Blocks::AIR))
             {
                 glBindTexture(GL_TEXTURE_2D, BlockTextures);
                 double tcX = Textures::getTexcoordX(indexselected, 1);

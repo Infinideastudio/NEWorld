@@ -15,7 +15,7 @@ bool Player::Running = false;
 bool Player::NearWall = false;
 bool Player::inWater = false;
 bool Player::glidingNow = false;
-item Player::BlockInHand = Blocks::AIR;
+item Player::BlockInHand = block(Blocks::AIR);
 ubyte Player::indexInHand = 0;
 
 Hitbox::AABB Player::playerbox;
@@ -100,24 +100,24 @@ void Player::spawn()
     //总得加点物品吧
     for (size_t i = 0; i < 255; i++)
     {
-        addItem(Blocks::ROCK);
-        addItem(Blocks::GRASS);
-        addItem(Blocks::DIRT);
-        addItem(Blocks::STONE);
-        addItem(Blocks::PLANK);
-        addItem(Blocks::WOOD);
-        //addItem(Blocks::BEDROCK);TMD这个是基岩
-        addItem(Blocks::LEAF);
-        addItem(Blocks::GLASS);
-        addItem(Blocks::WATER);
-        addItem(Blocks::LAVA);
-        addItem(Blocks::GLOWSTONE);
-        addItem(Blocks::SAND);
-        addItem(Blocks::CEMENT);
-        addItem(Blocks::ICE);
-        addItem(Blocks::COAL);
-        addItem(Blocks::IRON);
-        addItem(Blocks::TNT);
+        addItem(block(Blocks::ROCK));
+        addItem(block(Blocks::GRASS));
+        addItem(block(Blocks::DIRT));
+        addItem(block(Blocks::STONE));
+        addItem(block(Blocks::PLANK));
+        addItem(block(Blocks::WOOD));
+        //addItem(block(Blocks::BEDROCK));TMD这个是基岩
+        addItem(block(Blocks::LEAF));
+        addItem(block(Blocks::GLASS));
+        addItem(block(Blocks::WATER));
+        addItem(block(Blocks::LAVA));
+        addItem(block(Blocks::GLOWSTONE));
+        addItem(block(Blocks::SAND));
+        addItem(block(Blocks::CEMENT));
+        addItem(block(Blocks::ICE));
+        addItem(block(Blocks::COAL));
+        addItem(block(Blocks::IRON));
+        addItem(block(Blocks::TNT));
     }
 }
 
@@ -305,7 +305,7 @@ bool Player::addItem(item itemname, short amount)
     {
         for (int j = 0; j != 10; j++)
         {
-            if (inventory[i][j] == Blocks::AIR)
+            if (inventory[i][j] == block(Blocks::AIR))
             {
                 //找到一个空白格子
                 inventory[i][j] = itemname;

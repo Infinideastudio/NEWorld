@@ -141,7 +141,7 @@ void RenderPrimitive(QuadPrimitive& p)
     {
     case 0:
     {
-        if (p.block != Blocks::GLOWSTONE) color *= 0.7;
+        if (p.block != block(Blocks::GLOWSTONE)) color *= 0.7;
         float geomentry[] =
         {
             0.0, 0.0, T3d, color, color, color, x + 0.5, y - 0.5, z - 0.5,
@@ -154,7 +154,7 @@ void RenderPrimitive(QuadPrimitive& p)
     break;
     case 1:
     {
-        if (p.block != Blocks::GLOWSTONE) color *= 0.7;
+        if (p.block != block(Blocks::GLOWSTONE)) color *= 0.7;
         float geomentry[] =
         {
             0.0, 1.0, T3d, color, color, color, x - 0.5, y + 0.5, z - 0.5,
@@ -191,7 +191,7 @@ void RenderPrimitive(QuadPrimitive& p)
     break;
     case 4:
     {
-        if (p.block != Blocks::GLOWSTONE) color *= 0.5;
+        if (p.block != block(Blocks::GLOWSTONE)) color *= 0.5;
         float geomentry[] =
         {
             0.0, 1.0, T3d, color, color, color, x - 0.5, y + 0.5, z + 0.5,
@@ -204,7 +204,7 @@ void RenderPrimitive(QuadPrimitive& p)
     break;
     case 5:
     {
-        if (p.block != Blocks::GLOWSTONE) color *= 0.5;
+        if (p.block != block(Blocks::GLOWSTONE)) color *= 0.5;
         float geomentry[] =
         {
             0.0, 0.0, T3d, color, color, color, x - 0.5, y - 0.5, z - 0.5,
@@ -279,7 +279,7 @@ void RenderChunk(World::chunk* c)
             for (z = 0; z < 16; z++)
             {
                 block curr = c->getblock(x, y, z);
-                if (curr == Blocks::AIR) continue;
+                if (curr == block(Blocks::AIR)) continue;
                 if (!BlockInfo(curr).isTranslucent()) renderblock(x, y, z, c);
             }
         }
@@ -294,7 +294,7 @@ void RenderChunk(World::chunk* c)
             for (z = 0; z < 16; z++)
             {
                 block curr = c->getblock(x, y, z);
-                if (curr == Blocks::AIR) continue;
+                if (curr == block(Blocks::AIR)) continue;
                 if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(x, y, z, c);
             }
         }
@@ -309,7 +309,7 @@ void RenderChunk(World::chunk* c)
             for (z = 0; z < 16; z++)
             {
                 block curr = c->getblock(x, y, z);
-                if (curr == Blocks::AIR) continue;
+                if (curr == block(Blocks::AIR)) continue;
                 if (!BlockInfo(curr).isSolid()) renderblock(x, y, z, c);
             }
         }
@@ -335,7 +335,8 @@ void MergeFaceRender(World::chunk* c)
     for (int steps = 0; steps < 3; steps++)
     {
         cur = QuadPrimitive();
-        cur_l_mx = bl = neighbour = 0;
+		cur_l_mx = 0;
+		bl = neighbour = block(0);
         //Linear merge
         if (Renderer::AdvancedRender) Renderer::Init(3, 3, 1);
         else Renderer::Init(3, 3);
@@ -450,17 +451,17 @@ void MergeFaceRender(World::chunk* c)
                         //Get block ID
                         bl = c->getblock(x, y, z);
                         tex = Textures::getTextureIndex(bl, face);
-                        neighbour = World::getblock(gx + delta[d][0], gy + delta[d][1], gz + delta[d][2], Blocks::ROCK, c);
-                        if (NiceGrass && bl == Blocks::GRASS)
+                        neighbour = World::getblock(gx + delta[d][0], gy + delta[d][1], gz + delta[d][2], block(Blocks::ROCK), c);
+                        if (NiceGrass && bl == block(Blocks::GRASS))
                         {
-                            if (d == 0 && getblock(gx + 1, gy - 1, gz, Blocks::ROCK, c) == Blocks::GRASS) tex = Textures::getTextureIndex(bl, 1);
-                            else if (d == 1 && getblock(gx - 1, gy - 1, gz, Blocks::ROCK, c) == Blocks::GRASS) tex = Textures::getTextureIndex(bl, 1);
-                            else if (d == 4 && getblock(gx, gy - 1, gz + 1, Blocks::ROCK, c) == Blocks::GRASS) tex = Textures::getTextureIndex(bl, 1);
-                            else if (d == 5 && getblock(gx, gy - 1, gz - 1, Blocks::ROCK, c) == Blocks::GRASS) tex = Textures::getTextureIndex(bl, 1);
+                            if (d == 0 && getblock(gx + 1, gy - 1, gz, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
+                            else if (d == 1 && getblock(gx - 1, gy - 1, gz, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
+                            else if (d == 4 && getblock(gx, gy - 1, gz + 1, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
+                            else if (d == 5 && getblock(gx, gy - 1, gz - 1, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
                         }
                         //Render
                         const Blocks::SingleBlock& info = BlockInfo(bl);
-                        if (bl == Blocks::AIR || bl == neighbour && bl != Blocks::LEAF || BlockInfo(neighbour).isOpaque() ||
+                        if (bl == block(Blocks::AIR) || bl == neighbour && bl != block(Blocks::LEAF) || BlockInfo(neighbour).isOpaque() ||
                                 steps == 0 && info.isTranslucent() ||
                                 steps == 1 && (!info.isTranslucent() || !info.isSolid()) ||
                                 steps == 2 && (!info.isTranslucent() || info.isSolid()))
@@ -539,7 +540,8 @@ void RenderDepthModel(World::chunk* c)
     int cur_l_mx;
     block bl, neighbour;
     bool valid = false;
-    cur_l_mx = bl = neighbour = 0;
+	cur_l_mx = 0;
+	bl = neighbour = block(0);
     //Linear merge for depth model
     Renderer::Init(0, 0);
     for (int d = 0; d < 6; d++)
@@ -562,7 +564,7 @@ void RenderDepthModel(World::chunk* c)
                         neighbour = World::getblock(gx, gy, gz);
                     else neighbour = c->getblock(xx, yy, zz);
                     //Render
-                    if (bl == Blocks::AIR || bl == Blocks::GLASS || bl == neighbour && bl != Blocks::LEAF ||
+                    if (bl == block(Blocks::AIR) || bl == block(Blocks::GLASS) || bl == neighbour && bl != block(Blocks::LEAF) ||
                             BlockInfo(neighbour).isOpaque() || BlockInfo(bl).isTranslucent())
                     {
                         //Not valid block
