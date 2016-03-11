@@ -15,17 +15,17 @@ enum BuiltInItems
 };
 
 extern ItemInfo itemsinfo[];
-const item theFirstItem = STICK;
+const item theFirstItem = item(STICK);
 
 void loadItemsTextures();
 
 inline bool isBlock(item i)
 {
-    return i < theFirstItem;
+    return i.ID < theFirstItem.ID;
 }
 
 inline TextureID getItemTexture(item i)
 {
     if (isBlock(i)) return BlockTextures;
-    else return itemsinfo[i - theFirstItem].texture;
+    else return itemsinfo[i.ID - theFirstItem.ID].texture;
 }

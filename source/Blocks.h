@@ -1,16 +1,40 @@
-﻿#pragma once
+#ifndef BLOCKS_H
+#define BLOCKS_H
 #include "stdinclude.h"
+#include "Typedefs.h"
 #include "Definitions.h"
 #include "Globalization.h"
 namespace Blocks
 {
+enum MineType{
+	Solid,Liquid,Gas,Sand,Plasma,Special,Minetype_End
+};
+
 enum BlockID
 {
     AIR, ROCK, GRASS, DIRT, STONE, PLANK, WOOD, BEDROCK, LEAF,
     GLASS, WATER, LAVA, GLOWSTONE, SAND, CEMENT, ICE, COAL, IRON,
     TNT, BLOCK_DEF_END
 };
-const block NONEMPTY = 1;
+
+
+struct BUDDP{
+	block* upd;
+	block* slf;
+	void* dudp;
+	void* dslf;
+	long long cx, cy, cz;
+	short cp;
+};
+
+struct TILDP{
+	block* slf;
+	void* dslf;
+	long long cx, cy, cz;
+	short cp;
+};
+
+const block NONEMPTY = block(1);
 
 class SingleBlock
 {
@@ -22,6 +46,7 @@ private:
     bool Translucent;
     bool Dark;
     bool canexplode;
+	int MineType;
 
 public:
     SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _canexplode, float _hardness) :
@@ -84,4 +109,5 @@ const SingleBlock blockData[BLOCK_DEF_END + 1] =
     SingleBlock("NEWorld.Blocks.Null Block" , true  , true  , false , false,	0)
 };
 }
-#define BlockInfo(blockID) Blocks::blockData[(blockID) >= Blocks::BLOCK_DEF_END || (blockID) < 0 ? Blocks::BLOCK_DEF_END : (blockID)]
+#define BlockInfo(blockID) Blocks::blockData[(blockID).ID >= Blocks::BLOCK_DEF_END || (blockID.ID) < 0 ? Blocks::BLOCK_DEF_END : (blockID.ID)]
+#endif
