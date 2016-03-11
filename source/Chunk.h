@@ -77,7 +77,7 @@ public:
     void SaveToFile();
     void buildRender();
     void destroyRender();
-    inline block getblock(int x, int y, int z)
+    inline block& getblock(int x, int y, int z)
     {
         //»ñÈ¡Çø¿éÄÚµÄ·½¿é
         //assert(Empty == false);
