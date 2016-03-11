@@ -5,9 +5,9 @@ ItemInfo itemsinfo[] = { STICK, APPLE };
 
 void loadItemsTextures()
 {
-    itemsinfo[BuiltInItems::STICK - theFirstItem].texture =
+    itemsinfo[BuiltInItems::STICK - theFirstItem.ID].texture =
         Textures::LoadRGBTexture("Textures/Items/stick.bmp");
-    itemsinfo[BuiltInItems::APPLE - theFirstItem].texture =
+    itemsinfo[BuiltInItems::APPLE - theFirstItem.ID].texture =
         Textures::LoadRGBTexture("Textures/Items/apple.bmp");
 
 }

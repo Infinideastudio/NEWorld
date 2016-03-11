@@ -17,7 +17,7 @@ void Init()
 
 ubyte getTextureIndex(block blockname, ubyte side)
 {
-    switch (blockname)
+    switch (blockname.ID)
     {
     case Blocks::ROCK:
         return ROCK;

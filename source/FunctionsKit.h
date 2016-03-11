@@ -91,6 +91,13 @@ template<class T> inline void conv(string str, T& ret)
     s >> ret;
 }
 
+inline void conv(string str, block& ret)
+{
+	std::stringstream s(str);
+	s >> ret.ID;
+}
+
+
 template<class T> inline T clamp(T x, T min, T max)
 {
     if (x < min) return min;
