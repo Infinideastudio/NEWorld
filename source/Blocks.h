@@ -6,8 +6,10 @@
 #include "Globalization.h"
 namespace Blocks
 {
-enum MineType{
-	Solid,Liquid,Gas,Sand,Plasma,Special,Minetype_End
+
+enum MineType
+{
+    Solid,Liquid,Gas,Sand,Plasma,Special,Minetype_End
 };
 
 enum BlockID
@@ -18,20 +20,22 @@ enum BlockID
 };
 
 
-struct BUDDP{
-	block* upd;
-	block* slf;
-	void* dudp;
-	void* dslf;
-	long long cx, cy, cz;
-	short cp;
+struct BUDDP
+{
+    block* upd;
+    block* slf;
+    void* dudp;
+    void* dslf;
+    long long cx, cy, cz;
+    short cp;
 };
 
-struct TILDP{
-	block* slf;
-	void* dslf;
-	long long cx, cy, cz;
-	short cp;
+struct TILDP
+{
+    block* slf;
+    void* dslf;
+    long long cx, cy, cz;
+    short cp;
 };
 
 const block NONEMPTY = block(1);
@@ -47,48 +51,54 @@ private:
     bool Opaque;
     bool Translucent;
     bool Dark;
-    bool canexplode;
-	int MineType;
+    bool explosive;
+    int MineType;
 
 public:
 
-	BUDF BlockUpdateFunc = nullptr;
-	TILF BlockTickUpdateFunc = nullptr;
+    BUDF BlockUpdateFunc = nullptr;
+    TILF BlockTickUpdateFunc = nullptr;
 
-	inline bool ExecBUF(BUDDP b) {
-		return BlockUpdateFunc(&b);
-	}
+    inline bool ExecBUF(BUDDP b)
+    {
+        return BlockUpdateFunc(&b);
+    }
 
-    SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _canexplode, float _hardness) :
-        name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), canexplode(_canexplode), Hardness(_hardness) {};
+    SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness) :
+        name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness) {};
 
     //获得方块名称
-    inline string getBlockName()const
+    inline string getBlockName() const
     {
         return Globalization::GetStrbyKey(name);
     }
+
     //是否是固体
-    inline bool isSolid()const
+    inline bool isSolid() const
     {
         return Solid;
     }
+
     //是否不透明
-    inline bool isOpaque()const
+    inline bool isOpaque() const
     {
         return Opaque;
     }
+
     //是否半透明
-    inline bool isTranslucent()const
+    inline bool isTranslucent() const
     {
         return Translucent;
     }
+
     //是否可以爆炸
-    inline bool canExplode()const
+    inline bool isExplosive() const
     {
-        return canexplode;
+        return explosive;
     }
+
     //获得硬度（数值越大硬度越小，最大100）
-    inline float getHardness()const
+    inline float getHardness() const
     {
         return Hardness;
     }
@@ -118,6 +128,8 @@ const SingleBlock blockData[BLOCK_DEF_END + 1] =
     SingleBlock("NEWorld.Blocks.TNT"		, true	, true	, false , true,		25),
     SingleBlock("NEWorld.Blocks.Null Block" , true  , true  , false , false,	0)
 };
+
 }
+
 #define BlockInfo(blockID) Blocks::blockData[(blockID).ID >= Blocks::BLOCK_DEF_END || (blockID.ID) < 0 ? Blocks::BLOCK_DEF_END : (blockID.ID)]
 #endif

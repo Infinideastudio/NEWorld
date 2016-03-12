@@ -305,7 +305,7 @@ public:
 
         sel = false;
         selx = sely = selz = selbx = selby = selbz = selcx = selcy = selcz = selbr = 0;
-		selb = block(0);
+        selb = block(0);
 
         if (!bagOpened)
         {

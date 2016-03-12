@@ -10,6 +10,7 @@ class GameMenu :public GUI::Form
 private:
     GUI::label title;
     GUI::button resumebtn, exitbtn;
+
     void onLoad()
     {
         glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -18,6 +19,7 @@ private:
         exitbtn = GUI::button(GetStrbyKey("NEWorld.pause.back"), -200, 200, 3, 35, 0.5, 0.5, 0.5, 0.5);
         registerControls(3, &title, &resumebtn, &exitbtn);
     }
+
     void onUpdate()
     {
         MutexUnlock(Mutex);
@@ -43,8 +45,10 @@ private:
         }
     }
 };
+
 void gamemenu()
 {
     GUI::PushPage(new GameMenu);
 }
+
 }

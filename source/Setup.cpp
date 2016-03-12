@@ -43,7 +43,8 @@ void createWindow()
     });
     std::stringstream title;
     title << "NEWorld " << MAJOR_VERSION << MINOR_VERSION << EXT_VERSION;
-    if (Multisample != 0) glfwWindowHint(GLFW_SAMPLES, Multisample);
+    if (Multisample != 0)
+        glfwWindowHint(GLFW_SAMPLES, Multisample);
     MainWindow = glfwCreateWindow(windowwidth, windowheight, title.str().c_str(), NULL, NULL);
     MouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     glfwMakeContextCurrent(MainWindow);
@@ -86,7 +87,8 @@ void setupScreen()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glHint(GL_FOG_HINT, GL_FASTEST);
     glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST);
-    if (Multisample != 0) glEnable(GL_MULTISAMPLE_ARB);
+    if (Multisample != 0)
+        glEnable(GL_MULTISAMPLE_ARB);
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     glColor4f(0.0, 0.0, 0.0, 1.0);
@@ -95,9 +97,13 @@ void setupScreen()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClearDepth(1.0);
     glGenBuffersARB(1, &World::EmptyBuffer);
-    if (Renderer::AdvancedRender) Renderer::initShaders();
-    if (vsync) glfwSwapInterval(1);
-    else glfwSwapInterval(0);
+    if (Renderer::AdvancedRender)
+        Renderer::initShaders();
+
+    if (vsync)
+        glfwSwapInterval(1);
+    else
+        glfwSwapInterval(0);
 }
 
 void setupNormalFog()
@@ -140,8 +146,8 @@ void loadTextures()
 
 void WindowSizeFunc(GLFWwindow * win, int width, int height)
 {
-    if (width<640) width = 640;
-    if (height<360) height = 360;
+    width = max(width, 640);
+    height = max(height, 360);
     windowwidth = width;
     windowheight = height > 0 ? height : 1;
     glfwSetWindowSize(win, width, height);
@@ -153,11 +159,17 @@ void MouseButtonFunc(GLFWwindow *, int button, int action, int)
     mb = 0;
     if (action == GLFW_PRESS)
     {
-        if (button == GLFW_MOUSE_BUTTON_LEFT)mb += 1;
-        if (button == GLFW_MOUSE_BUTTON_RIGHT)mb += 2;
-        if (button == GLFW_MOUSE_BUTTON_MIDDLE)mb += 4;
+        if (button == GLFW_MOUSE_BUTTON_LEFT)
+            mb += 1;
+        if (button == GLFW_MOUSE_BUTTON_RIGHT)
+            mb += 2;
+        if (button == GLFW_MOUSE_BUTTON_MIDDLE)
+            mb += 4;
     }
-    else mb = 0;
+    else
+    {
+        mb = 0;
+    }
 }
 
 void CharInputFunc(GLFWwindow *, unsigned int c)
@@ -174,7 +186,10 @@ void CharInputFunc(GLFWwindow *, unsigned int c)
         free(pszMultiByte);
         delete[] pwszUnicode;
     }
-    else inputstr += (char)c;
+    else
+    {
+        inputstr += (char)c;
+    }
 }
 
 void MouseScrollFunc(GLFWwindow *, double, double yoffset)

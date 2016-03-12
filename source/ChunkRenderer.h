@@ -30,12 +30,14 @@ struct QuadPrimitive
     QuadPrimitive() : x(0), y(0), z(0), length(0), direction(0), once(false),
         tex(Textures::NULLBLOCK), col0(0), col1(0), col2(0), col3(0) {}
 };
+
 //深度模型的面 | Face in depth model
 struct QuadPrimitive_Depth
 {
     int x, y, z, length, direction;
     QuadPrimitive_Depth() : x(0), y(0), z(0), length(0), direction(0) {}
 };
+
 void RenderPrimitive(QuadPrimitive& p);
 void RenderPrimitive_Depth(QuadPrimitive_Depth& p);
 void RenderChunk(World::chunk* c);
