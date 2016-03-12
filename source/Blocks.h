@@ -56,7 +56,7 @@ public:
 	TILF BlockTickUpdateFunc = nullptr;
 
 	inline bool ExecBUF(BUDDP b) {
-		return BlockUpdateFunc(b);
+		return BlockUpdateFunc(&b);
 	}
 
     SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _canexplode, float _hardness) :
