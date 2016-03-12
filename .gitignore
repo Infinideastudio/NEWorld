@@ -204,3 +204,6 @@ FakesAssemblies/
 *.dll
 *.exe
 *.a
+
+# CScope database
+cscope.*
