@@ -16,13 +16,13 @@ enum NodeType { Unknown, Package, String, U8, U16, U32, U64, S8, S16, S32, S64, 
 struct Magic
 {
     uint8_t data[4];
-    bool operator!= (const Magic &src) const;
+    bool operator != (const Magic &src) const;
 };
 
 struct Version
 {
     uint8_t data[4];
-    bool operator> (const Version &src) const;
+    bool operator > (const Version &src) const;
 };
 
 struct Information
@@ -81,11 +81,13 @@ public:
     {
         uint8_t flags;
         in.read((char*)&flags, 1);
-        if (!in) return false;
+        if (!in)
+            return false;
 
         DataType data_;
         in.read((char*)&data_, sizeof(DataType));
-        if (!in) return false;
+        if (!in)
+            return false;
         data = data_;
         return true;
     }
@@ -94,10 +96,12 @@ public:
     {
         uint8_t flags = 0x00;
         out.write((char*)&flags, 1);
-        if (!out) return false;
+        if (!out)
+            return false;
 
         out.write((char*)&data, sizeof(DataType));
-        if (!out) return false;
+        if (!out)
+            return false;
         return true;
     }
 
@@ -115,6 +119,7 @@ public:
     {
         return data;
     }
+    
     inline const DataType* get() const
     {
         return data;
@@ -361,18 +366,22 @@ public:
     {
         return data;
     }
+
     inline const NodeMap& getNodeMap() const
     {
         return data;
     }
+
     inline void setNodeMap(const NodeMap& data_)
     {
         data = data_;
     }
+
     inline void addNode(std::string nodeName, Node* value)
     {
         data.insert(std::make_pair(nodeName, value));
     }
+
     inline void removeNode(std::string nodeName)
     {
         data.erase(nodeName);
@@ -387,8 +396,10 @@ public:
             for (unsigned int i = 0; i < result.size(); i++)
             {
                 Node* n = static_cast<NodePackage*>(M)->data.at(result[i]);
-                if (n->getType() == NodeType::Package) M = static_cast<NodePackage*>(n);
-                else break;
+                if (n->getType() == NodeType::Package)
+                    M = static_cast<NodePackage*>(n);
+                else
+                    break;
             }
         }
         catch (std::out_of_range&)
@@ -402,6 +413,7 @@ public:
     {
         printStack(out);
     }
+    
     void printStack(std::ostream& out, int stack = 0) const
     {
         for (NodeMap::const_iterator iter = data.begin(); iter != data.end(); iter++)

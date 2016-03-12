@@ -11,7 +11,7 @@ namespace NNN
 {
 
 
-bool Magic::operator!= (const Magic &src) const
+bool Magic::operator != (const Magic &src) const
 {
     return (data[0] != src.data[0])
            || (data[1] != src.data[1])
@@ -19,7 +19,7 @@ bool Magic::operator!= (const Magic &src) const
            || (data[3] != src.data[3]);
 }
 
-bool Version::operator> (const Version &src) const
+bool Version::operator > (const Version &src) const
 {
     return (data[0] > src.data[0])
            || ((data[0] == src.data[0]) && (data[1] > src.data[1]))
@@ -32,14 +32,14 @@ bool NodePackage::read(std::istream& in, Information& info)
 
     uint8_t flags;
     in.read((char*)&flags, 1);
-    if (!in) return false;
+    if (!in)
+        return false;
 
     info.depth++;
 
     std::map<std::string, Node*> data_;
     for (;;)
     {
-
         uint8_t rtype;
         in.read((char*)&rtype, 1);
         if (!in)
@@ -49,7 +49,9 @@ bool NodePackage::read(std::istream& in, Information& info)
             return false;
         }
 
-        if (rtype == 0x00) break;
+        if (rtype == 0x00)
+            break;
+        
         Node* node;
 
         switch (rtype)
@@ -160,14 +162,10 @@ bool NodePackage::write(std::ostream& out, Information& info)
 
     for (std::map<std::string, Node*>::iterator it = data.begin(); it != data.end(); ++it)
     {
-
         if (it->second == NULL)
         {
-
             info.depth--;
-
             return false;
-
         }
 
         uint8_t wtype;
@@ -209,30 +207,21 @@ bool NodePackage::write(std::ostream& out, Information& info)
         out.write((char*)&namelen, 2);
         if (!out)
         {
-
             info.depth--;
-
             return false;
-
         }
 
         out.write(it->first.data(), it->first.length());
         if (!out)
         {
-
             info.depth--;
-
             return false;
-
         }
 
         if (!it->second->write(out, info))
         {
-
             info.depth--;
-
             return false;
-
         }
 
     }
@@ -241,19 +230,13 @@ bool NodePackage::write(std::ostream& out, Information& info)
     out.write((char*)&end, 1);
     if (!out)
     {
-
         info.depth--;
-
         return false;
-
     }
 
 
     info.depth--;
-
     return true;
-
-
 }
 
 bool ValueNode<std::string>::read(std::istream& in, Information&)
@@ -304,7 +287,6 @@ bool ValueNode<std::string>::write(std::ostream& out, Information&)
     if (!out) return false;
 
     return true;
-
 }
 
 bool read(std::istream& in, NodePackage& package)
@@ -326,7 +308,6 @@ bool read(std::istream& in, NodePackage& package)
     if (!package.read(in, info)) return false;
 
     return true;
-
 }
 
 bool write(std::ostream& out, NodePackage& package)
@@ -344,7 +325,6 @@ bool write(std::ostream& out, NodePackage& package)
     if (!package.write(out, info)) return false;
 
     return true;
-
 }
 
 std::vector<std::string> split(std::string str, std::string pattern)
@@ -352,12 +332,11 @@ std::vector<std::string> split(std::string str, std::string pattern)
     std::string::size_type pos;
     std::vector<std::string> result;
     str += pattern;//扩展字符串以方便操作
-    size_t size = str.size();
 
-    for (size_t i = 0; i<size; i++)
+    for (size_t i = 0, size = str.size(); i < size; i++)
     {
         pos = str.find(pattern, i);
-        if (pos<size)
+        if (pos < size)
         {
             std::string s = str.substr(i, pos - i);
             result.push_back(s);
