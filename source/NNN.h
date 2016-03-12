@@ -27,10 +27,8 @@ struct Version
 
 struct Information
 {
-
     Version version;
     uintptr_t depth;
-
 };
 
 std::vector<std::string> split(std::string str, std::string pattern);
@@ -119,7 +117,7 @@ public:
     {
         return data;
     }
-    
+
     inline const DataType* get() const
     {
         return data;
@@ -413,7 +411,7 @@ public:
     {
         printStack(out);
     }
-    
+
     void printStack(std::ostream& out, int stack = 0) const
     {
         for (NodeMap::const_iterator iter = data.begin(); iter != data.end(); iter++)

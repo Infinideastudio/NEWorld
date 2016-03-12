@@ -104,7 +104,6 @@ void chunk::destroy()
 
 void chunk::buildTerrain(bool initIfEmpty)
 {
-    //Éú³ÉµØÐÎ
     //assert(Empty == false);
 
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
@@ -120,17 +119,21 @@ void chunk::buildTerrain(bool initIfEmpty)
     if (cy > 4)
     {
         Empty = true;
-        if (!initIfEmpty) return;
+        if (!initIfEmpty)
+            return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (int i = 0; i < 4096; i++) pbrightness[i] = skylight;
+        for (int i = 0; i < 4096; i++)
+            pbrightness[i] = skylight;
         return;
     }
     if (cy < 0)
     {
         Empty = true;
-        if (!initIfEmpty) return;
+        if (!initIfEmpty)
+            return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (int i = 0; i < 4096; i++) pbrightness[i] = BRIGHTNESSMIN;
+        for (int i = 0; i < 4096; i++)
+            pbrightness[i] = BRIGHTNESSMIN;
         return;
     }
 
@@ -139,16 +142,22 @@ void chunk::buildTerrain(bool initIfEmpty)
     if (cy > cur.high)
     {
         Empty = true;
-        if (!initIfEmpty) return;
+        if (!initIfEmpty)
+            return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (int i = 0; i < 4096; i++) pbrightness[i] = skylight;
+        for (int i = 0; i < 4096; i++)
+            pbrightness[i] = skylight;
         return;
     }
     if (cy < cur.low)
     {
-        for (int i = 0; i < 4096; i++) pblocks[i] = block(Blocks::ROCK);
+        for (int i = 0; i < 4096; i++)
+            pblocks[i] = block(Blocks::ROCK);
         memset(pbrightness, 0, 4096 * sizeof(brightness));
-        if (cy == 0) for (int x = 0; x < 16; x++) for (int z = 0; z < 16; z++) pblocks[x * 256 + z] = block(Blocks::BEDROCK);
+        if (cy == 0)
+            for (int x = 0; x < 16; x++)
+                for (int z = 0; z < 16; z++)
+                    pblocks[x * 256 + z] = block(Blocks::BEDROCK);
         Empty = false;
         return;
     }
@@ -158,7 +167,7 @@ void chunk::buildTerrain(bool initIfEmpty)
     memset(pblocks, 0, 4096 * sizeof(block)); //Empty the chunk
     memset(pbrightness, 0, 4096 * sizeof(brightness)); //Set All Brightness to 0
 
-    int x, z, h = 0, sh = 0, wh = 0;
+    int x, z, h = 0, sh = 0, wh = 0, base, y;
     int minh, maxh, cur_br;
 
     Empty = true;
@@ -169,58 +178,65 @@ void chunk::buildTerrain(bool initIfEmpty)
     {
         for (z = 0; z < 16; ++z)
         {
-            int base = (x << 8) + z;
+            base = (x << 8) + z;
             h = cur.H[x][z] - (cy << 4);
-            if (h >= 0 || wh >= 0) Empty = false;
+            if (h >= 0 || wh >= 0)
+                Empty = false;
             if (h > sh && h > wh + 1)
             {
                 //Grass layer
-                if (h >= 0 && h < 16) pblocks[(h << 4) + base] = block(Blocks::GRASS);
+                if (h >= 0 && h < 16)
+                    pblocks[(h << 4) + base] = block(Blocks::GRASS);
                 //Dirt layer
                 maxh = min(max(0, h), 16);
-                for (int y = min(max(0, h - 5), 16); y < maxh; ++y) pblocks[(y << 4) + base] = block(Blocks::DIRT);
+                for (y = min(max(0, h - 5), 16); y < maxh; ++y)
+                    pblocks[(y << 4) + base] = block(Blocks::DIRT);
             }
             else
             {
                 //Sand layer
                 maxh = min(max(0, h + 1), 16);
-                for (int y = min(max(0, h - 5), 16); y < maxh; ++y) pblocks[(y << 4) + base] = block(Blocks::SAND);
+                for (y = min(max(0, h - 5), 16); y < maxh; ++y)
+                    pblocks[(y << 4) + base] = block(Blocks::SAND);
                 //Water layer
                 minh = min(max(0, h + 1), 16);
                 maxh = min(max(0, wh + 1), 16);
                 cur_br = BRIGHTNESSMAX - (WorldGen::WaterLevel - (maxh - 1 + (cy << 4))) * 2;
                 if (cur_br < BRIGHTNESSMIN) cur_br = BRIGHTNESSMIN;
-                for (int y = maxh - 1; y >= minh; --y)
+                for (y = maxh - 1; y >= minh; --y)
                 {
                     pblocks[(y << 4) + base] = block(Blocks::WATER);
                     pbrightness[(y << 4) + base] = (brightness)cur_br;
                     cur_br -= 2;
-                    if (cur_br < BRIGHTNESSMIN) cur_br = BRIGHTNESSMIN;
+                    if (cur_br < BRIGHTNESSMIN)
+                        cur_br = BRIGHTNESSMIN;
                 }
             }
             //Rock layer
             maxh = min(max(0, h - 5), 16);
-            for (int y = 0; y < maxh; ++y) pblocks[(y << 4) + base] = block(Blocks::ROCK);
+            for (y = 0; y < maxh; ++y)
+                pblocks[(y << 4) + base] = block(Blocks::ROCK);
             //Air layer
-            for (int y = min(max(0, max(h + 1, wh + 1)), 16); y < 16; ++y)
+            for (y = min(max(0, max(h + 1, wh + 1)), 16); y < 16; ++y)
             {
                 pblocks[(y << 4) + base] = block(Blocks::AIR);
                 pbrightness[(y << 4) + base] = skylight;
             }
             //Bedrock layer (overwrite)
-            if (cy == 0) pblocks[base] = block(Blocks::BEDROCK);
+            if (cy == 0)
+                pblocks[base] = block(Blocks::BEDROCK);
         }
     }
 }
 
 void chunk::buildDetail()
 {
-    int index = 0;
-    for (int x = 0; x < 16; x++)
+    int index = 0, x, y, z;
+    for (x = 0; x < 16; x++)
     {
-        for (int y = 0; y < 16; y++)
+        for (y = 0; y < 16; y++)
         {
-            for (int z = 0; z < 16; z++)
+            for (z = 0; z < 16; z++)
             {
                 //Tree
                 if (pblocks[index] == block(Blocks::GRASS) && rnd() < 0.005)
@@ -236,7 +252,8 @@ void chunk::buildDetail()
 void chunk::build(bool initIfEmpty)
 {
     buildTerrain(initIfEmpty);
-    if (!Empty) buildDetail();
+    if (!Empty)
+        buildDetail();
 }
 
 void chunk::Load(bool initIfEmpty)
@@ -245,7 +262,8 @@ void chunk::Load(bool initIfEmpty)
 
     create();
 #ifndef NEWORLD_DEBUG_NO_FILEIO
-    if (!LoadFromFile()) build(initIfEmpty);
+    if (!LoadFromFile())
+        build(initIfEmpty);
 #else
     build(initIfEmpty);
 #endif
@@ -288,7 +306,7 @@ void chunk::SaveToFile()
     }
     if (objects.size() != 0)
     {
-
+        //TODO ?
     }
 }
 
@@ -303,7 +321,6 @@ void chunk::buildRender()
         return;
     }
 #endif
-    //½¨Á¢chunkÏÔÊ¾ÁÐ±í
     int x, y, z;
     for (x = -1; x <= 1; x++)
     {
@@ -311,9 +328,12 @@ void chunk::buildRender()
         {
             for (z = -1; z <= 1; z++)
             {
-                if (x == 0 && y == 0 && z == 0) continue;
-                if (chunkOutOfBound(cx + x, cy + y, cz + z))  continue;
-                if (!chunkLoaded(cx + x, cy + y, cz + z)) return;
+                if (x == 0 && y == 0 && z == 0)
+                    continue;
+                if (chunkOutOfBound(cx + x, cy + y, cz + z))
+                    continue;
+                if (!chunkLoaded(cx + x, cy + y, cz + z))
+                    return;
             }
         }
     }
@@ -321,27 +341,35 @@ void chunk::buildRender()
     rebuiltChunks++;
     updatedChunks++;
 
-    if (renderBuilt == false)
+    if (!renderBuilt)
     {
         renderBuilt = true;
         loadAnim = cy * 16.0f + 16.0f;
     }
 
-    if (MergeFace) ChunkRenderer::MergeFaceRender(this);
-    else ChunkRenderer::RenderChunk(this);
-    if (Renderer::AdvancedRender) ChunkRenderer::RenderDepthModel(this);
+    if (MergeFace)
+        ChunkRenderer::MergeFaceRender(this);
+    else
+        ChunkRenderer::RenderChunk(this);
+
+    if (Renderer::AdvancedRender)
+        ChunkRenderer::RenderDepthModel(this);
 
     updated = false;
-
 }
 
 void chunk::destroyRender()
 {
-    if (!renderBuilt) return;
-    if (vbuffer[0] != 0) vbuffersShouldDelete.push_back(vbuffer[0]);
-    if (vbuffer[1] != 0) vbuffersShouldDelete.push_back(vbuffer[1]);
-    if (vbuffer[2] != 0) vbuffersShouldDelete.push_back(vbuffer[2]);
-    if (vbuffer[3] != 0) vbuffersShouldDelete.push_back(vbuffer[3]);
+    if (!renderBuilt)
+        return;
+    if (vbuffer[0] != 0)
+        vbuffersShouldDelete.push_back(vbuffer[0]);
+    if (vbuffer[1] != 0)
+        vbuffersShouldDelete.push_back(vbuffer[1]);
+    if (vbuffer[2] != 0)
+        vbuffersShouldDelete.push_back(vbuffer[2]);
+    if (vbuffer[3] != 0)
+        vbuffersShouldDelete.push_back(vbuffer[3]);
     vbuffer[0] = vbuffer[1] = vbuffer[2] = vbuffer[3] = 0;
     renderBuilt = false;
 }

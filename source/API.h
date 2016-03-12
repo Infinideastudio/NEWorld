@@ -16,4 +16,5 @@ namespace Mod
 extern std::map<std::string, void*> sharedData;
 
 APIPackage getPackage();
+
 }

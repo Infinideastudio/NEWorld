@@ -31,6 +31,7 @@ int getRequestCount()
 {
     return reqs.size();
 }
+
 Net::Socket& getClientSocket()
 {
     return socketClient;
@@ -78,7 +79,8 @@ ThreadFunc networkThread(void *)
             int len = getClientSocket().recvInt();   //获得数据长度
             Net::Buffer buffer(len);
             getClientSocket().recv(buffer, Net::BufferConditionExactLength(len));
-            if (len > 0) callback(buffer.getData(), len); //调用回调函数
+            if (len > 0)
+                callback(buffer.getData(), len); //调用回调函数
             MutexLock(mutex);
         }
         reqs.pop();
@@ -98,7 +100,8 @@ void pushRequest(Request& r)
         std::queue<Request> q;
         while (reqs.size() != 0)
         {
-            if (reqs.front().isImportant()) q.push(reqs.front());
+            if (reqs.front().isImportant())
+                q.push(reqs.front());
             reqs.pop();
         }
         reqs = q;
