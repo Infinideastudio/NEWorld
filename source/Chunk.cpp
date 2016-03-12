@@ -79,16 +79,20 @@ Frustum chunk::TestFrustum;
 void chunk::create()
 {
     aabb = getBaseAABB();
-    pblocks = new block[4096];
-    pbrightness = new brightness[4096];
-    //memset(pblocks, 0, sizeof(pblocks));
-    //memset(pbrightness, 0, sizeof(pbrightness));
-#ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
-    if (pblocks == nullptr || pbrightness == nullptr)
+    try
     {
-        DebugError("Allocate memory failed!");
+        pblocks = new block[4096];
+        pbrightness = new brightness[4096];
+        //memset(pblocks, 0, sizeof(pblocks));
+        //memset(pbrightness, 0, sizeof(pbrightness));
     }
+    catch(std::bad_alloc &ba)
+    {
+#ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
+        DebugError("Allocate memory failed!");
 #endif
+        pblocks = pbrightness = nullptr;
+    }
 }
 
 void chunk::destroy()
