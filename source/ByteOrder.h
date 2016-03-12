@@ -6,19 +6,32 @@ namespace NNN
 
 namespace ByteOrder
 {
+
+//Returns true if native CPU uses big-endian
+bool NativeIsBigEndian()
+{
+    union
+    {
+        unsigned long int a;
+        unsigned char b[4];
+    } c;
+    c.a = 0x12345678;
+    return (c.b[0] == 0x12);
+}
+
 //Convert byte order
 template <typename Type>
 void convLENative(Type* data, uintptr_t count)
 {
-    int bytecount = sizeof(Type);
+    int bytecount = sizeof(Type), j;
+    Type sum;
+    uint8_t *cur = (uint8_t*)data;
     for (uint32_t i = 0; i < count; i++)
     {
-        uint8_t* cur = (uint8_t*)data + i*bytecount;
-        Type sum = 0;
-        for (int32_t j = 0; j < bytecount; j++)
-        {
-            sum ^= (Type)cur[j] << (8 * j);
-        }
+        cur += bytecount;
+        sum = 0;
+        for (j = 0; j < bytecount; j++)
+            sum ^= (Type)cur[j] << (j << 3);
         *(Type*)cur = sum;
     }
 }
@@ -26,83 +39,61 @@ void convLENative(Type* data, uintptr_t count)
 template <typename Type>
 void convNativeLE(Type* data, uintptr_t count)
 {
-    int bytecount = sizeof(Type);
+    int bytecount = sizeof(Type), j;
+    uint8_t *cur = (uint8_t*)data;
+    Type sum;
     for (uint32_t i = 0; i < count; i++)
     {
-        uint8_t* cur = (uint8_t*)data + i*bytecount;
-        Type sum = *(Type*)cur;
-        for (int32_t j = 0; j < bytecount; j++)
+        cur += bytecount;
+        sum = *(Type*)cur;
+        for (j = 0; j < bytecount; j++)
+            cur[j] = sum & ((Type)0xff << (j << 3));
+    }
+}
+
+void swapEndiannessU16(uint16_t* data, uintptr_t size)
+{
+    if(NativeIsBigEndian())
+    {
+        uint16_t result;
+        for(int i = 0; i < size; i++)
         {
-            cur[j] = sum & ((Type)0xff << (8 * j));
+            result = ((data[i] & 0x00FF) << 8) | ((data[i] & 0xFF00) >> 8);
+            data[i] = result;
         }
     }
 }
 
-inline void convertLE2NativeU16(uint16_t* data, uintptr_t size)
+void swapEndiannessU32(uint32_t* data, uintptr_t size)
 {
-    convLENative(data, size);
-}
-inline void convertLE2NativeU32(uint32_t* data, uintptr_t size)
-{
-    convLENative(data, size);
-}
-inline void convertLE2NativeU64(uint64_t* data, uintptr_t size)
-{
-    convLENative(data, size);
-}
-inline void convertLE2NativeS16(int16_t* data, uintptr_t size)
-{
-    convLENative((uint16_t*)data, size);
-}
-inline void convertLE2NativeS32(int32_t* data, uintptr_t size)
-{
-    convLENative((uint32_t*)data, size);
-}
-inline void convertLE2NativeS64(int64_t* data, uintptr_t size)
-{
-    convLENative((uint64_t*)data, size);
-}
-inline void convertLE2NativeF32(float* data, uintptr_t size)
-{
-    convLENative((uint32_t*)data, size);
-}
-inline void convertLE2NativeF64(double* data, uintptr_t size)
-{
-    convLENative((uint64_t*)data, size);
+    if(NativeIsBigEndian())
+    {
+        uint32_t result;
+        for(int i = 0; i < size; i++)
+        {
+            result = ((data[i] & 0x000000FF) << 24) | ((data[i] & 0x0000FF00) << 8) |
+                     ((data[i] & 0x00FF0000) >> 8) | ((data[i] & 0xFF000000) >> 24);
+            data[i] = result;
+        }
+    }
 }
 
-inline void convertNative2LEU16(uint16_t* data, uintptr_t size)
+void swapEndiannessU64(uint64_t *data, uintptr_t size)
 {
-    convNativeLE(data, size);
+    if(NativeIsBigEndian())
+    {
+        uint64_t result;
+        for(int i = 0; i < size; i++)
+        {
+            result = ((data[i] & 0x00000000000000FF) << 56) | ((data[i] & 0x000000000000FF00) << 40) |
+                     ((data[i] & 0x0000000000FF0000) << 24) | ((data[i] & 0x00000000FF000000) << 8) |
+                     ((data[i] & 0x000000FF00000000) >> 8) | ((data[i] & 0x0000FF0000000000) >> 24) |
+                     ((data[i] & 0x00FF000000000000) >> 40 | ((data[i] & 0xFF00000000000000) >> 56);
+            data[i] = result;
+        }
+    }
 }
-inline void convertNative2LEU32(uint32_t* data, uintptr_t size)
-{
-    convNativeLE(data, size);
-}
-inline void convertNative2LEU64(uint64_t* data, uintptr_t size)
-{
-    convNativeLE(data, size);
-}
-inline void convertNative2LES16(int16_t* data, uintptr_t size)
-{
-    convNativeLE((uint16_t*)data, size);
-}
-inline void convertNative2LES32(int32_t* data, uintptr_t size)
-{
-    convNativeLE((uint32_t*)data, size);
-}
-inline void convertNative2LES64(int64_t* data, uintptr_t size)
-{
-    convNativeLE((uint64_t*)data, size);
-}
-inline void convertNative2LEF32(float* data, uintptr_t size)
-{
-    convNativeLE((uint32_t*)data, size);
-}
-inline void convertNative2LEF64(double* data, uintptr_t size)
-{
-    convNativeLE((uint64_t*)data, size);
-}
+
 }
 
 }
