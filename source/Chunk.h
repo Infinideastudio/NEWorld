@@ -97,7 +97,6 @@ public:
     }
     inline brightness getbrightness(int x, int y, int z)
     {
-        //»ñÈ¡Çø¿éÄÚµÄÁÁ¶È
         //assert(Empty == false);
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
         if (pbrightness == nullptr)
@@ -121,12 +120,11 @@ public:
             return;
         }
         pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-		MarkBlockUpdate({pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx, cy, cz, (x << 8) ^ (y << 4) ^ z });
+		//MarkBlockUpdate({pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx, cy, cz, (x << 8) ^ (y << 4) ^ z });
         Modified = true;
     }
     inline void setbrightness(int x, int y, int z, brightness ibrightness)
     {
-        //ÉèÖÃÁÁ¶È
         //assert(Empty == false);
         pbrightness[(x << 8) ^ (y << 4) ^ z] = ibrightness;
         Modified = true;

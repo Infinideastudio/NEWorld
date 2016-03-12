@@ -1216,7 +1216,7 @@ void ProcessBuq() {
 	swap.swap(blockupdatequery);
 	blockupdatequery.clear();
 	for (Blocks::BUDDP B : blockupdatequery) {
-		if (BlockInfo((*B.slf)).ExecBUF(B)) MarkBlockUpdate({ B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz, B.cp });
+		//if (BlockInfo((*B.slf)).ExecBUF(B)) MarkBlockUpdate({ B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz, B.cp });
 		
 	}
 }
