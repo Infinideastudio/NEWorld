@@ -18,36 +18,42 @@ typedef int SkinID;
 typedef uint64 chunkid;
 typedef unsigned int onlineid;
 
-struct block {
-	unsigned short ID;
-	union 
-	{
-		struct {
-			unsigned int Oriention : 5;
-			unsigned int Oct : 3;
-			unsigned int Hex1 : 4;
-			unsigned int Hex4 : 4;
-		};
-		struct {
-			unsigned int Oriention : 5;
-			unsigned int Oct : 3;
-			unsigned int Data8 : 8;
-		};
-		struct {
-			unsigned int Data81 : 8;
-			unsigned int Data82 : 8;
-		};
-		unsigned short Data16;
-	};
-	block() {};
-	block(unsigned short iID) :ID(iID) {}
-	block(unsigned short iID, int iOriention) :ID(iID), Oriention(iOriention) {};
-	bool operator == (const block i) {
-		return i.ID == ID;
-	}
-	bool operator != (const block i) {
-		return i.ID != ID;
-	}
+struct block
+{
+    unsigned short ID;
+    union
+    {
+        struct
+        {
+            unsigned int Oriention : 5;
+            unsigned int Oct : 3;
+            unsigned int Hex1 : 4;
+            unsigned int Hex4 : 4;
+        };
+        struct
+        {
+            unsigned int Oriention : 5;
+            unsigned int Oct : 3;
+            unsigned int Data8 : 8;
+        };
+        struct
+        {
+            unsigned int Data81 : 8;
+            unsigned int Data82 : 8;
+        };
+        unsigned short Data16;
+    };
+    block() {};
+    block(unsigned short iID) :ID(iID) {}
+    block(unsigned short iID, int iOriention) :ID(iID), Oriention(iOriention) {};
+    bool operator == (const block i)
+    {
+        return i.ID == ID;
+    }
+    bool operator != (const block i)
+    {
+        return i.ID != ID;
+    }
 };
 typedef block item;
 

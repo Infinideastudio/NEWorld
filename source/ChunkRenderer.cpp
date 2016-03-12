@@ -335,8 +335,8 @@ void MergeFaceRender(World::chunk* c)
     for (int steps = 0; steps < 3; steps++)
     {
         cur = QuadPrimitive();
-		cur_l_mx = 0;
-		bl = neighbour = block(0);
+        cur_l_mx = 0;
+        bl = neighbour = block(0);
         //Linear merge
         if (Renderer::AdvancedRender) Renderer::Init(3, 3, 1);
         else Renderer::Init(3, 3);
@@ -540,8 +540,8 @@ void RenderDepthModel(World::chunk* c)
     int cur_l_mx;
     block bl, neighbour;
     bool valid = false;
-	cur_l_mx = 0;
-	bl = neighbour = block(0);
+    cur_l_mx = 0;
+    bl = neighbour = block(0);
     //Linear merge for depth model
     Renderer::Init(0, 0);
     for (int d = 0; d < 6; d++)

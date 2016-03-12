@@ -26,6 +26,5 @@ inline bool isBlock(item i)
 
 inline TextureID getItemTexture(item i)
 {
-    if (isBlock(i)) return BlockTextures;
-    else return itemsinfo[i.ID - theFirstItem.ID].texture;
+    return isBlock(i) ? BlockTextures : itemsinfo[i.ID - theFirstItem.ID].texture;
 }
