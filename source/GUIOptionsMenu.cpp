@@ -8,6 +8,7 @@ class GUIOptionsMenu :public GUI::Form
 private:
     GUI::label title, ppistat;
     GUI::button fontbtn, blurbtn, ppistretchbtn, backbtn;
+
     void onLoad()
     {
         title = GUI::label(GetStrbyKey("NEWorld.gui.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
@@ -19,17 +20,23 @@ private:
         registerControls(6, &title, &fontbtn, &blurbtn, &ppistretchbtn, &ppistat, &backbtn);
         fontbtn.enabled = false;
     }
+
     void onUpdate()
     {
-        //if (fontbtn.clicked) TextRenderer::useUnicodeASCIIFont = !TextRenderer::useUnicodeASCIIFont;
-        if (blurbtn.clicked) GUIScreenBlur = !GUIScreenBlur;
+        /*if (fontbtn.clicked)
+            TextRenderer::useUnicodeASCIIFont = !TextRenderer::useUnicodeASCIIFont;*/
+        if (blurbtn.clicked)
+            GUIScreenBlur = !GUIScreenBlur;
         if (ppistretchbtn.clicked)
         {
-            if (stretch == 1.0) GUI::InitStretch();
-            else GUI::EndStretch();
+            if (stretch == 1.0)
+                GUI::InitStretch();
+            else
+                GUI::EndStretch();
         }
         AudioSystem::GUIUpdate();
-        if (backbtn.clicked) GUI::PopPage();
+        if (backbtn.clicked)
+            GUI::PopPage();
         //fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(TextRenderer::useUnicodeASCIIFont);
         fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(true);
         blurbtn.text = GetStrbyKey("NEWorld.gui.blur") + BoolEnabled(GUIScreenBlur);
@@ -40,8 +47,10 @@ private:
                        " win:" + Var2Str(windowwidth) + "x" + Var2Str(windowheight);
     }
 };
+
 void GUIoptions()
 {
     GUI::PushPage(new GUIOptionsMenu);
 }
+
 }

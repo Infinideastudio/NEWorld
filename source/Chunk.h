@@ -35,6 +35,7 @@ public:
         memset(vertexes, 0, sizeof(vertexes));
         memset(vbuffer, 0, sizeof(vbuffer));
     }
+
     int cx, cy, cz;
     Hitbox::AABB aabb;
     bool Empty, updated, renderBuilt, Modified, DetailGenerated;
@@ -51,20 +52,23 @@ public:
     void buildTerrain(bool initIfEmpty = true);
     void buildDetail();
     void build(bool initIfEmpty = true);
-    inline string getChunkPath()
+
+    string getChunkPath()
     {
         //assert(Empty == false);
         std::stringstream ss;
         ss << "Worlds/" << worldname << "/chunks/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldChunk";
         return ss.str();
     }
-    inline string getObjectsPath()
+
+    string getObjectsPath()
     {
         std::stringstream ss;
         ss << "Worlds/" << worldname << "/objects/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldObjects";
         return ss.str();
     }
-    inline bool fileExist(string path)
+
+    bool fileExist(string path)
     {
         //assert(Empty == false);
         std::fstream file;
@@ -73,13 +77,14 @@ public:
         file.close();
         return ret;
     }
+
     bool LoadFromFile(); //返回true代表区块文件打开成功
     void SaveToFile();
     void buildRender();
     void destroyRender();
+
     inline block& getblock(int x, int y, int z)
     {
-        //»ñÈ¡Çø¿éÄÚµÄ·½¿é
         //assert(Empty == false);
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
         if (pblocks == nullptr)
@@ -95,7 +100,8 @@ public:
 #endif
         return pblocks[(x << 8) ^ (y << 4) ^ z];
     }
-    inline brightness getbrightness(int x, int y, int z)
+
+    brightness getbrightness(int x, int y, int z)
     {
         //assert(Empty == false);
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
@@ -112,7 +118,8 @@ public:
 #endif
         return pbrightness[(x << 8) ^ (y << 4) ^ z];
     }
-    inline void setblock(int x, int y, int z, block iblock)
+
+    void setblock(int x, int y, int z, block iblock)
     {
         if (iblock == block(Blocks::TNT))
         {
@@ -120,9 +127,10 @@ public:
             return;
         }
         pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-		//MarkBlockUpdate({pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx, cy, cz, (x << 8) ^ (y << 4) ^ z });
+        //MarkBlockUpdate({pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx, cy, cz, (x << 8) ^ (y << 4) ^ z });
         Modified = true;
     }
+
     inline void setbrightness(int x, int y, int z, brightness ibrightness)
     {
         //assert(Empty == false);

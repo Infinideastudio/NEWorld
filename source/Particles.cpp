@@ -58,7 +58,8 @@ void updateall()
 {
     for (vector<Particle>::iterator iter = ptcs.begin(); iter < ptcs.end();)
     {
-        if (!iter->exist) continue;
+        if (!iter->exist)
+            continue;
         update(*iter);
         if (iter->lasts <= 0)
         {
@@ -157,9 +158,10 @@ void renderall(double xpos, double ypos, double zpos)
     pypos = ypos;
     pzpos = zpos;
     ptcsrendered = 0;
-    for (unsigned int i = 0; i != ptcs.size(); i++)
+    for (unsigned int i = 0; i < ptcs.size(); i++)
     {
-        if (!ptcs[i].exist) continue;
+        if (!ptcs[i].exist)
+            continue;
         render(ptcs[i]);
     }
 }
@@ -188,4 +190,5 @@ void throwParticle(block pt, float x, float y, float z, float xs, float ys, floa
     ptc.tcY = tcY1 + (float)rnd()*((float)BLOCKTEXTURE_UNITSIZE / BLOCKTEXTURE_SIZE)*(1.0f - psz);
     ptcs.push_back(ptc);
 }
+
 }

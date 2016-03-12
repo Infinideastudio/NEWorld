@@ -51,7 +51,7 @@ bool NodePackage::read(std::istream& in, Information& info)
 
         if (rtype == 0x00)
             break;
-        
+
         Node* node;
 
         switch (rtype)

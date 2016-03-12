@@ -33,8 +33,10 @@ void chunkPtrArray::move(int xd, int yd, int zd)
         {
             for (int z = 0; z < size; z++)
             {
-                if (elementExists(x + xd, y + yd, z + zd))arrTemp[x*size2 + y*size + z] = array[(x + xd)*size2 + (y + yd)*size + (z + zd)];
-                else arrTemp[x*size2 + y*size + z] = nullptr;
+                if (elementExists(x + xd, y + yd, z + zd))
+                    arrTemp[x*size2 + y*size + z] = array[(x + xd)*size2 + (y + yd)*size + (z + zd)];
+                else
+                    arrTemp[x*size2 + y*size + z] = nullptr;
             }
         }
     }
@@ -55,7 +57,8 @@ void chunkPtrArray::AddChunk(chunk* cptr, int cx, int cy, int cz)
     cx -= originX;
     cy -= originY;
     cz -= originZ;
-    if (elementExists(cx, cy, cz)) array[cx*size2 + cy*size + cz] = cptr;
+    if (elementExists(cx, cy, cz))
+        array[cx*size2 + cy*size + cz] = cptr;
 }
 
 void chunkPtrArray::DeleteChunk(int cx, int cy, int cz)
@@ -63,7 +66,8 @@ void chunkPtrArray::DeleteChunk(int cx, int cy, int cz)
     cx -= originX;
     cy -= originY;
     cz -= originZ;
-    if (elementExists(cx, cy, cz)) array[cx*size2 + cy*size + cz] = nullptr;
+    if (elementExists(cx, cy, cz))
+        array[cx*size2 + cy*size + cz] = nullptr;
 }
 
 chunk* chunkPtrArray::getChunkPtr(int x, int y, int z)
@@ -71,7 +75,8 @@ chunk* chunkPtrArray::getChunkPtr(int x, int y, int z)
     x -= originX;
     y -= originY;
     z -= originZ;
-    if (!elementExists(x, y, z)) return nullptr;
+    if (!elementExists(x, y, z))
+        return nullptr;
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
     c_getChunkPtrFromCPA++;
 #endif
@@ -83,7 +88,9 @@ void chunkPtrArray::setChunkPtr(int x, int y, int z, chunk* c)
     x -= originX;
     y -= originY;
     z -= originZ;
-    if (!elementExists(x, y, z)) return;
+    if (!elementExists(x, y, z))
+        return;
     array[x*size2 + y*size + z] = c;
 }
+
 }

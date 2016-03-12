@@ -3,6 +3,7 @@
 
 namespace World
 {
+
 class chunk;
 struct chunkPtrArray
 {
@@ -22,4 +23,5 @@ struct chunkPtrArray
     chunk* getChunkPtr(int x, int y, int z);
     void setChunkPtr(int x, int y, int z, chunk* c);
 };
+
 }
