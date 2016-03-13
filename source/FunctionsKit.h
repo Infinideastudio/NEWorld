@@ -15,8 +15,8 @@ inline void UITrans(double x, double y)
 inline void UITrans(int x, int y)
 {
     glTranslated((static_cast<double>(x))*stretch, (static_cast<double>(y))*stretch, 0);
-
 }
+
 inline void UIVertex(double x, double y)
 {
     glVertex2d(x*stretch, y*stretch);
@@ -70,29 +70,8 @@ inline bool beginWith(string str, string begin)
     return str.substr(0, begin.size()) == begin;
 }
 
-void DebugWarning(string msg)
-{
-#ifdef NEWORLD_USE_WINAPI
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-    printf("[Debug][Warning]");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    printf("%s\n", msg.c_str());
-#else
-    printf("[Debug][Warning]%s\n", msg.c_str());
-#endif
-}
-
-void DebugError(string msg)
-{
-#ifdef NEWORLD_USE_WINAPI
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
-    printf("[Debug][Error]");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    printf("%s\n", msg.c_str());
-#else
-    printf("[Debug][Error]%s\n", msg.c_str());
-#endif
-}
+void DebugWarning(string msg);
+void DebugError(string msg);
 
 template<class T> inline void conv(string str, T& ret)
 {
@@ -167,15 +146,7 @@ inline unsigned int wstrlen(const wchar_t* wstr)
 
 }
 
-double timer()
-{
-    static LARGE_INTEGER counterFreq;
-    if (counterFreq.QuadPart == 0)
-        QueryPerformanceFrequency(&counterFreq);
-    LARGE_INTEGER now;
-    QueryPerformanceCounter(&now);
-    return (double)now.QuadPart / counterFreq.QuadPart;
-}
+double timer();
 
 #else
 
