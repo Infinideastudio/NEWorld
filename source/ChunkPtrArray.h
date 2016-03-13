@@ -16,7 +16,7 @@ struct chunkPtrArray
     void moveTo(int x, int y, int z);
     void AddChunk(chunk* cptr, int cx, int cy, int cz);
     void DeleteChunk(int cx, int cy, int cz);
-    inline bool elementExists(int x, int y, int z)
+    bool elementExists(int x, int y, int z)
     {
         return x >= 0 && x < size && z >= 0 && z < size && y >= 0 && y < size;
     }
