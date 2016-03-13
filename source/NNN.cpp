@@ -10,7 +10,6 @@
 namespace NNN
 {
 
-
 bool Magic::operator != (const Magic &src) const
 {
     return (data[0] != src.data[0])
@@ -29,7 +28,6 @@ bool Version::operator > (const Version &src) const
 
 bool NodePackage::read(std::istream& in, Information& info)
 {
-
     uint8_t flags;
     in.read((char*)&flags, 1);
     if (!in)
@@ -38,7 +36,7 @@ bool NodePackage::read(std::istream& in, Information& info)
     info.depth++;
 
     std::map<std::string, Node*> data_;
-    for (;;)
+    while(true)
     {
         uint8_t rtype;
         in.read((char*)&rtype, 1);
@@ -113,7 +111,6 @@ bool NodePackage::read(std::istream& in, Information& info)
         std::string name;
         if (namelen != 0)
         {
-
             char* namedata = new char[namelen];
             in.read(namedata, namelen);
             if (!in)
@@ -125,7 +122,6 @@ bool NodePackage::read(std::istream& in, Information& info)
             }
             name.append(namedata, namelen);
             delete[] namedata;
-
         }
 
         if (!node->read(in, info))
@@ -144,11 +140,8 @@ bool NodePackage::read(std::istream& in, Information& info)
     }
 
     info.depth--;
-
     data = data_;
-
     return true;
-
 }
 
 bool NodePackage::write(std::ostream& out, Information& info)
@@ -234,23 +227,23 @@ bool NodePackage::write(std::ostream& out, Information& info)
         return false;
     }
 
-
     info.depth--;
     return true;
 }
 
 bool ValueNode<std::string>::read(std::istream& in, Information&)
 {
-
     uint8_t flags;
     in.read((char*)&flags, 1);
-    if (!in) return false;
+    if (!in)
+        return false;
 
     std::string data_;
 
     uint16_t slen;
     in.read((char*)&slen, sizeof(uint16_t));
-    if (!in) return false;
+    if (!in)
+        return false;
 
     if (slen != 0)
     {
@@ -266,9 +259,7 @@ bool ValueNode<std::string>::read(std::istream& in, Information&)
     }
 
     data = data_;
-
     return true;
-
 }
 
 bool ValueNode<std::string>::write(std::ostream& out, Information&)
@@ -276,15 +267,18 @@ bool ValueNode<std::string>::write(std::ostream& out, Information&)
 
     uint8_t flags = 0x00;
     out.write((char*)&flags, 1);
-    if(!out) return false;
+    if(!out)
+        return false;
 
     uint16_t slen = (uint16_t)data.length();
     ByteOrder::swapEndiannessU16(&slen, 1);
     out.write((char*)&slen, 2);
-    if (!out) return false;
+    if (!out)
+        return false;
 
     out.write(data.data(), data.length());
-    if (!out) return false;
+    if (!out)
+        return false;
 
     return true;
 }
@@ -294,35 +288,42 @@ bool read(std::istream& in, NodePackage& package)
 
     Magic magic;
     in.read((char*)magic.data, 4);
-    if (!in) return false;
-    if (magic != MAGIC) return false;
+    if (!in)
+        return false;
+    if (magic != MAGIC)
+        return false;
 
     Version version;
     in.read((char*)version.data, 4);
-    if (!in) return false;
-    if (version > VERSION) return false;
+    if (!in)
+        return false;
+    if (version > VERSION)
+        return false;
 
     Information info;
     info.version = version;
     info.depth = 0;
-    if (!package.read(in, info)) return false;
+    if (!package.read(in, info))
+        return false;
 
     return true;
 }
 
 bool write(std::ostream& out, NodePackage& package)
 {
-
     out.write((char*)MAGIC.data, 4);
-    if (!out) return false;
+    if (!out)
+        return false;
 
     out.write((char*)VERSION.data, 4);
-    if (!out) return false;
+    if (!out)
+        return false;
 
     Information info;
     info.version = VERSION;
     info.depth = 0;
-    if (!package.write(out, info)) return false;
+    if (!package.write(out, info))
+        return false;
 
     return true;
 }
@@ -365,4 +366,5 @@ NodeType getType(Node* n)
     else if (typeinfo == typeid(ValueNode<std::vector<int32_t>>)) type = VS32;
     return type;
 }
+
 }
