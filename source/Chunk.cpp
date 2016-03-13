@@ -91,7 +91,8 @@ void chunk::create()
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
         DebugError("Allocate memory failed!");
 #endif
-        pblocks = pbrightness = nullptr;
+        pblocks = nullptr;
+        pbrightness = nullptr;
     }
 }
 
