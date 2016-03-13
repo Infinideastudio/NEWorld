@@ -17,3 +17,39 @@ vector<string> split(string str, string pattern)
         ret.push_back(str.substr(start));
     return ret;
 }
+
+void DebugWarning(string msg)
+{
+#ifdef NEWORLD_USE_WINAPI
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+    printf("[Debug][Warning]");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    printf("%s\n", msg.c_str());
+#else
+    printf("[Debug][Warning]%s\n", msg.c_str());
+#endif
+}
+
+void DebugError(string msg)
+{
+#ifdef NEWORLD_USE_WINAPI
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+    printf("[Debug][Error]");
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    printf("%s\n", msg.c_str());
+#else
+    printf("[Debug][Error]%s\n", msg.c_str());
+#endif
+}
+
+#ifdef NEWORLD_USE_WINAPI
+double timer()
+{
+    static LARGE_INTEGER counterFreq;
+    if (counterFreq.QuadPart == 0)
+        QueryPerformanceFrequency(&counterFreq);
+    LARGE_INTEGER now;
+    QueryPerformanceCounter(&now);
+    return (double)now.QuadPart / counterFreq.QuadPart;
+}
+#endif

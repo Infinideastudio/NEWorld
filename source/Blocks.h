@@ -9,7 +9,7 @@ namespace Blocks
 
 enum MineType
 {
-    Solid,Liquid,Gas,Sand,Plasma,Special,Minetype_End
+    Solid, Liquid, Gas, Sand, Plasma, Special, Minetype_End
 };
 
 enum BlockID
@@ -59,7 +59,7 @@ public:
     BUDF BlockUpdateFunc = nullptr;
     TILF BlockTickUpdateFunc = nullptr;
 
-    inline bool ExecBUF(BUDDP b)
+    bool ExecBUF(BUDDP b)
     {
         return BlockUpdateFunc(&b);
     }
@@ -68,37 +68,37 @@ public:
         name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness) {};
 
     //获得方块名称
-    inline string getBlockName() const
+    string getBlockName() const
     {
         return Globalization::GetStrbyKey(name);
     }
 
     //是否是固体
-    inline bool isSolid() const
+    bool isSolid() const
     {
         return Solid;
     }
 
     //是否不透明
-    inline bool isOpaque() const
+    bool isOpaque() const
     {
         return Opaque;
     }
 
     //是否半透明
-    inline bool isTranslucent() const
+    bool isTranslucent() const
     {
         return Translucent;
     }
 
     //是否可以爆炸
-    inline bool isExplosive() const
+    bool isExplosive() const
     {
         return explosive;
     }
 
     //获得硬度（数值越大硬度越小，最大100）
-    inline float getHardness() const
+    float getHardness() const
     {
         return Hardness;
     }
