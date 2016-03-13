@@ -64,10 +64,12 @@ public:
     {
         type = NNN::getType(this);
     }
+
     ValueNode(const DataType data_) : data(data_)
     {
         type = NNN::getType(this);
     }
+    
     virtual ~ValueNode() {}
 
     Node* clone()
@@ -133,12 +135,11 @@ template <>
 class ValueNode<std::string> : public Node
 {
 private:
-
     std::string data;
 
 public:
-
     ValueNode() {};
+    
     ValueNode(std::string data_)
     {
         data = data_;
@@ -152,6 +153,7 @@ public:
 
     bool read(std::istream& in, Information& info);
     bool write(std::ostream& out, Information& info);
+    
     virtual void print(std::ostream& out) const
     {
         out << data;
@@ -175,7 +177,7 @@ public:
     void set(std::string data_)
     {
         data = data_;
-    };
+    }
 
 };
 
@@ -184,20 +186,20 @@ class ValueNode<std::vector<ArrayType> > : public Node
 {
 private:
     typedef std::vector<ArrayType> Vector;
-
     Vector data;
 
 public:
-
     ValueNode()
     {
         type = NNN::getType(this);
     }
+
     ValueNode(Vector data_)
     {
         data = data_;
         type = NNN::getType(this);
     }
+    
     virtual ~ValueNode() {}
 
     Node* clone()
@@ -207,22 +209,23 @@ public:
 
     bool read(std::istream& in, Information&)
     {
-
         uint8_t flags;
         in.read((char*)&flags, 1);
-        if (!in) return false;
+        if (!in)
+            return false;
 
         Vector data_;
 
         uint16_t slen;
         in.read((char*)&slen, sizeof(uint16_t));
-        if (!in) return false;
+        if (!in)
+            return false;
 
         if (slen != 0)
         {
             char* sdata = new char[slen];
             in.read(sdata, slen);
-            if (!in||slen%sizeof(ArrayType)!=0)
+            if (!in || slen % sizeof(ArrayType) != 0)
             {
                 delete[] sdata;
                 return false;
@@ -233,26 +236,24 @@ public:
             ArrayType* p = (ArrayType*)sdata;
             for (int i = 0; i < elemCount; i++)
             {
-                data_[i]=*(p+i);
+                data_[i] = *(p+i);
             }
             delete[] sdata;
         }
 
         data = data_;
-
         return true;
-
     }
 
     bool write(std::ostream& out, Information&)
     {
-
         uint8_t flags = 0x0D;
         out.write((char*)&flags, 1);
-        if (!out) return false;
+        if (!out)
+            return false;
 
         uint16_t slen = (uint16_t)data.size()*sizeof(ArrayType);
-        ByteOrder::swapEndianness(&slen, 1);
+        ByteOrder::swapEndiannessU16(&slen, 1);
         out.write((char*)&slen, sizeof(uint16_t));
         if (!out)
             return false;
@@ -262,7 +263,6 @@ public:
             return false;
 
         return true;
-
     }
 
     virtual void print(std::ostream& out) const
@@ -280,32 +280,38 @@ public:
     {
         return data;
     }
+
     inline const Vector& getArray() const
     {
         return data;
     }
+
     void setArray(Vector data_)
     {
         data = data_;
-    };
+    }
 
-    inline ArrayType& get(size_t index_)
+    ArrayType& get(size_t index_)
     {
         return data[index_]
     }
-    inline const ArrayType& get(size_t index_) const
+
+    const ArrayType& get(size_t index_) const
     {
         return data[index_]
     }
-    inline void set(size_t index_, ArrayType data_)
+    
+    void set(size_t index_, ArrayType data_)
     {
         data[index_] = data_;
     }
-    inline void add(ArrayType data_)
+    
+    void add(ArrayType data_)
     {
         data.push_back(data_);
     }
-    inline void remove(size_t index_)
+
+    void remove(size_t index_)
     {
         data.erase(index_);
     }
@@ -321,9 +327,8 @@ private:
     void cleanMap(NodeMap& data_)
     {
         for (NodeMap::iterator it = data_.begin(); it != data_.end(); ++it)
-        {
-            if (it->second != nullptr) delete it->second;
-        }
+            if (it->second != nullptr)
+                delete it->second;
     }
 
 public:
@@ -431,7 +436,6 @@ public:
                 out << "(" << iter->second->getType() << ") ";
                 iter->second->print(out);
                 out << "\n";
-
             }
         }
     }
