@@ -15,17 +15,19 @@ public:
         float xmax, ymax, zmax;
     };
 
-    inline float* getProjMatrix()
+    float* getProjMatrix()
     {
         return proj;
     }
-    inline float* getModlMatrix()
+
+    float* getModlMatrix()
     {
         return modl;
     }
 
     void LoadIdentity();
-    inline void MultMatrixTo(float* sum, float* a, float* b)
+
+    void MultMatrixTo(float* sum, float* a, float* b)
     {
         sum[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
         sum[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
@@ -44,14 +46,12 @@ public:
         sum[14] = a[12] * b[2] + a[13] * b[6] + a[14] * b[10] + a[15] * b[14];
         sum[15] = a[12] * b[3] + a[13] * b[7] + a[14] * b[11] + a[15] * b[15];
     }
-    inline void MultMatrix(float* a, float* b);
-
+    
+    void MultMatrix(float* a, float* b);
     void SetPerspective(float FOV, float aspect, float Znear, float Zfar);
     void SetOrtho(float left, float right, float top, float bottom, float Znear, float Zfar);
     void MultRotate(float angle, float x, float y, float z);
-
-    inline void normalize(int side);
-
+    void normalize(int side);
     void update();
     bool FrustumTest(const ChunkBox& aabb);
 };
