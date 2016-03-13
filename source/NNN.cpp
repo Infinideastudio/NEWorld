@@ -203,7 +203,7 @@ bool NodePackage::write(std::ostream& out, Information& info)
         }
 
         uint16_t namelen = (uint16_t)it->first.length();
-        ByteOrder::convertNative2LEU16(&namelen, 1);
+        ByteOrder::swapEndiannessU16(&namelen, 1);
         out.write((char*)&namelen, 2);
         if (!out)
         {
@@ -279,7 +279,7 @@ bool ValueNode<std::string>::write(std::ostream& out, Information&)
     if(!out) return false;
 
     uint16_t slen = (uint16_t)data.length();
-    ByteOrder::convertNative2LEU16(&slen, 1);
+    ByteOrder::swapEndiannessU16(&slen, 1);
     out.write((char*)&slen, 2);
     if (!out) return false;
 
