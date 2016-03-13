@@ -252,7 +252,7 @@ public:
         if (!out) return false;
 
         uint16_t slen = (uint16_t)data.size()*sizeof(ArrayType);
-        ByteOrder::convertNative2LEU16(&slen, 1);
+        ByteOrder::swapEndiannessU16(&slen, 1);
         out.write((char*)&slen, sizeof(uint16_t));
         if (!out) return false;
 
