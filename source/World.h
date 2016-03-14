@@ -14,8 +14,7 @@ class Frsutum;
 
 namespace World
 {
-
-void MarkBlockUpdate(Blocks::BUDDP Block);
+void ProcessBuq();
 extern string worldname;
 const int worldsize = 134217728;
 const int worldheight = 128;
@@ -68,6 +67,7 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth = 0);
 block& getblock(int x, int y, int z, block mask = block(Blocks::AIR), chunk* cptr = nullptr);
 brightness getbrightness(int x, int y, int z, chunk* cptr = nullptr);
 void setblock(int x, int y, int z, block Block, chunk* cptr = nullptr);
+void Modifyblock(int x, int y, int z, block Block, chunk* cptr = nullptr);
 void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr = nullptr);
 void putblock(int x, int y, int z, block Block);
 void pickleaf();

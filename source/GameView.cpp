@@ -289,13 +289,14 @@ public:
                 World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
                 World::setChunkUpdated(cx, cy, cz, true);
             }
-            if (World::chunks[i]->getblock(x, y, z) == block(Blocks::GRASS) && World::getblock(gx, gy + 1, gz, block(Blocks::AIR)) != block(Blocks::AIR))
-            {
-                //草被覆盖
-                World::chunks[i]->setblock(x, y, z, block(Blocks::DIRT));
-                World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
-            }
+            //if (World::chunks[i]->getblock(x, y, z) == block(Blocks::GRASS) && World::getblock(gx, gy + 1, gz, block(Blocks::AIR)) != block(Blocks::AIR))
+            //{
+            //    //草被覆盖
+            //    World::chunks[i]->setblock(x, y, z, block(Blocks::DIRT));
+            //    World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
+            //}
         }
+		World::ProcessBuq();
 
         //判断选中的方块
         double lx, ly, lz, lxl, lyl, lzl;

@@ -4,6 +4,7 @@
 #include "Typedefs.h"
 #include "Definitions.h"
 #include "Globalization.h"
+#include "BlockFuncs.h"
 namespace Blocks
 {
 
@@ -17,25 +18,6 @@ enum BlockID
     AIR, ROCK, GRASS, DIRT, STONE, PLANK, WOOD, BEDROCK, LEAF,
     GLASS, WATER, LAVA, GLOWSTONE, SAND, CEMENT, ICE, COAL, IRON,
     TNT, BLOCK_DEF_END
-};
-
-
-struct BUDDP
-{
-    block* upd;
-    block* slf;
-    void* dudp;
-    void* dslf;
-    long long cx, cy, cz;
-    short cp;
-};
-
-struct TILDP
-{
-    block* slf;
-    void* dslf;
-    long long cx, cy, cz;
-    short cp;
 };
 
 const block NONEMPTY = block(1);
@@ -59,13 +41,15 @@ public:
     BUDF BlockUpdateFunc = nullptr;
     TILF BlockTickUpdateFunc = nullptr;
 
-    bool ExecBUF(BUDDP b)
+    bool ExecBUF(BUDDP b) const
     {
-        return BlockUpdateFunc(&b);
+		if (BlockUpdateFunc){
+			return BlockUpdateFunc(&b);
+		} else return false;
     }
 
-    SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness) :
-        name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness) {};
+    SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness, BUDF _buf) :
+        name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness), BlockUpdateFunc(_buf) {};
 
     //获得方块名称
     string getBlockName() const
@@ -106,27 +90,27 @@ public:
 
 const SingleBlock blockData[BLOCK_DEF_END + 1] =
 {
-    //			方块名称		  固体	 不透明	  半透明  可以爆炸  硬度
-    SingleBlock("NEWorld.Blocks.Air"		, false	, false	, false , false,	0),
-    SingleBlock("NEWorld.Blocks.Rock"		, true	, true	, false , false,	2),
-    SingleBlock("NEWorld.Blocks.Grass"		, true	, true	, false , false,	5),
-    SingleBlock("NEWorld.Blocks.Dirt"		, true	, true	, false , false,	5),
-    SingleBlock("NEWorld.Blocks.Stone"		, true	, true	, false , false,	2),
-    SingleBlock("NEWorld.Blocks.Plank"		, true	, true	, false , false,	5),
-    SingleBlock("NEWorld.Blocks.Wood"		, true	, true	, false , false,	5),
-    SingleBlock("NEWorld.Blocks.Bedrock"	, true	, true	, false , false,	0),
-    SingleBlock("NEWorld.Blocks.Leaf"		, true	, false	, false	, false,	15),
-    SingleBlock("NEWorld.Blocks.Glass"		, true	, false	, false	, false,	30),
-    SingleBlock("NEWorld.Blocks.Water"		, false	, false	, true	, false,	0),
-    SingleBlock("NEWorld.Blocks.Lava"		, false	, false	, true	, false,	0),
-    SingleBlock("NEWorld.Blocks.GlowStone"	, true	, true	, false	, false,	10),
-    SingleBlock("NEWorld.Blocks.Sand"		, true	, true	, false	, false,	8),
-    SingleBlock("NEWorld.Blocks.Cement"		, true	, true	, false	, false,	0.5f),
-    SingleBlock("NEWorld.Blocks.Ice"		, true	, false	, true  , false,	25),
-    SingleBlock("NEWorld.Blocks.Coal Block" , true	, true	, false , false,	1),
-    SingleBlock("NEWorld.Blocks.Iron Block" , true	, true	, false , false,	0.5f),
-    SingleBlock("NEWorld.Blocks.TNT"		, true	, true	, false , true,		25),
-    SingleBlock("NEWorld.Blocks.Null Block" , true  , true  , false , false,	0)
+    //			方块名称		  固体	 不透明	  半透明  可以爆炸  硬度 方块更新回调函数
+    SingleBlock("NEWorld.Blocks.Air"		, false	, false	, false , false,	0    , nullptr),
+    SingleBlock("NEWorld.Blocks.Rock"		, true	, true	, false , false,	2    , nullptr),
+    SingleBlock("NEWorld.Blocks.Grass"		, true	, true	, false , false,	5    , &GrassBUF),
+    SingleBlock("NEWorld.Blocks.Dirt"		, true	, true	, false , false,	5    , nullptr),
+    SingleBlock("NEWorld.Blocks.Stone"		, true	, true	, false , false,	2    , nullptr),
+    SingleBlock("NEWorld.Blocks.Plank"		, true	, true	, false , false,	5    , nullptr),
+    SingleBlock("NEWorld.Blocks.Wood"		, true	, true	, false , false,	5    , nullptr),
+    SingleBlock("NEWorld.Blocks.Bedrock"	, true	, true	, false , false,	0    , nullptr),
+    SingleBlock("NEWorld.Blocks.Leaf"		, true	, false	, false	, false,	15   , nullptr),
+    SingleBlock("NEWorld.Blocks.Glass"		, true	, false	, false	, false,	30   , nullptr),
+    SingleBlock("NEWorld.Blocks.Water"		, false	, false	, true	, false,	0    , nullptr),
+    SingleBlock("NEWorld.Blocks.Lava"		, false	, false	, true	, false,	0    , nullptr),
+    SingleBlock("NEWorld.Blocks.GlowStone"	, true	, true	, false	, false,	10   , nullptr),
+    SingleBlock("NEWorld.Blocks.Sand"		, true	, true	, false	, false,	8    , nullptr),
+    SingleBlock("NEWorld.Blocks.Cement"		, true	, true	, false	, false,	0.5f , nullptr),
+    SingleBlock("NEWorld.Blocks.Ice"		, true	, false	, true  , false,	25   , nullptr),
+    SingleBlock("NEWorld.Blocks.Coal Block" , true	, true	, false , false,	1    , nullptr),
+    SingleBlock("NEWorld.Blocks.Iron Block" , true	, true	, false , false,	0.5f , nullptr),
+    SingleBlock("NEWorld.Blocks.TNT"		, true	, true	, false , true,		25   , nullptr),
+    SingleBlock("NEWorld.Blocks.Null Block" , true  , true  , false , false,	0    , nullptr)
 };
 
 }
