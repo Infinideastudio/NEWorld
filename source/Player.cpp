@@ -212,7 +212,7 @@ bool Player::putBlock(int x, int y, int z, block blockname)
     if (!World::chunkOutOfBound(cx, cy, cz) && (((Hitbox::Hit(playerbox, blockbox) == false) || CrossWall ||
             BlockInfo(blockname).isSolid() == false) && BlockInfo(World::getblock(x, y, z)).isSolid() == false))
     {
-        World::putblock(x, y, z, blockname);
+        World::Modifyblock(x, y, z, blockname);
         success = true;
     }
     return success;

@@ -3,12 +3,14 @@
 #include "Hitbox.h"
 #include "Blocks.h"
 #include "Frustum.h"
+#include "World.h"
 
 class Object;
 
 namespace World
 {
 
+void MarkBlockUpdate(Blocks::BUDDP Block);
 extern string worldname;
 extern brightness BRIGHTNESSMIN;
 extern brightness skylight;
@@ -127,9 +129,20 @@ public:
             return;
         }
         pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-        //MarkBlockUpdate({pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx, cy, cz, (x << 8) ^ (y << 4) ^ z });
         Modified = true;
     }
+
+	void Modifyblock(int x, int y, int z, block iblock)
+	{
+		if (iblock == block(Blocks::TNT))
+		{
+			World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
+			return;
+		}
+		pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
+		MarkBlockUpdate(Blocks::BUDDP(pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx, cy, cz, (x << 8) ^ (y << 4) ^ z));
+		Modified = true;
+	}
 
     inline void setbrightness(int x, int y, int z, brightness ibrightness)
     {

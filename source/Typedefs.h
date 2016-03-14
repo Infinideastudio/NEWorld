@@ -55,6 +55,29 @@ struct block
         return i.ID != ID;
     }
 };
+
+namespace Blocks {
+	struct BUDDP
+	{
+		block* upd;
+		block* slf;
+		void* dudp;
+		void* dslf;
+		long long cx, cy, cz;
+		short cp;
+		BUDDP(block* _upd, block* _slf, void* _dudp, void* _dslf,
+			long long _cx, long long _cy, long long _cz, short _cp) :\
+			upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz), cp(_cp){};
+	};
+
+	struct TILDP
+	{
+		block* slf;
+		void* dslf;
+		long long cx, cy, cz;
+		short cp;
+	};
+}
 typedef block item;
 
 #ifdef NEWORLD_GAME

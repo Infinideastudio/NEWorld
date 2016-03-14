@@ -270,6 +270,9 @@
     <ClInclude Include="source\AudioSystem.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
+    <ClInclude Include="source\BlockFuncs.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\NEWorld.cpp">
@@ -445,6 +448,9 @@
     </ClCompile>
     <ClCompile Include="source\SoundMenu.cpp">
       <Filter>Source\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="source\BlockFuncs.cpp">
+      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
