@@ -311,6 +311,7 @@
     <ClInclude Include="include\Netycat\include\Netycat\Netycat.h" />
     <ClInclude Include="source\API.h" />
     <ClInclude Include="source\AudioSystem.h" />
+    <ClInclude Include="source\BlockFuncs.h" />
     <ClInclude Include="source\Blocks.h" />
     <ClInclude Include="source\ByteOrder.h" />
     <ClInclude Include="source\Chunk.h" />
@@ -368,6 +369,7 @@
     <ClCompile Include="include\Netycat\src\Netycat\Core\Socket.cpp" />
     <ClCompile Include="source\API.cpp" />
     <ClCompile Include="source\AudioSystem.cpp" />
+    <ClCompile Include="source\BlockFuncs.cpp" />
     <ClCompile Include="source\Chunk.cpp" />
     <ClCompile Include="source\ChunkPtrArray.cpp" />
     <ClCompile Include="source\ChunkRenderer.cpp" />
