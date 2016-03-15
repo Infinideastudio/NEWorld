@@ -1260,10 +1260,9 @@ void ProcessBuq()
     blockupdatequery.clear();
     for (Blocks::BUDDP B : swap)
     {
+		cout<<"upd"<<B.slf->ID<<" "<<B.cx<<" "<<B.cy<<" "<<B.cz<<endl;
         if (BlockInfo((*(B.slf))).ExecBUF(B)) {
-			getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
-			cout<<"upd"<<B.slf->ID<<" "<<B.cx<<" "<<B.cy<<" "<<B.cz<<endl;
-			updateblock( B.cx, B.cy, B.cz, true);
+			getChunkPtr(B.cx / 16,B.cy / 16,B.cz / 16)->Modified=true;
 			MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
 		}
     }
