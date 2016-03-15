@@ -1,7 +1,7 @@
 #pragma once
 //#define NEWORLD_DEBUG
 #ifndef NEWORLD_DEBUG
-#pragma comment(linker, "/SUBSYSTEM:\"WINDOWS\" /ENTRY:\"mainCRTStartup\"")
+//#pragma comment(linker, "/SUBSYSTEM:\"WINDOWS\" /ENTRY:\"mainCRTStartup\"")
 #endif
 //#define NEWORLD_SECURE
 #include "StdInclude.h"
