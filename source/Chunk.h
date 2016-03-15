@@ -22,13 +22,13 @@ void explode(int x, int y, int z, int r, chunk* c);
 class chunk
 {
 private:
-    block* pblocks;
     brightness* pbrightness;
     vector<Object*> objects;
     static double relBaseX, relBaseY, relBaseZ;
     static Frustum TestFrustum;
 
 public:
+    block* pblocks; //moved here for blockupd would get block ptr directly
     //竟然一直都没有构造函数/析构函数 还要手动调用Init...我受不了啦(╯‵□′)╯︵┻━┻ --Null
     //2333 --qiaozhanrong
     chunk(int cxi, int cyi, int czi, chunkid idi) : cx(cxi), cy(cyi), cz(czi), id(idi),
@@ -140,7 +140,7 @@ public:
 			return;
 		}
 		pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-		MarkBlockUpdate(Blocks::BUDDP(pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx, cy, cz, (x << 8) ^ (y << 4) ^ z));
+		MarkBlockUpdate(Blocks::BUDDP(pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
 		Modified = true;
 	}
 

@@ -64,7 +64,7 @@ vector<Hitbox::AABB> getHitboxes(const Hitbox::AABB& box);
 bool inWater(const Hitbox::AABB& box);
 void renderblock(int x, int y, int z, chunk* chunkptr);
 void updateblock(int x, int y, int z, bool blockchanged, int depth = 0);
-block& getblock(int x, int y, int z, block mask = block(Blocks::AIR), chunk* cptr = nullptr);
+block getblock(int x, int y, int z, block mask = block(Blocks::AIR), chunk* cptr = nullptr);
 brightness getbrightness(int x, int y, int z, chunk* cptr = nullptr);
 void setblock(int x, int y, int z, block Block, chunk* cptr = nullptr);
 void Modifyblock(int x, int y, int z, block Block, chunk* cptr = nullptr);
