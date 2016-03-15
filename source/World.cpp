@@ -754,7 +754,7 @@ void Modifyblock(int x, int y, int z, block Blockname, chunk* cptr)
 	}
 }
 
-block& getblock(int x, int y, int z, block mask, chunk* cptr)
+block getblock(int x, int y, int z, block mask, chunk* cptr)
 {
     //获取方块
     int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
@@ -1212,28 +1212,45 @@ void explode(int x, int y, int z, int r, chunk* c)
 
 vector<Blocks::BUDDP> blockupdatequery;
 
+block* getblockptr(int x, int y, int z, block* mask)
+{
+	//获取方块
+	int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+	if (chunkOutOfBound(cx, cy, cz)) return mask;
+	int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
+	chunk* ci = getChunkPtr(cx, cy, cz);
+	if (ci == EmptyChunkPtr) return mask;
+	if (ci != nullptr ) return ci->pblocks + (bx * 256 + by * 16 + bz);
+	return mask;
+}
+
 void MarkBlockUpdate(Blocks::BUDDP Block)
 {
-    int x = Block.cp >> 8;
-    int y = (Block.cp >> 4) % 16;
-    int z = Block.cp % 16;
-    long long bx = Block.cx * 16 + x;
-    long long by = Block.cy * 16 + y;
-    long long bz = Block.cz * 16 + z;
+    long long bx = Block.cx;
+    long long by = Block.cy;
+    long long bz = Block.cz;
 
+	block Mask=block(Blocks::AIR);
     block* b;
-    b = &getblock(bx - 1, by, bz);
-    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, (bx - 1) % 16 , by % 16 , bz % 16 , (((bx - 1) % 16) << 8) + ((by % 16) << 4) + bz % 16 });
-	b = &getblock(bx + 1, by, bz);
-    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, (bx + 1) % 16 , by % 16 , bz % 16 , (((bx + 1) % 16) << 8) + ((by % 16) << 4) + bz % 16 });
-	b = &getblock(bx, by - 1, bz);
-    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx % 16 , (by - 1) % 16 , bz % 16 , ((bx % 16) << 8) + (((by - 1) % 16) << 4) + bz % 16 });
-	b = &getblock(bx, by + 1, bz);
-    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx % 16 , (by - 1) % 16 , bz % 16 , ((bx % 16) << 8) + (((by + 1) % 16) << 4) + bz % 16 });
-    b = &getblock(bx, by, bz - 1);
-    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd  ,b, Block.dudp, nullptr, bx % 16 , by % 16 , (bz - 1) % 16 , ((bx % 16) << 8) + ((by % 16) << 4) + (bz - 1) % 16 });
-    b = &getblock(bx, by, bz + 1);
-    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx % 16 , by % 16 , (bz - 1) % 16 , ((bx % 16) << 8) + ((by % 16) << 4) + (bz + 1) % 16 });
+	cout <<"updget";
+    b = getblockptr(bx - 1, by, bz, &Mask);
+	cout << " " << b->ID<<" ";
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx - 1, by, bz});
+	b = getblockptr(bx + 1, by, bz, &Mask);
+	cout << b->ID << " ";
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx + 1, by, bz});
+	b = getblockptr(bx, by - 1, bz, &Mask);
+	cout << b->ID << " ";
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by - 1, bz});
+	b = getblockptr(bx, by + 1, bz, &Mask);
+	cout << b->ID << " ";
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by + 1, bz});
+    b = getblockptr(bx, by, bz - 1, &Mask);
+	cout << b->ID << " ";
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd  ,b, Block.dudp, nullptr, bx, by, bz - 1});
+    b = getblockptr(bx, by, bz + 1, &Mask);
+	cout << b->ID <<endl;
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by, bz + 1});
 }
 
 void ProcessBuq()
@@ -1244,8 +1261,10 @@ void ProcessBuq()
     for (Blocks::BUDDP B : swap)
     {
         if (BlockInfo((*(B.slf))).ExecBUF(B)) {
-			getChunkPtr(B.cx,B.cy,B.cz)->Modified=true;
-			MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz, B.cp ));
+			getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
+			cout<<"upd"<<B.slf->ID<<" "<<B.cx<<" "<<B.cy<<" "<<B.cz<<endl;
+			updateblock( B.cx, B.cy, B.cz, true);
+			MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
 		}
     }
 }

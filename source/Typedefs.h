@@ -64,10 +64,9 @@ namespace Blocks {
 		void* dudp;
 		void* dslf;
 		long long cx, cy, cz;
-		short cp;
 		BUDDP(block* _upd, block* _slf, void* _dudp, void* _dslf,
-			long long _cx, long long _cy, long long _cz, short _cp) :\
-			upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz), cp(_cp){};
+			long long _cx, long long _cy, long long _cz) :
+			upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz){};
 	};
 
 	struct TILDP
@@ -75,7 +74,9 @@ namespace Blocks {
 		block* slf;
 		void* dslf;
 		long long cx, cy, cz;
-		short cp;
+
+		TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
+			slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
 	};
 }
 typedef block item;
