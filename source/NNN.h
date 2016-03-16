@@ -69,7 +69,7 @@ public:
     {
         type = NNN::getType(this);
     }
-    
+
     virtual ~ValueNode() {}
 
     Node* clone()
@@ -139,7 +139,7 @@ private:
 
 public:
     ValueNode() {};
-    
+
     ValueNode(std::string data_)
     {
         data = data_;
@@ -153,7 +153,7 @@ public:
 
     bool read(std::istream& in, Information& info);
     bool write(std::ostream& out, Information& info);
-    
+
     virtual void print(std::ostream& out) const
     {
         out << data;
@@ -199,7 +199,7 @@ public:
         data = data_;
         type = NNN::getType(this);
     }
-    
+
     virtual ~ValueNode() {}
 
     Node* clone()
@@ -300,12 +300,12 @@ public:
     {
         return data[index_]
     }
-    
+
     void set(size_t index_, ArrayType data_)
     {
         data[index_] = data_;
     }
-    
+
     void add(ArrayType data_)
     {
         data.push_back(data_);
