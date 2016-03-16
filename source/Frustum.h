@@ -46,7 +46,7 @@ public:
         sum[14] = a[12] * b[2] + a[13] * b[6] + a[14] * b[10] + a[15] * b[14];
         sum[15] = a[12] * b[3] + a[13] * b[7] + a[14] * b[11] + a[15] * b[15];
     }
-    
+
     void MultMatrix(float* a, float* b);
     void SetPerspective(float FOV, float aspect, float Znear, float Zfar);
     void SetOrtho(float left, float right, float top, float bottom, float Znear, float Zfar);
