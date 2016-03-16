@@ -28,7 +28,7 @@ struct block
             unsigned int Oriention : 5;
             unsigned int Oct : 3;
             unsigned int Hex1 : 4;
-            unsigned int Hex4 : 4;
+            unsigned int Hex2 : 4;
         };
         struct
         {
@@ -43,9 +43,19 @@ struct block
         };
         unsigned short Data16;
     };
-    block() {};
-    block(unsigned short iID) :ID(iID) {}
-    block(unsigned short iID, int iOriention) :ID(iID), Oriention(iOriention) {};
+    block() 
+		:ID(0), Data16(0) {};
+    block(unsigned short iID) 
+		:ID(iID), Data16(0) {}
+    block(unsigned short iID, int iOriention) 
+		:ID(iID), Oriention(iOriention), Oct(0), Data8(0) {};
+	block(unsigned short iID, int iData81, int iData82)
+		:ID(iID), Data81(iData81), Data82(iData82) {};
+	block(unsigned short iID, int iOriention, int iOct, int iData8)
+		:ID(iID), Oriention(iOriention), Oct(iOct), Data8(iData8) {};
+	block(unsigned short iID, int iOriention, int iOct, int iHex1, int iHex2)
+		:ID(iID), Oriention(iOriention), Oct(iOct), Hex1(iHex1), Hex2(iHex2) {};
+
     bool operator == (const block i)
     {
         return i.ID == ID;

@@ -1053,39 +1053,6 @@ void buildtree(int x, int y, int z)
 {
 
     //废除原来的不科学的代码
-    /*
-    block trblock = getblock(x, y+1, z), tublock = getblock(x, y , z);
-    ubyte th = ubyte(rnd() * 3) + 4;
-    if (trblock != block(Blocks::AIR) || tublock != block(Blocks::GRASS)) { return; }
-
-    for (ubyte yt = 0; yt != th; yt++) {
-    setblock(x, y + yt, z, block(Blocks::WOOD));
-    }
-
-    setblock(x, y - 1, z, block(Blocks::DIRT));
-
-    for (ubyte xt = 0; xt != 5; xt++) {
-    for (ubyte zt = 0; zt != 5; zt++) {
-    for (ubyte yt = 0; yt != 2; yt++) {
-    if (getblock(x + xt - 2, y + th - 3 + yt, z + zt - 2) == block(Blocks::AIR)) setblock(x + xt - 2, y + th - 3 + yt, z + zt - 2, block(Blocks::LEAF));
-    }
-    }
-    }
-
-    for (ubyte xt = 0; xt != 3; xt++) {
-    for (ubyte zt = 0; zt != 3; zt++) {
-    for (ubyte yt = 0; yt != 2; yt++) {
-    if (getblock(x + xt - 1, y + th - 1 + yt, z + zt - 1) == block(Blocks::AIR) && abs(xt - 1) != abs(zt - 1)) setblock(x + xt - 1, y + th - 1 + yt, z + zt - 1, block(Blocks::LEAF));
-    }
-    }
-    }
-
-    setblock(x, y + th, z, block(Blocks::LEAF));
-
-    }
-
-
-    */
     //对生成条件进行更严格的检测
     //一：正上方五格必须为空气
     for (int i = y + 1; i < y + 6; i++)
@@ -1232,24 +1199,17 @@ void MarkBlockUpdate(Blocks::BUDDP Block)
 
 	block Mask=block(Blocks::AIR);
     block* b;
-	cout <<"updget";
-    b = getblockptr(bx - 1, by, bz, &Mask);
-	cout << " " << b->ID<<" ";
+	b = getblockptr(bx - 1, by, bz, &Mask);
     if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx - 1, by, bz});
 	b = getblockptr(bx + 1, by, bz, &Mask);
-	cout << b->ID << " ";
     if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx + 1, by, bz});
 	b = getblockptr(bx, by - 1, bz, &Mask);
-	cout << b->ID << " ";
     if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by - 1, bz});
 	b = getblockptr(bx, by + 1, bz, &Mask);
-	cout << b->ID << " ";
     if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by + 1, bz});
     b = getblockptr(bx, by, bz - 1, &Mask);
-	cout << b->ID << " ";
     if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd  ,b, Block.dudp, nullptr, bx, by, bz - 1});
     b = getblockptr(bx, by, bz + 1, &Mask);
-	cout << b->ID <<endl;
     if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by, bz + 1});
 }
 
@@ -1262,7 +1222,8 @@ void ProcessBuq()
     {
 		cout<<"upd"<<B.slf->ID<<" "<<B.cx<<" "<<B.cy<<" "<<B.cz<<endl;
         if (BlockInfo((*(B.slf))).ExecBUF(B)) {
-			getChunkPtr(B.cx / 16,B.cy / 16,B.cz / 16)->Modified=true;
+			getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
+			updateblock( B.cx, B.cy, B.cz, true);
 			MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
 		}
     }
@@ -1302,7 +1263,7 @@ void picktree(int x, int y, int z)
                                  float(rnd()*0.2f - 0.1f), float(rnd()*0.2f - 0.1f), float(rnd()*0.2f - 0.1f),
                                  float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
     }
-    setblock(x, y, z, block(Blocks::AIR));
+    Modifyblock(x, y, z, block(Blocks::AIR));
     //上
     if ((getblock(x, y + 1, z) == block(Blocks::WOOD)) || (getblock(x, y + 1, z) == block(Blocks::LEAF)))
         picktree(x, y + 1, z);
@@ -1337,7 +1298,7 @@ void pickblock(int x, int y, int z)
     else
         Player::addItem(getblock(x, y, z));
 
-    setblock(x, y, z, block(Blocks::AIR));
+    Modifyblock(x, y, z, block(Blocks::AIR));
 }
 
 bool chunkInRange(int x, int y, int z, int px, int py, int pz, int dist)
