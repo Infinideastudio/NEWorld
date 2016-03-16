@@ -43,18 +43,18 @@ struct block
         };
         unsigned short Data16;
     };
-    block() 
-		:ID(0), Data16(0) {};
-    block(unsigned short iID) 
-		:ID(iID), Data16(0) {}
-    block(unsigned short iID, int iOriention) 
-		:ID(iID), Oriention(iOriention), Oct(0), Data8(0) {};
-	block(unsigned short iID, int iData81, int iData82)
-		:ID(iID), Data81(iData81), Data82(iData82) {};
-	block(unsigned short iID, int iOriention, int iOct, int iData8)
-		:ID(iID), Oriention(iOriention), Oct(iOct), Data8(iData8) {};
-	block(unsigned short iID, int iOriention, int iOct, int iHex1, int iHex2)
-		:ID(iID), Oriention(iOriention), Oct(iOct), Hex1(iHex1), Hex2(iHex2) {};
+    block()
+        :ID(0), Data16(0) {};
+    block(unsigned short iID)
+        :ID(iID), Data16(0) {}
+    block(unsigned short iID, int iOriention)
+        :ID(iID), Oriention(iOriention), Oct(0), Data8(0) {};
+    block(unsigned short iID, int iData81, int iData82)
+        :ID(iID), Data81(iData81), Data82(iData82) {};
+    block(unsigned short iID, int iOriention, int iOct, int iData8)
+        :ID(iID), Oriention(iOriention), Oct(iOct), Data8(iData8) {};
+    block(unsigned short iID, int iOriention, int iOct, int iHex1, int iHex2)
+        :ID(iID), Oriention(iOriention), Oct(iOct), Hex1(iHex1), Hex2(iHex2) {};
 
     bool operator == (const block i)
     {
@@ -66,28 +66,29 @@ struct block
     }
 };
 
-namespace Blocks {
-	struct BUDDP
-	{
-		block* upd;
-		block* slf;
-		void* dudp;
-		void* dslf;
-		long long cx, cy, cz;
-		BUDDP(block* _upd, block* _slf, void* _dudp, void* _dslf,
-			long long _cx, long long _cy, long long _cz) :
-			upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz){};
-	};
+namespace Blocks
+{
+struct BUDDP
+{
+    block* upd;
+    block* slf;
+    void* dudp;
+    void* dslf;
+    long long cx, cy, cz;
+    BUDDP(block* _upd, block* _slf, void* _dudp, void* _dslf,
+          long long _cx, long long _cy, long long _cz) :
+        upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
+};
 
-	struct TILDP
-	{
-		block* slf;
-		void* dslf;
-		long long cx, cy, cz;
+struct TILDP
+{
+    block* slf;
+    void* dslf;
+    long long cx, cy, cz;
 
-		TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
-			slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-	};
+    TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
+        slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
+};
 }
 typedef block item;
 

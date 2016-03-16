@@ -726,32 +726,32 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth)
 
 void Modifyblock(int x, int y, int z, block Blockname, chunk* cptr)
 {
-	//设置方块
-	int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-	int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
+    //设置方块
+    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
-	if (cptr != nullptr && cptr != EmptyChunkPtr &&
-		cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
-	{
-		cptr->Modifyblock(bx, by, bz, Blockname);
-		updateblock(x, y, z, true);
-	}
-	if (!chunkOutOfBound(cx, cy, cz))
-	{
-		chunk* i = getChunkPtr(cx, cy, cz);
-		if (i == EmptyChunkPtr)
-		{
-			chunk* cp = AddChunk(cx, cy, cz);
-			cp->Load();
-			cp->Empty = false;
-			i = cp;
-		}
-		if (i != nullptr)
-		{
-			i->Modifyblock(bx, by, bz, Blockname);
-			updateblock(x, y, z, true);
-		}
-	}
+    if (cptr != nullptr && cptr != EmptyChunkPtr &&
+            cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
+    {
+        cptr->Modifyblock(bx, by, bz, Blockname);
+        updateblock(x, y, z, true);
+    }
+    if (!chunkOutOfBound(cx, cy, cz))
+    {
+        chunk* i = getChunkPtr(cx, cy, cz);
+        if (i == EmptyChunkPtr)
+        {
+            chunk* cp = AddChunk(cx, cy, cz);
+            cp->Load();
+            cp->Empty = false;
+            i = cp;
+        }
+        if (i != nullptr)
+        {
+            i->Modifyblock(bx, by, bz, Blockname);
+            updateblock(x, y, z, true);
+        }
+    }
 }
 
 block getblock(int x, int y, int z, block mask, chunk* cptr)
@@ -1181,27 +1181,36 @@ vector<Blocks::BUDDP> blockupdatequery;
 
 block* getblockptr(int x, int y, int z, block* mask)
 {
-	//获取方块
-	int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-	if (chunkOutOfBound(cx, cy, cz)) return mask;
-	int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
-	chunk* ci = getChunkPtr(cx, cy, cz);
-	if (ci == EmptyChunkPtr) return mask;
-	if (ci != nullptr ) return ci->pblocks + (bx * 256 + by * 16 + bz);
-	return mask;
+    //获取方块
+    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    if (chunkOutOfBound(cx, cy, cz)) return mask;
+    int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
+    chunk* ci = getChunkPtr(cx, cy, cz);
+    if (ci == EmptyChunkPtr) return mask;
+    if (ci != nullptr ) return ci->pblocks + (bx * 256 + by * 16 + bz);
+    return mask;
 }
 
 void MarkBlockUpdate(Blocks::BUDDP Block)
 {
-	blockupdatequery.push_back(Block);
-}
+    long long bx = Block.cx;
+    long long by = Block.cy;
+    long long bz = Block.cz;
 
-void ExecBUPD(Blocks::BUDDP B) {
-	if (BlockInfo((*(B.slf))).ExecBUF(B)) {
-		getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified = true;
-		updateblock(B.cx, B.cy, B.cz, true);
-		MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
-	}
+    block Mask=block(Blocks::AIR);
+    block* b;
+    b = getblockptr(bx - 1, by, bz, &Mask);
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx - 1, by, bz});
+    b = getblockptr(bx + 1, by, bz, &Mask);
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx + 1, by, bz});
+    b = getblockptr(bx, by - 1, bz, &Mask);
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by - 1, bz});
+    b = getblockptr(bx, by + 1, bz, &Mask);
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by + 1, bz});
+    b = getblockptr(bx, by, bz - 1, &Mask);
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd  ,b, Block.dudp, nullptr, bx, by, bz - 1});
+    b = getblockptr(bx, by, bz + 1, &Mask);
+    if (b->ID != Blocks::AIR) blockupdatequery.push_back({ Block.upd , b, Block.dudp, nullptr, bx, by, bz + 1});
 }
 
 void ProcessBuq()
@@ -1214,11 +1223,12 @@ void ProcessBuq()
 	long long bx, by, bz;
     for (Blocks::BUDDP B : swap)
     {
-        if (BlockInfo((*(B.slf))).ExecBUF(B)) {
-			getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
-			updateblock( B.cx, B.cy, B.cz, true);
-			MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
-		}
+        if (BlockInfo((*(B.slf))).ExecBUF(B))
+        {
+            getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
+            updateblock( B.cx, B.cy, B.cz, true);
+            MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
+        }
     }
 }
 

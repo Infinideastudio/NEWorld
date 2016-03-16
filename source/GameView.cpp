@@ -296,7 +296,7 @@ public:
             //    World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
             //}
         }
-		World::ProcessBuq();
+        World::ProcessBuq();
 
         //判断选中的方块
         double lx, ly, lz, lxl, lyl, lzl;
