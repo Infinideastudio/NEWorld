@@ -54,25 +54,6 @@ inline string v22string(int x, int y)
     return string(_);
 }
 
-/*std::map<std::string, HMapManager> HeightMap;
-
-HMapManager* HMapInclude(int x, int z) {
-	string _ = v22string(x, z);
-	if (!(HeightMap.find(_) != HeightMap.end())) {
-		pair<string, HMapManager> n = { _, HMapManager(x, z) };
-		HeightMap.insert(n);
-	}
-	HeightMap[_].count++;
-	return &HeightMap[_];
-}
-
-void HMapExclude(int x, int z) {
-	string _ = v22string(x, z);
-	if (!(HeightMap.find(_) != HeightMap.end())) return;
-	HeightMap[_].count--;
-	if (HeightMap[_].count == 0) HeightMap.erase(_);
-}*/
-
 double chunk::relBaseX, chunk::relBaseY, chunk::relBaseZ;
 Frustum chunk::TestFrustum;
 
@@ -83,8 +64,6 @@ void chunk::create()
     {
         pblocks = new block[4096];
         pbrightness = new brightness[4096];
-        //memset(pblocks, 0, sizeof(pblocks));
-        //memset(pbrightness, 0, sizeof(pbrightness));
     }
     catch(std::bad_alloc &ba)
     {
@@ -98,7 +77,6 @@ void chunk::create()
 
 void chunk::destroy()
 {
-    //HMapExclude(cx, cz);
     delete[] pblocks;
     delete[] pbrightness;
     pblocks = nullptr;
@@ -109,8 +87,6 @@ void chunk::destroy()
 
 void chunk::buildTerrain(bool initIfEmpty)
 {
-    //assert(Empty == false);
-
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
     if (pblocks == nullptr || pbrightness == nullptr)
     {
@@ -210,7 +186,7 @@ void chunk::buildTerrain(bool initIfEmpty)
                 if (cur_br < BRIGHTNESSMIN) cur_br = BRIGHTNESSMIN;
                 for (y = maxh - 1; y >= minh; --y)
                 {
-                    pblocks[(y << 4) + base] = block(Blocks::WATER);
+                    pblocks[(y << 4) + base] = block(Blocks::WATER, 1, 255);
                     pbrightness[(y << 4) + base] = (brightness)cur_br;
                     cur_br -= 2;
                     if (cur_br < BRIGHTNESSMIN)
@@ -317,8 +293,6 @@ void chunk::SaveToFile()
 
 void chunk::buildRender()
 {
-    //assert(Empty == false);
-
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
     if (pblocks == nullptr || pbrightness == nullptr)
     {
