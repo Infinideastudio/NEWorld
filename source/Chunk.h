@@ -132,17 +132,17 @@ public:
         Modified = true;
     }
 
-	void Modifyblock(int x, int y, int z, block iblock)
-	{
-		if (iblock == block(Blocks::TNT))
-		{
-			World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
-			return;
-		}
-		pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-		MarkBlockUpdate(Blocks::BUDDP(pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
-		Modified = true;
-	}
+    void Modifyblock(int x, int y, int z, block iblock)
+    {
+        if (iblock == block(Blocks::TNT))
+        {
+            World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
+            return;
+        }
+        pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
+        MarkBlockUpdate(Blocks::BUDDP(pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
+        Modified = true;
+    }
 
     inline void setbrightness(int x, int y, int z, brightness ibrightness)
     {

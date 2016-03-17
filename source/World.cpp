@@ -1214,7 +1214,8 @@ void ProcessBuq()
 	long long bx, by , bz;
     for (Blocks::BUDDP B : swap)
     {
-        if (BlockInfo((*(B.slf))).ExecBUF(B)) {
+        if (BlockInfo((*(B.slf))).ExecBUF(B))
+        {
 			getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
 			updateblock( B.cx, B.cy, B.cz, true);
 			MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
