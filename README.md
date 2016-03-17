@@ -10,13 +10,13 @@ NEWorld是一个开放源代码的模仿Minecraft游戏规则的游戏。
 
 ### Visual Studio用户
 
-** 请先下载libraries并放到NEWorld项目根目录[Libraries](http://pan.baidu.com/s/1jHz7rAe) **
+**请先下载libraries并放到NEWorld项目根目录[百度云/1jHz7rAe](http://pan.baidu.com/s/1jHz7rAe)**
 
 如果你没有Visual Studio Platform Tools v140 for Windows XP，你可以使用默认的平台工具。
 
 ### UNIX用户
 
-__ 待补充 __
+__待补充__
 
 ## Git协作协议(试行)
 
