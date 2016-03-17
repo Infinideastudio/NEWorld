@@ -1214,21 +1214,11 @@ void ProcessBuq()
 	long long bx, by, bz;
     for (Blocks::BUDDP B : swap)
     {
-		bx = B.cx;
-		by = B.cy;
-		bz = B.cz;
-		b = getblockptr(bx - 1, by, bz, &Mask);
-		if (b->ID != Blocks::AIR) ExecBUPD(Blocks::BUDDP(B.upd , b, B.dudp, nullptr, bx - 1, by, bz ));
-		b = getblockptr(bx + 1, by, bz, &Mask);
-		if (b->ID != Blocks::AIR) ExecBUPD(Blocks::BUDDP(B.upd , b, B.dudp, nullptr, bx + 1, by, bz ));
-		b = getblockptr(bx, by - 1, bz, &Mask);
-		if (b->ID != Blocks::AIR) ExecBUPD(Blocks::BUDDP(B.upd , b, B.dudp, nullptr, bx, by - 1, bz ));
-		b = getblockptr(bx, by + 1, bz, &Mask);
-		if (b->ID != Blocks::AIR) ExecBUPD(Blocks::BUDDP(B.upd , b, B.dudp, nullptr, bx, by + 1, bz ));
-		b = getblockptr(bx, by, bz - 1, &Mask);
-		if (b->ID != Blocks::AIR) ExecBUPD(Blocks::BUDDP(B.upd  ,b, B.dudp, nullptr, bx, by, bz - 1 ));
-		b = getblockptr(bx, by, bz + 1, &Mask);
-		if (b->ID != Blocks::AIR) ExecBUPD(Blocks::BUDDP(B.upd , b, B.dudp, nullptr, bx, by, bz + 1 ));
+        if (BlockInfo((*(B.slf))).ExecBUF(B)) {
+			getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
+			updateblock( B.cx, B.cy, B.cz, true);
+			MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
+		}
     }
 }
 
