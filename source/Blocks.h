@@ -43,11 +43,12 @@ public:
 
     bool ExecBUF(BUDDP b) const
     {
-		bool ret = false;
-		if (BlockUpdateFunc){
-			ret = BlockUpdateFunc(&b);
-		} 
-		return ret;
+        bool ret = false;
+        if (BlockUpdateFunc)
+        {
+            ret = BlockUpdateFunc(&b);
+        }
+        return ret;
     }
 
     SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness, BUDF _buf) :
