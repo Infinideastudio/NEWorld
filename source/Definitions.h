@@ -1,8 +1,6 @@
-#pragma once
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 //#define NEWORLD_DEBUG
-#ifndef NEWORLD_DEBUG
-//#pragma comment(linker, "/SUBSYSTEM:\"WINDOWS\" /ENTRY:\"mainCRTStartup\"")
-#endif
 //#define NEWORLD_SECURE
 #include "StdInclude.h"
 #include "Typedefs.h"
@@ -100,4 +98,5 @@ extern int c_getChunkPtrFromCPA;
 extern int c_getChunkPtrFromSearch;
 extern int c_getHeightFromHMap;
 extern int c_getHeightFromWorldGen;
+#endif
 #endif

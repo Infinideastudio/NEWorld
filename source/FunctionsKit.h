@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FUNCTIONKIT_H
+#define FUNCTIONKIT_H
 #include "StdInclude.h"
 #include "Typedefs.h"
 
@@ -221,3 +222,4 @@ inline int Distancen(int ix, int iy, int iz, int x, int y, int z)//计算距离�
 {
     return (ix - x)*(ix - x) + (iy - y)*(iy - y) + (iz - z)*(iz - z);
 }
+#endif

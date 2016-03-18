@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SETUP_H
+#define SETUP_H
 
 struct GLFWwindow;
 
@@ -19,3 +20,4 @@ void MouseButtonFunc(GLFWwindow*, int button, int action, int);
 void CharInputFunc(GLFWwindow*, unsigned int c);
 
 void MouseScrollFunc(GLFWwindow*, double, double yoffset);
+#endif

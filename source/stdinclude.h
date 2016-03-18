@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STDINCLUDE_H
+#define STDINCLUDE_H
 #define NEWORLD_USE_WINAPI
 #define NERDMODE1
 #ifdef NEWORLD_USE_WINAPI
@@ -55,4 +56,5 @@ using std::min;
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#endif
 #endif
