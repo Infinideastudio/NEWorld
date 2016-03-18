@@ -1176,6 +1176,9 @@ block* getblockptr(int x, int y, int z, block* mask)
 
 void MarkBlockUpdate(Blocks::BUDDP Block)
 {
+	//for (Blocks::BUDDP B : blockupdatequery)
+	//	if (B == Block) return;
+	//I'm not sure if we need this--DWVoid
 	blockupdatequery.push_back(Block);
 }
 
