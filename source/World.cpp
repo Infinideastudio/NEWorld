@@ -726,32 +726,32 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth)
 
 void Modifyblock(int x, int y, int z, block Blockname, chunk* cptr)
 {
-    //设置方块
-    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-    int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
+	//设置方块
+	int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+	int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
-    if (cptr != nullptr && cptr != EmptyChunkPtr &&
-            cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
-    {
-        cptr->Modifyblock(bx, by, bz, Blockname);
-        updateblock(x, y, z, true);
-    }
-    if (!chunkOutOfBound(cx, cy, cz))
-    {
-        chunk* i = getChunkPtr(cx, cy, cz);
-        if (i == EmptyChunkPtr)
-        {
-            chunk* cp = AddChunk(cx, cy, cz);
-            cp->Load();
-            cp->Empty = false;
-            i = cp;
-        }
-        if (i != nullptr)
-        {
-            i->Modifyblock(bx, by, bz, Blockname);
-            updateblock(x, y, z, true);
-        }
-    }
+	if (cptr != nullptr && cptr != EmptyChunkPtr &&
+		cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
+	{
+		cptr->Modifyblock(bx, by, bz, Blockname);
+		updateblock(x, y, z, true);
+	}
+	if (!chunkOutOfBound(cx, cy, cz))
+	{
+		chunk* i = getChunkPtr(cx, cy, cz);
+		if (i == EmptyChunkPtr)
+		{
+			chunk* cp = AddChunk(cx, cy, cz);
+			cp->Load();
+			cp->Empty = false;
+			i = cp;
+		}
+		if (i != nullptr)
+		{
+			i->Modifyblock(bx, by, bz, Blockname);
+			updateblock(x, y, z, true);
+		}
+	}
 }
 
 block getblock(int x, int y, int z, block mask, chunk* cptr)
@@ -1051,8 +1051,6 @@ void destroyAllChunks()
 
 void buildtree(int x, int y, int z)
 {
-
-    //废除原来的不科学的代码
     //对生成条件进行更严格的检测
     //一：正上方五格必须为空气
     for (int i = y + 1; i < y + 6; i++)
@@ -1070,7 +1068,7 @@ void buildtree(int x, int y, int z)
             }
         }
     }
-    //终于可以开始生成了
+    //开始生成
     //设置泥土
     setblock(x, y, z, block(Blocks::DIRT));
     //设置树干
@@ -1127,12 +1125,6 @@ void buildtree(int x, int y, int z)
                     else//生成树叶
                     {
                         //鉴于残缺树叶的bug,不考虑树叶密度
-                        /*
-                        if (rnd() < (double)Dirt / 250.0)//树叶密度
-                        {
-                        setblock(ix, iy, iz, block(Blocks::LEAF));
-                        }
-                        */
                         setblock(ix, iy, iz, block(Blocks::LEAF));
                     }
                 }
@@ -1170,7 +1162,7 @@ void explode(int x, int y, int z, int r, chunk* c)
                                                  float(rnd()*0.2f - 0.1f), float(rnd()*0.2f - 0.1f), float(rnd()*0.2f - 0.1f),
                                                  float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
                     }
-                    setblock(fx, fy, fz, block(Blocks::AIR), c);
+                    Modifyblock(fx, fy, fz, block(Blocks::AIR), c);
                 }
             }
         }
@@ -1181,28 +1173,27 @@ vector<Blocks::BUDDP> blockupdatequery;
 
 block* getblockptr(int x, int y, int z, block* mask)
 {
-    //获取方块
-    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-    if (chunkOutOfBound(cx, cy, cz)) return mask;
-    int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
-    chunk* ci = getChunkPtr(cx, cy, cz);
-    if (ci == EmptyChunkPtr) return mask;
-    if (ci != nullptr ) return ci->pblocks + (bx * 256 + by * 16 + bz);
-    return mask;
+	//获取方块
+	int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+	if (chunkOutOfBound(cx, cy, cz)) return mask;
+	int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
+	chunk* ci = getChunkPtr(cx, cy, cz);
+	if (ci == EmptyChunkPtr) return mask;
+	if (ci != nullptr ) return ci->pblocks + (bx * 256 + by * 16 + bz);
+	return mask;
 }
 
 void MarkBlockUpdate(Blocks::BUDDP Block)
 {
-    long long bx = Block.cx, by = Block.cy, bz = Block.cz;
-    block Mask = block(Blocks::AIR), *b;
+	blockupdatequery.push_back(Block);
+}
 
-    const int vec[] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1} };
-    for(int i = 0; i < 6; i++)
-    {
-        b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
-        if(b->ID != Blocks::AIR)
-            blockupdatequery.push_back( { Block.upd, b, Block.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] } );
-    }
+void ExecBUPD(Blocks::BUDDP B) {
+	if (BlockInfo((*(B.slf))).ExecBUF(B)) {
+		getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified = true;
+		updateblock(B.cx, B.cy, B.cz, true);
+		MarkBlockUpdate(Blocks::BUDDP(B.origon, B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
+	}
 }
 
 void ProcessBuq()
@@ -1210,14 +1201,19 @@ void ProcessBuq()
     vector<Blocks::BUDDP> swap;
     swap.swap(blockupdatequery);
     blockupdatequery.clear();
+	block Mask = block(Blocks::AIR);
+	block* b;
+	long long bx, by , bz;
+	const int vec[6][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, -1, 0 },{ 0, 1, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
+		
     for (Blocks::BUDDP B : swap)
     {
-        if (BlockInfo((*(B.slf))).ExecBUF(B))
-        {
-            getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
-            updateblock( B.cx, B.cy, B.cz, true);
-            MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
-        }
+		for (int i = 0; i < 6; i++)
+			{
+			b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
+			if (b->ID != Blocks::AIR)
+				 ExecBUPD(Blocks::BUDDP(B.origon, B.upd, b, B.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] ));
+			}
     }
 }
 

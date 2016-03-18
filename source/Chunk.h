@@ -57,7 +57,6 @@ public:
 
     string getChunkPath()
     {
-        //assert(Empty == false);
         std::stringstream ss;
         ss << "Worlds/" << worldname << "/chunks/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldChunk";
         return ss.str();
@@ -72,7 +71,6 @@ public:
 
     bool fileExist(string path)
     {
-        //assert(Empty == false);
         std::fstream file;
         file.open(path, std::ios::in);
         bool ret = file.is_open();
@@ -87,7 +85,6 @@ public:
 
     inline block& getblock(int x, int y, int z)
     {
-        //assert(Empty == false);
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
         if (pblocks == nullptr)
         {
@@ -105,7 +102,6 @@ public:
 
     brightness getbrightness(int x, int y, int z)
     {
-        //assert(Empty == false);
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
         if (pbrightness == nullptr)
         {
@@ -139,14 +135,13 @@ public:
             World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
             return;
         }
+		MarkBlockUpdate(Blocks::BUDDP(*(pblocks + ((x << 8) ^ (y << 4) ^ z)), pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
         pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-        MarkBlockUpdate(Blocks::BUDDP(pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
-        Modified = true;
+		Modified = true;
     }
 
     inline void setbrightness(int x, int y, int z, brightness ibrightness)
     {
-        //assert(Empty == false);
         pbrightness[(x << 8) ^ (y << 4) ^ z] = ibrightness;
         Modified = true;
     }
