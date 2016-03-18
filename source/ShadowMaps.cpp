@@ -67,34 +67,4 @@ void RenderShadowMap(double xpos, double ypos, double zpos, double curtime)
     glEnable(GL_FOG);
     glEnable(GL_BLEND);
 }
-
-/*
-void DrawShadowMap(int xi, int yi, int xa, int ya) {
-	glDisable(GL_TEXTURE_2D);
-	glColor4f(0.2f, 0.2f, 0.2f, 0.5f);
-	glBegin(GL_QUADS);
-	glVertex2i(xi, ya);
-	glVertex2i(xa, ya);
-	glVertex2i(xa, yi);
-	glVertex2i(xi, yi);
-	glEnd();
-
-	//glActiveTextureARB(GL_TEXTURE1);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, Renderer::DepthTexture);
-	Renderer::bindShader(Renderer::DepthShader);
-	//glUniform1iARB(glGetUniformLocationARB(Renderer::shaderPrograms[2], "Tex"), 1);
-
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f); glVertex2i(xi, ya);
-	glTexCoord2f(1.0f, 1.0f); glVertex2i(xa, ya);
-	glTexCoord2f(1.0f, 0.0f); glVertex2i(xa, yi);
-	glTexCoord2f(0.0f, 0.0f); glVertex2i(xi, yi);
-	glEnd();
-
-	//glActiveTextureARB(GL_TEXTURE0);
-	Renderer::unbindShader();
-}
-*/
 }
