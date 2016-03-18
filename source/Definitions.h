@@ -1,4 +1,7 @@
-#pragma once
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
+//#define NEWORLD_DEBUG
+//#define NEWORLD_SECURE
 #include "StdInclude.h"
 #include "Typedefs.h"
 #include "FunctionsKit.h"
@@ -80,4 +83,5 @@ extern int c_getHeightFromHMap;
 extern int c_getHeightFromWorldGen;
 #endif
 
-extern std::vector<LogItem> Logs;
+std::vector<LogItem> Logs;
+#endif
