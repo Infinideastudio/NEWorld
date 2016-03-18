@@ -1051,8 +1051,6 @@ void destroyAllChunks()
 
 void buildtree(int x, int y, int z)
 {
-
-    //废除原来的不科学的代码
     //对生成条件进行更严格的检测
     //一：正上方五格必须为空气
     for (int i = y + 1; i < y + 6; i++)
@@ -1070,7 +1068,7 @@ void buildtree(int x, int y, int z)
             }
         }
     }
-    //终于可以开始生成了
+    //开始生成
     //设置泥土
     setblock(x, y, z, block(Blocks::DIRT));
     //设置树干
@@ -1127,12 +1125,6 @@ void buildtree(int x, int y, int z)
                     else//生成树叶
                     {
                         //鉴于残缺树叶的bug,不考虑树叶密度
-                        /*
-                        if (rnd() < (double)Dirt / 250.0)//树叶密度
-                        {
-                        setblock(ix, iy, iz, block(Blocks::LEAF));
-                        }
-                        */
                         setblock(ix, iy, iz, block(Blocks::LEAF));
                     }
                 }
@@ -1200,7 +1192,7 @@ void ExecBUPD(Blocks::BUDDP B) {
 	if (BlockInfo((*(B.slf))).ExecBUF(B)) {
 		getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified = true;
 		updateblock(B.cx, B.cy, B.cz, true);
-		MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
+		MarkBlockUpdate(Blocks::BUDDP(B.origon, B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
 	}
 }
 
@@ -1212,14 +1204,16 @@ void ProcessBuq()
 	block Mask = block(Blocks::AIR);
 	block* b;
 	long long bx, by , bz;
+	const int vec[6][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, -1, 0 },{ 0, 1, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
+		
     for (Blocks::BUDDP B : swap)
     {
-        if (BlockInfo((*(B.slf))).ExecBUF(B))
-        {
-			getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
-			updateblock( B.cx, B.cy, B.cz, true);
-			MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
-		}
+		for (int i = 0; i < 6; i++)
+			{
+			b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
+			if (b->ID != Blocks::AIR)
+				 ExecBUPD(Blocks::BUDDP(B.origon, B.upd, b, B.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] ));
+			}
     }
 }
 
