@@ -45,8 +45,6 @@ void Init()
     ss << "Worlds/" << worldname << "/chunks";
     _mkdir(ss.str().c_str());
 
-    //EmptyChunkPtr = new chunk(0, 0, 0, getChunkID(0, 0, 0));
-    //EmptyChunkPtr->Empty = true;
     EmptyChunkPtr = (chunk*)~0;
 
     WorldGen::perlinNoiseInit(3404);
@@ -1131,13 +1129,6 @@ void buildtree(int x, int y, int z)
             }
         }
     }
-
-    //调试数据
-    /*
-    char a[100];
-    sprintf_s(a, "buildtree: h:%d leafh:%d endh:%d distancen2:%d\n", h, leafh, int(double(h)*1.382) + 2,distancen2);
-    OutputDebugString(a);
-    */
 }
 
 void explode(int x, int y, int z, int r, chunk* c)
@@ -1207,12 +1198,16 @@ void ProcessBuq()
 	long long bx, by, bz;
     for (Blocks::BUDDP B : swap)
     {
-        if (BlockInfo((*(B.slf))).ExecBUF(B))
-        {
-            getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified=true;
-            updateblock( B.cx, B.cy, B.cz, true);
-            MarkBlockUpdate(Blocks::BUDDP(B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
-        }
+        const int vec[] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1} };
+		bx = B.cx;
+		by = B.cy;
+		bz = B.cz;
+		for (int i = 0; i < 6; i++)
+		{
+			b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
+			if (b->ID != Blocks::AIR)
+				 ExecBUPD(Blocks::BUDDP(B.origon, B.upd, b, B.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] ));
+		}
     }
 }
 
