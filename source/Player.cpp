@@ -109,7 +109,7 @@ void Player::spawn()
         //addItem(block(Blocks::BEDROCK));TMD这个是基岩
         addItem(block(Blocks::LEAF));
         addItem(block(Blocks::GLASS));
-        addItem(block(Blocks::WATER));
+        addItem(block(Blocks::WATER , 0, 255));
         addItem(block(Blocks::LAVA));
         addItem(block(Blocks::GLOWSTONE));
         addItem(block(Blocks::SAND));

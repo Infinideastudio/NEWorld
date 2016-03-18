@@ -67,7 +67,7 @@ namespace Netycat {
             
             uintptr_t getRemaining();
             
-			uint8_t* getData() { return data; }
+            uint8_t* getData() { return data; }
         };
         
     }
