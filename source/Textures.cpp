@@ -278,19 +278,19 @@ TextureID LoadBlock3DTexture(string Filename, string MkFilename)
     glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, sz, sz, cnt, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.buffer.get());
     /*
     for (int i = 1; i <= mipmapLevel; i++) {
-    	scale *= 2; cursize = sz / scale;
-    	for (int z = 0; z < cnt; z++) {
-    		for (int x = 0; x < cursize; x++) for (int y = 0; y < cursize; y++) {
-    			for (int col = 0; col < 4; col++) {
-    				sum = 0;
-    				for (int xx = 0; xx < scale; xx++) for (int yy = 0; yy < scale; yy++) {
-    					sum += src[(z*sz*sz + (x * scale + xx) * sz + y * scale + yy) * 4 + col];
-    				}
-    				cur[(z*cursize*cursize + x*cursize + y) * 4 + col] = sum / (scale*scale);
-    			}
-    		}
-    	}
-    	glTexImage3D(GL_TEXTURE_3D, i, GL_RGBA, cursize, cursize, cnt / scale, 0, GL_RGBA, GL_UNSIGNED_BYTE, cur);
+        scale *= 2; cursize = sz / scale;
+        for (int z = 0; z < cnt; z++) {
+            for (int x = 0; x < cursize; x++) for (int y = 0; y < cursize; y++) {
+                for (int col = 0; col < 4; col++) {
+                    sum = 0;
+                    for (int xx = 0; xx < scale; xx++) for (int yy = 0; yy < scale; yy++) {
+                        sum += src[(z*sz*sz + (x * scale + xx) * sz + y * scale + yy) * 4 + col];
+                    }
+                    cur[(z*cursize*cursize + x*cursize + y) * 4 + col] = sum / (scale*scale);
+                }
+            }
+        }
+        glTexImage3D(GL_TEXTURE_3D, i, GL_RGBA, cursize, cursize, cnt / scale, 0, GL_RGBA, GL_UNSIGNED_BYTE, cur);
     }
     */
     glDisable(GL_TEXTURE_3D);

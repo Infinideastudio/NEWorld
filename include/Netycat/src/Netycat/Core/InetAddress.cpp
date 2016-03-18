@@ -46,7 +46,7 @@ namespace Netycat {
             
         }
         
-		std::shared_ptr<InetAddress> InetAddress::getByName(const char *host) {
+        std::shared_ptr<InetAddress> InetAddress::getByName(const char *host) {
             
             if(host == nullptr) {
                 
@@ -96,7 +96,7 @@ namespace Netycat {
                     
                     freeaddrinfo(result);
                     
-					return std::shared_ptr<InetAddress>(new InetAddressIPv4(d1, d2, d3, d4));
+                    return std::shared_ptr<InetAddress>(new InetAddressIPv4(d1, d2, d3, d4));
                     
                 }
                 case AF_INET6: {
@@ -123,9 +123,9 @@ namespace Netycat {
                     
                     freeaddrinfo(result);
                     
-					return  std::shared_ptr<InetAddress>(new InetAddressIPv6(
-						d1, d2, d3, d4, d5, d6, d7, d8,
-						d9, d10, d11, d12, d13, d14, d15, d16));
+                    return  std::shared_ptr<InetAddress>(new InetAddressIPv6(
+                        d1, d2, d3, d4, d5, d6, d7, d8,
+                        d9, d10, d11, d12, d13, d14, d15, d16));
                     
                 }
                 default: {
@@ -262,7 +262,7 @@ namespace Netycat {
         }
         
         
-		std::shared_ptr<InetAddress> InetAddressIPv4::getAny() {
+        std::shared_ptr<InetAddress> InetAddressIPv4::getAny() {
             
             return std::shared_ptr<InetAddress>(new InetAddressIPv4(0, 0, 0, 0));
             
@@ -409,7 +409,7 @@ namespace Netycat {
         }
         
         
-		std::shared_ptr<InetAddress> InetAddressIPv6::getAny() {
+        std::shared_ptr<InetAddress> InetAddressIPv6::getAny() {
             
             return std::shared_ptr<InetAddress>(new InetAddressIPv6(0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0));

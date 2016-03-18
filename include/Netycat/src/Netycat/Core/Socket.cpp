@@ -187,9 +187,9 @@ namespace Netycat {
             
         }
 
-		void Socket::connectIPv4(std::string addr, uint16_t port) {
-			connect(InetAddress::getByName(addr.c_str()).get(), port);
-		}
+        void Socket::connectIPv4(std::string addr, uint16_t port) {
+            connect(InetAddress::getByName(addr.c_str()).get(), port);
+        }
 
         void Socket::listen(InetAddress* addr, uint16_t port) {
             
@@ -316,11 +316,11 @@ namespace Netycat {
                 
             }
             
-		}
-		
-		void Socket::listenIPv4(uint16_t port) {
-			listen(InetAddressIPv4::getAny().get(), port);
-		}
+        }
+        
+        void Socket::listenIPv4(uint16_t port) {
+            listen(InetAddressIPv4::getAny().get(), port);
+        }
 
         void Socket::accept(Socket& s) {
             
@@ -479,17 +479,17 @@ namespace Netycat {
             
         }
 
-		int Socket::recvInt() {
-			Buffer buffer(4);
-			recv(buffer, BufferConditionExactLength(sizeof(int)));
-			int ret;
-			buffer.read((void*)&ret, sizeof(int));
-			return ret;
-		}
+        int Socket::recvInt() {
+            Buffer buffer(4);
+            recv(buffer, BufferConditionExactLength(sizeof(int)));
+            int ret;
+            buffer.read((void*)&ret, sizeof(int));
+            return ret;
+        }
 
         void Socket::send(Buffer& buffer, uintptr_t len) {
             
-			if (len == 0) len = buffer.getRemaining();
+            if (len == 0) len = buffer.getRemaining();
 
             if(len > buffer.getRemaining()) {
                 
