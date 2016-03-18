@@ -135,9 +135,9 @@ public:
             World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
             return;
         }
-		MarkBlockUpdate(Blocks::BUDDP(*(pblocks + ((x << 8) ^ (y << 4) ^ z)), pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
+        MarkBlockUpdate(Blocks::BUDDP(*(pblocks + ((x << 8) ^ (y << 4) ^ z)), pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
         pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-		Modified = true;
+        Modified = true;
     }
 
     inline void setbrightness(int x, int y, int z, brightness ibrightness)
