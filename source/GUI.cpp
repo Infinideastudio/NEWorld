@@ -1170,7 +1170,7 @@ void ClearStack()
     HaveRequest = true;
 }
 
-void ProcessRequests()  	//Process the op deque
+void ProcessRequests()      //Process the op deque
 {
     for (std::deque<PageOpRq>::iterator i = ViewOps.begin(); i != ViewOps.end(); i++)
     {
