@@ -6,14 +6,14 @@ namespace Net = Netycat::Core;
 #pragma comment(lib, "ws2_32.lib")
 
 namespace Network{
-	const unsigned short port = 30001;
+    const unsigned short port = 30001;
 
-	inline Net::Socket& getServerSocket() {
-		extern Net::Socket serverSocket;
-		return serverSocket;
-	}
+    inline Net::Socket& getServerSocket() {
+        extern Net::Socket serverSocket;
+        return serverSocket;
+    }
 
-	void cleanUp();
+    void cleanUp();
 
-	void init();
+    void init();
 }

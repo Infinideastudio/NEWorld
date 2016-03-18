@@ -58,9 +58,9 @@ namespace Netycat {
             ~Socket();
             
             void connect(InetAddress* addr, uint16_t port);
-			void connectIPv4(std::string addr, uint16_t port);
+            void connectIPv4(std::string addr, uint16_t port);
             void listen(InetAddress* addr, uint16_t port);
-			void listenIPv4(uint16_t port);
+            void listenIPv4(uint16_t port);
             void accept(Socket& s);
             
             InetAddress* getAddress();
@@ -70,8 +70,8 @@ namespace Netycat {
             uintptr_t getSendBufferSize();
             
             void recv(Buffer& buffer, BufferCondition& condition);
-			int recvInt();
-			void send(Buffer& buffer, uintptr_t len = 0);
+            int recvInt();
+            void send(Buffer& buffer, uintptr_t len = 0);
             
             bool close();
             

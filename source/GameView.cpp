@@ -1247,7 +1247,7 @@ public:
                 glEnable(GL_TEXTURE_2D);
                 glDisable(GL_CULL_FACE);
                 std::stringstream ss;
-                ss << BlockInfo(selb).getBlockName() << " (ID " << selb.ID << ")";
+                ss << BlockInfo(selb).getBlockName() << " (ID " << selb.ID << ":" << selb.Data81 << ")";
                 TextRenderer::renderString(windowuswidth / 2 + 50, windowusheight / 2 + 50 - 16, ss.str());
                 glDisable(GL_TEXTURE_2D);
                 glEnable(GL_CULL_FACE);
