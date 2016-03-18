@@ -1176,16 +1176,10 @@ block* getblockptr(int x, int y, int z, block* mask)
 
 void MarkBlockUpdate(Blocks::BUDDP Block)
 {
-    long long bx = Block.cx, by = Block.cy, bz = Block.cz;
-    block Mask = block(Blocks::AIR), *b;
-
-    const int vec[] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1} };
-    for(int i = 0; i < 6; i++)
-    {
-        b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
-        if(b->ID != Blocks::AIR)
-            blockupdatequery.push_back( { Block.upd, b, Block.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] } );
-    }
+	//for (Blocks::BUDDP B : blockupdatequery)
+	//	if (B == Block) return;
+	//I'm not sure if we need this--DWVoid
+	blockupdatequery.push_back(Block);
 }
 
 void ProcessBuq()
