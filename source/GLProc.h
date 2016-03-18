@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GLPROC_H
+#define GLPROC_H
 #include "StdInclude.h"
 
 extern PFNGLTEXIMAGE3DPROC glTexImage3D;
@@ -59,3 +60,4 @@ extern PFNGLGETUNIFORMFVARBPROC glGetUniformfvARB;
 extern PFNGLGETUNIFORMIVARBPROC glGetUniformivARB;
 
 void InitGLProc();
+#endif
