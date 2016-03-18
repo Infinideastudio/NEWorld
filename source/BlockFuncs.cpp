@@ -17,7 +17,11 @@ bool GrassBUF(Blocks::BUDDP * args)
 		*(args->slf)=block(Blocks::DIRT);
 		return true;
 	} 
-	return false;
+	else 
+	{ 
+		return false;
+	}
+	
 }
 
 bool WaterBUF(Blocks::BUDDP * args)
@@ -27,30 +31,15 @@ bool WaterBUF(Blocks::BUDDP * args)
 		long long by = args->cy;
 		long long bz = args->cz;
 		bool set = false;
-		block b=World::getblock(bx, by - 1, bz);
-		if (b.ID == Blocks::AIR || ((b.ID == Blocks::WATER) && (b.Data81 == 0))) {
-			World::setblock(bx, by - 1, bz, block(Blocks::WATER, 1, 255));
-			set = true;
-		}
-		b = World::getblock(bx - 1, by, bz);
-		if (b.ID == Blocks::AIR || ((b.ID == Blocks::WATER) && (b.Data81 == 0))) {
-			World::setblock(bx - 1, by, bz, block(Blocks::WATER, 1, 255));
-			set = true;
-		}
-		b = World::getblock(bx + 1, by, bz);
-		if (b.ID == Blocks::AIR || ((b.ID == Blocks::WATER) && (b.Data81 == 0))) {
-			World::setblock(bx + 1, by, bz, block(Blocks::WATER, 1, 255));
-			set = true;
-		}
-		b = World::getblock(bx, by, bz - 1);
-		if (b.ID == Blocks::AIR || ((b.ID == Blocks::WATER) && (b.Data81 == 0))) {
-			World::setblock(bx, by, bz - 1, block(Blocks::WATER, 1, 255));
-			set = true;
-		}
-		b = World::getblock(bx, by, bz + 1);
-		if (b.ID == Blocks::AIR || ((b.ID == Blocks::WATER) && (b.Data81 == 0))) {
-			World::setblock(bx, by, bz + 1, block(Blocks::WATER, 1, 255));
-			set = true;
+		block b;
+		const int vec[5][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, -1, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
+		for (int i = 0; i < 5; i++)
+		{
+			b = World::getblock(bx + vec[i][0], by + vec[i][1], bz + vec[i][2]);
+			if (b.ID == Blocks::AIR || ((b.ID == Blocks::WATER) && (b.Data81 == 0))) {
+				World::setblock(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], block(Blocks::WATER, 1, 255));
+				set = true;
+			}
 		}
 		if (set) return true;
 	}
@@ -71,35 +60,27 @@ bool WaterBUF(Blocks::BUDDP * args)
 				args->slf->Data82 = s - 255;
 				u = true;
 			}
-			bool left = false, right = false, front = false, back = false;
-			bool total = args->slf->Data82;
-			b = World::getblock(bx - 1, by, bz);
-			if (b.ID == Blocks::WATER && b.Data81 == 0 && (b.Data82 < args->slf->Data82 - 2)) {
-				left = u = true;
-				total += b.Data82;
+
+			const int vec[4][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
+			bool pos[4]={false, false, false, false};
+			int total = args->slf->Data82;
+
+			for (int i = 0; i < 4; i++)
+			{
+				b = World::getblock(bx + vec[i][0], by + vec[i][1], bz + vec[i][2]);
+				if (b.ID == Blocks::WATER && b.Data81 == 0 && (b.Data82 < args->slf->Data82 - 2)) {
+					pos[i] = u = true;
+					total += b.Data82;
+				}
 			}
-			b = World::getblock(bx + 1, by, bz);
-			if (b.ID == Blocks::WATER && b.Data81 == 0 && (b.Data82 < args->slf->Data82 - 2)) {
-				right = u = true;
-				total += b.Data82;
-			}
-			b = World::getblock(bx, by, bz - 1);
-			if (b.ID == Blocks::WATER && b.Data81 == 0 && (b.Data82 < args->slf->Data82 - 2)) {
-				front = u = true;
-				total += b.Data82;
-			}
-			b = World::getblock(bx, by, bz + 1);
-			if (b.ID == Blocks::WATER && b.Data81 == 0 && (b.Data82 < args->slf->Data82 - 2)) {
-				back = u = true;
-				total += b.Data82;
-			}
-			total /= (left+right+front+back);
-			if (left) World::setblock(bx - 1, by, bz, block(Blocks::WATER, 0, total));
-			if (right) World::setblock(bx + 1, by, bz, block(Blocks::WATER, 0, total));
-			if (front) World::setblock(bx, by, bz - 1, block(Blocks::WATER, 0, total));
-			if (back) World::setblock(bx, by, bz + 1, block(Blocks::WATER, 0, total));
+			total /= pos[0] + pos[1] + pos[2] + pos[3];
+			for (int i = 0; i < 4; i++)
+				if (pos[i]) World::setblock(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], block(Blocks::WATER, 0, total));
 			if (u) return u;
 		}
 	}
-	return false;
+	else
+	{
+	    return false;
+	}
 }
