@@ -71,7 +71,7 @@ extern "C" {
 
 /* Chorus Parameters */
 #define AL_CHORUS_WAVEFORM                                 0x0001
-#define	AL_CHORUS_PHASE                                    0x0002
+#define    AL_CHORUS_PHASE                                    0x0002
 #define AL_CHORUS_RATE                                     0x0003
 #define AL_CHORUS_DEPTH                                    0x0004
 #define AL_CHORUS_FEEDBACK                                 0x0005
@@ -200,7 +200,7 @@ extern "C" {
 
 /* Filter type definitions to be used with AL_FILTER_TYPE. */
 #define AL_FILTER_NULL                                     0x0000  /* Can also be used as a Filter Object ID */
-#define	AL_FILTER_LOWPASS                                  0x0001
+#define    AL_FILTER_LOWPASS                                  0x0001
 #define AL_FILTER_HIGHPASS                                 0x0002
 #define AL_FILTER_BANDPASS                                 0x0003
 
@@ -535,8 +535,8 @@ typedef void (__cdecl *LPALGETAUXILIARYEFFECTSLOTFV)( ALuint asid, ALenum pname,
 #define AL_VOCAL_MORPHER_MAX_PHONEMEA                      29
 #define AL_VOCAL_MORPHER_DEFAULT_PHONEMEA                  0
 
-#define AL_VOCAL_MORPHER_MIN_PHONEMEA_COARSE_TUNING	       (-24)
-#define AL_VOCAL_MORPHER_MAX_PHONEMEA_COARSE_TUNING	       24
+#define AL_VOCAL_MORPHER_MIN_PHONEMEA_COARSE_TUNING           (-24)
+#define AL_VOCAL_MORPHER_MAX_PHONEMEA_COARSE_TUNING           24
 #define AL_VOCAL_MORPHER_DEFAULT_PHONEMEA_COARSE_TUNING    0
 
 #define AL_VOCAL_MORPHER_MIN_PHONEMEB                      0
@@ -634,7 +634,7 @@ typedef void (__cdecl *LPALGETAUXILIARYEFFECTSLOTFV)( ALuint asid, ALenum pname,
 #define AL_AUTOWAH_MIN_RESONANCE                           2.0f
 #define AL_AUTOWAH_MAX_RESONANCE                           1000.0f
 #define AL_AUTOWAH_DEFAULT_RESONANCE                       1000.0f
-	
+    
 #define AL_AUTOWAH_MIN_PEAK_GAIN                           0.00003f
 #define AL_AUTOWAH_MAX_PEAK_GAIN                           31621.0f
 #define AL_AUTOWAH_DEFAULT_PEAK_GAIN                       11.22f
