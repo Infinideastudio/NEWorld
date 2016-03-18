@@ -66,7 +66,7 @@ inline pair<int,int> binary_search_chunks(chunk** target, int len, chunkid cid)
 {
     int first = 0;
     int last = len - 1;
-    int	middle = (first + last) / 2;
+    int    middle = (first + last) / 2;
     while (first <= last && target[middle]->id != cid)
     {
         if (target[middle]->id > cid)
@@ -724,38 +724,38 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth)
 
 void Modifyblock(int x, int y, int z, block Blockname, chunk* cptr)
 {
-	//设置方块
-	int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-	int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
+    //设置方块
+    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
-	if (cptr != nullptr && cptr != EmptyChunkPtr &&
-		cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
-	{
-		cptr->Modifyblock(bx, by, bz, Blockname);
-		updateblock(x, y, z, true);
-	}
-	if (!chunkOutOfBound(cx, cy, cz))
-	{
-		chunk* i = getChunkPtr(cx, cy, cz);
-		if (i == EmptyChunkPtr)
-		{
-			chunk* cp = AddChunk(cx, cy, cz);
-			cp->Load();
-			cp->Empty = false;
-			i = cp;
-		}
-		if (i != nullptr)
-		{
-			i->Modifyblock(bx, by, bz, Blockname);
-			updateblock(x, y, z, true);
-		}
-	}
+    if (cptr != nullptr && cptr != EmptyChunkPtr &&
+        cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
+    {
+        cptr->Modifyblock(bx, by, bz, Blockname);
+        updateblock(x, y, z, true);
+    }
+    if (!chunkOutOfBound(cx, cy, cz))
+    {
+        chunk* i = getChunkPtr(cx, cy, cz);
+        if (i == EmptyChunkPtr)
+        {
+            chunk* cp = AddChunk(cx, cy, cz);
+            cp->Load();
+            cp->Empty = false;
+            i = cp;
+        }
+        if (i != nullptr)
+        {
+            i->Modifyblock(bx, by, bz, Blockname);
+            updateblock(x, y, z, true);
+        }
+    }
 }
 
 block getblock(int x, int y, int z, block mask, chunk* cptr)
 {
     //获取方块
-    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     if (chunkOutOfBound(cx, cy, cz)) return block(Blocks::AIR);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
     if (cptr != nullptr && cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
@@ -771,7 +771,7 @@ block getblock(int x, int y, int z, block mask, chunk* cptr)
 brightness getbrightness(int x, int y, int z, chunk* cptr)
 {
     //获取亮度
-    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     if (chunkOutOfBound(cx, cy, cz)) return skylight;
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
     if (cptr != nullptr && cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
@@ -788,7 +788,7 @@ brightness getbrightness(int x, int y, int z, chunk* cptr)
 void setblock(int x, int y, int z, block Blockname, chunk* cptr)
 {
     //设置方块
-    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
     if (cptr != nullptr && cptr != EmptyChunkPtr &&
@@ -818,7 +818,7 @@ void setblock(int x, int y, int z, block Blockname, chunk* cptr)
 void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr)
 {
     //设置亮度
-    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
     if (cptr != nullptr && cptr != EmptyChunkPtr &&
@@ -1164,30 +1164,30 @@ vector<Blocks::BUDDP> blockupdatequery;
 
 block* getblockptr(int x, int y, int z, block* mask)
 {
-	//获取方块
-	int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-	if (chunkOutOfBound(cx, cy, cz)) return mask;
-	int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
-	chunk* ci = getChunkPtr(cx, cy, cz);
-	if (ci == EmptyChunkPtr) return mask;
-	if (ci != nullptr ) return ci->pblocks + (bx * 256 + by * 16 + bz);
-	return mask;
+    //获取方块
+    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    if (chunkOutOfBound(cx, cy, cz)) return mask;
+    int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
+    chunk* ci = getChunkPtr(cx, cy, cz);
+    if (ci == EmptyChunkPtr) return mask;
+    if (ci != nullptr ) return ci->pblocks + (bx * 256 + by * 16 + bz);
+    return mask;
 }
 
 void MarkBlockUpdate(Blocks::BUDDP Block)
 {
-	//for (Blocks::BUDDP B : blockupdatequery)
-	//	if (B == Block) return;
-	//I'm not sure if we need this--DWVoid
-	blockupdatequery.push_back(Block);
+    //for (Blocks::BUDDP B : blockupdatequery)
+    //    if (B == Block) return;
+    //I'm not sure if we need this--DWVoid
+    blockupdatequery.push_back(Block);
 }
 
 void ExecBUPD(Blocks::BUDDP B) {
-	if (BlockInfo((*(B.slf))).ExecBUF(B)) {
-		getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified = true;
-		updateblock(B.cx, B.cy, B.cz, true);
-		MarkBlockUpdate(Blocks::BUDDP(B.origon, B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
-	}
+    if (BlockInfo((*(B.slf))).ExecBUF(B)) {
+        getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified = true;
+        updateblock(B.cx, B.cy, B.cz, true);
+        MarkBlockUpdate(Blocks::BUDDP(B.origon, B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
+    }
 }
 
 void ProcessBuq()
@@ -1195,22 +1195,22 @@ void ProcessBuq()
     vector<Blocks::BUDDP> swap;
     swap.swap(blockupdatequery);
     blockupdatequery.clear();
-	block Mask = block(Blocks::AIR);
-	block* b;
-	long long bx, by , bz;
-	const int vec[6][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, -1, 0 },{ 0, 1, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
-		
+    block Mask = block(Blocks::AIR);
+    block* b;
+    long long bx, by , bz;
+    const int vec[6][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, -1, 0 },{ 0, 1, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
+        
     for (Blocks::BUDDP B : swap)
     {
-		bx = B.cx;
-		by = B.cy;
-		bz = B.cz;
-		for (int i = 0; i < 6; i++)
-		{
-			b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
-			if (b->ID != Blocks::AIR)
-				 ExecBUPD(Blocks::BUDDP(B.origon, B.upd, b, B.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] ));
-		}
+        bx = B.cx;
+        by = B.cy;
+        bz = B.cz;
+        for (int i = 0; i < 6; i++)
+        {
+            b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
+            if (b->ID != Blocks::AIR)
+                 ExecBUPD(Blocks::BUDDP(B.origon, B.upd, b, B.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] ));
+        }
     }
 }
 

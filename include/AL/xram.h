@@ -8,7 +8,7 @@ typedef ALenum    (__cdecl *EAXGetBufferMode)(ALuint buffer, ALint *value);
 // Query for X-RAM extension
 //
 // if (alIsExtensionPresent("EAX-RAM") == AL_TRUE)
-//		X-RAM Extension found
+//        X-RAM Extension found
 //  
 //////////////////////////////////////////////////////////////////////////////
 

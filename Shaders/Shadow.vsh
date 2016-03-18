@@ -1,4 +1,4 @@
 #version 110
 void main() {
-	gl_Position = ftransform();
+    gl_Position = ftransform();
 }

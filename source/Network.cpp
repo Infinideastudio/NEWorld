@@ -54,7 +54,7 @@ ThreadFunc networkThread(void *)
         }
         Request& r = reqs.front();
         //if (r._signal == PLAYER_PACKET_SEND && ((PlayerPacket*)r._dataSend)->onlineID != player::onlineID)
-        //	cout << "[ERROR]WTF!!!" << endl;
+        //    cout << "[ERROR]WTF!!!" << endl;
         if (r._dataSend != nullptr && r._dataLen != 0)
         {
             Net::Buffer buffer(r._dataLen + sizeof(int) * 2);
