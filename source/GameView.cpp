@@ -171,10 +171,8 @@ public:
 
     void updategame()
     {
-        //Time_updategame_ = timer();
         static double Wprstm;
         static bool WP;
-        //bool chunkupdated = false;
 
         //用于音效更新
         bool BlockClick = false;
@@ -289,12 +287,6 @@ public:
                 World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
                 World::setChunkUpdated(cx, cy, cz, true);
             }
-            //if (World::chunks[i]->getblock(x, y, z) == block(Blocks::GRASS) && World::getblock(gx, gy + 1, gz, block(Blocks::AIR)) != block(Blocks::AIR))
-            //{
-            //    //草被覆盖
-            //    World::chunks[i]->setblock(x, y, z, block(Blocks::DIRT));
-            //    World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
-            //}
         }
         World::ProcessBuq();
 
@@ -749,12 +741,6 @@ public:
             }
         }
 
-        //爬墙
-        //if (Player::NearWall && Player::Flying == false && Player::CrossWall == false){
-        //	Player::ya += walkspeed
-        //	Player::jump = 0.0
-        //}
-
         if (Player::glidingNow)
         {
             double& E = Player::glidingEnergy;
@@ -816,9 +802,6 @@ public:
         Player::intxposold = RoundInt(Player::xpos);
         Player::intyposold = RoundInt(Player::ypos);
         Player::intzposold = RoundInt(Player::zpos);
-
-        //	Time_updategame += timer() - Time_updategame;
-
     }
 
     void debugText(string s, bool init)
@@ -1110,9 +1093,6 @@ public:
 
         glEnable(GL_CULL_FACE);
         glEnable(GL_TEXTURE_2D);
-
-        //Time_renderscene = timer() - Time_renderscene;
-        //Time_renderGUI_ = timer();
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -1488,8 +1468,6 @@ public:
 
     void drawCloud(double px, double pz)
     {
-        //glFogf(GL_FOG_START, 100.0);
-        //glFogf(GL_FOG_END, 300.0);
         static double ltimer;
         static bool generated;
         static unsigned int cloudvb[128];
