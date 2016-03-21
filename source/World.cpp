@@ -1142,8 +1142,9 @@ void ProcessBuq()
     blockupdatequery.clear();
     block Mask = block(Blocks::AIR);
     block* b;
-    long long bx, by , bz;
-    const int vec[6][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, -1, 0 },{ 0, 1, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
+    long long bx, by, bz;
+    const int vec[][] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
+    //Please indent following the basic law
 
     for (Blocks::BUDDP B : swap)
     {
@@ -1181,12 +1182,14 @@ void pickleaf()
 
 void picktree(int x, int y, int z)
 {
-    if (getblock(x, y, z) == block(Blocks::LEAF))
+    const block leaf = block(Blocks::LEAF), wood = block(Blocks::WOOD);
+    int i;
+    if (getblock(x, y, z) == leaf)
         pickleaf();
     else
         Player::AddItem(getblock(x, y, z));
 
-    for (int j = 1; j <= 10; j++)
+    for(i = 0; i < 10; i++)
     {
         Particles::throwParticle(getblock(x, y, z),
                                  float(x + rnd() - 0.5f), float(y + rnd() - 0.2f), float(z + rnd() - 0.5f),
@@ -1194,10 +1197,14 @@ void picktree(int x, int y, int z)
                                  float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
     }
     Modifyblock(x, y, z, block(Blocks::AIR));
-	int vec[5][3] = { {0, 1, 0}, {0, 0, 1}, {0, 0, -1}, {1, 0, 0}, {-1, 0, 0} };
-	for (int i = 0; i < 5; i++)
-		if (getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]) == block(Blocks::WOOD) || getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]) == block(Blocks::LEAF))
-			picktree(x + vec[i][0], y + vec[i][1], z + vec[i][2]);
+    const int vec[][] = { { 0, 1, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 1, 0, 0 }, { -1, 0, 0 } };
+    block tmp;
+    for(i = 0; i < 5; i++)
+    {
+        tmp = getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]);
+        if(tmp == leaf || tmp == wood)
+            picktree(x + vec[i][0], y + vec[i][1], z + vec[i][2]);
+    }
 }
 
 void pickblock(int x, int y, int z)
