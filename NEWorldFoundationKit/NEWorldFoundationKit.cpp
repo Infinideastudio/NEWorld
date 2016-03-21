@@ -1,21 +1,21 @@
-// NEWorldFoundationKit.cpp : ¶¨Òå DLL Ó¦ÓÃ³ÌĞòµÄµ¼³öº¯Êı¡£
+// NEWorldFoundationKit.cpp : å®šä¹‰ DLL åº”ç”¨ç¨‹åºçš„å¯¼å‡ºå‡½æ•°ã€‚
 //
 
 #include "stdafx.h"
 #include "NEWorldFoundationKit.h"
 
 
-// ÕâÊÇµ¼³ö±äÁ¿µÄÒ»¸öÊ¾Àı
+// è¿™æ˜¯å¯¼å‡ºå˜é‡çš„ä¸€ä¸ªç¤ºä¾‹
 NEWORLDFOUNDATIONKIT_API int nNEWorldFoundationKit=0;
 
-// ÕâÊÇµ¼³öº¯ÊıµÄÒ»¸öÊ¾Àı¡£
+// è¿™æ˜¯å¯¼å‡ºå‡½æ•°çš„ä¸€ä¸ªç¤ºä¾‹ã€‚
 NEWORLDFOUNDATIONKIT_API int fnNEWorldFoundationKit(void)
 {
     return 42;
 }
 
-// ÕâÊÇÒÑµ¼³öÀàµÄ¹¹Ôìº¯Êı¡£
-// ÓĞ¹ØÀà¶¨ÒåµÄĞÅÏ¢£¬Çë²ÎÔÄ NEWorldFoundationKit.h
+// è¿™æ˜¯å·²å¯¼å‡ºç±»çš„æ„é€ å‡½æ•°ã€‚
+// æœ‰å…³ç±»å®šä¹‰çš„ä¿¡æ¯ï¼Œè¯·å‚é˜… NEWorldFoundationKit.h
 CNEWorldFoundationKit::CNEWorldFoundationKit()
 {
     return;
