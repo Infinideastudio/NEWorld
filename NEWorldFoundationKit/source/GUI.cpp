@@ -1,4 +1,4 @@
-#include "Major/NEWorldFoundationKit.h"
+#include "NEWorldFoundationKit.h"
 #include "TextRenderer.h"
 #include "Frustum.h"
 
@@ -239,24 +239,13 @@ void EndStretch()
     TextRenderer::resize();
 }
 
-void controls::updatepos()
+void controls::resize(EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height)
 {
-    xmin = (int)((parent->xmax - parent->xmin)*_xmin_b / stretch) + _xmin_r;
-    ymin = (int)((parent->ymax - parent->ymin)*_ymin_b / stretch) + _ymin_r;
-    xmax = (int)((parent->xmax - parent->xmin)*_xmax_b / stretch) + _xmax_r;
-    ymax = (int)((parent->ymax - parent->ymin)*_ymax_b / stretch) + _ymax_r;
-}
-
-void controls::resize(int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
-{
-    _xmin_r = xi_r;
-    _xmax_r = xa_r;
-    _ymin_r = yi_r;
-    _ymax_r = ya_r;
-    _xmin_b = xi_b;
-    _xmax_b = xa_b;
-    _ymin_b = yi_b;
-    _ymax_b = ya_b;
+    VerticalAlignment = _Vertical;
+    HorizontalAlignment = _Horizontal;
+    Margin = _Margin;
+    Width = _Width;
+    Height = _Height;
 }
 
 void label::update()
