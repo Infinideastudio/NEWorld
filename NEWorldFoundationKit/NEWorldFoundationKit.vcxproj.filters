@@ -21,22 +21,124 @@
     <ClInclude Include="stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="source\TextRenderer.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\API.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="NEWorldFoundationKit.h">
+    <ClInclude Include="source\Effect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Definitions.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ByteOrder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\AudioSystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Frustum.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\FunctionsKit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GLProc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Hitbox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Setup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\NNN.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\StdInclude.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Typedefs.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Globalization.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\NEWorldFoundationKit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="source\targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="source\Definitions.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="NEWorldFoundationKit.cpp">
+    <ClCompile Include="source\Effect.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="source\Frustum.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FunctionsKit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Globalization.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GLProc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Hitbox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\NNN.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Setup.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TextRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Window.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\World.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Major\dllmain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Major\stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\API.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\AudioSystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\dllmain.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="source\stdafx.cpp">
+      <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
