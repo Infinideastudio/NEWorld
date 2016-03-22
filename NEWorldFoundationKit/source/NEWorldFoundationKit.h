@@ -1,13 +1,16 @@
+#ifndef NEWORLDFOUNDATIONKIT_H
+#define NEWORLFFOUNDATIONKIT_H
+
+#include "Definitions.h"
+#include "Globalization.h"
+
 #ifdef NEWORLDFOUNDATIONKIT_EXPORTS
-#define NEWORLDFOUNDATIONKIT_API __declspec(dllexport)
+    #define NEWORLDFOUNDATIONKIT_API __declspec(dllexport)
 #else
-#define NEWORLDFOUNDATIONKIT_API __declspec(dllimport)
+    #define NEWORLDFOUNDATIONKIT_API __declspec(dllimport)
 #endif
 
-#include "../Definitions.h"
-#include "../Globalization.h"
 
-// �����Ǵ� NEWorldFoundationKit.dll ������
 extern int getMouseButton();
 extern int getMouseScroll();
 inline string BoolYesNo(bool b)
@@ -33,20 +36,8 @@ inline string Var2Str(T var)
     return ss.str();
 }
 
-//图形界面系统。。。正宗OOP！！！
 namespace NWUIK
 {
-extern float linewidth;
-extern float linealpha;
-extern float FgR;
-extern float FgG;
-extern float FgB;
-extern float FgA;
-extern float BgR;
-extern float BgG;
-extern float BgB;
-extern float BgA;
-
 extern int nScreenWidth;
 extern int nScreenHeight;
 extern unsigned int transitionList;
@@ -73,23 +64,36 @@ enum EHorizontalAlignment
 	Left, Right, Centre, Stretch
 };
 
+enum SysSolidCB
+{
+    NWButtonGray
+};
+
 struct Rect
 {
 	double Left, Right, Top ,Bottom;
+};
+
+typedef Rect TMargin;
+typedef void (controls::*CFC)(controls* sender, void * args);
+
+class NEWORLDFOUNDATIONKIT_API Pen
+{
+private:
+    double r, g, b, a, linewid;
+public:
+	void SerLineWidth(double Width){}
+	void PaintLine(Rect Area){}
+    Pen(double _r, double _g, double _b, double _a, double _lw = 1.0) :
+        r(_r), g(_g), b(_b), a(_a) ,linewid(_lw){}
 };
 
 class NEWORLDFOUNDATIONKIT_API Brush
 {
 public:
 	virtual void PaintArea(Rect Area){}
-}
-
-class NEWORLDFOUNDATIONKIT_API Pen
-{
-public:
-	virtual void SerLineWidth(int Width){}
-	virtual void PaintLine(Rect Area){}
-}
+    virtual void PaintWithColorMask(double r, double g, double b, double a){}
+};
 
 class NEWORLDFOUNDATIONKIT_API SolidColorBrush
 {
@@ -100,10 +104,7 @@ public:
 	void PaintBorder(Rect Area);
 	SolidColorBrush(double _r, double _g, double _b, double _a) :
 		r(_r), g(_g), b(_b), a(_a) {}
-}
-
-typedef Rect TMargin;
-typedef void (controls::CFC*)(controls* sender, void * args);
+};
 
 class NEWORLDFOUNDATIONKIT_API Trigger
 {
@@ -111,8 +112,12 @@ public:
 	CFC* HDCS = nullptr;
 	int count = 0;
 	Trigger &operator+=(const CFC &f){
-         v += a;
-         return *this;
+        count++;
+        CFC* swap = new CFC[count];
+        for (int c = 0; c < count - 1; ++c) swap[c] = HDCS[c];
+        swap[count - 1] = f;
+        delete[]HDCS;
+        HDCS = swap;
     }
 }; 
 
@@ -123,24 +128,21 @@ public:
     EVerticalAlignment VerticalAlignment;
 	EHorizontalAlignment HorizontalAlignment;
 	TMargin Margin;
-	
+    int Width, Height;
 	//Triggers
 	Trigger TouchBegin, TouchUpdate, TouchEnd, Touch, DblTouch,
 		EchoEnter, EchoLeave, GainFocus, LoseFocus, 
 		KeyPress, KeyDown, KeyUp; 
 	
+    Form* parent; 
+    void resize(EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height);
     virtual ~controls() {}
-    Form* parent;
-    virtual void render() {} //貌似是的！
-    virtual void destroy() {}
-    void updatepos();
-    void resize(int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
+    virtual void render() {}
 };
 
 class NEWORLDFOUNDATIONKIT_API label :public controls
 {
 public:
-    //标签
     string text;
     bool mouseon, focused;
     label() : mouseon(false), focused(false) {};
@@ -153,7 +155,6 @@ public:
 class NEWORLDFOUNDATIONKIT_API button :public controls
 {
 public:
-    //按钮
     string text;
     bool mouseon, focused, pressed, clicked, enabled;
     button() : mouseon(false), focused(false), pressed(false), clicked(false), enabled(false) {};
@@ -166,7 +167,6 @@ public:
 class NEWORLDFOUNDATIONKIT_API trackbar :public controls
 {
 public:
-    //该控件的中文名我不造
     string text;
     int barwidth;
     int barpos;
@@ -181,7 +181,6 @@ public:
 class NEWORLDFOUNDATIONKIT_API textbox :public controls
 {
 public:
-    //文本框
     string text;
     bool mouseon, focused, pressed, enabled;
     textbox() : mouseon(false), focused(false), pressed(false), enabled(false) {};
@@ -194,7 +193,6 @@ public:
 class NEWORLDFOUNDATIONKIT_API vscroll :public controls
 {
 public:
-    //垂直滚动条
     int barheight, barpos;
     bool mouseon, focused, pressed, enabled;
     bool defaultv, msup, msdown, psup, psdown;
@@ -208,7 +206,6 @@ public:
 class NEWORLDFOUNDATIONKIT_API imagebox :public controls
 {
 public:
-    //图片框
     float txmin, txmax, tymin, tymax;
     TextureID imageid;
     imagebox() : imageid(0) {};
@@ -220,7 +217,6 @@ public:
 
 typedef void(*UIVoidF)();
 
-// 窗体 / 容器
 class NEWORLDFOUNDATIONKIT_API Form
 {
 public:
@@ -267,10 +263,10 @@ class Window
 		void BackToMain();
 		void ClearStack();
 		
-		virtual GetMain(){return Form()}
+        virtual Form* GetMain() { return new Form(); }
 		
 		Window();
 		~Window();
 };
-
 }
+#endif
