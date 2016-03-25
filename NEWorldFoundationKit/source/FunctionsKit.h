@@ -98,7 +98,7 @@ template<class T> inline T clamp(T x, T min, T max)
 #ifdef NEWORLD_USE_WINAPI
 inline Mutex_t MutexCreate()
 {
-    return CreateMutex(NULL, FALSE, "");
+    return CreateMutex(NULL, FALSE, L"");
 }
 
 inline void MutexDestroy(Mutex_t _hMutex)
