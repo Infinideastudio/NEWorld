@@ -24,7 +24,7 @@ private:
     void onUpdate()
     {
         /*if (fontbtn.clicked)
-            TextRenderer::useUnicodeASCIIFont = !TextRenderer::useUnicodeASCIIFont;*/
+            TextRenderer::UseUnicodeASCIIFont = !TextRenderer::UseUnicodeASCIIFont;*/
         if (blurbtn.clicked)
             GUIScreenBlur = !GUIScreenBlur;
         if (ppistretchbtn.clicked)
@@ -37,7 +37,7 @@ private:
         AudioSystem::GUIUpdate();
         if (backbtn.clicked)
             GUI::PopPage();
-        //fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(TextRenderer::useUnicodeASCIIFont);
+        //fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(TextRenderer::UseUnicodeASCIIFont);
         fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(true);
         blurbtn.text = GetStrbyKey("NEWorld.gui.blur") + BoolEnabled(GUIScreenBlur);
         int vmc;

@@ -1172,12 +1172,12 @@ void ClearStack()
 
 void ProcessRequests()      //Process the op deque
 {
-    for (std::deque<PageOpRq>::iterator i = ViewOps.begin(); i != ViewOps.end(); i++)
+    while (!ViewOps.empty())
     {
-        switch (i->Op)
+        switch (ViewOps.begin()->Op)
         {
         case 1:
-            ViewStack.push_front(i->Page);
+            ViewStack.push_front(ViewOps.begin()->Page);
             (*ViewStack.begin())->onLoad();
             break;
         case 2:
@@ -1191,10 +1191,9 @@ void ProcessRequests()      //Process the op deque
         case 4:
             while (ViewStack.size() > 0) PopView();
             break;
-
         }
+		ViewOps.pop_front();
     }
-    ViewOps.clear();
     HaveRequest = false;
 }
 

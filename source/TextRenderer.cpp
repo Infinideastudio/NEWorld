@@ -12,7 +12,7 @@ unsigned int Font;
 int gloop;
 int ww, wh;
 float r = 0.0f, g = 0.0f, b = 0.0f, a = 1.0f;
-bool useUnicodeASCIIFont;
+bool UseUnicodeASCIIFont;
 
 void BuildFont(int w, int h)
 {

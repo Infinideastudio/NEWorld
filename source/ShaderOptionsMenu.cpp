@@ -17,7 +17,7 @@ private:
         shadowdistbar = GUI::trackbar("", 120, (Renderer::MaxShadowDist - 2) * 4 - 1, -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
         backbtn = GUI::button(GetStrbyKey("NEWorld.render.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
         registerControls(5, &title, &enablebtn, &shadowresbar, &shadowdistbar, &backbtn);
-        Renderer::destroyShaders();
+        Renderer::DestroyShaders();
         if (!Renderer::AdvancedRender) shadowresbar.enabled = shadowdistbar.enabled = false;
     }
     void onUpdate()
@@ -33,7 +33,7 @@ private:
         if (backbtn.clicked)
         {
             GUI::PopPage();
-            if (Renderer::AdvancedRender) Renderer::initShaders();
+            if (Renderer::AdvancedRender) Renderer::InitShaders();
         }
         enablebtn.text = GetStrbyKey("NEWorld.shaders.enable") + BoolYesNo(Renderer::AdvancedRender);
         std::stringstream ss;
