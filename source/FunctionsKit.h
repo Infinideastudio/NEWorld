@@ -1,4 +1,6 @@
-#pragma once
+#ifndef FUNCTIONSKIT_H
+#define FUNCTIONSKIT_H
+
 #include "StdInclude.h"
 #include "Typedefs.h"
 
@@ -103,7 +105,6 @@ inline Mutex_t MutexCreate()
 inline void MutexDestroy(Mutex_t _hMutex)
 {
     CloseHandle(_hMutex);
-
 }
 inline void MutexLock(Mutex_t _hMutex)
 {
@@ -221,3 +222,4 @@ inline int Distancen(int ix, int iy, int iz, int x, int y, int z)//计算距离�
 {
     return (ix - x)*(ix - x) + (iy - y)*(iy - y) + (iz - z)*(iz - z);
 }
+#endif

@@ -28,7 +28,7 @@ extern int ww, wh;
 extern float r, g, b, a;
 extern unsigned int unicodeTex[256];
 extern bool unicodeTexAval[256];
-extern bool useUnicodeASCIIFont;
+extern bool UseUnicodeASCIIFont;
 
 void BuildFont(int w, int h);
 void resize();

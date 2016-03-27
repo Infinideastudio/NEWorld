@@ -35,6 +35,7 @@ bool Shader::setUniform(const char* uniform, float value)
     glUniform1fARB(loc, value);
     return true;
 }
+
 bool Shader::setUniform(const char* uniform, int value)
 {
     int loc = glGetUniformLocationARB(shaderProgram, uniform);
@@ -43,6 +44,7 @@ bool Shader::setUniform(const char* uniform, int value)
     glUniform1iARB(loc, value);
     return true;
 }
+
 bool Shader::setUniform(const char* uniform, float v0, float v1, float v2, float v3)
 {
     int loc = glGetUniformLocationARB(shaderProgram, uniform);
@@ -51,6 +53,7 @@ bool Shader::setUniform(const char* uniform, float v0, float v1, float v2, float
     glUniform4fARB(loc, v0, v1, v2, v3);
     return true;
 }
+
 bool Shader::setUniform(const char* uniform, float * value)
 {
     int loc = glGetUniformLocationARB(shaderProgram, uniform);
