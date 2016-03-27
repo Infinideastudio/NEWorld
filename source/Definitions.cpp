@@ -3,8 +3,8 @@
 //Global Vars
 float FOVyNormal = 60.0f;       //视野角度
 float mousemove = 0.2f;         //鼠标灵敏度
-int viewdistance = 8;           //视野距离
-int cloudwidth = 10;            //云的宽度
+int ViewDistance = 8;           //视野距离
+int CloudWidth = 10;            //云的宽度
 int selectPrecision = 32;       //选择方块的精度
 int selectDistance = 8;         //选择方块的距离
 float walkspeed = 0.15f;        //玩家前进速度

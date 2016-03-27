@@ -51,13 +51,13 @@ void Init()
     cpCachePtr = nullptr;
     cpCacheID = 0;
 
-    cpArray.setSize((viewdistance + 2) * 2);
+    cpArray.setSize((ViewDistance + 2) * 2);
     if (!cpArray.create())
     {
         DebugError("Chunk Pointer Array not avaliable because it couldn't be created.");
     }
 
-    HMap.setSize((viewdistance + 2) * 2 * 16);
+    HMap.setSize((ViewDistance + 2) * 2 * 16);
     HMap.create();
 
 }
@@ -879,7 +879,7 @@ void sortChunkBuildRenderList(int xpos, int ypos, int zpos)
             cx = chunks[ci]->cx;
             cy = chunks[ci]->cy;
             cz = chunks[ci]->cz;
-            if (!chunkInRange(cx, cy, cz, cxp, cyp, czp, viewdistance)) continue;
+            if (!chunkInRange(cx, cy, cz, cxp, cyp, czp, ViewDistance)) continue;
             xd = cx * 16 + 7 - xpos;
             yd = cy * 16 + 7 - ypos;
             zd = cz * 16 + 7 - zpos;
@@ -919,7 +919,7 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
         cx = chunks[ci]->cx;
         cy = chunks[ci]->cy;
         cz = chunks[ci]->cz;
-        if (!chunkInRange(cx, cy, cz, cxp, cyp, czp, viewdistance + 1))
+        if (!chunkInRange(cx, cy, cz, cxp, cyp, czp, ViewDistance + 1))
         {
             xd = cx * 16 + 7 - xpos;
             yd = cy * 16 + 7 - ypos;
@@ -950,11 +950,11 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
     }
     chunkUnloads = pl;
 
-    for (cx = cxp - viewdistance - 1; cx <= cxp + viewdistance; cx++)
+    for (cx = cxp - ViewDistance - 1; cx <= cxp + ViewDistance; cx++)
     {
-        for (cy = cyp - viewdistance - 1; cy <= cyp + viewdistance; cy++)
+        for (cy = cyp - ViewDistance - 1; cy <= cyp + ViewDistance; cy++)
         {
-            for (cz = czp - viewdistance - 1; cz <= czp + viewdistance; cz++)
+            for (cz = czp - ViewDistance - 1; cz <= czp + ViewDistance; cz++)
             {
                 if (chunkOutOfBound(cx, cy, cz)) continue;
                 if (cpArray.getChunkPtr(cx, cy, cz) == nullptr)

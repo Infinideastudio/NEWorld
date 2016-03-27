@@ -1,7 +1,4 @@
-﻿//==============================   Initialize   ================================//
-//==============================初始化(包括闪屏)================================//
-
-#include "Definitions.h"
+﻿#include "Definitions.h"
 #include "Blocks.h"
 #include "Textures.h"
 #include "GLProc.h"
@@ -27,9 +24,6 @@
 #include"AudioSystem.h"
 void loadOptions();
 void saveOptions();
-
-//==============================  Main Program  ================================//
-//==============================     主程序     ================================//
 
 void ApplicationBeforeLaunch()
 {
@@ -88,10 +82,6 @@ int main()
     //App Entrance
     GUI::BackToMain();
     GUI::AppStart();
-    //结束程序，删了也没关系 ←_←（吐槽FB和glfw中）
-    //不对啊这不是FB！！！这是正宗的C++！！！！！！
-    //楼上的楼上在瞎说！！！别信他的！！！
-    //……所以你是不是应该说“吐槽C艹”中？——地鼠
     glfwTerminate();
     //反初始化音频系统
     AudioSystem::UnInit();
@@ -128,9 +118,9 @@ void loadOptions()
     filein.close();
     loadoption(options, "Language", Globalization::Cur_Lang);
     loadoption(options, "FOV", FOVyNormal);
-    loadoption(options, "RenderDistance", viewdistance);
+    loadoption(options, "RenderDistance", ViewDistance);
     loadoption(options, "Sensitivity", mousemove);
-    loadoption(options, "CloudWidth", cloudwidth);
+    loadoption(options, "CloudWidth", CloudWidth);
     loadoption(options, "SmoothLighting", SmoothLighting);
     loadoption(options, "FancyGrass", NiceGrass);
     loadoption(options, "MergeFaceRendering", MergeFace);
@@ -141,7 +131,7 @@ void loadOptions()
     loadoption(options, "VerticalSync", vsync);
     loadoption(options, "GUIBackgroundBlur", GUIScreenBlur);
     loadoption(options, "ppistretch", ppistretch);
-    loadoption(options, "ForceUnicodeFont", TextRenderer::useUnicodeASCIIFont);
+    loadoption(options, "ForceUnicodeFont", TextRenderer::UseUnicodeASCIIFont);
     loadoption(options, "GainOfBGM", AudioSystem::BGMGain);
     loadoption(options, "GainOfSound", AudioSystem::SoundGain);
 }
@@ -159,9 +149,9 @@ void saveOptions()
     if (!fileout.is_open()) return;
     saveoption(fileout, "Language", Globalization::Cur_Lang);
     saveoption(fileout, "FOV", FOVyNormal);
-    saveoption(fileout, "RenderDistance", viewdistance);
+    saveoption(fileout, "RenderDistance", ViewDistance);
     saveoption(fileout, "Sensitivity", mousemove);
-    saveoption(fileout, "CloudWidth", cloudwidth);
+    saveoption(fileout, "CloudWidth", CloudWidth);
     saveoption(fileout, "SmoothLighting", SmoothLighting);
     saveoption(fileout, "FancyGrass", NiceGrass);
     saveoption(fileout, "MergeFaceRendering", MergeFace);
@@ -172,7 +162,7 @@ void saveOptions()
     saveoption(fileout, "VerticalSync", vsync);
     saveoption(fileout, "GUIBackgroundBlur", GUIScreenBlur);
     saveoption(fileout, "ppistretch", ppistretch);
-    saveoption(fileout, "ForceUnicodeFont", TextRenderer::useUnicodeASCIIFont);
+    saveoption(fileout, "ForceUnicodeFont", TextRenderer::UseUnicodeASCIIFont);
     saveoption(fileout, "GainOfBGM", AudioSystem::BGMGain);
     saveoption(fileout, "GainOfSound", AudioSystem::SoundGain);
     fileout.close();

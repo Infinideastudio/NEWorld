@@ -16,7 +16,7 @@ private:
         title = GUI::label(GetStrbyKey("NEWorld.options.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
         FOVyBar = GUI::trackbar("", 120, (int)(FOVyNormal - 1), -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
         mmsBar = GUI::trackbar("", 120, (int)(mousemove * 40 * 2 - 1), 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
-        viewdistBar = GUI::trackbar("", 120, (viewdistance - 2) * 4 - 1, -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
+        viewdistBar = GUI::trackbar("", 120, (ViewDistance - 2) * 4 - 1, -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
         rdstbtn = GUI::button(GetStrbyKey("NEWorld.options.rendermenu"), -250, -10, 204, 228, 0.5, 0.5, 0.0, 0.0);
         gistbtn = GUI::button(GetStrbyKey("NEWorld.options.guimenu"), 10, 250, 204, 228, 0.5, 0.5, 0.0, 0.0);
         langbtn = GUI::button(GetStrbyKey("NEWorld.options.languagemenu"), -250, -10, 240, 264, 0.5, 0.5, 0.0, 0.0);
@@ -30,7 +30,7 @@ private:
     {
         FOVyNormal = (float)(FOVyBar.barpos + 1);
         mousemove = (mmsBar.barpos / 2 + 1) / 40.0f;
-        viewdistance = (viewdistBar.barpos + 1) / 4 + 2;
+        ViewDistance = (viewdistBar.barpos + 1) / 4 + 2;
         if (rdstbtn.clicked) Renderoptions();
         if (gistbtn.clicked) GUIoptions();
         if (backbtn.clicked) GUI::PopPage();
@@ -50,7 +50,7 @@ private:
         AudioSystem::GUIUpdate();
         FOVyBar.text = strWithVar(GetStrbyKey("NEWorld.options.fov"), FOVyNormal);
         mmsBar.text = strWithVar(GetStrbyKey("NEWorld.options.sensitivity"), mousemove);
-        viewdistBar.text = strWithVar(GetStrbyKey("NEWorld.options.distance"), viewdistance);
+        viewdistBar.text = strWithVar(GetStrbyKey("NEWorld.options.distance"), ViewDistance);
     }
 };
 void options()

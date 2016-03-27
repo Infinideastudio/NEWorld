@@ -30,8 +30,8 @@ const int networkRequestFrequency = 3; //请求频率
 const int networkRequestMax = 20; //理想最大请求队列长度
 extern float FOVyNormal;
 extern float mousemove;
-extern int viewdistance;
-extern int cloudwidth;
+extern int ViewDistance;
+extern int CloudWidth;
 extern int selectPrecision;
 extern int selectDistance;
 extern float walkspeed;
