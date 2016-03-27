@@ -9,7 +9,7 @@
 #include"Particles.h"
 #include"Items.h"
 
-extern int viewdistance;
+extern int ViewDistance;
 class Frsutum;
 
 namespace World

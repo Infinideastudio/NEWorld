@@ -198,14 +198,14 @@ public:
         World::updatedChunks = 0;
 
         //cpArray move
-        if (World::cpArray.originX != Player::cxt - viewdistance - 2 || World::cpArray.originY != Player::cyt - viewdistance - 2 || World::cpArray.originZ != Player::czt - viewdistance - 2)
+        if (World::cpArray.originX != Player::cxt - ViewDistance - 2 || World::cpArray.originY != Player::cyt - ViewDistance - 2 || World::cpArray.originZ != Player::czt - ViewDistance - 2)
         {
-            World::cpArray.moveTo(Player::cxt - viewdistance - 2, Player::cyt - viewdistance - 2, Player::czt - viewdistance - 2);
+            World::cpArray.moveTo(Player::cxt - ViewDistance - 2, Player::cyt - ViewDistance - 2, Player::czt - ViewDistance - 2);
         }
         //HeightMap move
-        if (World::HMap.originX != (Player::cxt - viewdistance - 2) * 16 || World::HMap.originZ != (Player::czt - viewdistance - 2) * 16)
+        if (World::HMap.originX != (Player::cxt - ViewDistance - 2) * 16 || World::HMap.originZ != (Player::czt - ViewDistance - 2) * 16)
         {
-            World::HMap.moveTo((Player::cxt - viewdistance - 2) * 16, (Player::czt - viewdistance - 2) * 16);
+            World::HMap.moveTo((Player::cxt - ViewDistance - 2) * 16, (Player::czt - ViewDistance - 2) * 16);
         }
 
         if (FirstUpdateThisFrame)
@@ -938,7 +938,7 @@ public:
         glEnable(GL_TEXTURE_2D);
 
         Player::ViewFrustum.LoadIdentity();
-        Player::ViewFrustum.SetPerspective(FOVyNormal + FOVyExt, (float)windowwidth / windowheight, 0.05f, viewdistance * 16.0f);
+        Player::ViewFrustum.SetPerspective(FOVyNormal + FOVyExt, (float)windowwidth / windowheight, 0.05f, ViewDistance * 16.0f);
         Player::ViewFrustum.MultRotate((float)plookupdown, 1, 0, 0);
         Player::ViewFrustum.MultRotate(360.0f - (float)pheading, 0, 1, 0);
         Player::ViewFrustum.update();
@@ -952,7 +952,7 @@ public:
         glRotated(360.0 - pheading, 0, 1, 0);
 
         World::calcVisible(xpos, ypos, zpos, Player::ViewFrustum);
-        renderedChunk = WorldRenderer::ListRenderChunks(Player::cxt, Player::cyt, Player::czt, viewdistance, curtime);
+        renderedChunk = WorldRenderer::ListRenderChunks(Player::cxt, Player::cyt, Player::czt, ViewDistance, curtime);
 
         MutexUnlock(Mutex);
 
@@ -1502,10 +1502,10 @@ public:
                 {
                     if (World::cloud[i][j] != 0)
                     {
-                        Renderer::Vertex3d(j*cloudwidth, 128.0, 0.0);
-                        Renderer::Vertex3d(j*cloudwidth, 128.0, cloudwidth);
-                        Renderer::Vertex3d((j + 1)*cloudwidth, 128.0, cloudwidth);
-                        Renderer::Vertex3d((j + 1)*cloudwidth, 128.0, 0.0);
+                        Renderer::Vertex3d(j*CloudWidth, 128.0, 0.0);
+                        Renderer::Vertex3d(j*CloudWidth, 128.0, CloudWidth);
+                        Renderer::Vertex3d((j + 1)*CloudWidth, 128.0, CloudWidth);
+                        Renderer::Vertex3d((j + 1)*CloudWidth, 128.0, 0.0);
                     }
                 }
                 Renderer::Flush(cloudvb[i], vtxs[i]);
@@ -1518,7 +1518,7 @@ public:
         for (int i = 0; i < 128; i++)
         {
             glPushMatrix();
-            glTranslated(-64.0 * cloudwidth - px, 0.0, cloudwidth*((l + i) % 128 + f) - 64.0 * cloudwidth - pz);
+            glTranslated(-64.0 * CloudWidth - px, 0.0, CloudWidth*((l + i) % 128 + f) - 64.0 * CloudWidth - pz);
             Renderer::renderbuffer(cloudvb[i], vtxs[i], 0, 0);
             glPopMatrix();
         }
