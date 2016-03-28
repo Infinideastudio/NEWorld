@@ -60,19 +60,9 @@ Frustum chunk::TestFrustum;
 void chunk::create()
 {
     aabb = getBaseAABB();
-    try
-    {
-        pblocks = new block[4096];
-        pbrightness = new brightness[4096];
-    }
-    catch(std::bad_alloc &)
-    {
-#ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
-        DebugError("Allocate memory failed!");
-#endif
-        pblocks = nullptr;
-        pbrightness = nullptr;
-    }
+    pblocks = new block[4096];
+    pbrightness = new brightness[4096];
+    //Note: If the memory is not enough, let it crash. Or you will have to face other 'strange' errors.
 }
 
 void chunk::destroy()
@@ -87,13 +77,6 @@ void chunk::destroy()
 
 void chunk::buildTerrain(bool initIfEmpty)
 {
-#ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
-    if (pblocks == nullptr || pbrightness == nullptr)
-    {
-        DebugWarning("Empty pointer when chunk generating!");
-        return;
-    }
-#endif
 
     //Fast generate parts
     //Part1 out of the terrain bound
@@ -293,13 +276,6 @@ void chunk::SaveToFile()
 
 void chunk::buildRender()
 {
-#ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
-    if (pblocks == nullptr || pbrightness == nullptr)
-    {
-        DebugWarning("Empty pointer when building vertex buffers!");
-        return;
-    }
-#endif
     int x, y, z;
     for (x = -1; x <= 1; x++)
     {

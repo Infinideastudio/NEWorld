@@ -78,41 +78,25 @@ public:
         return ret;
     }
 
-    bool LoadFromFile(); //返回true代表区块文件打开成功
+    bool LoadFromFile();
     void SaveToFile();
     void buildRender();
     void destroyRender();
 
     inline block& getblock(int x, int y, int z)
     {
-#ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
-        if (pblocks == nullptr)
-        {
-            DebugWarning("chunk.getblock() error: Empty pointer");
-            return;
-        }
-        if (x>15 || x<0 || y>15 || y<0 || z>15 || z<0)
-        {
-            DebugWarning("chunk.getblock() error: Out of range");
-            return;
-        }
+#ifdef _DEBUG
+		assert(pblocks != nullptr);
+		assert(x >= 0 && x < 16 && y >= 0 && y < 16 && z >= 0 && z < 16);
 #endif
         return pblocks[(x << 8) ^ (y << 4) ^ z];
     }
 
     brightness getbrightness(int x, int y, int z)
     {
-#ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
-        if (pbrightness == nullptr)
-        {
-            DebugWarning("chunk.getbrightness() error: Empty pointer");
-            return;
-        }
-        if (x>15 || x<0 || y>15 || y<0 || z>15 || z<0)
-        {
-            DebugWarning("chunk.getbrightness() error: Out of range");
-            return;
-        }
+#ifdef _DEBUG
+		assert(pbrightness != nullptr);
+		assert(x >= 0 && x < 16 && y >= 0 && y < 16 && z >= 0 && z < 16);
 #endif
         return pbrightness[(x << 8) ^ (y << 4) ^ z];
     }
