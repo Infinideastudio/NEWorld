@@ -172,8 +172,7 @@ void Player::updatePosition()
     if (xa != xal || za != zal) NearWall = true;
     else NearWall = false;
 
-    //消除浮点数精度带来的影响（查了好久的穿墙bug才发现是在这里有问题(╯‵□′)╯︵┻━┻）
-    //  --qiaozhanrong
+    //消除浮点数精度带来的影响
     xa = (double)((int)(xa * 100000)) / 100000.0;
     ya = (double)((int)(ya * 100000)) / 100000.0;
     za = (double)((int)(za * 100000)) / 100000.0;
