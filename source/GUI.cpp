@@ -974,7 +974,6 @@ void Form::update()
         glfwSetCursor(MainWindow, MouseCursor);
     }
     onUpdate();
-
 }
 
 void Form::render()
@@ -1108,23 +1107,20 @@ struct PageOpRq
 
 std::deque<Form*> ViewStack;
 std::deque<PageOpRq> ViewOps = {};
-bool HaveRequest = false;
+
 void PushPage(Form* View)
 {
     ViewOps.push_back({ 1, View });
-    HaveRequest = true;
 }
 
 void PopPage()
 {
     ViewOps.push_back({ 2, nullptr });
-    HaveRequest = true;
 }
 
 void BackToMain()
 {
     ViewOps.push_back({ 3, nullptr });
-    HaveRequest = true;
 }
 
 void PopView()
@@ -1137,34 +1133,32 @@ void PopView()
 void ClearStack()
 {
     ViewOps.push_back({ 4, nullptr });
-    HaveRequest = true;
 }
 
-void ProcessRequests()      //Process the op deque
+void ProcessEvents()
 {
-    while (!ViewOps.empty())
-    {
-        switch (ViewOps.begin()->Op)
-        {
-        case 1:
-            ViewStack.push_front(ViewOps.begin()->Page);
-            (*ViewStack.begin())->onLoad();
-            break;
-        case 2:
-            PopView();
-            break;
-        case 3:
-            while (ViewStack.size() > 0) PopView();
-            ViewStack.push_front(GetMain());
-            (*ViewStack.begin())->onLoad();
-            break;
-        case 4:
-            while (ViewStack.size() > 0) PopView();
-            break;
-        }
+	while (!ViewOps.empty())
+	{
+		switch (ViewOps.begin()->Op)
+		{
+		case 1:
+			ViewStack.push_front(ViewOps.begin()->Page);
+			(*ViewStack.begin())->onLoad();
+			break;
+		case 2:
+			PopView();
+			break;
+		case 3:
+			while (ViewStack.size() > 0) PopView();
+			ViewStack.push_front(GetMain());
+			(*ViewStack.begin())->onLoad();
+			break;
+		case 4:
+			while (ViewStack.size() > 0) PopView();
+			break;
+		}
 		ViewOps.pop_front();
-    }
-    HaveRequest = false;
+	}
 }
 
 void AppStart()
@@ -1172,16 +1166,15 @@ void AppStart()
     glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glDisable(GL_CULL_FACE);
-    ProcessRequests();
+	ProcessEvents();
     TextRenderer::setFontColor(1.0, 1.0, 1.0, 1.0);
-    while (ViewStack.size() > 0)
+    while (!ViewStack.empty())
     {
         (*ViewStack.begin())->singleloop();
-        if (HaveRequest) ProcessRequests();
+		ProcessEvents();
         if (glfwWindowShouldClose(MainWindow))
-        {
-            while (ViewStack.size() > 0) PopView();
-        }
+            while (!ViewStack.empty())
+				PopView();
     }
     AppCleanUp();
 }
