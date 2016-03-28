@@ -68,31 +68,31 @@ struct block
 
 namespace Blocks
 {
-struct BUDDP
-{
-    block origon;
-    block* upd;
-    block* slf;
-    void* dudp;
-    void* dslf;
-    long long cx, cy, cz;
-    BUDDP(block iOri, block* _upd, block* _slf, void* _dudp, void* _dslf,
-          long long _cx, long long _cy, long long _cz) :
-        origon(iOri), upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-    bool operator == (const BUDDP i) {
-        return cx == i.cx && cy == i.cy && cz == i.cz;
-    }
-};
+	struct BUDDP
+	{
+		block origon;
+		block* upd;
+		block* slf;
+		void* dudp;
+		void* dslf;
+		long long cx, cy, cz;
+		BUDDP(block iOri, block* _upd, block* _slf, void* _dudp, void* _dslf,
+			  long long _cx, long long _cy, long long _cz) :
+			origon(iOri), upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
+		bool operator == (const BUDDP i) {
+			return cx == i.cx && cy == i.cy && cz == i.cz;
+		}
+	};
 
-struct TILDP
-{
-    block* slf;
-    void* dslf;
-    long long cx, cy, cz;
+	struct TILDP
+	{
+		block* slf;
+		void* dslf;
+		long long cx, cy, cz;
 
-    TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
-        slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-};
+		TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
+			slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
+	};
 }
 typedef block item;
 
