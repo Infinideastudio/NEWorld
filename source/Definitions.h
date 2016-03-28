@@ -5,7 +5,6 @@
 #include "Typedefs.h"
 #include "FunctionsKit.h"
 //#ifdef NEWORLD_DEBUG
-//#define NEWORLD_DEBUG_CONSOLE_OUTPUT
 //#define NEWORLD_DEBUG_NO_FILEIO
 //#define NEWORLD_DEBUG_PERFORMANCE_REC
 //#endif
@@ -45,7 +44,6 @@ extern bool vsync;
 extern double stretch;
 extern int gametime;
 const int gameTimeMax = 43200;
-//extern float daylight;
 
 extern int windowwidth;
 extern int windowheight;
