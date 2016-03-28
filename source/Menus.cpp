@@ -272,7 +272,7 @@ namespace Menus
 		{
 			for (size_t i = 0; i < Langs.size(); i++)
 			{
-				for (vector<GUI::controls*>::iterator iter = children.begin(); iter != children.end(); )
+				for (vector<GUI::control*>::iterator iter = children.begin(); iter != children.end(); )
 				{
 					if ((*iter)->id == Langs[i].Button->id) iter = children.erase(iter);
 					else ++iter;
