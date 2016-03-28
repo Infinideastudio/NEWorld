@@ -26,7 +26,6 @@ double stretch = 1.0f;          //ppi缩放比例（供gui绘制使用）
 int Multisample = 0;            //多重采样抗锯齿
 bool vsync = false;             //垂直同步
 int gametime = 0;                //游戏时间 0~2592000
-//float daylight;
 
 int windowwidth;     //窗口宽度
 int windowheight;    //窗口宽度
