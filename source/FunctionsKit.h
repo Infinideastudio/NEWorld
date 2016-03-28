@@ -6,7 +6,7 @@
 
 extern double stretch;
 
-//常用函数
+//Widget Functions
 vector<string> split(string str, string pattern);
 
 inline void UITrans(double x, double y)
@@ -218,7 +218,7 @@ inline double timer()
 
 #endif
 
-inline int Distancen(int ix, int iy, int iz, int x, int y, int z)//计算距离的平方
+inline int Distancen(int ix, int iy, int iz, int x, int y, int z)//Calculte the square of distence between two points
 {
     return (ix - x)*(ix - x) + (iy - y)*(iy - y) + (iz - z)*(iz - z);
 }

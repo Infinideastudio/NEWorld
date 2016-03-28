@@ -240,7 +240,7 @@ void EndStretch()
     TextRenderer::resize();
 }
 
-void controls::updatepos()
+void control::updatepos()
 {
     xmin = (int)(windowwidth*_xmin_b / stretch) + _xmin_r;
     ymin = (int)(windowheight*_ymin_b / stretch) + _ymin_r;
@@ -248,7 +248,7 @@ void controls::updatepos()
     ymax = (int)(windowheight*_ymax_b / stretch) + _ymax_r;
 }
 
-void controls::resize(int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
+void control::resize(int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
 {
     _xmin_r = xi_r;
     _xmax_r = xa_r;
@@ -864,19 +864,7 @@ void imagebox::render()
     glEnd();
 }
 
-void Form::Init()
-{
-    maxid = 0;
-    currentid = 0;
-    focusid = -1;
-    //Transition forward
-    if (transitionList != 0) glDeleteLists(transitionList, 1);
-    transitionList = lastdisplaylist;
-    transitionForward = true;
-    transitionTimer = timer();
-}
-
-void Form::registerControl(controls* c)
+void Form::registerControl(control* c)
 {
     c->id = currentid;
     c->parent = this;
@@ -885,15 +873,15 @@ void Form::registerControl(controls* c)
     maxid++;
 }
 
-void Form::registerControls(int count, controls* c, ...)
+void Form::registerControls(int count, control* c, ...)
 {
     va_list arg_ptr;
-    controls* cur = c;
+    control* cur = c;
     va_start(arg_ptr, c);
     for (int i = 0; i < count; i++)
     {
         registerControl(cur);
-        cur = va_arg(arg_ptr, controls*);
+        cur = va_arg(arg_ptr, control*);
     }
     va_end(arg_ptr);
 }
@@ -1085,20 +1073,7 @@ imagebox::imagebox(float _txmin, float _txmax, float _tymin, float _tymax, Textu
     resize(xi_r, xa_r, yi_r, ya_r, xi_b, xa_b, yi_b, ya_b);
 }
 
-void Form::cleanup()
-{
-    //Transition backward
-    if (transitionList != 0) glDeleteLists(transitionList, 1);
-    transitionList = displaylist;
-    transitionForward = false;
-    transitionTimer = timer();
-    for (size_t i = 0; i != children.size(); i++)
-    {
-        children[i]->destroy();
-    }
-}
-
-controls* Form::getControlByID(int cid)
+control* Form::getControlByID(int cid)
 {
     for (size_t i = 0; i != children.size(); i++)
     {
@@ -1107,11 +1082,6 @@ controls* Form::getControlByID(int cid)
     return nullptr;
 }
 
-Form::Form()
-{
-    Init();
-    Background = &drawBackground;
-}
 void Form::singleloop()
 {
     double dmx, dmy;
@@ -1217,6 +1187,14 @@ void AppStart()
 }
 Form::~Form()
 {
-    cleanup();
+	//Transition backward
+	if (transitionList != 0) glDeleteLists(transitionList, 1);
+	transitionList = displaylist;
+	transitionForward = false;
+	transitionTimer = timer();
+	for (size_t i = 0; i != children.size(); i++)
+	{
+		children[i]->destroy();
+	}
 }
 }
