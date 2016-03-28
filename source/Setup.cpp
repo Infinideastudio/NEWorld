@@ -28,7 +28,6 @@ void splashScreen()
         glTexCoord2f(0.0, 1.0 - 480.0f / 1024.0f);
         glVertex2i(-1, -1);
         glEnd();
-        Sleep(10);
     }
     glDeleteTextures(1, &splTex);
     glfwSwapBuffers(MainWindow);
@@ -59,7 +58,6 @@ void createWindow()
 
 void setupScreen()
 {
-
     //获取OpenGL版本
     GLVersionMajor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MAJOR);
     GLVersionMinor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MINOR);
@@ -87,7 +85,7 @@ void setupScreen()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glHint(GL_FOG_HINT, GL_FASTEST);
     glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST);
-    if (Multisample != 0)
+    if (Multisample)
         glEnable(GL_MULTISAMPLE_ARB);
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
@@ -156,40 +154,29 @@ void WindowSizeFunc(GLFWwindow * win, int width, int height)
 
 void MouseButtonFunc(GLFWwindow *, int button, int action, int)
 {
-    mb = 0;
-    if (action == GLFW_PRESS)
-    {
-        if (button == GLFW_MOUSE_BUTTON_LEFT)
-            mb += 1;
-        if (button == GLFW_MOUSE_BUTTON_RIGHT)
-            mb += 2;
-        if (button == GLFW_MOUSE_BUTTON_MIDDLE)
-            mb += 4;
-    }
-    else
-    {
-        mb = 0;
-    }
+	mb = 0;
+	if (action == GLFW_PRESS)
+	{
+		if (button == GLFW_MOUSE_BUTTON_LEFT)
+			mb = 1;
+		if (button == GLFW_MOUSE_BUTTON_RIGHT)
+			mb = 2;
+		if (button == GLFW_MOUSE_BUTTON_MIDDLE)
+			mb = 4;
+	}
 }
 
 void CharInputFunc(GLFWwindow *, unsigned int c)
 {
     if (c >= 128)
     {
-        wchar_t* pwszUnicode = new wchar_t[2];
-        pwszUnicode[0] = (wchar_t)c;
-        pwszUnicode[1] = '\0';
-        char* pszMultiByte;
-        pszMultiByte = (char*)malloc((unsigned int)4);
-        pszMultiByte = (char*)realloc(pszMultiByte, WCharToMByte(pszMultiByte, pwszUnicode, 4));
+		wchar_t pwszUnicode[2] = { (wchar_t)c,'\0' };
+		char pszMultiByte[5];
+		WCharToMByte(pszMultiByte, pwszUnicode, 4);
         inputstr += pszMultiByte;
-        free(pszMultiByte);
-        delete[] pwszUnicode;
     }
     else
-    {
         inputstr += (char)c;
-    }
 }
 
 void MouseScrollFunc(GLFWwindow *, double, double yoffset)
