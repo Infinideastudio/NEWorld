@@ -65,7 +65,7 @@ void chunk::create()
         pblocks = new block[4096];
         pbrightness = new brightness[4096];
     }
-    catch(std::bad_alloc &ba)
+    catch(std::bad_alloc &)
     {
 #ifdef NEWORLD_DEBUG_CONSOLE_OUTPUT
         DebugError("Allocate memory failed!");
