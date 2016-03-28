@@ -53,37 +53,31 @@ public:
     SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness, BUDF _buf) :
         name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness), BlockUpdateFunc(_buf) {};
 
-    //获得方块名称
     string getBlockName() const
     {
         return Globalization::GetStrbyKey(name);
     }
 
-    //是否是固体
     bool isSolid() const
     {
         return Solid;
     }
 
-    //是否不透明
     bool isOpaque() const
     {
         return Opaque;
     }
 
-    //是否半透明
     bool isTranslucent() const
     {
         return Translucent;
     }
 
-    //是否可以爆炸
     bool isExplosive() const
     {
         return explosive;
     }
 
-    //获得硬度（数值越大硬度越小，最大100）
     float getHardness() const
     {
         return Hardness;
@@ -92,7 +86,7 @@ public:
 
 const SingleBlock blockData[BLOCK_DEF_END + 1] =
 {
-    //            方块名称          固体     不透明      半透明  可以爆炸  硬度 方块更新回调函数
+    //            Block Name                  Solid   Opaque Translucent Explosive Hardness Block Update Callback Function
     SingleBlock("NEWorld.Blocks.Air"        , false    , false    , false , false,    0    , nullptr),
     SingleBlock("NEWorld.Blocks.Rock"        , true    , true    , false , false,    2    , nullptr),
     SingleBlock("NEWorld.Blocks.Grass"        , true    , true    , false , false,    5    , &GrassBUF),
