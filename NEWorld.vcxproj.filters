@@ -14,9 +14,6 @@
     <Filter Include="Source\GUI">
       <UniqueIdentifier>{92f24a42-2d77-4317-9cd7-04a69e43c2fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\GUI\Menus">
-      <UniqueIdentifier>{a3b20020-88a5-471c-8536-f09a7af5af56}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\GUI\Globalization">
       <UniqueIdentifier>{a9cb3744-03b3-4b6d-af7a-a84d6f4b36d4}</UniqueIdentifier>
     </Filter>
@@ -326,24 +323,6 @@
     <ClCompile Include="source\GUI.cpp">
       <Filter>源代码\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="source\RenderOptionsMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="source\CreateWorldMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GUIOptionsMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="source\MainMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="source\MultiplayerGame.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="source\OptionsMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="source\ChunkRenderer.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>
@@ -353,17 +332,8 @@
     <ClCompile Include="source\Network.cpp">
       <Filter>Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="source\GameMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="source\Globalization.cpp">
       <Filter>Source\GUI\Globalization</Filter>
-    </ClCompile>
-    <ClCompile Include="source\LanguageMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ShaderOptionsMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
     </ClCompile>
     <ClCompile Include="source\TextRenderer.cpp">
       <Filter>Source\Renderer\GUIRenderer</Filter>
@@ -416,14 +386,8 @@
     <ClCompile Include="source\Shader.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="source\WorldMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="source\GameView.cpp">
       <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Information.cpp">
-      <Filter>Source\GUI\Menus</Filter>
     </ClCompile>
     <ClCompile Include="include\AL\ALDevice.cpp">
       <Filter>Source\Common\OpenAL</Filter>
@@ -446,11 +410,11 @@
     <ClCompile Include="source\AudioSystem.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="source\SoundMenu.cpp">
-      <Filter>Source\GUI\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="source\BlockFuncs.cpp">
       <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Menus.cpp">
+      <Filter>Source\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
