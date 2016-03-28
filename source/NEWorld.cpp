@@ -21,7 +21,7 @@
 #include "Command.h"
 #include "ModLoader.h"
 #include "Setup.h"
-#include"AudioSystem.h"
+#include "AudioSystem.h"
 void loadOptions();
 void saveOptions();
 
@@ -47,7 +47,6 @@ void ApplicationBeforeLaunch()
     loadOptions();
     Globalization::Load();
 
-    _mkdir("Configs");
     _mkdir("Worlds");
     _mkdir("Screenshots");
     _mkdir("Mods");
@@ -57,7 +56,6 @@ void ApplicationAfterLaunch()
 {
     loadTextures();
     Mod::ModLoader::loadMods();
-    //初始化音频系统
     AudioSystem::Init();
 }
 
@@ -66,7 +64,7 @@ int main()
     ApplicationBeforeLaunch();
     windowwidth = defaultwindowwidth;
     windowheight = defaultwindowheight;
-    cout << "[Console][Event]Initialize GLFW" << (glfwInit() == 1 ? "" : " - Failed!") << endl;
+	glfwInit();
     createWindow();
     setupScreen();
     glDisable(GL_CULL_FACE);
@@ -83,7 +81,6 @@ int main()
     GUI::BackToMain();
     GUI::AppStart();
     glfwTerminate();
-    //反初始化音频系统
     AudioSystem::UnInit();
     return 0;
 }
@@ -107,7 +104,7 @@ void loadoption(std::map<string, string> &m, const char* name, T &value)
 void loadOptions()
 {
     std::map<string, string> options;
-    std::ifstream filein("Configs/options.ini", std::ios::in);
+    std::ifstream filein("options.ini", std::ios::in);
     if (!filein.is_open()) return;
     string name, value;
     while (!filein.eof())
@@ -145,7 +142,7 @@ void saveoption(std::ofstream &out, const char* name, T &value)
 void saveOptions()
 {
     std::map<string, string> options;
-    std::ofstream fileout("Configs/options.ini", std::ios::out);
+    std::ofstream fileout("options.ini", std::ios::out);
     if (!fileout.is_open()) return;
     saveoption(fileout, "Language", Globalization::Cur_Lang);
     saveoption(fileout, "FOV", FOVyNormal);
