@@ -218,9 +218,7 @@ public:
             for (int i = 0; i < sumUnload; i++)
             {
                 World::chunk* cp = World::chunkUnloadList[i].first;
-#ifdef NEWORLD_DEBUG
-                if (cp == nullptr || cp == World::EmptyChunkPtr) DebugError("Unload error!");
-#endif
+				assert(cp != World::EmptyChunkPtr);
                 int cx = cp->cx, cy = cp->cy, cz = cp->cz;
                 cp->Unload();
                 World::DeleteChunk(cx, cy, cz);

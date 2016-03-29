@@ -1,21 +1,14 @@
 #pragma once
-//#define NEWORLD_DEBUG
-//#define NEWORLD_SECURE
 #include "StdInclude.h"
 #include "Typedefs.h"
 #include "FunctionsKit.h"
-//#ifdef NEWORLD_DEBUG
-//#define NEWORLD_DEBUG_NO_FILEIO
 //#define NEWORLD_DEBUG_PERFORMANCE_REC
-//#endif
 
 //Global Vars
 const unsigned int VERSION = 39;
 const string MAJOR_VERSION = "Alpha 0.";
 const string MINOR_VERSION = "5";
 const string EXT_VERSION = " Technical Perview";
-const int defaultwindowwidth = 852;
-const int defaultwindowheight = 480;
 const int networkRequestFrequency = 3;
 const int networkRequestMax = 20; //Maximum Request Queue Length
 extern float FOVyNormal;
