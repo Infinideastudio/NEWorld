@@ -117,7 +117,6 @@ void setupNormalFog()
 void loadTextures()
 {
     //载入纹理
-    Textures::Init();
 
     tex_select = Textures::LoadRGBATexture("Textures/GUI/select.bmp", "");
     tex_unselect = Textures::LoadRGBATexture("Textures/GUI/unselect.bmp", "");
