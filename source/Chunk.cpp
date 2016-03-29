@@ -225,21 +225,15 @@ void chunk::Load(bool initIfEmpty)
     //assert(Empty == false);
 
     create();
-#ifndef NEWORLD_DEBUG_NO_FILEIO
     if (!LoadFromFile())
         build(initIfEmpty);
-#else
-    build(initIfEmpty);
-#endif
     if (!Empty) updated = true;
 }
 
 void chunk::Unload()
 {
     unloadedChunksCount++;
-#ifndef NEWORLD_DEBUG_NO_FILEIO
     SaveToFile();
-#endif
     destroyRender();
     destroy();
 }
