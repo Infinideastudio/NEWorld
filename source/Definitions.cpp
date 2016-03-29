@@ -27,8 +27,8 @@ int Multisample = 0;            //多重采样抗锯齿
 bool vsync = false;             //垂直同步
 int gametime = 0;                //游戏时间 0~2592000
 
-int windowwidth;     //窗口宽度
-int windowheight;    //窗口宽度
+int windowwidth = 852;     //窗口宽度
+int windowheight = 480;    //窗口宽度
 bool gamebegin, gameexit, bagOpened;
 
 //多人游戏

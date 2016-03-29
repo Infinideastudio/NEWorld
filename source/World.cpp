@@ -132,9 +132,7 @@ int getChunkPtrIndex(int x, int y, int z)
     chunkid cid = getChunkID(x, y, z);
     pair<int, int> pos = binary_search_chunks(chunks, loadedChunks, cid);
     if (chunks[pos.second]->id == cid) return pos.second;
-#ifdef NEWORLD_DEBUG
-    DebugError("getChunkPtrIndex Error!");
-#endif
+	assert(false);
     return -1;
 }
 
@@ -1002,12 +1000,10 @@ void calcVisible(double xpos, double ypos, double zpos, Frustum& frus)
 
 void saveAllChunks()
 {
-#ifndef NEWORLD_DEBUG_NO_FILEIO
     for (int i = 0; i != loadedChunks; i++)
     {
         chunks[i]->SaveToFile();
     }
-#endif
 }
 
 void destroyAllChunks()

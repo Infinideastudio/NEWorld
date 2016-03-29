@@ -62,8 +62,6 @@ void ApplicationAfterLaunch()
 int main()
 {
     ApplicationBeforeLaunch();
-    windowwidth = defaultwindowwidth;
-    windowheight = defaultwindowheight;
 	glfwInit();
     createWindow();
     setupScreen();
