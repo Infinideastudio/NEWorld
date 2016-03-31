@@ -26,7 +26,6 @@ public:
     static bool addItem(item itemname, short amount = 1);
     static bool putBlock(int x, int y, int z, block blockname);
 
-    //修改游戏模式
     static void changeGameMode(int gamemode);
 
     static PlayerPacket convertToPlayerPacket();
