@@ -3,7 +3,7 @@
 
 ItemInfo itemsinfo[] = { STICK, APPLE };
 
-void loadItemsTextures()
+void LoadItemsTextures()
 {
     itemsinfo[BuiltInItems::STICK - theFirstItem.ID].texture =
         Textures::LoadRGBTexture("Textures/Items/stick.bmp");

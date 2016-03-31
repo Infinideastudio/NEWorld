@@ -1161,6 +1161,13 @@ void ProcessEvents()
 	}
 }
 
+void AppCleanUp()
+{
+	World::saveAllChunks();
+	World::destroyAllChunks();
+	Mod::ModLoader::unloadMods();
+}
+
 void AppStart()
 {
     glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
