@@ -17,7 +17,7 @@ enum BuiltInItems
 extern ItemInfo itemsinfo[];
 const item theFirstItem = item(STICK);
 
-void loadItemsTextures();
+void LoadItemsTextures();
 
 inline bool isBlock(item i)
 {

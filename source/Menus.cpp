@@ -15,7 +15,7 @@ struct Langinfo
     GUI::button * Button;
 };
 
-void saveOptions();
+void SaveOptions();
 
 string Str[] =
 {
@@ -645,7 +645,7 @@ namespace Menus
 			if (rdstbtn.clicked) Renderoptions();
 			if (gistbtn.clicked) GUIoptions();
 			if (backbtn.clicked) GUI::PopPage();
-			if (savebtn.clicked) saveOptions();
+			if (savebtn.clicked) SaveOptions();
 			if (langbtn.clicked)
 			{
 				languagemenu();

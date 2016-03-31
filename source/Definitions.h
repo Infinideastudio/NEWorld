@@ -4,13 +4,16 @@
 #include "FunctionsKit.h"
 //#define NEWORLD_DEBUG_PERFORMANCE_REC
 
-//Global Vars
-const unsigned int VERSION = 39;
+enum
+{
+	VERSION = 39,
+	gameTimeMax = 43200,
+	networkRequestFrequency = 3,
+	networkRequestMax = 20
+};
 const string MAJOR_VERSION = "Alpha 0.";
 const string MINOR_VERSION = "5";
 const string EXT_VERSION = " Technical Perview";
-const int networkRequestFrequency = 3;
-const int networkRequestMax = 20; //Maximum Request Queue Length
 extern float FOVyNormal;
 extern float mousemove;
 extern int ViewDistance;
@@ -36,7 +39,6 @@ extern int Multisample;
 extern bool vsync;
 extern double stretch;
 extern int gametime;
-const int gameTimeMax = 43200;
 
 extern int windowwidth;
 extern int windowheight;
@@ -75,7 +77,6 @@ extern double mx, my, mxl, myl;
 extern int mw, mb, mbp, mbl, mwl;
 extern double mxdelta, mydelta;
 extern string inputstr;
-void AppCleanUp();
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
 extern int c_getChunkPtrFromCPA;
