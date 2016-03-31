@@ -1,20 +1,18 @@
 #include "TextRenderer.h"
 #include "Textures.h"
 
-namespace TextRenderer
-{
-FT_Library library;
-FT_Face fontface;
-FT_GlyphSlot slot;
-UnicodeChar chars[65536];
-unsigned int gbe;
-unsigned int Font;
-int gloop;
-int ww, wh;
-float r = 0.0f, g = 0.0f, b = 0.0f, a = 1.0f;
-bool UseUnicodeASCIIFont;
+FT_Library TextRenderer::library;
+FT_Face TextRenderer::fontface;
+FT_GlyphSlot TextRenderer::slot;
+TextRenderer::UnicodeChar TextRenderer::chars[65536];
+unsigned int TextRenderer::gbe;
+unsigned int TextRenderer::Font;
+int TextRenderer::gloop;
+int TextRenderer::ww, TextRenderer::wh;
+float TextRenderer::r = 0.0f, TextRenderer::g = 0.0f, TextRenderer::b = 0.0f, TextRenderer::a = 1.0f;
+bool TextRenderer::UseUnicodeASCIIFont;
 
-void BuildFont(int w, int h)
+void TextRenderer::BuildFont(int w, int h)
 {
     ww = w;
     wh = h;
@@ -61,28 +59,7 @@ void BuildFont(int w, int h)
 
 }
 
-void resize()
-{
-    if (FT_Set_Pixel_Sizes(fontface, 16 * stretch, 16 * stretch))
-    {
-        //assert(false);
-    }
-    for (int i = 0; i < 63356; i++) if (chars[i].aval)
-        {
-            chars[i].aval = false;
-            glDeleteTextures(1, &chars[i].tex);
-        }
-}
-
-void setFontColor(float r_, float g_, float b_, float a_)
-{
-    r = r_;
-    g = g_;
-    b = b_;
-    a = a_;
-}
-
-void loadchar(unsigned int uc)
+void TextRenderer::loadchar(unsigned int uc)
 {
     FT_Bitmap* bitmap;
     unsigned int index;
@@ -127,7 +104,7 @@ void MBToWC(const char* lpcszStr, wchar_t*& lpwszStr, int dwSize)
     lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
 }
 
-int getStrWidth(string s)
+int TextRenderer::getStrWidth(string s)
 {
     UnicodeChar c;
     int uc, res = 0;
@@ -148,7 +125,7 @@ int getStrWidth(string s)
     return res;
 }
 
-void renderString(int x, int y, string glstring)
+void TextRenderer::renderString(int x, int y, string glstring)
 {
     UnicodeChar c;
     int uc;
@@ -210,7 +187,7 @@ void renderString(int x, int y, string glstring)
     free(wstr);
 }
 
-void renderASCIIString(int x, int y, string glstring)
+void TextRenderer::renderASCIIString(int x, int y, string glstring)
 {
     //glBindTexture(GL_TEXTURE_2D, Font);
     glPushMatrix();
@@ -225,6 +202,4 @@ void renderASCIIString(int x, int y, string glstring)
     glListBase(gbe);
     glCallLists((GLsizei)glstring.length(), GL_UNSIGNED_BYTE, glstring.c_str());
     glPopMatrix();
-}
-
 }

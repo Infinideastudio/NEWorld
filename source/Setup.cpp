@@ -7,7 +7,7 @@
 #include "World.h"
 #include "Items.h"
 
-void splashScreen()
+void SplashScreen()
 {
     TextureID splTex = Textures::LoadRGBTexture("Textures/GUI/splashscreen.bmp");
     glEnable(GL_TEXTURE_2D);
@@ -36,10 +36,6 @@ void splashScreen()
 
 void createWindow()
 {
-    glfwSetErrorCallback([](int, const char* desc)
-    {
-        cout << desc << endl;
-    });
     std::stringstream title;
     title << "NEWorld " << MAJOR_VERSION << MINOR_VERSION << EXT_VERSION;
     if (Multisample != 0)
@@ -51,12 +47,12 @@ void createWindow()
     glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetWindowSizeCallback(MainWindow, &WindowSizeFunc);
     glfwSetMouseButtonCallback(MainWindow, &MouseButtonFunc);
-    glfwSetScrollCallback(MainWindow, &MouseScrollFunc);
+	glfwSetScrollCallback(MainWindow, [](GLFWwindow *, double, double yoffset) {mw += (int)yoffset; });
     glfwSetCharCallback(MainWindow, &CharInputFunc);
     if (ppistretch) GUI::InitStretch();
 }
 
-void setupScreen()
+void SetupScreen()
 {
     //获取OpenGL版本
     GLVersionMajor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MAJOR);
@@ -80,7 +76,7 @@ void setupScreen()
     glEnable(GL_BLEND);
     glEnable(GL_LINE_SMOOTH);
     glDepthFunc(GL_LEQUAL);
-    glAlphaFunc(GL_GREATER, 0.0); //<--这家伙在卖萌？(往后面看看，卖萌的多着呢)
+    glAlphaFunc(GL_GREATER, 0.0);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glHint(GL_FOG_HINT, GL_FASTEST);
@@ -114,10 +110,8 @@ void setupNormalFog()
     glFogf(GL_FOG_END, ViewDistance * 16.0f);
 }
 
-void loadTextures()
+void LoadTextures()
 {
-    //载入纹理
-
     tex_select = Textures::LoadRGBATexture("Textures/GUI/select.bmp", "");
     tex_unselect = Textures::LoadRGBATexture("Textures/GUI/unselect.bmp", "");
     tex_title = Textures::LoadRGBATexture("Textures/GUI/title.bmp", "Textures/GUI/titlemask.bmp");
@@ -138,7 +132,7 @@ void loadTextures()
 
     BlockTextures = Textures::LoadRGBATexture("Textures/blocks/Terrain.bmp", "Textures/blocks/Terrainmask.bmp");
     BlockTextures3D = Textures::LoadBlock3DTexture("Textures/blocks/Terrain3D.bmp", "Textures/blocks/Terrain3Dmask.bmp");
-    loadItemsTextures();
+    LoadItemsTextures();
 }
 
 void WindowSizeFunc(GLFWwindow * win, int width, int height)
@@ -148,7 +142,7 @@ void WindowSizeFunc(GLFWwindow * win, int width, int height)
     windowwidth = width;
     windowheight = height > 0 ? height : 1;
     glfwSetWindowSize(win, width, height);
-    setupScreen();
+    SetupScreen();
 }
 
 void MouseButtonFunc(GLFWwindow *, int button, int action, int)
@@ -176,9 +170,4 @@ void CharInputFunc(GLFWwindow *, unsigned int c)
     }
     else
         inputstr += (char)c;
-}
-
-void MouseScrollFunc(GLFWwindow *, double, double yoffset)
-{
-    mw += (int)yoffset;
 }
