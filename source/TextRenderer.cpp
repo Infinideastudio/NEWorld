@@ -16,7 +16,7 @@ void TextRenderer::BuildFont(int w, int h)
 {
     ww = w;
     wh = h;
-    Font = Textures::LoadFontTexture("Fonts/ASCII.bmp");
+    Font = Textures::LoadFontTexture("Textures/Fonts/ASCII.bmp");
 
     float cx, cy;
     gbe = glGenLists(256);

@@ -1,7 +1,9 @@
 #include "GUI.h"
 #include "TextRenderer.h"
 #include "Frustum.h"
-#include"AudioSystem.h"
+#include "AudioSystem.h"
+#include "World.h"
+#include "ModLoader.h"
 
 extern string inputstr;
 
