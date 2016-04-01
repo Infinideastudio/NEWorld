@@ -117,7 +117,7 @@ namespace Menus
 				glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 				glDepthFunc(GL_LEQUAL);
 				glEnable(GL_CULL_FACE);
-				setupNormalFog();
+				SetupNormalFog();
 				double dmx, dmy;
 				glfwGetCursorPos(MainWindow, &dmx, &dmy);
 				mx = (int)(dmx / stretch), my = (int)(dmy / stretch);
@@ -442,7 +442,6 @@ namespace Menus
 				vscroll.barpos = 0;
 				chosenWorldName = "";
 				//查找所有世界存档
-				Textures::TEXTURE_RGB tmb;
 				long hFile = 0;
 				_finddata_t fileinfo;
 				if ((hFile = _findfirst("Worlds\\*", &fileinfo)) != -1)
@@ -461,16 +460,15 @@ namespace Menus
 								texSizeY.push_back(0);
 								if (file.is_open())
 								{
-									Textures::LoadRGBImage(tmb, "Worlds\\" + string(fileinfo.name) + "\\Thumbnail.bmp");
 									glGenTextures(1, &thumbnails[thumbnails.size() - 1]);
 									glBindTexture(GL_TEXTURE_2D, thumbnails[thumbnails.size() - 1]);
 									glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 									glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+									Textures::TEXTURE_RGB tmb("Worlds\\" + string(fileinfo.name) + "\\Thumbnail.bmp");
 									glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tmb.sizeX, tmb.sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, tmb.buffer.get());
 									texSizeX[texSizeX.size() - 1] = tmb.sizeX;
 									texSizeY[texSizeY.size() - 1] = tmb.sizeY;
 								}
-								file.close();
 							}
 						}
 					}

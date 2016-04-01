@@ -45,10 +45,42 @@ void createWindow()
     glfwMakeContextCurrent(MainWindow);
     glfwSetCursor(MainWindow, MouseCursor);
     glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    glfwSetWindowSizeCallback(MainWindow, &WindowSizeFunc);
-    glfwSetMouseButtonCallback(MainWindow, &MouseButtonFunc);
-	glfwSetScrollCallback(MainWindow, [](GLFWwindow *, double, double yoffset) {mw += (int)yoffset; });
-    glfwSetCharCallback(MainWindow, &CharInputFunc);
+	glfwSetWindowSizeCallback(MainWindow, [](GLFWwindow * win, int width, int height) 
+	{
+		windowwidth = max(width, 640);
+		windowheight = max(height, 360);
+		glfwSetWindowSize(win, windowwidth, windowheight);
+		SetupScreen();
+	});
+	glfwSetMouseButtonCallback(MainWindow, [](GLFWwindow *, int button, int action, int) 
+	{
+		mb = 0;
+		if (action == GLFW_PRESS)
+		{
+			if (button == GLFW_MOUSE_BUTTON_LEFT)
+				mb = 1;
+			if (button == GLFW_MOUSE_BUTTON_RIGHT)
+				mb = 2;
+			if (button == GLFW_MOUSE_BUTTON_MIDDLE)
+				mb = 4;
+		}
+	});
+	glfwSetScrollCallback(MainWindow, [](GLFWwindow *, double, double yoffset) 
+	{
+		mw += (int)yoffset; 
+	});
+    glfwSetCharCallback(MainWindow, [](GLFWwindow *, unsigned int c)
+	{
+		if (c >= 128)
+		{
+			wchar_t pwszUnicode[2] = { (wchar_t)c,'\0' };
+			char pszMultiByte[5];
+			WCharToMByte(pszMultiByte, pwszUnicode, 4);
+			inputstr += pszMultiByte;
+		}
+		else
+			inputstr += (char)c;
+	});
     if (ppistretch) GUI::InitStretch();
 }
 
@@ -100,7 +132,7 @@ void SetupScreen()
         glfwSwapInterval(0);
 }
 
-void setupNormalFog()
+void SetupNormalFog()
 {
     float fogColor[4] = { skycolorR, skycolorG, skycolorB, 1.0f };
     glEnable(GL_FOG);
@@ -133,41 +165,4 @@ void LoadTextures()
     BlockTextures = Textures::LoadRGBATexture("Textures/blocks/Terrain.bmp", "Textures/blocks/Terrainmask.bmp");
     BlockTextures3D = Textures::LoadBlock3DTexture("Textures/blocks/Terrain3D.bmp", "Textures/blocks/Terrain3Dmask.bmp");
     LoadItemsTextures();
-}
-
-void WindowSizeFunc(GLFWwindow * win, int width, int height)
-{
-    width = max(width, 640);
-    height = max(height, 360);
-    windowwidth = width;
-    windowheight = height > 0 ? height : 1;
-    glfwSetWindowSize(win, width, height);
-    SetupScreen();
-}
-
-void MouseButtonFunc(GLFWwindow *, int button, int action, int)
-{
-	mb = 0;
-	if (action == GLFW_PRESS)
-	{
-		if (button == GLFW_MOUSE_BUTTON_LEFT)
-			mb = 1;
-		if (button == GLFW_MOUSE_BUTTON_RIGHT)
-			mb = 2;
-		if (button == GLFW_MOUSE_BUTTON_MIDDLE)
-			mb = 4;
-	}
-}
-
-void CharInputFunc(GLFWwindow *, unsigned int c)
-{
-    if (c >= 128)
-    {
-		wchar_t pwszUnicode[2] = { (wchar_t)c,'\0' };
-		char pszMultiByte[5];
-		WCharToMByte(pszMultiByte, pwszUnicode, 4);
-        inputstr += pszMultiByte;
-    }
-    else
-        inputstr += (char)c;
 }
