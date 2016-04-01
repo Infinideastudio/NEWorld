@@ -1520,7 +1520,7 @@ public:
             Renderer::renderbuffer(cloudvb[i], vtxs[i], 0, 0);
             glPopMatrix();
         }
-        //setupNormalFog();
+        //SetupNormalFog();
     }
 
     void renderDestroy(float level, int x, int y, int z)
@@ -1804,28 +1804,15 @@ public:
 
     void saveScreenshot(int x, int y, int w, int h, string filename)
     {
-        Textures::TEXTURE_RGB scrBuffer;
-        int bufw = w, bufh = h;
-        while (bufw % 4 != 0)
-        {
-            bufw += 1;
-        }
-        while (bufh % 4 != 0)
-        {
-            bufh += 1;
-        }
-        scrBuffer.sizeX = bufw;
-        scrBuffer.sizeY = bufh;
-        scrBuffer.buffer = unique_ptr<ubyte[]>(new ubyte[bufw*bufh * 3]);
+		int bufw = ((w >> 2) << 2) + (w & 3 ? 4 : 0), bufh = ((h >> 2) << 2) + (h & 3 ? 4 : 0);
+		Textures::TEXTURE_RGB scrBuffer(bufw, bufh);
         glReadPixels(x, y, bufw, bufh, GL_RGB, GL_UNSIGNED_BYTE, scrBuffer.buffer.get());
         Textures::SaveRGBImage(filename, scrBuffer);
     }
 
     void createThumbnail()
     {
-        std::stringstream ss;
-        ss << "Worlds/" << World::worldname << "/Thumbnail.bmp";
-        saveScreenshot(0, 0, windowwidth, windowheight, ss.str());
+		saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "Thumbnail.bmp");
     }
 
 
@@ -2005,7 +1992,7 @@ public:
         GUIrenderswitch = true;
         glDepthFunc(GL_LEQUAL);
         glEnable(GL_CULL_FACE);
-        setupNormalFog();
+        SetupNormalFog();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glfwSwapBuffers(MainWindow);
