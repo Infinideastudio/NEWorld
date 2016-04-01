@@ -64,85 +64,10 @@ ubyte Textures::getTextureIndex(block blockname, ubyte side)
     }
 }
 
-void Textures::LoadRGBImage(TEXTURE_RGB& tex, string Filename)
-{
-    unsigned int ind = 0;
-    tex.buffer = nullptr;
-    tex.sizeX = tex.sizeY = 0;
-    std::ifstream bmpfile(Filename, std::ios::binary | std::ios::in); //位图文件（二进制）
-#ifdef _DEBUG
-    assert(bmpfile.is_open());
-#endif
-    BITMAPINFOHEADER bih;
-    BITMAPFILEHEADER bfh;
-    bmpfile.read((char*)&bfh, sizeof(BITMAPFILEHEADER));
-    bmpfile.read((char*)&bih, sizeof(BITMAPINFOHEADER));
-    tex.sizeX = bih.biWidth;
-    tex.sizeY = bih.biHeight;
-    tex.buffer = unique_ptr<ubyte[]>(new unsigned char[tex.sizeX * tex.sizeY * 3]);
-    bmpfile.read((char*)tex.buffer.get(), tex.sizeX * tex.sizeY * 3);
-    bmpfile.close();
-    for (unsigned int i = 0; i < tex.sizeX * tex.sizeY; i++)
-    {
-        unsigned char t = tex.buffer[ind];
-        tex.buffer[ind] = tex.buffer[ind + 2];
-        tex.buffer[ind + 2] = t;
-        ind += 3;
-    }
-}
-
-void Textures::LoadRGBAImage(TEXTURE_RGBA& tex, string Filename, string MkFilename)
-{
-    unsigned char *rgb = nullptr, *a = nullptr;
-    unsigned int ind = 0;
-    bool noMaskFile = (MkFilename == "");
-    TEXTURE_RGBA& bitmap = tex;
-    bitmap.buffer = nullptr;
-    bitmap.sizeX = bitmap.sizeY = 0;
-    std::ifstream bmpfile(Filename, std::ios::binary | std::ios::in);
-    std::ifstream maskfile;
-    if (!noMaskFile)maskfile.open(MkFilename, std::ios::binary | std::ios::in);
-#ifdef _DEBUG
-	assert(bmpfile.is_open());
-	assert(noMaskFile || maskfile.is_open());
-#endif
-    BITMAPFILEHEADER bfh;
-    BITMAPINFOHEADER bih;
-    if (!noMaskFile)
-    {
-        maskfile.read((char*)&bfh, sizeof(BITMAPFILEHEADER));
-        maskfile.read((char*)&bih, sizeof(BITMAPINFOHEADER));
-    }
-    bmpfile.read((char*)&bfh, sizeof(BITMAPFILEHEADER));
-    bmpfile.read((char*)&bih, sizeof(BITMAPINFOHEADER));
-    bitmap.sizeX = bih.biWidth;
-    bitmap.sizeY = bih.biHeight;
-    bitmap.buffer = unique_ptr<ubyte[]>(new unsigned char[bitmap.sizeX * bitmap.sizeY * 4]);
-    rgb = new unsigned char[bitmap.sizeX * bitmap.sizeY * 3];
-    bmpfile.read((char*)rgb, bitmap.sizeX*bitmap.sizeY * 3);
-    bmpfile.close();
-    if (!noMaskFile)
-    {
-        a = new unsigned char[bitmap.sizeX*bitmap.sizeY * 3];
-        maskfile.read((char*)a, bitmap.sizeX*bitmap.sizeY * 3);
-        maskfile.close();
-    }
-    for (unsigned int i = 0; i < bitmap.sizeX * bitmap.sizeY; i++)
-    {
-        bitmap.buffer[ind] = rgb[i * 3 + 2];
-        bitmap.buffer[ind + 1] = rgb[i * 3 + 1];
-        bitmap.buffer[ind + 2] = rgb[i * 3];
-        if (noMaskFile) bitmap.buffer[ind + 3] = 255;
-        else bitmap.buffer[ind + 3] = 255 - a[i * 3];
-        ind += 4;
-    }
-}
-
 TextureID Textures::LoadRGBTexture(string Filename)
 {
-    TEXTURE_RGB image;
+    TEXTURE_RGB image(Filename);
     TextureID ret;
-    LoadRGBImage(image, Filename);
     glGenTextures(1, &ret);
     glBindTexture(GL_TEXTURE_2D, ret);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -153,19 +78,10 @@ TextureID Textures::LoadRGBTexture(string Filename)
 
 TextureID Textures::LoadFontTexture(string Filename)
 {
-    TEXTURE_RGBA Texture;
-    TEXTURE_RGB image;
+    TEXTURE_RGB image(Filename);
+	TEXTURE_RGBA Texture(image.sizeX, image.sizeY);
     ubyte *ip, *tp;
     TextureID ret;
-    LoadRGBImage(image, Filename);
-    Texture.sizeX = image.sizeX;
-    Texture.sizeY = image.sizeY;
-    Texture.buffer = unique_ptr<ubyte[]>(new unsigned char[image.sizeX * image.sizeY * 4]);
-    if (Texture.buffer == nullptr)
-    {
-        printf("[console][Warning] Cannot alloc memory when loading %s\n", Filename.c_str());
-        return 0;
-    }
     ip = image.buffer.get();
     tp = Texture.buffer.get();
     for (unsigned int i = 0; i != image.sizeX*image.sizeY; i++)
@@ -191,8 +107,7 @@ TextureID Textures::LoadFontTexture(string Filename)
 TextureID Textures::LoadRGBATexture(string Filename, string MkFilename)
 {
     TextureID ret;
-    TEXTURE_RGBA image;
-    LoadRGBAImage(image, Filename, MkFilename);
+	TEXTURE_RGBA image(Filename, MkFilename);
     glGenTextures(1, &ret);
     glBindTexture(GL_TEXTURE_2D, ret);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -209,8 +124,7 @@ TextureID Textures::LoadBlock3DTexture(string Filename, string MkFilename)
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_TEXTURE_3D);
     TextureID ret;
-    TEXTURE_RGBA image;
-    LoadRGBAImage(image, Filename, MkFilename);
+    TEXTURE_RGBA image(Filename, MkFilename);
     src = image.buffer.get();
     cur = new ubyte[sz*sz*cnt * 4];
     glGenTextures(1, &ret);

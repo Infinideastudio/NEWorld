@@ -8,12 +8,6 @@ void createWindow();
 
 void SetupScreen();
 
-void setupNormalFog();
+void SetupNormalFog();
 
 void LoadTextures();
-
-void WindowSizeFunc(GLFWwindow* win, int width, int height);
-
-void MouseButtonFunc(GLFWwindow*, int button, int action, int);
-
-void CharInputFunc(GLFWwindow*, unsigned int c);
