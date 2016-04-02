@@ -1,5 +1,4 @@
 ﻿#include "Textures.h"
-#include <fstream>
 
 int BLOCKTEXTURE_SIZE = 256, BLOCKTEXTURE_UNITSIZE = 32, BLOCKTEXTURE_UNITS = 8;
 
@@ -64,58 +63,6 @@ ubyte Textures::getTextureIndex(block blockname, ubyte side)
     }
 }
 
-TextureID Textures::LoadRGBTexture(string Filename)
-{
-    TEXTURE_RGB image(Filename);
-    TextureID ret;
-    glGenTextures(1, &ret);
-    glBindTexture(GL_TEXTURE_2D, ret);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-    Build2DMipmaps(GL_RGB, image.sizeX, image.sizeY, (int)log2(image.sizeX), image.buffer.get());
-    return ret;
-}
-
-TextureID Textures::LoadFontTexture(string Filename)
-{
-    TEXTURE_RGB image(Filename);
-	TEXTURE_RGBA Texture(image.sizeX, image.sizeY);
-    ubyte *ip, *tp;
-    TextureID ret;
-    ip = image.buffer.get();
-    tp = Texture.buffer.get();
-    for (unsigned int i = 0; i != image.sizeX*image.sizeY; i++)
-    {
-        *tp = 255;
-        tp++;
-        *tp = 255;
-        tp++;
-        *tp = 255;
-        tp++;
-        *tp = 255 - *ip;
-        tp++;
-        ip += 3;
-    }
-    glGenTextures(1, &ret);
-    glBindTexture(GL_TEXTURE_2D, ret);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Texture.sizeX, Texture.sizeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, Texture.buffer.get());
-    return ret;
-}
-
-TextureID Textures::LoadRGBATexture(string Filename, string MkFilename)
-{
-    TextureID ret;
-	TEXTURE_RGBA image(Filename, MkFilename);
-    glGenTextures(1, &ret);
-    glBindTexture(GL_TEXTURE_2D, ret);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-    Build2DMipmaps(GL_RGBA, image.sizeX, image.sizeY, (int)log2(BLOCKTEXTURE_UNITSIZE), image.buffer.get());
-    return ret;
-}
-
 TextureID Textures::LoadBlock3DTexture(string Filename, string MkFilename)
 {
     int sz = BLOCKTEXTURE_UNITSIZE, cnt = BLOCKTEXTURE_UNITS*BLOCKTEXTURE_UNITS;
@@ -161,28 +108,6 @@ TextureID Textures::LoadBlock3DTexture(string Filename, string MkFilename)
     glEnable(GL_TEXTURE_2D);
     delete[] cur;
     return ret;
-}
-
-void Textures::SaveRGBImage(string filename, TEXTURE_RGB& image)
-{
-    BITMAPFILEHEADER bitmapfileheader;
-    BITMAPINFOHEADER bitmapinfoheader;
-    bitmapfileheader.bfSize = image.sizeX*image.sizeY * 3 + 54;
-    bitmapinfoheader.biWidth = image.sizeX;
-    bitmapinfoheader.biHeight = image.sizeY;
-    bitmapinfoheader.biSizeImage = image.sizeX*image.sizeY * 3;
-    for (unsigned int i = 0; i != image.sizeX*image.sizeY * 3; i += 3)
-    {
-        //°ÑRGB¸ñÊ½×ª»»ÎªBGR¸ñÊ½
-        ubyte t = image.buffer.get()[i];
-        image.buffer.get()[i] = image.buffer.get()[i + 2];
-        image.buffer.get()[i + 2] = t;
-    }
-    std::ofstream ofs(filename, std::ios::out | std::ios::binary);
-    ofs.write((char*)&bitmapfileheader, sizeof(bitmapfileheader));
-    ofs.write((char*)&bitmapinfoheader, sizeof(bitmapinfoheader));
-    ofs.write((char*)image.buffer.get(), sizeof(ubyte)*image.sizeX*image.sizeY * 3);
-    ofs.close();
 }
 
 void Textures::Build2DMipmaps(GLenum format, int w, int h, int level, const ubyte* src)

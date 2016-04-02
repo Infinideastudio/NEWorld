@@ -127,6 +127,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,6 +160,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
@@ -177,6 +179,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -216,24 +219,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\include\Netycat\src\Netycat\Core\Buffer.cpp" />
-    <ClCompile Include="..\..\include\Netycat\src\Netycat\Core\BufferCondition.cpp" />
-    <ClCompile Include="..\..\include\Netycat\src\Netycat\Core\Core.cpp" />
-    <ClCompile Include="..\..\include\Netycat\src\Netycat\Core\Exception.cpp" />
-    <ClCompile Include="..\..\include\Netycat\src\Netycat\Core\InetAddress.cpp" />
-    <ClCompile Include="..\..\include\Netycat\src\Netycat\Core\Socket.cpp" />
+    <ClCompile Include="..\include\Netycat\src\Netycat\Core\Buffer.cpp" />
+    <ClCompile Include="..\include\Netycat\src\Netycat\Core\BufferCondition.cpp" />
+    <ClCompile Include="..\include\Netycat\src\Netycat\Core\Core.cpp" />
+    <ClCompile Include="..\include\Netycat\src\Netycat\Core\Exception.cpp" />
+    <ClCompile Include="..\include\Netycat\src\Netycat\Core\InetAddress.cpp" />
+    <ClCompile Include="..\include\Netycat\src\Netycat\Core\Socket.cpp" />
     <ClCompile Include="Source\Console.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Network.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Netycat\include\Netycat\Core\Buffer.h" />
-    <ClInclude Include="..\..\include\Netycat\include\Netycat\Core\BufferCondition.h" />
-    <ClInclude Include="..\..\include\Netycat\include\Netycat\Core\Core.h" />
-    <ClInclude Include="..\..\include\Netycat\include\Netycat\Core\Exception.h" />
-    <ClInclude Include="..\..\include\Netycat\include\Netycat\Core\InetAddress.h" />
-    <ClInclude Include="..\..\include\Netycat\include\Netycat\Core\Socket.h" />
-    <ClInclude Include="..\..\include\Netycat\include\Netycat\Netycat.h" />
+    <ClInclude Include="..\include\Netycat\include\Netycat\Core\Buffer.h" />
+    <ClInclude Include="..\include\Netycat\include\Netycat\Core\BufferCondition.h" />
+    <ClInclude Include="..\include\Netycat\include\Netycat\Core\Core.h" />
+    <ClInclude Include="..\include\Netycat\include\Netycat\Core\Exception.h" />
+    <ClInclude Include="..\include\Netycat\include\Netycat\Core\InetAddress.h" />
+    <ClInclude Include="..\include\Netycat\include\Netycat\Core\Socket.h" />
+    <ClInclude Include="..\include\Netycat\include\Netycat\Netycat.h" />
     <ClInclude Include="Source\Console.h" />
     <ClInclude Include="Source\Network.h" />
   </ItemGroup>
