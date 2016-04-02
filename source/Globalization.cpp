@@ -10,7 +10,7 @@ map<string, int> keys;
 
 bool LoadLang(string lang)
 {
-    std::ifstream f("Lang/" + lang + ".lang");
+    std::ifstream f("locale/" + lang + ".lang");
     if (f.bad())
     {
         exit(-101);
@@ -31,7 +31,7 @@ bool LoadLang(string lang)
 
 bool Load()
 {
-    std::ifstream f("Lang/Keys.lk");
+    std::ifstream f("locale/Keys.lk");
     if (f.bad()) return false;
     f >> count;
     f.get();

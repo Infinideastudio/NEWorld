@@ -1,5 +1,4 @@
 #pragma once
-#include "Definitions.h"
 
 //Perlin Noise 2D
 namespace WorldGen
