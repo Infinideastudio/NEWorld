@@ -38,6 +38,18 @@ void createWindow()
 {
     std::stringstream title;
     title << "NEWorld " << MAJOR_VERSION << MINOR_VERSION << EXT_VERSION;
+	glfwSetErrorCallback([](int, const char* desc)
+	{
+		cout << "We are sorry to inform you that NEWorld has crashed." << endl
+			<< "Maybe it is caused by a badly-written plugin or a bug." << endl
+			<< "You can report it to NEWorld Team, " << endl
+			<< "https://github.com/Infinideastudio/NEWorld/issues" << endl
+			<< "or if you are a programmer, please fix it and start a pull request." << endl
+			<< "Reason:" << endl << desc << endl
+			<< "Logs:" << endl;
+		for (vector<LogItem>::iterator it = Logs.begin(); it != Logs.end(); it++)
+			cout << it->ToString() << endl;
+	});
     if (Multisample != 0)
         glfwWindowHint(GLFW_SAMPLES, Multisample);
     MainWindow = glfwCreateWindow(windowwidth, windowheight, title.str().c_str(), NULL, NULL);
@@ -86,14 +98,13 @@ void createWindow()
 
 void SetupScreen()
 {
-    //获取OpenGL版本
+    //Get OpenGL Version
     GLVersionMajor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MAJOR);
     GLVersionMinor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MINOR);
     GLVersionRev = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_REVISION);
-    //获取OpenGL函数地址
+    //Get OpenGL Procedure Addresses
     InitGLProc();
-
-    //渲染参数设置
+	//Config Rendering Arguments
     glViewport(0, 0, windowwidth, windowheight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -126,10 +137,7 @@ void SetupScreen()
     if (Renderer::AdvancedRender)
         Renderer::InitShaders();
 
-    if (vsync)
-        glfwSwapInterval(1);
-    else
-        glfwSwapInterval(0);
+    glfwSwapInterval(vsync);
 }
 
 void SetupNormalFog()

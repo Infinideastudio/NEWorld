@@ -1,5 +1,6 @@
 #include "FunctionsKit.h"
 unsigned int g_seed;
+extern std::vector<LogItem> Logs;
 
 vector<string> split(string str, string pattern)
 {
@@ -20,25 +21,14 @@ vector<string> split(string str, string pattern)
 
 void DebugWarning(string msg)
 {
-#ifdef NEWORLD_USE_WINAPI
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-    printf("[Debug][Warning]");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    printf("%s\n", msg.c_str());
-#else
-    printf("[Debug][Warning]%s\n", msg.c_str());
-#endif
+	Logs.push_back(LogItem(LogItem::Level_Warning, msg));
 }
 
 void DebugError(string msg)
 {
-#ifdef NEWORLD_USE_WINAPI
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
-    printf("[Debug][Error]");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    printf("%s\n", msg.c_str());
-#else
-    printf("[Debug][Error]%s\n", msg.c_str());
+	Logs.push_back(LogItem(LogItem::Level_Error, msg));
+#ifdef _DEBUG
+	assert(false);
 #endif
 }
 

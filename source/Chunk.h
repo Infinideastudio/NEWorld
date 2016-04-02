@@ -29,8 +29,6 @@ private:
 
 public:
     block* pblocks; //moved here for blockupd would get block ptr directly
-    //竟然一直都没有构造函数/析构函数 还要手动调用Init...我受不了啦(╯‵□′)╯︵┻━┻ --Null
-    //2333 --qiaozhanrong
     chunk(int cxi, int cyi, int czi, chunkid idi) : cx(cxi), cy(cyi), cz(czi), id(idi),
         Modified(false), Empty(false), updated(false), renderBuilt(false), DetailGenerated(false), loadAnim(0.0)
     {

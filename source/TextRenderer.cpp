@@ -23,7 +23,6 @@ void TextRenderer::BuildFont(int w, int h)
     glBindTexture(GL_TEXTURE_2D, Font);
     for (gloop = 0; gloop < 256; gloop++)
     {
-
         cx = (float)(gloop % 16) / 16.0f;
         cy = (float)(gloop / 16) / 16.0f;
 
@@ -40,7 +39,6 @@ void TextRenderer::BuildFont(int w, int h)
         glEnd();
         glTranslated(10.0, 0.0, 0.0);
         glEndList();
-
     }
 
 	FT_Init_FreeType(&library);
