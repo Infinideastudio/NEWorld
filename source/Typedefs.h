@@ -1,5 +1,4 @@
 #pragma once
-//Types/constants define
 typedef unsigned char ubyte;
 typedef signed char int8;
 typedef short int16;
@@ -96,7 +95,6 @@ namespace Blocks
 }
 typedef block item;
 
-#ifdef NEWORLD_GAME
 #ifdef NEWORLD_USE_WINAPI
 typedef HANDLE Mutex_t;
 typedef HANDLE Thread_t;
@@ -108,4 +106,28 @@ typedef std::thread* Thread_t;
 typedef unsigned int(*ThreadFunc_t)(void* param);
 #define ThreadFunc unsigned int
 #endif
-#endif
+
+class LogItem
+{
+public:
+	enum LogLevel
+	{
+		Level_Information,
+		Level_Warning,
+		Level_Error
+	};
+	LogLevel Level;
+	std::string Information;
+	LogItem()
+	{
+	}
+	LogItem(LogLevel _level, std::string _info)
+		:Level(_level), Information(_info)
+	{
+	}
+	std::string ToString()
+	{
+		return std::string("Level:") + (Level == Level_Information ? "Information" : Level == Level_Warning ? "Warning" : Level == Level_Error ? "Error" : "Unknown")
+			+ ",Information:" + Information;
+	}
+};
