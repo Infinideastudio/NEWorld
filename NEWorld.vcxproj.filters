@@ -101,9 +101,6 @@
     <ClInclude Include="source\Player.h">
       <Filter>Source\Game\Player</Filter>
     </ClInclude>
-    <ClInclude Include="source\Mob.h">
-      <Filter>Source\Game\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="source\Network.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
