@@ -6,7 +6,6 @@
 
 extern double stretch;
 
-//Widget Functions
 vector<string> split(string str, string pattern);
 
 inline void UITrans(double x, double y)
@@ -44,10 +43,7 @@ inline void fastSrand(int seed)
 
 vector<string> split(string str, string pattern);
 
-inline string boolstr(bool b)
-{
-    return b ? "True" : "False";
-}
+#define boolstr(b) (b ? "True" : "False") 
 
 inline double rnd()
 {
@@ -87,13 +83,10 @@ inline void conv(string str, block& ret)
     s >> ret.ID;
 }
 
-template<class T> inline T clamp(T x, T min, T max)
+template<class T>
+inline T clamp(T x, T min_value, T max_value)
 {
-    if (x < min)
-        return min;
-    if (x > max)
-        return max;
-    return x;
+	return max(min_value, min(x, max_value));
 }
 
 #ifdef NEWORLD_USE_WINAPI

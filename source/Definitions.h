@@ -30,9 +30,7 @@ extern bool GUIScreenBlur;
 extern bool ppistretch;
 extern int linelength;
 extern int linedist;
-extern float skycolorR;
-extern float skycolorG;
-extern float skycolorB;
+extern float skycolorR, skycolorG, skycolorB;
 extern float FOVyRunning;
 extern float FOVyExt;
 extern int Multisample;
@@ -84,3 +82,5 @@ extern int c_getChunkPtrFromSearch;
 extern int c_getHeightFromHMap;
 extern int c_getHeightFromWorldGen;
 #endif
+
+extern std::vector<LogItem> Logs;
