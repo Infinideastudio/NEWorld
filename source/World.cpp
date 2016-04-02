@@ -1143,7 +1143,7 @@ void ProcessBuq()
     block Mask = block(Blocks::AIR);
     block* b;
     long long bx, by, bz;
-    const int vec[][] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
+    const int vec[6][3] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
     //Please indent following the basic law
 
     for (Blocks::BUDDP B : swap)
@@ -1197,7 +1197,7 @@ void picktree(int x, int y, int z)
                                  float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
     }
     Modifyblock(x, y, z, block(Blocks::AIR));
-    const int vec[][] = { { 0, 1, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 1, 0, 0 }, { -1, 0, 0 } };
+    const int vec[5][3] = { { 0, 1, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 1, 0, 0 }, { -1, 0, 0 } };
     block tmp;
     for(i = 0; i < 5; i++)
     {

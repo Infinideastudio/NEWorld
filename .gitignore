@@ -210,3 +210,5 @@ FakesAssemblies/
 # CScope database
 cscope.*
 *.o
+/NEWorld.VC.db
+/NEWorld.VC.VC.opendb
