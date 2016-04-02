@@ -23,7 +23,6 @@
 #include "Setup.h"
 #include "AudioSystem.h"
 
-
 template<typename T>
 void loadoption(std::map<string, string> &m, const char* name, T &value)
 {
@@ -33,14 +32,11 @@ void loadoption(std::map<string, string> &m, const char* name, T &value)
 	ss >> value;
 }
 
-
 template<typename T>
 void saveoption(std::ofstream &out, const char* name, T &value)
 {
 	out << string(name) << " " << value << endl;
 }
-
-
 
 void LoadOptions()
 {

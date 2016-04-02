@@ -1807,7 +1807,7 @@ public:
 		int bufw = ((w >> 2) << 2) + (w & 3 ? 4 : 0), bufh = ((h >> 2) << 2) + (h & 3 ? 4 : 0);
 		Textures::TEXTURE_RGB scrBuffer(bufw, bufh);
         glReadPixels(x, y, bufw, bufh, GL_RGB, GL_UNSIGNED_BYTE, scrBuffer.buffer.get());
-        Textures::SaveRGBImage(filename, scrBuffer);
+		scrBuffer.Save(filename);
     }
 
     void createThumbnail()
