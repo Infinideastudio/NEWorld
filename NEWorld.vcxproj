@@ -96,10 +96,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(ProjectDir)include\Netycat\include;$(ProjectDir)include\Netycat\src;$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <LinkIncremental>
-    </LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
@@ -108,7 +107,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
@@ -117,7 +116,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
@@ -133,7 +132,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
       <PreprocessorDefinitions>NEWORLD_GAME;NEWORLD_CONSOLE_OUTPUT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <ControlFlowGuard>false</ControlFlowGuard>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -141,12 +140,12 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;OpenAL32.lib;EFX-Util.lib</AdditionalDependencies>
-      <Profile>true</Profile>
+      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;OpenAL32.lib;EFX-Util.lib</AdditionalDependencies>
+      <Profile>false</Profile>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>false</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -194,7 +193,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;OpenAL32.lib;EFX-Util.lib</AdditionalDependencies>
+      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;OpenAL32.lib;EFX-Util.lib</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
@@ -258,7 +257,7 @@
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;EFX-Util.lib;OpenAL32.lib</AdditionalDependencies>
+      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;EFX-Util.lib;OpenAL32.lib</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AssemblyDebug>true</AssemblyDebug>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
@@ -311,7 +310,6 @@
     <ClInclude Include="include\Netycat\include\Netycat\Core\InetAddress.h" />
     <ClInclude Include="include\Netycat\include\Netycat\Core\Socket.h" />
     <ClInclude Include="include\Netycat\include\Netycat\Netycat.h" />
-    <ClInclude Include="source\API.h" />
     <ClInclude Include="source\AudioSystem.h" />
     <ClInclude Include="source\BlockFuncs.h" />
     <ClInclude Include="source\Blocks.h" />
@@ -319,7 +317,6 @@
     <ClInclude Include="source\Chunk.h" />
     <ClInclude Include="source\ChunkPacket.h" />
     <ClInclude Include="source\ChunkPtrArray.h" />
-    <ClInclude Include="source\Command.h" />
     <ClInclude Include="source\Effect.h" />
     <ClInclude Include="source\ChunkRenderer.h" />
     <ClInclude Include="source\FunctionsKit.h" />
@@ -333,8 +330,6 @@
     <ClInclude Include="source\Globalization.h" />
     <ClInclude Include="source\Items.h" />
     <ClInclude Include="source\Menus.h" />
-    <ClInclude Include="source\ModSupport.h" />
-    <ClInclude Include="source\ModLoader.h" />
     <ClInclude Include="source\Network.h" />
     <ClInclude Include="source\NNN.h" />
     <ClInclude Include="source\Object.h" />
@@ -368,7 +363,6 @@
     <ClCompile Include="include\Netycat\src\Netycat\Core\Exception.cpp" />
     <ClCompile Include="include\Netycat\src\Netycat\Core\InetAddress.cpp" />
     <ClCompile Include="include\Netycat\src\Netycat\Core\Socket.cpp" />
-    <ClCompile Include="source\API.cpp" />
     <ClCompile Include="source\AudioSystem.cpp" />
     <ClCompile Include="source\BlockFuncs.cpp" />
     <ClCompile Include="source\Chunk.cpp" />
@@ -386,7 +380,6 @@
     <ClCompile Include="source\Globalization.cpp" />
     <ClCompile Include="source\Items.cpp" />
     <ClCompile Include="source\Menus.cpp" />
-    <ClCompile Include="source\ModLoader.cpp" />
     <ClCompile Include="source\Network.cpp" />
     <ClCompile Include="source\NEWorld.cpp" />
     <ClCompile Include="source\NNN.cpp" />
