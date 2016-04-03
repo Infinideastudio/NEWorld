@@ -18,10 +18,9 @@
 #include "Effect.h"
 #include "Items.h"
 #include "Globalization.h"
-#include "Command.h"
-#include "ModLoader.h"
 #include "Setup.h"
 #include "AudioSystem.h"
+#include "../PluginSDK/src/pluginsdk.h"
 
 template<typename T>
 void loadoption(std::map<string, string> &m, const char* name, T &value)
@@ -103,14 +102,13 @@ int main()
 
     _mkdir("Worlds");
     _mkdir("Screenshots");
-    _mkdir("Mods");
 	glfwInit();
     createWindow();
     SetupScreen();
     glDisable(GL_CULL_FACE);
     SplashScreen();
 	LoadTextures();
-	Mod::ModLoader::loadMods();
+	load_plugins(L"plugins.ini");
 	AudioSystem::Init();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

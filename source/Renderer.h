@@ -55,7 +55,6 @@ namespace Renderer
 
 	inline void Quad(float *geomentry)
 	{
-		//这样做貌似提升不了性能吧。。。 --qiaozhanrong
 		memcpy(VA, geomentry, size*sizeof(float));
 		VA += size;
 		Vertexes += 4;
