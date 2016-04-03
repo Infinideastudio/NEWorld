@@ -3,7 +3,7 @@
 #include "Frustum.h"
 #include "AudioSystem.h"
 #include "World.h"
-#include "ModLoader.h"
+#include "../PluginSDK/src/pluginsdk.h"
 
 extern string inputstr;
 
@@ -1167,7 +1167,7 @@ void AppCleanUp()
 {
 	World::saveAllChunks();
 	World::destroyAllChunks();
-	Mod::ModLoader::unloadMods();
+	unload_plugins();
 }
 
 void AppStart()

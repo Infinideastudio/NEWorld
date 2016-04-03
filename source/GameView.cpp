@@ -18,23 +18,21 @@
 #include "Effect.h"
 #include "Items.h"
 #include "Globalization.h"
-#include "Command.h"
-#include "ModLoader.h"
+#include "../PluginSDK/src/export_variables.h"
+#include "../PluginSDK/src/pluginsdk.h"
 #include "Setup.h"
-#include"AudioSystem.h"
+#include "AudioSystem.h"
 
 
 ThreadFunc updateThreadFunc(void*);
-
 int getMouseScroll()
 {
-    return mw;
+	return mw;
 }
 int getMouseButton()
 {
-    return mb;
+	return mb;
 }
-vector<Command> commands;
 
 class GameDView :public GUI::Form
 {
@@ -666,13 +664,9 @@ public:
                 //自动补全
                 if (isPressed(GLFW_KEY_TAB) && chatmode && chatword.size() > 0 && chatword.substr(0, 1) == "/")
                 {
-                    for (unsigned int i = 0; i != commands.size(); i++)
-                    {
-                        if (beginWith(commands[i].identifier, chatword))
-                        {
-                            chatword = commands[i].identifier;
-                        }
-                    }
+					for (std::map<std::wstring, command>::iterator it = commands.begin(); it != commands.end(); it++)
+						if (beginWith(it->first, to_wstring(chatword)))
+							chatword = to_string(it->first);
                 }
             }
         }
@@ -1815,149 +1809,83 @@ public:
 		saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "Thumbnail.bmp");
     }
 
-
     void registerCommands()
     {
-        commands.push_back(Command("/give", [](const vector<string>& command)
+        register_command(L"/give", [](int argc, const wchar_t** argv) -> int
         {
-            if (command.size() != 3) return false;
-            item itemid;
-            conv(command[1], itemid);
-            short amount;
-            conv(command[2], amount);
-            Player::addItem(itemid, amount);
-            return true;
-        }));
-        commands.push_back(Command("/tp", [](const vector<string>& command)
+            if (argc != 3) return 0;
+			item itemid;
+			itemid.ID = extract<unsigned short>(argv[1]);
+            Player::addItem(itemid, extract<short>(argv[2]));
+			return 1;
+        });
+        register_command(L"/tp", [](int argc, const wchar_t** argv) -> int
         {
-            if (command.size() != 4) return false;
-            double x;
-            conv(command[1], x);
-            double y;
-            conv(command[2], y);
-            double z;
-            conv(command[3], z);
-            Player::xpos = x;
-            Player::ypos = y;
-            Player::zpos = z;
-            return true;
-        }));
-        commands.push_back(Command("/suicide", [](const vector<string>& command)
+            if (argc != 4) return 0;
+            Player::xpos = extract<double>(argv[1]);
+            Player::ypos = extract<double>(argv[2]);
+            Player::zpos = extract<double>(argv[3]);
+            return 1;
+        });
+        register_command(L"/suicide", [](int, const wchar_t**) -> int
         {
-            if (command.size() != 1) return false;
             Player::spawn();
-            return true;
-        }));
-        commands.push_back(Command("/setblock", [](const vector<string>& command)
+            return 1;
+        });
+        register_command(L"/setblock", [](int argc, const wchar_t** argv) -> int
         {
-            if (command.size() != 5) return false;
-            int x;
-            conv(command[1], x);
-            int y;
-            conv(command[2], y);
-            int z;
-            conv(command[3], z);
+            if (argc != 5) return 0;
             block b;
-            conv(command[4], b);
-            World::setblock(x, y, z, b);
-            return true;
-        }));
-        commands.push_back(Command("/tree", [](const vector<string>& command)
+			b.ID = extract<unsigned short>(argv[4]);
+            World::setblock(extract<int>(argv[1]), extract<int>(argv[2]), extract<int>(argv[3]), b);
+            return 1;
+        });
+        register_command(L"/tree", [](int argc, const wchar_t** argv) -> int
         {
-            if (command.size() != 4) return false;
-            int x;
-            conv(command[1], x);
-            int y;
-            conv(command[2], y);
-            int z;
-            conv(command[3], z);
-            World::buildtree(x, y, z);
-            return true;
-        }));
-        commands.push_back(Command("/explode", [](const vector<string>& command)
+            if (argc != 4) return 0;
+			World::buildtree(extract<int>(argv[1]), extract<int>(argv[2]), extract<int>(argv[3]));
+            return 1;
+        });
+        register_command(L"/explode", [](int argc, const wchar_t** argv) -> int
         {
-            if (command.size() != 5) return false;
-            int x;
-            conv(command[1], x);
-            int y;
-            conv(command[2], y);
-            int z;
-            conv(command[3], z);
-            int r;
-            conv(command[4], r);
-            World::explode(x, y, z, r);
-            return true;
-        }));
-        commands.push_back(Command("/gamemode", [](const vector<string>& command)
+            if (argc != 5) return 0;
+            World::explode(extract<int>(argv[1]), extract<int>(argv[2]), extract<int>(argv[3]), extract<int>(argv[4]));
+            return 1;
+        });
+        register_command(L"/gamemode", [](int argc, const wchar_t** argv) -> int
         {
-            if (command.size() != 2) return false;
-            int mode;
-            conv(command[1], mode);
-            Player::changeGameMode(mode);
-            return true;
-        }));
-        commands.push_back(Command("/kit", [](const vector<string>& command)
+            if (argc != 2) return 0;
+            Player::changeGameMode(extract<int>(argv[1]));
+            return 1;
+        });
+        register_command(L"/kit", [](int argc, const wchar_t** argv) -> int
         {
-            if (command.size() != 1) return false;
-            Player::inventory[0][0] = 1;
-            Player::inventoryAmount[0][0] = 255;
-            Player::inventory[0][1] = 2;
-            Player::inventoryAmount[0][1] = 255;
-            Player::inventory[0][2] = 3;
-            Player::inventoryAmount[0][2] = 255;
-            Player::inventory[0][3] = 4;
-            Player::inventoryAmount[0][3] = 255;
-            Player::inventory[0][4] = 5;
-            Player::inventoryAmount[0][4] = 255;
-            Player::inventory[0][5] = 6;
-            Player::inventoryAmount[0][5] = 255;
-            Player::inventory[0][6] = 7;
-            Player::inventoryAmount[0][6] = 255;
-            Player::inventory[0][7] = 8;
-            Player::inventoryAmount[0][7] = 255;
-            Player::inventory[0][8] = 9;
-            Player::inventoryAmount[0][8] = 255;
-            Player::inventory[0][9] = 10;
-            Player::inventoryAmount[0][9] = 255;
-            Player::inventory[1][0] = 11;
-            Player::inventoryAmount[1][0] = 255;
-            Player::inventory[1][1] = 12;
-            Player::inventoryAmount[1][1] = 255;
-            Player::inventory[1][2] = 13;
-            Player::inventoryAmount[1][2] = 255;
-            Player::inventory[1][3] = 14;
-            Player::inventoryAmount[1][3] = 255;
-            Player::inventory[1][4] = 15;
-            Player::inventoryAmount[1][4] = 255;
-            Player::inventory[1][5] = 16;
-            Player::inventoryAmount[1][5] = 255;
-            Player::inventory[1][6] = 17;
-            Player::inventoryAmount[1][6] = 255;
-            Player::inventory[1][7] = 18;
-            Player::inventoryAmount[1][7] = 255;
-            return true;
-        }));
-        commands.push_back(Command("/time", [](const vector<string>& command)
+			for (int i = 0; i <= 1; i++)
+				for (int j = 0; j <= i ? 7 : 9; j++)
+				{
+					Player::inventory[i][j] = i * 10 + j + 1;
+					Player::inventoryAmount[i][j] = 255;
+				}
+			return 1;
+        });
+        register_command(L"/time", [](int argc, const wchar_t** argv) -> int
         {
-            if (command.size() != 2) return false;
-            int time;
-            conv(command[1], time);
-            if (time<0 || time>gameTimeMax) return false;
+            if (argc != 2) return 0;
+			int time = extract<int>(argv[1]);
+            if (time<0 || time>gameTimeMax) return 0;
             gametime = time;
-            return true;
-        }));
+            return 1;
+        });
     }
 
     bool doCommand(const vector<string>& command)
     {
-        for (unsigned int i = 0; i != commands.size(); i++)
-        {
-            if (command[0] == commands[i].identifier)
-            {
-                return commands[i].execute(command);
-            }
-        }
-        return false;
+		vector<std::wstring> tmp;
+		for (int i = 0; i < (int)command.size(); i++)
+			tmp.push_back(to_wstring(command[i]));
+		if (commands.count(tmp[0]))
+			return commands[tmp[0]].execute(tmp);
+		return false;
     }
 
     void onLoad()
@@ -1981,13 +1909,15 @@ public:
             Network::init(serverip, port);
         }
         //初始化游戏状态
-        printf("[Console][Game]Init player...\n");
         if (loadGame()) Player::init(Player::xpos, Player::ypos, Player::zpos);
         else Player::spawn();
-        printf("[Console][Game]Init world...\n");
         World::Init();
-        registerCommands();
-        printf("[Console][Game]Loading Mods...\n");
+		static bool registered = false;
+		if (!registered)
+		{
+			registerCommands();
+			registered = true;
+		}
 
         GUIrenderswitch = true;
         glDepthFunc(GL_LEQUAL);
@@ -1997,13 +1927,11 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glfwSwapBuffers(MainWindow);
         glfwPollEvents();
-        printf("[Console][Game]Game start!\n");
 
         //这才是游戏开始!
         glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         mxl = mx;
         myl = my;
-        printf("[Console][Game]Main loop started\n");
         updateThreadRun = true;
         fctime = uctime = lastupdate = timer();
     }
@@ -2038,7 +1966,6 @@ public:
         TextRenderer::renderString(0, 0, "Saving world...");
         glfwSwapBuffers(MainWindow);
         glfwPollEvents();
-        printf("[Console][Game]Terminate threads\n");
         updateThreadRun = false;
         MutexUnlock(Mutex);
         ThreadWait(updateThread);
@@ -2052,7 +1979,6 @@ public:
             World::vbuffersShouldDelete.clear();
         }
         if (multiplayer) Network::cleanUp();
-        commands.clear();
         chatMessages.clear();
         GUI::BackToMain();
     }

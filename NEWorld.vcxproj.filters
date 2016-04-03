@@ -53,15 +53,9 @@
     <Filter Include="Source\DataStorage">
       <UniqueIdentifier>{949e684e-b65c-4015-82ab-e4bb1972035c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Mod">
-      <UniqueIdentifier>{f2eb1263-1080-487c-afb0-6d937680ea10}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source\Common\BaseEngine">
-      <UniqueIdentifier>{514ad253-19e5-49bd-910a-f07db8e67836}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Common\OpenAL">
       <UniqueIdentifier>{756831cf-7167-4c1f-9d20-e33d38861d08}</UniqueIdentifier>
@@ -149,9 +143,6 @@
     <ClInclude Include="source\OnlinePlayer.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
-    <ClInclude Include="source\Command.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="source\Globalization.h">
       <Filter>Source\GUI\Globalization</Filter>
     </ClInclude>
@@ -191,17 +182,8 @@
     <ClInclude Include="source\GLProc.h">
       <Filter>Source\Common\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="source\ModLoader.h">
-      <Filter>Source\Mod</Filter>
-    </ClInclude>
-    <ClInclude Include="source\API.h">
-      <Filter>Source\Mod</Filter>
-    </ClInclude>
     <ClInclude Include="source\Hitbox.h">
       <Filter>源代码\Game\Hitbox</Filter>
-    </ClInclude>
-    <ClInclude Include="source\ModSupport.h">
-      <Filter>Source\Mod</Filter>
     </ClInclude>
     <ClInclude Include="source\NNN.h">
       <Filter>Source\DataStorage</Filter>
@@ -364,12 +346,6 @@
     </ClCompile>
     <ClCompile Include="source\GLProc.cpp">
       <Filter>Source\Common\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ModLoader.cpp">
-      <Filter>Source\Mod</Filter>
-    </ClCompile>
-    <ClCompile Include="source\API.cpp">
-      <Filter>Source\Mod</Filter>
     </ClCompile>
     <ClCompile Include="source\NNN.cpp">
       <Filter>Source\DataStorage</Filter>
