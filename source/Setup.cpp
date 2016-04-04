@@ -36,8 +36,6 @@ void SplashScreen()
 
 void createWindow()
 {
-    std::stringstream title;
-    title << "NEWorld " << MAJOR_VERSION << MINOR_VERSION << EXT_VERSION;
 	glfwSetErrorCallback([](int, const char* desc)
 	{
 		cout << "We are sorry to inform you that NEWorld has crashed." << endl
@@ -52,7 +50,7 @@ void createWindow()
 	});
     if (Multisample != 0)
         glfwWindowHint(GLFW_SAMPLES, Multisample);
-    MainWindow = glfwCreateWindow(windowwidth, windowheight, title.str().c_str(), NULL, NULL);
+    MainWindow = glfwCreateWindow(windowwidth, windowheight, ("NEWorld " + major_version + minor_version + ext_version).c_str(), NULL, NULL);
     MouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     glfwMakeContextCurrent(MainWindow);
     glfwSetCursor(MainWindow, MouseCursor);
@@ -99,9 +97,9 @@ void createWindow()
 void SetupScreen()
 {
     //Get OpenGL Version
-    GLVersionMajor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MAJOR);
-    GLVersionMinor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MINOR);
-    GLVersionRev = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_REVISION);
+    gl_version_major = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MAJOR);
+    gl_version_minor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MINOR);
+    gl_version_rev = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_REVISION);
     //Get OpenGL Procedure Addresses
     InitGLProc();
 	//Config Rendering Arguments
