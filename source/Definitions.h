@@ -2,18 +2,15 @@
 #include "StdInclude.h"
 #include "Typedefs.h"
 #include "FunctionsKit.h"
-//#define NEWORLD_DEBUG_PERFORMANCE_REC
 
 enum
 {
-	VERSION = 39,
+	version = 39,
 	gameTimeMax = 43200,
 	networkRequestFrequency = 3,
 	networkRequestMax = 20
 };
-const string MAJOR_VERSION = "Alpha 0.";
-const string MINOR_VERSION = "5";
-const string EXT_VERSION = " Technical Perview";
+const string major_version = "Alpha 0.", minor_version = "5", ext_version = " Technical Perview";
 extern float FOVyNormal;
 extern float mousemove;
 extern int ViewDistance;
@@ -68,7 +65,7 @@ extern double screenshotAnimTimer;
 extern double bagAnimTimer;
 extern double bagAnimDuration;
 
-extern int GLVersionMajor, GLVersionMinor, GLVersionRev;
+extern int gl_version_major, gl_version_minor, gl_version_rev;
 extern GLFWwindow* MainWindow;
 extern GLFWcursor* MouseCursor;
 extern double mx, my, mxl, myl;

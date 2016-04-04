@@ -43,7 +43,7 @@ inline void fastSrand(int seed)
 
 vector<string> split(string str, string pattern);
 
-#define boolstr(b) (b ? "True" : "False") 
+#define boolstr(b) std::string(b ? "True" : "False") 
 
 inline double rnd()
 {
@@ -84,12 +84,25 @@ inline void conv(string str, block& ret)
 }
 
 template<typename T>
-inline T extract(std::wstring str)
+inline T extract(const std::wstring& str)
 {
 	T ret;
 	std::wstringstream s(str);
 	s >> ret;
 	return ret;
+}
+
+template<typename T>
+inline std::string pack(const T& data)
+{
+	std::stringstream s;
+	s << data;
+	return s.str();
+}
+
+inline std::string pack(bool data)
+{
+	return data ? "True" : "False";
 }
 
 template<class T>
