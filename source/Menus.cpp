@@ -19,7 +19,7 @@ void SaveOptions();
 
 string Str[] =
 {
-    "NEWorld Main Version:" + MAJOR_VERSION + MINOR_VERSION + EXT_VERSION ,
+    "NEWorld Main Version:" + major_version + minor_version + ext_version ,
     "Copyright (c) 2016 Infinideastudio under the Public Domain" ,
     "Welcome to develope with us!",
     "Contributers:" ,

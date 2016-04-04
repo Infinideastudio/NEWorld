@@ -56,7 +56,7 @@ double bagAnimTimer;
 double bagAnimDuration = 0.5;
 
 //OpenGL
-int GLVersionMajor, GLVersionMinor, GLVersionRev;
+int gl_version_major, gl_version_minor, gl_version_rev;
 //GLFW
 GLFWwindow* MainWindow;
 GLFWcursor* MouseCursor;
