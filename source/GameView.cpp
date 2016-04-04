@@ -129,9 +129,7 @@ public:
         World::saveAllChunks();
         if (!Player::save(World::worldname))
         {
-#ifdef NEWORLD_CONSOLE_OUTPUT
             DebugWarning("Failed saving player info!");
-#endif
         }
     }
 
@@ -139,9 +137,7 @@ public:
     {
         if (!Player::load(World::worldname))
         {
-#ifdef NEWORLD_CONSOLE_OUTPUT
             DebugWarning("Failed loading player info!");
-#endif
             return false;
         }
         return true;
@@ -796,18 +792,6 @@ public:
         Player::intzposold = RoundInt(Player::zpos);
     }
 
-    void debugText(string s, bool init)
-    {
-        static int pos = 0;
-        if (init)
-        {
-            pos = 0;
-            return;
-        }
-        TextRenderer::renderASCIIString(0, 16 * pos, s);
-        pos++;
-    }
-
     void Grender()
     {
         //画场景
@@ -1365,94 +1349,66 @@ public:
         if (DebugMode)
         {
             std::stringstream ss;
-            //ss << std::fixed << std::setprecision(4);
-            ss << "NEWorld v" << VERSION << " [OpenGL " << GLVersionMajor << "." << GLVersionMinor << "|" << GLVersionRev << "]";
-            debugText(ss.str(), false);
-            ss.str("");
-            ss << "Fps:" << fps << "|" << "Ups:" << ups;
-            debugText(ss.str(), false);
-            ss.str("");
+			int pos = 0;
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "NEWorld v" + pack(version) + "[OpenGL " + pack(gl_version_major) + "." + pack(gl_version_minor) + "|" + pack(gl_version_rev) + "]");
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "Fps:" + pack(fps) + "|" + "Ups:" + pack(ups));
 
-            ss << "Debug Mode:" << boolstr(DebugMode);
-            debugText(ss.str(), false);
-            ss.str("");
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "Debug Mode:" + pack(DebugMode));
             if (Renderer::AdvancedRender)
-            {
-                ss << "Shadow View:" << boolstr(DebugShadow);
-                debugText(ss.str(), false);
-                ss.str("");
-            }
-            ss << "X:" << Player::xpos << " Y:" << Player::ypos << " Z:" << Player::zpos;
-            debugText(ss.str(), false);
-            ss.str("");
-            ss << "Direction:" << Player::heading << " Head:" << Player::lookupdown << "Jump speed:" << Player::jump;
-            debugText(ss.str(), false);
-            ss.str("");
+                TextRenderer::renderASCIIString(0, (pos++) * 16, "Shadow View:" + pack(DebugShadow));
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "X:" + pack(Player::xpos) + "Y:" + pack(Player::ypos) + "Z:" + pack(Player::zpos));
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "Direction:" + pack(Player::heading) + "Head:" + pack(Player::lookupdown) + "Jump speed:" + pack(Player::jump));
 
-            ss << "Stats:";
-            if (Player::Flying) ss << " Flying";
-            if (Player::OnGround) ss << " On_ground";
-            if (Player::NearWall) ss << " Near_wall";
-            if (Player::inWater) ss << " In_water";
-            if (Player::CrossWall) ss << " Cross_Wall";
-            if (Player::Glide) ss << " Gliding_enabled";
-            if (Player::glidingNow) ss << "Gliding";
-            debugText(ss.str(), false);
-            ss.str("");
+			{
+				string tmp = "Stats:";
+				if (Player::Flying) tmp += " Flying";
+				if (Player::OnGround) tmp += " On_ground";
+				if (Player::NearWall) tmp += " Near_wall";
+				if (Player::inWater) tmp += " In_water";
+				if (Player::CrossWall) tmp += " Cross_Wall";
+				if (Player::Glide) tmp += " Gliding_enabled";
+				if (Player::glidingNow) tmp += "Gliding";
+				TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
+			}
 
-            ss << "Energy:" << Player::glidingEnergy;
-            debugText(ss.str(), false);
-            ss.str("");
-            ss << "Speed:" << Player::glidingSpeed;
-            debugText(ss.str(), false);
-            ss.str("");
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "Energy:" + pack(Player::glidingEnergy));
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "Speed:" + pack(Player::glidingSpeed));
 
-            int h = gametime / (30 * 60);
-            int m = gametime % (30 * 60) / 30;
-            int s = gametime % 30 * 2;
-            ss << "Time: "
-               << (h < 10 ? "0" : "") << h << ":"
-               << (m < 10 ? "0" : "") << m << ":"
-               << (s < 10 ? "0" : "") << s
-               << " (" << gametime << "/" << gameTimeMax << ")";
-            debugText(ss.str(), false);
-            ss.str("");
+			{
+				char tmp[50];
+				sprintf(tmp, "Time:%02d:%02d:%02d(%d/%d)", gametime / (30 * 60), gametime % (30 * 60) / 30, gametime % 30 * 2, gametime, gameTimeMax);
+				TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
+			}
 
-            ss << "load:" << World::loadedChunks << " unload:" << World::unloadedChunks
-               << " render:"  << WorldRenderer::RenderChunkList.size() << " update:" <<World::updatedChunks ;
-            debugText(ss.str(), false);
-            ss.str("");
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "load:" + pack(World::loadedChunks) + " unload:" + pack(World::unloadedChunks) + " render:" + pack(WorldRenderer::RenderChunkList.size()) + " update:" + pack(World::updatedChunks));
 
             if (multiplayer)
             {
                 MutexLock(Network::mutex);
-                ss << Network::getRequestCount() << "/" << networkRequestMax << " network requests";
-                debugText(ss.str(), false);
-                ss.str("");
+                TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::getRequestCount) + "/" + pack(networkRequestMax) + " network requests");
                 MutexUnlock(Network::mutex);
             }
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
             ss << c_getChunkPtrFromCPA << " CPA requests";
-            debugText(ss.str());
+            TextRenderer::renderASCIIString(0, (pos++) * 16, ss.str());
             ss.str("");
             ss << c_getChunkPtrFromSearch << " search requests";
-            debugText(ss.str());
+            TextRenderer::renderASCIIString(0, (pos++) * 16, ss.str());
             ss.str("");
             ss << c_getHeightFromHMap << " heightmap requests";
-            debugText(ss.str());
+            TextRenderer::renderASCIIString(0, (pos++) * 16, ss.str());
             ss.str("");
             ss << c_getHeightFromWorldGen << " worldgen requests";
-            debugText(ss.str());
+            TextRenderer::renderASCIIString(0, (pos++) * 16, ss.str());
             ss.str("");
 #endif
-            debugText("", true);
         }
         else
         {
             TextRenderer::setFontColor(1.0f, 1.0f, 1.0f, 0.9f);
             std::stringstream ss;
-            ss << "v" << VERSION << "  Fps:" << fps;
+            ss << "v" << version << "  Fps:" << fps;
             TextRenderer::renderString(10, 30, ss.str());
         }
         glFlush();
