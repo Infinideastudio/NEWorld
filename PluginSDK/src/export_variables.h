@@ -30,5 +30,11 @@ struct command
 	}
 };
 
+typedef unsigned short(*get_block_func)(int x, int y, int z);
+typedef void(*update_block_func)(int x, int y, int z, bool val);
+
+extern get_block_func get_func;
+extern update_block_func update_func;
 DLLIMPEXP extern std::map<std::wstring, command> commands;
+extern "C" DLLIMPEXP void init(get_block_func _get, update_block_func _update);
 #endif
