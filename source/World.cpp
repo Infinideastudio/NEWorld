@@ -769,7 +769,7 @@ block getblock(int x, int y, int z, block mask, chunk* cptr)
 brightness getbrightness(int x, int y, int z, chunk* cptr)
 {
     //获取亮度
-    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     if (chunkOutOfBound(cx, cy, cz)) return skylight;
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
     if (cptr != nullptr && cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
@@ -786,7 +786,7 @@ brightness getbrightness(int x, int y, int z, chunk* cptr)
 void setblock(int x, int y, int z, block Blockname, chunk* cptr)
 {
     //设置方块
-    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
     if (cptr != nullptr && cptr != EmptyChunkPtr &&

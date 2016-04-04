@@ -31,6 +31,8 @@ DLLIMPEXP void set_shared_data(wchar_t const * const key, void* const data);
 DLLIMPEXP command_function get_command(wchar_t const * const name);
 DLLIMPEXP void register_command(wchar_t const * const name, command_function func);
 
+DLLIMPEXP unsigned short get_block(int x, int y, int z);
+DLLIMPEXP void update_block(int x, int y, int z, char val);
 #ifdef __cplusplus
 }
 #endif
