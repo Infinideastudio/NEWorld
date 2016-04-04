@@ -35,7 +35,7 @@ bool Hit(const AABB& boxA, const AABB& boxB)
 
 double MaxMoveOnXclip(const AABB& boxA, const AABB& boxB, double movedist)
 {
-    //用boxA去撞boxB，别搞反了
+    //用boxA去撞boxB
     if (!(inYclip(boxA, boxB) && inZclip(boxA, boxB))) return movedist;
     else if (boxA.xmin >= boxB.xmax && movedist < 0.0) return max(boxB.xmax - boxA.xmin, movedist);
     else if (boxA.xmax <= boxB.xmin && movedist > 0.0) return min(boxB.xmin - boxA.xmax, movedist);
@@ -45,7 +45,7 @@ double MaxMoveOnXclip(const AABB& boxA, const AABB& boxB, double movedist)
 
 double MaxMoveOnYclip(const AABB& boxA, const AABB& boxB, double movedist)
 {
-    //用boxA去撞boxB，别搞反了 （这好像是句废话）
+    //用boxA去撞boxB
     if (!(inXclip(boxA, boxB) && inZclip(boxA, boxB))) return movedist;
     else if (boxA.ymin >= boxB.ymax && movedist < 0.0) return max(boxB.ymax - boxA.ymin, movedist);
     else if (boxA.ymax <= boxB.ymin && movedist > 0.0) return min(boxB.ymin - boxA.ymax, movedist);
@@ -55,7 +55,7 @@ double MaxMoveOnYclip(const AABB& boxA, const AABB& boxB, double movedist)
 
 double MaxMoveOnZclip(const AABB& boxA, const AABB& boxB, double movedist)
 {
-    //用boxA去撞boxB，别搞反了 （这好像还是句废话）
+    //用boxA去撞boxB
     if (!(inXclip(boxA, boxB) && inYclip(boxA, boxB))) return movedist;
     else if (boxA.zmin >= boxB.zmax && movedist < 0.0) return max(boxB.zmax - boxA.zmin, movedist);
     else if (boxA.zmax <= boxB.zmin && movedist > 0.0) return min(boxB.zmin - boxA.zmax, movedist);

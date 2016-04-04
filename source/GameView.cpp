@@ -1840,7 +1840,7 @@ public:
 		for (int i = 0; i < (int)command.size(); i++)
 			tmp.push_back(to_wstring(command[i]));
 		if (commands.count(tmp[0]))
-			return commands[tmp[0]].execute(tmp);
+			return commands[tmp[0]].execute(tmp) != 0;
 		return false;
     }
 

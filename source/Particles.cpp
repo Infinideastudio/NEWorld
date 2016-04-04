@@ -54,20 +54,17 @@ void Particles::update(Particle &ptc)
 void Particles::updateall()
 {
 	for (vector<Particle>::iterator iter = ptcs.begin(); iter < ptcs.end();)
-	{
-		if (!iter->exist)
-			continue;
-		update(*iter);
-		if (iter->lasts <= 0)
+		if (iter->exist)
 		{
-			iter->exist = false;
-			iter = ptcs.erase(iter);
+			update(*iter);
+			if (iter->lasts <= 0)
+			{
+				iter->exist = false;
+				iter = ptcs.erase(iter);
+			}
+			else
+				iter++;
 		}
-		else
-		{
-			iter++;
-		}
-	}
 }
 
 void Particles::render(Particle &ptc)

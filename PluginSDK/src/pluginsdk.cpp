@@ -59,3 +59,13 @@ void register_command(wchar_t const * const name, command_function func)
 {
 	commands[name] = command(name, func);
 }
+
+unsigned short get_block(int x, int y, int z)
+{
+	return get_func(x, y, z);
+}
+
+void update_block(int x, int y, int z, char val)
+{
+	update_func(x, y, z, val != 0);
+}
