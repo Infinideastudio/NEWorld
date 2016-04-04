@@ -21,6 +21,7 @@
 #include "Setup.h"
 #include "AudioSystem.h"
 #include "../PluginSDK/src/pluginsdk.h"
+#include "../PluginSDK/src/export_variables.h"
 
 template<typename T>
 void loadoption(std::map<string, string> &m, const char* name, T &value)
@@ -108,6 +109,13 @@ int main()
     glDisable(GL_CULL_FACE);
     SplashScreen();
 	LoadTextures();
+	init([](int x, int y, int z) -> unsigned short
+	{
+		return World::getblock(x, y, z).ID;
+	}, [](int x, int y, int z, bool val) -> void
+	{
+		World::updateblock(x, y, z, val);
+	});
 	load_plugins(L"plugins.ini");
 	AudioSystem::Init();
     glMatrixMode(GL_PROJECTION);

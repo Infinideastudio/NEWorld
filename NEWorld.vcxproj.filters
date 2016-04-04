@@ -50,9 +50,6 @@
     <Filter Include="Source\Game\Hitbox">
       <UniqueIdentifier>{e671892d-d7a8-41a7-81ad-57abd5613c9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\DataStorage">
-      <UniqueIdentifier>{949e684e-b65c-4015-82ab-e4bb1972035c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -184,12 +181,6 @@
     </ClInclude>
     <ClInclude Include="source\Hitbox.h">
       <Filter>源代码\Game\Hitbox</Filter>
-    </ClInclude>
-    <ClInclude Include="source\NNN.h">
-      <Filter>Source\DataStorage</Filter>
-    </ClInclude>
-    <ClInclude Include="source\ByteOrder.h">
-      <Filter>Source\DataStorage</Filter>
     </ClInclude>
     <ClInclude Include="source\Setup.h">
       <Filter>Source\Common</Filter>
@@ -346,9 +337,6 @@
     </ClCompile>
     <ClCompile Include="source\GLProc.cpp">
       <Filter>Source\Common\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="source\NNN.cpp">
-      <Filter>Source\DataStorage</Filter>
     </ClCompile>
     <ClCompile Include="source\Setup.cpp">
       <Filter>Source\Common</Filter>
