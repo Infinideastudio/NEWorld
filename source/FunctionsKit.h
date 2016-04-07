@@ -43,8 +43,6 @@ inline void fastSrand(int seed)
 
 vector<string> split(string str, string pattern);
 
-#define boolstr(b) std::string(b ? "True" : "False") 
-
 inline double rnd()
 {
     return (double)fastRand() / (RAND_MAX + 1);
@@ -71,18 +69,6 @@ inline bool beginWith(const std::wstring& str, const std::wstring& begin)
 void DebugWarning(string msg);
 void DebugError(string msg);
 
-template<class T> inline void conv(string str, T& ret)
-{
-    std::stringstream s(str);
-    s >> ret;
-}
-
-inline void conv(string str, block& ret)
-{
-    std::stringstream s(str);
-    s >> ret.ID;
-}
-
 template<typename T>
 inline T extract(const std::wstring& str)
 {
@@ -105,7 +91,7 @@ inline std::string pack(bool data)
 	return data ? "True" : "False";
 }
 
-template<class T>
+template<typename T>
 inline T clamp(T x, T min_value, T max_value)
 {
 	return max(min_value, min(x, max_value));
