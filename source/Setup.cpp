@@ -48,7 +48,7 @@ void createWindow()
 		for (vector<LogItem>::iterator it = Logs.begin(); it != Logs.end(); it++)
 			cout << it->ToString() << endl;
 	});
-    if (Multisample != 0)
+    if (Multisample)
         glfwWindowHint(GLFW_SAMPLES, Multisample);
     MainWindow = glfwCreateWindow(windowwidth, windowheight, ("NEWorld " + major_version + minor_version + ext_version).c_str(), NULL, NULL);
     MouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
