@@ -52,15 +52,15 @@ void Init()
         }
     }
     //行走and跑步声音
-    if (!Device.load("Audio\\Run.wav", &Run))Run = -1;
+    if (!Device.load("Audio/Run.wav", &Run))Run = -1;
     //鼠标单击
-    if (!Device.load("Audio\\Click.wav", &Click))Click = -1;
+    if (!Device.load("Audio/Click.wav", &Click))Click = -1;
     //掉落
-    if (!Device.load("Audio\\Fall.wav", &Fall))Fall = -1;
+    if (!Device.load("Audio/Fall.wav", &Fall))Fall = -1;
     //击打方块
-    if (!Device.load("Audio\\BlockClick.wav", &BlockClick))BlockClick = -1;
+    if (!Device.load("Audio/BlockClick.wav", &BlockClick))BlockClick = -1;
     //下水
-    if (!Device.load("Audio\\DownWater.wav", &DownWater))DownWater = -1;
+    if (!Device.load("Audio/DownWater.wav", &DownWater))DownWater = -1;
     //播放BGM
     if (BGMNum > 0)
     {
@@ -90,7 +90,7 @@ void Update(ALfloat PlayerPos[3],bool BFall, bool BBlockClick, ALfloat BlockPos[
     if (SFall != -1)EFX::set(SFall);
     if (SBlockClick != -1)EFX::set(SBlockClick);
     if (SDownWater != -1)EFX::set(SDownWater);
-    //更新玩家位置
+    //更新位置
     PlayerPos[1] += 0.74;
     ALfloat Vel[] = { 0.0,0.0,0.0 };
     ALfloat Ori[] = { 0.0,0.0,-1.0, 0.0,1.0,0.0 };
