@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NEWorldServer", "Server\NEW
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginSDK", "PluginSDK\PluginSDK.vcxproj", "{1A1B24AF-2218-41BB-BFF0-2A5DF3EA9ACC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataKit", "DataKit\DataKit.vcxproj", "{80ACC83B-C967-47B2-A9FE-7760E78D565D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -58,6 +60,18 @@ Global
 		{1A1B24AF-2218-41BB-BFF0-2A5DF3EA9ACC}.Release|Win32.Build.0 = Release|Win32
 		{1A1B24AF-2218-41BB-BFF0-2A5DF3EA9ACC}.Release|x64.ActiveCfg = Release|x64
 		{1A1B24AF-2218-41BB-BFF0-2A5DF3EA9ACC}.Release|x64.Build.0 = Release|x64
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Debug|Win32.Build.0 = Debug|Win32
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Debug|x64.ActiveCfg = Debug|x64
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Debug|x64.Build.0 = Debug|x64
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Profile|Win32.ActiveCfg = Release|Win32
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Profile|Win32.Build.0 = Release|Win32
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Profile|x64.ActiveCfg = Release|x64
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Profile|x64.Build.0 = Release|x64
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Release|Win32.ActiveCfg = Release|Win32
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Release|Win32.Build.0 = Release|Win32
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Release|x64.ActiveCfg = Release|x64
+		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
