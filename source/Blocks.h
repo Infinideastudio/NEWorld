@@ -26,7 +26,7 @@ typedef bool(*TILF)(TILDP* arg);
 class SingleBlock
 {
 private:
-    std::wstring name;
+    string name;
     float Hardness;
     bool Solid;
     bool Opaque;
@@ -50,10 +50,10 @@ public:
         return ret;
     }
 
-    SingleBlock(std::wstring blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness, BUDF _buf) :
+    SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness, BUDF _buf) :
         name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness), BlockUpdateFunc(_buf) {};
 
-    std::wstring getBlockName() const
+    string getBlockName() const
     {
         return Globalization::GetStrbyKey(name);
     }
@@ -87,26 +87,26 @@ public:
 const SingleBlock blockData[BLOCK_DEF_END + 1] =
 {
     //            Block Name                  Solid   Opaque Translucent Explosive Hardness Block Update Callback Function
-    SingleBlock(L"NEWorld.Blocks.Air"        , false    , false    , false , false,    0    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Rock"        , true    , true    , false , false,    2    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Grass"        , true    , true    , false , false,    5    , &GrassBUF),
-    SingleBlock(L"NEWorld.Blocks.Dirt"        , true    , true    , false , false,    5    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Stone"        , true    , true    , false , false,    2    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Plank"        , true    , true    , false , false,    5    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Wood"        , true    , true    , false , false,    5    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Bedrock"    , true    , true    , false , false,    0    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Leaf"        , true    , false    , false    , false,    15   , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Glass"        , true    , false    , false    , false,    30   , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Water"        , false    , false    , true    , false,    0    , &WaterBUF),
-    SingleBlock(L"NEWorld.Blocks.Lava"        , false    , false    , true    , false,    0    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.GlowStone"    , true    , true    , false    , false,    10   , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Sand"        , true    , true    , false    , false,    8    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Cement"        , true    , true    , false    , false,    0.5f , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Ice"        , true    , false    , true  , false,    25   , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Coal Block" , true    , true    , false , false,    1    , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Iron Block" , true    , true    , false , false,    0.5f , nullptr),
-    SingleBlock(L"NEWorld.Blocks.TNT"        , true    , true    , false , true,        25   , nullptr),
-    SingleBlock(L"NEWorld.Blocks.Null Block" , true  , true  , false , false,    0    , nullptr)
+    SingleBlock("NEWorld.Blocks.Air"        , false    , false    , false , false,    0    , nullptr),
+    SingleBlock("NEWorld.Blocks.Rock"        , true    , true    , false , false,    2    , nullptr),
+    SingleBlock("NEWorld.Blocks.Grass"        , true    , true    , false , false,    5    , &GrassBUF),
+    SingleBlock("NEWorld.Blocks.Dirt"        , true    , true    , false , false,    5    , nullptr),
+    SingleBlock("NEWorld.Blocks.Stone"        , true    , true    , false , false,    2    , nullptr),
+    SingleBlock("NEWorld.Blocks.Plank"        , true    , true    , false , false,    5    , nullptr),
+    SingleBlock("NEWorld.Blocks.Wood"        , true    , true    , false , false,    5    , nullptr),
+    SingleBlock("NEWorld.Blocks.Bedrock"    , true    , true    , false , false,    0    , nullptr),
+    SingleBlock("NEWorld.Blocks.Leaf"        , true    , false    , false    , false,    15   , nullptr),
+    SingleBlock("NEWorld.Blocks.Glass"        , true    , false    , false    , false,    30   , nullptr),
+    SingleBlock("NEWorld.Blocks.Water"        , false    , false    , true    , false,    0    , &WaterBUF),
+    SingleBlock("NEWorld.Blocks.Lava"        , false    , false    , true    , false,    0    , nullptr),
+    SingleBlock("NEWorld.Blocks.GlowStone"    , true    , true    , false    , false,    10   , nullptr),
+    SingleBlock("NEWorld.Blocks.Sand"        , true    , true    , false    , false,    8    , nullptr),
+    SingleBlock("NEWorld.Blocks.Cement"        , true    , true    , false    , false,    0.5f , nullptr),
+    SingleBlock("NEWorld.Blocks.Ice"        , true    , false    , true  , false,    25   , nullptr),
+    SingleBlock("NEWorld.Blocks.Coal Block" , true    , true    , false , false,    1    , nullptr),
+    SingleBlock("NEWorld.Blocks.Iron Block" , true    , true    , false , false,    0.5f , nullptr),
+    SingleBlock("NEWorld.Blocks.TNT"        , true    , true    , false , true,        25   , nullptr),
+    SingleBlock("NEWorld.Blocks.Null Block" , true  , true  , false , false,    0    , nullptr)
 };
 
 }

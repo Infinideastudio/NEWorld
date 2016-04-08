@@ -14,10 +14,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginSDK", "PluginSDK\Plug
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataKit", "DataKit\DataKit.vcxproj", "{80ACC83B-C967-47B2-A9FE-7760E78D565D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{1A1629CE-0F6D-489E-961B-062AB3D771A8}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LangFileGenerator", "Tools\LangFileGenerator\LangFileGenerator.vcxproj", "{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -76,23 +72,8 @@ Global
 		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Release|Win32.Build.0 = Release|Win32
 		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Release|x64.ActiveCfg = Release|x64
 		{80ACC83B-C967-47B2-A9FE-7760E78D565D}.Release|x64.Build.0 = Release|x64
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Debug|Win32.Build.0 = Debug|Win32
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Debug|x64.ActiveCfg = Debug|x64
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Debug|x64.Build.0 = Debug|x64
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Profile|Win32.ActiveCfg = Release|Win32
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Profile|Win32.Build.0 = Release|Win32
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Profile|x64.ActiveCfg = Release|x64
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Profile|x64.Build.0 = Release|x64
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Release|Win32.ActiveCfg = Release|Win32
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Release|Win32.Build.0 = Release|Win32
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Release|x64.ActiveCfg = Release|x64
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{64B3079A-FF37-400E-A3F9-B864DD5CCA1B} = {1A1629CE-0F6D-489E-961B-062AB3D771A8}
 	EndGlobalSection
 EndGlobal

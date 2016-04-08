@@ -567,13 +567,17 @@ void textbox::update()
     else focused = false;                //焦点
     if (focused && inputstr != "")
     {
-        text += MStrToWStr(inputstr);
+        text += inputstr;
     }
     delt++;
     if (parent->backspacep && (delt - ldel > 5) && text.length() >= 1)
     {
         ldel = delt;
-        text = text.substr(0, text.length() - 1);
+        int n = text[text.length() - 1];
+        if (n > 0 && n <= 127)
+            text = text.substr(0, text.length() - 1);
+        else
+            text = text.substr(0, text.length() - 2);
     }
 }
 
@@ -1017,14 +1021,14 @@ void Form::render()
     lastdisplaylist = displaylist;
 }
 
-label::label(std::wstring t, int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
+label::label(string t, int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
     : label()
 {
     text = t;
     resize(xi_r, xa_r, yi_r, ya_r, xi_b, xa_b, yi_b, ya_b);
 }
 
-button::button(std::wstring t, int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
+button::button(string t, int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
     : button()
 {
     text = t;
@@ -1032,7 +1036,7 @@ button::button(std::wstring t, int xi_r, int xa_r, int yi_r, int ya_r, double xi
     resize(xi_r, xa_r, yi_r, ya_r, xi_b, xa_b, yi_b, ya_b);
 }
 
-trackbar::trackbar(std::wstring t, int w, int s, int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
+trackbar::trackbar(string t, int w, int s, int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
     : trackbar()
 {
     text = t;
@@ -1042,7 +1046,7 @@ trackbar::trackbar(std::wstring t, int w, int s, int xi_r, int xa_r, int yi_r, i
     resize(xi_r, xa_r, yi_r, ya_r, xi_b, xa_b, yi_b, ya_b);
 }
 
-textbox::textbox(std::wstring t, int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
+textbox::textbox(string t, int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b)
     : textbox()
 {
     text = t;
