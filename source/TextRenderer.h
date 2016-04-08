@@ -50,7 +50,7 @@ public:
 		a = a_;
 	}
 	static void loadchar(unsigned int uc);
-	static int getStrWidth(string s);
-	static void renderString(int x, int y, string glstring);
+	static int getStrWidth(std::wstring s);
+	static void renderString(int x, int y, std::wstring glstring);
 	static void renderASCIIString(int x, int y, string glstring);
 };

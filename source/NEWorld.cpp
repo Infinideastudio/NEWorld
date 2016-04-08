@@ -50,7 +50,7 @@ void LoadOptions()
 		options[name] = value;
 	}
 	filein.close();
-	loadoption(options, "Language", Globalization::Cur_Lang);
+//	loadoption(options, "Language", Globalization::Cur_Lang);
 	loadoption(options, "FOV", FOVyNormal);
 	loadoption(options, "RenderDistance", ViewDistance);
 	loadoption(options, "Sensitivity", mousemove);
@@ -75,7 +75,7 @@ void SaveOptions()
 	std::map<string, string> options;
 	std::ofstream fileout("options.ini", std::ios::out);
 	if (!fileout.is_open()) return;
-	saveoption(fileout, "Language", Globalization::Cur_Lang);
+//	saveoption(fileout, "Language", Globalization::Cur_Lang);
 	saveoption(fileout, "FOV", FOVyNormal);
 	saveoption(fileout, "RenderDistance", ViewDistance);
 	saveoption(fileout, "Sensitivity", mousemove);

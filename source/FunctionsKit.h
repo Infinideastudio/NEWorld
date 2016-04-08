@@ -142,6 +142,22 @@ inline unsigned int WCharToMByte(char* dst, const wchar_t* src, unsigned int n)
     return WideCharToMultiByte(CP_ACP, 0, src, n, dst, n * 2, NULL, NULL);
 }
 
+inline std::wstring MStrToWStr(const std::string src)
+{
+    int n = src.length() + 1;
+    wchar_t* res = new wchar_t[n];
+    MultiByteToWideChar(CP_ACP, 0, src.c_str(), n, res, n);
+    return std::wstring(res);
+}
+
+inline std::string WStrToMStr(const std::wstring src)
+{
+    int n = src.length() + 1;
+    char* res = new char[n];
+    WideCharToMultiByte(CP_ACP, 0, src.c_str(), n, res, n * 2, NULL, NULL);
+    return std::string(res);
+}
+
 inline unsigned int wstrlen(const wchar_t* wstr)
 {
     return lstrlenW(wstr);

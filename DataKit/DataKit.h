@@ -4,6 +4,8 @@
 // 任何其他项目上不应定义此符号。这样，源文件中包含此文件的任何其他项目都会将
 // DATAKIT_API 函数视为是从 DLL 导入的，而此 DLL 则将用此宏定义的
 // 符号视为是被导出的。
+#ifndef DATAKIT
+#define DATAKIT
 #ifdef DATAKIT_EXPORTS
 #define DATAKIT_API __declspec(dllexport)
 #else
@@ -69,7 +71,7 @@ namespace DataKit
         void write(std::fstream & file);
         void addsub(unsigned long x, unsigned long y, object_type oftype);
         void deletesub(unsigned long x, unsigned long y);
-        object* sub(unsigned long x, unsigned long y);;
+        object* sub(unsigned long x, unsigned long y);
         object* sub(std::wstring key);
         object* operator [](const std::wstring key);
         cl_sheet();
@@ -83,6 +85,8 @@ namespace DataKit
         void write(std::fstream & file);
         void addsub(std::wstring key, object_type oftype);
         void deletesub(std::wstring key);
+        void createdir(std::wstring key);
+        void createstr(std::wstring key);
         object* sub(std::wstring key);
         object* operator [](const std::wstring key);
         cl_list();
@@ -112,3 +116,4 @@ namespace DataKit
 extern DATAKIT_API int nDataKit;
 
 DATAKIT_API int fnDataKit(void);
+#endif
