@@ -358,6 +358,40 @@ namespace DataKit
         }
     }
 
+    void cl_list::createdir(std::wstring key)
+    {
+        std::size_t found = key.find(L"::");
+        if (found != std::wstring::npos) {
+            object* res = sub(key.substr(0, found));
+            if (!res||(res->type!=DK_LIST)) {
+                addsub(key.substr(0, found), DK_LIST);
+                ((cl_list*)((*this)[key.substr(0, found)]))->createdir(key.substr(found + 2));
+            }
+        }
+        else
+        {
+            object* res = sub(key);
+            if (!res || (res->type != DK_LIST)) {
+                addsub(key.substr(0, found), DK_LIST);
+            }
+        }
+    }
+
+    void cl_list::createstr(std::wstring key)
+    {
+        std::size_t found = key.find(L"::");
+        if (found != std::wstring::npos) {
+            object* res = sub(key.substr(0, found));
+            if (res) {
+                ((cl_list*)((*this)[key.substr(0, found)]))->createstr(key.substr(found + 2));
+            }
+        }
+        else
+        {
+           addsub(key.substr(0, found), DK_STRING);
+        }
+    }
+
     object * cl_list::sub(std::wstring key)
     {
         std::map<std::wstring, object*>::iterator i;

@@ -1222,8 +1222,8 @@ public:
                 TextRenderer::setFontColor(1.0f, 1.0f, 1.0f, 0.8f);
                 glEnable(GL_TEXTURE_2D);
                 glDisable(GL_CULL_FACE);
-                std::stringstream ss;
-                ss << BlockInfo(selb).getBlockName() << " (ID " << selb.ID << ":" << selb.Data81 << ")";
+                std::wstringstream ss;
+                ss << BlockInfo(selb).getBlockName() << L" (ID " << selb.ID << L":" << selb.Data81 << L")";
                 TextRenderer::renderString(windowuswidth / 2 + 50, windowusheight / 2 + 50 - 16, ss.str());
                 glDisable(GL_TEXTURE_2D);
                 glEnable(GL_CULL_FACE);
@@ -1329,7 +1329,7 @@ public:
             glVertex2i(1, windowheight - 51);
             glEnd();
             glEnable(GL_TEXTURE_2D);
-            TextRenderer::renderString(0, windowheight - 50, chatword);
+            TextRenderer::renderString(0, windowheight - 50, MStrToWStr(chatword));
         }
         int posy = 0;
         int size = chatMessages.size();
@@ -1337,7 +1337,7 @@ public:
         {
             for (int i = size - 1; i >= (size - 10 > 0 ? size - 10 : 0); --i)
             {
-                TextRenderer::renderString(0, windowheight - 80 - 18 * posy++, chatMessages[i]);
+                TextRenderer::renderString(0, windowheight - 80 - 18 * posy++, MStrToWStr(chatMessages[i]));
             }
         }
 
@@ -1407,8 +1407,8 @@ public:
         else
         {
             TextRenderer::setFontColor(1.0f, 1.0f, 1.0f, 0.9f);
-            std::stringstream ss;
-            ss << "v" << version << "  Fps:" << fps;
+            std::wstringstream ss;
+            ss << L"v" << version << L"  Fps:" << fps;
             TextRenderer::renderString(10, 30, ss.str());
         }
         glFlush();
@@ -1572,7 +1572,7 @@ public:
                 glTexCoord2d(tcX, tcY);
                 UIVertex(xbase + i * (32 + spac) + 2, ybase + 30);
                 glEnd();
-                std::stringstream ss;
+                std::wstringstream ss;
                 ss << (int)Player::inventoryAmount[row][i];
                 TextRenderer::renderString(xbase + i * (32 + spac), ybase, ss.str());
             }
@@ -1683,7 +1683,7 @@ public:
                 glTexCoord2d(tcX, tcY);
                 UIVertex(mx - 16, my + 16);
                 glEnd();
-                std::stringstream ss;
+                std::wstringstream ss;
                 ss << Amountselected;
                 TextRenderer::renderString((int)mx - 16, (int)my - 16, ss.str());
             }
@@ -1919,7 +1919,7 @@ public:
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         TextRenderer::setFontColor(1.0, 1.0, 1.0, 1.0);
-        TextRenderer::renderString(0, 0, "Saving world...");
+        TextRenderer::renderString(0, 0, L"Saving world...");
         glfwSwapBuffers(MainWindow);
         glfwPollEvents();
         updateThreadRun = false;
