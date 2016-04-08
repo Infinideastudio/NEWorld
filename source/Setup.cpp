@@ -50,7 +50,7 @@ void createWindow()
 	});
     if (Multisample)
         glfwWindowHint(GLFW_SAMPLES, Multisample);
-    MainWindow = glfwCreateWindow(windowwidth, windowheight, WStrToMStr((L"NEWorld " + major_version + minor_version + ext_version)).c_str(), NULL, NULL);
+    MainWindow = glfwCreateWindow(windowwidth, windowheight, ("NEWorld " + major_version + minor_version + ext_version).c_str(), NULL, NULL);
     MouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     glfwMakeContextCurrent(MainWindow);
     glfwSetCursor(MainWindow, MouseCursor);

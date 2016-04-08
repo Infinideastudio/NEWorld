@@ -17,21 +17,21 @@ struct Langinfo
 
 void SaveOptions();
 
-std::wstring Str[] =
+string Str[] =
 {
-    L"NEWorld Main Version:" + major_version + minor_version + ext_version ,
-    L"Copyright (c) 2016 Infinideastudio under the Public Domain" ,
-    L"Welcome to develope with us!",
-    L"Contributers:" ,
-    L"qiaozhanrong,Null,SuperSodaSea,ascchrvalstr,DREAMWORLDVOID," ,
-    L"jacky8399,0u0,jelawat地鼠,HydroH,Michael R,dtcxzyw" ,
-    L"" ,
-    L"PS: Since this is a version in development, we welcome any type of suggestion or question.",
-    L"Everyone is welcomed to send issues on the following project site:",
-    L"https://github.com/Infinideastudio/NEWorld",
-    L"You can submit bug reports or request new features there.",
-    L"If you have any problems, please contact us.",
-    L"Thank you very much!"
+    "NEWorld Main Version:" + major_version + minor_version + ext_version ,
+    "Copyright (c) 2016 Infinideastudio under the Public Domain" ,
+    "Welcome to develope with us!",
+    "Contributers:" ,
+    "qiaozhanrong,Null,SuperSodaSea,ascchrvalstr,DREAMWORLDVOID," ,
+    "jacky8399,0u0,jelawat地鼠,HydroH,Michael R,dtcxzyw" ,
+    "" ,
+    "PS: Since this is a version in development, we welcome any type of suggestion or question.",
+    "Everyone is welcomed to send issues on the following project site:",
+    "https://github.com/Infinideastudio/NEWorld",
+    "You can submit bug reports or request new features there.",
+    "If you have any problems, please contact us.",
+    "Thank you very much!"
 };
 
 namespace Menus
@@ -52,11 +52,11 @@ namespace Menus
 		GUI::button runbtn, okbtn, backbtn;
 		void onLoad()
 		{
-			title = GUI::label(L"==============<  多 人 游 戏  >==============", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			serveriptb = GUI::textbox(L"输入服务器IP", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			runbtn = GUI::button(L"运行服务器（开服）", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			okbtn = GUI::button(L"确定", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button(L"<< 返回", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			title = GUI::label("==============<  多 人 游 戏  >==============", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			serveriptb = GUI::textbox("输入服务器IP", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			runbtn = GUI::button("运行服务器（开服）", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			okbtn = GUI::button("确定", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button("<< 返回", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 			inputstr = "";
 			okbtn.enabled = false;
 			registerControls(4, &title, &serveriptb, &runbtn, &okbtn, &backbtn);
@@ -69,7 +69,7 @@ namespace Menus
 	#endif
 			if (okbtn.clicked)
 			{
-				serverip = WStrToMStr(serveriptb.text);
+				serverip = serveriptb.text;
 				gamebegin = true;
 				multiplayer = true;
 			}
@@ -78,10 +78,10 @@ namespace Menus
 			if (backbtn.clicked) GUI::PopPage();
 			if (serveriptb.pressed && !serveripChanged)
 			{
-				serveriptb.text = L"";
+				serveriptb.text = "";
 				serveripChanged = true;
 			}
-			if (serveriptb.text == L"" || !serveripChanged || getDotCount(WStrToMStr(serveriptb.text)) != 3) okbtn.enabled = false;
+			if (serveriptb.text == "" || !serveripChanged || getDotCount(serveriptb.text) != 3) okbtn.enabled = false;
 			else okbtn.enabled = true;
 			inputstr = "";
 		}
@@ -100,9 +100,9 @@ namespace Menus
 		void onLoad()
 		{
 			glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::pause::caption"), -225, 225, 0, 16, 0.5, 0.5, 0.25, 0.25);
-			resumebtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::pause::continue"), -200, 200, -35, -3, 0.5, 0.5, 0.5, 0.5);
-			exitbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::pause::back"), -200, 200, 3, 35, 0.5, 0.5, 0.5, 0.5);
+			title = GUI::label(GetStrbyKey("NEWorld.pause.caption"), -225, 225, 0, 16, 0.5, 0.5, 0.25, 0.25);
+			resumebtn = GUI::button(GetStrbyKey("NEWorld.pause.continue"), -200, 200, -35, -3, 0.5, 0.5, 0.5, 0.5);
+			exitbtn = GUI::button(GetStrbyKey("NEWorld.pause.back"), -200, 200, 3, 35, 0.5, 0.5, 0.5, 0.5);
 			registerControls(3, &title, &resumebtn, &exitbtn);
 		}
 
@@ -146,10 +146,10 @@ namespace Menus
 		GUI::button okbtn, backbtn;
 		void onLoad()
 		{
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::create::caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			worldnametb = GUI::textbox(GetStrbyKey(L"NEWorld::Menus::create::inputname"), -250, 250, 48, 72, 0.5, 0.5, 0.0, 0.0);
-			okbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::create::ok"), -250, 250, 84, 120, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::create::back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			title = GUI::label(GetStrbyKey("NEWorld.create.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			worldnametb = GUI::textbox(GetStrbyKey("NEWorld.create.inputname"), -250, 250, 48, 72, 0.5, 0.5, 0.0, 0.0);
+			okbtn = GUI::button(GetStrbyKey("NEWorld.create.ok"), -250, 250, 84, 120, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.create.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(4, &title, &worldnametb, &okbtn, &backbtn);
 			inputstr = "";
 			okbtn.enabled = false;
@@ -159,16 +159,16 @@ namespace Menus
 		{
 			if (worldnametb.pressed && !worldnametbChanged)
 			{
-				worldnametb.text = L"";
+				worldnametb.text = "";
 				worldnametbChanged = true;
 			}
-			if (worldnametb.text == L"" || !worldnametbChanged) okbtn.enabled = false;
+			if (worldnametb.text == "" || !worldnametbChanged) okbtn.enabled = false;
 			else okbtn.enabled = true;
 			if (okbtn.clicked)
 			{
-				if (worldnametb.text != L"")
+				if (worldnametb.text != "")
 				{
-					World::worldname = WStrToMStr(worldnametb.text);
+					World::worldname = worldnametb.text;
 					GUI::ClearStack();
 					GameView();
 				}
@@ -195,10 +195,10 @@ namespace Menus
 		void onLoad()
 		{
 			title = GUI::imagebox(0.0f, 1.0f, 0.5f, 1.0f, tex_title, -256, 256, 20, 276, 0.5, 0.5, 0.0, 0.0);
-			startbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::main::start"), -200, 200, 280, 312, 0.5, 0.5, 0.0, 0.0);
-			optionsbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::main::options"), -200, -3, 318, 352, 0.5, 0.5, 0.0, 0.0);
-			quitbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::main::exit"), 3, 200, 318, 352, 0.5, 0.5, 0.0, 0.0);
-			info = GUI::button(L"i", 210, 250, 318, 352, 0.5, 0.5, 0.0, 0.0);
+			startbtn = GUI::button(GetStrbyKey("NEWorld.main.start"), -200, 200, 280, 312, 0.5, 0.5, 0.0, 0.0);
+			optionsbtn = GUI::button(GetStrbyKey("NEWorld.main.options"), -200, -3, 318, 352, 0.5, 0.5, 0.0, 0.0);
+			quitbtn = GUI::button(GetStrbyKey("NEWorld.main.exit"), 3, 200, 318, 352, 0.5, 0.5, 0.0, 0.0);
+			info = GUI::button("i", 210, 250, 318, 352, 0.5, 0.5, 0.0, 0.0);
 			registerControls(5, &title, &startbtn, &optionsbtn, &info, &quitbtn);
 		}
 		void onUpdate()
@@ -209,9 +209,9 @@ namespace Menus
 			if (optionsbtn.clicked)
 			{
 				options();
-				startbtn.text = GetStrbyKey(L"NEWorld::Menus::main::start");
-				optionsbtn.text = GetStrbyKey(L"NEWorld::Menus::main::options");
-				quitbtn.text = GetStrbyKey(L"NEWorld::Menus::main::exit");
+				startbtn.text = GetStrbyKey("NEWorld.main.start");
+				optionsbtn.text = GetStrbyKey("NEWorld.main.options");
+				quitbtn.text = GetStrbyKey("NEWorld.main.exit");
 			}
 			if (info.clicked) Information();
 			if (quitbtn.clicked) exit(0);
@@ -228,10 +228,10 @@ namespace Menus
 		void onLoad()
 		{
 			Langs.clear();
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::language::caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::language::back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			title = GUI::label(GetStrbyKey("NEWorld.language.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.language.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(2, &title, &backbtn);
-			std::ifstream index(L"Lang/Langs.txt");
+			std::ifstream index("Lang/Langs.txt");
 			int count;
 			index >> count;
 			Langinfo Info;
@@ -242,7 +242,7 @@ namespace Menus
 				getline(LF, Info.EngSymbol);
 				getline(LF, Info.Name);
 				LF.close();
-				Info.Button = new GUI::button(/*Info.EngSymbol + L"--" + Info.Name*/L"", -200, 200, i * 36 + 42, i * 36 + 72, 0.5, 0.5, 0.0, 0.0);
+				Info.Button = new GUI::button(Info.EngSymbol + "--" + Info.Name, -200, 200, i * 36 + 42, i * 36 + 72, 0.5, 0.5, 0.0, 0.0);
 				registerControls(1, Info.Button);
 				Langs.push_back(Info);
 			}
@@ -258,11 +258,11 @@ namespace Menus
 				if (Langs[i].Button->clicked)
 				{
 					GUI::PopPage();
-					//if (Globalization::Cur_Lang != Langs[i].Symbol)
-					//{
-					//	Globalization::LoadLang(Langs[i].Symbol);
-					//	GUI::BackToMain();
-					//}
+					if (Globalization::Cur_Lang != Langs[i].Symbol)
+					{
+						Globalization::LoadLang(Langs[i].Symbol);
+						GUI::BackToMain();
+					}
 					break;
 				}
 			}
@@ -295,14 +295,14 @@ namespace Menus
 		GUI::trackbar msaabar;
 		void onLoad()
 		{
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::render::caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			smoothlightingbtn = GUI::button(L"", -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			fancygrassbtn = GUI::button(L"", 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			mergefacebtn = GUI::button(L"", -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
-			msaabar = GUI::trackbar(L"", 120, Multisample == 0 ? 0 : (int)(log2(Multisample) - 1) * 30 - 1, 10, 250, 96, 120, 0.5, 0.5, 0.0, 0.0);
-			shaderbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::render::shaders"), -250, -10, 132, 156, 0.5, 0.5, 0.0, 0.0);
-			vsyncbtn = GUI::button(L"", 10, 250, 132, 156, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::render::back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			title = GUI::label(GetStrbyKey("NEWorld.render.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			smoothlightingbtn = GUI::button("", -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			fancygrassbtn = GUI::button("", 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			mergefacebtn = GUI::button("", -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
+			msaabar = GUI::trackbar("", 120, Multisample == 0 ? 0 : (int)(log2(Multisample) - 1) * 30 - 1, 10, 250, 96, 120, 0.5, 0.5, 0.0, 0.0);
+			shaderbtn = GUI::button(GetStrbyKey("NEWorld.render.shaders"), -250, -10, 132, 156, 0.5, 0.5, 0.0, 0.0);
+			vsyncbtn = GUI::button("", 10, 250, 132, 156, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.render.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(8, &title, &smoothlightingbtn, &fancygrassbtn, &mergefacebtn, &msaabar, &shaderbtn, &vsyncbtn, &backbtn);
 		}
 		void onUpdate()
@@ -322,13 +322,13 @@ namespace Menus
 				else glfwSwapInterval(0);
 			}
 			if (backbtn.clicked) GUI::PopPage();
-			std::wstringstream ss;
+			std::stringstream ss;
 			ss << Multisample;
-			smoothlightingbtn.text = GetStrbyKey(L"NEWorld::Menus::render::smooth") + BoolEnabled(SmoothLighting);
-			fancygrassbtn.text = GetStrbyKey(L"NEWorld::Menus::render::grasstex") + BoolYesNo(NiceGrass);
-			mergefacebtn.text = GetStrbyKey(L"NEWorld::Menus::render::merge") + BoolEnabled(MergeFace);
-			msaabar.text = GetStrbyKey(L"NEWorld::Menus::render::multisample") + (Multisample != 0 ? ss.str() + L"x" : BoolEnabled(false));
-			vsyncbtn.text = GetStrbyKey(L"NEWorld::Menus::render::vsync") + BoolEnabled(vsync);
+			smoothlightingbtn.text = GetStrbyKey("NEWorld.render.smooth") + BoolEnabled(SmoothLighting);
+			fancygrassbtn.text = GetStrbyKey("NEWorld.render.grasstex") + BoolYesNo(NiceGrass);
+			mergefacebtn.text = GetStrbyKey("NEWorld.render.merge") + BoolEnabled(MergeFace);
+			msaabar.text = GetStrbyKey("NEWorld.render.multisample") + (Multisample != 0 ? ss.str() + "x" : BoolEnabled(false));
+			vsyncbtn.text = GetStrbyKey("NEWorld.render.vsync") + BoolEnabled(vsync);
 
 			AudioSystem::GUIUpdate();;
 		}
@@ -357,11 +357,11 @@ namespace Menus
 		GUI::button enterbtn, deletebtn, backbtn;
 		void onLoad()
 		{
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::worlds::caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			title = GUI::label(GetStrbyKey("NEWorld.worlds.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 			vscroll = GUI::vscroll(100, 0, 275, 295, 36, -20, 0.5, 0.5, 0.0, 1.0);
-			enterbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::worlds::enter"), -250, -10, -80, -56, 0.5, 0.5, 1.0, 1.0);
-			deletebtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::worlds::delete"), 10, 250, -80, -56, 0.5, 0.5, 1.0, 1.0);
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::worlds::back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			enterbtn = GUI::button(GetStrbyKey("NEWorld.worlds.enter"), -250, -10, -80, -56, 0.5, 0.5, 1.0, 1.0);
+			deletebtn = GUI::button(GetStrbyKey("NEWorld.worlds.delete"), 10, 250, -80, -56, 0.5, 0.5, 1.0, 1.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.worlds.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(5, &title, &vscroll, &enterbtn, &deletebtn, &backbtn);
 			World::worldname = "";
 			enterbtn.enabled = false;
@@ -550,7 +550,7 @@ namespace Menus
 					UIVertex(midp - 250, 48 + i * 64 + 60);
 					glEnd();
 				}
-				TextRenderer::renderString(static_cast<int>(windowwidth / stretch - TextRenderer::getStrWidth(MStrToWStr(worldnames[i]))) / 2, (140 + i * 128) / 2, MStrToWStr(worldnames[i]));
+				TextRenderer::renderString(static_cast<int>(windowwidth / stretch - TextRenderer::getStrWidth(worldnames[i])) / 2, (140 + i * 128) / 2, worldnames[i]);
 			}
 			int i = worldcount;
 			glDisable(GL_TEXTURE_2D);
@@ -571,8 +571,8 @@ namespace Menus
 			UIVertex(midp + 250, 48 + i * 64 + 60);
 			UIVertex(midp - 250, 48 + i * 64 + 60);
 			glEnd();
-			TextRenderer::renderString(static_cast<int>(windowwidth / stretch - TextRenderer::getStrWidth(GetStrbyKey(L"NEWorld::Menus::worlds::new"))) / 2,
-									   (140 + i * 128) / 2, GetStrbyKey(L"NEWorld::Menus::worlds::new"));
+			TextRenderer::renderString(static_cast<int>(windowwidth / stretch - TextRenderer::getStrWidth(GetStrbyKey("NEWorld.worlds.new"))) / 2,
+									   (140 + i * 128) / 2, GetStrbyKey("NEWorld.worlds.new"));
 			glDisable(GL_SCISSOR_TEST);
 		}
 	};
@@ -589,10 +589,10 @@ namespace Menus
 		GUI::trackbar Musicbar,SoundBar;
 		void onLoad()
 		{
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::Sound::caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			Musicbar = GUI::trackbar(GetStrbyKey(L"NEWorld::Menus::Sound::MusicGain"), 100, AudioSystem::BGMGain*300, -200, 201, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			SoundBar= GUI::trackbar(GetStrbyKey(L"NEWorld::Menus::Sound::SoundGain"), 100, AudioSystem::SoundGain*300, -200, 201, 90, 114, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::render::back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			title = GUI::label(GetStrbyKey("NEWorld.Sound.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			Musicbar = GUI::trackbar(GetStrbyKey("NEWorld.Sound.MusicGain"), 100, AudioSystem::BGMGain*300, -200, 201, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			SoundBar= GUI::trackbar(GetStrbyKey("NEWorld.Sound.SoundGain"), 100, AudioSystem::SoundGain*300, -200, 201, 90, 114, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.render.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(4, &title,&Musicbar,&SoundBar , &backbtn);
 		}
 		void onUpdate()
@@ -600,12 +600,10 @@ namespace Menus
 			char text[100];
 			AudioSystem::BGMGain = float(Musicbar.barpos) / 300.0f;
 			AudioSystem::SoundGain = float(SoundBar.barpos) / 300.0f;
-            std::wstringstream ss;
-            ss << L":" << Musicbar.barpos / 3 << L"%";
-			Musicbar.text = GetStrbyKey(L"NEWorld::Menus::Sound::MusicGain") + ss.str();
-            ss.clear();
-            ss << L":" << SoundBar.barpos / 3 << L"%";
-			SoundBar.text = GetStrbyKey(L"NEWorld::Menus::Sound::SoundGain") + ss.str();
+			sprintf_s(text, ":%d%%", Musicbar.barpos/3);
+			Musicbar.text = GetStrbyKey("NEWorld.Sound.MusicGain") + text;
+			sprintf_s(text, ":%d%%", SoundBar.barpos/3);
+			SoundBar.text = GetStrbyKey("NEWorld.Sound.SoundGain") + text;
 			AudioSystem::GUIUpdate();
 			if (backbtn.clicked) GUI::PopPage();
 		}
@@ -624,16 +622,16 @@ namespace Menus
 		//GUI::button rdstbtn, gistbtn, backbtn, savebtn;
 		void onLoad()
 		{
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::options::caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			FOVyBar = GUI::trackbar(L"", 120, (int)(FOVyNormal - 1), -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			mmsBar = GUI::trackbar(L"", 120, (int)(mousemove * 40 * 2 - 1), 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			viewdistBar = GUI::trackbar(L"", 120, (ViewDistance - 2) * 4 - 1, -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
-			rdstbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::options::render::menu"), -250, -10, 204, 228, 0.5, 0.5, 0.0, 0.0);
-			gistbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::options::guimenu"), 10, 250, 204, 228, 0.5, 0.5, 0.0, 0.0);
-			langbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::options::languagemenu"), -250, -10, 240, 264, 0.5, 0.5, 0.0, 0.0);
-			sounbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::options::soundmenu"), 10, 250, 240, 264, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::options::back"), -250, -10, -44, -20, 0.5, 0.5, 1.0, 1.0);
-			savebtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::options::save"), 10, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			title = GUI::label(GetStrbyKey("NEWorld.options.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			FOVyBar = GUI::trackbar("", 120, (int)(FOVyNormal - 1), -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			mmsBar = GUI::trackbar("", 120, (int)(mousemove * 40 * 2 - 1), 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			viewdistBar = GUI::trackbar("", 120, (ViewDistance - 2) * 4 - 1, -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
+			rdstbtn = GUI::button(GetStrbyKey("NEWorld.options.rendermenu"), -250, -10, 204, 228, 0.5, 0.5, 0.0, 0.0);
+			gistbtn = GUI::button(GetStrbyKey("NEWorld.options.guimenu"), 10, 250, 204, 228, 0.5, 0.5, 0.0, 0.0);
+			langbtn = GUI::button(GetStrbyKey("NEWorld.options.languagemenu"), -250, -10, 240, 264, 0.5, 0.5, 0.0, 0.0);
+			sounbtn = GUI::button(GetStrbyKey("NEWorld.options.soundmenu"), 10, 250, 240, 264, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.options.back"), -250, -10, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			savebtn = GUI::button(GetStrbyKey("NEWorld.options.save"), 10, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(10, &title, &FOVyBar, &mmsBar, &viewdistBar, &rdstbtn, &gistbtn, &backbtn, &savebtn, &langbtn,&sounbtn);
 			//registerControls(8, &title, &FOVyBar, &mmsBar, &viewdistBar, &rdstbtn, &gistbtn, &backbtn, &savebtn);
 		}
@@ -649,19 +647,19 @@ namespace Menus
 			if (langbtn.clicked)
 			{
 				languagemenu();
-				title.text = GetStrbyKey(L"NEWorld::Menus::options::caption");
-				rdstbtn.text = GetStrbyKey(L"NEWorld::Menus::options::rendermenu");
-				gistbtn.text = GetStrbyKey(L"NEWorld::Menus::options::guimenu");
-				langbtn.text = GetStrbyKey(L"NEWorld::Menus::options::languagemenu");
-				backbtn.text = GetStrbyKey(L"NEWorld::Menus::options::back");
-				savebtn.text = GetStrbyKey(L"NEWorld::Menus::options::save");
+				title.text = GetStrbyKey("NEWorld.options.caption");
+				rdstbtn.text = GetStrbyKey("NEWorld.options.rendermenu");
+				gistbtn.text = GetStrbyKey("NEWorld.options.guimenu");
+				langbtn.text = GetStrbyKey("NEWorld.options.languagemenu");
+				backbtn.text = GetStrbyKey("NEWorld.options.back");
+				savebtn.text = GetStrbyKey("NEWorld.options.save");
 			}
 			if (sounbtn.clicked)Soundmenu();
 
 			AudioSystem::GUIUpdate();
-			FOVyBar.text = strWithVar(GetStrbyKey(L"NEWorld::Menus::options::fov"), FOVyNormal);
-			mmsBar.text = strWithVar(GetStrbyKey(L"NEWorld::Menus::options::sensitivity"), mousemove);
-			viewdistBar.text = strWithVar(GetStrbyKey(L"NEWorld::Menus::options::distance"), ViewDistance);
+			FOVyBar.text = strWithVar(GetStrbyKey("NEWorld.options.fov"), FOVyNormal);
+			mmsBar.text = strWithVar(GetStrbyKey("NEWorld.options.sensitivity"), mousemove);
+			viewdistBar.text = strWithVar(GetStrbyKey("NEWorld.options.distance"), ViewDistance);
 		}
 	};
 	void options()
@@ -677,12 +675,12 @@ namespace Menus
 
 		void onLoad()
 		{
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::gui::caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			fontbtn = GUI::button(L"", -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			blurbtn = GUI::button(L"", 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			ppistretchbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::gui::stretch"), -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
-			ppistat = GUI::label(L"", -250, 250, 120, 144, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::gui::back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			title = GUI::label(GetStrbyKey("NEWorld.gui.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			fontbtn = GUI::button("", -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			blurbtn = GUI::button("", 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			ppistretchbtn = GUI::button(GetStrbyKey("NEWorld.gui.stretch"), -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
+			ppistat = GUI::label("", -250, 250, 120, 144, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.gui.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(6, &title, &fontbtn, &blurbtn, &ppistretchbtn, &ppistat, &backbtn);
 			fontbtn.enabled = false;
 		}
@@ -703,14 +701,14 @@ namespace Menus
 			AudioSystem::GUIUpdate();
 			if (backbtn.clicked)
 				GUI::PopPage();
-			//fontbtn.text = GetStrbyKey(L"NEWorld::Menus::gui::unicode") + BoolYesNo(TextRenderer::UseUnicodeASCIIFont);
-			fontbtn.text = GetStrbyKey(L"NEWorld::Menus::gui::unicode") + BoolYesNo(true);
-			blurbtn.text = GetStrbyKey(L"NEWorld::Menus::gui::blur") + BoolEnabled(GUIScreenBlur);
+			//fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(TextRenderer::UseUnicodeASCIIFont);
+			fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(true);
+			blurbtn.text = GetStrbyKey("NEWorld.gui.blur") + BoolEnabled(GUIScreenBlur);
 			int vmc;
 			const GLFWvidmode* m = glfwGetVideoModes(glfwGetPrimaryMonitor(), &vmc);
-			ppistat.text = L"phy:" + Var2Str(GUI::nScreenWidth) + L"x" + Var2Str(GUI::nScreenHeight) +
-						   L" scr:" + Var2Str(m[vmc - 1].width) + L"x" + Var2Str(m[vmc - 1].height) +
-						   L" win:" + Var2Str(windowwidth) + L"x" + Var2Str(windowheight);
+			ppistat.text = "phy:" + Var2Str(GUI::nScreenWidth) + "x" + Var2Str(GUI::nScreenHeight) +
+						   " scr:" + Var2Str(m[vmc - 1].width) + "x" + Var2Str(m[vmc - 1].height) +
+						   " win:" + Var2Str(windowwidth) + "x" + Var2Str(windowheight);
 		}
 	};
 
@@ -727,7 +725,7 @@ namespace Menus
 
 		void onLoad()
 		{
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::language::back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.language.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(1, &backbtn);
 		}
 
@@ -758,11 +756,11 @@ namespace Menus
 		GUI::trackbar shadowresbar, shadowdistbar;
 		void onLoad()
 		{
-			title = GUI::label(GetStrbyKey(L"NEWorld::Menus::shaders::caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			enablebtn = GUI::button(L"", -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			shadowresbar = GUI::trackbar(L"", 120, (int)(log2(Renderer::ShadowRes) - 10) * 40 - 1, 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
-			shadowdistbar = GUI::trackbar(L"", 120, (Renderer::MaxShadowDist - 2) * 4 - 1, -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
-			backbtn = GUI::button(GetStrbyKey(L"NEWorld::Menus::render::back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
+			title = GUI::label(GetStrbyKey("NEWorld.shaders.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			enablebtn = GUI::button("", -250, -10, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			shadowresbar = GUI::trackbar("", 120, (int)(log2(Renderer::ShadowRes) - 10) * 40 - 1, 10, 250, 60, 84, 0.5, 0.5, 0.0, 0.0);
+			shadowdistbar = GUI::trackbar("", 120, (Renderer::MaxShadowDist - 2) * 4 - 1, -250, -10, 96, 120, 0.5, 0.5, 0.0, 0.0);
+			backbtn = GUI::button(GetStrbyKey("NEWorld.render.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
 			registerControls(5, &title, &enablebtn, &shadowresbar, &shadowdistbar, &backbtn);
 			Renderer::DestroyShaders();
 			if (!Renderer::AdvancedRender) shadowresbar.enabled = shadowdistbar.enabled = false;
@@ -782,13 +780,13 @@ namespace Menus
 				GUI::PopPage();
 				if (Renderer::AdvancedRender) Renderer::InitShaders();
 			}
-			enablebtn.text = GetStrbyKey(L"NEWorld::Menus::shaders::enable") + BoolYesNo(Renderer::AdvancedRender);
-			std::wstringstream ss;
+			enablebtn.text = GetStrbyKey("NEWorld.shaders.enable") + BoolYesNo(Renderer::AdvancedRender);
+			std::stringstream ss;
 			ss << Renderer::ShadowRes;
-			shadowresbar.text = GetStrbyKey(L"NEWorld::Menus::shaders::shadowres") + ss.str() + L"x";
-			ss.str(L"");
+			shadowresbar.text = GetStrbyKey("NEWorld.shaders.shadowres") + ss.str() + "x";
+			ss.str("");
 			ss << Renderer::MaxShadowDist;
-			shadowdistbar.text = GetStrbyKey(L"NEWorld::Menus::shaders::distance") + ss.str();
+			shadowdistbar.text = GetStrbyKey("NEWorld.shaders.distance") + ss.str();
 			AudioSystem::GUIUpdate();
 		}
 	};
