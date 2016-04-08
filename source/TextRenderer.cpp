@@ -92,12 +92,11 @@ void MBToWC(const char* lpcszStr, wchar_t*& lpwszStr, int dwSize)
     lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
 }
 
-int TextRenderer::getStrWidth(string s)
+int TextRenderer::getStrWidth(std::wstring s)
 {
     UnicodeChar c;
     int uc, res = 0;
-    wchar_t* wstr = nullptr;
-    MBToWC(s.c_str(), wstr, s.length()+128);
+    const wchar_t* wstr = s.c_str();
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {
         uc = wstr[k];
@@ -109,18 +108,16 @@ int TextRenderer::getStrWidth(string s)
         }
         res += c.advance / stretch;
     }
-    free(wstr);
     return res;
 }
 
-void TextRenderer::renderString(int x, int y, string glstring)
+void TextRenderer::renderString(int x, int y, std::wstring glstring)
 {
     UnicodeChar c;
     int uc;
     int span = 0;
     double wid = pow(2, ceil(log2(32 * stretch)));
-    wchar_t* wstr = nullptr;
-    MBToWC(glstring.c_str(), wstr, glstring.length()+128);
+    const wchar_t* wstr = glstring.c_str();
 
     glEnable(GL_TEXTURE_2D);
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
@@ -172,7 +169,6 @@ void TextRenderer::renderString(int x, int y, string glstring)
         span += c.advance / stretch;
     }
     glColor4f(1.0, 1.0, 1.0, 1.0);
-    free(wstr);
 }
 
 void TextRenderer::renderASCIIString(int x, int y, string glstring)

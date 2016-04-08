@@ -5,28 +5,28 @@
 int getMouseButton();
 int getMouseScroll();
 
-inline string BoolYesNo(bool b)
+inline std::wstring BoolYesNo(bool b)
 {
-    return b ? Globalization::GetStrbyKey("NEWorld.yes") : Globalization::GetStrbyKey("NEWorld.no");
+    return b ? Globalization::GetStrbyKey(L"Global::yes") : Globalization::GetStrbyKey(L"Global::no");
 }
 
-inline string BoolEnabled(bool b)
+inline std::wstring BoolEnabled(bool b)
 {
-    return b ? Globalization::GetStrbyKey("NEWorld.enabled") : Globalization::GetStrbyKey("NEWorld.disabled");
+    return b ? Globalization::GetStrbyKey(L"Global::enabled") : Globalization::GetStrbyKey(L"Global::disabled");
 }
 
 template<typename T>
-inline string strWithVar(string str, T var)
+inline std::wstring strWithVar(std::wstring str, T var)
 {
-    std::stringstream ss;
+    std::wstringstream ss;
     ss << str << var;
     return ss.str();
 }
 
 template<typename T>
-inline string Var2Str(T var)
+inline std::wstring Var2Str(T var)
 {
-    std::stringstream ss;
+    std::wstringstream ss;
     ss << var;
     return ss.str();
 }
@@ -80,10 +80,10 @@ namespace GUI
 	{
 	public:
 		//标签
-		string text;
+        std::wstring text;
 		bool mouseon, focused;
 		label() : mouseon(false), focused(false) {};
-		label(string t,
+		label(std::wstring t,
 			  int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
 		void update();
 		void render();
@@ -93,10 +93,10 @@ namespace GUI
 	{
 	public:
 		//按钮
-		string text;
+        std::wstring text;
 		bool mouseon, focused, pressed, clicked, enabled;
 		button() : mouseon(false), focused(false), pressed(false), clicked(false), enabled(false) {};
-		button(string t,
+		button(std::wstring t,
 			   int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
 		void update();
 		void render();
@@ -106,12 +106,12 @@ namespace GUI
 	{
 	public:
 		//该控件的中文名我不造
-		string text;
+        std::wstring text;
 		int barwidth;
 		int barpos;
 		bool mouseon, focused, pressed, enabled;
 		trackbar() : mouseon(false), focused(false), pressed(false), enabled(false) {};
-		trackbar(string t, int w, int s,
+		trackbar(std::wstring t, int w, int s,
 				 int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
 		void update();
 		void render();
@@ -121,10 +121,10 @@ namespace GUI
 	{
 	public:
 		//文本框
-		string text;
+        std::wstring text;
 		bool mouseon, focused, pressed, enabled;
 		textbox() : mouseon(false), focused(false), pressed(false), enabled(false) {};
-		textbox(string t,
+		textbox(std::wstring t,
 				int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
 		void update();
 		void render();
