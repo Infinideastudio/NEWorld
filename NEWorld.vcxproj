@@ -96,7 +96,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(ProjectDir)include\Netycat\include;$(ProjectDir)include\Netycat\src;$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Debug;$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -107,7 +107,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Release;$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
@@ -116,7 +116,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Profile;$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
@@ -140,7 +140,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;OpenAL32.lib;EFX-Util.lib;DataKit.lib</AdditionalDependencies>
+      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;OpenAL32.lib;EFX-Util.lib</AdditionalDependencies>
       <Profile>false</Profile>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
@@ -193,7 +193,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;OpenAL32.lib;EFX-Util.lib;DataKit.h</AdditionalDependencies>
+      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;OpenAL32.lib;EFX-Util.lib</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
@@ -257,7 +257,7 @@
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;EFX-Util.lib;OpenAL32.lib;DataKit.lib</AdditionalDependencies>
+      <AdditionalDependencies>PluginSDK.lib;opengl32.lib;glfw3dll.lib;ws2_32.lib;freetype2.lib;EFX-Util.lib;OpenAL32.lib</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <AssemblyDebug>true</AssemblyDebug>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
