@@ -10,7 +10,7 @@ enum
 	networkRequestFrequency = 3,
 	networkRequestMax = 20
 };
-const std::wstring major_version = L"Alpha 0.", minor_version = L"5", ext_version = L" Technical Perview";
+const string major_version = "Alpha 0.", minor_version = "5", ext_version = " Technical Perview";
 extern float FOVyNormal;
 extern float mousemove;
 extern int ViewDistance;

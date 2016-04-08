@@ -1,38 +1,57 @@
 #include "Globalization.h"
-#include "../DataKit/DataKit.h"
 
 namespace Globalization
 {
-    DataKit::cl_file ls;
-    DataKit::cl_file* l = nullptr;
 
-std::wstring Cur_Lang = L"zh_CN";
+int count;
+string Cur_Lang = "zh_CN", Cur_Symbol = "", Cur_Name = "";
+map<int, Line> Lines;
+map<string, int> keys;
 
-vector<std::wstring> GetLangs()
+bool LoadLang(string lang)
 {
-    return vector<std::wstring>();
-}
-
-void LoadLang(std::wstring lang)
-{
-    if (l != nullptr) {
-        delete l;
+    std::ifstream f("locale/" + lang + ".lang");
+    if (f.bad())
+    {
+        exit(-101);
+        return false;
     }
-    l = new DataKit::cl_file;
-    l->open(L"locale/" + lang + L".dtsf");
+    Lines.clear();
+    Cur_Lang = lang;
+    f >> Cur_Symbol;
+    f.get();
+    getline(f, Cur_Name);
+    for (int i = 0; i < count; i++)
+    {
+        getline(f, Lines[i].str);
+    }
+    f.close();
+    return true;
 }
 
-void Load()
+bool Load()
 {
-    LoadLang(Cur_Lang);
+    std::ifstream f("locale/Keys.lk");
+    if (f.bad()) return false;
+    f >> count;
+    f.get();
+    for (int i = 0; i < count; i++)
+    {
+        string temp;
+        getline(f, temp);
+        keys[temp] = i;
+    }
+    f.close();
+    return LoadLang(Cur_Lang);
 }
 
-std::wstring GetStrbyKey(std::wstring key)
+string GetStrbyid(int id)
 {
-    DataKit::cl_str* res = (DataKit::cl_str*)(*l)[key];
-    if (res)
-        return *res->val;
-    else
-        return key;
+    return Lines[id].str;
+}
+
+string GetStrbyKey(string key)
+{
+    return Lines[keys[key]].str;
 }
 }
