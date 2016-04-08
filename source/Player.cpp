@@ -246,7 +246,7 @@ bool Player::save(string worldn)
 
 bool Player::load(string worldn)
 {
-	std::ifstream iload("Worlds/" + worldn + "player.NEWorldPlayer", std::ios::binary | std::ios::in);
+	std::ifstream iload("Worlds/" + worldn + "/player.NEWorldPlayer", std::ios::binary | std::ios::in);
     if (!iload.is_open()) return false;
     uint32 targetVersion;
     iload.read((char*)&targetVersion, sizeof(targetVersion));
