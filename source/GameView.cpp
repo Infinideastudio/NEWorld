@@ -1912,7 +1912,7 @@ public:
             updateThreadPaused = true;
             createThumbnail();
             GUI::clearTransition();
-            Menus::gamemenu();
+            GUI::PushPage(new Menus::GameMenu);
         }
     }
     void onLeave()
