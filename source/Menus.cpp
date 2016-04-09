@@ -54,7 +54,7 @@ namespace Menus
 		{
 			title = GUI::label("==============<  多 人 游 戏  >==============", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 			serveriptb = GUI::textbox("输入服务器IP", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-			runbtn = GUI::button("运行服务器（开服）", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+			runbtn = GUI::button("运行服务器", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 			okbtn = GUI::button("确定", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 			backbtn = GUI::button("<< 返回", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 			inputstr = "";
@@ -657,9 +657,9 @@ namespace Menus
 			if (sounbtn.clicked)Soundmenu();
 
 			AudioSystem::GUIUpdate();
-			FOVyBar.text = strWithVar(GetStrbyKey("NEWorld.options.fov"), FOVyNormal);
-			mmsBar.text = strWithVar(GetStrbyKey("NEWorld.options.sensitivity"), mousemove);
-			viewdistBar.text = strWithVar(GetStrbyKey("NEWorld.options.distance"), ViewDistance);
+			FOVyBar.text = GetStrbyKey("NEWorld.options.fov") + pack(FOVyNormal);
+			mmsBar.text = GetStrbyKey("NEWorld.options.sensitivity") + pack(mousemove);
+			viewdistBar.text = GetStrbyKey("NEWorld.options.distance") + pack(ViewDistance);
 		}
 	};
 	void options()
@@ -706,9 +706,9 @@ namespace Menus
 			blurbtn.text = GetStrbyKey("NEWorld.gui.blur") + BoolEnabled(GUIScreenBlur);
 			int vmc;
 			const GLFWvidmode* m = glfwGetVideoModes(glfwGetPrimaryMonitor(), &vmc);
-			ppistat.text = "phy:" + Var2Str(GUI::nScreenWidth) + "x" + Var2Str(GUI::nScreenHeight) +
-						   " scr:" + Var2Str(m[vmc - 1].width) + "x" + Var2Str(m[vmc - 1].height) +
-						   " win:" + Var2Str(windowwidth) + "x" + Var2Str(windowheight);
+			ppistat.text = "phy:" + pack(GUI::nScreenWidth) + "x" + pack(GUI::nScreenHeight) +
+						   " scr:" + pack(m[vmc - 1].width) + "x" + pack(m[vmc - 1].height) +
+						   " win:" + pack(windowwidth) + "x" + pack(windowheight);
 		}
 	};
 
