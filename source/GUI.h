@@ -15,23 +15,7 @@ inline string BoolEnabled(bool b)
     return b ? Globalization::GetStrbyKey("NEWorld.enabled") : Globalization::GetStrbyKey("NEWorld.disabled");
 }
 
-template<typename T>
-inline string strWithVar(string str, T var)
-{
-    std::stringstream ss;
-    ss << str << var;
-    return ss.str();
-}
-
-template<typename T>
-inline string Var2Str(T var)
-{
-    std::stringstream ss;
-    ss << var;
-    return ss.str();
-}
-
-//图形界面系统。。。正宗OOP！！！
+//Graphical User Interface System
 namespace GUI
 {
 	extern float linewidth;
@@ -62,10 +46,10 @@ namespace GUI
 	class control
 	{
 	public:
-		//控件基类，只要是控件都得继承这个
 		virtual ~control() {}
 		int id, xmin, ymin, xmax, ymax;
 		Form* parent;
+		bool mouse_on();
 		virtual void update() {}
 		virtual void render() {}
 		virtual void destroy() {}
@@ -81,8 +65,8 @@ namespace GUI
 	public:
 		//标签
 		string text;
-		bool mouseon, focused;
-		label() : mouseon(false), focused(false) {};
+		bool focused;
+		label() : focused(false) {};
 		label(string t,
 			  int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
 		void update();
@@ -182,7 +166,7 @@ namespace GUI
 		Form() :maxid(0), currentid(0), focusid(-1), Background(&drawBackground)
 		{
 			//Transition forward
-			if (transitionList != 0) glDeleteLists(transitionList, 1);
+			if (transitionList) glDeleteLists(transitionList, 1);
 			transitionList = lastdisplaylist;
 			transitionForward = true;
 			transitionTimer = timer();
