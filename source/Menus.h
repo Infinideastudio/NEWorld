@@ -22,7 +22,7 @@ namespace Menus
 		void onUpdate();
 	};
 	
-	void multiplayermenu()
+	inline void multiplayermenu()
 	{
 		GUI::PushPage(new MultiplayerMenu);
 	}
