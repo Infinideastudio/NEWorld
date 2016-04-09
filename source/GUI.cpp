@@ -7,7 +7,7 @@
 
 extern string inputstr;
 
-//图形界面系统。。。正宗OOP！！！
+//Graphical User Interface System
 namespace GUI
 {
 
@@ -242,6 +242,11 @@ void EndStretch()
     TextRenderer::resize();
 }
 
+bool control::mouse_on()
+{
+	return parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax;
+}
+
 void control::updatepos()
 {
     xmin = (int)(windowwidth*_xmin_b / stretch) + _xmin_r;
@@ -264,13 +269,7 @@ void control::resize(int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double
 
 void label::update()
 {
-    //更新标签状态
-    if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)               //鼠标悬停
-        mouseon = true;
-    else
-        mouseon = false;
-
-    if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;              //焦点在此
+    if (parent->mb == 1 && parent->mbl == 0 && mouse_on()) parent->focusid = id;              //焦点在此
     focused = parent->focusid == id;   //焦点
 }
 
@@ -282,7 +281,7 @@ void label::render()
     fcG = FgG;
     fcB = FgB;
     fcA = FgA;
-    if (mouseon)
+    if (mouse_on())
     {
         fcR = FgR*1.2f;
         fcG = FgG*1.2f;
@@ -312,30 +311,29 @@ void label::render()
 void button::update()
 {
     if (!enabled)
-    {
-        mouseon = false, focused = false, pressed = false, clicked = false;
-        return;
-    }
+        mouseon = focused = pressed = clicked = false;
+	else
+	{
+		//更新按钮状态
+		if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)
+			mouseon = true;
+		else
+			mouseon = false;
 
-    //更新按钮状态
-    if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)
-        mouseon = true;
-    else
-        mouseon = false;
+		if ((parent->mb == 1 && mouseon || parent->enterp) && focused)
+			pressed = true;
+		else
+			pressed = false;
 
-    if ((parent->mb == 1 && mouseon || parent->enterp) && focused)
-        pressed = true;
-    else
-        pressed = false;
+		if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;
+		if (parent->focusid == id) focused = true;
+		else focused = false;
 
-    if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;
-    if (parent->focusid == id) focused = true;
-    else focused = false;
+		clicked = (parent->mb == 0 && parent->mbl == 1 && mouseon || parent->enterpl && parent->enterp == false) && focused;
+		//clicked = lp&&!pressed
 
-    clicked = (parent->mb == 0 && parent->mbl == 1 && mouseon || parent->enterpl && parent->enterp == false) && focused;
-    //clicked = lp&&!pressed
-
-    if (clicked)AudioSystem::ClickEvent();
+		if (clicked)AudioSystem::ClickEvent();
+	}
 }
 
 void button::render()
