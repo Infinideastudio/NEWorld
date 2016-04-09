@@ -2,8 +2,8 @@
 #include <AL/ALDevice.h>
 namespace AudioSystem
 {
-//BGM
-const  unsigned int BGM_MAX_NUM=10;
+
+extern ALDevice Device;
 //Gain
 extern ALfloat BGMGain;//背景音乐
 extern ALfloat SoundGain;//音效
