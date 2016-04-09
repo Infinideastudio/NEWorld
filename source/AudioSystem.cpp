@@ -14,7 +14,7 @@ bool FallBefore = false;//OnGround
 bool DownWaterBefore = false;//InWater
 int BGMNum = 0;
 //Buffer
-ALuint BGM[BGM_MAX_NUM];
+ALuint BGM[10];
 ALuint Run = -1;
 ALuint Click = -1;
 ALuint Fall = -1;
@@ -33,31 +33,34 @@ void Init()
     ALDeviceList *DL = Device.GetALDeviceList();
     Device.InitAL(DL->GetDeviceName(DL->GetDefaultDevice()));
     delete DL;
-    //开启所有功能(然而打不开,资料和实现不同)
+    //开启所有功能
     alEnable(AL_DOPPLER_FACTOR);
     alEnable(AL_DISTANCE_MODEL);
     alEnable(AL_SPEED_OF_SOUND);
     //背景音乐
-    char BGMName[32];
-    for (size_t i = 0; i < BGM_MAX_NUM; i++)
+    char BGMName[256];
+    for (size_t i = 0; i < 10; i++)
     {
         BGM[i] = -1;
-        sprintf_s(BGMName, "Audio\\BGM%d.Audio", i);
+    }
+    for (size_t i = 0; i < 10; i++)
+    {
+        sprintf_s(BGMName, "Audio\\BGM%d.wav", i);
         if (Device.load(BGMName, &BGM[BGMNum]))
         {
             BGMNum++;
         }
     }
     //行走and跑步声音
-    if (!Device.load("Audio/Run.Audio", &Run))Run = -1;
+    if (!Device.load("Audio/Run.wav", &Run))Run = -1;
     //鼠标单击
-    if (!Device.load("Audio/Click.Audio", &Click))Click = -1;
+    if (!Device.load("Audio/Click.wav", &Click))Click = -1;
     //掉落
-    if (!Device.load("Audio/Fall.Audio", &Fall))Fall = -1;
+    if (!Device.load("Audio/Fall.wav", &Fall))Fall = -1;
     //击打方块
-    if (!Device.load("Audio/BlockClick.Audio", &BlockClick))BlockClick = -1;
+    if (!Device.load("Audio/BlockClick.wav", &BlockClick))BlockClick = -1;
     //下水
-    if (!Device.load("Audio/DownWater.Audio", &DownWater))DownWater = -1;
+    if (!Device.load("Audio/DownWater.wav", &DownWater))DownWater = -1;
     //播放BGM
     if (BGMNum > 0)
     {

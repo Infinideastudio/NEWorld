@@ -1762,7 +1762,7 @@ public:
 
     void createThumbnail()
     {
-		saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "/Thumbnail.bmp");
+		saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "Thumbnail.bmp");
     }
 
     void registerCommands()
