@@ -1074,7 +1074,7 @@ imagebox::imagebox(float _txmin, float _txmax, float _tymin, float _tymax, Textu
 
 control* Form::getControlByID(int cid)
 {
-    for (size_t i = 0; i != children.size(); i++)
+    for (size_t i = 0; i < children.size(); i++)
     {
         if (children[i]->id == cid) return children[i];
     }
@@ -1088,8 +1088,8 @@ void Form::singleloop()
     myl = my;
     mwl = mw;
     mbl = mb;
-    mb = getMouseButton();
-    mw = getMouseScroll();
+    mb = GUI::GetMouseButton();
+    mw = GUI::GetMouseScroll();
     glfwGetCursorPos(MainWindow, &dmx, &dmy);
     mx = (int)(dmx / stretch), my = (int)(dmy / stretch);
     update();
@@ -1106,7 +1106,7 @@ struct PageOpRq
 };
 
 std::deque<Form*> ViewStack;
-std::deque<PageOpRq> ViewOps = {};
+std::deque<PageOpRq> ViewOps;
 
 void PushPage(Form* View)
 {
