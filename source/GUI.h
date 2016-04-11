@@ -2,9 +2,6 @@
 #include "Definitions.h"
 #include "Globalization.h"
 
-int getMouseButton();
-int getMouseScroll();
-
 inline string BoolYesNo(bool b)
 {
     return b ? Globalization::GetStrbyKey("NEWorld.yes") : Globalization::GetStrbyKey("NEWorld.no");
@@ -142,6 +139,15 @@ namespace GUI
 	};
 
 	typedef void(*UIVoidF)();
+
+	inline int GetMouseScroll()
+	{
+		return mw;
+	}
+	inline int GetMouseButton()
+	{
+		return mb;
+	}
 
 	// 窗体 / 容器
 	class Form

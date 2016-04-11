@@ -25,14 +25,6 @@
 
 
 ThreadFunc updateThreadFunc(void*);
-int getMouseScroll()
-{
-	return mw;
-}
-int getMouseButton()
-{
-	return mb;
-}
 
 class GameDView :public GUI::Form
 {
