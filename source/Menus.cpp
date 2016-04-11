@@ -33,14 +33,14 @@ namespace Menus
 	int getDotCount(string s)
 	{
 		int ret = 0;
-		for (unsigned int i = 0; i != s.size(); i++)
+		for (size_t i = 0; i < s.size(); i++)
 			if (s[i] == '.') ret++;
 		return ret;
 	}
 	
 	void MultiplayerMenu::onLoad()
 	{
-		title = GUI::label("==============<  多 人 游 戏  >==============", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
+		title = GUI::label("                 多 人 游 戏                 ", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 		serveriptb = GUI::textbox("输入服务器IP", -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
 		runbtn = GUI::button("开启服务器", -255, 255, 20, 36, 0.5, 0.5, 0.0, 0.0);
 		okbtn = GUI::button("确定", -255, 255, 20, 36, 0.5, 0.5, 0.0, 0.0);
@@ -226,7 +226,6 @@ namespace Menus
 				if ((*iter)->id == Langs[i].Button->id) iter = children.erase(iter);
 				else ++iter;
 			}
-			Langs[i].Button->destroy();
 			delete Langs[i].Button;
 		}
 	}
