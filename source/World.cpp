@@ -19,7 +19,6 @@ int MaxChunkUnloads = 64;
 int MaxChunkRenders = 1;
 
 vector<chunk*> chunks;
-int loadedChunks;
 chunk* cpCachePtr = nullptr;
 chunkid cpCacheID = 0;
 chunkPtrArray cpArray;
@@ -37,7 +36,6 @@ int chunkBuildRenders, chunkLoads, chunkUnloads;
 
 void Init()
 {
-    std::stringstream ss;
     _mkdir(("Worlds/" + worldname + "/").c_str());
     _mkdir(("Worlds/" + worldname + "/chunks").c_str());
 
@@ -47,21 +45,20 @@ void Init()
 
     HMap.setSize((ViewDistance + 2) * 2 * 16);
     HMap.create();
-
 }
 
-inline pair<int,int> binary_search_chunks(const vector<chunk*>& target, int len, chunkid cid)
+inline pair<int,int> binary_search_chunks(chunkid cid)
 {
     int first = 0;
-    int last = len - 1;
-    int    middle = (first + last) / 2;
-    while (first <= last && target[middle]->id != cid)
+    int last = chunks.size() - 1;
+    int middle = (first + last) / 2;
+    while (first <= last && chunks[middle]->id != cid)
     {
-        if (target[middle]->id > cid)
+        if (chunks[middle]->id > cid)
         {
             last = middle - 1;
         }
-        if (target[middle]->id < cid)
+        if (chunks[middle]->id < cid)
         {
             first = middle + 1;
         }
@@ -74,16 +71,16 @@ chunk* AddChunk(int x, int y, int z)
 {
     chunkid cid;
     cid = getChunkID(x, y, z);  //Chunk ID
-    pair<int, int> pos = binary_search_chunks(chunks, loadedChunks, cid);
-    if (loadedChunks > 0 && chunks[pos.second]->id == cid)
+    pair<int, int> pos = binary_search_chunks(cid);
+    if (chunks.size() && chunks[pos.second]->id == cid)
     {
         printf("[Console][Error]");
         printf("Chunk(%d,%d,%d)has been loaded,when adding chunk.\n", x, y, z);
         return chunks[pos.second];
     }
 
-    ExpandChunkArray(1);
-    for (int i = loadedChunks - 1; i >= pos.first + 1; i--)
+	chunks.push_back(nullptr);
+    for (int i = chunks.size() - 1; i >= pos.first + 1; i--)
     {
         chunks[i] = chunks[i - 1];
     }
@@ -97,19 +94,14 @@ chunk* AddChunk(int x, int y, int z)
 void DeleteChunk(int x, int y, int z)
 {
     int index = World::getChunkPtrIndex(x, y, z);
-    delete chunks[index];
-    for (int i = index; i < loadedChunks - 1; i++)
-    {
-        chunks[i] = chunks[i + 1];
-    }
     if (cpCachePtr == chunks[index])
     {
         cpCacheID = 0;
         cpCachePtr = nullptr;
     }
+    delete chunks[index];
+	chunks.erase(chunks.begin() + index);
     cpArray.DeleteChunk(x, y, z);
-    chunks[loadedChunks - 1] = nullptr;
-    ReduceChunkArray(1);
 }
 
 int getChunkPtrIndex(int x, int y, int z)
@@ -118,7 +110,7 @@ int getChunkPtrIndex(int x, int y, int z)
     c_getChunkPtrFromSearch++;
 #endif
     chunkid cid = getChunkID(x, y, z);
-    pair<int, int> pos = binary_search_chunks(chunks, loadedChunks, cid);
+    pair<int, int> pos = binary_search_chunks(cid);
     if (chunks[pos.second]->id == cid) return pos.second;
 	assert(false);
     return -1;
@@ -137,12 +129,12 @@ chunk* getChunkPtr(int x, int y, int z)
             cpCachePtr = ret;
             return ret;
         }
-        if (loadedChunks > 0)
+        if (chunks.size())
         {
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
             c_getChunkPtrFromSearch++;
 #endif
-            pair<int, int> pos = binary_search_chunks(chunks, loadedChunks, cid);
+            pair<int, int> pos = binary_search_chunks(cid);
             if (chunks[pos.second]->id == cid)
             {
                 ret = chunks[pos.second];
@@ -157,19 +149,6 @@ chunk* getChunkPtr(int x, int y, int z)
         }
     }
     return nullptr;
-}
-
-void ExpandChunkArray(int cc)
-{
-    loadedChunks += cc;
-	while (chunks.size() < loadedChunks)
-		chunks.push_back(nullptr);
-}
-
-void ReduceChunkArray(int cc)
-{
-    loadedChunks -= cc;
-	chunks.pop_back();
 }
 
 void renderblock(int x, int y, int z, chunk* chunkptr)
@@ -844,7 +823,7 @@ void sortChunkBuildRenderList(int xpos, int ypos, int zpos)
     cyp = getchunkpos(ypos);
     czp = getchunkpos(zpos);
 
-    for (int ci = 0; ci < loadedChunks; ci++)
+    for (int ci = 0; ci < chunks.size(); ci++)
     {
         if (chunks[ci]->updated)
         {
@@ -886,7 +865,7 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
     cyp = getchunkpos(ypos);
     czp = getchunkpos(zpos);
 
-    for (int ci = 0; ci < loadedChunks; ci++)
+    for (int ci = 0; ci < chunks.size(); ci++)
     {
         cx = chunks[ci]->cx;
         cy = chunks[ci]->cy;
@@ -969,12 +948,12 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
 void calcVisible(double xpos, double ypos, double zpos, Frustum& frus)
 {
     chunk::setRelativeBase(xpos, ypos, zpos, frus);
-    for (int ci = 0; ci != loadedChunks; ci++) chunks[ci]->calcVisible();
+    for (int ci = 0; ci < chunks.size(); ci++) chunks[ci]->calcVisible();
 }
 
 void saveAllChunks()
 {
-    for (int i = 0; i != loadedChunks; i++)
+    for (int i = 0; i < chunks.size(); i++)
     {
         chunks[i]->SaveToFile();
     }
@@ -983,7 +962,7 @@ void saveAllChunks()
 void destroyAllChunks()
 {
 
-    for (int i = 0; i != loadedChunks; i++)
+    for (int i = 0; i < chunks.size(); i++)
     {
         if (!chunks[i]->Empty)
         {
@@ -993,7 +972,6 @@ void destroyAllChunks()
         }
     }
 	chunks.clear();
-    loadedChunks = 0;
     cpArray.~chunkPtrArray();
     HMap.destroy();
 

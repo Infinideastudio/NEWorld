@@ -8,7 +8,7 @@ int ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curtime,
 {
     int renderedChunks = 0;
     RenderChunkList.clear();
-    for (int i = 0; i < World::loadedChunks; i++)
+    for (int i = 0; i < World::chunks.size(); i++)
     {
         if (!World::chunks[i]->renderBuilt || World::chunks[i]->Empty) continue;
         if (World::chunkInRange(World::chunks[i]->cx, World::chunks[i]->cy, World::chunks[i]->cz,
