@@ -179,7 +179,7 @@ public:
         if (glfwGetKey(MainWindow, GLFW_KEY_F8)) gametime += 30;
         if (gametime > gameTimeMax) gametime = 0;
 
-        //World::unloadedChunks=0
+        //World::unchunks.size()=0
         World::rebuiltChunks = 0;
         World::updatedChunks = 0;
 
@@ -231,7 +231,7 @@ public:
         }
 
         //加载动画
-        for (int i = 0; i < World::loadedChunks; i++)
+        for (int i = 0; i < World::chunks.size(); i++)
         {
             World::chunk* cp = World::chunks[i];
             if (cp->loadAnim <= 0.3f) cp->loadAnim = 0.0f;
@@ -239,7 +239,7 @@ public:
         }
 
         //随机状态更新
-        for (int i = 0; i < World::loadedChunks; i++)
+        for (int i = 0; i < World::chunks.size(); i++)
         {
             int x, y, z, gx, gy, gz;
             int cx = World::chunks[i]->cx;
@@ -1372,7 +1372,7 @@ public:
 				TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
 			}
 
-            TextRenderer::renderASCIIString(0, (pos++) * 16, "load:" + pack(World::loadedChunks) + " unload:" + pack(World::unloadedChunks) + " render:" + pack(WorldRenderer::RenderChunkList.size()) + " update:" + pack(World::updatedChunks));
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "load:" + pack(World::chunks.size()) + " unload:" + pack(World::unloadedChunks) + " render:" + pack(WorldRenderer::RenderChunkList.size()) + " update:" + pack(World::updatedChunks));
 
             if (multiplayer)
             {
