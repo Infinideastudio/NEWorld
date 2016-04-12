@@ -5,9 +5,9 @@
 #include "Chunk.h"
 #include "Hitbox.h"
 #include "Blocks.h"
-#include"Player.h"
-#include"Particles.h"
-#include"Items.h"
+#include "Player.h"
+#include "Particles.h"
+#include "Items.h"
 
 extern int ViewDistance;
 class Frsutum;
@@ -29,7 +29,6 @@ extern int MaxChunkUnloads;
 extern int MaxChunkRenders;
 
 extern vector<chunk*> chunks;
-extern int loadedChunks;
 extern chunk* cpCachePtr;
 extern chunkid cpCacheID;
 extern HeightMap HMap;
@@ -52,8 +51,6 @@ void DeleteChunk(int x, int y, int z);
 chunkid getChunkID(int x, int y, int z);
 int getChunkPtrIndex(int x, int y, int z);
 chunk* getChunkPtr(int x, int y, int z);
-void ExpandChunkArray(int cc);
-void ReduceChunkArray(int cc);
 
 #define getchunkpos(n) ((n)>>4)
 #define getblockpos(n) ((n)&15)
