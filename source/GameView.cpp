@@ -1764,7 +1764,7 @@ public:
             if (argc != 3) return 0;
 			item itemid;
 			itemid.ID = extract<unsigned short>(argv[1]);
-            Player::addItem(itemid, extract<short>(argv[2]));
+            Player::AddItem(itemid, extract<short>(argv[2]));
 			return 1;
         });
         register_command(L"/tp", [](int argc, const wchar_t** argv) -> int

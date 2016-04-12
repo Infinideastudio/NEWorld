@@ -12,7 +12,7 @@ brightness skylight = 15;         //Sky light level
 brightness BRIGHTNESSMAX = 15;    //Maximum brightness
 brightness BRIGHTNESSMIN = 2;     //Mimimum brightness
 brightness BRIGHTNESSDEC = 1;     //Brightness decrease
-chunk* EmptyChunkPtr;
+chunk* EmptyChunkPtr = (chunk*)~0;
 unsigned int EmptyBuffer;
 int MaxChunkLoads = 64;
 int MaxChunkUnloads = 64;
@@ -38,24 +38,12 @@ int chunkBuildRenders, chunkLoads, chunkUnloads;
 void Init()
 {
     std::stringstream ss;
-    ss << "Worlds/" << worldname << "/";
-    _mkdir(ss.str().c_str());
-    ss.clear();
-    ss.str("");
-    ss << "Worlds/" << worldname << "/chunks";
-    _mkdir(ss.str().c_str());
-
-    EmptyChunkPtr = (chunk*)~0;
+    _mkdir(("Worlds/" + worldname + "/").c_str());
+    _mkdir(("Worlds/" + worldname + "/chunks").c_str());
 
     WorldGen::perlinNoiseInit(3404);
     cpCachePtr = nullptr;
     cpCacheID = 0;
-
-    cpArray.setSize((ViewDistance + 2) * 2);
-    if (!cpArray.create())
-    {
-        DebugError("Chunk Pointer Array not avaliable because it couldn't be created.");
-    }
 
     HMap.setSize((ViewDistance + 2) * 2 * 16);
     HMap.create();
@@ -1006,7 +994,7 @@ void destroyAllChunks()
     }
 	chunks.clear();
     loadedChunks = 0;
-    cpArray.destroy();
+    cpArray.~chunkPtrArray();
     HMap.destroy();
 
     rebuiltChunks = 0;
@@ -1204,13 +1192,13 @@ void pickleaf()
     if (rnd() < 0.05)
     {
         if (rnd() < 0.5)
-            Player::addItem(APPLE);
+            Player::AddItem(APPLE);
         else
-            Player::addItem(STICK);
+            Player::AddItem(STICK);
     }
     else
     {
-        Player::addItem(block(Blocks::LEAF));
+        Player::AddItem(block(Blocks::LEAF));
     }
 }
 
@@ -1219,7 +1207,7 @@ void picktree(int x, int y, int z)
     if (getblock(x, y, z) == block(Blocks::LEAF))
         pickleaf();
     else
-        Player::addItem(getblock(x, y, z));
+        Player::AddItem(getblock(x, y, z));
 
     for (int j = 1; j <= 10; j++)
     {
@@ -1229,21 +1217,10 @@ void picktree(int x, int y, int z)
                                  float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
     }
     Modifyblock(x, y, z, block(Blocks::AIR));
-    //上
-    if ((getblock(x, y + 1, z) == block(Blocks::WOOD)) || (getblock(x, y + 1, z) == block(Blocks::LEAF)))
-        picktree(x, y + 1, z);
-    //前
-    if ((getblock(x, y , z + 1) == block(Blocks::WOOD)) || (getblock(x, y , z + 1) == block(Blocks::LEAF)))
-        picktree(x, y, z + 1);
-    //后
-    if ((getblock(x, y, z - 1) == block(Blocks::WOOD)) || (getblock(x, y, z - 1) == block(Blocks::LEAF)))
-        picktree(x, y, z - 1);
-    //左
-    if ((getblock(x+1, y, z) == block(Blocks::WOOD)) || (getblock(x+1, y, z) == block(Blocks::LEAF)))
-        picktree(x+1, y, z);
-    //右
-    if ((getblock(x - 1, y, z) == block(Blocks::WOOD)) || (getblock(x - 1, y, z) == block(Blocks::LEAF)))
-        picktree(x - 1, y, z);
+	int vec[5][3] = { {0, 1, 0}, {0, 0, 1}, {0, 0, -1}, {1, 0, 0}, {-1, 0, 0} };
+	for (int i = 0; i < 5; i++)
+		if (getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]) == block(Blocks::WOOD) || getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]) == block(Blocks::LEAF))
+			picktree(x + vec[i][0], y + vec[i][1], z + vec[i][2]);
 }
 
 void pickblock(int x, int y, int z)
@@ -1261,7 +1238,7 @@ void pickblock(int x, int y, int z)
     if (getblock(x, y, z) == block(Blocks::LEAF))
         pickleaf();
     else
-        Player::addItem(getblock(x, y, z));
+        Player::AddItem(getblock(x, y, z));
 
     Modifyblock(x, y, z, block(Blocks::AIR));
 }
