@@ -823,7 +823,7 @@ void sortChunkBuildRenderList(int xpos, int ypos, int zpos)
     cyp = getchunkpos(ypos);
     czp = getchunkpos(zpos);
 
-    for (int ci = 0; ci < chunks.size(); ci++)
+    for (size_t ci = 0; ci < chunks.size(); ci++)
     {
         if (chunks[ci]->updated)
         {
@@ -865,7 +865,7 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
     cyp = getchunkpos(ypos);
     czp = getchunkpos(zpos);
 
-    for (int ci = 0; ci < chunks.size(); ci++)
+    for (size_t ci = 0; ci < chunks.size(); ci++)
     {
         cx = chunks[ci]->cx;
         cy = chunks[ci]->cy;
@@ -948,12 +948,12 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
 void calcVisible(double xpos, double ypos, double zpos, Frustum& frus)
 {
     chunk::setRelativeBase(xpos, ypos, zpos, frus);
-    for (int ci = 0; ci < chunks.size(); ci++) chunks[ci]->calcVisible();
+    for (size_t ci = 0; ci < chunks.size(); ci++) chunks[ci]->calcVisible();
 }
 
 void saveAllChunks()
 {
-    for (int i = 0; i < chunks.size(); i++)
+    for (size_t i = 0; i < chunks.size(); i++)
     {
         chunks[i]->SaveToFile();
     }
@@ -962,7 +962,7 @@ void saveAllChunks()
 void destroyAllChunks()
 {
 
-    for (int i = 0; i < chunks.size(); i++)
+    for (size_t i = 0; i < chunks.size(); i++)
     {
         if (!chunks[i]->Empty)
         {
@@ -972,7 +972,7 @@ void destroyAllChunks()
         }
     }
 	chunks.clear();
-    cpArray.~chunkPtrArray();
+	cpArray = chunkPtrArray();
     HMap.destroy();
 
     rebuiltChunks = 0;
@@ -1039,7 +1039,7 @@ void buildtree(int x, int y, int z)
         else
         {
             break;
-        };
+        }
     }
     //取最小值
     h = min(h, Dirt * 15 / 268 * max(rnd(), 0.8));
@@ -1128,8 +1128,10 @@ void MarkBlockUpdate(Blocks::BUDDP Block)
     blockupdatequery.push_back(Block);
 }
 
-void ExecBUPD(Blocks::BUDDP B) {
-    if (BlockInfo((*(B.slf))).ExecBUF(B)) {
+void ExecBUPD(Blocks::BUDDP B)
+{
+    if (BlockInfo((*(B.slf))).ExecBUF(B))
+	{
         getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified = true;
         updateblock(B.cx, B.cy, B.cz, true);
         MarkBlockUpdate(Blocks::BUDDP(B.origon, B.slf, nullptr, B.dslf, nullptr, B.cx, B.cy, B.cz));
