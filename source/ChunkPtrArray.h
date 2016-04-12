@@ -7,11 +7,10 @@ namespace World
 class chunk;
 struct chunkPtrArray
 {
-    chunk** array = nullptr;
+    vector<chunk*> array;
     int originX, originY, originZ, size, size2, size3;
     void setSize(int s);
     chunkPtrArray();
-    ~chunkPtrArray();
     void move(int xd, int yd, int zd);
     void moveTo(int x, int y, int z);
     void AddChunk(chunk* cptr, int cx, int cy, int cz);
