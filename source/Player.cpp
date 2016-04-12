@@ -100,24 +100,24 @@ void Player::spawn()
     //总得加点物品吧
     for (size_t i = 0; i < 255; i++)
     {
-        addItem(block(Blocks::ROCK));
-        addItem(block(Blocks::GRASS));
-        addItem(block(Blocks::DIRT));
-        addItem(block(Blocks::STONE));
-        addItem(block(Blocks::PLANK));
-        addItem(block(Blocks::WOOD));
-        //addItem(block(Blocks::BEDROCK));TMD这个是基岩
-        addItem(block(Blocks::LEAF));
-        addItem(block(Blocks::GLASS));
-        addItem(block(Blocks::WATER , 0, 255));
-        addItem(block(Blocks::LAVA));
-        addItem(block(Blocks::GLOWSTONE));
-        addItem(block(Blocks::SAND));
-        addItem(block(Blocks::CEMENT));
-        addItem(block(Blocks::ICE));
-        addItem(block(Blocks::COAL));
-        addItem(block(Blocks::IRON));
-        addItem(block(Blocks::TNT));
+        AddItem(block(Blocks::ROCK));
+        AddItem(block(Blocks::GRASS));
+        AddItem(block(Blocks::DIRT));
+        AddItem(block(Blocks::STONE));
+        AddItem(block(Blocks::PLANK));
+        AddItem(block(Blocks::WOOD));
+        //AddItem(block(Blocks::BEDROCK));TMD这个是基岩
+        AddItem(block(Blocks::LEAF));
+        AddItem(block(Blocks::GLASS));
+        AddItem(block(Blocks::WATER , 0, 255));
+        AddItem(block(Blocks::LAVA));
+        AddItem(block(Blocks::GLOWSTONE));
+        AddItem(block(Blocks::SAND));
+        AddItem(block(Blocks::CEMENT));
+        AddItem(block(Blocks::ICE));
+        AddItem(block(Blocks::COAL));
+        AddItem(block(Blocks::IRON));
+        AddItem(block(Blocks::TNT));
     }
 }
 
@@ -271,7 +271,7 @@ bool Player::load(string worldn)
     return true;
 }
 
-bool Player::addItem(item itemname, short amount)
+bool Player::AddItem(item itemname, short amount)
 {
     //向背包里加入物品
     const int InvMaxStack = 255;
