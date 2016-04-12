@@ -1192,9 +1192,5 @@ Form::~Form()
 	transitionList = displaylist;
 	transitionForward = false;
 	transitionTimer = timer();
-	for (size_t i = 0; i != children.size(); i++)
-	{
-		children[i]->destroy();
-	}
 }
 }
