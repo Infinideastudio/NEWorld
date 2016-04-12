@@ -19,7 +19,7 @@ int MaxChunkUnloads = 64;
 int MaxChunkRenders = 1;
 
 vector<chunk*> chunks;
-int loadedChunks, chunkArraySize;
+int loadedChunks;
 chunk* cpCachePtr = nullptr;
 chunkid cpCacheID = 0;
 chunkPtrArray cpArray;
@@ -174,18 +174,14 @@ chunk* getChunkPtr(int x, int y, int z)
 void ExpandChunkArray(int cc)
 {
     loadedChunks += cc;
-    if (loadedChunks > chunkArraySize)
-    {
-        if (chunkArraySize < 1024) chunkArraySize = 1024;
-        else chunkArraySize *= 2;
-		while (chunkArraySize < loadedChunks) chunkArraySize *= 2;
-		chunks.resize(chunkArraySize);
-    }
+	while (chunks.size() < loadedChunks)
+		chunks.push_back(nullptr);
 }
 
 void ReduceChunkArray(int cc)
 {
     loadedChunks -= cc;
+	chunks.pop_back();
 }
 
 void renderblock(int x, int y, int z, chunk* chunkptr)
@@ -1010,7 +1006,6 @@ void destroyAllChunks()
     }
 	chunks.clear();
     loadedChunks = 0;
-    chunkArraySize = 0;
     cpArray.destroy();
     HMap.destroy();
 
