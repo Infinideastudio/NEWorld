@@ -1111,15 +1111,13 @@ public:
             screenshotAnimTimer = curtime;
             time_t t = time(0);
             char tmp[64];
-            tm* timeinfo;
+            tm timeinfo;
 #ifdef NEWORLD_COMPILE_DISABLE_SECURE
-            timeinfo = localtime(&t);
+            timeinfo = *localtime(&t);
 #else
-            timeinfo = new tm;
-            localtime_s(timeinfo, &t);
+            localtime_s(&timeinfo, &t);
 #endif
-            strftime(tmp, sizeof(tmp), "%Y年%m月%d日%H时%M分%S秒", timeinfo);
-            delete timeinfo;
+            strftime(tmp, sizeof(tmp), "%Y年%m月%d日%H时%M分%S秒", &timeinfo);
             std::stringstream ss;
             ss << "Screenshots/" << tmp << ".bmp";
             saveScreenshot(0, 0, windowwidth, windowheight, ss.str());
@@ -1754,7 +1752,7 @@ public:
 
     void createThumbnail()
     {
-		saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "Thumbnail.bmp");
+		saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "/Thumbnail.bmp");
     }
 
     void registerCommands()

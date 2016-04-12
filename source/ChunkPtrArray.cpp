@@ -13,19 +13,12 @@ void chunkPtrArray::setSize(int s)
 chunkPtrArray::chunkPtrArray()
 {
 	setSize((ViewDistance + 2) * 2);
-    array = new chunk*[size3];
-    memset(array, (int)nullptr, size3*sizeof(chunk*));
-}
-
-chunkPtrArray::~chunkPtrArray()
-{
-    delete[] array;
-    array = nullptr;
+	array = vector<chunk*>(size3, nullptr);
 }
 
 void chunkPtrArray::move(int xd, int yd, int zd)
 {
-    chunk** arrTemp = new chunk*[size3];
+    vector<chunk*> arrTemp(size3);
     for (int x = 0; x < size; x++)
     {
         for (int y = 0; y < size; y++)
@@ -39,7 +32,6 @@ void chunkPtrArray::move(int xd, int yd, int zd)
             }
         }
     }
-    delete[] array;
     array = arrTemp;
     originX += xd;
     originY += yd;
@@ -74,7 +66,8 @@ chunk* chunkPtrArray::getChunkPtr(int x, int y, int z)
     x -= originX;
     y -= originY;
     z -= originZ;
-	assert(elementExists(x, y, z));
+	if (!elementExists(x, y, z))
+		return nullptr;
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
     c_getChunkPtrFromCPA++;
 #endif
