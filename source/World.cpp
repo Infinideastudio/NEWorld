@@ -18,7 +18,7 @@ int MaxChunkLoads = 64;
 int MaxChunkUnloads = 64;
 int MaxChunkRenders = 1;
 
-chunk** chunks;
+vector<chunk*> chunks;
 int loadedChunks, chunkArraySize;
 chunk* cpCachePtr = nullptr;
 chunkid cpCacheID = 0;
@@ -62,7 +62,7 @@ void Init()
 
 }
 
-inline pair<int,int> binary_search_chunks(chunk** target, int len, chunkid cid)
+inline pair<int,int> binary_search_chunks(const vector<chunk*>& target, int len, chunkid cid)
 {
     int first = 0;
     int last = len - 1;
@@ -173,23 +173,13 @@ chunk* getChunkPtr(int x, int y, int z)
 
 void ExpandChunkArray(int cc)
 {
-
     loadedChunks += cc;
     if (loadedChunks > chunkArraySize)
     {
         if (chunkArraySize < 1024) chunkArraySize = 1024;
         else chunkArraySize *= 2;
-        while (chunkArraySize < loadedChunks) chunkArraySize *= 2;
-        chunk** cp = (chunk**)realloc(chunks, chunkArraySize * sizeof(chunk*));
-        if (cp == nullptr && loadedChunks != 0)
-        {
-            DebugError("Allocate memory failed!");
-            saveAllChunks();
-            destroyAllChunks();
-            glfwTerminate();
-            exit(0);
-        }
-        chunks = cp;
+		while (chunkArraySize < loadedChunks) chunkArraySize *= 2;
+		chunks.resize(chunkArraySize);
     }
 }
 
@@ -1018,8 +1008,7 @@ void destroyAllChunks()
             delete chunks[i];
         }
     }
-    free(chunks);
-    chunks = nullptr;
+	chunks.clear();
     loadedChunks = 0;
     chunkArraySize = 0;
     cpArray.destroy();

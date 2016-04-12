@@ -28,7 +28,7 @@ extern int MaxChunkLoads;
 extern int MaxChunkUnloads;
 extern int MaxChunkRenders;
 
-extern chunk** chunks;
+extern vector<chunk*> chunks;
 extern int loadedChunks, chunkArraySize;
 extern chunk* cpCachePtr;
 extern chunkid cpCacheID;
