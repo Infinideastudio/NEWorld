@@ -23,7 +23,7 @@ public:
     static bool save(string worldn);
     static bool load(string worldn);
 
-    static bool addItem(item itemname, short amount = 1);
+    static bool AddItem(item itemname, short amount = 1);
     static bool putBlock(int x, int y, int z, block blockname);
 
     static void changeGameMode(int gamemode);
