@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NEWorldServer", "Server\NEW
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginSDK", "PluginSDK\PluginSDK.vcxproj", "{1A1B24AF-2218-41BB-BFF0-2A5DF3EA9ACC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NEWorldFoundationKit", "NEWorldFoundationKit\NEWorldFoundationKit.vcxproj", "{07896376-E187-4D50-B22A-DD4C29EB4A8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

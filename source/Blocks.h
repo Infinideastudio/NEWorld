@@ -98,7 +98,7 @@ const SingleBlock blockData[BLOCK_DEF_END + 1] =
     SingleBlock("NEWorld.Blocks.Leaf"        , true    , false    , false    , false,    15   , nullptr),
     SingleBlock("NEWorld.Blocks.Glass"        , true    , false    , false    , false,    30   , nullptr),
     SingleBlock("NEWorld.Blocks.Water"        , false    , false    , true    , false,    0    , &WaterBUF),
-    SingleBlock("NEWorld.Blocks.Lava"        , false    , false    , true    , false,    0    , nullptr),
+    SingleBlock("NEWorld.Blocks.Lava"        , false    , false    , true    , false,    0    , &LavaBUF),
     SingleBlock("NEWorld.Blocks.GlowStone"    , true    , true    , false    , false,    10   , nullptr),
     SingleBlock("NEWorld.Blocks.Sand"        , true    , true    , false    , false,    8    , nullptr),
     SingleBlock("NEWorld.Blocks.Cement"        , true    , true    , false    , false,    0.5f , nullptr),

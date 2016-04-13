@@ -1,0 +1,953 @@
+#include "NEWorldFoundationKit.h"
+#include "TextRenderer.h"
+#include "Frustum.h"
+
+extern string inputstr;
+
+//图形界面系统。。。正宗OOP！！！
+namespace NWUIK
+{
+
+    double stdppi = 96.0f;
+    int nScreenWidth, nScreenHeight;
+    float linewidth = 1.0f;
+    float linealpha = 0.9f;
+    float FgR = 0.2f;
+    float FgG = 0.2f;
+    float FgB = 0.2f;
+    float FgA = 0.6f;
+    float BgR = 0.2f;
+    float BgG = 0.2f;
+    float BgB = 0.2f;
+    float BgA = 0.3f;
+    unsigned int transitionList;
+    unsigned int lastdisplaylist;
+    double transitionTimer;
+    bool transitionForward;
+
+    void clearTransition()
+    {
+        if (transitionList != 0)
+        {
+            glDeleteLists(transitionList, 1);
+            transitionList = 0;
+        }
+        if (lastdisplaylist != 0)
+        {
+            glDeleteLists(lastdisplaylist, 1);
+            lastdisplaylist = 0;
+        }
+    }
+
+    void screenBlur()
+    {
+        static int szl = 0, rl = 0;
+        static float* mat = nullptr;
+        static ubyte *scr; //屏幕像素缓存
+
+        int w = windowwidth; //Width
+        int h = windowheight; //Height
+        int r = 2; //范围
+        int sz = 1;
+        float scale = 2;
+        TextureID bgTex;
+
+        while (sz < w || sz < h) sz *= 2;
+        if (sz != szl)
+        {
+            szl = sz;
+            delete[] scr;
+            scr = new ubyte[sz * sz * 3];
+        }
+
+        if (rl != r)
+        {
+            if (mat != nullptr) delete[] mat;
+            int size = r * 2 + 1;
+            int size2 = size * size;
+            float sum = 0.0f;
+            int index = 0;
+            mat = new float[size2];
+            for (int x = -r; x <= r; x++)
+            {
+                for (int y = -r; y <= r; y++)
+                {
+                    float val = 1.0f / (float)(abs(x) + abs(y) + 1);
+                    mat[index++] = val;
+                    sum += val;
+                }
+            }
+            sum = 1.0f / sum;
+            for (int i = 0; i < size2; i++) mat[i] *= sum;
+        }
+
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glReadPixels(0, 0, sz, sz, GL_RGB, GL_UNSIGNED_BYTE, scr);
+        //glColorMask(true, true, true, false);
+
+        glGenTextures(1, &bgTex);
+        glBindTexture(GL_TEXTURE_2D, bgTex);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sz, sz, 0, GL_RGB, GL_UNSIGNED_BYTE, scr);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        for (int x = -r; x <= r; x++)
+        {
+            for (int y = -r; y <= r; y++)
+            {
+                float d = mat[(x + r)*(r * 2 + 1) + y + r];
+                glColor4f(1.0f, 1.0f, 1.0f, d);
+                glBegin(GL_QUADS);
+                glTexCoord2f(0.0f, (float)h / sz);
+                glVertex2f(x * scale, y * scale);
+                glTexCoord2f((float)w / sz, (float)h / sz);
+                glVertex2f(w + x * scale, y * scale);
+                glTexCoord2f((float)w / sz, 0.0f);
+                glVertex2f(w + x * scale, h + y * scale);
+                glTexCoord2f(0.0f, 0.0f);
+                glVertex2f(x * scale, h + y * scale);
+                glEnd();
+            }
+        }
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDeleteTextures(1, &bgTex);
+        glPixelStorei(GL_PACK_ALIGNMENT, 4);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+        //glColorMask(true, true, true, true);
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    void drawBackground()
+    {
+        static Frustum frus;
+        static double startTimer = timer();
+        double elapsed = timer() - startTimer;
+        frus.LoadIdentity();
+        frus.SetPerspective(90.0f, (float)windowwidth / windowheight, 0.1f, 10.0f);
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glMultMatrixf(frus.getProjMatrix());
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotated(elapsed * 4.0, 0.1, 1.0, 0.1);
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDepthFunc(GL_LEQUAL);
+        glDisable(GL_CULL_FACE);
+        glEnable(GL_TEXTURE_2D);
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+        //Begin to draw a cube
+        glBindTexture(GL_TEXTURE_2D, tex_mainmenu[0]);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(-1.0f, 1.0f, -1.0f);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(1.0f, -1.0f, -1.0f);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(-1.0f, -1.0f, -1.0f);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, tex_mainmenu[1]);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, -1.0f);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, 1.0f);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(1.0f, -1.0f, 1.0f);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(1.0f, -1.0f, -1.0f);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, tex_mainmenu[2]);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, 1.0f);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(-1.0f, 1.0f, 1.0f);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(-1.0f, -1.0f, 1.0f);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(1.0f, -1.0f, 1.0f);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, tex_mainmenu[3]);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(-1.0f, 1.0f, 1.0f);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(-1.0f, 1.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(-1.0f, -1.0f, -1.0f);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(-1.0f, -1.0f, 1.0f);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, tex_mainmenu[4]);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(-1.0f, -1.0f, 1.0f);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(-1.0f, -1.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(1.0f, -1.0f, -1.0f);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(1.0f, -1.0f, 1.0f);
+        glEnd();
+        glBindTexture(GL_TEXTURE_2D, tex_mainmenu[5]);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, 1.0f);
+        glTexCoord2f(1.0f, 1.0f);
+        glVertex3f(1.0f, 1.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f);
+        glVertex3f(-1.0f, 1.0f, -1.0f);
+        glTexCoord2f(0.0f, 0.0f);
+        glVertex3f(-1.0f, 1.0f, 1.0f);
+        glEnd();
+    }
+
+//Get the Screen Physical Size and set stretch
+//NEVER CALL THIS FUNCTION BEFORE THE CONTEXT IS CREATED
+    void InitStretch()
+    {
+        ppistretch = true;
+        glfwGetMonitorPhysicalSize(glfwGetPrimaryMonitor(), &nScreenWidth,
+                                   &nScreenHeight);
+        int vmc;
+        const GLFWvidmode* mode = glfwGetVideoModes(glfwGetPrimaryMonitor(), &vmc);
+        double ppi = static_cast<double>(mode[vmc - 1].width) / (static_cast<double>(nScreenWidth)/25.4f);
+        stretch = ppi / stdppi;
+        //Calaulate the scale and resize the window
+        windowwidth = static_cast<int>(windowwidth * stretch);
+        windowheight = static_cast<int>(windowheight * stretch);
+        glfwSetWindowSize(MainWindow, windowwidth, windowheight);
+        TextRenderer::resize();
+    }
+
+    void EndStretch()
+    {
+        ppistretch = false;
+        windowwidth =static_cast<int>(windowwidth/stretch);
+        windowheight = static_cast<int>(windowheight/stretch);
+        stretch = 1.0;
+        glfwSetWindowSize(MainWindow, windowwidth, windowheight);
+        TextRenderer::resize();
+    }
+
+    void controls::resize(EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height)
+    {
+     
+    }
+
+    void label::update()
+    {
+        //更新标签状态
+        if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)               //鼠标悬停
+            mouseon = true;
+        else
+            mouseon = false;
+
+        if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;              //焦点在此
+        focused = parent->focusid == id;   //焦点
+    }
+
+    void label::render()
+    {
+        //渲染标签
+        float fcR, fcG, fcB, fcA;
+        fcR = FgR;
+        fcG = FgG;
+        fcB = FgB;
+        fcA = FgA;
+        if (mouseon)
+        {
+            fcR = FgR*1.2f;
+            fcG = FgG*1.2f;
+            fcB = FgB*1.2f;
+            fcA = FgA*0.8f;
+        }
+        if (focused)                                                   //Focus
+        {
+            glDisable(GL_TEXTURE_2D);
+            glColor4f(FgR*0.6f, FgG*0.6f, FgB*0.6f, linealpha);
+            glLineWidth(linewidth);
+            //glBegin(GL_POINTS)
+            //UIVertex(xmin - 1, ymin)
+            //glEnd()
+            glBegin(GL_LINE_LOOP);
+            UIVertex(xmin, ymin);
+            UIVertex(xmin, ymax);
+            UIVertex(xmax, ymax);
+            UIVertex(xmax, ymin);
+            glEnd();
+        }
+        glEnable(GL_TEXTURE_2D);
+        TextRenderer::setFontColor(fcR, fcG, fcB, fcA);
+        TextRenderer::renderString((xmin + xmax - TextRenderer::getStrWidth(text)) / 2, (ymin + ymax - 20) / 2, text);
+    }
+
+    void button::update()
+    {
+        if (!enabled)
+        {
+            mouseon = false, focused = false, pressed = false, clicked = false;
+            return;
+        }
+
+        //更新按钮状态
+        if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)
+            mouseon = true;
+        else
+            mouseon = false;
+
+        if ((parent->mb == 1 && mouseon || parent->enterp) && focused)
+            pressed = true;
+        else
+            pressed = false;
+
+        if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;
+        if (parent->focusid == id) focused = true;
+        else focused = false;
+
+        clicked = (parent->mb == 0 && parent->mbl == 1 && mouseon || parent->enterpl && parent->enterp == false) && focused;
+        //clicked = lp&&!pressed
+
+        //if (clicked)AudioSystem::ClickEvent();
+    }
+
+    void button::render()
+    {
+
+        //渲染按钮
+        float fcR, fcG, fcB, fcA;
+        fcR = FgR;
+        fcG = FgG;
+        fcB = FgB;
+        fcA = FgA;
+        if (mouseon)
+        {
+            fcR = FgR*1.2f;
+            fcG = FgG*1.2f;
+            fcB = FgB*1.2f;
+            fcA = FgA*0.8f;
+        }
+        if (pressed)
+        {
+            fcR = FgR*0.8f;
+            fcG = FgG*0.8f;
+            fcB = FgB*0.8f;
+            fcA = FgA*1.5f;
+        }
+        if (!enabled)
+        {
+            fcR = FgR*0.5f;
+            fcG = FgG*0.5f;
+            fcB = FgB*0.5f;
+            fcA = FgA*0.3f;
+        }
+        glColor4f(fcR, fcG, fcB, fcA);
+
+        glDisable(GL_TEXTURE_2D);    //Button
+        glBegin(GL_QUADS);
+        UIVertex(xmin, ymin);
+        UIVertex(xmin, ymax);
+        UIVertex(xmax, ymax);
+        UIVertex(xmax, ymin);
+        glEnd();
+        glColor4f(FgR*0.9f, FgG*0.9f, FgB*0.9f, linealpha);
+
+        if (!enabled) glColor4f(0.5f, 0.5f, 0.5f, linealpha);
+        glLineWidth(linewidth);
+        glBegin(GL_LINE_LOOP);
+        UIVertex(xmin, ymin);
+        UIVertex(xmin, ymax);
+        UIVertex(xmax, ymax);
+        UIVertex(xmax, ymin);
+        glEnd();
+
+        glBegin(GL_LINE_LOOP);
+
+        if (focused) glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+        UIVertex(xmin + 1, ymin + 1);
+
+        if (focused) glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else glColor4f(0.4f, 0.4f, 0.4f, linealpha);
+        UIVertex(xmin + 1, ymax - 1);
+
+        if (focused) glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else glColor4f(0.4f, 0.4f, 0.4f, linealpha);
+        UIVertex(xmax - 1, ymax - 1);
+
+        if (focused) glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+        UIVertex(xmax - 1, ymin + 1);
+
+        glEnd();
+
+        glEnable(GL_TEXTURE_2D);
+        TextRenderer::setFontColor(1.0f, 1.0f, 1.0f, 1.0f);
+        if (!enabled) TextRenderer::setFontColor(0.6f, 0.6f, 0.6f, 1.0f);
+        TextRenderer::renderString((xmin + xmax - TextRenderer::getStrWidth(text)) / 2, (ymin + ymax - 20) / 2, text);
+    }
+
+    void trackbar::update()
+    {
+        if (!enabled)
+        {
+            mouseon = false, focused = false, pressed = false;
+            return;
+        }
+
+        //更新TrackBar（到底该怎么翻译呢？）状态
+        if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax && parent->mb == 1)
+            parent->focusid = id;
+        if (parent->mx >= xmin + barpos && parent->mx <= xmin + barpos + barwidth && parent->my >= ymin && parent->my <= ymax)
+            mouseon = true;
+        else mouseon = false;
+        if (parent->mb == 1 && mouseon && focused)pressed = true;
+        else if (parent->mbl == 0) pressed = false;
+        if (parent->mb == 1 && parent->mbl == 0 && mouseon)parent->focusid = id;
+        focused = parent->focusid == id;
+        if (focused && pressed)barpos += parent->mx - parent->mxl;
+        if (focused)
+        {
+            if (parent->upkp && !parent->upkpl) barpos -= 1;
+            if (parent->downkp && !parent->downkpl) barpos += 1;
+            if (parent->leftkp) barpos -= 1;
+            if (parent->rightkp) barpos += 1;
+        }
+        if (barpos <= 0) barpos = 0;
+        if (barpos >= xmax - xmin - barwidth) barpos = xmax - xmin - barwidth - 1;
+
+    }
+
+    void trackbar::render()
+    {
+
+        //渲染TrackBar（How can I translate it?）
+        float fcR, fcG, fcB, fcA;
+        float bcR, bcG, bcB, bcA;
+        fcR = FgR;
+        fcG = FgG;
+        fcB = FgB;
+        fcA = FgA;
+        bcR = BgR;
+        bcG = BgG;
+        bcB = BgB;
+        bcA = BgA;
+        if (mouseon)
+        {
+            fcR = FgR*1.2f;
+            fcG = FgG*1.2f;
+            fcB = FgB*1.2f;
+            fcA = FgA*0.8f;
+        }
+        if (pressed)
+        {
+            fcR = FgR*0.8f;
+            fcG = FgG*0.8f;
+            fcB = FgB*0.8f;
+            fcA = FgA*1.5f;
+        }
+        if (!enabled)
+        {
+            fcR = FgR*0.5f;
+            fcG = FgG*0.5f;
+            fcB = FgB*0.5f;
+            fcA = FgA*0.3f;
+        }
+        glColor4f(bcR, bcG, bcB, bcA);
+        glDisable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS);
+        UIVertex(xmin, ymin);
+        UIVertex(xmax, ymin);
+        UIVertex(xmax, ymax);
+        UIVertex(xmin, ymax);
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+        glColor4f(fcR, fcG, fcB, fcA);
+        glBegin(GL_QUADS);
+        UIVertex(xmin + barpos, ymin);
+        UIVertex(xmin + barpos + barwidth, ymin);
+        UIVertex(xmin + barpos + barwidth, ymax);
+        UIVertex(xmin + barpos, ymax);
+        glEnd();
+        glColor4f(FgR*0.9f, FgG*0.9f, FgB*0.9f, linealpha);
+
+        if (!enabled) glColor4f(0.5f, 0.5f, 0.5f, linealpha);
+        glBegin(GL_LINE_LOOP);
+        UIVertex(xmin, ymin);
+        UIVertex(xmin, ymax);
+        UIVertex(xmax, ymax);
+        UIVertex(xmax, ymin);
+        glEnd();
+
+        if (focused) glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+
+        glBegin(GL_LINE_LOOP);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+        UIVertex(xmin + 1, ymin + 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.4f, 0.4f, 0.4f, linealpha);
+        UIVertex(xmin + 1, ymax - 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.4f, 0.4f, 0.4f, linealpha);
+        UIVertex(xmax - 1, ymax - 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+        UIVertex(xmax - 1, ymin + 1);
+
+        glEnd();
+        glEnable(GL_TEXTURE_2D);
+        TextRenderer::setFontColor(1.0f, 1.0f, 1.0f, 1.0f);
+        if (!enabled) TextRenderer::setFontColor(0.6f, 0.6f, 0.6f, 1.0f);
+        TextRenderer::renderString((xmin + xmax - TextRenderer::getStrWidth(text)) / 2, ymin, text);
+
+    }
+
+    void textbox::update()
+    {
+        if (!enabled)
+        {
+            mouseon = false, focused = false, pressed = false;
+            return;
+        }
+        static int delt = 0;
+        static int ldel = 0;
+        if (delt > INT_MAX - 2) delt = 0;
+        if (ldel > INT_MAX - 2) delt = 0;
+        //更新文本框状态
+        if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)
+            mouseon = true, parent->MouseOnTextbox = true;
+        else mouseon = false;
+
+        if ((parent->mb == 1 && mouseon || parent->enterp) && focused) pressed = true;
+        else pressed = false;
+
+        if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;       //焦点在此
+        if (parent->focusid == id) focused = true;
+        else focused = false;                //焦点
+        if (focused && inputstr != "")
+        {
+            text += inputstr;
+        }
+        delt++;
+        if (parent->backspacep && (delt - ldel > 5) && text.length() >= 1)
+        {
+            ldel = delt;
+            int n = text[text.length() - 1];
+            if (n > 0 && n <= 127)
+                text = text.substr(0, text.length() - 1);
+            else
+                text = text.substr(0, text.length() - 2);
+        }
+    }
+
+    void textbox::render()
+    {
+
+        //渲染文本框
+        float bcR, bcG, bcB, bcA;
+        bcR = BgR;
+        bcG = BgG;
+        bcB = BgB;
+        bcA = BgA;
+        if (!enabled)
+        {
+            bcR = BgR*0.5f;
+            bcG = BgG*0.5f;
+            bcB = BgB*0.5f;
+            bcA = BgA*0.3f;
+        }
+        glColor4f(bcR, bcG, bcB, bcA);
+
+        glDisable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS);
+        UIVertex(xmin, ymin);
+        UIVertex(xmin, ymax);
+        UIVertex(xmax, ymax);
+        UIVertex(xmax, ymin);
+        glEnd();
+        glColor4f(FgR*0.9f, FgG*0.9f, FgB*0.9f, linealpha);
+
+        if (!enabled) glColor4f(0.5f, 0.5f, 0.5f, linealpha);
+        glLineWidth(linewidth);
+        glBegin(GL_LINE_LOOP);
+        UIVertex(xmin, ymin);
+        UIVertex(xmin, ymax);
+        UIVertex(xmax, ymax);
+        UIVertex(xmax, ymin);
+        glEnd();
+
+        glBegin(GL_LINE_LOOP);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+        UIVertex(xmin + 1, ymin + 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.4f, 0.4f, 0.4f, linealpha);
+        UIVertex(xmin + 1, ymax - 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.4f, 0.4f, 0.4f, linealpha);
+        UIVertex(xmax - 1, ymax - 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+        UIVertex(xmax - 1, ymin + 1);
+
+        glEnd();
+
+        glEnable(GL_TEXTURE_2D);
+        TextRenderer::setFontColor(1.0f, 1.0f, 1.0f, 1.0f);
+        if (!enabled) TextRenderer::setFontColor(0.6f, 0.6f, 0.6f, 1.0f);
+        TextRenderer::renderString(xmin, (ymin + ymax - 20) / 2, text);
+
+    }
+
+    void vscroll::update()
+    {
+        if (!enabled)
+        {
+            mouseon = false, focused = false, pressed = false;
+            return;
+        }
+        static double lstime;
+        msup = false;
+        msdown = false;
+        psup = false;
+        psdown = false;
+
+        //更新滚动条状态
+        //鼠标悬停
+        mouseon = (parent->my >= ymin + barpos + 20 && parent->my <= ymin + barpos + barheight + 20 && parent->mx >= xmin && parent->mx <= xmax);
+        if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)
+        {
+            if (parent->mb == 1) parent->focusid = id;
+            if (parent->my <= ymin + 20)
+            {
+                msup = true;
+                if (parent->mb == 1 && parent->mbl == 0) barpos -= 10;
+                if (parent->mb == 1) psup = true;
+            }
+            else if (parent->my >= ymax - 20)
+            {
+                msdown = true;
+                if (parent->mb == 1 && parent->mbl == 0)  barpos += 10;
+                if (parent->mb == 1)  psdown = true;
+            }
+            else if (timer() - lstime > 0.1 && parent->mb == 1)
+            {
+                lstime = timer();
+                if (parent->my<ymin + barpos + 20) barpos -= 25;
+                if (parent->my>ymin + barpos + barheight + 20)  barpos += 25;
+            }
+        }
+        if (parent->mb == 1 && mouseon && focused)  //鼠标按住
+        {
+            pressed = true;
+        }
+        else
+        {
+            if (parent->mbl == 0) pressed = false;
+        }
+
+        if (parent->mb == 1 && parent->mbl == 0 && mouseon)  parent->focusid = id;     //焦点在此
+        focused = (parent->focusid == id);   //焦点
+        if (pressed) barpos += parent->my - parent->myl;                               //拖动
+        if (focused)
+        {
+            if (parent->upkp)  barpos -= 1;
+            if (parent->downkp)  barpos += 1;
+            if (parent->leftkp && !parent->leftkpl)barpos -= 1;
+            if (parent->rightkp && !parent->rightkpl) barpos += 1;
+        }
+        if (defaultv)
+            barpos += (parent->mwl - parent->mw) * 15;
+        if (barpos < 0) barpos = 0;                                                    //让拖动条不越界
+        if (barpos >= ymax - ymin - barheight - 40)
+            barpos = ymax - ymin - barheight - 40;
+    }
+
+    void vscroll::render()
+    {
+        //渲染滚动条
+        float fcR, fcG, fcB, fcA;
+        float bcR, bcG, bcB, bcA;
+        fcR = FgR;
+        fcG = FgG;
+        fcB = FgB;
+        fcA = FgA;
+        bcR = BgR;
+        bcG = BgG;
+        bcB = BgB;
+        bcA = BgA;
+        if (mouseon)
+        {
+            fcR = FgR*1.2f;
+            fcG = FgG*1.2f;
+            fcB = FgB*1.2f;
+            fcA = FgA*0.8f;
+        }
+        if (pressed)
+        {
+            fcR = FgR*0.8f;
+            fcG = FgG*0.8f;
+            fcB = FgB*0.8f;
+            fcA = FgA*1.5f;
+        }
+        if (!enabled)
+        {
+            fcR = FgR*0.5f;
+            fcG = FgG*0.5f;
+            fcB = FgB*0.5f;
+            fcA = FgA*0.3f;
+        }
+
+        glColor4f(bcR, bcG, bcB, bcA);                                              //Track
+        glDisable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS);
+        UIVertex(xmin, ymin);
+        UIVertex(xmax, ymin);
+        UIVertex(xmax, ymax);
+        UIVertex(xmin, ymax);
+        glEnd();
+        glDisable(GL_TEXTURE_2D);                                                //Bar
+        glColor4f(fcR, fcG, fcB, fcA);
+        glBegin(GL_QUADS);
+        UIVertex(xmin, ymin + barpos + 20);
+        UIVertex(xmin, ymin + barpos + barheight + 20);
+        UIVertex(xmax, ymin + barpos + barheight + 20);
+        UIVertex(xmax, ymin + barpos + 20);
+        glEnd();
+
+        if (msup)
+        {
+            glColor4f(1.0f, 1.0f, 1.0f, 0.7f);
+            if (psup) glColor4f(FgR, FgG, FgB, 0.9f);
+            glBegin(GL_QUADS);
+            UIVertex(xmin, ymin);
+            UIVertex(xmin, ymin + 20);
+            UIVertex(xmax, ymin + 20);
+            UIVertex(xmax, ymin);
+            glEnd();
+        }
+        if (msdown)
+        {
+            glColor4f(1.0f, 1.0f, 1.0f, 0.7f);
+            if (psdown) glColor4f(FgR, FgG, FgB, 0.9f);
+            glBegin(GL_QUADS);
+            UIVertex(xmin, ymax - 20);
+            UIVertex(xmin, ymax);
+            UIVertex(xmax, ymax);
+            UIVertex(xmax, ymax - 20);
+            glEnd();
+        }
+
+        glColor4f(FgR*0.9f, FgG*0.9f, FgB*0.9f, linealpha);
+        if (!enabled)  glColor4f(0.5f, 0.5f, 0.5f, linealpha);
+        glBegin(GL_LINE_LOOP);
+        UIVertex(xmin, ymin);
+        UIVertex(xmin, ymax);
+        UIVertex(xmax, ymax);
+        UIVertex(xmax, ymin);
+        glEnd();
+
+        glBegin(GL_LINE_LOOP);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+        UIVertex(xmin + 1, ymin + 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.4f, 0.4f, 0.4f, linealpha);
+        UIVertex(xmin + 1, ymax - 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.4f, 0.4f, 0.4f, linealpha);
+        UIVertex(xmax - 1, ymax - 1);
+
+        if (focused)
+            glColor4f(1.0f, 1.0f, 1.0f, linealpha);
+        else
+            glColor4f(0.8f, 0.8f, 0.8f, linealpha);
+        UIVertex(xmax - 1, ymin + 1);
+
+        glEnd();
+
+        glLineWidth(3.0);
+        glBegin(GL_LINES);
+        glColor4f(FgR, FgG, FgB, 1.0);
+        if (psup) glColor4f(1.0f - FgR, 1.0f - FgG, 1.0f - FgB, 1.0f);
+        UIVertex((xmin + xmax) / 2, ymin + 8);
+        UIVertex((xmin + xmax) / 2 - 4, ymin + 12);
+        UIVertex((xmin + xmax) / 2, ymin + 8);
+        UIVertex((xmin + xmax) / 2 + 4, ymin + 12);
+        glColor4f(FgR, FgG, FgB, 1.0);
+        if (psdown) glColor4f(1.0f - FgR, 1.0f - FgG, 1.0f - FgB, 1.0f);
+        UIVertex((xmin + xmax) / 2, ymax - 8);
+        UIVertex((xmin + xmax) / 2 - 4, ymax - 12);
+        UIVertex((xmin + xmax) / 2, ymax - 8);
+        UIVertex((xmin + xmax) / 2 + 4, ymax - 12);
+        glEnd();
+    }
+
+    void imagebox::update()
+    {
+
+    }
+
+    void imagebox::render()
+    {
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, imageid);
+        glBegin(GL_QUADS);
+        glTexCoord2f(txmin, tymax);
+        UIVertex(xmin, ymin);
+        glTexCoord2f(txmin, tymin);
+        UIVertex(xmin, ymax);
+        glTexCoord2f(txmax, tymin);
+        UIVertex(xmax, ymax);
+        glTexCoord2f(txmax, tymax);
+        UIVertex(xmax, ymin);
+        glEnd();
+    }
+
+   
+
+    label::label(string t, EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height)
+        : label()
+    {
+        text = t;
+        resize(_Vertical, _Horizontal, _Margon, _Width, _Height);
+    }
+
+    button::button(string t, EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height)
+        : button()
+    {
+        text = t;
+        resize(_Vertical, _Horizontal, _Margon, _Width, _Height);
+    }
+
+    trackbar::trackbar(string t, int w, int s, EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height)
+        : trackbar()
+    {
+        text = t;
+        barwidth = w;
+        barpos = s;
+        resize(_Vertical, _Horizontal, _Margon, _Width, _Height);
+    }
+
+    textbox::textbox(string t, EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height)
+        : textbox()
+    {
+        text = t;
+        resize(_Vertical, _Horizontal, _Margon, _Width, _Height);
+    }
+
+    vscroll::vscroll(int h, int s, EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height)
+        : vscroll()
+    {
+        barheight = h;
+        barpos = s;
+        resize(_Vertical, _Horizontal, _Margon, _Width, _Height);
+    }
+
+    imagebox::imagebox(float _txmin, float _txmax, float _tymin, float _tymax, TextureID iid,
+                       EVerticalAlignment _Vertical, EHorizontalAlignment _Horizontal, TMargin _Margin, int _Width, int _Height)
+        : imagebox()
+    {
+        txmin = _txmin;
+        txmax = _txmax;
+        tymin = _tymin;
+        tymax = _tymax;
+        imageid = iid;
+        resize(_Vertical, _Horizontal, _Margon, _Width, _Height);
+    }
+
+    void Form::cleanup()
+    {
+        //Transition backward
+        if (transitionList != 0) glDeleteLists(transitionList, 1);
+        transitionList = displaylist;
+        transitionForward = false;
+        transitionTimer = timer();
+        for (size_t i = 0; i != children.size(); i++)
+        {
+            children[i]->destroy();
+        }
+    }
+
+    controls* Form::getControlByID(int cid)
+    {
+        for (size_t i = 0; i != children.size(); i++)
+        {
+            if (children[i]->id == cid) return children[i];
+        }
+        return nullptr;
+    }
+
+    Form::Form()
+    {
+        Init();
+        Background = &drawBackground;
+    }
+
+    void Form::singleloop()
+    {
+        double dmx, dmy;
+        mxl = mx;
+        myl = my;
+        mwl = mw;
+        mbl = mb;
+        mb = getMouseButton();
+        mw = getMouseScroll();
+        glfwGetCursorPos(MainWindow, &dmx, &dmy);
+        mx = (int)(dmx / stretch), my = (int)(dmy / stretch);
+        update();
+        render();
+        glFinish();
+        glfwSwapBuffers(MainWindow);
+        glfwPollEvents();
+    }
+
+    Form::~Form()
+    {
+        cleanup();
+    }
+}
