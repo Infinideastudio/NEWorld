@@ -79,5 +79,4 @@ extern int c_getChunkPtrFromSearch;
 extern int c_getHeightFromHMap;
 extern int c_getHeightFromWorldGen;
 #endif
-
 extern std::vector<LogItem> Logs;
