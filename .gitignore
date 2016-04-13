@@ -205,6 +205,10 @@ FakesAssemblies/
 *.dll
 *.exe
 *.a
+[Ll]ibraries/
 
 # CScope database
 cscope.*
+*.o
+/NEWorld.VC.db
+/NEWorld.VC.VC.opendb
