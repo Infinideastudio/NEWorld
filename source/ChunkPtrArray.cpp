@@ -12,8 +12,8 @@ void chunkPtrArray::setSize(int s)
 
 chunkPtrArray::chunkPtrArray()
 {
-	setSize((ViewDistance + 2) * 2);
-	array = vector<chunk*>(size3, nullptr);
+    setSize((ViewDistance + 2) * 2);
+    array = vector<chunk*>(size3, nullptr);
 }
 
 void chunkPtrArray::move(int xd, int yd, int zd)
@@ -66,8 +66,8 @@ chunk* chunkPtrArray::getChunkPtr(int x, int y, int z)
     x -= originX;
     y -= originY;
     z -= originZ;
-	if (!elementExists(x, y, z))
-		return nullptr;
+    if (!elementExists(x, y, z))
+        return nullptr;
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
     c_getChunkPtrFromCPA++;
 #endif
@@ -79,7 +79,7 @@ void chunkPtrArray::setChunkPtr(int x, int y, int z, const chunk* c)
     x -= originX;
     y -= originY;
     z -= originZ;
-	assert(elementExists(x, y, z));
+    assert(elementExists(x, y, z));
     array[x*size2 + y*size + z] = (chunk*)c;
 }
 

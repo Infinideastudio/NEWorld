@@ -244,7 +244,7 @@ void EndStretch()
 
 bool control::mouse_on()
 {
-	return parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax;
+    return parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax;
 }
 
 void control::updatepos()
@@ -312,28 +312,28 @@ void button::update()
 {
     if (!enabled)
         mouseon = focused = pressed = clicked = false;
-	else
-	{
-		//更新按钮状态
-		if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)
-			mouseon = true;
-		else
-			mouseon = false;
+    else
+    {
+        //更新按钮状态
+        if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)
+            mouseon = true;
+        else
+            mouseon = false;
 
-		if ((parent->mb == 1 && mouseon || parent->enterp) && focused)
-			pressed = true;
-		else
-			pressed = false;
+        if ((parent->mb == 1 && mouseon || parent->enterp) && focused)
+            pressed = true;
+        else
+            pressed = false;
 
-		if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;
-		if (parent->focusid == id) focused = true;
-		else focused = false;
+        if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;
+        if (parent->focusid == id) focused = true;
+        else focused = false;
 
-		clicked = (parent->mb == 0 && parent->mbl == 1 && mouseon || parent->enterpl && parent->enterp == false) && focused;
-		//clicked = lp&&!pressed
+        clicked = (parent->mb == 0 && parent->mbl == 1 && mouseon || parent->enterpl && parent->enterp == false) && focused;
+        //clicked = lp&&!pressed
 
-		if (clicked)AudioSystem::ClickEvent();
-	}
+        if (clicked)AudioSystem::ClickEvent();
+    }
 }
 
 void button::render()
@@ -1137,35 +1137,35 @@ void ClearStack()
 
 void ProcessEvents()
 {
-	while (!ViewOps.empty())
-	{
-		switch (ViewOps.begin()->Op)
-		{
-		case 1:
-			ViewStack.push_front(ViewOps.begin()->Page);
-			(*ViewStack.begin())->onLoad();
-			break;
-		case 2:
-			PopView();
-			break;
-		case 3:
-			while (ViewStack.size() > 0) PopView();
-			ViewStack.push_front(GetMain());
-			(*ViewStack.begin())->onLoad();
-			break;
-		case 4:
-			while (ViewStack.size() > 0) PopView();
-			break;
-		}
-		ViewOps.pop_front();
-	}
+    while (!ViewOps.empty())
+    {
+        switch (ViewOps.begin()->Op)
+        {
+        case 1:
+            ViewStack.push_front(ViewOps.begin()->Page);
+            (*ViewStack.begin())->onLoad();
+            break;
+        case 2:
+            PopView();
+            break;
+        case 3:
+            while (ViewStack.size() > 0) PopView();
+            ViewStack.push_front(GetMain());
+            (*ViewStack.begin())->onLoad();
+            break;
+        case 4:
+            while (ViewStack.size() > 0) PopView();
+            break;
+        }
+        ViewOps.pop_front();
+    }
 }
 
 void AppCleanUp()
 {
-	World::saveAllChunks();
-	World::destroyAllChunks();
-	unload_plugins();
+    World::saveAllChunks();
+    World::destroyAllChunks();
+    unload_plugins();
 }
 
 void AppStart()
@@ -1173,24 +1173,24 @@ void AppStart()
     glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glDisable(GL_CULL_FACE);
-	ProcessEvents();
+    ProcessEvents();
     TextRenderer::setFontColor(1.0, 1.0, 1.0, 1.0);
     while (!ViewStack.empty())
     {
         (*ViewStack.begin())->singleloop();
-		ProcessEvents();
+        ProcessEvents();
         if (glfwWindowShouldClose(MainWindow))
             while (!ViewStack.empty())
-				PopView();
+                PopView();
     }
     AppCleanUp();
 }
 Form::~Form()
 {
-	//Transition backward
-	if (transitionList != 0) glDeleteLists(transitionList, 1);
-	transitionList = displaylist;
-	transitionForward = false;
-	transitionTimer = timer();
+    //Transition backward
+    if (transitionList != 0) glDeleteLists(transitionList, 1);
+    transitionList = displaylist;
+    transitionForward = false;
+    transitionTimer = timer();
 }
 }

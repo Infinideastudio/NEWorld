@@ -12,7 +12,7 @@ bool GrassBUF(Blocks::BUDDP * args)
     {
         *(args->slf)=block(Blocks::DIRT);
         return true;
-    } 
+    }
     else
     {
         return false;
