@@ -27,9 +27,6 @@ public:
 	static int gloop;
 	static int ww, wh;
 	static float r, g, b, a;
-	static unsigned int unicodeTex[256];
-	static bool unicodeTexAval[256];
-	static bool UseUnicodeASCIIFont;
 
 	static void BuildFont(int w, int h);
 	static void resize()

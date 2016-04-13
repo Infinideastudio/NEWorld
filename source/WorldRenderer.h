@@ -20,6 +20,6 @@ struct RenderChunk
 };
 extern vector<RenderChunk> RenderChunkList;
 
-int ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curtime, bool frustest = true);
+size_t ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curtime, bool frustest = true);
 void RenderChunks(double x, double y, double z, int buffer);
 }
