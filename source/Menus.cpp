@@ -571,8 +571,6 @@ namespace Menus
 
 	void GUIOptionsMenu::onUpdate()
 	{
-		/*if (fontbtn.clicked)
-			TextRenderer::UseUnicodeASCIIFont = !TextRenderer::UseUnicodeASCIIFont;*/
 		if (blurbtn.clicked)
 			GUIScreenBlur = !GUIScreenBlur;
 		if (ppistretchbtn.clicked)
@@ -585,7 +583,6 @@ namespace Menus
 		AudioSystem::GUIUpdate();
 		if (backbtn.clicked)
 			GUI::PopPage();
-		//fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(TextRenderer::UseUnicodeASCIIFont);
 		fontbtn.text = GetStrbyKey("NEWorld.gui.unicode") + BoolYesNo(true);
 		blurbtn.text = GetStrbyKey("NEWorld.gui.blur") + BoolEnabled(GUIScreenBlur);
 		int vmc;

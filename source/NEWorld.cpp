@@ -51,7 +51,6 @@ void LoadOptions()
 	loadoption(options, "VerticalSync", vsync);
 	loadoption(options, "GUIBackgroundBlur", GUIScreenBlur);
 	loadoption(options, "ppistretch", ppistretch);
-	loadoption(options, "ForceUnicodeFont", TextRenderer::UseUnicodeASCIIFont);
 	loadoption(options, "GainOfBGM", AudioSystem::BGMGain);
 	loadoption(options, "GainOfSound", AudioSystem::SoundGain);
 }
@@ -76,7 +75,6 @@ void SaveOptions()
 	saveoption(fileout, "VerticalSync", vsync);
 	saveoption(fileout, "GUIBackgroundBlur", GUIScreenBlur);
 	saveoption(fileout, "ppistretch", ppistretch);
-	saveoption(fileout, "ForceUnicodeFont", TextRenderer::UseUnicodeASCIIFont);
 	saveoption(fileout, "GainOfBGM", AudioSystem::BGMGain);
 	saveoption(fileout, "GainOfSound", AudioSystem::SoundGain);
 	fileout.close();
