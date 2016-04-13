@@ -4,21 +4,17 @@ namespace WorldRenderer
 {
 vector<RenderChunk> RenderChunkList;
 
-int ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curtime, bool frustest)
+size_t ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curtime, bool frustest)
 {
-    int renderedChunks = 0;
+    size_t renderedChunks = 0u;
     RenderChunkList.clear();
-    for (int i = 0; i < World::chunks.size(); i++)
+    for (size_t i = 0; i < World::chunks.size(); i++)
     {
-        if (!World::chunks[i]->renderBuilt || World::chunks[i]->Empty) continue;
-        if (World::chunkInRange(World::chunks[i]->cx, World::chunks[i]->cy, World::chunks[i]->cz,
-                                cx, cy, cz, renderdistance))
+        if (World::chunks[i]->renderBuilt && !World::chunks[i]->Empty && World::chunkInRange(World::chunks[i]->cx, World::chunks[i]->cy, World::chunks[i]->cz,
+                                cx, cy, cz, renderdistance) && (!frustest || World::chunks[i]->visible))
         {
-            if (!frustest || World::chunks[i]->visible)
-            {
-                renderedChunks++;
-                RenderChunkList.push_back(RenderChunk(World::chunks[i], (curtime - lastupdate) * 30.0));
-            }
+            renderedChunks++;
+            RenderChunkList.push_back(RenderChunk(World::chunks[i], (curtime - lastupdate) * 30.0));
         }
     }
     return renderedChunks;
