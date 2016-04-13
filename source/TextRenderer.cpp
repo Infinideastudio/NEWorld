@@ -10,7 +10,6 @@ unsigned int TextRenderer::Font;
 int TextRenderer::gloop;
 int TextRenderer::ww, TextRenderer::wh;
 float TextRenderer::r = 0.0f, TextRenderer::g = 0.0f, TextRenderer::b = 0.0f, TextRenderer::a = 1.0f;
-bool TextRenderer::UseUnicodeASCIIFont;
 
 void TextRenderer::BuildFont(int w, int h)
 {
