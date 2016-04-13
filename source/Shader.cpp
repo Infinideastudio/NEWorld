@@ -78,7 +78,7 @@ GLhandleARB Shader::loadShader(string filename, unsigned int mode, std::set<stri
     {
         std::getline(filein, cur);
         if (cur.empty()) continue;
-		if (cur[0] == '#')   //处理NEWorld预处理器标志
+        if (cur[0] == '#')   //处理NEWorld预处理器标志
         {
             ss.str(cur);
             ss >> macro;

@@ -79,7 +79,7 @@ chunk* AddChunk(int x, int y, int z)
         return chunks[pos.second];
     }
 
-	chunks.push_back(nullptr);
+    chunks.push_back(nullptr);
     for (int i = chunks.size() - 1; i >= pos.first + 1; i--)
     {
         chunks[i] = chunks[i - 1];
@@ -100,7 +100,7 @@ void DeleteChunk(int x, int y, int z)
         cpCachePtr = nullptr;
     }
     delete chunks[index];
-	chunks.erase(chunks.begin() + index);
+    chunks.erase(chunks.begin() + index);
     cpArray.DeleteChunk(x, y, z);
 }
 
@@ -112,7 +112,7 @@ int getChunkPtrIndex(int x, int y, int z)
     chunkid cid = getChunkID(x, y, z);
     pair<int, int> pos = binary_search_chunks(cid);
     if (chunks[pos.second]->id == cid) return pos.second;
-	assert(false);
+    assert(false);
     return -1;
 }
 
@@ -971,8 +971,8 @@ void destroyAllChunks()
             delete chunks[i];
         }
     }
-	chunks.clear();
-	cpArray = chunkPtrArray();
+    chunks.clear();
+    cpArray = chunkPtrArray();
     HMap.destroy();
 
     rebuiltChunks = 0;
@@ -1197,14 +1197,10 @@ void picktree(int x, int y, int z)
                                  float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
     }
     Modifyblock(x, y, z, block(Blocks::AIR));
-    const int vec[5][3] = { { 0, 1, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 1, 0, 0 }, { -1, 0, 0 } };
-    block tmp;
-    for(i = 0; i < 5; i++)
-    {
-        tmp = getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]);
-        if(tmp == leaf || tmp == wood)
+    int vec[5][3] = { {0, 1, 0}, {0, 0, 1}, {0, 0, -1}, {1, 0, 0}, {-1, 0, 0} };
+    for (int i = 0; i < 5; i++)
+        if (getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]) == block(Blocks::WOOD) || getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]) == block(Blocks::LEAF))
             picktree(x + vec[i][0], y + vec[i][1], z + vec[i][2]);
-    }
 }
 
 void pickblock(int x, int y, int z)

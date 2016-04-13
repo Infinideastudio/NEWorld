@@ -36,18 +36,18 @@ void SplashScreen()
 
 void createWindow()
 {
-	glfwSetErrorCallback([](int, const char* desc)
-	{
-		cout << "We are sorry to inform you that NEWorld has crashed." << endl
-			<< "Maybe it is caused by a badly-written plugin or a bug." << endl
-			<< "You can report it to NEWorld Team, " << endl
-			<< "https://github.com/Infinideastudio/NEWorld/issues" << endl
-			<< "or if you are a programmer, please fix it and start a pull request." << endl
-			<< "Reason:" << endl << desc << endl
-			<< "Logs:" << endl;
-		for (vector<LogItem>::iterator it = Logs.begin(); it != Logs.end(); it++)
-			cout << it->ToString() << endl;
-	});
+    glfwSetErrorCallback([](int, const char* desc)
+    {
+        cout << "We are sorry to inform you that NEWorld has crashed." << endl
+             << "Maybe it is caused by a badly-written plugin or a bug." << endl
+             << "You can report it to NEWorld Team, " << endl
+             << "https://github.com/Infinideastudio/NEWorld/issues" << endl
+             << "or if you are a programmer, please fix it and start a pull request." << endl
+             << "Reason:" << endl << desc << endl
+             << "Logs:" << endl;
+        for (vector<LogItem>::iterator it = Logs.begin(); it != Logs.end(); it++)
+            cout << it->ToString() << endl;
+    });
     if (Multisample)
         glfwWindowHint(GLFW_SAMPLES, Multisample);
     MainWindow = glfwCreateWindow(windowwidth, windowheight, ("NEWorld " + major_version + minor_version + ext_version).c_str(), NULL, NULL);
@@ -55,42 +55,42 @@ void createWindow()
     glfwMakeContextCurrent(MainWindow);
     glfwSetCursor(MainWindow, MouseCursor);
     glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	glfwSetWindowSizeCallback(MainWindow, [](GLFWwindow * win, int width, int height) 
-	{
-		windowwidth = max(width, 640);
-		windowheight = max(height, 360);
-		glfwSetWindowSize(win, windowwidth, windowheight);
-		SetupScreen();
-	});
-	glfwSetMouseButtonCallback(MainWindow, [](GLFWwindow *, int button, int action, int) 
-	{
-		mb = 0;
-		if (action == GLFW_PRESS)
-		{
-			if (button == GLFW_MOUSE_BUTTON_LEFT)
-				mb = 1;
-			if (button == GLFW_MOUSE_BUTTON_RIGHT)
-				mb = 2;
-			if (button == GLFW_MOUSE_BUTTON_MIDDLE)
-				mb = 4;
-		}
-	});
-	glfwSetScrollCallback(MainWindow, [](GLFWwindow *, double, double yoffset) 
-	{
-		mw += (int)yoffset; 
-	});
+    glfwSetWindowSizeCallback(MainWindow, [](GLFWwindow * win, int width, int height)
+    {
+        windowwidth = max(width, 640);
+        windowheight = max(height, 360);
+        glfwSetWindowSize(win, windowwidth, windowheight);
+        SetupScreen();
+    });
+    glfwSetMouseButtonCallback(MainWindow, [](GLFWwindow *, int button, int action, int)
+    {
+        mb = 0;
+        if (action == GLFW_PRESS)
+        {
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mb = 1;
+            if (button == GLFW_MOUSE_BUTTON_RIGHT)
+                mb = 2;
+            if (button == GLFW_MOUSE_BUTTON_MIDDLE)
+                mb = 4;
+        }
+    });
+    glfwSetScrollCallback(MainWindow, [](GLFWwindow *, double, double yoffset)
+    {
+        mw += (int)yoffset;
+    });
     glfwSetCharCallback(MainWindow, [](GLFWwindow *, unsigned int c)
-	{
-		if (c >= 128)
-		{
-			wchar_t pwszUnicode[2] = { (wchar_t)c,'\0' };
-			char pszMultiByte[5];
-			WCharToMByte(pszMultiByte, pwszUnicode, 4);
-			inputstr += pszMultiByte;
-		}
-		else
-			inputstr += (char)c;
-	});
+    {
+        if (c >= 128)
+        {
+            wchar_t pwszUnicode[2] = { (wchar_t)c,'\0' };
+            char pszMultiByte[5];
+            WCharToMByte(pszMultiByte, pwszUnicode, 4);
+            inputstr += pszMultiByte;
+        }
+        else
+            inputstr += (char)c;
+    });
     if (ppistretch) GUI::InitStretch();
 }
 
@@ -102,7 +102,7 @@ void SetupScreen()
     gl_version_rev = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_REVISION);
     //Get OpenGL Procedure Addresses
     InitGLProc();
-	//Config Rendering Arguments
+    //Config Rendering Arguments
     glViewport(0, 0, windowwidth, windowheight);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

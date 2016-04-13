@@ -8,10 +8,10 @@
 
 enum
 {
-	version = 39,
-	gameTimeMax = 43200,
-	networkRequestFrequency = 3,
-	networkRequestMax = 20
+    version = 39,
+    gameTimeMax = 43200,
+    networkRequestFrequency = 3,
+    networkRequestMax = 20
 };
 const string major_version = "Alpha 0.", minor_version = "5", ext_version = " Technical Perview";
 extern float FOVyNormal;
