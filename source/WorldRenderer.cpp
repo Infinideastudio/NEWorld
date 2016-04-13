@@ -11,7 +11,7 @@ size_t ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curti
     for (size_t i = 0; i < World::chunks.size(); i++)
     {
         if (World::chunks[i]->renderBuilt && !World::chunks[i]->Empty && World::chunkInRange(World::chunks[i]->cx, World::chunks[i]->cy, World::chunks[i]->cz,
-                                cx, cy, cz, renderdistance) && (!frustest || World::chunks[i]->visible))
+                cx, cy, cz, renderdistance) && (!frustest || World::chunks[i]->visible))
         {
             renderedChunks++;
             RenderChunkList.push_back(RenderChunk(World::chunks[i], (curtime - lastupdate) * 30.0));

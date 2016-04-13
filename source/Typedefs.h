@@ -61,31 +61,32 @@ struct block
 
 namespace Blocks
 {
-	struct BUDDP
-	{
-		block origon;
-		block* upd;
-		block* slf;
-		void* dudp;
-		void* dslf;
-		long long cx, cy, cz;
-		BUDDP(block iOri, block* _upd, block* _slf, void* _dudp, void* _dslf,
-			  long long _cx, long long _cy, long long _cz) :
-			origon(iOri), upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-		bool operator == (const BUDDP i) {
-			return cx == i.cx && cy == i.cy && cz == i.cz;
-		}
-	};
+struct BUDDP
+{
+    block origon;
+    block* upd;
+    block* slf;
+    void* dudp;
+    void* dslf;
+    long long cx, cy, cz;
+    BUDDP(block iOri, block* _upd, block* _slf, void* _dudp, void* _dslf,
+          long long _cx, long long _cy, long long _cz) :
+        origon(iOri), upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
+    bool operator == (const BUDDP i)
+    {
+        return cx == i.cx && cy == i.cy && cz == i.cz;
+    }
+};
 
-	struct TILDP
-	{
-		block* slf;
-		void* dslf;
-		long long cx, cy, cz;
+struct TILDP
+{
+    block* slf;
+    void* dslf;
+    long long cx, cy, cz;
 
-		TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
-			slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-	};
+    TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
+        slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
+};
 }
 typedef block item;
 
@@ -104,24 +105,24 @@ typedef unsigned int(*ThreadFunc_t)(void* param);
 class LogItem
 {
 public:
-	enum LogLevel
-	{
-		Level_Information,
-		Level_Warning,
-		Level_Error
-	};
-	LogLevel Level;
-	std::string Information;
-	LogItem()
-	{
-	}
-	LogItem(LogLevel _level, std::string _info)
-		:Level(_level), Information(_info)
-	{
-	}
-	std::string ToString()
-	{
-		return std::string("Level:") + (Level == Level_Information ? "Information" : Level == Level_Warning ? "Warning" : Level == Level_Error ? "Error" : "Unknown")
-			+ ",Information:" + Information;
-	}
+    enum LogLevel
+    {
+        Level_Information,
+        Level_Warning,
+        Level_Error
+    };
+    LogLevel Level;
+    std::string Information;
+    LogItem()
+    {
+    }
+    LogItem(LogLevel _level, std::string _info)
+        :Level(_level), Information(_info)
+    {
+    }
+    std::string ToString()
+    {
+        return std::string("Level:") + (Level == Level_Information ? "Information" : Level == Level_Warning ? "Warning" : Level == Level_Error ? "Error" : "Unknown")
+               + ",Information:" + Information;
+    }
 };

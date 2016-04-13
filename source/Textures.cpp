@@ -129,13 +129,13 @@ void Textures::Build2DMipmaps(GLenum format, int w, int h, int level, const ubyt
         cur_w = w / scale;
         cur_h = h / scale;
         for (int y = 0; y < cur_h; y++) for (int x = 0; x < cur_w; x++)
-            for (int col = 0; col < cc; col++)
-            {
-                sum = 0;
-                for (int yy = 0; yy < scale; yy++) for (int xx = 0; xx < scale; xx++)
-                    sum += src[((y * scale + yy) * w + x * scale + xx) * cc + col];
-                cur[(y * cur_w + x) * cc + col] = (ubyte)(sum / (scale*scale));
-            }
+                for (int col = 0; col < cc; col++)
+                {
+                    sum = 0;
+                    for (int yy = 0; yy < scale; yy++) for (int xx = 0; xx < scale; xx++)
+                            sum += src[((y * scale + yy) * w + x * scale + xx) * cc + col];
+                    cur[(y * cur_w + x) * cc + col] = (ubyte)(sum / (scale*scale));
+                }
         glTexImage2D(GL_TEXTURE_2D, i, format, cur_w, cur_h, 0, format, GL_UNSIGNED_BYTE, cur);
     }
     delete[] cur;

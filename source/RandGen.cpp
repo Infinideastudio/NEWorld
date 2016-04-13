@@ -1,4 +1,4 @@
-/* 
+/*
  * Originally written by Christian Stigen Larsen
  * http://csl.name
  *
