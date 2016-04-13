@@ -40,9 +40,9 @@ void TextRenderer::BuildFont(int w, int h)
         glEndList();
     }
 
-	FT_Init_FreeType(&library);
-	FT_New_Face(library, "Fonts/Font.ttf", 0, &fontface);
-	FT_Set_Pixel_Sizes(fontface, 16 * stretch, 16 * stretch);
+    FT_Init_FreeType(&library);
+    FT_New_Face(library, "Fonts/Font.ttf", 0, &fontface);
+    FT_Set_Pixel_Sizes(fontface, 16 * stretch, 16 * stretch);
     slot = fontface->glyph;
 }
 

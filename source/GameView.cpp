@@ -204,7 +204,7 @@ public:
             for (int i = 0; i < sumUnload; i++)
             {
                 World::chunk* cp = World::chunkUnloadList[i].first;
-				assert(cp != World::EmptyChunkPtr);
+                assert(cp != World::EmptyChunkPtr);
                 int cx = cp->cx, cy = cp->cy, cz = cp->cz;
                 cp->Unload();
                 World::DeleteChunk(cx, cy, cz);
@@ -652,9 +652,9 @@ public:
                 //自动补全
                 if (isPressed(GLFW_KEY_TAB) && chatmode && chatword.size() > 0 && chatword.substr(0, 1) == "/")
                 {
-					for (std::map<std::wstring, command>::iterator it = commands.begin(); it != commands.end(); it++)
-						if (beginWith(it->first, to_wstring(chatword)))
-							chatword = to_string(it->first);
+                    for (std::map<std::wstring, command>::iterator it = commands.begin(); it != commands.end(); it++)
+                        if (beginWith(it->first, to_wstring(chatword)))
+                            chatword = to_string(it->first);
                 }
             }
         }
@@ -1339,7 +1339,7 @@ public:
         if (DebugMode)
         {
             std::stringstream ss;
-			int pos = 0;
+            int pos = 0;
             TextRenderer::renderASCIIString(0, (pos++) * 16, "NEWorld v" + pack(version) + "[OpenGL " + pack(gl_version_major) + "." + pack(gl_version_minor) + "|" + pack(gl_version_rev) + "]");
             TextRenderer::renderASCIIString(0, (pos++) * 16, "Fps:" + pack(fps) + "|" + "Ups:" + pack(ups));
 
@@ -1349,26 +1349,26 @@ public:
             TextRenderer::renderASCIIString(0, (pos++) * 16, "X:" + pack(Player::xpos) + "Y:" + pack(Player::ypos) + "Z:" + pack(Player::zpos));
             TextRenderer::renderASCIIString(0, (pos++) * 16, "Direction:" + pack(Player::heading) + "Head:" + pack(Player::lookupdown) + "Jump speed:" + pack(Player::jump));
 
-			{
-				string tmp = "Stats:";
-				if (Player::Flying) tmp += " Flying";
-				if (Player::OnGround) tmp += " On_ground";
-				if (Player::NearWall) tmp += " Near_wall";
-				if (Player::inWater) tmp += " In_water";
-				if (Player::CrossWall) tmp += " Cross_Wall";
-				if (Player::Glide) tmp += " Gliding_enabled";
-				if (Player::glidingNow) tmp += "Gliding";
-				TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
-			}
+            {
+                string tmp = "Stats:";
+                if (Player::Flying) tmp += " Flying";
+                if (Player::OnGround) tmp += " On_ground";
+                if (Player::NearWall) tmp += " Near_wall";
+                if (Player::inWater) tmp += " In_water";
+                if (Player::CrossWall) tmp += " Cross_Wall";
+                if (Player::Glide) tmp += " Gliding_enabled";
+                if (Player::glidingNow) tmp += "Gliding";
+                TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
+            }
 
             TextRenderer::renderASCIIString(0, (pos++) * 16, "Energy:" + pack(Player::glidingEnergy));
             TextRenderer::renderASCIIString(0, (pos++) * 16, "Speed:" + pack(Player::glidingSpeed));
 
-			{
-				char tmp[50];
-				sprintf(tmp, "Time:%02d:%02d:%02d(%d/%d)", gametime / (30 * 60), gametime % (30 * 60) / 30, gametime % 30 * 2, gametime, gameTimeMax);
-				TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
-			}
+            {
+                char tmp[50];
+                sprintf(tmp, "Time:%02d:%02d:%02d(%d/%d)", gametime / (30 * 60), gametime % (30 * 60) / 30, gametime % 30 * 2, gametime, gameTimeMax);
+                TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
+            }
 
             TextRenderer::renderASCIIString(0, (pos++) * 16, "load:" + pack(World::chunks.size()) + " unload:" + pack(World::unloadedChunks) + " render:" + pack(WorldRenderer::RenderChunkList.size()) + " update:" + pack(World::updatedChunks));
 
@@ -1744,15 +1744,15 @@ public:
 
     void saveScreenshot(int x, int y, int w, int h, string filename)
     {
-		int bufw = ((w >> 2) << 2) + (w & 3 ? 4 : 0), bufh = ((h >> 2) << 2) + (h & 3 ? 4 : 0);
-		Textures::TEXTURE_RGB scrBuffer(bufw, bufh);
+        int bufw = ((w >> 2) << 2) + (w & 3 ? 4 : 0), bufh = ((h >> 2) << 2) + (h & 3 ? 4 : 0);
+        Textures::TEXTURE_RGB scrBuffer(bufw, bufh);
         glReadPixels(x, y, bufw, bufh, GL_RGB, GL_UNSIGNED_BYTE, scrBuffer.buffer.get());
-		scrBuffer.Save(filename);
+        scrBuffer.Save(filename);
     }
 
     void createThumbnail()
     {
-		saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "/Thumbnail.bmp");
+        saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "/Thumbnail.bmp");
     }
 
     void registerCommands()
@@ -1760,10 +1760,10 @@ public:
         register_command(L"/give", [](int argc, const wchar_t** argv) -> int
         {
             if (argc != 3) return 0;
-			item itemid;
-			itemid.ID = extract<unsigned short>(argv[1]);
+            item itemid;
+            itemid.ID = extract<unsigned short>(argv[1]);
             Player::AddItem(itemid, extract<short>(argv[2]));
-			return 1;
+            return 1;
         });
         register_command(L"/tp", [](int argc, const wchar_t** argv) -> int
         {
@@ -1782,14 +1782,14 @@ public:
         {
             if (argc != 5) return 0;
             block b;
-			b.ID = extract<unsigned short>(argv[4]);
+            b.ID = extract<unsigned short>(argv[4]);
             World::setblock(extract<int>(argv[1]), extract<int>(argv[2]), extract<int>(argv[3]), b);
             return 1;
         });
         register_command(L"/tree", [](int argc, const wchar_t** argv) -> int
         {
             if (argc != 4) return 0;
-			World::buildtree(extract<int>(argv[1]), extract<int>(argv[2]), extract<int>(argv[3]));
+            World::buildtree(extract<int>(argv[1]), extract<int>(argv[2]), extract<int>(argv[3]));
             return 1;
         });
         register_command(L"/explode", [](int argc, const wchar_t** argv) -> int
@@ -1806,18 +1806,18 @@ public:
         });
         register_command(L"/kit", [](int argc, const wchar_t** argv) -> int
         {
-			for (int i = 0; i <= 1; i++)
-				for (int j = 0; j <= i ? 7 : 9; j++)
-				{
-					Player::inventory[i][j] = i * 10 + j + 1;
-					Player::inventoryAmount[i][j] = 255;
-				}
-			return 1;
+            for (int i = 0; i <= 1; i++)
+                for (int j = 0; j <= i ? 7 : 9; j++)
+                {
+                    Player::inventory[i][j] = i * 10 + j + 1;
+                    Player::inventoryAmount[i][j] = 255;
+                }
+            return 1;
         });
         register_command(L"/time", [](int argc, const wchar_t** argv) -> int
         {
             if (argc != 2) return 0;
-			int time = extract<int>(argv[1]);
+            int time = extract<int>(argv[1]);
             if (time<0 || time>gameTimeMax) return 0;
             gametime = time;
             return 1;
@@ -1826,12 +1826,12 @@ public:
 
     bool doCommand(const vector<string>& command)
     {
-		vector<std::wstring> tmp;
-		for (int i = 0; i < (int)command.size(); i++)
-			tmp.push_back(to_wstring(command[i]));
-		if (commands.count(tmp[0]))
-			return commands[tmp[0]].execute(tmp) != 0;
-		return false;
+        vector<std::wstring> tmp;
+        for (int i = 0; i < (int)command.size(); i++)
+            tmp.push_back(to_wstring(command[i]));
+        if (commands.count(tmp[0]))
+            return commands[tmp[0]].execute(tmp) != 0;
+        return false;
     }
 
     void onLoad()
@@ -1858,12 +1858,12 @@ public:
         if (loadGame()) Player::init(Player::xpos, Player::ypos, Player::zpos);
         else Player::spawn();
         World::Init();
-		static bool registered = false;
-		if (!registered)
-		{
-			registerCommands();
-			registered = true;
-		}
+        static bool registered = false;
+        if (!registered)
+        {
+            registerCommands();
+            registered = true;
+        }
 
         GUIrenderswitch = true;
         glDepthFunc(GL_LEQUAL);

@@ -21,14 +21,14 @@ vector<string> split(string str, string pattern)
 
 void DebugWarning(string msg)
 {
-	Logs.push_back(LogItem(LogItem::Level_Warning, msg));
+    Logs.push_back(LogItem(LogItem::Level_Warning, msg));
 }
 
 void DebugError(string msg)
 {
-	Logs.push_back(LogItem(LogItem::Level_Error, msg));
+    Logs.push_back(LogItem(LogItem::Level_Error, msg));
 #ifdef _DEBUG
-	assert(false);
+    assert(false);
 #endif
 }
 
