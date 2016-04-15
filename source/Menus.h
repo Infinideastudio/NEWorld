@@ -2,7 +2,7 @@
 #include "GUI.h"
 #include "Globalization.h"
 #include "AudioSystem.h"
-using Globalization::GetStrbyKey;
+using Globalization::GetStr;
 
 struct Langinfo
 {

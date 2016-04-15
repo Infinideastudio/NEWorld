@@ -9,7 +9,7 @@
 
 void SplashScreen()
 {
-    TextureID splTex = Textures::LoadRGBTexture("Textures/GUI/splashscreen.bmp");
+    TextureID splTex = Textures::LoadRGBTexture("res/Textures/GUI/splashscreen.bmp");
     glEnable(GL_TEXTURE_2D);
     for (int i = 0; i < 256; i += 2)
     {
@@ -150,25 +150,25 @@ void SetupNormalFog()
 
 void LoadTextures()
 {
-    tex_select = Textures::LoadRGBATexture("Textures/GUI/select.bmp", "");
-    tex_unselect = Textures::LoadRGBATexture("Textures/GUI/unselect.bmp", "");
-    tex_title = Textures::LoadRGBATexture("Textures/GUI/title.bmp", "Textures/GUI/titlemask.bmp");
+    tex_select = Textures::LoadRGBATexture("res/Textures/GUI/select.bmp", "");
+    tex_unselect = Textures::LoadRGBATexture("res/Textures/GUI/unselect.bmp", "");
+    tex_title = Textures::LoadRGBATexture("res/Textures/GUI/title.bmp", "res/Textures/GUI/titlemask.bmp");
     for (int i = 0; i < 6; i++)
     {
         std::stringstream ss;
-        ss << "Textures/GUI/mainmenu" << i << ".bmp";
+        ss << "res/Textures/GUI/mainmenu" << i << ".bmp";
         tex_mainmenu[i] = Textures::LoadRGBTexture(ss.str());
     }
 
-    DefaultSkin = Textures::LoadRGBATexture("Textures/Player/skin_xiaoqiao.bmp", "Textures/Player/skinmask_xiaoqiao.bmp");
+    DefaultSkin = Textures::LoadRGBATexture("res/Textures/Player/skin_xiaoqiao.bmp", "res/Textures/Player/skinmask_xiaoqiao.bmp");
 
     for (int gloop = 1; gloop <= 10; gloop++)
     {
-        string path = "Textures/blocks/destroy_" + itos(gloop) + ".bmp";
+        string path = "res/Textures/blocks/destroy_" + itos(gloop) + ".bmp";
         DestroyImage[gloop] = Textures::LoadRGBATexture(path, path);
     }
 
-    BlockTextures = Textures::LoadRGBATexture("Textures/blocks/Terrain.bmp", "Textures/blocks/Terrainmask.bmp");
-    BlockTextures3D = Textures::LoadBlock3DTexture("Textures/blocks/Terrain3D.bmp", "Textures/blocks/Terrain3Dmask.bmp");
+    BlockTextures = Textures::LoadRGBATexture("res/Textures/blocks/Terrain.bmp", "res/Textures/blocks/Terrainmask.bmp");
+    BlockTextures3D = Textures::LoadBlock3DTexture("res/Textures/blocks/Terrain3D.bmp", "res/Textures/blocks/Terrain3Dmask.bmp");
     LoadItemsTextures();
 }

@@ -60,6 +60,9 @@
     <Filter Include="Source\Renderer\Shader">
       <UniqueIdentifier>{033d1b67-aa91-4782-ac09-87d8bffaafd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sqlite">
+      <UniqueIdentifier>{06ec6d50-6a86-4d4a-9168-86fcfefd34aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Object.h">
@@ -240,6 +243,9 @@
     <ClInclude Include="source\BlockFuncs.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
+    <ClInclude Include="include\sqlite\sqlite3.h">
+      <Filter>Sqlite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\NEWorld.cpp">
@@ -376,6 +382,9 @@
     </ClCompile>
     <ClCompile Include="source\Menus.cpp">
       <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="include\sqlite\sqlite3.c">
+      <Filter>Sqlite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
