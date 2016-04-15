@@ -199,6 +199,8 @@ FakesAssemblies/
 [Ww]orlds/
 [Ss]creen[Ss]hots/
 [Cc]onfigs/
+# NEWorld Resources
+[Rr]es/
 
 # Some binary files
 *.lib

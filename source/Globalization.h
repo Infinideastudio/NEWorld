@@ -3,19 +3,16 @@
 
 namespace Globalization
 {
-struct Line
-{
-    string str;
-    int id;
-};
+    void Load();
+    void LoadLang(string lang);
+    void Finalize();
+    string GetStr(string key);
 
-extern int count;
-extern map<int, Line> Lines;
-extern map<string, int> keys;
-extern string Cur_Lang;
+    struct LangInfo
+    {
+        string symbol, eng_symbol, name;
+    };
 
-bool LoadLang(string lang);
-bool Load();
-string GetStrbyid(int id);
-string GetStrbyKey(string key);
+    vector<LangInfo> GetLangs();
+    string& Cur_Lang();
 }

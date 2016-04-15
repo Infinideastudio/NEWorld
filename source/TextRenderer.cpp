@@ -15,7 +15,7 @@ void TextRenderer::BuildFont(int w, int h)
 {
     ww = w;
     wh = h;
-    Font = Textures::LoadFontTexture("Fonts/ASCII.bmp");
+    Font = Textures::LoadFontTexture("res/Fonts/ASCII.bmp");
 
     float cx, cy;
     gbe = glGenLists(256);
@@ -41,7 +41,7 @@ void TextRenderer::BuildFont(int w, int h)
     }
 
     FT_Init_FreeType(&library);
-    FT_New_Face(library, "Fonts/Font.ttf", 0, &fontface);
+    FT_New_Face(library, "res/Fonts/Font.ttf", 0, &fontface);
     FT_Set_Pixel_Sizes(fontface, 16 * stretch, 16 * stretch);
     slot = fontface->glyph;
 }

@@ -134,12 +134,12 @@ inline void ThreadDestroy(Thread_t _hThread)
 
 inline unsigned int MByteToWChar(wchar_t* dst, const char* src, unsigned int n)
 {
-    return MultiByteToWideChar(CP_ACP, 0, src, n, dst, n);
+    return MultiByteToWideChar(CP_UTF8, 0, src, n, dst, n);
 }
 
 inline unsigned int WCharToMByte(char* dst, const wchar_t* src, unsigned int n)
 {
-    return WideCharToMultiByte(CP_ACP, 0, src, n, dst, n * 2, NULL, NULL);
+    return WideCharToMultiByte(CP_UTF8, 0, src, n, dst, n * 2, NULL, NULL);
 }
 
 inline unsigned int wstrlen(const wchar_t* wstr)

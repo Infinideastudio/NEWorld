@@ -55,7 +55,7 @@ public:
 
     string getBlockName() const
     {
-        return Globalization::GetStrbyKey(name);
+        return Globalization::GetStr(name);
     }
 
     bool isSolid() const

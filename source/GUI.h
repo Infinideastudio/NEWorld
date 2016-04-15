@@ -4,12 +4,12 @@
 
 inline string BoolYesNo(bool b)
 {
-    return b ? Globalization::GetStrbyKey("NEWorld.yes") : Globalization::GetStrbyKey("NEWorld.no");
+    return b ? Globalization::GetStr("NEWorld.yes") : Globalization::GetStr("NEWorld.no");
 }
 
 inline string BoolEnabled(bool b)
 {
-    return b ? Globalization::GetStrbyKey("NEWorld.enabled") : Globalization::GetStrbyKey("NEWorld.disabled");
+    return b ? Globalization::GetStr("NEWorld.enabled") : Globalization::GetStr("NEWorld.disabled");
 }
 
 //Graphical User Interface System
