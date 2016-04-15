@@ -7,7 +7,7 @@
 namespace World
 {
 
-string worldname;
+string WorldName;
 brightness skylight = 15;         //Sky light level
 brightness BRIGHTNESSMAX = 15;    //Maximum brightness
 brightness BRIGHTNESSMIN = 2;     //Mimimum brightness
@@ -24,9 +24,9 @@ chunkid cpCacheID = 0;
 chunkPtrArray cpArray;
 HeightMap HMap;
 int cloud[128][128];
-int rebuiltChunks, rebuiltChunksCount;
-int updatedChunks, updatedChunksCount;
-int unloadedChunks, unloadedChunksCount;
+int rebuiltChunks;
+int updatedChunks;
+int unloadedChunks;
 int chunkBuildRenderList[256][2];
 int chunkLoadList[256][4];
 pair<chunk*, int> chunkUnloadList[256];
@@ -36,8 +36,8 @@ int chunkBuildRenders, chunkLoads, chunkUnloads;
 
 void Init()
 {
-    _mkdir(("Worlds/" + worldname + "/").c_str());
-    _mkdir(("Worlds/" + worldname + "/chunks").c_str());
+    _mkdir(("Worlds/" + WorldName + "/").c_str());
+    _mkdir(("Worlds/" + WorldName + "/chunks").c_str());
 
     WorldGen::perlinNoiseInit(3404);
     cpCachePtr = nullptr;
@@ -79,12 +79,7 @@ chunk* AddChunk(int x, int y, int z)
         return chunks[pos.second];
     }
 
-    chunks.push_back(nullptr);
-    for (int i = chunks.size() - 1; i >= pos.first + 1; i--)
-    {
-        chunks[i] = chunks[i - 1];
-    }
-    chunks[pos.first] = new chunk(x, y, z, cid);
+    chunks.insert(chunks.begin() + pos.first, new chunk(x, y, z, cid));
     cpCacheID = cid;
     cpCachePtr = chunks[pos.first];
     cpArray.AddChunk(chunks[pos.first],x,y,z);
@@ -142,7 +137,7 @@ chunk* getChunkPtr(int x, int y, int z)
                 cpCachePtr = ret;
                 if (cpArray.elementExists(x - cpArray.originX, y - cpArray.originY, z - cpArray.originZ))
                 {
-                    cpArray.array[(x - cpArray.originX)*cpArray.size2 + (y - cpArray.originY)*cpArray.size + (z - cpArray.originZ)] = chunks[pos.second];
+                    cpArray.setChunkPtr(x, y, z, chunks[pos.second]);
                 }
                 return ret;
             }
@@ -544,23 +539,18 @@ bool inWater(const Hitbox::AABB& box)
     return false;
 }
 
-void updateblock(int x, int y, int z, bool blockchanged, int depth)
+void updateblock(int x, int y, int z, bool updated, int depth)
 {
     //Blockupdate
 
     if (depth > 4096) return;
     depth++;
 
-    bool updated = blockchanged;
-    int cx = getchunkpos(x);
-    int cy = getchunkpos(y);
-    int cz = getchunkpos(z);
+    int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
 
     if (chunkOutOfBound(cx, cy, cz)) return;
 
-    int bx = getblockpos(x);
-    int by = getblockpos(y);
-    int bz = getblockpos(z);
+    int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
     chunk* cptr = getChunkPtr(cx, cy, cz);
     if (cptr != nullptr)
@@ -654,12 +644,9 @@ void updateblock(int x, int y, int z, bool blockchanged, int depth)
 
         if (updated)
         {
-            updateblock(x, y + 1, z, false, depth);
-            updateblock(x, y - 1, z, false, depth);
-            updateblock(x + 1, y, z, false, depth);
-            updateblock(x - 1, y, z, false, depth);
-            updateblock(x, y, z + 1, false, depth);
-            updateblock(x, y, z - 1, false, depth);
+            int vec[6][3] = { {0, 1, 0}, {0, -1, 0}, {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1} };
+            for (int i = 0; i < 6; i++)
+                updateblock(x + vec[i][0], y + vec[i][1], z + vec[i][2], false, depth);
         }
 
         setChunkUpdated(cx, cy, cz, true);
@@ -967,7 +954,6 @@ void destroyAllChunks()
         if (!chunks[i]->Empty)
         {
             chunks[i]->destroyRender();
-            chunks[i]->destroy();
             delete chunks[i];
         }
     }
@@ -976,14 +962,8 @@ void destroyAllChunks()
     HMap.destroy();
 
     rebuiltChunks = 0;
-    rebuiltChunksCount = 0;
-
     updatedChunks = 0;
-    updatedChunksCount = 0;
-
     unloadedChunks = 0;
-    unloadedChunksCount = 0;
-
     memset(chunkBuildRenderList, 0, 256 * 2 * sizeof(int));
     memset(chunkLoadList, 0, 256 * 4 * sizeof(int));
 

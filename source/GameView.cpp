@@ -24,7 +24,7 @@
 #include "AudioSystem.h"
 
 
-ThreadFunc updateThreadFunc(void*);
+ThreadFunc UpdateThreadFunc(void*);
 
 class GameDView :public GUI::Form
 {
@@ -44,6 +44,8 @@ private:
     bool DebugShadow;
     bool DebugMergeFace;
 
+    bool updateThreadRun;
+
     int selx, sely, selz, oldselx, oldsely, oldselz, selface;
     bool sel;
     float selt, seldes;
@@ -52,11 +54,11 @@ private:
     bool selce;
     int selbx, selby, selbz, selcx, selcy, selcz;
 
-    int getMouseScroll()
+    int GetMouseScroll()
     {
         return mw;
     }
-    int getMouseButton()
+    int GetMouseButton()
     {
         return mb;
     }
@@ -101,7 +103,7 @@ public:
             {
                 lastupdate += 1.0 / 30.0;
                 upsc++;
-                updategame();
+                UpdateGame();
                 FirstUpdateThisFrame = false;
             }
 
@@ -116,18 +118,18 @@ public:
         MutexUnlock(Mutex);
     }
 
-    void saveGame()
+    void SaveGame()
     {
         World::saveAllChunks();
-        if (!Player::save(World::worldname))
+        if (!Player::save(World::WorldName))
         {
             DebugWarning("Failed saving player info!");
         }
     }
 
-    bool loadGame()
+    bool LoadGame()
     {
-        if (!Player::load(World::worldname))
+        if (!Player::load(World::WorldName))
         {
             DebugWarning("Failed loading player info!");
             return false;
@@ -136,7 +138,7 @@ public:
     }
 
 
-    bool isPressed(int key, bool setFalse = false)
+    bool IsPressed(int key, bool setFalse = false)
     {
         static bool keyPressed[GLFW_KEY_LAST + 1];
         if (setFalse)
@@ -155,7 +157,7 @@ public:
     }
 
 
-    void updategame()
+    void UpdateGame()
     {
         static double Wprstm;
         static bool WP;
@@ -177,7 +179,7 @@ public:
         //时间
         gametime++;
         if (glfwGetKey(MainWindow, GLFW_KEY_F8)) gametime += 30;
-        if (gametime > gameTimeMax) gametime = 0;
+        if (gametime > MaxGameTime) gametime = 0;
 
         //World::unchunks.size()=0
         World::rebuiltChunks = 0;
@@ -373,7 +375,7 @@ public:
                             BlockPos[2] = z;
                         }
                     }
-                    if (((mb == 2 && mbp == false) || (!chatmode&&isPressed(GLFW_KEY_TAB))))   //鼠标右键
+                    if (((mb == 2 && mbp == false) || (!chatmode&&IsPressed(GLFW_KEY_TAB))))   //鼠标右键
                     {
                         if (Player::inventoryAmount[3][Player::indexInHand] > 0 && isBlock(Player::inventory[3][Player::indexInHand]))
                         {
@@ -526,15 +528,15 @@ public:
                 }
 
                 //切换方块
-                if (isPressed(GLFW_KEY_Z) && Player::indexInHand > 0) Player::indexInHand--;
-                if (isPressed(GLFW_KEY_X) && Player::indexInHand < 9) Player::indexInHand++;
+                if (IsPressed(GLFW_KEY_Z) && Player::indexInHand > 0) Player::indexInHand--;
+                if (IsPressed(GLFW_KEY_X) && Player::indexInHand < 9) Player::indexInHand++;
                 if ((int)Player::indexInHand + (mwl - mw) < 0)Player::indexInHand = 0;
                 else if ((int)Player::indexInHand + (mwl - mw) > 9)Player::indexInHand = 9;
                 else Player::indexInHand += (char)(mwl - mw);
                 mwl = mw;
 
                 //起跳！
-                if (isPressed(GLFW_KEY_SPACE))
+                if (IsPressed(GLFW_KEY_SPACE))
                 {
                     if (!Player::inWater)
                     {
@@ -554,14 +556,14 @@ public:
                         if (Player::Flying || Player::CrossWall)
                         {
                             Player::ya += walkspeed / 2;
-                            isPressed(GLFW_KEY_SPACE, true);
+                            IsPressed(GLFW_KEY_SPACE, true);
                         }
                         Wprstm = 0.0;
                     }
                     else
                     {
                         Player::ya = walkspeed;
-                        isPressed(GLFW_KEY_SPACE, true);
+                        IsPressed(GLFW_KEY_SPACE, true);
                     }
                 }
 
@@ -580,41 +582,41 @@ public:
                 }
 
                 //各种设置切换
-                if (isPressed(GLFW_KEY_F1))
+                if (IsPressed(GLFW_KEY_F1))
                 {
                     Player::changeGameMode(Player::gamemode == Player::Creative ?
                                            Player::Survival : Player::Creative);
                 }
-                if (isPressed(GLFW_KEY_F2)) shouldGetScreenshot = true;
-                if (isPressed(GLFW_KEY_F3)) DebugMode = !DebugMode;
-                if (isPressed(GLFW_KEY_F4)) Player::CrossWall = !Player::CrossWall;
-                if (isPressed(GLFW_KEY_H) && glfwGetKey(MainWindow, GLFW_KEY_F3) == GLFW_PRESS)
+                if (IsPressed(GLFW_KEY_F2)) shouldGetScreenshot = true;
+                if (IsPressed(GLFW_KEY_F3)) DebugMode = !DebugMode;
+                if (IsPressed(GLFW_KEY_F4)) Player::CrossWall = !Player::CrossWall;
+                if (IsPressed(GLFW_KEY_H) && glfwGetKey(MainWindow, GLFW_KEY_F3) == GLFW_PRESS)
                 {
                     DebugHitbox = !DebugHitbox;
                     DebugMode = true;
                 }
                 if (Renderer::AdvancedRender)
                 {
-                    if (isPressed(GLFW_KEY_M) && glfwGetKey(MainWindow, GLFW_KEY_F3) == GLFW_PRESS)
+                    if (IsPressed(GLFW_KEY_M) && glfwGetKey(MainWindow, GLFW_KEY_F3) == GLFW_PRESS)
                     {
                         DebugShadow = !DebugShadow;
                         DebugMode = true;
                     }
                 }
                 else DebugShadow = false;
-                if (isPressed(GLFW_KEY_G) && glfwGetKey(MainWindow, GLFW_KEY_F3) == GLFW_PRESS)
+                if (IsPressed(GLFW_KEY_G) && glfwGetKey(MainWindow, GLFW_KEY_F3) == GLFW_PRESS)
                 {
                     DebugMergeFace = !DebugMergeFace;
                     DebugMode = true;
                 }
-                if (isPressed(GLFW_KEY_F4 && Player::gamemode == Player::Creative)) Player::CrossWall = !Player::CrossWall;
-                if (isPressed(GLFW_KEY_F5)) GUIrenderswitch = !GUIrenderswitch;
-                if (isPressed(GLFW_KEY_F6)) Player::Glide = !Player::Glide;
-                if (isPressed(GLFW_KEY_F7)) Player::spawn();
-                if (isPressed(GLFW_KEY_SLASH)) chatmode = true; //斜杠将会在下面的if(chatmode)里添加
+                if (IsPressed(GLFW_KEY_F4 && Player::gamemode == Player::Creative)) Player::CrossWall = !Player::CrossWall;
+                if (IsPressed(GLFW_KEY_F5)) GUIrenderswitch = !GUIrenderswitch;
+                if (IsPressed(GLFW_KEY_F6)) Player::Glide = !Player::Glide;
+                if (IsPressed(GLFW_KEY_F7)) Player::spawn();
+                if (IsPressed(GLFW_KEY_SLASH)) chatmode = true; //斜杠将会在下面的if(chatmode)里添加
             }
 
-            if (isPressed(GLFW_KEY_ENTER) == GLFW_PRESS)
+            if (IsPressed(GLFW_KEY_ENTER) == GLFW_PRESS)
             {
                 chatmode = !chatmode;
                 if (chatword != "")   //指令的执行，或发出聊天文本
@@ -622,7 +624,7 @@ public:
                     if (chatword.substr(0, 1) == "/")   //指令
                     {
                         vector<string> command = split(chatword, " ");
-                        if (!doCommand(command))   //执行失败
+                        if (!ExecuteCommand(command))   //执行失败
                         {
                             DebugWarning("Fail to execute the command: " + chatword);
                             chatMessages.push_back("Fail to execute the command: " + chatword);
@@ -637,7 +639,7 @@ public:
             }
             if (chatmode)
             {
-                if (isPressed(GLFW_KEY_BACKSPACE) && chatword.length()>0)
+                if (IsPressed(GLFW_KEY_BACKSPACE) && chatword.length()>0)
                 {
                     int n = chatword[chatword.length() - 1];
                     if (n > 0 && n <= 127)
@@ -650,7 +652,7 @@ public:
                     chatword += inputstr;
                 }
                 //自动补全
-                if (isPressed(GLFW_KEY_TAB) && chatmode && chatword.size() > 0 && chatword.substr(0, 1) == "/")
+                if (IsPressed(GLFW_KEY_TAB) && chatmode && chatword.size() > 0 && chatword.substr(0, 1) == "/")
                 {
                     for (std::map<std::wstring, command>::iterator it = commands.begin(); it != commands.end(); it++)
                         if (beginWith(it->first, to_wstring(chatword)))
@@ -661,7 +663,7 @@ public:
 
         inputstr = "";
 
-        if (isPressed(GLFW_KEY_E) && GUIrenderswitch && !chatmode)
+        if (IsPressed(GLFW_KEY_E) && GUIrenderswitch && !chatmode)
         {
             bagOpened = !bagOpened;
             bagAnimTimer = timer();
@@ -678,7 +680,7 @@ public:
 
         if (!bagOpened && !chatmode)
         {
-            if (isPressed(GLFW_KEY_L))World::saveAllChunks();
+            if (IsPressed(GLFW_KEY_L))World::saveAllChunks();
         }
 
         //跳跃
@@ -693,7 +695,7 @@ public:
                     {
                         Player::jump = 0.0;
                         Player::AirJumps = 0;
-                        isPressed(GLFW_KEY_SPACE, true);
+                        IsPressed(GLFW_KEY_SPACE, true);
                     }
                     else
                     {
@@ -712,7 +714,7 @@ public:
             {
                 Player::jump = 0.0;
                 Player::AirJumps = MaxAirJumps;
-                isPressed(GLFW_KEY_SPACE, true);
+                IsPressed(GLFW_KEY_SPACE, true);
                 if (Player::ya <= 0.001 && !Player::Flying && !Player::CrossWall)
                 {
                     Player::ya = -0.001;
@@ -893,7 +895,7 @@ public:
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
-        //daylight = clamp((1.0 - cos((double)gametime / gameTimeMax * 2.0 * M_PI) * 2.0) / 2.0, 0.05, 1.0);
+        //daylight = clamp((1.0 - cos((double)gametime / MaxGameTime * 2.0 * M_PI) * 2.0) / 2.0, 0.05, 1.0);
         //Renderer::sunlightXrot = 90 * daylight;
         if (Renderer::AdvancedRender)
         {
@@ -970,7 +972,7 @@ public:
         if (seldes > 0.0)
         {
             glTranslated(selx - xpos, sely - ypos, selz - zpos);
-            renderDestroy(seldes, 0, 0, 0);
+            RenderDestroy(seldes, 0, 0, 0);
             glTranslated(-selx + xpos, -sely + ypos, -selz + zpos);
         }
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
@@ -980,7 +982,7 @@ public:
         if (GUIrenderswitch&&sel)
         {
             glTranslated(selx - xpos, sely - ypos, selz - zpos);
-            drawBorder(0, 0, 0);
+            DrawBorder(0, 0, 0);
             glTranslated(-selx + xpos, -sely + ypos, -selz + zpos);
         }
 
@@ -1087,8 +1089,8 @@ public:
         }
         if (GUIrenderswitch)
         {
-            drawGUI();
-            drawBag();
+            DrawGUI();
+            DrawBag();
         }
 
         glDisable(GL_TEXTURE_2D);
@@ -1120,12 +1122,12 @@ public:
             strftime(tmp, sizeof(tmp), "%Y年%m月%d日%H时%M分%S秒", &timeinfo);
             std::stringstream ss;
             ss << "Screenshots/" << tmp << ".bmp";
-            saveScreenshot(0, 0, windowwidth, windowheight, ss.str());
+            SaveScreenshot(0, 0, windowwidth, windowheight, ss.str());
         }
         if (shouldGetThumbnail)
         {
             shouldGetThumbnail = false;
-            createThumbnail();
+            CreateThumbnail();
         }
 
         //屏幕刷新，千万别删，后果自负！！！
@@ -1139,7 +1141,7 @@ public:
         //==refresh end==//
     }
 
-    void drawBorder(int x, int y, int z)
+    void DrawBorder(int x, int y, int z)
     {
         //绘制选择边框
         static float eps = 0.002f; //实际上这个边框应该比方块大一些，否则很难看
@@ -1187,7 +1189,7 @@ public:
         glDisable(GL_LINE_SMOOTH);
     }
 
-    void drawGUI()
+    void DrawGUI()
     {
         int windowuswidth = windowwidth / stretch, windowusheight = windowheight / stretch;
         glDepthFunc(GL_ALWAYS);
@@ -1346,7 +1348,7 @@ public:
             TextRenderer::renderASCIIString(0, (pos++) * 16, "Debug Mode:" + pack(DebugMode));
             if (Renderer::AdvancedRender)
                 TextRenderer::renderASCIIString(0, (pos++) * 16, "Shadow View:" + pack(DebugShadow));
-            TextRenderer::renderASCIIString(0, (pos++) * 16, "X:" + pack(Player::xpos) + "Y:" + pack(Player::ypos) + "Z:" + pack(Player::zpos));
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "X:" + pack(Player::xpos) + " Y:" + pack(Player::ypos) + " Z:" + pack(Player::zpos));
             TextRenderer::renderASCIIString(0, (pos++) * 16, "Direction:" + pack(Player::heading) + "Head:" + pack(Player::lookupdown) + "Jump speed:" + pack(Player::jump));
 
             {
@@ -1366,7 +1368,7 @@ public:
 
             {
                 char tmp[50];
-                sprintf(tmp, "Time:%02d:%02d:%02d(%d/%d)", gametime / (30 * 60), gametime % (30 * 60) / 30, gametime % 30 * 2, gametime, gameTimeMax);
+                sprintf(tmp, "Time:%02d:%02d:%02d(%d/%d)", gametime / (30 * 60), gametime % (30 * 60) / 30, gametime % 30 * 2, gametime, MaxGameTime);
                 TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
             }
 
@@ -1375,7 +1377,7 @@ public:
             if (multiplayer)
             {
                 MutexLock(Network::mutex);
-                TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::getRequestCount) + "/" + pack(networkRequestMax) + " network requests");
+                TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::getRequestCount) + "/" + pack(NetworkRequestMax) + " network requests");
                 MutexUnlock(Network::mutex);
             }
 
@@ -1404,7 +1406,7 @@ public:
         glFlush();
     }
 
-    void drawCloud(double px, double pz)
+    void DrawCloud(double px, double pz)
     {
         static double ltimer;
         static bool generated;
@@ -1463,7 +1465,7 @@ public:
         //SetupNormalFog();
     }
 
-    void renderDestroy(float level, int x, int y, int z)
+    void RenderDestroy(float level, int x, int y, int z)
     {
         static float eps = 0.002f;
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1528,7 +1530,7 @@ public:
         glEnd();
     }
 
-    void drawBagRow(int row, int itemid, int xbase, int ybase, int spac, float alpha)
+    void DrawBagRow(int row, int itemid, int xbase, int ybase, int spac, float alpha)
     {
         //画出背包的一行
         for (int i = 0; i < 10; i++)
@@ -1569,7 +1571,7 @@ public:
         }
     }
 
-    void drawBag()
+    void DrawBag()
     {
         //背包界面与更新
         static int si, sj, sf;
@@ -1655,7 +1657,7 @@ public:
                             if (Player::inventory[i][j] == block(Blocks::AIR)) Player::inventoryAmount[i][j] = 0;
                         }
                     }
-                    drawBagRow(i, (csi == i ? csj : -1), (windowwidth / stretch - 392) / 2, windowheight / stretch - 152 - 16 + i * 40, 8, 1.0f);
+                    DrawBagRow(i, (csi == i ? csj : -1), (windowwidth / stretch - 392) / 2, windowheight / stretch - 152 - 16 + i * 40, 8, 1.0f);
                 }
             }
             if (indexselected != block(Blocks::AIR))
@@ -1690,13 +1692,13 @@ public:
                 xbase = (int)round(((windowwidth / stretch - 392) / 2)*bagAnim);
                 ybase = (int)round((windowheight / stretch - 152 - 16 + 120 - (windowheight / stretch - 32))*bagAnim + (windowheight / stretch - 32));
                 spac = (int)round(8 * bagAnim);
-                drawBagRow(3, -1, xbase, ybase, spac, alpha);
+                DrawBagRow(3, -1, xbase, ybase, spac, alpha);
                 xbase = (int)round(((windowwidth / stretch - 392) / 2 - windowwidth / stretch)*bagAnim + windowwidth / stretch);
                 ybase = (int)round((windowheight / stretch - 152 - 16 - (windowheight / stretch - 32))*bagAnim + (windowheight / stretch - 32));
                 for (int i = 0; i < 3; i++)
                 {
                     glColor4f(1.0f, 1.0f, 1.0f, bagAnim);
-                    drawBagRow(i, -1, xbase, ybase + i * 40, spac, alpha);
+                    DrawBagRow(i, -1, xbase, ybase + i * 40, spac, alpha);
                 }
             }
 
@@ -1728,21 +1730,21 @@ public:
                 ybase = (int)round((windowheight / stretch - 152 - 16 + 120 - (windowheight / stretch - 32)) - (windowheight / stretch - 152 - 16 + 120 - (windowheight - 32))*bagAnim + (windowheight / stretch - 32));
                 spac = (int)round(8 - 8 * bagAnim);
                 glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-                drawBagRow(3, Player::indexInHand, xbase, ybase, spac, alpha);
+                DrawBagRow(3, Player::indexInHand, xbase, ybase, spac, alpha);
                 xbase = (int)round(((windowwidth / stretch - 392) / 2 - windowwidth / stretch) - ((windowwidth / stretch - 392) / 2 - windowwidth / stretch)*bagAnim + windowwidth / stretch);
                 ybase = (int)round((windowheight / stretch - 152 - 16 - (windowheight / stretch - 32)) - (windowheight / stretch - 152 - 16 - (windowheight / stretch - 32))*bagAnim + (windowheight / stretch - 32));
                 for (int i = 0; i < 3; i++)
                 {
                     glColor4f(1.0f, 1.0f, 1.0f, 1.0f - bagAnim);
-                    drawBagRow(i, -1, xbase, ybase + i * 40, spac, alpha);
+                    DrawBagRow(i, -1, xbase, ybase + i * 40, spac, alpha);
                 }
             }
-            else drawBagRow(3, Player::indexInHand, 0, windowheight / stretch - 32, 0, 0.5f);
+            else DrawBagRow(3, Player::indexInHand, 0, windowheight / stretch - 32, 0, 0.5f);
         }
         glFlush();
     }
 
-    void saveScreenshot(int x, int y, int w, int h, string filename)
+    void SaveScreenshot(int x, int y, int w, int h, string filename)
     {
         int bufw = ((w >> 2) << 2) + (w & 3 ? 4 : 0), bufh = ((h >> 2) << 2) + (h & 3 ? 4 : 0);
         Textures::TEXTURE_RGB scrBuffer(bufw, bufh);
@@ -1750,12 +1752,12 @@ public:
         scrBuffer.Save(filename);
     }
 
-    void createThumbnail()
+    void CreateThumbnail()
     {
-        saveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::worldname + "/Thumbnail.bmp");
+        SaveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::WorldName + "/Thumbnail.bmp");
     }
 
-    void registerCommands()
+    void RegisterCommands()
     {
         register_command(L"/give", [](int argc, const wchar_t** argv) -> int
         {
@@ -1818,13 +1820,13 @@ public:
         {
             if (argc != 2) return 0;
             int time = extract<int>(argv[1]);
-            if (time<0 || time>gameTimeMax) return 0;
+            if (time<0 || time>MaxGameTime) return 0;
             gametime = time;
             return 1;
         });
     }
 
-    bool doCommand(const vector<string>& command)
+    bool ExecuteCommand(const vector<string>& command)
     {
         vector<std::wstring> tmp;
         for (int i = 0; i < (int)command.size(); i++)
@@ -1846,7 +1848,7 @@ public:
 
         Mutex = MutexCreate();
         MutexLock(Mutex);
-        updateThread = ThreadCreate(&updateThreadFunc, NULL);
+        updateThread = ThreadCreate(&UpdateThreadFunc, NULL);
         if (multiplayer)
         {
             fastSrand((unsigned int)time(NULL));
@@ -1855,13 +1857,13 @@ public:
             Network::init(serverip, port);
         }
         //初始化游戏状态
-        if (loadGame()) Player::init(Player::xpos, Player::ypos, Player::zpos);
+        if (LoadGame()) Player::init(Player::xpos, Player::ypos, Player::zpos);
         else Player::spawn();
         World::Init();
         static bool registered = false;
         if (!registered)
         {
-            registerCommands();
+            RegisterCommands();
             registered = true;
         }
 
@@ -1900,7 +1902,7 @@ public:
         if (glfwGetKey(MainWindow, GLFW_KEY_ESCAPE) == 1)
         {
             updateThreadPaused = true;
-            createThumbnail();
+            CreateThumbnail();
             GUI::clearTransition();
             GUI::PushPage(new Menus::GameMenu);
         }
@@ -1917,7 +1919,7 @@ public:
         ThreadWait(updateThread);
         ThreadDestroy(updateThread);
         MutexDestroy(Mutex);
-        saveGame();
+        SaveGame();
         World::destroyAllChunks();
         if (World::vbuffersShouldDelete.size() > 0)
         {
@@ -1935,7 +1937,7 @@ void GameView()
     GUI::PushPage(Game = (new GameDView));
 }
 
-ThreadFunc updateThreadFunc(void*)
+ThreadFunc UpdateThreadFunc(void*)
 {
     Game->GameThreadloop();
     return 0;

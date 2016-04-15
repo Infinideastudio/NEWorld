@@ -9,9 +9,9 @@
 enum
 {
     version = 39,
-    gameTimeMax = 43200,
-    networkRequestFrequency = 3,
-    networkRequestMax = 20
+    MaxGameTime = 43200,
+    NetworkRequestFrequency = 3,
+    NetworkRequestMax = 20
 };
 const string major_version = "Alpha 0.", minor_version = "5", ext_version = " Technical Perview";
 extern float FOVyNormal;
@@ -55,7 +55,7 @@ extern Mutex_t Mutex;
 extern Thread_t updateThread;
 extern double lastupdate, updateTimer;
 extern double lastframe;
-extern bool updateThreadRun, updateThreadPaused;
+extern bool updateThreadPaused;
 
 extern bool mpclient, mpserver;
 extern bool shouldGetScreenshot;
