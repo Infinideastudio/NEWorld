@@ -63,6 +63,9 @@
     <Filter Include="Sqlite">
       <UniqueIdentifier>{06ec6d50-6a86-4d4a-9168-86fcfefd34aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Game\Blocks">
+      <UniqueIdentifier>{07da47c7-26fc-4f1e-98fe-3e47eb7ed575}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Object.h">
@@ -240,9 +243,6 @@
     <ClInclude Include="source\AudioSystem.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="source\BlockFuncs.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="include\sqlite\sqlite3.h">
       <Filter>Sqlite</Filter>
     </ClInclude>
@@ -377,14 +377,17 @@
     <ClCompile Include="source\AudioSystem.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="source\BlockFuncs.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
     <ClCompile Include="source\Menus.cpp">
       <Filter>Source\GUI</Filter>
     </ClCompile>
     <ClCompile Include="include\sqlite\sqlite3.c">
       <Filter>Sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CBlocks.cpp">
+      <Filter>Source\Game\Blocks</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Blocks.cpp">
+      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

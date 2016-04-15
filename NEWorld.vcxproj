@@ -312,7 +312,6 @@
     <ClInclude Include="include\Netycat\include\Netycat\Netycat.h" />
     <ClInclude Include="include\sqlite\sqlite3.h" />
     <ClInclude Include="source\AudioSystem.h" />
-    <ClInclude Include="source\BlockFuncs.h" />
     <ClInclude Include="source\Blocks.h" />
     <ClInclude Include="source\Chunk.h" />
     <ClInclude Include="source\ChunkPacket.h" />
@@ -364,7 +363,8 @@
     <ClCompile Include="include\Netycat\src\Netycat\Core\Socket.cpp" />
     <ClCompile Include="include\sqlite\sqlite3.c" />
     <ClCompile Include="source\AudioSystem.cpp" />
-    <ClCompile Include="source\BlockFuncs.cpp" />
+    <ClCompile Include="source\Blocks.cpp" />
+    <ClCompile Include="source\CBlocks.cpp" />
     <ClCompile Include="source\Chunk.cpp" />
     <ClCompile Include="source\ChunkPtrArray.cpp" />
     <ClCompile Include="source\ChunkRenderer.cpp" />

@@ -1130,7 +1130,7 @@ void MarkBlockUpdate(Blocks::BUDDP Block)
 
 void ExecBUPD(Blocks::BUDDP B)
 {
-    if (BlockInfo((*(B.slf))).ExecBUF(B))
+    if (Blocks::blockData[B.slf->ID]->ExecBUF(&B))
     {
         getChunkPtr(getchunkpos(B.cx), getchunkpos(B.cy), getchunkpos(B.cz))->Modified = true;
         updateblock(B.cx, B.cy, B.cz, true);

@@ -460,11 +460,11 @@ void MergeFaceRender(World::chunk* c)
                             else if (d == 5 && getblock(gx, gy - 1, gz - 1, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
                         }
                         //Render
-                        const Blocks::SingleBlock& info = BlockInfo(bl);
+                        Blocks::SingleBlock& info = BlockInfo(bl);
                         if (bl == block(Blocks::AIR) || bl == neighbour && bl != block(Blocks::LEAF) || BlockInfo(neighbour).isOpaque() ||
-                                steps == 0 && info.isTranslucent() ||
-                                steps == 1 && (!info.isTranslucent() || !info.isSolid()) ||
-                                steps == 2 && (!info.isTranslucent() || info.isSolid()))
+                                steps == 0 && (info.isTranslucent()) ||
+                                steps == 1 && (!(info.isTranslucent()) || !(info.isSolid())) ||
+                                steps == 2 && (!(info.isTranslucent()) || (info.isSolid())))
                         {
                             //Not valid block
                             if (valid)

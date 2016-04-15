@@ -1,9 +1,9 @@
-#ifndef BLOCKS_H
-#define BLOCKS_H
-
+#pragma once
 #include "Definitions.h"
 #include "Globalization.h"
-#include "BlockFuncs.h"
+
+void* Allocator(string key);
+
 namespace Blocks
 {
 
@@ -37,79 +37,30 @@ private:
 
 public:
 
-    BUDF BlockUpdateFunc = nullptr;
-    TILF BlockTickUpdateFunc = nullptr;
 
-    bool ExecBUF(BUDDP b) const
-    {
-        bool ret = false;
-        if (BlockUpdateFunc)
-        {
-            ret = BlockUpdateFunc(&b);
-        }
-        return ret;
-    }
+    SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness) :
+        name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness) {};
 
-    SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness, BUDF _buf) :
-        name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness), BlockUpdateFunc(_buf) {};
+    virtual bool ExecBUF(BUDDP * args);
 
-    string getBlockName() const
-    {
-        return Globalization::GetStr(name);
-    }
+    virtual string getBlockName();
 
-    bool isSolid() const
-    {
-        return Solid;
-    }
+    virtual bool isSolid();
 
-    bool isOpaque() const
-    {
-        return Opaque;
-    }
+    virtual bool isOpaque();
 
-    bool isTranslucent() const
-    {
-        return Translucent;
-    }
+    virtual bool isTranslucent();
 
-    bool isExplosive() const
-    {
-        return explosive;
-    }
+    virtual bool isExplosive();
 
-    float getHardness() const
-    {
-        return Hardness;
-    }
+    virtual float getHardness();
 };
 
-const SingleBlock blockData[BLOCK_DEF_END + 1] =
-{
-    //            Block Name                  Solid   Opaque Translucent Explosive Hardness Block Update Callback Function
-    SingleBlock("NEWorld.Blocks.Air"        , false    , false    , false , false,    0    , nullptr),
-    SingleBlock("NEWorld.Blocks.Rock"        , true    , true    , false , false,    2    , nullptr),
-    SingleBlock("NEWorld.Blocks.Grass"        , true    , true    , false , false,    5    , &GrassBUF),
-    SingleBlock("NEWorld.Blocks.Dirt"        , true    , true    , false , false,    5    , nullptr),
-    SingleBlock("NEWorld.Blocks.Stone"        , true    , true    , false , false,    2    , nullptr),
-    SingleBlock("NEWorld.Blocks.Plank"        , true    , true    , false , false,    5    , nullptr),
-    SingleBlock("NEWorld.Blocks.Wood"        , true    , true    , false , false,    5    , nullptr),
-    SingleBlock("NEWorld.Blocks.Bedrock"    , true    , true    , false , false,    0    , nullptr),
-    SingleBlock("NEWorld.Blocks.Leaf"        , true    , false    , false    , false,    15   , nullptr),
-    SingleBlock("NEWorld.Blocks.Glass"        , true    , false    , false    , false,    30   , nullptr),
-    SingleBlock("NEWorld.Blocks.Water"        , false    , false    , true    , false,    0    , &WaterBUF),
-    SingleBlock("NEWorld.Blocks.Lava"        , false    , false    , true    , false,    0    , &LavaBUF),
-    SingleBlock("NEWorld.Blocks.GlowStone"    , true    , true    , false    , false,    10   , nullptr),
-    SingleBlock("NEWorld.Blocks.Sand"        , true    , true    , false    , false,    8    , nullptr),
-    SingleBlock("NEWorld.Blocks.Cement"        , true    , true    , false    , false,    0.5f , nullptr),
-    SingleBlock("NEWorld.Blocks.Ice"        , true    , false    , true  , false,    25   , nullptr),
-    SingleBlock("NEWorld.Blocks.Coal Block" , true    , true    , false , false,    1    , nullptr),
-    SingleBlock("NEWorld.Blocks.Iron Block" , true    , true    , false , false,    0.5f , nullptr),
-    SingleBlock("NEWorld.Blocks.TNT"        , true    , true    , false , true,        25   , nullptr),
-    SingleBlock("NEWorld.Blocks.Null Block" , true  , true  , false , false,    0    , nullptr)
-};
+extern SingleBlock* blockData[BLOCK_DEF_END + 1];
 
 }
 
-#define BlockInfo(blockID) Blocks::blockData[(blockID).ID >= Blocks::BLOCK_DEF_END || (blockID.ID) < 0 ? Blocks::BLOCK_DEF_END : (blockID.ID)]
-#endif
+inline Blocks::SingleBlock BlockInfo(block blockID)
+{
+    return (*Blocks::blockData[(blockID).ID >= Blocks::BLOCK_DEF_END || (blockID.ID) < 0 ? Blocks::BLOCK_DEF_END : (blockID.ID)]);
+}
