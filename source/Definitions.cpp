@@ -43,7 +43,7 @@ Mutex_t Mutex;
 Thread_t updateThread;
 double lastupdate, updateTimer;
 double lastframe;
-bool updateThreadRun, updateThreadPaused;
+bool updateThreadPaused;
 
 bool shouldGetScreenshot;
 bool shouldGetThumbnail;

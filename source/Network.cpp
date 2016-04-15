@@ -91,11 +91,11 @@ ThreadFunc networkThread(void *)
 
 void pushRequest(Request& r)
 {
-    if (reqs.size() + 1 > networkRequestMax)    //超过请求队列长度，试图精简队列
+    if (reqs.size() + 1 > NetworkRequestMax)    //超过请求队列长度，试图精简队列
     {
         if (!reqs.front().isImportant()) reqs.pop();
     }
-    if (reqs.size() + 1 > networkRequestMax * 2)    //大量超过请求队列长度，只保留重要请求
+    if (reqs.size() + 1 > NetworkRequestMax * 2)    //大量超过请求队列长度，只保留重要请求
     {
         std::queue<Request> q;
         while (reqs.size() != 0)

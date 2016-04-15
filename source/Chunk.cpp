@@ -65,7 +65,7 @@ void chunk::create()
     //Note: If the memory is not enough, let it crash. Or you will have to face other 'strange' errors.
 }
 
-void chunk::destroy()
+chunk::~chunk()
 {
     delete[] pblocks;
     delete[] pbrightness;
@@ -102,7 +102,7 @@ void chunk::buildTerrain(bool initIfEmpty)
     }
 
     //Part2 out of geomentry area
-    HMapManager cur = HMapManager(cx, cz);
+    HMapManager cur(cx, cz);
     if (cy > cur.high)
     {
         Empty = true;
@@ -232,10 +232,9 @@ void chunk::Load(bool initIfEmpty)
 
 void chunk::Unload()
 {
-    unloadedChunksCount++;
     SaveToFile();
     destroyRender();
-    destroy();
+    this->~chunk();
 }
 
 bool chunk::LoadFromFile()
@@ -262,26 +261,17 @@ void chunk::SaveToFile()
         file.write((char*)&DetailGenerated, sizeof(bool));
         file.close();
     }
-    if (objects.size() != 0)
-    {
-        //TODO ?
-    }
 }
 
 void chunk::buildRender()
 {
-    int x, y, z;
-    for (x = -1; x <= 1; x++)
+    for (int x = -1; x <= 1; x++)
     {
-        for (y = -1; y <= 1; y++)
+        for (int y = -1; y <= 1; y++)
         {
-            for (z = -1; z <= 1; z++)
+            for (int z = -1; z <= 1; z++)
             {
-                if (x == 0 && y == 0 && z == 0)
-                    continue;
-                if (chunkOutOfBound(cx + x, cy + y, cz + z))
-                    continue;
-                if (!chunkLoaded(cx + x, cy + y, cz + z))
+                if ((x || y || z) && !chunkOutOfBound(cx + x, cy + y, cz + z) && !chunkLoaded(cx + x, cy + y, cz + z))
                     return;
             }
         }
