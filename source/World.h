@@ -15,7 +15,7 @@ class Frsutum;
 namespace World
 {
 void ProcessBuq();
-extern string worldname;
+extern string WorldName;
 const int worldsize = 134217728;
 const int worldheight = 128;
 extern brightness skylight;         //Sky light level
@@ -35,9 +35,9 @@ extern HeightMap HMap;
 extern chunkPtrArray cpArray;
 
 extern int cloud[128][128];
-extern int rebuiltChunks, rebuiltChunksCount;
-extern int updatedChunks, updatedChunksCount;
-extern int unloadedChunks, unloadedChunksCount;
+extern int rebuiltChunks;
+extern int updatedChunks;
+extern int unloadedChunks;
 extern int chunkBuildRenderList[256][2];
 extern int chunkLoadList[256][4];
 extern pair<chunk*, int> chunkUnloadList[256];

@@ -45,7 +45,7 @@ vector<string> split(string str, string pattern);
 
 inline double rnd()
 {
-    return (double)fastRand() / (RAND_MAX + 1);
+    return (double)fastRand() / ((double)RAND_MAX + 1);
 }
 
 inline int RoundInt(double d)

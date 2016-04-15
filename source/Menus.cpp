@@ -134,7 +134,7 @@ void CreateWorldMenu::onUpdate()
     {
         if (worldnametb.text != "")
         {
-            World::worldname = worldnametb.text;
+            World::WorldName = worldnametb.text;
             GUI::ClearStack();
             GameView();
         }
@@ -279,7 +279,7 @@ void WorldMenu::onLoad()
     deletebtn = GUI::button(GetStrbyKey("NEWorld.worlds.delete"), 10, 250, -80, -56, 0.5, 0.5, 1.0, 1.0);
     backbtn = GUI::button(GetStrbyKey("NEWorld.worlds.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
     registerControls(5, &title, &vscroll, &enterbtn, &deletebtn, &backbtn);
-    World::worldname = "";
+    World::WorldName = "";
     enterbtn.enabled = false;
     deletebtn.enabled = false;
     vscroll.defaultv = true;
@@ -331,7 +331,7 @@ void WorldMenu::onUpdate()
     }
     if (enterbtn.clicked)
     {
-        World::worldname = chosenWorldName;
+        World::WorldName = chosenWorldName;
         GUI::ClearStack();
         GameView();
     }
@@ -340,7 +340,7 @@ void WorldMenu::onUpdate()
         //删除世界文件
         system((string("rd /s/q \"Worlds\\") + chosenWorldName + "\"").c_str());
         deletebtn.clicked = false;
-        World::worldname = "";
+        World::WorldName = "";
         enterbtn.enabled = false;
         deletebtn.enabled = false;
         refresh = true;
