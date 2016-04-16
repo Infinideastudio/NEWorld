@@ -5,9 +5,7 @@
 
 bool GrassBUF(Blocks::BUDDP * args)
 {
-    long long bx = args->cx;
-    long long by = args->cy;
-    long long bz = args->cz;
+    int bx = args->cx, by = args->cy, bz = args->cz;
     block b;
     b = World::getblock(bx, by + 1, bz);
     if (b.ID != Blocks::AIR)
@@ -25,9 +23,7 @@ bool WaterBUF(Blocks::BUDDP* args)
 {
     if (args->slf->Data81==1)
     {
-        long long bx = args->cx;
-        long long by = args->cy;
-        long long bz = args->cz;
+        int bx = args->cx, by = args->cy, bz = args->cz;
         bool set = false;
         block b;
         const int vec[][] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
@@ -44,10 +40,8 @@ bool WaterBUF(Blocks::BUDDP* args)
     }
     else if (args->slf->Data81 == 0)
     {
-        long long bx = args->cx;
-        long long by = args->cy;
-        long long bz = args->cz;
-        bool set = false, u = false;
+        int bx = args->cx, by = args->cy, bz = args->cz;
+        bool u = false;
         block b = World::getblock(bx, by - 1, bz);
         if (b.ID == Blocks::WATER && b.Data81 == 0 && b.Data82 != 255)
         {
@@ -112,9 +106,9 @@ bool LavaBUF(Blocks::BUDDP * args)
 {
     if (args->slf->Data81 == 1)
     {
-        long long bx = args->cx;
-        long long by = args->cy;
-        long long bz = args->cz;
+        int bx = args->cx;
+        int by = args->cy;
+        int bz = args->cz;
         bool set = false;
         block b;
         const int vec[5][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, -1, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
@@ -131,9 +125,9 @@ bool LavaBUF(Blocks::BUDDP * args)
     }
     else if (args->slf->Data81 == 0)
     {
-        long long bx = args->cx;
-        long long by = args->cy;
-        long long bz = args->cz;
+        int bx = args->cx;
+        int by = args->cy;
+        int bz = args->cz;
         bool u = false;
         block b = World::getblock(bx, by - 1, bz);
         if (b.ID == Blocks::LAVA && b.Data81 == 0 && b.Data82 != 255)

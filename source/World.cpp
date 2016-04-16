@@ -693,7 +693,7 @@ void Modifyblock(int x, int y, int z, block Blockname, chunk* cptr)
 block getblock(int x, int y, int z, block mask, chunk* cptr)
 {
     //获取方块
-    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     if (chunkOutOfBound(cx, cy, cz)) return block(Blocks::AIR);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
     if (cptr != nullptr && cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
@@ -1022,7 +1022,7 @@ void buildtree(int x, int y, int z)
         }
     }
     //取最小值
-    h = min(h, Dirt * 15 / 268 * max(rnd(), 0.8));
+    h = static_cast<int>(min(h, Dirt * 15 / 268 * max(rnd(), 0.8)));
     if (h < 7)return;
     //开始生成树干
     for (int i = y + 1; i < y + h + 1; i++)
@@ -1122,7 +1122,7 @@ void ProcessBuq()
     blockupdatequery.clear();
     block Mask = block(Blocks::AIR);
     block* b;
-    long long bx, by, bz;
+    int bx, by, bz;
     const int vec[6][3] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
     //Please indent following the basic law
 

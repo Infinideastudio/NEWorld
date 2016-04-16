@@ -14,7 +14,7 @@ extern "C"
 
 typedef struct
 {
-	wchar_t *name, *description;
+    wchar_t *name, *description;
 } plugin_information;
 
 typedef plugin_information* (*get_information)();

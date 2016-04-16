@@ -233,27 +233,26 @@ public:
         }
 
         //加载动画
-        for (int i = 0; i < World::chunks.size(); i++)
+        for (auto cp : World::chunks)
         {
-            World::chunk* cp = World::chunks[i];
             if (cp->loadAnim <= 0.3f) cp->loadAnim = 0.0f;
             else cp->loadAnim *= 0.6f;
         }
 
         //随机状态更新
-        for (int i = 0; i < World::chunks.size(); i++)
+        for (auto cp : World::chunks)
         {
             int x, y, z, gx, gy, gz;
-            int cx = World::chunks[i]->cx;
-            int cy = World::chunks[i]->cy;
-            int cz = World::chunks[i]->cz;
+            int cx = cp->cx;
+            int cy = cp->cy;
+            int cz = cp->cz;
             x = int(rnd() * 16);
             gx = x + cx * 16;
             y = int(rnd() * 16);
             gy = y + cy * 16;
             z = int(rnd() * 16);
             gz = z + cz * 16;
-            if (World::chunks[i]->getblock(x, y, z) == block(Blocks::DIRT) &&
+            if (cp->getblock(x, y, z) == block(Blocks::DIRT) &&
                     World::getblock(gx, gy + 1, gz, Blocks::NONEMPTY) == block(Blocks::AIR) && (
                         World::getblock(gx + 1, gy, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
                         World::getblock(gx - 1, gy, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
@@ -269,7 +268,7 @@ public:
                         World::getblock(gx, gy - 1, gz - 1, block(Blocks::AIR)) == block(Blocks::GRASS)))
             {
                 //长草
-                World::chunks[i]->setblock(x, y, z, block(Blocks::GRASS));
+                cp->setblock(x, y, z, block(Blocks::GRASS));
                 World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
                 World::setChunkUpdated(cx, cy, cz, true);
             }
@@ -347,15 +346,15 @@ public:
                             if (Player::inventory[3][Player::indexInHand] == STICK)Factor = 4.0;
                             else
                             {
-                                Factor = 30.0 / (BlockInfo(Player::inventory[3][Player::indexInHand]).getHardness() + 0.1);
-                                if (Factor < 1.0)Factor = 1.0;
-                                if (Factor > 1.7)Factor = 1.7;
+                                Factor = 30.0f / (BlockInfo(Player::inventory[3][Player::indexInHand]).getHardness() + 0.1f);
+                                if (Factor < 1.0) Factor = 1.0f;
+                                if (Factor > 1.7) Factor = 1.7f;
                             }
                             seldes += BlockInfo(selb).getHardness()*((Player::gamemode == Player::Creative) ? 10.0f : 0.3f)*Factor;
                             BlockClick = true;
-                            BlockPos[0] = x;
-                            BlockPos[1] = y;
-                            BlockPos[2] = z;
+                            BlockPos[0] = static_cast<ALfloat>(x);
+                            BlockPos[1] = static_cast<ALfloat>(y);
+                            BlockPos[2] = static_cast<ALfloat>(z);
 
                         }
 
@@ -370,9 +369,9 @@ public:
                             }
                             World::pickblock(x, y, z);
                             BlockClick = true;
-                            BlockPos[0] = x;
-                            BlockPos[1] = y;
-                            BlockPos[2] = z;
+                            BlockPos[0] = static_cast<ALfloat>(x);
+                            BlockPos[1] = static_cast<ALfloat>(y);
+                            BlockPos[2] = static_cast<ALfloat>(z);
                         }
                     }
                     if (((mb == 2 && mbp == false) || (!chatmode&&IsPressed(GLFW_KEY_TAB))))   //鼠标右键
@@ -386,9 +385,9 @@ public:
                                 if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = block(Blocks::AIR);
 
                                 BlockClick = true;
-                                BlockPos[0] = x;
-                                BlockPos[1] = y;
-                                BlockPos[2] = z;
+                                BlockPos[0] = static_cast<ALfloat>(x);
+                                BlockPos[1] = static_cast<ALfloat>(y);
+                                BlockPos[2] = static_cast<ALfloat>(z);
                             }
                         }
                         else
@@ -742,9 +741,9 @@ public:
         int Run = 0;
         if (WP)Run = Player::Running ? 2 : 1;
         ALfloat PlayerPos[3];
-        PlayerPos[0] = Player::xpos;
-        PlayerPos[1] = Player::ypos;
-        PlayerPos[2] = Player::zpos;
+        PlayerPos[0] = static_cast<ALfloat>(Player::xpos);
+        PlayerPos[1] = static_cast<ALfloat>(Player::ypos);
+        PlayerPos[2] = static_cast<ALfloat>(Player::zpos);
         bool Fall = Player::OnGround
                     && (!Player::inWater)
                     && (Player::jump == 0);
@@ -1191,7 +1190,7 @@ public:
 
     void DrawGUI()
     {
-        int windowuswidth = windowwidth / stretch, windowusheight = windowheight / stretch;
+        int windowuswidth = getStretchedIntWindowWidth(), windowusheight = getStretchedIntWindowHeight();
         glDepthFunc(GL_ALWAYS);
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LINE_SMOOTH);
@@ -1253,7 +1252,7 @@ public:
 
         }
 
-        glLineWidth(4 * stretch);
+        glLineWidth(4.0f * static_cast<float>(stretch));
         glBegin(GL_LINES);
         glColor4f(0.0, 0.0, 0.0, 1.0);
         UIVertex(windowuswidth / 2 - 16, windowusheight / 2);
@@ -1261,7 +1260,7 @@ public:
         UIVertex(windowuswidth / 2, windowusheight / 2 - 16);
         UIVertex(windowuswidth / 2, windowusheight / 2 + 16);
         glEnd();
-        glLineWidth(2 * stretch);
+        glLineWidth(2.0f * static_cast<float>(stretch));
         glBegin(GL_LINES);
         glColor4f(1.0, 1.0, 1.0, 1.0);
         UIVertex(windowuswidth / 2 - 15, windowusheight / 2);
@@ -1270,7 +1269,7 @@ public:
         UIVertex(windowuswidth / 2, windowusheight / 2 + 15);
         glEnd();
 
-        if (seldes > 0.0)
+        if (seldes > 0.0f)
         {
 
             glBegin(GL_LINES);
@@ -1576,8 +1575,8 @@ public:
         //背包界面与更新
         static int si, sj, sf;
         int csi = -1, csj = -1;
-        int leftp = (windowwidth / stretch - 392) / 2;
-        int upp = windowheight / stretch - 152 - 16;
+        int leftp = static_cast<int>((windowwidth / stretch - 392) / 2);
+        int upp = getStretchedIntWindowHeight() - 152 - 16;
         static int mousew, mouseb, mousebl;
         static block indexselected = block(Blocks::AIR);
         static short Amountselected = 0;
@@ -1599,9 +1598,9 @@ public:
             else glColor4f(0.2f, 0.2f, 0.2f, 0.6f*bagAnim);
             glBegin(GL_QUADS);
             UIVertex(0, 0);
-            UIVertex((int)(windowwidth / stretch), 0);
-            UIVertex((int)(windowwidth / stretch), (int)(windowheight / stretch));
-            UIVertex(0, (int)(windowheight / stretch));
+            UIVertex(getStretchedIntWindowWidth(), 0);
+            UIVertex(getStretchedIntWindowWidth(), getStretchedIntWindowHeight());
+            UIVertex(0, getStretchedIntWindowHeight());
             glEnd();
 
             glEnable(GL_TEXTURE_2D);
@@ -1657,7 +1656,7 @@ public:
                             if (Player::inventory[i][j] == block(Blocks::AIR)) Player::inventoryAmount[i][j] = 0;
                         }
                     }
-                    DrawBagRow(i, (csi == i ? csj : -1), (windowwidth / stretch - 392) / 2, windowheight / stretch - 152 - 16 + i * 40, 8, 1.0f);
+                    DrawBagRow(i, (csi == i ? csj : -1), static_cast<int>((windowwidth / stretch - 392) / 2), getStretchedIntWindowHeight() - 152 - 16 + i * 40, 8, 1.0f);
                 }
             }
             if (indexselected != block(Blocks::AIR))
@@ -1739,7 +1738,7 @@ public:
                     DrawBagRow(i, -1, xbase, ybase + i * 40, spac, alpha);
                 }
             }
-            else DrawBagRow(3, Player::indexInHand, 0, windowheight / stretch - 32, 0, 0.5f);
+            else DrawBagRow(3, Player::indexInHand, 0, getStretchedIntWindowHeight() - 32, 0, 0.5f);
         }
         glFlush();
     }
