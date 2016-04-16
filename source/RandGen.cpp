@@ -1,99 +1,70 @@
-/*
- * Originally written by Christian Stigen Larsen
- * http://csl.name
- *
- * This file is distributed under the modified BSD license.
- *
- * Modified and optimized by DLaboratory to adapt NEWorld project.
- */
-
 #include "RandGen.h"
+#include <algorithm>
+using namespace std;
 
-inline unsigned int M32(unsigned int x)
+unsigned long long RandGen::get_u64()
 {
-    return (0x80000000 & x);
+    unsigned long long low = get_u32(), high = get_u32();
+    return (low << 32) + high;
 }
 
-inline unsigned int L31(unsigned int x)
+long long RandGen::get_s64()
 {
-    return (0x7FFFFFFF & x);
+    return static_cast<long long>(0x7FFFFFFFFFFFFFFFULL & get_u64());
 }
 
-inline unsigned int ODD(unsigned int x)
+long long RandGen::get_s64_ranged(long long x, long long y)
 {
-    return (x & 1);
+    if(x > y)
+        swap(x, y);
+    return x + get_s64() % (y - x);
 }
 
-void RandGen::generate_numbers()
+int RandGen::get_s32()
 {
-    const unsigned int MATRIX[2] = {0, 0x9908b0df};
-    unsigned int y, i = 0, j;
-
-    while ( i < (DIFF-1) )
-    {
-        y = M32(MT[i]) | L31(MT[i+1]);
-        MT[i] = MT[i+PERIOD] ^ (y >> 1) ^ MATRIX[ODD(y)];
-        ++i;
-    }
-
-    y = M32(MT[i]) | L31(MT[i+1]);
-    MT[i] = MT[(i+PERIOD)%SIZE] ^ (y >> 1) ^ MATRIX[ODD(y)];
-    ++i;
-
-    while ( i < (SIZE-1) )
-    {
-        y = M32(MT[i]) | L31(MT[i+1]);
-        MT[i] = MT[i-DIFF] ^ (y >> 1) ^ MATRIX[ODD(y)];
-        ++i;
-    }
-
-    y = M32(MT[SIZE-1]) | L31(MT[0]);
-    MT[SIZE-1] = MT[PERIOD-1] ^ (y>>1) ^ MATRIX[ODD(y)];
+    return static_cast<int>(0x7FFFFFFF & get_u32());
 }
 
-void RandGen::seed(unsigned int value)
+int RandGen::get_s32_ranged(int x, int y)
 {
-    MT[0] = value;
-    index = 0;
-
-    for (unsigned int i = 1; i < SIZE; ++i)
-        MT[i] = 0x6c078965 * (MT[i-1] ^ MT[i-1] >> 30) + i;
+    if(x > y)
+        swap(x, y);
+    return x + get_s32() % (y - x);
 }
 
-unsigned int RandGen::rand_u32()
+short RandGen::get_s16()
 {
-    if ( !index )
-        generate_numbers();
-
-    unsigned int y = MT[index];
-
-    y ^= y>>11;
-    y ^= y<< 7 & 0x9d2c5680;
-    y ^= y<<15 & 0xefc60000;
-    y ^= y>>18;
-
-    if ( ++index == SIZE )
-        index = 0;
-
-    return y;
+    return static_cast<short>(0x7FFF & get_u16());
 }
 
-unsigned long long RandGen::rand_u64()
+unsigned short RandGen::get_u16()
 {
-    return (((unsigned long long)(rand_u32()) << 32) | (unsigned long long)rand_u32());
+    return get_u32() & 0xFFFF;
 }
 
-int RandGen::rand_s32()
+bool RandGen::one_in(int x)
 {
-    return static_cast<int>(0x7FFFFFFF & rand_u32());
+    return x_in_y(1, x);
 }
 
-float RandGen::randf_cc()
+bool RandGen::x_in_y(int x, int y)
 {
-    return static_cast<float>(rand_u32()) / 0xFFFFFFFF;
+    return get_s32_ranged(0, y) < x;
 }
 
-float RandGen::randf_co()
+double RandGen::get_double_co()
 {
-    return static_cast<float>(rand_u32()) / (0xFFFFFFFF + 1.0f);
+    return static_cast<double>(get_u32()) / (0xFFFFFFFF + 1.0f);
+}
+
+double RandGen::get_double_cc()
+{
+    return static_cast<double>(get_u32()) / 0xFFFFFFFF;
+}
+
+double RandGen::get_double_ranged(double x, double y)
+{
+    if(x > y)
+        swap(x, y);
+    return x + (y - x) * get_double_co();
 }
