@@ -212,4 +212,13 @@ cscope.*
 *.o
 /NEWorld.VC.db
 /NEWorld.VC.VC.opendb
+
+# Unnecessary binary asset
 Fonts/
+
+# Unittest
+*.unittest.cpp
+*.unittest.h
+
+# Binary output
+a.out
