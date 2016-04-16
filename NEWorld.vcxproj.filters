@@ -60,6 +60,9 @@
     <Filter Include="Source\Renderer\Shader">
       <UniqueIdentifier>{033d1b67-aa91-4782-ac09-87d8bffaafd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Common\RandGen">
+      <UniqueIdentifier>{a5ec2aab-4a00-410f-8b9a-c94635754c70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\Object.h">
@@ -240,6 +243,15 @@
     <ClInclude Include="source\BlockFuncs.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
+    <ClInclude Include="source\linearrand.h">
+      <Filter>Source\Common\RandGen</Filter>
+    </ClInclude>
+    <ClInclude Include="source\mersenne.h">
+      <Filter>Source\Common\RandGen</Filter>
+    </ClInclude>
+    <ClInclude Include="source\RandGen.h">
+      <Filter>Source\Common\RandGen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\NEWorld.cpp">
@@ -376,6 +388,15 @@
     </ClCompile>
     <ClCompile Include="source\Menus.cpp">
       <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\linearrand.cpp">
+      <Filter>Source\Common\RandGen</Filter>
+    </ClCompile>
+    <ClCompile Include="source\mersenne.cpp">
+      <Filter>Source\Common\RandGen</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RandGen.cpp">
+      <Filter>Source\Common\RandGen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
