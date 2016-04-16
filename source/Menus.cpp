@@ -180,14 +180,14 @@ void Language::onLoad()
     title = GUI::label(GetStrbyKey("NEWorld.language.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
     backbtn = GUI::button(GetStrbyKey("NEWorld.language.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
     registerControls(2, &title, &backbtn);
-    std::ifstream index("Lang/Langs.txt");
+    std::ifstream index("locale/Langs.txt");
     int count;
     index >> count;
     Langinfo Info;
     for (int i = 0; i < count; i++)
     {
         index >> Info.Symbol;
-        std::ifstream LF("Lang/" + Info.Symbol + ".lang");
+        std::ifstream LF("locale/" + Info.Symbol + ".lang");
         getline(LF, Info.EngSymbol);
         getline(LF, Info.Name);
         LF.close();
