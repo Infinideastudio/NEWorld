@@ -31,6 +31,7 @@ using std::mutex;
 #endif
 #include <string>
 #include <iostream>
+#include <cstdlib>
 #include <sstream>
 #include <vector>
 #include <memory>
@@ -46,6 +47,11 @@ using std::mutex;
 // CROSS PLATFORM REQUIRED direct.h is a header offered by Microsoft
 #ifdef NEWORLD_TARGET_WINDOWS
 #include <direct.h>
+#endif
+
+#ifdef NEWORLD_TARGET_MACOSX
+#include <unistd.h>
+#include <sys/stat.h>
 #endif
 
 using std::string;

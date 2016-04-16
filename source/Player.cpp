@@ -350,7 +350,11 @@ PlayerPacket Player::convertToPlayerPacket()
 #ifdef NEWORLD_COMPILE_DISABLE_SECURE
     strcpy(p.name, name.c_str());
 #else
+#ifdef NEWORLD_TARGET_MACOSX
+    strcpy(p.name, name.c_str());
+#else
     strcpy_s(p.name, name.c_str());
+#endif
 #endif
     return p;
 }
