@@ -1486,7 +1486,7 @@ public:
             generated = true;
             for (i = 0; i < 128; i++)
                 for (j = 0; j < 128; j++)
-                    World::cloud[i][j] = mersenne->get_s32_ranged(0, 2); // CHECKREQUIRED 真的是[0, 2) ?
+                    World::cloud[i][j] = mersenne->get_s32_ranged(0, 2); // CHECK REQUIRED 真的是[0, 2) ?
 
             glGenBuffersARB(128, cloudvb);
 

@@ -36,23 +36,10 @@ struct HMapManager
                 H[x][z] = h;
             }
         }
-        low = (l - 21) / 16, high = (hi + 16) / 16;
+        low = (l - 21) >> 4, high = (hi + 16) >> 4;
         count = 0;
     }
 };
-
-inline string v22string(int x, int y)
-{
-    char * _ = (char*)malloc(sizeof(int) * 2+1);
-    int * __ = (int*)_;
-    __[0] = x;
-    __[1] = y;
-    _[sizeof(int) * 2] = '\0';
-    string s = string(_);
-    free(_);
-    free(__);
-    return string(_);
-}
 
 double chunk::relBaseX, chunk::relBaseY, chunk::relBaseZ;
 Frustum chunk::TestFrustum;
@@ -77,7 +64,7 @@ chunk::~chunk()
 
 void chunk::buildTerrain(bool initIfEmpty)
 {
-
+    int i, x, z;
     //Fast generate parts
     //Part1 out of the terrain bound
     if (cy > 4)
@@ -86,7 +73,7 @@ void chunk::buildTerrain(bool initIfEmpty)
         if (!initIfEmpty)
             return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (int i = 0; i < 4096; i++)
+        for (i = 0; i < 4096; i++)
             pbrightness[i] = skylight;
         return;
     }
@@ -96,7 +83,7 @@ void chunk::buildTerrain(bool initIfEmpty)
         if (!initIfEmpty)
             return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (int i = 0; i < 4096; i++)
+        for (i = 0; i < 4096; i++)
             pbrightness[i] = BRIGHTNESSMIN;
         return;
     }
@@ -109,19 +96,19 @@ void chunk::buildTerrain(bool initIfEmpty)
         if (!initIfEmpty)
             return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (int i = 0; i < 4096; i++)
+        for (i = 0; i < 4096; i++)
             pbrightness[i] = skylight;
         return;
     }
     if (cy < cur.low)
     {
-        for (int i = 0; i < 4096; i++)
+        for (i = 0; i < 4096; i++)
             pblocks[i] = block(Blocks::ROCK);
         memset(pbrightness, 0, 4096 * sizeof(brightness));
         if (cy == 0)
-            for (int x = 0; x < 16; x++)
-                for (int z = 0; z < 16; z++)
-                    pblocks[x * 256 + z] = block(Blocks::BEDROCK);
+            for (x = 0; x < 16; x++)
+                for (z = 0; z < 16; z++)
+                    pblocks[(x << 8) + z] = block(Blocks::BEDROCK);
         Empty = false;
         return;
     }
@@ -131,7 +118,7 @@ void chunk::buildTerrain(bool initIfEmpty)
     memset(pblocks, 0, 4096 * sizeof(block)); //Empty the chunk
     memset(pbrightness, 0, 4096 * sizeof(brightness)); //Set All Brightness to 0
 
-    int x, z, h = 0, sh = 0, wh = 0, base, y;
+    int h = 0, sh = 0, wh = 0, base, y;
     int minh, maxh, cur_br;
 
     Empty = true;
@@ -203,7 +190,7 @@ void chunk::buildDetail()
             for (z = 0; z < 16; z++)
             {
                 //Tree
-                if (pblocks[index] == block(Blocks::GRASS) && rnd() < 0.005)
+                if (pblocks[index] == block(Blocks::GRASS) && mersenne->one_in(200))
                 {
                     buildtree(cx * 16 + x, cy * 16 + y, cz * 16 + z);
                 }
@@ -237,6 +224,9 @@ void chunk::Unload()
     this->~chunk();
 }
 
+// OPTIMIZE REQUIRED
+// recommendation : introduce database to store chunks terrian
+
 bool chunk::LoadFromFile()
 {
     std::ifstream file(getChunkPath(), std::ios::in | std::ios::binary);
@@ -265,11 +255,12 @@ void chunk::SaveToFile()
 
 void chunk::buildRender()
 {
-    for (int x = -1; x <= 1; x++)
+    int x, y, z;
+    for (x = -1; x <= 1; x++)
     {
-        for (int y = -1; y <= 1; y++)
+        for (y = -1; y <= 1; y++)
         {
-            for (int z = -1; z <= 1; z++)
+            for (z = -1; z <= 1; z++)
             {
                 if ((x || y || z) && !chunkOutOfBound(cx + x, cy + y, cz + z) && !chunkLoaded(cx + x, cy + y, cz + z))
                     return;
