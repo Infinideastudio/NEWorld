@@ -53,7 +53,7 @@ void MultiplayerMenu::onLoad()
 void MultiplayerMenu::onUpdate()
 {
     static bool serveripChanged = false;
-#ifdef NEWORLD_USE_WINAPI
+#ifdef NEWORLD_TARGET_WINDOWS
     if (runbtn.clicked) WinExec("NEWorldServer.exe", SW_SHOWDEFAULT);
 #endif
     if (okbtn.clicked)

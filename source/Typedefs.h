@@ -24,15 +24,15 @@ struct block
     {
         struct
         {
-            unsigned int Oriention : 5;
-            unsigned int Oct : 3;
+            unsigned int OrientionFirst : 5;
+            unsigned int OctFirst : 3;
             unsigned int Hex1 : 4;
             unsigned int Hex2 : 4;
         };
         struct
         {
-            unsigned int Oriention : 5;
-            unsigned int Oct : 3;
+            unsigned int OrientionSecond : 5;
+            unsigned int OctSecond : 3;
             unsigned int Data8 : 8;
         };
         struct
@@ -72,7 +72,7 @@ struct BUDDP
     BUDDP(block iOri, block* _upd, block* _slf, void* _dudp, void* _dslf,
           int _cx, int _cy, int _cz) :
         origon(iOri), upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-    bool operator == (const BUDDP& i) noexcept
+    bool operator == (const BUDDP& i) 
     {
         return cx == i.cx && cy == i.cy && cz == i.cz;
     }
