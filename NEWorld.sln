@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NEWorld", "NEWorld.vcxproj", "{9401A960-F56F-4186-AD7D-2F9A6F541190}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -11,8 +11,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NEWorldServer", "Server\NEWorldServer.vcxproj", "{ABBA7A56-1D26-4C66-AED9-67C8F7CC3AE7}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginSDK", "PluginSDK\PluginSDK.vcxproj", "{1A1B24AF-2218-41BB-BFF0-2A5DF3EA9ACC}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NEWorldFoundationKit", "NEWorldFoundationKit\NEWorldFoundationKit.vcxproj", "{07896376-E187-4D50-B22A-DD4C29EB4A8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
