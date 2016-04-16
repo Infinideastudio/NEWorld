@@ -76,6 +76,8 @@ extern int mw, mb, mbp, mbl, mwl;
 extern double mxdelta, mydelta;
 extern string inputstr;
 
+extern RandGen *mersenne, *linear;
+
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
 extern int c_getChunkPtrFromCPA;
 extern int c_getChunkPtrFromSearch;

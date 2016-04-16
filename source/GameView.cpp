@@ -23,10 +23,9 @@
 #include "Setup.h"
 #include "AudioSystem.h"
 
-
 ThreadFunc UpdateThreadFunc(void*);
 
-class GameDView :public GUI::Form
+class GameDView : public GUI::Form
 {
 private:
     string chatword;
@@ -58,14 +57,15 @@ private:
     {
         return mw;
     }
+    
     int GetMouseButton()
     {
         return mb;
     }
+
 public:
     void GameThreadloop()
     {
-
         //Wait until start...
         MutexLock(Mutex);
         while (!updateThreadRun)
@@ -82,7 +82,6 @@ public:
 
         while (updateThreadRun)
         {
-
             MutexUnlock(Mutex);
             Sleep(1); //Don't make it always busy
             MutexLock(Mutex);
@@ -97,7 +96,8 @@ public:
 
             FirstUpdateThisFrame = true;
             updateTimer = timer();
-            if (updateTimer - lastupdate >= 5.0) lastupdate = updateTimer;
+            if (updateTimer - lastupdate >= 5.0)
+                lastupdate = updateTimer;
 
             while ((updateTimer - lastupdate) >= 1.0 / 30.0 && upsc < 60)
             {
@@ -137,7 +137,6 @@ public:
         return true;
     }
 
-
     bool IsPressed(int key, bool setFalse = false)
     {
         static bool keyPressed[GLFW_KEY_LAST + 1];
@@ -146,8 +145,10 @@ public:
             keyPressed[key] = false;
             return true;
         }
-        if (key > GLFW_KEY_LAST || key <= 0) return false;
-        if (!glfwGetKey(MainWindow, key)) keyPressed[key] = false;
+        if (key > GLFW_KEY_LAST || key <= 0)
+            return false;
+        if (!glfwGetKey(MainWindow, key))
+            keyPressed[key] = false;
         if (!keyPressed[key] && glfwGetKey(MainWindow, key))
         {
             keyPressed[key] = true;
@@ -155,7 +156,6 @@ public:
         }
         return false;
     }
-
 
     void UpdateGame()
     {
@@ -170,16 +170,24 @@ public:
         //生命值相关
         if (Player::health > 0 || Player::gamemode == Player::Creative)
         {
-            if (Player::ypos < -100) Player::health -= ((-100) - Player::ypos) / 100;
-            if (Player::health < Player::healthMax) Player::health += Player::healSpeed;
-            if (Player::health > Player::healthMax) Player::health = Player::healthMax;
+            if (Player::ypos < -100)
+                Player::health -= ((-100) - Player::ypos) / 100;
+            if (Player::health < Player::healthMax)
+                Player::health += Player::healSpeed;
+            if (Player::health > Player::healthMax)
+                Player::health = Player::healthMax;
         }
-        else Player::spawn();
+        else
+        {
+            Player::spawn();
+        }
 
         //时间
         gametime++;
-        if (glfwGetKey(MainWindow, GLFW_KEY_F8)) gametime += 30;
-        if (gametime > MaxGameTime) gametime = 0;
+        if (glfwGetKey(MainWindow, GLFW_KEY_F8))
+            gametime += 30;
+        if (gametime > MaxGameTime)
+            gametime = 0;
 
         //World::unchunks.size()=0
         World::rebuiltChunks = 0;
@@ -201,8 +209,7 @@ public:
             World::sortChunkLoadUnloadList(RoundInt(Player::xpos), RoundInt(Player::ypos), RoundInt(Player::zpos));
 
             //卸载区块(Unload chunks)
-            int sumUnload;
-            sumUnload = World::chunkUnloads > World::MaxChunkUnloads ? World::MaxChunkUnloads : World::chunkUnloads;
+            int sumUnload = min(World::chunkUnloads, World::MaxChunkUnloads);
             for (int i = 0; i < sumUnload; i++)
             {
                 World::chunk* cp = World::chunkUnloadList[i].first;
@@ -213,8 +220,7 @@ public:
             }
 
             //加载区块(Load chunks)
-            int sumLoad;
-            sumLoad = World::chunkLoads > World::MaxChunkLoads ? World::MaxChunkLoads : World::chunkLoads;
+            int sumLoad = min(World::chunkLoads, World::MaxChunkLoads);
             for (int i = 0; i < sumLoad; i++)
             {
                 int cx = World::chunkLoadList[i][1];
@@ -235,8 +241,10 @@ public:
         //加载动画
         for (auto cp : World::chunks)
         {
-            if (cp->loadAnim <= 0.3f) cp->loadAnim = 0.0f;
-            else cp->loadAnim *= 0.6f;
+            if (cp->loadAnim <= 0.3f)
+                cp->loadAnim = 0.0f;
+            else
+                cp->loadAnim *= 0.6f;
         }
 
         //随机状态更新
@@ -246,12 +254,12 @@ public:
             int cx = cp->cx;
             int cy = cp->cy;
             int cz = cp->cz;
-            x = int(rnd() * 16);
-            gx = x + cx * 16;
-            y = int(rnd() * 16);
-            gy = y + cy * 16;
-            z = int(rnd() * 16);
-            gz = z + cz * 16;
+            x = mersenne->get_s32_ranged(0, 16);
+            y = mersenne->get_s32_ranged(0, 16);
+            z = mersenne->get_s32_ranged(0, 16);
+            gx = x + (cx << 4);
+            gy = y + (cy << 4);
+            gz = z + (cz << 4);
             if (cp->getblock(x, y, z) == block(Blocks::DIRT) &&
                     World::getblock(gx, gy + 1, gz, Blocks::NONEMPTY) == block(Blocks::AIR) && (
                         World::getblock(gx + 1, gy, gz, block(Blocks::AIR)) == block(Blocks::GRASS) ||
@@ -287,7 +295,6 @@ public:
 
         if (!bagOpened)
         {
-
             //从玩家位置发射一条线段
             for (int i = 0; i < selectPrecision*selectDistance; i++)
             {
@@ -327,11 +334,14 @@ public:
                     if (World::chunkOutOfBound(selcx, selcy, selcz) == false)
                     {
                         World::chunk* cp = World::getChunkPtr(selcx, selcy, selcz);
-                        if (cp == nullptr || cp == World::EmptyChunkPtr) continue;
+                        if (cp == nullptr || cp == World::EmptyChunkPtr)
+                            continue;
                         selb = cp->getblock(selbx, selby, selbz);
                     }
+                    
                     selbr = World::getbrightness(xl, yl, zl);
                     selb = World::getblock(x, y, z);
+                    
                     if (mb == 1 || glfwGetKey(MainWindow, GLFW_KEY_ENTER) == GLFW_PRESS)
                     {
                         Particles::throwParticle(selb,
@@ -339,16 +349,24 @@ public:
                                                  float(rnd()*0.2f - 0.1f), float(rnd()*0.2f - 0.1f), float(rnd()*0.2f - 0.1f),
                                                  float(rnd()*0.01f + 0.02f), int(rnd() * 30) + 30);
 
-                        if (selx != oldselx || sely != oldsely || selz != oldselz) seldes = 0.0;
+                        if (selx != oldselx || sely != oldsely || selz != oldselz)
+                        {
+                            seldes = 0.0;
+                        }
                         else
                         {
-                            float Factor=1.0;
-                            if (Player::inventory[3][Player::indexInHand] == STICK)Factor = 4.0;
+                            float Factor = 1.0f;
+                            if (Player::inventory[3][Player::indexInHand] == STICK)
+                            {
+                                Factor = 4.0;
+                            }
                             else
                             {
                                 Factor = 30.0f / (BlockInfo(Player::inventory[3][Player::indexInHand]).getHardness() + 0.1f);
-                                if (Factor < 1.0) Factor = 1.0f;
-                                if (Factor > 1.7) Factor = 1.7f;
+                                if (Factor < 1.0f)
+                                    Factor = 1.0f;
+                                if (Factor > 1.7f)
+                                    Factor = 1.7f;
                             }
                             seldes += BlockInfo(selb).getHardness()*((Player::gamemode == Player::Creative) ? 10.0f : 0.3f)*Factor;
                             BlockClick = true;
@@ -374,6 +392,7 @@ public:
                             BlockPos[2] = static_cast<ALfloat>(z);
                         }
                     }
+
                     if (((mb == 2 && mbp == false) || (!chatmode&&IsPressed(GLFW_KEY_TAB))))   //鼠标右键
                     {
                         if (Player::inventoryAmount[3][Player::indexInHand] > 0 && isBlock(Player::inventory[3][Player::indexInHand]))
@@ -382,8 +401,8 @@ public:
                             if (Player::putBlock(xl, yl, zl, Player::BlockInHand))
                             {
                                 Player::inventoryAmount[3][Player::indexInHand]--;
-                                if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = block(Blocks::AIR);
-
+                                if (Player::inventoryAmount[3][Player::indexInHand] == 0)
+                                    Player::inventory[3][Player::indexInHand] = block(Blocks::AIR);
                                 BlockClick = true;
                                 BlockPos[0] = static_cast<ALfloat>(x);
                                 BlockPos[1] = static_cast<ALfloat>(y);
@@ -396,7 +415,8 @@ public:
                             if (Player::inventory[3][Player::indexInHand] == APPLE)
                             {
                                 Player::inventoryAmount[3][Player::indexInHand]--;
-                                if (Player::inventoryAmount[3][Player::indexInHand] == 0) Player::inventory[3][Player::indexInHand] = block(Blocks::AIR);
+                                if (Player::inventoryAmount[3][Player::indexInHand] == 0)
+                                    Player::inventory[3][Player::indexInHand] = block(Blocks::AIR);
                                 Player::health = Player::healthMax;
                             }
                         }
@@ -405,7 +425,8 @@ public:
                 }
             }
 
-            if (selx != oldselx || sely != oldsely || selz != oldselz || (mb == 0 && glfwGetKey(MainWindow, GLFW_KEY_ENTER) != GLFW_PRESS)) seldes = 0.0;
+            if (selx != oldselx || sely != oldsely || selz != oldselz || (mb == 0 && glfwGetKey(MainWindow, GLFW_KEY_ENTER) != GLFW_PRESS))
+                seldes = 0.0;
             oldselx = selx;
             oldsely = sely;
             oldselz = selz;
@@ -437,10 +458,14 @@ public:
                                 Player::Running = true;
                                 Wprstm = 0.0;
                             }
-                            else Wprstm = timer();
+                            else
+                            {
+                                Wprstm = timer();
+                            }
                         }
                     }
-                    if (Wprstm != 0.0 && timer() - Wprstm > 0.5) Wprstm = 0.0;
+                    if (Wprstm != 0.0 && timer() - Wprstm > 0.5)
+                        Wprstm = 0.0;
                     WP = true;
                     if (!Player::glidingNow)
                     {
@@ -460,8 +485,8 @@ public:
                     Player::Running = false;
                     WP = false;
                 }
-                if (Player::Running)Player::speed = runspeed;
-                else Player::speed = walkspeed;
+
+                player::speed = (Player::Running ? runspeed : walkspeed);
 
                 if (glfwGetKey(MainWindow, GLFW_KEY_S) == GLFW_PRESS&&!Player::glidingNow)
                 {
@@ -527,11 +552,16 @@ public:
                 }
 
                 //切换方块
-                if (IsPressed(GLFW_KEY_Z) && Player::indexInHand > 0) Player::indexInHand--;
-                if (IsPressed(GLFW_KEY_X) && Player::indexInHand < 9) Player::indexInHand++;
-                if ((int)Player::indexInHand + (mwl - mw) < 0)Player::indexInHand = 0;
-                else if ((int)Player::indexInHand + (mwl - mw) > 9)Player::indexInHand = 9;
-                else Player::indexInHand += (char)(mwl - mw);
+                if (IsPressed(GLFW_KEY_Z) && Player::indexInHand > 0)
+                    Player::indexInHand--;
+                if (IsPressed(GLFW_KEY_X) && Player::indexInHand < 9)
+                    Player::indexInHand++;
+                if ((int)Player::indexInHand + (mwl - mw) < 0)
+                    Player::indexInHand = 0;
+                else if ((int)Player::indexInHand + (mwl - mw) > 9)
+                    Player::indexInHand = 9;
+                else
+                    Player::indexInHand += (char)(mwl - mw);
                 mwl = mw;
 
                 //起跳！
@@ -568,27 +598,27 @@ public:
 
                 if ((glfwGetKey(MainWindow, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS || glfwGetKey(MainWindow, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) && !Player::glidingNow)
                 {
-                    if (Player::CrossWall || Player::Flying) Player::ya -= walkspeed / 2;
+                    if (Player::CrossWall || Player::Flying)
+                        Player::ya -= walkspeed / 2;
                     Wprstm = 0.0;
                 }
 
                 if (glfwGetKey(MainWindow, GLFW_KEY_K) && Player::Glide && !Player::OnGround && !Player::glidingNow)
                 {
-                    double h = Player::ypos + Player::height + Player::heightExt;
-                    Player::glidingEnergy = g*h;
+                    Player::glidingEnergy = g * (Player::ypos + Player::height + Player::heightExt);
                     Player::glidingSpeed = 0;
                     Player::glidingNow = true;
                 }
 
                 //各种设置切换
                 if (IsPressed(GLFW_KEY_F1))
-                {
-                    Player::changeGameMode(Player::gamemode == Player::Creative ?
-                                           Player::Survival : Player::Creative);
-                }
-                if (IsPressed(GLFW_KEY_F2)) shouldGetScreenshot = true;
-                if (IsPressed(GLFW_KEY_F3)) DebugMode = !DebugMode;
-                if (IsPressed(GLFW_KEY_F4)) Player::CrossWall = !Player::CrossWall;
+                    Player::changeGameMode(Player::gamemode == Player::Creative ? Player::Survival : Player::Creative);
+                if (IsPressed(GLFW_KEY_F2))
+                    shouldGetScreenshot = true;
+                if (IsPressed(GLFW_KEY_F3))
+                    DebugMode = !DebugMode;
+                if (IsPressed(GLFW_KEY_F4))
+                    Player::CrossWall = !Player::CrossWall;
                 if (IsPressed(GLFW_KEY_H) && glfwGetKey(MainWindow, GLFW_KEY_F3) == GLFW_PRESS)
                 {
                     DebugHitbox = !DebugHitbox;
@@ -602,25 +632,33 @@ public:
                         DebugMode = true;
                     }
                 }
-                else DebugShadow = false;
+                else
+                {
+                    DebugShadow = false;
+                }
                 if (IsPressed(GLFW_KEY_G) && glfwGetKey(MainWindow, GLFW_KEY_F3) == GLFW_PRESS)
                 {
                     DebugMergeFace = !DebugMergeFace;
                     DebugMode = true;
                 }
-                if (IsPressed(GLFW_KEY_F4 && Player::gamemode == Player::Creative)) Player::CrossWall = !Player::CrossWall;
-                if (IsPressed(GLFW_KEY_F5)) GUIrenderswitch = !GUIrenderswitch;
-                if (IsPressed(GLFW_KEY_F6)) Player::Glide = !Player::Glide;
-                if (IsPressed(GLFW_KEY_F7)) Player::spawn();
-                if (IsPressed(GLFW_KEY_SLASH)) chatmode = true; //斜杠将会在下面的if(chatmode)里添加
+                if (IsPressed(GLFW_KEY_F4 && Player::gamemode == Player::Creative))
+                    Player::CrossWall = !Player::CrossWall;
+                if (IsPressed(GLFW_KEY_F5))
+                    GUIrenderswitch = !GUIrenderswitch;
+                if (IsPressed(GLFW_KEY_F6))
+                    Player::Glide = !Player::Glide;
+                if (IsPressed(GLFW_KEY_F7))
+                    Player::spawn();
+                if (IsPressed(GLFW_KEY_SLASH))
+                    chatmode = true; //斜杠将会在下面的if(chatmode)里添加
             }
 
             if (IsPressed(GLFW_KEY_ENTER) == GLFW_PRESS)
             {
                 chatmode = !chatmode;
-                if (chatword != "")   //指令的执行，或发出聊天文本
+                if (chatword.size() > 0)   //指令的执行，或发出聊天文本
                 {
-                    if (chatword.substr(0, 1) == "/")   //指令
+                    if (chatword[0] == '/')   //指令
                     {
                         vector<string> command = split(chatword, " ");
                         if (!ExecuteCommand(command))   //执行失败
@@ -636,6 +674,7 @@ public:
                 }
                 chatword = "";
             }
+            
             if (chatmode)
             {
                 if (IsPressed(GLFW_KEY_BACKSPACE) && chatword.length()>0)
@@ -679,7 +718,8 @@ public:
 
         if (!bagOpened && !chatmode)
         {
-            if (IsPressed(GLFW_KEY_L))World::saveAllChunks();
+            if (IsPressed(GLFW_KEY_L))
+                World::saveAllChunks();
         }
 
         //跳跃
@@ -736,7 +776,6 @@ public:
             Player::ya += h - oldh;
         }
 
-
         //音效更新
         int Run = 0;
         if (WP)Run = Player::Running ? 2 : 1;
@@ -744,9 +783,7 @@ public:
         PlayerPos[0] = static_cast<ALfloat>(Player::xpos);
         PlayerPos[1] = static_cast<ALfloat>(Player::ypos);
         PlayerPos[2] = static_cast<ALfloat>(Player::zpos);
-        bool Fall = Player::OnGround
-                    && (!Player::inWater)
-                    && (Player::jump == 0);
+        bool Fall = Player::OnGround && (!Player::inWater) && (Player::jump == 0);
         //更新声速
         AudioSystem::SpeedOfSound = Player::inWater ? AudioSystem::Water_SpeedOfSound : AudioSystem::Air_SpeedOfSound;
         //更新环境
@@ -767,7 +804,6 @@ public:
         }
         EFX::UpdateEAXprop();
         AudioSystem::Update(PlayerPos, Fall, BlockClick, BlockPos, Run, Player::inWater);
-
 
         mbp = mb;
         FirstFrameThisUpdate = true;
@@ -854,15 +890,23 @@ public:
         if (!bagOpened)
         {
             //转头！你治好了我多年的颈椎病！
-            if (mx != mxl) Player::xlookspeed -= (mx - mxl)*mousemove;
-            if (my != myl) Player::ylookspeed += (my - myl)*mousemove;
-            if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1) Player::xlookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1) Player::xlookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1) Player::ylookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1) Player::ylookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
+            if (mx != mxl)
+                Player::xlookspeed -= (mx - mxl)*mousemove;
+            if (my != myl)
+                Player::ylookspeed += (my - myl)*mousemove;
+            if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1)
+                Player::xlookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
+            if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1)
+                Player::xlookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
+            if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1)
+                Player::ylookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
+            if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1)
+                Player::ylookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
             //限制角度，别把头转掉下来了 ←_←
-            if (Player::lookupdown + Player::ylookspeed < -90.0) Player::ylookspeed = -90.0 - Player::lookupdown;
-            if (Player::lookupdown + Player::ylookspeed > 90.0) Player::ylookspeed = 90.0 - Player::lookupdown;
+            if (Player::lookupdown + Player::ylookspeed < -90.0)
+                Player::ylookspeed = -90.0 - Player::lookupdown;
+            if (Player::lookupdown + Player::ylookspeed > 90.0)
+                Player::ylookspeed = 90.0 - Player::lookupdown;
         }
 
         Player::cxt = getchunkpos((int)Player::xpos);
@@ -873,10 +917,7 @@ public:
         World::sortChunkBuildRenderList(RoundInt(Player::xpos), RoundInt(Player::ypos), RoundInt(Player::zpos));
         int brl = World::chunkBuildRenders > World::MaxChunkRenders ? World::MaxChunkRenders : World::chunkBuildRenders;
         for (int i = 0; i < brl; i++)
-        {
-            int ci = World::chunkBuildRenderList[i][1];
-            World::chunks[ci]->buildRender();
-        }
+            World::chunks[World::chunkBuildRenderList[i][1]]->buildRender();
 
         //删除已卸载区块的VBO
         if (World::vbuffersShouldDelete.size() > 0)
@@ -903,7 +944,8 @@ public:
             else ShadowMaps::RenderShadowMap(xpos, ypos, zpos, curtime);
         }
         glClearColor(skycolorR, skycolorG, skycolorB, 1.0);
-        if (!DebugShadow) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        if (!DebugShadow)
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_TEXTURE_2D);
 
         Player::ViewFrustum.LoadIdentity();
@@ -931,7 +973,10 @@ public:
             glEnable(GL_TEXTURE_3D);
             glBindTexture(GL_TEXTURE_3D, BlockTextures3D);
         }
-        else glBindTexture(GL_TEXTURE_2D, BlockTextures);
+        else
+        {
+            glBindTexture(GL_TEXTURE_2D, BlockTextures);
+        }
 
         if (DebugMergeFace)
         {
@@ -944,9 +989,12 @@ public:
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_VERTEX_ARRAY);
 
-        if (Renderer::AdvancedRender) Renderer::EnableShaders();
-        if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 0);
-        if (Renderer::AdvancedRender) Renderer::DisableShaders();
+        if (Renderer::AdvancedRender)
+            Renderer::EnableShaders();
+        if (!DebugShadow)
+            WorldRenderer::RenderChunks(xpos, ypos, zpos, 0);
+        if (Renderer::AdvancedRender)
+            Renderer::DisableShaders();
 
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
         glDisableClientState(GL_COLOR_ARRAY);
@@ -997,7 +1045,8 @@ public:
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_VERTEX_ARRAY);
 
-        if (Renderer::AdvancedRender) Renderer::EnableShaders();
+        if (Renderer::AdvancedRender)
+            Renderer::EnableShaders();
 
         if (MergeFace)
         {
@@ -1005,7 +1054,10 @@ public:
             glEnable(GL_TEXTURE_3D);
             glBindTexture(GL_TEXTURE_3D, BlockTextures3D);
         }
-        else glBindTexture(GL_TEXTURE_2D, BlockTextures);
+        else
+        {
+            glBindTexture(GL_TEXTURE_2D, BlockTextures);
+        }
 
         if (DebugMergeFace)
         {
@@ -1013,10 +1065,13 @@ public:
             glPolygonMode(GL_FRONT, GL_LINE);
         }
 
-        if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 1);
+        if (!DebugShadow)
+            WorldRenderer::RenderChunks(xpos, ypos, zpos, 1);
         glDisable(GL_CULL_FACE);
-        if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 2);
-        if (Renderer::AdvancedRender) Renderer::DisableShaders();
+        if (!DebugShadow)
+            WorldRenderer::RenderChunks(xpos, ypos, zpos, 2);
+        if (Renderer::AdvancedRender)
+            Renderer::DisableShaders();
 
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
         glDisableClientState(GL_COLOR_ARRAY);
@@ -1413,8 +1468,11 @@ public:
         static int vtxs[128];
         static float f;
         static int l;
-        if (ltimer == 0.0) ltimer = timer();
-        f += (float)(timer() - ltimer)*0.25f;
+        int i, j;
+        
+        if (ltimer == 0.0)
+            ltimer = timer();
+        f += (float)(timer() - ltimer) * 0.25f;
         ltimer = timer();
         if (f >= 1.0)
         {
@@ -1426,18 +1484,16 @@ public:
         if (!generated)
         {
             generated = true;
-            for (int i = 0; i != 128; i++)
-            {
-                for (int j = 0; j != 128; j++)
-                {
-                    World::cloud[i][j] = int(rnd() * 2);
-                }
-            }
+            for (i = 0; i < 128; i++)
+                for (j = 0; j < 128; j++)
+                    World::cloud[i][j] = mersenne->get_s32_ranged(0, 2); // CHECKREQUIRED 真的是[0, 2) ?
+
             glGenBuffersARB(128, cloudvb);
-            for (int i = 0; i != 128; i++)
+            
+            for (i = 0; i < 128; i++)
             {
                 Renderer::Init(0, 0);
-                for (int j = 0; j != 128; j++)
+                for (j = 0; j < 128; j++)
                 {
                     if (World::cloud[i][j] != 0)
                     {
@@ -1850,14 +1906,15 @@ public:
         updateThread = ThreadCreate(&UpdateThreadFunc, NULL);
         if (multiplayer)
         {
-            fastSrand((unsigned int)time(NULL));
             Player::name = "";
-            Player::onlineID = rand();
+            Player::onlineID = mersenne->get_u16();
             Network::init(serverip, port);
         }
         //初始化游戏状态
-        if (LoadGame()) Player::init(Player::xpos, Player::ypos, Player::zpos);
-        else Player::spawn();
+        if (LoadGame())
+            Player::init(Player::xpos, Player::ypos, Player::zpos);
+        else
+            Player::spawn();
         World::Init();
         static bool registered = false;
         if (!registered)
