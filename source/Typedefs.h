@@ -45,7 +45,7 @@ struct block
     block()
         :ID(0), Data16(0) {};
     block(unsigned short iID)
-        :ID(iID), Data16(0) {}
+        :ID(iID), Data16(0) {};
     block(unsigned short iID, int iData81, int iData82)
         :ID(iID), Data81(iData81), Data82(iData82) {};
 
