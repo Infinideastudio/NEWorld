@@ -1,5 +1,4 @@
-#ifndef FUNCTIONSKIT_H
-#define FUNCTIONSKIT_H
+#pragma once
 
 #include "StdInclude.h"
 #include "Typedefs.h"
@@ -96,7 +95,7 @@ inline T clamp(T x, T min_value, T max_value)
     return max(min_value, min(x, max_value));
 }
 
-#ifdef NEWORLD_USE_WINAPI
+#ifdef NEWORLD_TARGET_WINDOWS
 inline Mutex_t MutexCreate()
 {
     return CreateMutex(NULL, FALSE, "");
@@ -227,14 +226,22 @@ inline void ThreadDestroy(Thread_t _hThread)
 inline unsigned int MByteToWChar(wchar_t* dst, const char* src, unsigned int n)
 {
     size_t res;
+#ifdef NEWORLD_TARGET_MACOSX
+    res = mbstowcs(dst, src, n);
+#else
     mbstowcs_s(&res, dst, n, src, _TRUNCATE);
+#endif
     return res;
 }
 
 inline unsigned int WCharToMByte(char* dst, const wchar_t* src, unsigned int n)
 {
     size_t res;
+#ifdef NEWORLD_TARGET_MACOSX
+    res = wcstombs(dst, src, n);
+#else
     wcstombs_s(&res, dst, n, src, _TRUNCATE);
+#endif
     return res;
 }
 
@@ -260,4 +267,3 @@ inline int Distancen(int ix, int iy, int iz, int x, int y, int z)//Calculte the 
 {
     return (ix - x)*(ix - x) + (iy - y)*(iy - y) + (iz - z)*(iz - z);
 }
-#endif
