@@ -3,10 +3,15 @@
 
 #include "StdInclude.h"
 #include "Typedefs.h"
+#include "mersenne.h"
+#include "linearrand.h"
 
 extern double stretch;
 
 vector<string> split(string str, string pattern);
+
+void RandomGeneratorInit();
+void RandomGeneratorUninit();
 
 inline int getStretchedIntWindowWidth()
 {
