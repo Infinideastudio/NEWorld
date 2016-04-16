@@ -3,6 +3,7 @@
 NEWorld是一个开放源代码的模仿Minecraft游戏规则的游戏。
 
 请下载`libraries`并放到NEWorld项目根目录[lib](http://pan.baidu.com/s/1jHz7rAe)
+Font.ttf在此处下载：[Font.ttf](http://pan.baidu.com/s/1hr5TQjM)
 
 最新进度在`0.5.0`分支。
 
