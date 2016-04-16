@@ -67,6 +67,8 @@ public:
         return ss.str();
     }
 
+    // REFACTOR REQUIRED
+    // Too young too evil. should apply better approach.
     bool fileExist(string path)
     {
         std::fstream file;
@@ -81,7 +83,10 @@ public:
     void buildRender();
     void destroyRender();
 
-    inline block& getblock(int x, int y, int z)
+    // Member functions implemented inside the declaration of a class
+    // are regarded as inline functions by default. Please learn
+    // the correct usage of C++ programming language.
+    block& getblock(int x, int y, int z)
     {
 #ifdef _DEBUG
         assert(pblocks != nullptr);
@@ -122,7 +127,7 @@ public:
         Modified = true;
     }
 
-    inline void setbrightness(int x, int y, int z, brightness ibrightness)
+    void setbrightness(int x, int y, int z, brightness ibrightness)
     {
         pbrightness[(x << 8) ^ (y << 4) ^ z] = ibrightness;
         Modified = true;
@@ -138,7 +143,7 @@ public:
 
     Hitbox::AABB getBaseAABB();
     Frustum::ChunkBox getRelativeAABB();
-    inline void calcVisible()
+    void calcVisible()
     {
         visible = TestFrustum.FrustumTest(getRelativeAABB());
     }

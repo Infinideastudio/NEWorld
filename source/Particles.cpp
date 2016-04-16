@@ -180,7 +180,7 @@ void Particles::throwParticle(block pt, float x, float y, float z, float xs, flo
     ptc.hb.zmin = z - psz;
     ptc.hb.zmax = z + psz;
     ptc.lasts = last;
-    ptc.tcX = tcX1 + (float)rnd()*((float)BLOCKTEXTURE_UNITSIZE / BLOCKTEXTURE_SIZE)*(1.0f - psz);
-    ptc.tcY = tcY1 + (float)rnd()*((float)BLOCKTEXTURE_UNITSIZE / BLOCKTEXTURE_SIZE)*(1.0f - psz);
+    ptc.tcX = tcX1 + (float)mersenne->get_double_co()*((float)BLOCKTEXTURE_UNITSIZE / BLOCKTEXTURE_SIZE)*(1.0f - psz);
+    ptc.tcY = tcY1 + (float)mersenne->get_double_co()*((float)BLOCKTEXTURE_UNITSIZE / BLOCKTEXTURE_SIZE)*(1.0f - psz);
     ptcs.push_back(ptc);
 }
