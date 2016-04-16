@@ -100,8 +100,10 @@ void SetupScreen()
     gl_version_major = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MAJOR);
     gl_version_minor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MINOR);
     gl_version_rev = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_REVISION);
+#ifndef NEWORLD_TARGET_MACOSX
     //Get OpenGL Procedure Addresses
     InitGLProc();
+#endif
     //Config Rendering Arguments
     glViewport(0, 0, windowwidth, windowheight);
     glMatrixMode(GL_PROJECTION);
