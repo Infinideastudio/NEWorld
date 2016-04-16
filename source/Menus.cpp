@@ -495,8 +495,8 @@ void WorldMenu::onRender()
 void SoundMenu::onLoad()
 {
     title = GUI::label(GetStrbyKey("NEWorld.Sound.caption"), -225, 225, 20, 36, 0.5, 0.5, 0.0, 0.0);
-    Musicbar = GUI::trackbar(GetStrbyKey("NEWorld.Sound.MusicGain"), 100, AudioSystem::BGMGain*300, -200, 201, 60, 84, 0.5, 0.5, 0.0, 0.0);
-    SoundBar= GUI::trackbar(GetStrbyKey("NEWorld.Sound.SoundGain"), 100, AudioSystem::SoundGain*300, -200, 201, 90, 114, 0.5, 0.5, 0.0, 0.0);
+    Musicbar = GUI::trackbar(GetStrbyKey("NEWorld.Sound.MusicGain"), 100, static_cast<int>(AudioSystem::BGMGain*300), -200, 201, 60, 84, 0.5, 0.5, 0.0, 0.0);
+    SoundBar= GUI::trackbar(GetStrbyKey("NEWorld.Sound.SoundGain"), 100, static_cast<int>(AudioSystem::SoundGain*300), -200, 201, 90, 114, 0.5, 0.5, 0.0, 0.0);
     backbtn = GUI::button(GetStrbyKey("NEWorld.render.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
     registerControls(4, &title,&Musicbar,&SoundBar , &backbtn);
 }

@@ -8,6 +8,17 @@ extern double stretch;
 
 vector<string> split(string str, string pattern);
 
+inline int getStretchedIntWindowWidth()
+{
+    extern int windowwidth;
+    return static_cast<int>(windowwidth / stretch);
+}
+inline int getStretchedIntWindowHeight()
+{
+    extern int windowheight;
+    return static_cast<int>(windowheight / stretch);
+}
+
 inline void UITrans(double x, double y)
 {
     glTranslated(x*stretch, y*stretch, 0);
