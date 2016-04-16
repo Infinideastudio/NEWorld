@@ -361,10 +361,15 @@
     <ClCompile Include="include\Netycat\src\Netycat\Core\Exception.cpp" />
     <ClCompile Include="include\Netycat\src\Netycat\Core\InetAddress.cpp" />
     <ClCompile Include="include\Netycat\src\Netycat\Core\Socket.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="include\sqlite\sqlite3.c" />
     <ClCompile Include="source\AudioSystem.cpp" />
     <ClCompile Include="source\Blocks.cpp" />
     <ClCompile Include="source\CBlocks.cpp" />
+=======
+    <ClCompile Include="source\AudioSystem.cpp" />
+    <ClCompile Include="source\BlockFuncs.cpp" />
+>>>>>>> 0.5.0
     <ClCompile Include="source\Chunk.cpp" />
     <ClCompile Include="source\ChunkPtrArray.cpp" />
     <ClCompile Include="source\ChunkRenderer.cpp" />

@@ -31,7 +31,7 @@ public:
     static void BuildFont(int w, int h);
     static void resize()
     {
-        assert(!FT_Set_Pixel_Sizes(fontface, 16 * stretch, 16 * stretch));
+        assert(!FT_Set_Pixel_Sizes(fontface, static_cast<int>(16 * stretch), static_cast<int>(16 * stretch)));
         for (int i = 0; i < 63356; i++)
             if (chars[i].aval)
             {

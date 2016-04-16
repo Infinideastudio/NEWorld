@@ -106,7 +106,7 @@ int TextRenderer::getStrWidth(string s)
             loadchar(uc);
             c = chars[uc];
         }
-        res += c.advance / stretch;
+        res += static_cast<int>(c.advance / stretch);
     }
     free(wstr);
     return res;
@@ -168,7 +168,7 @@ void TextRenderer::renderString(int x, int y, string glstring)
         glEnd();
 
         UITrans(-x - span, -y);
-        span += c.advance / stretch;
+        span += static_cast<int>(c.advance / stretch);
     }
     glColor4f(1.0, 1.0, 1.0, 1.0);
     free(wstr);

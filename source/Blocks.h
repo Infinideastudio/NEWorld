@@ -1,4 +1,6 @@
-#pragma once
+#ifndef BLOCKS_H
+#define BLOCKS_H
+
 #include "Definitions.h"
 #include "Globalization.h"
 
@@ -36,8 +38,6 @@ private:
     int MineType;
 
 public:
-
-
     SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness) :
         name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness) {};
 
@@ -64,3 +64,4 @@ inline Blocks::SingleBlock BlockInfo(block blockID)
 {
     return (*Blocks::blockData[(blockID).ID >= Blocks::BLOCK_DEF_END || (blockID.ID) < 0 ? Blocks::BLOCK_DEF_END : (blockID.ID)]);
 }
+#endif

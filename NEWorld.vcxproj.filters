@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Netycat">
@@ -243,8 +243,13 @@
     <ClInclude Include="source\AudioSystem.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="include\sqlite\sqlite3.h">
       <Filter>Sqlite</Filter>
+=======
+    <ClInclude Include="source\BlockFuncs.h">
+      <Filter>Source\Game</Filter>
+>>>>>>> 0.5.0
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +382,7 @@
     <ClCompile Include="source\AudioSystem.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="source\Menus.cpp">
       <Filter>Source\GUI</Filter>
     </ClCompile>
@@ -389,6 +395,14 @@
     <ClCompile Include="source\Blocks.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
+=======
+    <ClCompile Include="source\BlockFuncs.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Menus.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+>>>>>>> 0.5.0
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="source\resource.rc">
