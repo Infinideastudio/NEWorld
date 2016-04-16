@@ -1,7 +1,7 @@
-#ifndef GLPROC_H
-#define GLPROC_H
+#pragma once
 #include "StdInclude.h"
 
+#ifndef NEWORLD_TARGET_MACOSX
 extern PFNGLTEXIMAGE3DPROC glTexImage3D;
 extern PFNGLTEXSUBIMAGE3DPROC glTexSubImage3D;
 extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;

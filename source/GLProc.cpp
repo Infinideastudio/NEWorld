@@ -1,5 +1,6 @@
 #include "GLProc.h"
 
+#ifndef NEWORLD_TARGET_MACOSX
 //OpenGL Procedure
 
 PFNGLTEXIMAGE3DPROC glTexImage3D;
@@ -120,3 +121,5 @@ void InitGLProc()
     glGetUniformfvARB = (PFNGLGETUNIFORMFVARBPROC)glfwGetProcAddress("glGetUniformfvARB");
     glGetUniformivARB = (PFNGLGETUNIFORMIVARBPROC)glfwGetProcAddress("glGetUniformivARB");
 }
+
+#endif
