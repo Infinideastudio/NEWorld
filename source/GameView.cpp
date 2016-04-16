@@ -57,7 +57,7 @@ private:
     {
         return mw;
     }
-    
+
     int GetMouseButton()
     {
         return mb;
@@ -277,7 +277,7 @@ public:
             {
                 //长草
                 cp->setblock(x, y, z, block(Blocks::GRASS));
-                World::updateblock(x + cx * 16, y + cy * 16 + 1, z + cz * 16, true);
+                World::updateblock(gx, gy + 1, gz, true);
                 World::setChunkUpdated(cx, cy, cz, true);
             }
         }
@@ -338,10 +338,10 @@ public:
                             continue;
                         selb = cp->getblock(selbx, selby, selbz);
                     }
-                    
+
                     selbr = World::getbrightness(xl, yl, zl);
                     selb = World::getblock(x, y, z);
-                    
+
                     if (mb == 1 || glfwGetKey(MainWindow, GLFW_KEY_ENTER) == GLFW_PRESS)
                     {
                         Particles::throwParticle(selb,
@@ -674,7 +674,7 @@ public:
                 }
                 chatword = "";
             }
-            
+
             if (chatmode)
             {
                 if (IsPressed(GLFW_KEY_BACKSPACE) && chatword.length()>0)
@@ -1469,7 +1469,7 @@ public:
         static float f;
         static int l;
         int i, j;
-        
+
         if (ltimer == 0.0)
             ltimer = timer();
         f += (float)(timer() - ltimer) * 0.25f;
@@ -1478,7 +1478,7 @@ public:
         {
             l += int(f);
             f -= int(f);
-            l %= 128;
+            l &= 127;
         }
 
         if (!generated)
@@ -1489,7 +1489,7 @@ public:
                     World::cloud[i][j] = mersenne->get_s32_ranged(0, 2); // CHECKREQUIRED 真的是[0, 2) ?
 
             glGenBuffersARB(128, cloudvb);
-            
+
             for (i = 0; i < 128; i++)
             {
                 Renderer::Init(0, 0);
@@ -1513,7 +1513,7 @@ public:
         for (int i = 0; i < 128; i++)
         {
             glPushMatrix();
-            glTranslated(-64.0 * CloudWidth - px, 0.0, CloudWidth*((l + i) % 128 + f) - 64.0 * CloudWidth - pz);
+            glTranslated(-64.0 * CloudWidth - px, 0.0, CloudWidth*(((l + i) & 127) + f) - 64.0 * CloudWidth - pz);
             Renderer::renderbuffer(cloudvb[i], vtxs[i], 0, 0);
             glPopMatrix();
         }
@@ -1963,6 +1963,7 @@ public:
             GUI::PushPage(new Menus::GameMenu);
         }
     }
+
     void onLeave()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

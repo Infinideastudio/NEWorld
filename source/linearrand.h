@@ -8,7 +8,7 @@ private:
 public:
     // automatically set seed to current UNIX time stamp
     LinearRandGen();
-    
+
     // set seed to the given value k
     LinearRandGen(unsigned int k);
 
