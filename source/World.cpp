@@ -36,8 +36,13 @@ int chunkBuildRenders, chunkLoads, chunkUnloads;
 
 void Init()
 {
+#ifdef NEWORLD_TARGET_WINDOWS
     _mkdir(("Worlds/" + WorldName + "/").c_str());
     _mkdir(("Worlds/" + WorldName + "/chunks").c_str());
+#elif NEWORLD_TARGET_MACOSX
+    mkdir(("Worlds/" + WorldName + "/").c_str(), 644);
+    mkdir(("Worlds/" + WorldName + "/chunks").c_str(), 644);
+#endif
 
     WorldGen::perlinNoiseInit(3404);
     cpCachePtr = nullptr;
@@ -1022,7 +1027,7 @@ void buildtree(int x, int y, int z)
         }
     }
     //取最小值
-    h = static_cast<int>(min(h, Dirt * 15 / 268 * max(mersenne->get_double_co(), 0.8)));
+    h = static_cast<int>(min((double)h, Dirt * 15 / 268 * max(mersenne->get_double_co(), 0.8)));
     if (h < 7)return;
     //开始生成树干
     for (int i = y + 1; i < y + h + 1; i++)
