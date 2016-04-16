@@ -52,7 +52,7 @@ void DebugError(string msg)
 #endif
 }
 
-#ifdef NEWORLD_USE_WINAPI
+#ifdef NEWORLD_TARGET_WINDOWS
 double timer()
 {
     static LARGE_INTEGER counterFreq;
