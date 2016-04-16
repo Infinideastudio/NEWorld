@@ -1,6 +1,27 @@
 #include "FunctionsKit.h"
-unsigned int g_seed;
+#include "mersenne.h"
+#include "linearrand.h"
+
+RandGen *mersenne, *linearrand;
+
 extern std::vector<LogItem> Logs;
+
+double rnd()
+{
+    return mersenne->get_double_co();
+}
+
+void RandomGeneratorInit()
+{
+    mersenne = new MersenneRandGen();
+    linearrand = new LinearRandGne();
+}
+
+void RandomGeneratorUninit()
+{
+    delete mersenne;
+    delete linearrand;
+}
 
 vector<string> split(string str, string pattern)
 {
