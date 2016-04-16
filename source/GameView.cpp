@@ -486,7 +486,7 @@ public:
                     WP = false;
                 }
 
-                player::speed = (Player::Running ? runspeed : walkspeed);
+                Player::speed = (Player::Running ? runspeed : walkspeed);
 
                 if (glfwGetKey(MainWindow, GLFW_KEY_S) == GLFW_PRESS&&!Player::glidingNow)
                 {

@@ -1,6 +1,5 @@
 #include "FunctionsKit.h"
-#include "mersenne.h"
-#include "linearrand.h"
+
 
 RandGen *mersenne, *linearrand;
 
@@ -14,7 +13,7 @@ double rnd()
 void RandomGeneratorInit()
 {
     mersenne = new MersenneRandGen();
-    linearrand = new LinearRandGne();
+    linearrand = new LinearRandGen();
 }
 
 void RandomGeneratorUninit()
