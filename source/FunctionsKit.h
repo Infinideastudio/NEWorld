@@ -39,25 +39,8 @@ inline void UIVertex(int x, int y)
     glVertex2i(static_cast<int>(x*stretch), static_cast<int>(y*stretch));
 }
 
-extern unsigned int g_seed;
-
-inline int fastRand()
-{
-    g_seed = (214013 * g_seed + 2531011);
-    return (g_seed >> 16) & 0x7FFF;
-}
-
-inline void fastSrand(int seed)
-{
-    g_seed = seed;
-}
-
+double rnd();
 vector<string> split(string str, string pattern);
-
-inline double rnd()
-{
-    return (double)fastRand() / ((double)RAND_MAX + 1);
-}
 
 inline int RoundInt(double d)
 {

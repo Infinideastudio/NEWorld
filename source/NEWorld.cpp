@@ -1,4 +1,5 @@
 ﻿#include "Definitions.h"
+#include "FunctionsKit.h"
 #include "Renderer.h"
 #include "TextRenderer.h"
 #include "World.h"
@@ -87,6 +88,7 @@ int main()
 
     _mkdir("Worlds");
     _mkdir("Screenshots");
+    RandomGeneratorInit();
     glfwInit();
     createWindow();
     SetupScreen();
@@ -113,5 +115,6 @@ int main()
     GUI::AppStart();
     glfwTerminate();
     AudioSystem::UnInit();
+    RandomGeneratorUninit();
     return 0;
 }
