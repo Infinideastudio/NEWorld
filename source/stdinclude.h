@@ -1,7 +1,7 @@
 #pragma once
 
 //#define NEWORLD_TARGET_WINDOWS
-//#define NERDMODE1
+#define NERDMODE1
 // Optional macros above should be set in compiling settings
 
 #ifdef NEWORLD_TARGET_WINDOWS
@@ -65,8 +65,8 @@ using std::min;
 #include <GLFW/glfw3.h>
 //GLEXT
 #ifdef NEWORLD_TARGET_MACOSX
-#include <OpenGL.h>
-#include <gl3ext.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
 #else
 #include <GL/glext.h>
 #endif
