@@ -10,41 +10,28 @@
 
 ## 总则
 
-编写此多人协作开发规范的目的，是考虑到NEWorld的开发过程中，存在的各种严重的问题。各位开发人员，为了工作效率、正确的Git使用方式、统一的代码缩进风格、不必要的麻烦，也为了给予开发者足够的尊重，必须要遵守此规范的条款。
+NEWorld Git Cooporation: Basic Rules
 
-## 第一节 代码规范
-
-0. 所有代码使用UTF-8编码。
-
-0. 所有代码使用4个空格缩进(可在Visual Studio中设置)。
-
-0. 每个人对自己写的代码负责。
-
-0. 确保你使用的库都是可以跨平台的。
-
-0. 不要擅自修改许可证。
-
-## 第二节 Git使用及GitHub使用规范
-
-0. 严禁上传编译后的二进制文件，包括但不仅限于`.exe`、`.obj`、`.dll`、`.lib`。抓到后施以严厉处罚。
-
-0. 所有分支都应该可以(或计划可以)合并到`master`分支。
-
-0. 不要擅自修改`.gitignore`文件。
-
-0. 所有人必须通过git水平技能测试才能拥有write权限，否则请使用Pull Request提交代码。
-
-0. 经常浏览issues，解决属于你范围的issues。
-
-0. 如果没有必要，不要使用`git revert`回滚别人的代码。回滚他人代码，必须满足
-
-- 经开发组超过2/3人员同意
-
-- 通知原作者，并获得原作者正式的(包括但不限于电子邮件、GitHub留言)许可回复
-
-中的任意一个或两个条件时，才能回滚。否则，施以严厉处罚。
-
-
-## 第三节 合作开发规范
-
-0. 确保主要开发人知晓并同意你要做的大修改(包括但不限于重构，加入新库)。
+- 所有代码使用UTF-8编码
+- Use UTF-8 in code files.
+- 不要上传生成文件，中间文件(*.exe,*.obj)，不要擅自修改.gitignore
+- Don't upload build results, temporary files (*.exe, *.obj). Don't modify .gitignore without communication.
+- 每个人对自己写的代码负责
+- Everyone must track his/her own code.
+- 大文件(超过1MB的非源码文件)使用git lfs
+- Use git lfs to upload big files (binary files over 1MB)
+- 所有人必须通过git测试之后才能拥有write权限，否则请使用PR
+- Everyone must pass the Git test before he/she have write permission. If not, use pull requests instead.
+- 确保主要开发人知晓并同意你要做的大修改（重构，加入新库等）
+- Ensure that mayor developers know and agree with you before big modifications (rebuild, add new libraries and so on).
+- 确保你使用的库都是可以跨平台的
+- Ensure that libraries you use are portable.
+- 不要擅自修改license
+- Don't modify license without communication.
+- 经常浏览issues，解决属于你范围的issues
+- View issues frequently and solve issues that belong to you.
+- 所有分支都应该可以（或计划可以）合并到master分支
+- All branches should be (or plan to be) able to merge to ' master ' branch.
+- merge的时候应该尊重其他作者的修改；如果没有特殊情况，不要使用git push -force；如果没有必要，不要使用git revert回滚别人的代码
+- While solving conflicts, please don't destroy others' contribution; no special reason, don't use ' git push -force '; don't use ' git revert ' to revert others' changes if not nesserary.
+>>>>>>> master
