@@ -78,7 +78,9 @@ ThreadFunc networkThread(void *)
             MutexUnlock(mutex);
             int len = getClientSocket().recvInt();   //获得数据长度
             Net::Buffer buffer(len);
-            getClientSocket().recv(buffer, Net::BufferConditionExactLength(len));
+            Net::BufferCondition *tmp = new Netycat::Core::BufferConditionExactLength(len);
+            getClientSocket().recv(buffer, *tmp);
+            delete tmp;
             if (len > 0)
                 callback(buffer.getData(), len); //调用回调函数
             MutexLock(mutex);
