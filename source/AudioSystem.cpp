@@ -45,7 +45,11 @@ void Init()
     }
     for (size_t i = 0; i < 10; i++)
     {
+#ifdef NEWORLD_TARGET_WINDOWS
         sprintf_s(BGMName, "Audio\\BGM%d.wav", i);
+#elif NEWORLD_TARGET_MACOSX
+        snprintf(BGMName, i, "Audio\\BGM%d.wav");
+#endif
         if (Device.load(BGMName, &BGM[BGMNum]))
         {
             BGMNum++;

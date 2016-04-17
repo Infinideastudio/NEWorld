@@ -3,7 +3,7 @@
 
 //Netycat
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
-#include <Netycat\include\Netycat\Netycat.h>
+#include <Netycat/include/Netycat/Netycat.h>
 namespace Net = Netycat::Core;
 
 namespace Network
