@@ -1,10 +1,14 @@
 #include "ALDevice.h"
-#include<AL\CWaves.h>
-//#include<FLAC++\decoder.h>
-#include<Ogg\ogg.h>
-#include<Vorbis\vorbisfile.h>
-#include<vector>
-#include<iterator>
+#include <AL/CWaves.h>
+//#include <FLAC++/decoder.h>
+#include <Ogg/ogg.h>
+#include <Vorbis/vorbisfile.h>
+#include <vector>
+#include <iterator>
+#include <cstring>
+#include <memory>
+#include <cstdlib>
+using namespace std;
 void Swap(short &s1, short &s2)
 {
     short sTemp = s1;
@@ -66,8 +70,9 @@ bool ALDevice::InitAL(ALCchar * DeviceName)//初始化
         if (Context)
         {
             alcMakeContextCurrent(Context);
-            //开启EFX
+#ifdef NEWORLD_TARGET_WINDOWS
             EFX::Init();
+#endif
             return true;
         }
         alcCloseDevice(Device);
@@ -114,7 +119,7 @@ bool ALDevice::load(char * FileName, ALuint *uiBuffer)
         unsigned long	ulChannels = 0;
         FILE *pOggVorbisFile;
 
-        fopen_s(&pOggVorbisFile, FileName, "rb");
+        pOggVorbisFile = fopen(FileName, "rb");
         if (!pOggVorbisFile)return false;
         if (ov_open(pOggVorbisFile, &sOggVorbisFile, NULL, 0) == 0) {
             psVorbisInfo = ov_info(&sOggVorbisFile, -1);
@@ -209,7 +214,9 @@ ALuint ALDevice::Play(ALuint uiBuffer, bool loop, float gain,  ALfloat sourcePos
     //设置位置
     Updatesource(uiSource,sourcePos,sourceVel);
     //开启EFX
+#ifdef NEWORLD_TARGET_WINDOWS
     EFX::set(uiSource);
+#endif
     alSourcePlay(uiSource);
     return uiSource;
 }

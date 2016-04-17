@@ -343,7 +343,9 @@ void WorldMenu::onUpdate()
     if (deletebtn.clicked)
     {
         //删除世界文件
+#ifdef NEWORLD_TARGET_WINDOWS
         system((string("rd /s/q \"Worlds\\") + chosenWorldName + "\"").c_str());
+#endif
         deletebtn.clicked = false;
         World::WorldName = "";
         enterbtn.enabled = false;
