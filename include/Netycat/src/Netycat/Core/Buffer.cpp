@@ -1,6 +1,7 @@
 /*******************************************************************************
 
     Copyright 2015 SuperSodaSea
+    (C) Copyright 2016 DLaboratory
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,7 +24,7 @@
 #include <cstdio>
 #include <cstring>
 
-#include "..\..\..\include\Netycat\Core\Buffer.h"
+#include "../../../include/Netycat/Core/Buffer.h"
 
 
 namespace Netycat

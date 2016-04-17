@@ -1,6 +1,7 @@
 /*******************************************************************************
 
     Copyright 2015 SuperSodaSea
+    (C) Copyright 2016 DLaboratory
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,10 +19,11 @@
 
 *******************************************************************************/
 
-
+#ifdef NEWORLD_TARGET_WINDOWS
 #include <winsock2.h>
+#endif
 
-#include "..\..\..\include\Netycat\Core\Core.h"
+#include "../../../include/Netycat/Core/Core.h"
 
 
 namespace Netycat
@@ -32,13 +34,19 @@ namespace Core
 
 bool startup()
 {
+#ifdef NEWORLD_TARGET_WINDOWS
     WSADATA wsaData;
     return WSAStartup(WINSOCK_VERSION, &wsaData) == 0;
+#elif NEWORLD_TARGET_MACOSX
+    return true;
+#endif
 }
 
 bool cleanup()
 {
+#ifdef NEWORLD_TARGET_WINDOWS
     WSACleanup();
+#endif
     return true;
 }
 
