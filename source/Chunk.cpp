@@ -25,7 +25,7 @@ struct HMapManager
     HMapManager() {};
     HMapManager(int cx, int cz)
     {
-        int l = MAXINT, hi = WorldGen::WaterLevel, h;
+        int l = 2147483647, hi = WorldGen::WaterLevel, h;
         for (int x = 0; x < 16; ++x)
         {
             for (int z = 0; z < 16; ++z)
