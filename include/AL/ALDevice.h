@@ -1,9 +1,9 @@
 #pragma once
-#include<AL/al.h>
-#include<AL/alc.h>
-#include<AL/CWaves.h>
-#include<AL/aldlist.h>
-#include<AL/AL-EFX.h>
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/aldlist.h>
+#include <AL/AL-EFX.h>
+
 class ALDevice
 {
 public:

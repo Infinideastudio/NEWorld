@@ -357,6 +357,7 @@ void WorldMenu::onUpdate()
         vscroll.barpos = 0;
         chosenWorldName = "";
         //查找所有世界存档
+        // CROSS PLATFORM REQUIRED
         long hFile = 0;
         _finddata_t fileinfo;
         if ((hFile = _findfirst("Worlds\\*", &fileinfo)) != -1)
