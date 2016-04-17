@@ -5,22 +5,16 @@
 // Optional macros above should be set in compiling settings
 
 #ifdef NEWORLD_TARGET_WINDOWS
-
 #ifdef NEWORLD_SERVER
-#include <thread>
-#include <mutex>
 using std::thread;
 using std::mutex;
 #endif //NEWORLD_SERVER
 #include <WinSock2.h>
 #include <Windows.h>
-
-#else //NEWORLD_TARGET_WINDOWS
+#endif //NEWORLD_TARGET_WINDOWS
 
 #include <thread>
 #include <mutex>
-
-#endif //NEWORLD_TARGET_WINDOWS
 
 #define _USE_MATH_DEFINES
 #include <math.h>
