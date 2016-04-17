@@ -23,9 +23,46 @@
  */
 
 #include "CWaves.h"
-#include <ks.h>
-#include <ksmedia.h>
+
+/* flags for wFormatTag field of WAVEFORMAT */
+#define WAVE_FORMAT_PCM     1
+
+typedef struct waveformat_tag {
+    WORD    wFormatTag;        /* format type */
+    WORD    nChannels;         /* number of channels (i.e. mono, stereo, etc.) */
+    DWORD   nSamplesPerSec;    /* sample rate */
+    DWORD   nAvgBytesPerSec;   /* for buffer estimation */
+    WORD    nBlockAlign;       /* block size of data */
+} WAVEFORMAT, *PWAVEFORMAT;
+
+/* specific waveform format structure for PCM data */
+typedef struct pcmwaveformat_tag {
+    WAVEFORMAT  wf;
+    WORD        wBitsPerSample;
+} PCMWAVEFORMAT, *PPCMWAVEFORMAT;
+//#include <ks.h>
+//#include <ksmedia.h>
 #include <errno.h>
+#define SPEAKER_FRONT_LEFT              0x1
+#define SPEAKER_FRONT_RIGHT             0x2
+#define SPEAKER_FRONT_CENTER            0x4
+#define SPEAKER_LOW_FREQUENCY           0x8
+#define SPEAKER_BACK_LEFT               0x10
+#define SPEAKER_BACK_RIGHT              0x20
+#define SPEAKER_FRONT_LEFT_OF_CENTER    0x40
+#define SPEAKER_FRONT_RIGHT_OF_CENTER   0x80
+#define SPEAKER_BACK_CENTER             0x100
+#define SPEAKER_SIDE_LEFT               0x200
+#define SPEAKER_SIDE_RIGHT              0x400
+#define SPEAKER_TOP_CENTER              0x800
+#define SPEAKER_TOP_FRONT_LEFT          0x1000
+#define SPEAKER_TOP_FRONT_CENTER        0x2000
+#define SPEAKER_TOP_FRONT_RIGHT         0x4000
+#define SPEAKER_TOP_BACK_LEFT           0x8000
+#define SPEAKER_TOP_BACK_CENTER         0x10000
+#define SPEAKER_TOP_BACK_RIGHT          0x20000
+
+#define  WAVE_FORMAT_EXTENSIBLE                 0xFFFE
 
 #pragma pack(push, 4)
 
@@ -53,7 +90,7 @@ typedef struct
     unsigned short    usSize;
     unsigned short  usReserved;
     unsigned long    ulChannelMask;
-    GUID            guidSubFormat;
+    GUIDX            guidSubFormat;
 } WAVEFMT;
 
 #pragma pack(pop)

@@ -23,7 +23,7 @@
  */
 
 // Win32 version of the Creative Labs OpenAL 1.1 Framework for samples
-#include<windows.h>
+//#include<windows.h>
 #include<stdio.h>
 
 #include "Framework.h"
@@ -99,8 +99,8 @@ void ALFWShutdown()
         g_pWaveLoader = NULL;
     }
 
-    ALFWprintf("\nPress a key to quit\n");
-    ALchar ch = _getch();
+
+    //ALchar ch = _getch();
 }
 
 ALboolean ALFWInitOpenAL()
@@ -114,13 +114,13 @@ ALboolean ALFWInitOpenAL()
     pDeviceList = new ALDeviceList();
     if ((pDeviceList) && (pDeviceList->GetNumDevices()))
     {
-        ALFWprintf("\nSelect OpenAL Device:\n");
+       
         for (i = 0; i < pDeviceList->GetNumDevices(); i++) 
-            ALFWprintf("%d. %s%s\n", i + 1, pDeviceList->GetDeviceName(i), i == pDeviceList->GetDefaultDevice() ? "(DEFAULT)" : "");
+            //ALFWprintf("%d. %s%s\n", i + 1, pDeviceList->GetDeviceName(i), i == pDeviceList->GetDefaultDevice() ? "(DEFAULT)" : "");
     
         do {
-            ALchar ch = _getch();
-            i = atoi(&ch);
+            //ALchar ch = _getch();
+            //i = atoi(&ch);
         } while ((i < 1) || (i > pDeviceList->GetNumDevices()));
 
         pDevice = alcOpenDevice(pDeviceList->GetDeviceName(i - 1));
@@ -129,7 +129,7 @@ ALboolean ALFWInitOpenAL()
             pContext = alcCreateContext(pDevice, NULL);
             if (pContext)
             {
-                ALFWprintf("\nOpened %s Device\n", alcGetString(pDevice, ALC_DEVICE_SPECIFIER));
+                //ALFWprintf("\nOpened %s Device\n", alcGetString(pDevice, ALC_DEVICE_SPECIFIER));
                 alcMakeContextCurrent(pContext);
                 bReturn = AL_TRUE;
             }
@@ -195,13 +195,7 @@ ALboolean ALFWLoadWaveToBuffer(const char *szWaveFile, ALuint uiBufferID, ALenum
     return bReturn;
 }
 
-void ALFWprintf( const char* x, ... )
-{
-    va_list args;
-    va_start( args, x );
-    vprintf( x, args ); 
-    va_end( args );
-}
+
 
 ALchar fullPath[_MAX_PATH];
 ALchar *ALFWaddMediaPath(const ALchar *filename)
@@ -212,7 +206,8 @@ ALchar *ALFWaddMediaPath(const ALchar *filename)
 
 ALint ALFWKeyPress(void)
 {
-    return _kbhit();
+    //return _kbhit();
+    return 0;
 }
 
 // Extension Queries

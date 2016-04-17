@@ -201,12 +201,6 @@
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="source\resource.h" />
-    <ClInclude Include="include\AL\al.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\alc.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
     <ClInclude Include="include\AL\ALDevice.h">
       <Filter>Source\Common\OpenAL</Filter>
     </ClInclude>
@@ -217,24 +211,6 @@
       <Filter>Source\Common\OpenAL</Filter>
     </ClInclude>
     <ClInclude Include="include\AL\CWaves.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\efx.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\efx-creative.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\EFX-Util.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\Framework.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\LoadOAL.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\xram.h">
       <Filter>Source\Common\OpenAL</Filter>
     </ClInclude>
     <ClInclude Include="source\AudioSystem.h">
@@ -251,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="source\RandGen.h">
       <Filter>Source\Common\RandGen</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AL\Framework.h">
+      <Filter>Source\Common\OpenAL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -374,12 +353,6 @@
     <ClCompile Include="include\AL\CWaves.cpp">
       <Filter>Source\Common\OpenAL</Filter>
     </ClCompile>
-    <ClCompile Include="include\AL\Framework.cpp">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClCompile>
-    <ClCompile Include="include\AL\LoadOAL.cpp">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClCompile>
     <ClCompile Include="source\AudioSystem.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
@@ -397,6 +370,9 @@
     </ClCompile>
     <ClCompile Include="source\RandGen.cpp">
       <Filter>Source\Common\RandGen</Filter>
+    </ClCompile>
+    <ClCompile Include="include\AL\Framework.cpp">
+      <Filter>Source\Common\OpenAL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

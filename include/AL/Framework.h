@@ -2,16 +2,16 @@
 #define _FRAMEWORK_H_
 
 // Get some classic includes
-#include<Windows.h>
+//#include<Windows.h>
 #include<stdio.h>
-#include<io.h>
-#include<fcntl.h>
-#include<conio.h>
-#include"al.h"
-#include"alc.h"
-#include"efx.h"
-#include"efx-creative.h"
-#include"xram.h"
+//#include<io.h>
+//#include<fcntl.h>
+//#include<conio.h>
+#include<AL\al.h>
+#include<AL\alc.h>
+#include<AL\efx.h>
+#include<AL\efx-creative.h>
+#include<AL\xram.h>
 
 // Initialization and shutdown
 void ALFWInit();
@@ -30,7 +30,7 @@ ALboolean ALFWIsEFXSupported();
 
 
 // Utilities
-ALvoid ALFWprintf( const ALchar * x, ... );
+
 ALchar *ALFWaddMediaPath(const ALchar *filename);
 ALint ALFWKeyPress(void);
 

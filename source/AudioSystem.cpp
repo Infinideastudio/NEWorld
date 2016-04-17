@@ -64,7 +64,7 @@ void Init()
     //播放BGM
     if (BGMNum > 0)
     {
-        int size = GetTickCount64() % BGMNum;
+        int size = clock() % BGMNum;
         ALfloat Pos[] = { 0.0,0.0,0.0 };
         ALfloat Vel[] = { 0.0,0.0,0.0 };
         SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
@@ -105,7 +105,7 @@ void Update(ALfloat PlayerPos[3],bool BFall, bool BBlockClick, ALfloat BlockPos[
             Device.Stop(SBGM);
             if (BGMNum>0)
             {
-                int size = GetTickCount64() % BGMNum;
+                int size = clock() % BGMNum;
                 ALfloat Pos[] = { 0.0,0.0,0.0 };
                 ALfloat Vel[] = { 0.0,0.0,0.0 };
                 SBGM = Device.Play(BGM[size], false, BGMGain, Pos, Vel);
@@ -181,7 +181,9 @@ void ClickEvent()
     ALfloat Pos[] = { 0.0,0.0,0.0 };
     ALfloat Vel[] = { 0.0,0.0,0.0 };
     SClick = Device.Play(Click, false, SoundGain, Pos, Vel);
-    Sleep(50);
+    //Sleep(50);
+    clock_t c = clock();
+    while (clock() - c > 50) {}
     Device.Stop(SClick);
     SClick = -1;
 }
