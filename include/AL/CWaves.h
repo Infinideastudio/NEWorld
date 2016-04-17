@@ -5,8 +5,20 @@
 #ifndef _CWAVES_H_
 #define _CWAVES_H_
 
-#include <windows.h>
+//#include <windows.h>
 #include <stdio.h>
+#include<cstring>
+
+#define SUCCEEDED(hr) (((long)(hr)) >= 0)
+
+typedef unsigned short      WORD;
+typedef unsigned long       DWORD;
+struct GUIDX {
+    unsigned long  Data1;
+    unsigned short Data2;
+    unsigned short Data3;
+    unsigned char  Data4[8];
+};
 
 #define MAX_NUM_WAVEID            1024
 
@@ -63,7 +75,7 @@ typedef struct {
     } Samples;
     DWORD           dwChannelMask;      /* which channels are */
                                         /* present in stream  */
-    GUID            SubFormat;
+    GUIDX            SubFormat;
 } WAVEFORMATEXTENSIBLE, *PWAVEFORMATEXTENSIBLE;
 #endif // !_WAVEFORMATEXTENSIBLE_
 

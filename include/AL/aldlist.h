@@ -4,7 +4,6 @@
 #pragma warning(disable: 4786)  //disable warning "identifier was truncated to '255' characters in the browser information"
 #include <vector>
 #include <string>
-#include "LoadOAL.h"
 
 using namespace std;
 
@@ -21,7 +20,6 @@ typedef struct
 class ALDeviceList
 {
 private:
-    OPENALFNTABLE    ALFunction;
     vector<ALDEVICEINFO> vDeviceInfo;
     int defaultDeviceIndex;
     int filterIndex;
