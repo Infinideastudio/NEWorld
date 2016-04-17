@@ -1,6 +1,6 @@
 #include "FunctionsKit.h"
 
-
+using namespace std;
 RandGen *mersenne, *linearrand;
 
 extern std::vector<LogItem> Logs;
@@ -42,14 +42,14 @@ vector<string> split(string str, string pattern)
 string WStringToString(const wstring &s)
 {
     string str(s.length(), ' ');
-    copy(s.begin(), s.end(), str.begin();
+    copy(s.begin(), s.end(), str.begin());
     return str;
 }
 
 wstring StringToWString(const string &s)
 {
     wstring str(s.length(), ' ');
-    copy(s.begin(), s.end(), str.begin();
+    copy(s.begin(), s.end(), str.begin());
     return str;
 }
 

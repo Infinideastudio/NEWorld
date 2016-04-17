@@ -100,6 +100,7 @@ int main()
     glDisable(GL_CULL_FACE);
     SplashScreen();
     LoadTextures();
+#ifdef NEWORLD_TARGET_WINDOWS
     init([](int x, int y, int z) -> unsigned short
     {
         return World::getblock(x, y, z).ID;
@@ -108,6 +109,7 @@ int main()
         World::updateblock(x, y, z, val);
     });
     load_plugins(L"plugins.ini");
+#endif
     AudioSystem::Init();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();

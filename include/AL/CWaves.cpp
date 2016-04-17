@@ -334,11 +334,11 @@ WAVERESULT CWaves::ParseFile(const char *szFilename, LPWAVEFILEINFO pWaveInfo)
     {
         // Read Wave file header
         fread(&waveFileHeader, 1, sizeof(WAVEFILEHEADER), pWaveInfo->pFile);
-        if (!_strnicmp(waveFileHeader.szRIFF, "RIFF", 4) && !_strnicmp(waveFileHeader.szWAVE, "WAVE", 4))
+        if (!strncasecmp(waveFileHeader.szRIFF, "RIFF", 4) && !strncasecmp(waveFileHeader.szWAVE, "WAVE", 4))
         {
             while (fread(&riffChunk, 1, sizeof(RIFFCHUNK), pWaveInfo->pFile) == sizeof(RIFFCHUNK))
             {
-                if (!_strnicmp(riffChunk.szChunkName, "fmt ", 4))
+                if (!strncasecmp(riffChunk.szChunkName, "fmt ", 4))
                 {
                     if (riffChunk.ulChunkSize <= sizeof(WAVEFMT))
                     {
@@ -361,7 +361,7 @@ WAVERESULT CWaves::ParseFile(const char *szFilename, LPWAVEFILEINFO pWaveInfo)
                         fseek(pWaveInfo->pFile, riffChunk.ulChunkSize, SEEK_CUR);
                     }
                 }
-                else if (!_strnicmp(riffChunk.szChunkName, "data", 4))
+                else if (!strncasecmp(riffChunk.szChunkName, "data", 4))
                 {
                     pWaveInfo->ulDataSize = riffChunk.ulChunkSize;
                     pWaveInfo->ulDataOffset = ftell(pWaveInfo->pFile);
