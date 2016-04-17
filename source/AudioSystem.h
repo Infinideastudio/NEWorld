@@ -1,6 +1,6 @@
 #pragma once
 #include <AL/ALDevice.h>
-#include<ctime>
+#include <ctime>
 namespace AudioSystem
 {
 

@@ -1,17 +1,19 @@
-#ifndef _FRAMEWORK_H_ // Win32 version
-#define _FRAMEWORK_H_
+#pragma once
 
 // Get some classic includes
-//#include<Windows.h>
 #include<stdio.h>
-//#include<io.h>
-//#include<fcntl.h>
-//#include<conio.h>
-#include<AL\al.h>
-#include<AL\alc.h>
-#include<AL\efx.h>
-#include<AL\efx-creative.h>
-#include<AL\xram.h>
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/efx.h>
+#include <AL/efx-creative.h>
+
+#ifdef NEWORLD_TARGET_WINDOWS
+#include<Windows.h>
+#include<io.h>
+#include<fcntl.h>
+#include<conio.h>
+#include <AL/xram.h>
+#endif
 
 // Initialization and shutdown
 void ALFWInit();
@@ -87,4 +89,3 @@ extern LPEAXGETBUFFERMODE eaxGetBufferMode;
 extern ALenum eXRAMSize, eXRAMFree;
 extern ALenum eXRAMAuto, eXRAMHardware, eXRAMAccessible;
 
-#endif _FRAMEWORK_H_

@@ -86,8 +86,13 @@ int main()
     LoadOptions();
     Globalization::Load();
 
+#ifdef NEWORLD_TARGET_WINDOWS
     _mkdir("Worlds");
     _mkdir("Screenshots");
+#elif NEWORLD_TARGET_MACOSX
+    mkdir("Worlds", 644);
+    mkdir("Screenshots", 644);
+#endif
     RandomGeneratorInit();
     glfwInit();
     createWindow();
