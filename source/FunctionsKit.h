@@ -46,6 +46,9 @@ inline void UIVertex(int x, int y)
 double rnd();
 vector<string> split(string str, string pattern);
 
+std::string WStringToString(const std::wstring &s);
+std::wstring StringToWString(const std::string &s);
+
 inline int RoundInt(double d)
 {
     return int(floor(d + 0.5));

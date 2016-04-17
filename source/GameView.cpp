@@ -693,8 +693,8 @@ public:
                 if (IsPressed(GLFW_KEY_TAB) && chatmode && chatword.size() > 0 && chatword.substr(0, 1) == "/")
                 {
                     for (std::map<std::wstring, command>::iterator it = commands.begin(); it != commands.end(); it++)
-                        if (beginWith(it->first, to_wstring(chatword)))
-                            chatword = to_string(it->first);
+                        if (beginWith(it->first, StringToWString(chatword)))
+                            chatword = WStringToString(it->first);
                 }
             }
         }
@@ -1171,7 +1171,11 @@ public:
 #ifdef NEWORLD_COMPILE_DISABLE_SECURE
             timeinfo = *localtime(&t);
 #else
+#ifdef NEWORLD_TARGET_MACOSX
+            timeinfo = *localtime(&t);
+#else
             localtime_s(&timeinfo, &t);
+#endif
 #endif
             strftime(tmp, sizeof(tmp), "%Y年%m月%d日%H时%M分%S秒", &timeinfo);
             std::stringstream ss;
@@ -1885,7 +1889,7 @@ public:
     {
         vector<std::wstring> tmp;
         for (int i = 0; i < (int)command.size(); i++)
-            tmp.push_back(to_wstring(command[i]));
+            tmp.push_back(StringToWString(command[i]));
         if (commands.count(tmp[0]))
             return commands[tmp[0]].execute(tmp) != 0;
         return false;

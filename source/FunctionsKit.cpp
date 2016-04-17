@@ -39,6 +39,20 @@ vector<string> split(string str, string pattern)
     return ret;
 }
 
+string WStringToString(const wstring &s)
+{
+    string str(s.length(), ' ');
+    copy(s.begin(), s.end(), str.begin();
+    return str;
+}
+
+wstring StringToWString(const string &s)
+{
+    wstring str(s.length(), ' ');
+    copy(s.begin(), s.end(), str.begin();
+    return str;
+}
+
 void DebugWarning(string msg)
 {
     Logs.push_back(LogItem(LogItem::Level_Warning, msg));
