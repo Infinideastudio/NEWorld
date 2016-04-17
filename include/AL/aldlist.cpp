@@ -23,8 +23,8 @@
  */
 
 #include "aldlist.h"
-#include <windows.h>
-#include "alc.h"
+#include <AL\alc.h>
+#include<AL\al.h>
 
 
 /* 
@@ -45,23 +45,23 @@ ALDeviceList::ALDeviceList()
     defaultDeviceIndex = 0;
 
     // grab function pointers for 1.0-API functions, and if successful proceed to enumerate all devices
-    if (LoadOAL10Library(NULL, &ALFunction) == TRUE) {
-        if (ALFunction.alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT")) {
-            devices = (char *)ALFunction.alcGetString(NULL, ALC_DEVICE_SPECIFIER);
-            defaultDeviceName = (char *)ALFunction.alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
+    
+        if (alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT")) {
+            devices = (char *)alcGetString(NULL, ALC_DEVICE_SPECIFIER);
+            defaultDeviceName = (char *)alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
             index = 0;
             // go through device list (each device terminated with a single NULL, list terminated with double NULL)
             while (*devices != NULL) {
                 if (strcmp(defaultDeviceName, devices) == 0) {
                     defaultDeviceIndex = index;
                 }
-                ALCdevice *device = ALFunction.alcOpenDevice(devices);
+                ALCdevice *device = alcOpenDevice(devices);
                 if (device) {
-                    ALCcontext *context = ALFunction.alcCreateContext(device, NULL);
+                    ALCcontext *context = alcCreateContext(device, NULL);
                     if (context) {
-                        ALFunction.alcMakeContextCurrent(context);
+                        alcMakeContextCurrent(context);
                         // if new actual device name isn't already in the list, then add it...
-                        actualDeviceName = ALFunction.alcGetString(device, ALC_DEVICE_SPECIFIER);
+                        actualDeviceName = alcGetString(device, ALC_DEVICE_SPECIFIER);
                         bool bNewName = true;
                         for (int i = 0; i < GetNumDevices(); i++) {
                             if (strcmp(GetDeviceName(i), actualDeviceName) == 0) {
@@ -72,36 +72,36 @@ ALDeviceList::ALDeviceList()
                             memset(&ALDeviceInfo, 0, sizeof(ALDEVICEINFO));
                             ALDeviceInfo.bSelected = true;
                             ALDeviceInfo.strDeviceName = actualDeviceName;
-                            ALFunction.alcGetIntegerv(device, ALC_MAJOR_VERSION, sizeof(int), &ALDeviceInfo.iMajorVersion);
-                            ALFunction.alcGetIntegerv(device, ALC_MINOR_VERSION, sizeof(int), &ALDeviceInfo.iMinorVersion);
+                            alcGetIntegerv(device, ALC_MAJOR_VERSION, sizeof(int), &ALDeviceInfo.iMajorVersion);
+                            alcGetIntegerv(device, ALC_MINOR_VERSION, sizeof(int), &ALDeviceInfo.iMinorVersion);
 
                             ALDeviceInfo.pvstrExtensions = new vector<string>;
 
                             // Check for ALC Extensions
-                            if (ALFunction.alcIsExtensionPresent(device, "ALC_EXT_CAPTURE") == AL_TRUE)
+                            if (alcIsExtensionPresent(device, "ALC_EXT_CAPTURE") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("ALC_EXT_CAPTURE");
-                            if (ALFunction.alcIsExtensionPresent(device, "ALC_EXT_EFX") == AL_TRUE)
+                            if (alcIsExtensionPresent(device, "ALC_EXT_EFX") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("ALC_EXT_EFX");
-
+                            
                             // Check for AL Extensions
-                            if (ALFunction.alIsExtensionPresent("AL_EXT_OFFSET") == AL_TRUE)
+                            if (alIsExtensionPresent("AL_EXT_OFFSET") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("AL_EXT_OFFSET");
 
-                            if (ALFunction.alIsExtensionPresent("AL_EXT_LINEAR_DISTANCE") == AL_TRUE)
+                            if (alIsExtensionPresent("AL_EXT_LINEAR_DISTANCE") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("AL_EXT_LINEAR_DISTANCE");
-                            if (ALFunction.alIsExtensionPresent("AL_EXT_EXPONENT_DISTANCE") == AL_TRUE)
+                            if (alIsExtensionPresent("AL_EXT_EXPONENT_DISTANCE") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("AL_EXT_EXPONENT_DISTANCE");
                             
-                            if (ALFunction.alIsExtensionPresent("EAX2.0") == AL_TRUE)
+                            if (alIsExtensionPresent("EAX2.0") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("EAX2.0");
-                            if (ALFunction.alIsExtensionPresent("EAX3.0") == AL_TRUE)
+                            if (alIsExtensionPresent("EAX3.0") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("EAX3.0");
-                            if (ALFunction.alIsExtensionPresent("EAX4.0") == AL_TRUE)
+                            if (alIsExtensionPresent("EAX4.0") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("EAX4.0");
-                            if (ALFunction.alIsExtensionPresent("EAX5.0") == AL_TRUE)
+                            if (alIsExtensionPresent("EAX5.0") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("EAX5.0");
 
-                            if (ALFunction.alIsExtensionPresent("EAX-RAM") == AL_TRUE)
+                            if (alIsExtensionPresent("EAX-RAM") == AL_TRUE)
                                 ALDeviceInfo.pvstrExtensions->push_back("EAX-RAM");
 
                             // Get Source Count
@@ -109,16 +109,16 @@ ALDeviceList::ALDeviceList()
 
                             vDeviceInfo.push_back(ALDeviceInfo);
                         }
-                        ALFunction.alcMakeContextCurrent(NULL);
-                        ALFunction.alcDestroyContext(context);
+                        alcMakeContextCurrent(NULL);
+                        alcDestroyContext(context);
                     }
-                    ALFunction.alcCloseDevice(device);
+                    alcCloseDevice(device);
                 }
                 devices += strlen(devices) + 1;
                 index += 1;
             }
         }
-    }
+    
 
     ResetFilters();
 }
@@ -137,7 +137,7 @@ ALDeviceList::~ALDeviceList()
 
     vDeviceInfo.empty();
 
-    UnloadOAL10Library();
+    //UnloadOAL10Library();
 }
 
 /*
@@ -311,23 +311,23 @@ unsigned int ALDeviceList::GetMaxNumSources()
     unsigned int iSourceCount = 0;
 
     // Clear AL Error Code
-    ALFunction.alGetError();
+    alGetError();
 
     // Generate up to 256 Sources, checking for any errors
     for (iSourceCount = 0; iSourceCount < 256; iSourceCount++)
     {
-        ALFunction.alGenSources(1, &uiSources[iSourceCount]);
-        if (ALFunction.alGetError() != AL_NO_ERROR)
+        alGenSources(1, &uiSources[iSourceCount]);
+        if (alGetError() != AL_NO_ERROR)
             break;
     }
 
     // Release the Sources
-    ALFunction.alDeleteSources(iSourceCount, uiSources);
-    if (ALFunction.alGetError() != AL_NO_ERROR)
+    alDeleteSources(iSourceCount, uiSources);
+    if (alGetError() != AL_NO_ERROR)
     {
         for (unsigned int i = 0; i < 256; i++)
         {
-            ALFunction.alDeleteSources(1, &uiSources[i]);
+            alDeleteSources(1, &uiSources[i]);
         }
     }
 
