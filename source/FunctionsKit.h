@@ -98,7 +98,7 @@ inline T clamp(T x, T min_value, T max_value)
 #ifdef NEWORLD_TARGET_WINDOWS
 inline Mutex_t MutexCreate()
 {
-    return CreateMutex(NULL, FALSE, "");
+    return (Mutex_t)CreateMutex(NULL, FALSE, "");
 }
 
 inline void MutexDestroy(Mutex_t _hMutex)
@@ -117,7 +117,7 @@ inline void MutexUnlock(Mutex_t _hMutex)
 
 inline Thread_t ThreadCreate(ThreadFunc_t func, void* param)
 {
-    return CreateThread(NULL, 0, func, param, 0, NULL);
+    return (Thread_t)CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)func, param, 0, NULL);
 }
 
 inline void ThreadWait(Thread_t _hThread)
