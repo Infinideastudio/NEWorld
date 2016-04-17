@@ -222,3 +222,6 @@ Fonts/
 
 # Binary output
 a.out
+
+# Final NEWorld executable
+NEWorld

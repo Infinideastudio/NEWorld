@@ -2,7 +2,6 @@
 #include <AL/Framework.h>
 #ifdef NEWORLD_TARGET_WINDOWS
 #include <AL/EFX-Util.h>
-#endif
 
 #define Generic REVERB_PRESET_GENERIC;
 #define Plain REVERB_PRESET_PLAIN;
@@ -18,3 +17,4 @@ namespace EFX
     ALboolean CreateEffect(ALuint *puiEffect, ALenum eEffectType);
     ALboolean SetEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect);
 }
+#endif

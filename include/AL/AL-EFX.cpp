@@ -1,5 +1,5 @@
 #include "AL-EFX.h"
-
+#ifdef NEWORLD_TARGET_WINDOWS
 namespace EFX
 {
     ALuint uiEffectSlot, uiEffect;
@@ -117,3 +117,4 @@ namespace EFX
         return bReturn;
     }
 }
+#endif

@@ -692,9 +692,11 @@ public:
                 //自动补全
                 if (IsPressed(GLFW_KEY_TAB) && chatmode && chatword.size() > 0 && chatword.substr(0, 1) == "/")
                 {
+#ifdef NEWORLD_TARGET_WINDOWS
                     for (std::map<std::wstring, command>::iterator it = commands.begin(); it != commands.end(); it++)
                         if (beginWith(it->first, StringToWString(chatword)))
                             chatword = WStringToString(it->first);
+#endif
                 }
             }
         }
@@ -786,6 +788,7 @@ public:
         bool Fall = Player::OnGround && (!Player::inWater) && (Player::jump == 0);
         //更新声速
         AudioSystem::SpeedOfSound = Player::inWater ? AudioSystem::Water_SpeedOfSound : AudioSystem::Air_SpeedOfSound;
+#ifdef NEWORLD_TARGET_WINDOWS
         //更新环境
         if (Player::inWater)
         {
@@ -803,6 +806,7 @@ public:
             }
         }
         EFX::UpdateEAXprop();
+#endif
         AudioSystem::Update(PlayerPos, Fall, BlockClick, BlockPos, Run, Player::inWater);
 
         mbp = mb;
@@ -1818,6 +1822,7 @@ public:
 
     void RegisterCommands()
     {
+#ifdef NEWORLD_TARGET_WINDOWS
         register_command(L"/give", [](int argc, const wchar_t** argv) -> int
         {
             if (argc != 3) return 0;
@@ -1883,15 +1888,18 @@ public:
             gametime = time;
             return 1;
         });
+#endif
     }
 
     bool ExecuteCommand(const vector<string>& command)
     {
+#ifdef NEWORLD_TARGET_WINDOWS
         vector<std::wstring> tmp;
         for (int i = 0; i < (int)command.size(); i++)
             tmp.push_back(StringToWString(command[i]));
         if (commands.count(tmp[0]))
             return commands[tmp[0]].execute(tmp) != 0;
+#endif
         return false;
     }
 

@@ -195,12 +195,14 @@ ALboolean ALFWLoadWaveToBuffer(const char *szWaveFile, ALuint uiBufferID, ALenum
     return bReturn;
 }
 
-
-
+#ifdef NEWORLD_TARGET_WINDOWS
 ALchar fullPath[_MAX_PATH];
+#elif NEWORLD_TARGET_MACOSX
+ALchar fullPath[1024];
+#endif
 ALchar *ALFWaddMediaPath(const ALchar *filename)
 {
-    sprintf_s(fullPath, "%s%s", "..\\..\\Media\\", filename);
+    sprintf(fullPath, "%s%s", "..\\..\\Media\\", filename);
     return fullPath;
 }
 
@@ -214,6 +216,7 @@ ALint ALFWKeyPress(void)
 
 ALboolean ALFWIsXRAMSupported()
 {
+#ifdef NEWORLD_TARGET_WINDOWS
     ALboolean bXRAM = AL_FALSE;
     
     if (alIsExtensionPresent("EAX-RAM") == AL_TRUE)
@@ -236,10 +239,14 @@ ALboolean ALFWIsXRAMSupported()
     }
 
     return bXRAM;
+#elif NEWORLD_TARGET_MACOSX
+    return false;
+#endif
 }
 
 ALboolean ALFWIsEFXSupported()
 {
+#ifdef NEWORLD_TARGET_WINDOWS
     ALCdevice *pDevice = NULL;
     ALCcontext *pContext = NULL;
     ALboolean bEFXSupport = AL_FALSE;
@@ -296,4 +303,7 @@ ALboolean ALFWIsEFXSupported()
     }
 
     return bEFXSupport;
+#elif NEWORLD_TARGET_MACOSX
+    return false;
+#endif
 }
