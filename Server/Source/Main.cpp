@@ -1,9 +1,9 @@
+#define NEWORLD_SERVER
 #include <thread>
 #include <mutex>
 #include <algorithm>
 #include <vector>
 #include <map>
-#include <list>
 #include "Network.h"
 #include "Console.h"
 #include "..\..\source\PlayerPacket.h"
@@ -14,8 +14,9 @@ using std::thread;
 map<int, PlayerPacket> players;
 std::mutex m;
 
-void handle(Net::Socket&& socket)
+void handle(SOCKET sockConn)
 {
+    char receiveBuf[128]; //接收缓存区
     unsigned int onlineID = 0;
     bool IDSet = false;
     m.lock();
@@ -23,28 +24,18 @@ void handle(Net::Socket&& socket)
     m.unlock();
     while (true)
     {
-
-        int len;
-        try
-        {
-            len = socket.recvInt();    //获得数据长度
-        }
-        catch (...)
+        int recvbyte = recv(sockConn, receiveBuf, sizeof(receiveBuf), 0);
+        if (recvbyte == 0 || recvbyte == -1)
         {
             Print("A connection closed.");
-            socket.close();
+            closesocket(sockConn);
             m.lock();
             players.erase(onlineID);
             m.unlock();
             return;
         }
-
-        Net::Buffer buffer(len);
-        socket.recv(buffer, Net::BufferConditionExactLength(len));
-
-        int signal = 0;
-        buffer.read((void*)&signal, sizeof(int));
-        char* data = (char*)buffer.getData() + sizeof(int);
+        int signal = *receiveBuf; //强制截断，提取signal
+        char* data = receiveBuf + sizeof(int);
         m.lock();
         Print("Online players:" + toString(players.size()));
         switch (signal)
@@ -92,11 +83,7 @@ void handle(Net::Socket&& socket)
                 playersData[i] = iter->second;
                 i++;
             }
-            Net::Buffer bufferSend(players.size()*sizeof(PlayerPacket) + sizeof(int));
-            int len = players.size()*sizeof(PlayerPacket);
-            bufferSend.write((void*)&len, sizeof(int));
-            bufferSend.write((void*)playersData, players.size()*sizeof(PlayerPacket));
-            socket.send(bufferSend);
+            send(sockConn, (const char*)playersData, players.size()*sizeof(PlayerPacket), 0);
             break;
         }
         }
@@ -110,12 +97,10 @@ int main()
     Print("The server is starting...");
     Network::init();
     Print("The server is running.");
-    std::list<thread> clients;
+    vector<thread> clients;
     while (true)
     {
-        Net::Socket socketAccept;
-        Network::getServerSocket().accept(socketAccept);
-        clients.push_back(thread(handle, std::move(socketAccept)));
+        clients.push_back(thread(handle, Network::waitForClient()));
     }
     Print("The server is stopping...");
     std::for_each(clients.begin(), clients.end(), [](thread& t)

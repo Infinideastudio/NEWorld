@@ -11,7 +11,7 @@ namespace World
 {
 
 void MarkBlockUpdate(Blocks::BUDDP Block);
-extern string WorldName;
+extern string Name;
 extern brightness BRIGHTNESSMIN;
 extern brightness skylight;
 
@@ -56,14 +56,14 @@ public:
     string getChunkPath()
     {
         std::stringstream ss;
-        ss << "Worlds/" << WorldName << "/chunks/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldChunk";
+        ss << "Worlds/" << Name << "/chunks/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldChunk";
         return ss.str();
     }
 
     string getObjectsPath()
     {
         std::stringstream ss;
-        ss << "Worlds/" << WorldName << "/objects/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldObjects";
+        ss << "Worlds/" << Name << "/objects/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldObjects";
         return ss.str();
     }
 

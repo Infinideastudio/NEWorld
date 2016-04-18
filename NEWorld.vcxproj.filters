@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Netycat">
-      <UniqueIdentifier>{19ae8c3a-70c1-4ddb-8bbd-237232e9e9e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -106,27 +103,6 @@
     </ClInclude>
     <ClInclude Include="source\Particles.h">
       <Filter>Source\Game\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Netycat\include\Netycat\Core\Buffer.h">
-      <Filter>Netycat</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Netycat\include\Netycat\Core\BufferCondition.h">
-      <Filter>Netycat</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Netycat\include\Netycat\Core\Core.h">
-      <Filter>Netycat</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Netycat\include\Netycat\Core\Exception.h">
-      <Filter>Netycat</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Netycat\include\Netycat\Core\InetAddress.h">
-      <Filter>Netycat</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Netycat\include\Netycat\Core\Socket.h">
-      <Filter>Netycat</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Netycat\include\Netycat\Netycat.h">
-      <Filter>Netycat</Filter>
     </ClInclude>
     <ClInclude Include="source\GUI.h">
       <Filter>源代码\GUI</Filter>
@@ -262,24 +238,6 @@
     </ClCompile>
     <ClCompile Include="source\Particles.cpp">
       <Filter>Source\Game\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Netycat\src\Netycat\Core\Buffer.cpp">
-      <Filter>Netycat</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Netycat\src\Netycat\Core\BufferCondition.cpp">
-      <Filter>Netycat</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Netycat\src\Netycat\Core\Core.cpp">
-      <Filter>Netycat</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Netycat\src\Netycat\Core\Exception.cpp">
-      <Filter>Netycat</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Netycat\src\Netycat\Core\InetAddress.cpp">
-      <Filter>Netycat</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Netycat\src\Netycat\Core\Socket.cpp">
-      <Filter>Netycat</Filter>
     </ClCompile>
     <ClCompile Include="source\GUI.cpp">
       <Filter>源代码\GUI</Filter>

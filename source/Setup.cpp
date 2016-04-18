@@ -166,7 +166,7 @@ void LoadTextures()
 
     for (int gloop = 1; gloop <= 10; gloop++)
     {
-        string path = "Textures/blocks/destroy_" + itos(gloop) + ".bmp";
+        string path = "Textures/blocks/destroy_" + pack(gloop) + ".bmp";
         DestroyImage[gloop] = Textures::LoadRGBATexture(path, path);
     }
 

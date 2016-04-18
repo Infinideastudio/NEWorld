@@ -54,13 +54,6 @@ inline int RoundInt(double d)
     return int(floor(d + 0.5));
 }
 
-inline string itos(int i)
-{
-    std::stringstream ss;
-    ss << i;
-    return string(ss.str());
-}
-
 inline bool beginWith(const std::wstring& str, const std::wstring& begin)
 {
     if (str.size() < begin.size()) return false;

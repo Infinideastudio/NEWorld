@@ -205,7 +205,10 @@ FakesAssemblies/
 *.dll
 *.exe
 *.a
-[Ll]ibraries/
+[Ll]ib/
+
+# Third-party include files
+include/
 
 # CScope database
 cscope.*
