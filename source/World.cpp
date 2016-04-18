@@ -7,7 +7,7 @@
 namespace World
 {
 
-string WorldName;
+string Name;
 brightness skylight = 15;         //Sky light level
 brightness BRIGHTNESSMAX = 15;    //Maximum brightness
 brightness BRIGHTNESSMIN = 2;     //Mimimum brightness
@@ -37,11 +37,11 @@ int chunkBuildRenders, chunkLoads, chunkUnloads;
 void Init()
 {
 #ifdef NEWORLD_TARGET_WINDOWS
-    _mkdir(("Worlds/" + WorldName + "/").c_str());
-    _mkdir(("Worlds/" + WorldName + "/chunks").c_str());
+    _mkdir(("Worlds/" + Name + "/").c_str());
+    _mkdir(("Worlds/" + Name + "/chunks").c_str());
 #elif NEWORLD_TARGET_MACOSX
-    mkdir(("Worlds/" + WorldName + "/").c_str(), 644);
-    mkdir(("Worlds/" + WorldName + "/chunks").c_str(), 644);
+    mkdir(("Worlds/" + Name + "/").c_str(), 644);
+    mkdir(("Worlds/" + Name + "/chunks").c_str(), 644);
 #endif
 
     WorldGen::perlinNoiseInit(3404);

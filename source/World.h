@@ -15,7 +15,7 @@ class Frsutum;
 namespace World
 {
 void ProcessBuq();
-extern string WorldName;
+extern string Name;
 const int worldsize = 134217728;
 const int worldheight = 128;
 extern brightness skylight;         //Sky light level

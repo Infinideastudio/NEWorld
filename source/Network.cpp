@@ -2,7 +2,7 @@
 namespace Network
 {
 
-Net::Socket socketClient;
+SOCKET sockClient;
 Thread_t t;
 Mutex_t mutex;
 std::queue<Request> reqs;
@@ -10,18 +10,14 @@ bool threadRun = true;
 
 void init(string ip, unsigned short _port)
 {
-    Net::startup();
-
-    try
-    {
-        socketClient.connectIPv4(ip, _port);
-    }
-    catch (...)
-    {
-        DebugError("Cannot connect to the server!");
-        return;
-    }
-
+    WSADATA wsaData;
+    WSAStartup(MAKEWORD(1, 1), &wsaData);
+    sockClient = socket(AF_INET, SOCK_STREAM, 0);
+    SOCKADDR_IN addrSrv;
+    addrSrv.sin_addr.S_un.S_addr = inet_addr(ip.c_str());
+    addrSrv.sin_family = AF_INET;
+    addrSrv.sin_port = htons(_port);
+    connect(sockClient, (SOCKADDR*)&addrSrv, sizeof(SOCKADDR));
     threadRun = true;
     mutex = MutexCreate();
     t = ThreadCreate(networkThread, NULL);
@@ -31,15 +27,14 @@ int getRequestCount()
 {
     return reqs.size();
 }
-
-Net::Socket& getClientSocket()
+SOCKET getClientSocket()
 {
-    return socketClient;
+    return sockClient;
 }
 
 ThreadFunc networkThread(void *)
 {
-    while (true)
+    while (updateThreadRun)
     {
         MutexLock(mutex);
         if (!threadRun)
@@ -54,35 +49,27 @@ ThreadFunc networkThread(void *)
         }
         Request& r = reqs.front();
         //if (r._signal == PLAYER_PACKET_SEND && ((PlayerPacket*)r._dataSend)->onlineID != player::onlineID)
-        //    cout << "[ERROR]WTF!!!" << endl;
+        //	cout << "[ERROR]WTF!!!" << endl;
         if (r._dataSend != nullptr && r._dataLen != 0)
         {
-            Net::Buffer buffer(r._dataLen + sizeof(int) * 2);
-            int len = r._dataLen + sizeof(int);
-            buffer.write((void*)&len, sizeof(int));
-            buffer.write((void*)&r._signal, sizeof(int));
-            buffer.write((void*)r._dataSend, r._dataLen);
-            getClientSocket().send(buffer);
+            char* data = new char[r._dataLen + sizeof(int)];
+            int* signal = (int*)data;
+            *signal = r._signal;
+            memcpy_s(data + sizeof(int), r._dataLen, r._dataSend, r._dataLen);
+            send(getClientSocket(), data, r._dataLen + sizeof(int), 0);
+            delete[] data;
         }
         else
         {
-            Net::Buffer buffer(sizeof(int) * 2);
-            int len = sizeof(int);
-            buffer.write((void*)&len, sizeof(int));
-            buffer.write((void*)&r._signal, sizeof(int));
-            getClientSocket().send(buffer);
+            send(getClientSocket(), (const char*)&r._signal, sizeof(int), 0);
         }
         if (r._callback)   //判断有无回调函数
         {
             auto callback = r._callback;
             MutexUnlock(mutex);
-            int len = getClientSocket().recvInt();   //获得数据长度
-            Net::Buffer buffer(len);
-            Net::BufferCondition *tmp = new Netycat::Core::BufferConditionExactLength(len);
-            getClientSocket().recv(buffer, *tmp);
-            delete tmp;
-            if (len > 0)
-                callback(buffer.getData(), len); //调用回调函数
+            char recvBuf[1024]; //接收缓存区
+            int len = recv(sockClient, recvBuf, 1024, 0); //获得数据长度
+            if (len > 0) callback(recvBuf, len); //调用回调函数
             MutexLock(mutex);
         }
         reqs.pop();
@@ -102,8 +89,7 @@ void pushRequest(Request& r)
         std::queue<Request> q;
         while (reqs.size() != 0)
         {
-            if (reqs.front().isImportant())
-                q.push(reqs.front());
+            if (reqs.front().isImportant()) q.push(reqs.front());
             reqs.pop();
         }
         reqs = q;
@@ -117,7 +103,7 @@ void cleanUp()
     ThreadWait(t);
     ThreadDestroy(t);
     MutexDestroy(mutex);
-    getClientSocket().close();
-    Net::cleanup();
+    closesocket(getClientSocket());
+    WSACleanup();
 }
 }

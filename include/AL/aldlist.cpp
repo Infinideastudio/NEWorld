@@ -26,6 +26,9 @@
 #include <AL/alc.h>
 #include <AL/al.h>
 
+#ifdef _MSC_VER
+#define strcasecmp _stricmp
+#endif
 
 /* 
  * Init call

@@ -55,7 +55,7 @@ extern Mutex_t Mutex;
 extern Thread_t updateThread;
 extern double lastupdate, updateTimer;
 extern double lastframe;
-extern bool updateThreadPaused;
+extern bool updateThreadRun, updateThreadPaused;
 
 extern bool mpclient, mpserver;
 extern bool shouldGetScreenshot;
