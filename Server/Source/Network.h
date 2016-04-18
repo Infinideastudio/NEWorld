@@ -1,20 +1,16 @@
 #pragma once
-//Netycat
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#include "..\..\include\Netycat\include\Netycat\Netycat.h"
-namespace Net = Netycat::Core;
+#include <Winsock2.h>
+#pragma comment(lib, "ws2_32.lib")
 
 namespace Network
 {
-const unsigned short port = 30001;
+	const unsigned short port = 30001;
 
-inline Net::Socket& getServerSocket()
-{
-    extern Net::Socket serverSocket;
-    return serverSocket;
-}
+	inline SOCKET getServerSocket();
 
-void cleanUp();
+	SOCKET waitForClient();
 
-void init();
+	void cleanUp();
+
+	void init();
 }

@@ -43,8 +43,6 @@ private:
     bool DebugShadow;
     bool DebugMergeFace;
 
-    bool updateThreadRun;
-
     int selx, sely, selz, oldselx, oldsely, oldselz, selface;
     bool sel;
     float selt, seldes;
@@ -121,7 +119,7 @@ public:
     void SaveGame()
     {
         World::saveAllChunks();
-        if (!Player::save(World::WorldName))
+        if (!Player::save(World::Name))
         {
             DebugWarning("Failed saving player info!");
         }
@@ -129,7 +127,7 @@ public:
 
     bool LoadGame()
     {
-        if (!Player::load(World::WorldName))
+        if (!Player::load(World::Name))
         {
             DebugWarning("Failed loading player info!");
             return false;
@@ -1817,7 +1815,7 @@ public:
 
     void CreateThumbnail()
     {
-        SaveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::WorldName + "/Thumbnail.bmp");
+        SaveScreenshot(0, 0, windowwidth, windowheight, "Worlds/" + World::Name + "/Thumbnail.bmp");
     }
 
     void RegisterCommands()
