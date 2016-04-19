@@ -3,18 +3,11 @@
 #include "OnlinePlayer.h"
 
 int Player::gamemode = GameMode::Survival;
-bool Player::Glide;
-bool Player::Flying;
-bool Player::CrossWall;
+bool Player::Glide, Player::Flying, Player::CrossWall;
 double Player::glidingMinimumSpeed = pow(1, 2) / 2;
 
-float Player::height = 1.2f;
-float Player::heightExt = 0.0f;
-bool Player::OnGround = false;
-bool Player::Running = false;
-bool Player::NearWall = false;
-bool Player::inWater = false;
-bool Player::glidingNow = false;
+float Player::height = 1.2f, Player::heightExt = 0.0f;
+bool Player::OnGround = false, Player::Running = false, Player::NearWall = false, Player::inWater = false, Player::glidingNow = false;
 item Player::BlockInHand = block(Blocks::AIR);
 ubyte Player::indexInHand = 0;
 
@@ -31,10 +24,8 @@ double Player::speed;
 int Player::AirJumps;
 int Player::cxt, Player::cyt, Player::czt, Player::cxtl, Player::cytl, Player::cztl;
 double Player::lookupdown, Player::heading, Player::xpos, Player::ypos, Player::zpos;
-double Player::xposold, Player::yposold, Player::zposold, Player::jump;
-double Player::xlookspeed, Player::ylookspeed;
-int Player::intxpos, Player::intypos, Player::intzpos;
-int Player::intxposold, Player::intyposold, Player::intzposold;
+double Player::jump;
+double Player::xlookspeed = 0, Player::ylookspeed = 0;
 
 item Player::inventory[4][10];
 short Player::inventoryAmount[4][10];
@@ -53,9 +44,6 @@ void InitHitbox(Hitbox::AABB& playerbox)
 
 void InitPosition()
 {
-    Player::xposold = Player::xpos;
-    Player::yposold = Player::ypos;
-    Player::zposold = Player::zpos;
     Player::cxt = getchunkpos((int)Player::xpos);
     Player::cxtl = Player::cxt;
     Player::cyt = getchunkpos((int)Player::ypos);
@@ -64,21 +52,13 @@ void InitPosition()
     Player::cztl = Player::czt;
 }
 
-void MoveHitbox(double x, double y, double z)
-{
-    Hitbox::MoveTo(Player::playerbox, x, y + 0.5, z);
-}
-
 void updateHitbox()
 {
-    MoveHitbox(Player::xpos, Player::ypos, Player::zpos);
+    Hitbox::MoveTo(Player::playerbox, Player::xpos, Player::ypos + 0.5, Player::zpos);
 }
 
-void Player::init(double x, double y, double z)
+void Player::init()
 {
-    xpos = x;
-    ypos = y;
-    zpos = z;
     InitHitbox(Player::playerbox);
     InitPosition();
     updateHitbox();
@@ -325,16 +305,13 @@ void Player::changeGameMode(int _gamemode)
     switch (_gamemode)
     {
     case Survival:
-        Flying = false;
-        Player::jump = 0.0;
-        CrossWall = false;
+        Flying = CrossWall = false;
         break;
-
     case Creative:
         Flying = true;
-        Player::jump = 0.0;
         break;
     }
+    Player::jump = 0.0;
 }
 
 PlayerPacket Player::convertToPlayerPacket()
@@ -347,15 +324,7 @@ PlayerPacket Player::convertToPlayerPacket()
     p.lookupdown = lookupdown;
     p.onlineID = onlineID;
     p.skinID = 0;
-#ifdef NEWORLD_COMPILE_DISABLE_SECURE
     strcpy(p.name, name.c_str());
-#else
-#ifdef NEWORLD_TARGET_MACOSX
-    strcpy(p.name, name.c_str());
-#else
-    strcpy_s(p.name, name.c_str());
-#endif
-#endif
     return p;
 }
 

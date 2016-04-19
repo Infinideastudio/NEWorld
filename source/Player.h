@@ -15,7 +15,7 @@ class Frustum;
 class Player
 {
 public:
-    static void init(double x, double y, double z);
+    static void init();
     static void spawn();
 
     static void updatePosition();
@@ -53,9 +53,8 @@ public:
     static double speed;
     static int AirJumps;
     static int cxt, cyt, czt, cxtl, cytl, cztl;
-    static double lookupdown, heading, xpos, ypos, zpos, xposold, yposold, zposold, jump;
+    static double lookupdown, heading, xpos, ypos, zpos, jump;
     static double xlookspeed, ylookspeed;
-    static int intxpos, intypos, intzpos, intxposold, intyposold, intzposold;
 
     static float height;
     static float heightExt;
