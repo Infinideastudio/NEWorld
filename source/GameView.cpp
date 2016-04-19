@@ -429,10 +429,6 @@ public:
             oldsely = sely;
             oldselz = selz;
 
-            Player::intxpos = RoundInt(Player::xpos);
-            Player::intypos = RoundInt(Player::ypos);
-            Player::intzpos = RoundInt(Player::zpos);
-
             //更新方向
             Player::heading += Player::xlookspeed;
             Player::lookupdown += Player::ylookspeed;
@@ -811,16 +807,7 @@ public:
         FirstFrameThisUpdate = true;
         Particles::updateall();
 
-        Player::intxpos = RoundInt(Player::xpos);
-        Player::intypos = RoundInt(Player::ypos);
-        Player::intzpos = RoundInt(Player::zpos);
         Player::updatePosition();
-        Player::xposold = Player::xpos;
-        Player::yposold = Player::ypos;
-        Player::zposold = Player::zpos;
-        Player::intxposold = RoundInt(Player::xpos);
-        Player::intyposold = RoundInt(Player::ypos);
-        Player::intzposold = RoundInt(Player::zpos);
     }
 
     void Grender()
@@ -1922,7 +1909,7 @@ public:
         }
         //初始化游戏状态
         if (LoadGame())
-            Player::init(Player::xpos, Player::ypos, Player::zpos);
+            Player::init();
         else
             Player::spawn();
         World::Init();
