@@ -4,6 +4,7 @@
 #include "StdInclude.h"
 #include "Typedefs.h"
 #include "FunctionsKit.h"
+#include "logger.h"
 
 enum
 {
@@ -83,6 +84,6 @@ extern int c_getChunkPtrFromSearch;
 extern int c_getHeightFromHMap;
 extern int c_getHeightFromWorldGen;
 #endif
-extern std::vector<LogItem> Logs;
+extern Logger GlobalLogger;
 
 #endif

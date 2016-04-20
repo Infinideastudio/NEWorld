@@ -74,7 +74,7 @@ struct BUDDP
     BUDDP(block iOri, block* _upd, block* _slf, void* _dudp, void* _dslf,
           int _cx, int _cy, int _cz) :
         origon(iOri), upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-    bool operator == (const BUDDP& i) 
+    bool operator == (const BUDDP& i)
     {
         return cx == i.cx && cy == i.cy && cz == i.cz;
     }
@@ -103,30 +103,5 @@ typedef std::thread* Thread_t;
 typedef unsigned int(*ThreadFunc_t)(void* param);
 #define ThreadFunc unsigned int
 #endif
-
-class LogItem
-{
-public:
-    enum LogLevel
-    {
-        Level_Information,
-        Level_Warning,
-        Level_Error
-    };
-    LogLevel Level;
-    std::string Information;
-    LogItem()
-    {
-    }
-    LogItem(LogLevel _level, std::string _info)
-        :Level(_level), Information(_info)
-    {
-    }
-    std::string ToString()
-    {
-        return std::string("Level:") + (Level == Level_Information ? "Information" : Level == Level_Warning ? "Warning" : Level == Level_Error ? "Error" : "Unknown")
-               + ",Information:" + Information;
-    }
-};
 
 #endif
