@@ -36,6 +36,9 @@ public:
     {
         memset(vertexes, 0, sizeof(vertexes));
         memset(vbuffer, 0, sizeof(vbuffer));
+        aabb = getBaseAABB();
+        pblocks = new block[4096];
+        pbrightness = new brightness[4096];
     }
 
     int cx, cy, cz;
@@ -47,40 +50,19 @@ public:
     double loadAnim;
     bool visible;
 
-    void create();
     ~chunk();
     void Load(bool initIfEmpty = true);
-    void Unload();
     void buildTerrain(bool initIfEmpty = true);
     void buildDetail();
     void build(bool initIfEmpty = true);
 
-    string getChunkPath()
+    string getChunkFileName()
     {
         std::stringstream ss;
         ss << "Worlds/" << Name << "/chunks/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldChunk";
         return ss.str();
     }
 
-    string getObjectsPath()
-    {
-        std::stringstream ss;
-        ss << "Worlds/" << Name << "/objects/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldObjects";
-        return ss.str();
-    }
-
-    // REFACTOR REQUIRED
-    // Too young too evil. should apply better approach.
-    bool fileExist(string path)
-    {
-        std::fstream file;
-        file.open(path, std::ios::in);
-        bool ret = file.is_open();
-        file.close();
-        return ret;
-    }
-
-    bool LoadFromFile();
     void SaveToFile();
     void buildRender();
     void destroyRender();

@@ -5,10 +5,8 @@ FT_Library TextRenderer::library;
 FT_Face TextRenderer::fontface;
 FT_GlyphSlot TextRenderer::slot;
 TextRenderer::UnicodeChar TextRenderer::chars[65536];
-unsigned int TextRenderer::gbe;
-unsigned int TextRenderer::Font;
-int TextRenderer::gloop;
-int TextRenderer::ww, TextRenderer::wh;
+unsigned int TextRenderer::gbe, TextRenderer::Font;
+int TextRenderer::gloop, TextRenderer::ww, TextRenderer::wh;
 float TextRenderer::r = 0.0f, TextRenderer::g = 0.0f, TextRenderer::b = 0.0f, TextRenderer::a = 1.0f;
 
 void TextRenderer::BuildFont(int w, int h)
@@ -48,24 +46,20 @@ void TextRenderer::BuildFont(int w, int h)
 
 void TextRenderer::loadchar(unsigned int uc)
 {
-    FT_Bitmap* bitmap;
-    unsigned int index;
-    ubyte *Tex, *Texsrc;
-    int wid = (int)pow(2, ceil(log2(32 * stretch)));
-
-    index = FT_Get_Char_Index(fontface, uc);
+    size_t index = FT_Get_Char_Index(fontface, uc);
     FT_Load_Glyph(fontface, index, FT_LOAD_DEFAULT);
     FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
-    bitmap = &(slot->bitmap);
-    Texsrc = bitmap->buffer;
-    Tex = new ubyte[wid * wid * 4];
+    FT_Bitmap* bitmap = &(slot->bitmap);
+    int wid = (int)pow(2, ceil(log2(32 * stretch)));
+    ubyte *Texsrc = bitmap->buffer, *Tex = new ubyte[wid * wid * 4];
     memset(Tex, 0, wid * wid * 4 * sizeof(ubyte));
-    for (unsigned int i = 0; i < bitmap->rows; i++)
+    for (size_t i = 0; i < bitmap->rows; i++)
     {
-        for (unsigned int j = 0; j < bitmap->width; j++)
+        for (size_t j = 0; j < bitmap->width; j++)
         {
-            Tex[(i * wid + j) * 4 + 0] = Tex[(i * wid + j) * 4 + 1] = Tex[(i * wid + j) * 4 + 2] = 255U;
-            Tex[(i * wid + j) * 4 + 3] = *Texsrc;
+            size_t tmp = (i * wid + j) << 2;
+            Tex[tmp] = Tex[tmp ^ 1] = Tex[tmp ^ 2] = 255U;
+            Tex[tmp ^ 3] = *Texsrc;
             Texsrc++;
         }
     }
@@ -176,7 +170,6 @@ void TextRenderer::renderString(int x, int y, string glstring)
 
 void TextRenderer::renderASCIIString(int x, int y, string glstring)
 {
-    //glBindTexture(GL_TEXTURE_2D, Font);
     glPushMatrix();
     glLoadIdentity();
     glColor4f(0.5, 0.5, 0.5, a);

@@ -213,7 +213,6 @@ public:
                 World::chunk* cp = World::chunkUnloadList[i].first;
                 assert(cp != World::EmptyChunkPtr);
                 int cx = cp->cx, cy = cp->cy, cz = cp->cz;
-                cp->Unload();
                 World::DeleteChunk(cx, cy, cz);
             }
 
@@ -228,7 +227,6 @@ public:
                 c->Load(false);
                 if (c->Empty)
                 {
-                    c->Unload();
                     World::DeleteChunk(cx, cy, cz);
                     World::cpArray.setChunkPtr(cx, cy, cz, World::EmptyChunkPtr);
                 }
@@ -308,13 +306,7 @@ public:
                 //碰到方块
                 if (BlockInfo(World::getblock(RoundInt(lx), RoundInt(ly), RoundInt(lz))).isSolid())
                 {
-                    int x, y, z, xl, yl, zl;
-                    x = RoundInt(lx);
-                    y = RoundInt(ly);
-                    z = RoundInt(lz);
-                    xl = RoundInt(lxl);
-                    yl = RoundInt(lyl);
-                    zl = RoundInt(lzl);
+                    int x = RoundInt(lx), y = RoundInt(ly), z = RoundInt(lz), xl = RoundInt(lxl), yl = RoundInt(lyl), zl = RoundInt(lzl);
 
                     selx = x;
                     sely = y;
@@ -775,10 +767,7 @@ public:
         //音效更新
         int Run = 0;
         if (WP)Run = Player::Running ? 2 : 1;
-        ALfloat PlayerPos[3];
-        PlayerPos[0] = static_cast<ALfloat>(Player::xpos);
-        PlayerPos[1] = static_cast<ALfloat>(Player::ypos);
-        PlayerPos[2] = static_cast<ALfloat>(Player::zpos);
+        ALfloat PlayerPos[3] = { static_cast<ALfloat>(Player::xpos),static_cast<ALfloat>(Player::ypos),static_cast<ALfloat>(Player::zpos) };
         bool Fall = Player::OnGround && (!Player::inWater) && (Player::jump == 0);
         //更新声速
         AudioSystem::SpeedOfSound = Player::inWater ? AudioSystem::Water_SpeedOfSound : AudioSystem::Air_SpeedOfSound;
@@ -1157,15 +1146,7 @@ public:
             time_t t = time(0);
             char tmp[64];
             tm timeinfo;
-#ifdef NEWORLD_COMPILE_DISABLE_SECURE
             timeinfo = *localtime(&t);
-#else
-#ifdef NEWORLD_TARGET_MACOSX
-            timeinfo = *localtime(&t);
-#else
-            localtime_s(&timeinfo, &t);
-#endif
-#endif
             strftime(tmp, sizeof(tmp), "%Y年%m月%d日%H时%M分%S秒", &timeinfo);
             std::stringstream ss;
             ss << "Screenshots/" << tmp << ".bmp";
@@ -1177,15 +1158,12 @@ public:
             CreateThumbnail();
         }
 
-        //屏幕刷新，千万别删，后果自负！！！
-        //====refresh====//
         MutexUnlock(Mutex);
     }
 
     void onRender()
     {
         MutexLock(Mutex);
-        //==refresh end==//
     }
 
     void DrawBorder(int x, int y, int z)
@@ -1396,7 +1374,7 @@ public:
             if (Renderer::AdvancedRender)
                 TextRenderer::renderASCIIString(0, (pos++) * 16, "Shadow View:" + pack(DebugShadow));
             TextRenderer::renderASCIIString(0, (pos++) * 16, "X:" + pack(Player::xpos) + " Y:" + pack(Player::ypos) + " Z:" + pack(Player::zpos));
-            TextRenderer::renderASCIIString(0, (pos++) * 16, "Direction:" + pack(Player::heading) + "Head:" + pack(Player::lookupdown) + "Jump speed:" + pack(Player::jump));
+            TextRenderer::renderASCIIString(0, (pos++) * 16, "Direction:" + pack(Player::heading) + " Head:" + pack(Player::lookupdown) + " Jump speed:" + pack(Player::jump));
 
             {
                 string tmp = "Stats:";
@@ -1406,7 +1384,7 @@ public:
                 if (Player::inWater) tmp += " In_water";
                 if (Player::CrossWall) tmp += " Cross_Wall";
                 if (Player::Glide) tmp += " Gliding_enabled";
-                if (Player::glidingNow) tmp += "Gliding";
+                if (Player::glidingNow) tmp += " Gliding";
                 TextRenderer::renderASCIIString(0, (pos++) * 16, tmp);
             }
 

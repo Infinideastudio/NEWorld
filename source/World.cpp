@@ -94,11 +94,6 @@ chunk* AddChunk(int x, int y, int z)
 void DeleteChunk(int x, int y, int z)
 {
     int index = World::getChunkPtrIndex(x, y, z);
-    if (cpCachePtr == chunks[index])
-    {
-        cpCacheID = 0;
-        cpCachePtr = nullptr;
-    }
     delete chunks[index];
     chunks.erase(chunks.begin() + index);
     cpArray.DeleteChunk(x, y, z);
@@ -940,15 +935,14 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
 void calcVisible(double xpos, double ypos, double zpos, Frustum& frus)
 {
     chunk::setRelativeBase(xpos, ypos, zpos, frus);
-    for (size_t ci = 0; ci < chunks.size(); ci++) chunks[ci]->calcVisible();
+    for (size_t ci = 0; ci < chunks.size(); ci++)
+        chunks[ci]->calcVisible();
 }
 
 void saveAllChunks()
 {
     for (size_t i = 0; i < chunks.size(); i++)
-    {
         chunks[i]->SaveToFile();
-    }
 }
 
 void destroyAllChunks()
