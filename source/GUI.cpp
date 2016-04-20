@@ -1163,7 +1163,6 @@ void ProcessEvents()
 
 void AppCleanUp()
 {
-    World::saveAllChunks();
     World::destroyAllChunks();
 #ifdef NEWORLD_TARGET_WINDOWS
     unload_plugins();

@@ -18,53 +18,26 @@ extern bool AdvancedRender;
 namespace World
 {
 
-struct HMapManager
-{
-    int H[16][16];
-    int low, high, count;
-    HMapManager() {};
-    HMapManager(int cx, int cz)
-    {
-        int l = 2147483647, hi = WorldGen::WaterLevel, h;
-        for (int x = 0; x < 16; ++x)
-        {
-            for (int z = 0; z < 16; ++z)
-            {
-                h = HMap.getHeight(cx * 16 + x, cz * 16 + z);
-                if (h < l) l = h;
-                if (h > hi) hi = h;
-                H[x][z] = h;
-            }
-        }
-        low = (l - 21) >> 4, high = (hi + 16) >> 4;
-        count = 0;
-    }
-};
-
 double chunk::relBaseX, chunk::relBaseY, chunk::relBaseZ;
 Frustum chunk::TestFrustum;
 
-void chunk::create()
-{
-    aabb = getBaseAABB();
-    pblocks = new block[4096];
-    pbrightness = new brightness[4096];
-    //Note: If the memory is not enough, let it crash. Or you will have to face other 'strange' errors.
-}
-
 chunk::~chunk()
 {
+    SaveToFile();
+    destroyRender();
+    if (World::cpCachePtr == this)
+    {
+        World::cpCacheID = 0;
+        World::cpCachePtr = nullptr;
+    }
     delete[] pblocks;
     delete[] pbrightness;
-    pblocks = nullptr;
-    pbrightness = nullptr;
     updated = false;
     unloadedChunks++;
 }
 
 void chunk::buildTerrain(bool initIfEmpty)
 {
-    int i, x, z;
     //Fast generate parts
     //Part1 out of the terrain bound
     if (cy > 4)
@@ -73,7 +46,7 @@ void chunk::buildTerrain(bool initIfEmpty)
         if (!initIfEmpty)
             return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (i = 0; i < 4096; i++)
+        for (size_t i = 0; i < 4096; i++)
             pbrightness[i] = skylight;
         return;
     }
@@ -83,32 +56,48 @@ void chunk::buildTerrain(bool initIfEmpty)
         if (!initIfEmpty)
             return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (i = 0; i < 4096; i++)
+        for (size_t i = 0; i < 4096; i++)
             pbrightness[i] = BRIGHTNESSMIN;
         return;
     }
 
     //Part2 out of geomentry area
-    HMapManager cur(cx, cz);
-    if (cy > cur.high)
+
+    int H[16][16];
+    int low, high, count;
+    int l = 2147483647, hi = WorldGen::WaterLevel;
+
+    for (int x = 0; x < 16; ++x)
+    {
+        for (int z = 0; z < 16; ++z)
+        {
+            int h;
+            h = HMap.getHeight(cx * 16 + x, cz * 16 + z);
+            if (h < l) l = h;
+            if (h > hi) hi = h;
+            H[x][z] = h;
+        }
+    }
+    low = (l - 21) >> 4, high = (hi + 16) >> 4;
+    count = 0;
+    if (cy > high)
     {
         Empty = true;
         if (!initIfEmpty)
             return;
         memset(pblocks, 0, 4096 * sizeof(block));
-        for (i = 0; i < 4096; i++)
-            pbrightness[i] = skylight;
+        memset(pbrightness, 0, 4096 * sizeof(brightness));
         return;
     }
-    if (cy < cur.low)
+    if (cy < low)
     {
-        for (i = 0; i < 4096; i++)
+        for (size_t i = 0; i < 4096; i++)
             pblocks[i] = block(Blocks::ROCK);
         memset(pbrightness, 0, 4096 * sizeof(brightness));
         if (cy == 0)
-            for (x = 0; x < 16; x++)
-                for (z = 0; z < 16; z++)
-                    pblocks[(x << 8) + z] = block(Blocks::BEDROCK);
+            for (int x = 0; x < 16; x++)
+                for (int z = 0; z < 16; z++)
+                    pblocks[(x << 8) ^ z] = block(Blocks::BEDROCK);
         Empty = false;
         return;
     }
@@ -125,12 +114,12 @@ void chunk::buildTerrain(bool initIfEmpty)
     sh = WorldGen::WaterLevel + 2 - (cy << 4);
     wh = WorldGen::WaterLevel - (cy << 4);
 
-    for (x = 0; x < 16; ++x)
+    for (size_t x = 0; x < 16; ++x)
     {
-        for (z = 0; z < 16; ++z)
+        for (size_t z = 0; z < 16; ++z)
         {
             base = (x << 8) + z;
-            h = cur.H[x][z] - (cy << 4);
+            h = H[x][z] - (cy << 4);
             if (h >= 0 || wh >= 0)
                 Empty = false;
             if (h > sh && h > wh + 1)
@@ -209,58 +198,39 @@ void chunk::build(bool initIfEmpty)
 
 void chunk::Load(bool initIfEmpty)
 {
-    //assert(Empty == false);
-
-    create();
-    if (!LoadFromFile())
+    std::ifstream file(getChunkFileName(), std::ios::in | std::ios::binary);
+    if (file.is_open())
+    {
+        file.read((char*)pblocks, 4096 * sizeof(block));
+        file.read((char*)pbrightness, 4096 * sizeof(brightness));
+        file.read((char*)&DetailGenerated, sizeof(bool));
+    }
+    else
         build(initIfEmpty);
     if (!Empty) updated = true;
 }
 
-void chunk::Unload()
-{
-    SaveToFile();
-    destroyRender();
-    this->~chunk();
-}
-
-// OPTIMIZE REQUIRED
+// OPTIMIZATION REQUIRED
 // recommendation : introduce database to store chunks terrian
-
-bool chunk::LoadFromFile()
-{
-    std::ifstream file(getChunkPath(), std::ios::in | std::ios::binary);
-    bool openChunkFile = file.is_open();
-    file.read((char*)pblocks, 4096 * sizeof(block));
-    file.read((char*)pbrightness, 4096 * sizeof(brightness));
-    file.read((char*)&DetailGenerated, sizeof(bool));
-    file.close();
-
-    //file.open(getObjectsPath(), std::ios::in | std::ios::binary);
-    //file.close();
-    return openChunkFile;
-}
 
 void chunk::SaveToFile()
 {
     if (!Empty&&Modified)
     {
-        std::ofstream file(getChunkPath(), std::ios::out | std::ios::binary);
+        std::ofstream file(getChunkFileName(), std::ios::out | std::ios::binary);
         file.write((char*)pblocks, 4096 * sizeof(block));
         file.write((char*)pbrightness, 4096 * sizeof(brightness));
         file.write((char*)&DetailGenerated, sizeof(bool));
-        file.close();
     }
 }
 
 void chunk::buildRender()
 {
-    int x, y, z;
-    for (x = -1; x <= 1; x++)
+    for (int x = -1; x <= 1; x++)
     {
-        for (y = -1; y <= 1; y++)
+        for (int y = -1; y <= 1; y++)
         {
-            for (z = -1; z <= 1; z++)
+            for (int z = -1; z <= 1; z++)
             {
                 if ((x || y || z) && !chunkOutOfBound(cx + x, cy + y, cz + z) && !chunkLoaded(cx + x, cy + y, cz + z))
                     return;
@@ -292,13 +262,13 @@ void chunk::destroyRender()
 {
     if (!renderBuilt)
         return;
-    if (vbuffer[0] != 0)
+    if (vbuffer[0])
         vbuffersShouldDelete.push_back(vbuffer[0]);
-    if (vbuffer[1] != 0)
+    if (vbuffer[1])
         vbuffersShouldDelete.push_back(vbuffer[1]);
-    if (vbuffer[2] != 0)
+    if (vbuffer[2])
         vbuffersShouldDelete.push_back(vbuffer[2]);
-    if (vbuffer[3] != 0)
+    if (vbuffer[3])
         vbuffersShouldDelete.push_back(vbuffer[3]);
     vbuffer[0] = vbuffer[1] = vbuffer[2] = vbuffer[3] = 0;
     renderBuilt = false;

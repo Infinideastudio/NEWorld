@@ -52,8 +52,6 @@ using std::endl;
 using std::max;
 using std::min;
 
-#ifdef NEWORLD_GAME
-
 //GLFW
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
@@ -67,7 +65,5 @@ using std::min;
 //FREETYPE
 #include <ft2build.h>
 #include FT_FREETYPE_H
-
-#endif //NEWORLD_GAME
 
 #endif
