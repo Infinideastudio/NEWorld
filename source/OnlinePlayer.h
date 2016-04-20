@@ -1,6 +1,8 @@
-#pragma once
+#ifndef ONLINEPLAYER_H
+#define ONLINEPLAYER_H
+
+#include "Definitions.h"
 #include "Object.h"
-#include "stdinclude.h"
 #include "PlayerPacket.h"
 
 extern map<SkinID, pair<VBOID, vtxCount>> playerSkins;
@@ -38,3 +40,5 @@ private:
 };
 
 extern vector<OnlinePlayer> players;
+
+#endif

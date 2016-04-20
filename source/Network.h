@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NETWORK_H
+#define NETWORK_H
+
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "Definitions.h"
 
@@ -31,3 +33,5 @@ ThreadFunc networkThread(void*);
 void pushRequest(Request& r);
 void cleanUp();
 }
+
+#endif

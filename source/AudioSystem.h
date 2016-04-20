@@ -1,4 +1,6 @@
-#pragma once
+#ifndef AUDIOSYSTEM_H
+#define AUDIOSYSTEM_H
+
 #include <AL/ALDevice.h>
 #include <ctime>
 namespace AudioSystem
@@ -21,3 +23,5 @@ void GUIUpdate();
 void UnInit();
 
 }
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef FRUSTUM_H
+#define FRUSTUM_H
+
 #include "Hitbox.h"
 
 class Frustum
@@ -55,3 +57,5 @@ public:
     void update();
     bool FrustumTest(const ChunkBox& aabb);
 };
+
+#endif

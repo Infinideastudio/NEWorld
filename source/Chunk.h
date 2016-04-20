@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿#ifndef CHUNK_H
+#define CHUNK_H
+
 #include "Definitions.h"
 #include "Hitbox.h"
 #include "Blocks.h"
@@ -150,3 +152,5 @@ public:
 
 };
 }
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FUNCTIONSKIT_H
+#define FUNCTIONSKIT_H
 
 #include "StdInclude.h"
 #include "Typedefs.h"
@@ -143,45 +144,6 @@ inline unsigned int wstrlen(const wchar_t* wstr)
 
 double timer();
 
-inline std::string WChar2Ansi(LPCWSTR pwszSrc)
-{
-    int nLen = WideCharToMultiByte(CP_ACP, 0, pwszSrc, -1, NULL, 0, NULL, NULL);
-    if (nLen <= 0) return std::string("");
-    char* pszDst = new char[nLen];
-    if (NULL == pszDst) return std::string("");
-    WideCharToMultiByte(CP_ACP, 0, pwszSrc, -1, pszDst, nLen, NULL, NULL);
-    pszDst[nLen - 1] = 0;
-    std::string strTemp(pszDst);
-    delete[] pszDst;
-    return strTemp;
-}
-
-inline std::string to_string(const std::wstring& inputws)
-{
-    return WChar2Ansi(inputws.c_str());
-}
-
-inline std::wstring Ansi2WChar(LPCSTR pszSrc, int nLen)
-
-{
-    int nSize = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)pszSrc, nLen, 0, 0);
-    if (nSize <= 0) return NULL;
-    WCHAR *pwszDst = new WCHAR[nSize + 1];
-    if (NULL == pwszDst) return NULL;
-    MultiByteToWideChar(CP_ACP, 0, (LPCSTR)pszSrc, nLen, pwszDst, nSize);
-    pwszDst[nSize] = 0;
-    if (pwszDst[0] == 0xFEFF) // skip Oxfeff
-        for (int i = 0; i < nSize; i++)
-            pwszDst[i] = pwszDst[i + 1];
-    std::wstring wcharString(pwszDst);
-    delete pwszDst;
-    return wcharString;
-}
-inline std::wstring to_wstring(const string& s)
-{
-    return Ansi2WChar(s.c_str(), s.size());
-}
-
 #else
 
 inline Mutex_t MutexCreate()
@@ -263,3 +225,5 @@ inline int Distancen(int ix, int iy, int iz, int x, int y, int z)//Calculte the 
 {
     return (ix - x)*(ix - x) + (iy - y)*(iy - y) + (iz - z)*(iz - z);
 }
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef LINEARRAND_H
+#define LINEERRAND_H
+
 #include "randgen.h"
 class LinearRandGen : public RandGen
 {
@@ -21,3 +23,5 @@ public:
     // generate an unsigned 32bit integer
     unsigned int get_u32();
 };
+
+#endif
