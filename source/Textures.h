@@ -100,7 +100,7 @@ public:
             bmpfile.read((char*)&bfh, sizeof(BITMAPFILEHEADER));
             bmpfile.read((char*)&bih, sizeof(BITMAPINFOHEADER));
             *this = TEXTURE_RGBA(bih.biWidth, bih.biHeight);
-            unsigned char* rgb = new unsigned char[sizeX * sizeY * 3], *a = new unsigned char[sizeX * sizeY * 3];
+            ubyte* rgb = new ubyte[sizeX * sizeY * 3], *a = new ubyte[sizeX * sizeY * 3];
             if (mask != "")
                 maskfile.read((char*)a, sizeX * sizeY * 3);
             bmpfile.read((char*)rgb, sizeX * sizeY * 3);
@@ -148,24 +148,17 @@ public:
         Build2DMipmaps(GL_RGB, image.sizeX, image.sizeY, (int)log2(image.sizeX), image.buffer.get());
         return ret;
     }
+
     static TextureID LoadFontTexture(string Filename)
     {
         TEXTURE_RGB image(Filename);
         TEXTURE_RGBA Texture(image.sizeX, image.sizeY);
-        TextureID ret;
-        ubyte *ip = image.buffer.get(), *tp = Texture.buffer.get();
-        for (unsigned int i = 0; i != image.sizeX * image.sizeY; i++)
+        for (size_t i = 0; i != image.sizeX * image.sizeY; i++)
         {
-            *tp = 255;
-            tp++;
-            *tp = 255;
-            tp++;
-            *tp = 255;
-            tp++;
-            *tp = 255 - *ip;
-            tp++;
-            ip += 3;
+            Texture.buffer[i << 2] = Texture.buffer[(i << 2) ^ 1] = Texture.buffer[(i << 2) ^ 2] = 255;
+            Texture.buffer[(i << 2) ^ 3] = 255 - image.buffer[3 * i];
         }
+        TextureID ret;
         glGenTextures(1, &ret);
         glBindTexture(GL_TEXTURE_2D, ret);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -173,6 +166,7 @@ public:
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Texture.sizeX, Texture.sizeY, 0, GL_RGBA, GL_UNSIGNED_BYTE, Texture.buffer.get());
         return ret;
     }
+
     static TextureID LoadRGBATexture(string Filename, string MkFilename)
     {
         TextureID ret;
@@ -184,6 +178,7 @@ public:
         Build2DMipmaps(GL_RGBA, image.sizeX, image.sizeY, (int)log2(BLOCKTEXTURE_UNITSIZE), image.buffer.get());
         return ret;
     }
+
     static TextureID LoadBlock3DTexture(string Filename, string MkFilename);
 
     static void Build2DMipmaps(GLenum format, int w, int h, int level, const ubyte* src);

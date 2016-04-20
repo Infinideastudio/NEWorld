@@ -65,48 +65,19 @@ ubyte Textures::getTextureIndex(block blockname, ubyte side)
 
 TextureID Textures::LoadBlock3DTexture(string Filename, string MkFilename)
 {
-    int sz = BLOCKTEXTURE_UNITSIZE, cnt = BLOCKTEXTURE_UNITS*BLOCKTEXTURE_UNITS;
-    //int mipmapLevel = (int)log2(BLOCKTEXTURE_UNITSIZE), sum = 0, cursize = 0, scale = 1;
-    ubyte *src, *cur;
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_TEXTURE_3D);
     TextureID ret;
-    TEXTURE_RGBA image(Filename, MkFilename);
-    src = image.buffer.get();
-    cur = new ubyte[sz*sz*cnt * 4];
     glGenTextures(1, &ret);
     glBindTexture(GL_TEXTURE_3D, ret);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_BASE_LEVEL, 0);
-    //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, mipmapLevel);
-    //glTexParameterf(GL_TEXTURE_3D, GL_TEXTURE_MIN_LOD, 0);
-    //glTexParameterf(GL_TEXTURE_3D, GL_TEXTURE_MAX_LOD, mipmapLevel);
-    //glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, 0.0);
-    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, sz, sz, cnt, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.buffer.get());
-    /*
-    for (int i = 1; i <= mipmapLevel; i++) {
-        scale *= 2; cursize = sz / scale;
-        for (int z = 0; z < cnt; z++) {
-            for (int x = 0; x < cursize; x++) for (int y = 0; y < cursize; y++) {
-                for (int col = 0; col < 4; col++) {
-                    sum = 0;
-                    for (int xx = 0; xx < scale; xx++) for (int yy = 0; yy < scale; yy++) {
-                        sum += src[(z*sz*sz + (x * scale + xx) * sz + y * scale + yy) * 4 + col];
-                    }
-                    cur[(z*cursize*cursize + x*cursize + y) * 4 + col] = sum / (scale*scale);
-                }
-            }
-        }
-        glTexImage3D(GL_TEXTURE_3D, i, GL_RGBA, cursize, cursize, cnt / scale, 0, GL_RGBA, GL_UNSIGNED_BYTE, cur);
-    }
-    */
+    TEXTURE_RGBA image(Filename, MkFilename);
+    glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, BLOCKTEXTURE_UNITSIZE, BLOCKTEXTURE_UNITSIZE, BLOCKTEXTURE_UNITS * BLOCKTEXTURE_UNITS, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.buffer.get());
     glDisable(GL_TEXTURE_3D);
     glEnable(GL_TEXTURE_2D);
-    delete[] cur;
     return ret;
 }
 

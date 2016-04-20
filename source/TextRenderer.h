@@ -24,10 +24,8 @@ public:
     static FT_GlyphSlot slot;
     static UnicodeChar chars[65536];
 
-    static unsigned int gbe;
-    static unsigned int Font;
-    static int gloop;
-    static int ww, wh;
+    static unsigned int gbe, Font;
+    static int gloop, ww, wh;
     static float r, g, b, a;
 
     static void BuildFont(int w, int h);
