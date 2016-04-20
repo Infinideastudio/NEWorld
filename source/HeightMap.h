@@ -1,4 +1,6 @@
-#pragma once
+#ifndef HEIGHTMAP_H
+#define HEIGHTMAP_H
+
 #include "Definitions.h"
 
 namespace World
@@ -17,3 +19,5 @@ struct HeightMap
     int getHeight(int x, int z);
 };
 }
+
+#endif

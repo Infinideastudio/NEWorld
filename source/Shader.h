@@ -1,5 +1,7 @@
-#pragma once
-#include "StdInclude.h"
+#ifndef SHADER_H
+#define SHADER_H
+
+#include "Definitions.h"
 #include "GLProc.h"
 
 class Shader
@@ -31,3 +33,5 @@ private:
     GLhandleARB shaderVertex;
     GLhandleARB shaderProgram;
 };
+
+#endif

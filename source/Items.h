@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ITEMS_H
+#define ITEMS_H
+
 #include "Definitions.h"
 
 class ItemInfo
@@ -28,3 +30,5 @@ inline TextureID getItemTexture(item i)
 {
     return isBlock(i) ? BlockTextures : itemsinfo[i.ID - theFirstItem.ID].texture;
 }
+
+#endif

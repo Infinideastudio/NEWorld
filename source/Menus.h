@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MENUS_H
+#define MENUS_H
+
 #include "GUI.h"
 #include "Globalization.h"
 #include "AudioSystem.h"
@@ -149,3 +151,5 @@ private:
     void onUpdate();
 };
 }
+
+#endif

@@ -1,5 +1,7 @@
-#pragma once
-#include "stdinclude.h"
+#ifndef GLOBALIZATION_H
+#define GLOBALIZATION_H
+
+#include "Definitions.h"
 
 namespace Globalization
 {
@@ -19,3 +21,5 @@ bool Load();
 string GetStrbyid(int id);
 string GetStrbyKey(string key);
 }
+
+#endif

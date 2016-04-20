@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GUI_H
+#define GUI_H
+
 #include "Definitions.h"
 #include "Globalization.h"
 
@@ -12,7 +14,6 @@ inline string BoolEnabled(bool b)
     return b ? Globalization::GetStrbyKey("NEWorld.enabled") : Globalization::GetStrbyKey("NEWorld.disabled");
 }
 
-//Graphical User Interface System
 namespace GUI
 {
 extern float linewidth;
@@ -186,3 +187,5 @@ void BackToMain();
 void ClearStack();
 Form* GetMain();
 }
+
+#endif

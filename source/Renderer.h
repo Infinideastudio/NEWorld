@@ -1,4 +1,6 @@
-#pragma once
+#ifndef RENDERER_H
+#define RENDERER_H
+
 #include "Definitions.h"
 #include "GLProc.h"
 #include "Frustum.h"
@@ -75,3 +77,5 @@ void DisableShaders();
 void StartShadowPass();
 void EndShadowPass();
 }
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CHUNKRENDERER_H
+#define CHUNKRENDERER_H
+
 #include "Definitions.h"
 #include "Blocks.h"
 #include "Textures.h"
@@ -45,3 +47,5 @@ void MergeFaceRender(World::chunk* c);
 void RenderDepthModel(World::chunk* c);
 
 }
+
+#endif

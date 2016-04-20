@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GLPROC_H
+#define GLPROC_H
+
 #include "StdInclude.h"
 
 #ifndef NEWORLD_TARGET_MACOSX
@@ -60,4 +62,6 @@ extern PFNGLGETUNIFORMFVARBPROC glGetUniformfvARB;
 extern PFNGLGETUNIFORMIVARBPROC glGetUniformivARB;
 
 void InitGLProc();
+#endif
+
 #endif

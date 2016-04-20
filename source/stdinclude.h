@@ -1,14 +1,10 @@
-#pragma once
+#ifndef STDINCLUDE_H
+#define STDINCLUDE_H
 
-//#define NEWORLD_TARGET_WINDOWS
 #define NERDMODE1
 // Optional macros above should be set in compiling settings
 
 #ifdef NEWORLD_TARGET_WINDOWS
-#ifdef NEWORLD_SERVER
-using std::thread;
-using std::mutex;
-#endif //NEWORLD_SERVER
 #include <WinSock2.h>
 #include <Windows.h>
 #endif //NEWORLD_TARGET_WINDOWS
@@ -19,13 +15,11 @@ using std::mutex;
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <time.h>
-// CROSS PLATFORM REQUIRED io.h is a header offered by Microsoft
-#ifdef NEWORLD_TARGET_WINDOWS
-#include <io.h>
-#endif
+#include <assert.h>
+#include <stdarg.h>
+#include <stdlib.h>
 #include <string>
 #include <iostream>
-#include <cstdlib>
 #include <sstream>
 #include <vector>
 #include <memory>
@@ -36,11 +30,11 @@ using std::mutex;
 #include <queue>
 #include <functional>
 #include <algorithm>
-#include <cassert>
-#include <stdarg.h>
-// CROSS PLATFORM REQUIRED direct.h is a header offered by Microsoft
+
+// CROSS PLATFORM REQUIRED `direct.h` and `io.h` are headerers offered by Microsoft
 #ifdef NEWORLD_TARGET_WINDOWS
 #include <direct.h>
+#include <io.h>
 #endif
 
 #ifdef NEWORLD_TARGET_MACOSX
@@ -75,3 +69,5 @@ using std::min;
 #include FT_FREETYPE_H
 
 #endif //NEWORLD_GAME
+
+#endif
