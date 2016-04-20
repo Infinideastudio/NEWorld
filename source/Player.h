@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include "Definitions.h"
 
 const double g = 9.8;
@@ -67,3 +69,5 @@ public:
     static double glidingEnergy, glidingSpeed;
 
 };
+
+#endif

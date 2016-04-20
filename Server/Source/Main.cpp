@@ -1,4 +1,3 @@
-#define NEWORLD_SERVER
 #include <thread>
 #include <mutex>
 #include <algorithm>

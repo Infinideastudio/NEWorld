@@ -1,4 +1,6 @@
-#pragma once
+#ifndef EFFECT_H
+#define EFFECT_H
+
 #include "Definitions.h"
 
 namespace Effect
@@ -12,3 +14,5 @@ void blurGaussianX(int w, int h, uint8_t* src, uint8_t* dst, int rx);
 void blurGaussianY(int w, int h, uint8_t* src, uint8_t* dst, int ry);
 
 }
+
+#endif

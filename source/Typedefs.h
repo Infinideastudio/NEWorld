@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TYPEDEFS_H
+#define TYPEDEFS_H
+
 typedef unsigned char ubyte;
 typedef signed char int8;
 typedef short int16;
@@ -90,7 +92,7 @@ struct TILDP
 }
 typedef block item;
 
-#ifdef NEWORLD_USE_WINAPI
+#ifdef NEWORLD_TARGET_WINDOWS
 typedef HANDLE Mutex_t;
 typedef HANDLE Thread_t;
 typedef PTHREAD_START_ROUTINE ThreadFunc_t;
@@ -126,3 +128,5 @@ public:
                + ",Information:" + Information;
     }
 };
+
+#endif

@@ -1,7 +1,6 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
-//#define NEWORLD_DEBUG
-//#define NEWORLD_SECURE
+
 #include "StdInclude.h"
 #include "Typedefs.h"
 #include "FunctionsKit.h"
@@ -84,6 +83,11 @@ extern int c_getChunkPtrFromSearch;
 extern int c_getHeightFromHMap;
 extern int c_getHeightFromWorldGen;
 #endif
+<<<<<<< HEAD
 
 std::vector<LogItem> Logs;
+=======
+extern std::vector<LogItem> Logs;
+
+>>>>>>> 90b7ce1... Arrange Code
 #endif

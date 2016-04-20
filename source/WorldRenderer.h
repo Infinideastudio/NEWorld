@@ -1,4 +1,6 @@
-#pragma once
+#ifndef WORLDRENDERER_H
+#define WORLDRENDERER_H
+
 #include "StdInclude.h"
 #include "World.h"
 #include "Renderer.h"
@@ -23,3 +25,5 @@ extern vector<RenderChunk> RenderChunkList;
 size_t ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curtime, bool frustest = true);
 void RenderChunks(double x, double y, double z, int buffer);
 }
+
+#endif

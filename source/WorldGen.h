@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WORLDGEN_H
+#define WORLDGEN_H
 
 //Perlin Noise 2D
 namespace WorldGen
@@ -33,3 +34,5 @@ inline int getHeight(int x, int y)
 }
 
 }
+
+#endif

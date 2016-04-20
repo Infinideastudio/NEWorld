@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CHUNKPTRARRAY_H
+#define CHUNKPTRARRAY_H
+
 #include "Definitions.h"
 
 namespace World
@@ -24,3 +26,5 @@ struct chunkPtrArray
 };
 
 }
+
+#endif

@@ -86,7 +86,6 @@ public:
 
 const SingleBlock blockData[BLOCK_DEF_END + 1] =
 {
-    //            Block Name                  Solid   Opaque Translucent Explosive Hardness Block Update Callback Function
     SingleBlock("NEWorld.Blocks.Air"        , false    , false    , false , false,    0    , nullptr),
     SingleBlock("NEWorld.Blocks.Rock"        , true    , true    , false , false,    2    , nullptr),
     SingleBlock("NEWorld.Blocks.Grass"        , true    , true    , false , false,    5    , &GrassBUF),
@@ -112,4 +111,5 @@ const SingleBlock blockData[BLOCK_DEF_END + 1] =
 }
 
 #define BlockInfo(blockID) Blocks::blockData[(blockID).ID >= Blocks::BLOCK_DEF_END || (blockID.ID) < 0 ? Blocks::BLOCK_DEF_END : (blockID.ID)]
+
 #endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TEXTRENDERER_H
+#define TEXTRENDERER_H
+
 #include "Definitions.h"
 
 class TextRenderer
@@ -51,3 +53,5 @@ public:
     static void renderString(int x, int y, string glstring);
     static void renderASCIIString(int x, int y, string glstring);
 };
+
+#endif
