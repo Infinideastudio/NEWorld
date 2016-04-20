@@ -3,7 +3,7 @@
 using namespace std;
 RandGen *mersenne, *linearrand;
 
-extern std::vector<LogItem> Logs;
+extern Logger GlobalLogger;
 
 double rnd()
 {
@@ -55,12 +55,12 @@ wstring StringToWString(const string &s)
 
 void DebugWarning(string msg)
 {
-    Logs.push_back(LogItem(LogItem::Level_Warning, msg));
+    GlobalLogger.Log(msg, Logger::CRITICAL_LEVEL_WARNING);
 }
 
 void DebugError(string msg)
 {
-    Logs.push_back(LogItem(LogItem::Level_Error, msg));
+    GlobalLogger.Log(msg, Logger::CRITICAL_LEVEL_ERROR);
 #ifdef _DEBUG
     assert(false);
 #endif

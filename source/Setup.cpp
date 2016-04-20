@@ -39,14 +39,15 @@ void createWindow()
     glfwSetErrorCallback([](int, const char* desc)
     {
         cout << "We are sorry to inform you that NEWorld has crashed." << endl
-             << "Maybe it is caused by a badly-written plugin or a bug." << endl
-             << "You can report it to NEWorld Team, " << endl
+             << "It is probably caused by a badly-written plugin or a bug." << endl
+             << "You can post an issue on the GitHub repository at" << endl
              << "https://github.com/Infinideastudio/NEWorld/issues" << endl
-             << "or if you are a programmer, please fix it and start a pull request." << endl
+             << "You're welcomed to fix the bug and post a PR." << endl
+             << "==========" << endl
+             << "Technical Information:" << endl
              << "Reason:" << endl << desc << endl
              << "Logs:" << endl;
-        for (vector<LogItem>::iterator it = Logs.begin(); it != Logs.end(); it++)
-            cout << it->ToString() << endl;
+        cout << GlobalLogger.ExportAll() << endl;
     });
     if (Multisample)
         glfwWindowHint(GLFW_SAMPLES, Multisample);
