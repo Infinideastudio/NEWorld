@@ -1,7 +1,7 @@
 #ifndef GLPROC_H
 #define GLPROC_H
 
-#include "StdInclude.h"
+#include "Definitions.h"
 
 #ifndef NEWORLD_TARGET_MACOSX
 extern PFNGLTEXIMAGE3DPROC glTexImage3D;
