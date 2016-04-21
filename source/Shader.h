@@ -10,14 +10,16 @@ public:
     Shader(string vshPath, string fshPath, bool bindLocation = false) :Shader(vshPath, fshPath, bindLocation, std::set<string>()) {}
     Shader(string vshPath, string fshPath, bool bindLocation, std::set<string> defines);
 
-    inline void bind()
+    void bind()
     {
         glUseProgramObjectARB(shaderProgram);
     }
-    static inline void unbind()
+
+    static void unbind()
     {
         glUseProgramObjectARB(0);
     }
+
     void release();
 
     bool setUniform(const char* uniform, float value);
