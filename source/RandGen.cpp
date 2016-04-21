@@ -1,5 +1,6 @@
 #include "RandGen.h"
 #include <algorithm>
+#include <ctime>
 using namespace std;
 
 unsigned long long RandGen::get_u64()
@@ -68,3 +69,126 @@ double RandGen::get_double_ranged(double x, double y)
         swap(x, y);
     return x + (y - x) * get_double_co();
 }
+
+// Mersenne Twister Random Number Generation Algorithm
+
+inline unsigned int M32(unsigned int x)
+{
+    return (0x80000000 & x);
+}
+
+inline unsigned int L31(unsigned int x)
+{
+    return (0x7FFFFFFF & x);
+}
+
+inline unsigned int matrix(unsigned int x)
+{
+    return (x & 1) ? 0x9908b0df : 0;
+}
+
+MersenneRandGen::MersenneRandGen()
+{
+    seed(time(NULL));
+}
+
+MersenneRandGen::MersenneRandGen(unsigned int k)
+{
+    seed(k);
+}
+
+void MersenneRandGen::generate_numbers()
+{
+    unsigned int y, i = 0, j;
+
+    while ( i < (diff-1) )
+    {
+        y = M32(buffer[i]) | L31(buffer[i+1]);
+        buffer[i] = buffer[i+period] ^ (y >> 1) ^ matrix(y);
+        ++i;
+    }
+
+    y = M32(buffer[i]) | L31(buffer[i+1]);
+    buffer[i] = buffer[(i+period)%buffer_size] ^ (y >> 1) ^ matrix(y);
+    ++i;
+
+    while ( i < (buffer_size-1) )
+    {
+        y = M32(buffer[i]) | L31(buffer[i+1]);
+        buffer[i] = buffer[i-diff] ^ (y >> 1) ^ matrix(y);
+        ++i;
+    }
+
+    y = M32(buffer[buffer_size-1]) | L31(buffer[0]);
+    buffer[buffer_size-1] = buffer[period-1] ^ (y>>1) ^ matrix(y);
+}
+
+void MersenneRandGen::seed(unsigned int k)
+{
+    buffer[0] = k;
+    index = 0;
+
+    for (unsigned int i = 1; i < buffer_size; ++i)
+        buffer[i] = 0x6c078965 * (buffer[i-1] ^ buffer[i-1] >> 30) + i;
+}
+
+unsigned int MersenneRandGen::get_u32()
+{
+    if ( !index )
+        generate_numbers();
+
+    unsigned int y = buffer[index];
+
+    y ^= y>>11;
+    y ^= y<< 7 & 0x9d2c5680;
+    y ^= y<<15 & 0xefc60000;
+    y ^= y>>18;
+
+    if (++index == buffer_size)
+        index = 0;
+
+    return y;
+}
+
+// Linear Recurrence Random Number Generation Algorithm
+
+LinearRandGen::LinearRandGen()
+{
+    coefficient = 214013;
+    offset = 2531011;
+    seed(time(NULL));
+}
+
+LinearRandGen::LinearRandGen(unsigned int k)
+{
+    coefficient = 214013;
+    offset = 2531011;
+    seed(k);
+}
+
+LinearRandGen::LinearRandGen(unsigned int k, unsigned int _coefficient, unsigned int _offset)
+{
+    coefficient = _coefficient;
+    offset = _offset;
+    seed(k);
+}
+
+void LinearRandGen::seed(unsigned int k)
+{
+    v = k;
+}
+
+unsigned int LinearRandGen::get_u32()
+{
+    v = v * coefficient + offset;
+    return v;
+}
+
+#if (defined NEWORLD_TARGET_MACOSX) && (defined __RDRND__)
+unsigned int IntelRandGen::get_u32()
+{
+    int val;
+    _rdrand32_step(&val);
+    return val;
+}
+#endif

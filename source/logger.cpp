@@ -35,7 +35,6 @@ void Logger::Log(std::string information, CriticalLevel level)
 #endif
 }
 
-
 string Logger::ExportAll()
 {
     stringstream ss;

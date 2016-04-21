@@ -1,25 +1,30 @@
 #include "Definitions.h"
 
 using namespace std;
-RandGen *mersenne, *linearrand;
+RandGen *pRandGen;
 
 extern Logger GlobalLogger;
 
 double rnd()
 {
-    return mersenne->get_double_co();
+    return pRandGen->get_double_co();
 }
 
+#if (defined NEWORLD_TARGET_MACOSX) && (defined __RDRND__)
 void RandomGeneratorInit()
 {
-    mersenne = new MersenneRandGen();
-    linearrand = new LinearRandGen();
+    pRandGen = new IntelRandGen();
 }
+#else
+void RandomGeneratorInit()
+{
+    pRandGen = new MersenneRandGen();
+}
+#endif
 
 void RandomGeneratorUninit()
 {
-    delete mersenne;
-    delete linearrand;
+    delete pRandGen;
 }
 
 vector<string> split(string str, string pattern)

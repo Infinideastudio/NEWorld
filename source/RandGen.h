@@ -1,6 +1,7 @@
 #ifndef RANDGEN_H
 #define RANDGEN_H
 
+#include <immintrin.h>
 class RandGen
 {
 public:
@@ -30,5 +31,62 @@ public:
     double get_double_cc(); // returns double value in [0, 1]
     double get_double_ranged(double x, double y); // [x, y)
 };
+
+class MersenneRandGen : public RandGen
+{
+private:
+    static const unsigned int buffer_size = 624, period = 397, diff = 227;
+    unsigned int buffer[buffer_size], index;
+
+    void generate_numbers();
+
+public:
+    // automatically set seed to current UNIX time stamp
+    MersenneRandGen();
+
+    // set seed to the given value k
+    MersenneRandGen(unsigned int k);
+
+    // set seed to k
+    void seed(unsigned int k);
+
+    // generate an unsigned 32bit integer
+    unsigned int get_u32();
+};
+
+class LinearRandGen : public RandGen
+{
+private:
+    unsigned int coefficient, offset, v;
+
+public:
+    // automatically set seed to current UNIX time stamp
+    LinearRandGen();
+
+    // set seed to the given value k
+    LinearRandGen(unsigned int k);
+
+    // set seed, coefficient and offset manually
+    LinearRandGen(unsigned int k, unsigned int _coefficient, unsigned int _offset);
+
+    // set seed to k
+    void seed(unsigned int k);
+
+    // generate an unsigned 32bit integer
+    unsigned int get_u32();
+};
+
+#if (defined NEWORLD_TARGET_MACOSX) && (defined __RDRND__)
+// Intel的RNRAND硬件随机数生成器
+class IntelRandGen : public RandGen
+{
+public:
+    // dummy function
+    void seed() {}
+
+    // generate an unsigned 32bit integer
+    unsigned int get_u32();
+};
+#endif
 
 #endif
