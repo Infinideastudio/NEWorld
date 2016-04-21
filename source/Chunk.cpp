@@ -179,7 +179,7 @@ void chunk::buildDetail()
             for (z = 0; z < 16; z++)
             {
                 //Tree
-                if (pblocks[index] == block(Blocks::GRASS) && mersenne->one_in(200))
+                if (pblocks[index] == block(Blocks::GRASS) && pRandGen->one_in(200))
                 {
                     buildtree(cx * 16 + x, cy * 16 + y, cz * 16 + z);
                 }

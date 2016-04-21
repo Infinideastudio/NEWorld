@@ -172,9 +172,6 @@ typedef unsigned int(*ThreadFunc_t)(void* param);
 #endif
 
 // functions kit
-#include "mersenne.h"
-#include "linearrand.h"
-
 extern double stretch;
 
 vector<string> split(string str, string pattern);
@@ -466,7 +463,7 @@ extern int mw, mb, mbp, mbl, mwl;
 extern double mxdelta, mydelta;
 extern string inputstr;
 
-extern RandGen *mersenne, *linear;
+extern RandGen *pRandGen;
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
 extern int c_getChunkPtrFromCPA;
