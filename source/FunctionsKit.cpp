@@ -1,4 +1,4 @@
-#include "FunctionsKit.h"
+#include "Definitions.h"
 
 using namespace std;
 RandGen *mersenne, *linearrand;

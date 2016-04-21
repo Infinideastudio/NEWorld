@@ -1,5 +1,5 @@
+#include "Definitions.h"
 #include "Shader.h"
-#include "FunctionsKit.h"
 #include "GLProc.h"
 Shader::Shader(string vshPath, string fshPath, bool bindLocation, std::set<string> defines)
 {
