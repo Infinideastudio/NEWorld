@@ -13,10 +13,11 @@ int WaterLevel = 30;
 
 void perlinNoiseInit(int mapseed)
 {
-    RandGen *mersenne_gen =new MersenneRandGen(mapseed);
+    RandGen *mersenne_gen = new MersenneRandGen(mapseed);
     for (int i = 0; i < 256; i++)
         perm[i] = mersenne_gen->get_double_ranged(0.0, 256.0);
     seed = mapseed;
+    delete mersenne_gen;
 }
 
 double SmoothedNoise(int x, int y)

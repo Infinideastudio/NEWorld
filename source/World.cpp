@@ -1021,7 +1021,7 @@ void buildtree(int x, int y, int z)
         }
     }
     //取最小值
-    h = static_cast<int>(min((double)h, Dirt * 15 / 268 * max(mersenne->get_double_co(), 0.8)));
+    h = static_cast<int>(min((double)h, Dirt * 15 / 268 * max(pRandGen->get_double_co(), 0.8)));
     if (h < 7)return;
     //开始生成树干
     for (int i = y + 1; i < y + h + 1; i++)
@@ -1041,7 +1041,7 @@ void buildtree(int x, int y, int z)
                 int distancen = Distancen(ix, iy, iz, x, y + leafh + 1, z);
                 if ((getblock(ix, iy, iz) == block(Blocks::AIR)) && (distancen <distancen2))
                 {
-                    if ((distancen <= distancen2 / 9) && (mersenne->x_in_y(7, 10)))//生成枝杈
+                    if ((distancen <= distancen2 / 9) && (pRandGen->x_in_y(7, 10)))//生成枝杈
                     {
                         setblock(ix, iy, iz, block(Blocks::WOOD));
                     }
@@ -1067,7 +1067,7 @@ void explode(int x, int y, int z, int r, chunk* c)
             {
                 int distsqr = (fx - x)*(fx - x) + (fy - y)*(fy - y) + (fz - z)*(fz - z);
                 if (distsqr <= maxdistsqr*0.75 ||
-                        distsqr <= maxdistsqr && mersenne->get_double_co() > (distsqr - maxdistsqr*0.6) / (maxdistsqr*0.4))
+                        distsqr <= maxdistsqr && pRandGen->get_double_co() > (distsqr - maxdistsqr*0.6) / (maxdistsqr*0.4))
                 {
                     block e = World::getblock(fx, fy, fz);
                     if (e == block(Blocks::AIR)) continue;
@@ -1146,9 +1146,9 @@ void putblock(int x, int y, int z, block Block)
 
 void pickleaf()
 {
-    if(mersenne->one_in(20))
+    if(pRandGen->one_in(20))
     {
-        if(mersenne->one_in(2))
+        if(pRandGen->one_in(2))
             Player::AddItem(APPLE);
         else
             Player::AddItem(STICK);

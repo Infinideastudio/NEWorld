@@ -250,9 +250,9 @@ public:
             int cx = cp->cx;
             int cy = cp->cy;
             int cz = cp->cz;
-            x = mersenne->get_s32_ranged(0, 16);
-            y = mersenne->get_s32_ranged(0, 16);
-            z = mersenne->get_s32_ranged(0, 16);
+            x = pRandGen->get_s32_ranged(0, 16);
+            y = pRandGen->get_s32_ranged(0, 16);
+            z = pRandGen->get_s32_ranged(0, 16);
             gx = x + (cx << 4);
             gy = y + (cy << 4);
             gz = z + (cz << 4);
@@ -1457,7 +1457,7 @@ public:
             generated = true;
             for (i = 0; i < 128; i++)
                 for (j = 0; j < 128; j++)
-                    World::cloud[i][j] = mersenne->get_s32_ranged(0, 2); // CHECK REQUIRED 真的是[0, 2) ?
+                    World::cloud[i][j] = pRandGen->get_s32_ranged(0, 2); // CHECK REQUIRED 真的是[0, 2) ?
 
             glGenBuffersARB(128, cloudvb);
 
@@ -1882,7 +1882,7 @@ public:
         if (multiplayer)
         {
             Player::name = "";
-            Player::onlineID = mersenne->get_u16();
+            Player::onlineID = pRandGen->get_u16();
             Network::init(serverip, port);
         }
         //初始化游戏状态
