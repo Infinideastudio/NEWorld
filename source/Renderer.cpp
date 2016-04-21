@@ -48,20 +48,27 @@ void Init(int tc, int cc, int ac)
     Texcoordc = tc;
     Colorc = cc;
     Attribc = ac;
-    if (VertexArray == nullptr) VertexArray = new float[ArraySize];
+    if (VertexArray == nullptr)
+        VertexArray = new float[ArraySize];
     index = 0;
     VA = VertexArray;
     Vertexes = 0;
+    // CHECK REQUIRED
+    // (tc + cc + + ac + 3)是个什么鬼
     size = (tc + cc + + ac + 3) * 4;
 }
 
 void Vertex3f(float x, float y, float z)
 {
-    if ((Vertexes + 1)*(Texcoordc + Colorc + 3) > ArraySize) return;
-    if (Attribc != 0) VertexArray[index++] = Attribs;
-    if (Texcoordc != 0) memcpy(VertexArray + index, TexCoords, Texcoordc*sizeof(float));
+    if ((Vertexes + 1) * (Texcoordc + Colorc + 3) > ArraySize)
+        return;
+    if (Attribc != 0)
+        VertexArray[index++] = Attribs;
+    if (Texcoordc != 0)
+        memcpy(VertexArray + index, TexCoords, Texcoordc*sizeof(float));
     index += Texcoordc;
-    if (Colorc != 0) memcpy(VertexArray + index, Colors, Colorc*sizeof(float));
+    if (Colorc != 0)
+        memcpy(VertexArray + index, Colors, Colorc*sizeof(float));
     index += Colorc;
     VertexArray[index++] = x;
     VertexArray[index++] = y;
@@ -104,14 +111,11 @@ void Attrib1f(float a)
 
 void Flush(VBOID& buffer, vtxCount& vtxs)
 {
-
-    //上次才知道原来Flush还有冲厕所的意思QAQ
-    //OpenGL有个函数glFlush()，翻译过来就是GL冲厕所() ←_←
-
     vtxs = Vertexes;
     if (Vertexes != 0)
     {
-        if (buffer == 0) glGenBuffersARB(1, &buffer);
+        if (buffer == 0)
+            glGenBuffersARB(1, &buffer);
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer);
         glBufferDataARB(GL_ARRAY_BUFFER_ARB,
                         Vertexes * ((Texcoordc + Colorc + Attribc + 3) * sizeof(float)),
@@ -122,7 +126,6 @@ void Flush(VBOID& buffer, vtxCount& vtxs)
 
 void renderbuffer(VBOID buffer, vtxCount vtxs, int tc, int cc, int ac)
 {
-
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer);
     int cnt = tc + cc + 3;
     if (!AdvancedRender || ac == 0)
