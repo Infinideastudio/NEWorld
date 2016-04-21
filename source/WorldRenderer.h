@@ -1,7 +1,7 @@
 #ifndef WORLDRENDERER_H
 #define WORLDRENDERER_H
 
-#include "StdInclude.h"
+#include "Definitions.h"
 #include "World.h"
 #include "Renderer.h"
 

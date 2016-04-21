@@ -188,7 +188,6 @@
     <ClInclude Include="source\ChunkPtrArray.h" />
     <ClInclude Include="source\Effect.h" />
     <ClInclude Include="source\ChunkRenderer.h" />
-    <ClInclude Include="source\FunctionsKit.h" />
     <ClInclude Include="source\GameView.h" />
     <ClInclude Include="source\GLProc.h" />
     <ClInclude Include="source\HeightMap.h" />
@@ -199,6 +198,7 @@
     <ClInclude Include="source\Globalization.h" />
     <ClInclude Include="source\Items.h" />
     <ClInclude Include="source\linearrand.h" />
+    <ClInclude Include="source\logger.h" />
     <ClInclude Include="source\Menus.h" />
     <ClInclude Include="source\mersenne.h" />
     <ClInclude Include="source\Network.h" />
@@ -213,10 +213,8 @@
     <ClInclude Include="source\Setup.h" />
     <ClInclude Include="source\Shader.h" />
     <ClInclude Include="source\ShadowMaps.h" />
-    <ClInclude Include="source\StdInclude.h" />
     <ClInclude Include="source\TextRenderer.h" />
     <ClInclude Include="source\Textures.h" />
-    <ClInclude Include="source\Typedefs.h" />
     <ClInclude Include="source\World.h" />
     <ClInclude Include="source\WorldGen.h" />
     <ClInclude Include="source\WorldRenderer.h" />
@@ -244,6 +242,7 @@
     <ClCompile Include="source\Globalization.cpp" />
     <ClCompile Include="source\Items.cpp" />
     <ClCompile Include="source\linearrand.cpp" />
+    <ClCompile Include="source\logger.cpp" />
     <ClCompile Include="source\Menus.cpp" />
     <ClCompile Include="source\mersenne.cpp" />
     <ClCompile Include="source\Network.cpp" />

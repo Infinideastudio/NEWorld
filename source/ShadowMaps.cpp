@@ -1,4 +1,4 @@
-#include "stdinclude.h"
+#include "Definitions.h"
 #include "ShadowMaps.h"
 
 namespace ShadowMaps

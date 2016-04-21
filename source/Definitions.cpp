@@ -74,5 +74,3 @@ int c_getChunkPtrFromSearch;
 int c_getHeightFromHMap;
 int c_getHeightFromWorldGen;
 #endif
-
-std::vector<LogItem> Logs;

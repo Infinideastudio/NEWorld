@@ -5,7 +5,6 @@ namespace Hitbox
 {
 
 bool stuck = false;
-AABB Emptybox;
 
 bool inXclip(const AABB& boxA, const AABB& boxB)
 {

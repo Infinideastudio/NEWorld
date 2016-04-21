@@ -5,7 +5,7 @@
 #include "Object.h"
 #include "PlayerPacket.h"
 
-extern map<SkinID, pair<VBOID, vtxCount>> playerSkins;
+extern map<SkinID, pair<VBOID, vtxCount> > playerSkins;
 
 class OnlinePlayer : public Object
 {

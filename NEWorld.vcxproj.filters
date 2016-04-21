@@ -110,9 +110,6 @@
     <ClInclude Include="source\Menus.h">
       <Filter>源代码\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="source\StdInclude.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="source\ChunkRenderer.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
@@ -167,12 +164,6 @@
     <ClInclude Include="source\Shader.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="source\Typedefs.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\FunctionsKit.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="source\GameView.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
@@ -206,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="include\AL\Framework.h">
       <Filter>Source\Common\OpenAL</Filter>
+    </ClInclude>
+    <ClInclude Include="source\logger.h">
+      <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="include\AL\Framework.cpp">
       <Filter>Source\Common\OpenAL</Filter>
+    </ClCompile>
+    <ClCompile Include="source\logger.cpp">
+      <Filter>Source\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

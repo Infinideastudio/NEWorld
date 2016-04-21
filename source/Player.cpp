@@ -32,14 +32,9 @@ short Player::inventoryAmount[4][10];
 
 double Player::glidingEnergy, Player::glidingSpeed;
 
-void InitHitbox(Hitbox::AABB& playerbox)
+void InitHitbox()
 {
-    playerbox.xmin = -0.3;
-    playerbox.xmax = 0.3;
-    playerbox.ymin = -0.85;
-    playerbox.ymax = 0.85;
-    playerbox.zmin = -0.3;
-    playerbox.zmax = 0.3;
+    Player::playerbox = Hitbox::AABB(-0.3, -0.85, -0.3, 0.3, 0.85, 0.3);
 }
 
 void InitPosition()
@@ -59,7 +54,7 @@ void updateHitbox()
 
 void Player::init()
 {
-    InitHitbox(Player::playerbox);
+    InitHitbox();
     InitPosition();
     updateHitbox();
 }
@@ -70,7 +65,7 @@ void Player::spawn()
     ypos = 60.0;
     zpos = 0.0;
     jump = 0.0;
-    InitHitbox(Player::playerbox);
+    InitHitbox();
     InitPosition();
     updateHitbox();
     health = healthMax;
@@ -179,14 +174,8 @@ void Player::updatePosition()
 
 bool Player::putBlock(int x, int y, int z, block blockname)
 {
-    Hitbox::AABB blockbox;
+    Hitbox::AABB blockbox(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z + 0.5);
     bool success = false;
-    blockbox.xmin = x - 0.5;
-    blockbox.ymin = y - 0.5;
-    blockbox.zmin = z - 0.5;
-    blockbox.xmax = x + 0.5;
-    blockbox.ymax = y + 0.5;
-    blockbox.zmax = z + 0.5;
     int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     if (!World::chunkOutOfBound(cx, cy, cz) && (((Hitbox::Hit(playerbox, blockbox) == false) || CrossWall ||
             BlockInfo(blockname).isSolid() == false) && BlockInfo(World::getblock(x, y, z)).isSolid() == false))
