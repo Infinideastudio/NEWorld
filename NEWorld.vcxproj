@@ -226,7 +226,6 @@
     <ClCompile Include="source\BlockFuncs.cpp" />
     <ClCompile Include="source\Chunk.cpp" />
     <ClCompile Include="source\ChunkPtrArray.cpp" />
-    <ClCompile Include="source\ChunkRenderer.cpp" />
     <ClCompile Include="source\Effect.cpp" />
     <ClCompile Include="source\FunctionsKit.cpp" />
     <ClCompile Include="source\GameView.cpp" />
