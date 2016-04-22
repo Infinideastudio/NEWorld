@@ -186,12 +186,6 @@
     <ClInclude Include="source\BlockFuncs.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="source\linearrand.h">
-      <Filter>Source\Common\RandGen</Filter>
-    </ClInclude>
-    <ClInclude Include="source\mersenne.h">
-      <Filter>Source\Common\RandGen</Filter>
-    </ClInclude>
     <ClInclude Include="source\RandGen.h">
       <Filter>Source\Common\RandGen</Filter>
     </ClInclude>
@@ -313,12 +307,6 @@
     </ClCompile>
     <ClCompile Include="source\Menus.cpp">
       <Filter>Source\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="source\linearrand.cpp">
-      <Filter>Source\Common\RandGen</Filter>
-    </ClCompile>
-    <ClCompile Include="source\mersenne.cpp">
-      <Filter>Source\Common\RandGen</Filter>
     </ClCompile>
     <ClCompile Include="source\RandGen.cpp">
       <Filter>Source\Common\RandGen</Filter>

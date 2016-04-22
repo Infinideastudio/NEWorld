@@ -3,8 +3,6 @@
 using namespace std;
 RandGen *pRandGen;
 
-extern Logger GlobalLogger;
-
 double rnd()
 {
     return pRandGen->get_double_co();
@@ -56,19 +54,6 @@ wstring StringToWString(const string &s)
     wstring str(s.length(), ' ');
     copy(s.begin(), s.end(), str.begin());
     return str;
-}
-
-void DebugWarning(string msg)
-{
-    GlobalLogger.Log(msg, Logger::CRITICAL_LEVEL_WARNING);
-}
-
-void DebugError(string msg)
-{
-    GlobalLogger.Log(msg, Logger::CRITICAL_LEVEL_ERROR);
-#ifdef _DEBUG
-    assert(false);
-#endif
 }
 
 #ifdef NEWORLD_TARGET_WINDOWS

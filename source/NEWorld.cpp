@@ -6,6 +6,7 @@
 #include "Globalization.h"
 #include "Setup.h"
 #include "AudioSystem.h"
+#include "Textures.h"
 #include "../PluginSDK/src/pluginsdk.h"
 #include "../PluginSDK/src/export_variables.h"
 
@@ -94,12 +95,115 @@ int main()
 #endif
     RandomGeneratorInit();
     glfwInit();
-    createWindow();
+    glfwSetErrorCallback([](int, const char* desc)
+    {
+        cout << "We are sorry to inform you that NEWorld has crashed." << endl
+            << "It is probably caused by a badly-written plugin or a bug." << endl
+            << "You can post an issue on the GitHub repository at" << endl
+            << "https://github.com/Infinideastudio/NEWorld/issues" << endl
+            << "You're welcomed to fix the bug and post a PR." << endl
+            << "==========" << endl
+            << "Technical Information:" << endl
+            << "Reason:" << endl << desc << endl
+            << "Logs:" << endl;
+        cout << GlobalLogger.ExportAll() << endl;
+    });
+    if (Multisample)
+        glfwWindowHint(GLFW_SAMPLES, Multisample);
+    MainWindow = glfwCreateWindow(windowwidth, windowheight, ("NEWorld " + major_version + minor_version + ext_version).c_str(), NULL, NULL);
+    MouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+    glfwMakeContextCurrent(MainWindow);
+    glfwSetCursor(MainWindow, MouseCursor);
+    glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetWindowSizeCallback(MainWindow, [](GLFWwindow * win, int width, int height)
+    {
+        windowwidth = max(width, 640);
+        windowheight = max(height, 360);
+        glfwSetWindowSize(win, windowwidth, windowheight);
+        SetupScreen();
+    });
+    glfwSetMouseButtonCallback(MainWindow, [](GLFWwindow *, int button, int action, int)
+    {
+        mb = 0;
+        if (action == GLFW_PRESS)
+        {
+            if (button == GLFW_MOUSE_BUTTON_LEFT)
+                mb = 1;
+            if (button == GLFW_MOUSE_BUTTON_RIGHT)
+                mb = 2;
+            if (button == GLFW_MOUSE_BUTTON_MIDDLE)
+                mb = 4;
+        }
+    });
+    glfwSetScrollCallback(MainWindow, [](GLFWwindow *, double, double yoffset)
+    {
+        mw += (int)yoffset;
+    });
+    glfwSetCharCallback(MainWindow, [](GLFWwindow *, unsigned int c)
+    {
+        if (c >= 128)
+        {
+            wchar_t pwszUnicode[2] = { (wchar_t)c,'\0' };
+            char pszMultiByte[5];
+            WCharToMByte(pszMultiByte, pwszUnicode, 4);
+            inputstr += pszMultiByte;
+        }
+        else
+            inputstr += (char)c;
+    });
+    if (ppistretch) GUI::InitStretch();
     SetupScreen();
     glDisable(GL_CULL_FACE);
-    SplashScreen();
-    LoadTextures();
+    
+    //Show the splash screen
+    TextureID splTex = Textures::LoadRGBTexture("Textures/GUI/splashscreen.bmp");
+    glEnable(GL_TEXTURE_2D);
+    for (int i = 0; i < 256; i += 2)
+    {
+        glfwSwapBuffers(MainWindow);
+        glfwPollEvents();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glBindTexture(GL_TEXTURE_2D, splTex);
+        glColor4f((float)i / 256, (float)i / 256, (float)i / 256, 1.0);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 1.0);
+        glVertex2i(-1, 1);
+        glTexCoord2f(850.0f / 1024.0f, 1.0);
+        glVertex2i(1, 1);
+        glTexCoord2f(850.0f / 1024.0f, 1.0 - 480.0f / 1024.0f);
+        glVertex2i(1, -1);
+        glTexCoord2f(0.0, 1.0 - 480.0f / 1024.0f);
+        glVertex2i(-1, -1);
+        glEnd();
+    }
+    glDeleteTextures(1, &splTex);
+    glfwSwapBuffers(MainWindow);
+    glfwPollEvents();
+
+    //Load textures
+    tex_select = Textures::LoadRGBATexture("Textures/GUI/select.bmp", "");
+    tex_unselect = Textures::LoadRGBATexture("Textures/GUI/unselect.bmp", "");
+    tex_title = Textures::LoadRGBATexture("Textures/GUI/title.bmp", "Textures/GUI/titlemask.bmp");
+    for (int i = 0; i < 6; i++)
+    {
+        std::stringstream ss;
+        ss << "Textures/GUI/mainmenu" << i << ".bmp";
+        tex_mainmenu[i] = Textures::LoadRGBTexture(ss.str());
+    }
+
+    DefaultSkin = Textures::LoadRGBATexture("Textures/Player/skin_xiaoqiao.bmp", "Textures/Player/skinmask_xiaoqiao.bmp");
+
+    for (int gloop = 1; gloop <= 10; gloop++)
+    {
+        string path = "Textures/blocks/destroy_" + pack(gloop) + ".bmp";
+        DestroyImage[gloop] = Textures::LoadRGBATexture(path, path);
+    }
+
+    BlockTextures = Textures::LoadRGBATexture("Textures/blocks/Terrain.bmp", "Textures/blocks/Terrainmask.bmp");
+    BlockTextures3D = Textures::LoadBlock3DTexture("Textures/blocks/Terrain3D.bmp", "Textures/blocks/Terrain3Dmask.bmp");
+    LoadItemsTextures();
 #ifdef NEWORLD_TARGET_WINDOWS
+    //Init plugin sdk
     init([](int x, int y, int z) -> unsigned short
     {
         return World::getblock(x, y, z).ID;
@@ -118,7 +222,18 @@ int main()
     glDisable(GL_LINE_SMOOTH);
     GUI::clearTransition();
     GUI::BackToMain();
+
+    //Major part
+    glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glDisable(GL_CULL_FACE);
     GUI::AppStart();
+
+    //Clean
+    World::destroyAllChunks();
+#ifdef NEWORLD_TARGET_WINDOWS
+    unload_plugins();
+#endif
     glfwTerminate();
     AudioSystem::UnInit();
     RandomGeneratorUninit();
