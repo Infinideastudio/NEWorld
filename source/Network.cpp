@@ -1,4 +1,5 @@
 #include "Network.h"
+#ifdef NEWORLD_TARGET_WINDOWS
 namespace Network
 {
 
@@ -107,3 +108,4 @@ void cleanUp()
     WSACleanup();
 }
 }
+#endif

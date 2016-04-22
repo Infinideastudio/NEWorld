@@ -1401,9 +1401,13 @@ public:
 
             if (multiplayer)
             {
+                // CROSS PLATFORM REQUIRED
+                // 暂时关闭网络代码
+#ifdef NEWORLD_TARGET_WINDOWS
                 MutexLock(Network::mutex);
                 TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::getRequestCount) + "/" + pack(NetworkRequestMax) + " network requests");
                 MutexUnlock(Network::mutex);
+#endif
             }
         }
         else
@@ -1866,9 +1870,13 @@ public:
         updateThread = ThreadCreate(&UpdateThreadFunc, NULL);
         if (multiplayer)
         {
+            // CROSS PLATFORM REQUIRED
+            // 暂时关闭网络代码
+#ifdef NEWORLD_TARGET_WINDOWS
             Player::name = "";
             Player::onlineID = pRandGen->get_u16();
             Network::init(serverip, port);
+#endif
         }
         //初始化游戏状态
         if (LoadGame())
@@ -1943,7 +1951,11 @@ public:
             glDeleteBuffersARB(World::vbuffersShouldDelete.size(), World::vbuffersShouldDelete.data());
             World::vbuffersShouldDelete.clear();
         }
+        // CROSS PLATFORM REQUIRED
+        // 暂时关闭网络代码
+#ifdef NEWORLD_TARGET_WINDOWS
         if (multiplayer) Network::cleanUp();
+#endif
         chatMessages.clear();
         GUI::BackToMain();
     }

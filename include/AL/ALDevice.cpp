@@ -169,7 +169,7 @@ bool ALDevice::load(char * FileName, ALuint *uiBuffer)
                 {
                     vector<char> data;
                     unsigned long ulBytesWritten;
-                    back_insert_iterator<vector<char>> iter(data);
+                    back_insert_iterator<vector<char> > iter(data);
                     do
                     {
                         ulBytesWritten = DecodeOggVorbis(&sOggVorbisFile, pData, iDataSize, ulChannels);
