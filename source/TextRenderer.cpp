@@ -49,6 +49,9 @@ void TextRenderer::loadchar(unsigned int uc)
     size_t index = FT_Get_Char_Index(fontface, uc);
     FT_Load_Glyph(fontface, index, FT_LOAD_DEFAULT);
     FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
+    //FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
+    //在Mac上的随机崩溃之一，运行十多次，有几次会在这一行崩溃，其他几次正常通过
+    //malloc: *** error for object 0x7fcf52cac4f8: incorrect checksum for freed object - object was probably modified after being freed.
     FT_Bitmap* bitmap = &(slot->bitmap);
     int wid = (int)pow(2, ceil(log2(32 * stretch)));
     ubyte *Texsrc = bitmap->buffer, *Tex = new ubyte[wid * wid * 4];
@@ -68,6 +71,9 @@ void TextRenderer::loadchar(unsigned int uc)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wid, wid, 0, GL_RGBA, GL_UNSIGNED_BYTE, Tex);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wid, wid, 0, GL_RGBA, GL_UNSIGNED_BYTE, Tex);
+    //在Mac上的随机崩溃之一，运行十多次，有几次会在这一行崩溃，其他几次正常通过
+    //malloc: *** error for object 0x1007d10a8: incorrect checksum for freed object - object was probably modified after being freed.
     delete[] Tex;
     chars[uc].aval = true;
     chars[uc].width = bitmap->width;
@@ -81,8 +87,18 @@ void MBToWC(const char* lpcszStr, wchar_t*& lpwszStr, int dwSize)
 {
     lpwszStr = (wchar_t*)malloc(dwSize);
     memset(lpwszStr, 0, dwSize);
-    int iSize = (MByteToWChar(lpwszStr, lpcszStr, strlen(lpcszStr)) + 1)*sizeof(wchar_t);
-    lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
+    //原写法：
+    //int iSize = (MByteToWChar(lpwszStr, lpcszStr, strlen(lpcszStr)) + 1)*sizeof(wchar_t);
+    //在Mac上出现随机崩溃，有一定概率会因为这里崩溃
+    //运行7次程序，碰到了1次，lpwszStr尾部存在一些随机的乱码
+    //根据man page中给出的描述
+    //The mbstowcs() function converts a multibyte character string s, beginning in the initial conversion state, into a wide character string pwcs. No more than n wide characters are stored. A terminating null wide character is appended, if there is room.
+    //由此推测，可能是由于没有位置存储\0结束符导致
+    //所以在这里预留5个位置留给\0结束符，富裕点压压惊
+    //MD耗了我一个小时，一直以为是其他地方有错，直到查看lpwszStr的值 --DLaboratory
+    int iSize = (MByteToWChar(lpwszStr, lpcszStr, strlen(lpcszStr) + 5) + 1)*sizeof(wchar_t);
+    //出现iSize < dwSize的情况
+    //lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
 }
 
 int TextRenderer::getStrWidth(string s)
@@ -118,7 +134,6 @@ void TextRenderer::renderString(int x, int y, string glstring)
     glEnable(GL_TEXTURE_2D);
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {
-
         uc = wstr[k];
         c = chars[uc];
         if (uc == (int)'\n')

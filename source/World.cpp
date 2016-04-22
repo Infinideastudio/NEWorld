@@ -615,9 +615,9 @@ void updateblock(int x, int y, int z, bool updated, int depth)
         }
         br = brts[maxbrightness];
         if (blks[maxbrightness] == block(Blocks::WATER))
-            br = max(br - 2, BRIGHTNESSMIN);
+            br = max(br - 2, (int)BRIGHTNESSMIN);
         else
-            br = max(br - 1, BRIGHTNESSMIN);
+            br = max(br - 1, (int)BRIGHTNESSMIN);
         if (skylighted && br < skylight)
             br = skylight;
         br = max(br, BRIGHTNESSMIN);
