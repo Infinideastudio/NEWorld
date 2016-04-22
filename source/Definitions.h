@@ -156,8 +156,8 @@ typedef HANDLE thread_t;
 typedef PTHREAD_START_ROUTINE ThreadFunc_t;
 #define ThreadFunc DWORD WINAPI
 #else
-typedef std::mutex* mutex_t;
-typedef std::thread* thread_t;
+typedef mutex* mutex_t;
+typedef thread* thread_t;
 typedef unsigned int(*ThreadFunc_t)(void* param);
 #define ThreadFunc unsigned int
 #endif
@@ -204,15 +204,15 @@ inline void UIVertex(int x, int y)
 double rnd();
 vector<string> split(string str, string pattern);
 
-std::string WStringToString(const std::wstring &s);
-std::wstring StringToWString(const std::string &s);
+string WStringToString(const wstring &s);
+wstring StringToWString(const string &s);
 
 inline int RoundInt(double d)
 {
     return int(floor(d + 0.5));
 }
 
-inline bool beginWith(const std::wstring& str, const std::wstring& begin)
+inline bool beginWith(const wstring& str, const wstring& begin)
 {
     if (str.size() < begin.size()) return false;
     return str.substr(0, begin.size()) == begin;
@@ -222,23 +222,23 @@ void DebugWarning(string msg);
 void DebugError(string msg);
 
 template<typename T>
-inline T extract(const std::wstring& str)
+inline T extract(const wstring& str)
 {
     T ret;
-    std::wstringstream s(str);
+    wstringstream s(str);
     s >> ret;
     return ret;
 }
 
 template<typename T>
-inline std::string pack(const T& data)
+inline string pack(const T& data)
 {
-    std::stringstream s;
+    stringstream s;
     s << data;
     return s.str();
 }
 
-inline std::string pack(bool data)
+inline string pack(bool data)
 {
     return data ? "True" : "False";
 }
@@ -305,7 +305,7 @@ double timer();
 
 inline mutex_t MutexCreate()
 {
-    return new std::mutex;
+    return new mutex;
 }
 
 inline void MutexDestroy(mutex_t _hMutex)
@@ -325,7 +325,7 @@ inline void MutexUnlock(mutex_t _hMutex)
 
 inline thread_t ThreadCreate(ThreadFunc_t func, void* param)
 {
-    return new std::thread(func, param);
+    return new thread(func, param);
 }
 
 inline void ThreadWait(thread_t _hThread)
@@ -367,8 +367,13 @@ inline unsigned int wstrlen(const wchar_t* wstr)
 
 inline void Sleep(unsigned int ms)
 {
+#ifdef NEWORLD_TARGET_MACOSX
+    unsigned int us = ms * 1000;
+    usleep(us);
+#else
     unsigned int fr = clock();
     while (clock() - fr <= ms);
+#endif
 }
 
 inline double timer()
