@@ -68,9 +68,6 @@ chunk* chunkPtrArray::getChunkPtr(int x, int y, int z)
     z -= originZ;
     if (!elementExists(x, y, z))
         return nullptr;
-#ifdef NEWORLD_DEBUG_PERFORMANCE_REC
-    c_getChunkPtrFromCPA++;
-#endif
     return array[x*size2 + y*size + z];
 }
 

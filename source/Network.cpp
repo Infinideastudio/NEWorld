@@ -3,8 +3,8 @@ namespace Network
 {
 
 SOCKET sockClient;
-Thread_t t;
-Mutex_t mutex;
+thread_t t;
+mutex_t mutex;
 std::queue<Request> reqs;
 bool threadRun = true;
 

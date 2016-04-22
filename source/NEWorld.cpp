@@ -98,14 +98,14 @@ int main()
     glfwSetErrorCallback([](int, const char* desc)
     {
         cout << "We are sorry to inform you that NEWorld has crashed." << endl
-            << "It is probably caused by a badly-written plugin or a bug." << endl
-            << "You can post an issue on the GitHub repository at" << endl
-            << "https://github.com/Infinideastudio/NEWorld/issues" << endl
-            << "You're welcomed to fix the bug and post a PR." << endl
-            << "==========" << endl
-            << "Technical Information:" << endl
-            << "Reason:" << endl << desc << endl
-            << "Logs:" << endl;
+             << "It is probably caused by a badly-written plugin or a bug." << endl
+             << "You can post an issue on the GitHub repository at" << endl
+             << "https://github.com/Infinideastudio/NEWorld/issues" << endl
+             << "You're welcomed to fix the bug and post a PR." << endl
+             << "==========" << endl
+             << "Technical Information:" << endl
+             << "Reason:" << endl << desc << endl
+             << "Logs:" << endl;
         cout << GlobalLogger.ExportAll() << endl;
     });
     if (Multisample)
@@ -154,7 +154,7 @@ int main()
     if (ppistretch) GUI::InitStretch();
     SetupScreen();
     glDisable(GL_CULL_FACE);
-    
+
     //Show the splash screen
     TextureID splTex = Textures::LoadRGBTexture("Textures/GUI/splashscreen.bmp");
     glEnable(GL_TEXTURE_2D);
@@ -234,6 +234,7 @@ int main()
 #ifdef NEWORLD_TARGET_WINDOWS
     unload_plugins();
 #endif
+    delete World::pWorldGen;
     glfwTerminate();
     AudioSystem::UnInit();
     RandomGeneratorUninit();

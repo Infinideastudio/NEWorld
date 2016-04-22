@@ -1405,21 +1405,6 @@ public:
                 TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::getRequestCount) + "/" + pack(NetworkRequestMax) + " network requests");
                 MutexUnlock(Network::mutex);
             }
-
-#ifdef NEWORLD_DEBUG_PERFORMANCE_REC
-            ss << c_getChunkPtrFromCPA << " CPA requests";
-            TextRenderer::renderASCIIString(0, (pos++) * 16, ss.str());
-            ss.str("");
-            ss << c_getChunkPtrFromSearch << " search requests";
-            TextRenderer::renderASCIIString(0, (pos++) * 16, ss.str());
-            ss.str("");
-            ss << c_getHeightFromHMap << " heightmap requests";
-            TextRenderer::renderASCIIString(0, (pos++) * 16, ss.str());
-            ss.str("");
-            ss << c_getHeightFromWorldGen << " worldgen requests";
-            TextRenderer::renderASCIIString(0, (pos++) * 16, ss.str());
-            ss.str("");
-#endif
         }
         else
         {
