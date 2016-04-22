@@ -197,10 +197,8 @@
     <ClInclude Include="source\Hitbox.h" />
     <ClInclude Include="source\Globalization.h" />
     <ClInclude Include="source\Items.h" />
-    <ClInclude Include="source\linearrand.h" />
     <ClInclude Include="source\logger.h" />
     <ClInclude Include="source\Menus.h" />
-    <ClInclude Include="source\mersenne.h" />
     <ClInclude Include="source\Network.h" />
     <ClInclude Include="source\Object.h" />
     <ClInclude Include="source\OnlinePlayer.h" />
@@ -241,10 +239,8 @@
     <ClCompile Include="source\Hitbox.cpp" />
     <ClCompile Include="source\Globalization.cpp" />
     <ClCompile Include="source\Items.cpp" />
-    <ClCompile Include="source\linearrand.cpp" />
     <ClCompile Include="source\logger.cpp" />
     <ClCompile Include="source\Menus.cpp" />
-    <ClCompile Include="source\mersenne.cpp" />
     <ClCompile Include="source\Network.cpp" />
     <ClCompile Include="source\NEWorld.cpp" />
     <ClCompile Include="source\OnlinePlayer.cpp" />

@@ -463,6 +463,7 @@ extern int mw, mb, mbp, mbl, mwl;
 extern double mxdelta, mydelta;
 extern string inputstr;
 
+#include "RandGen.h"
 extern RandGen *pRandGen;
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC

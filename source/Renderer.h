@@ -59,7 +59,7 @@ inline void Color4d(double r, double g, double b, double a)
     Color4f((float)r, (float)g, (float)b, (float)a);
 }
 
-void Quad(float *geomentry)
+inline void Quad(float *geomentry)
 {
     memcpy(VA, geomentry, size*sizeof(float));
     VA += size;

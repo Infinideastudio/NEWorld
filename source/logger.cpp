@@ -1,14 +1,12 @@
+#include "Definitions.h"
 #include "logger.h"
-#include <ctime>
-#include <sstream>
-#include <iostream>
-using namespace std;
+#include <assert.h>
 
 Logger GlobalLogger;
 
 void Logger::Log(std::string information, CriticalLevel level)
 {
-    stringstream ss;
+    std::stringstream ss;
     ss << '[' << clock() * 1.0 / CLOCKS_PER_SEC << "] ";
     switch(level)
     {
@@ -37,8 +35,21 @@ void Logger::Log(std::string information, CriticalLevel level)
 
 string Logger::ExportAll()
 {
-    stringstream ss;
-    for(vector<string>::iterator it = m_logs.begin(); it != m_logs.end(); ++it)
-        ss << *it;
-    return ss.str();
+    std::string ret;
+    for (vector<string>::iterator it = m_logs.begin(); it != m_logs.end(); ++it)
+        ret += *it;
+    return ret;
+}
+
+void DebugWarning(std::string msg)
+{
+    GlobalLogger.Log(msg, Logger::CRITICAL_LEVEL_WARNING);
+}
+
+void DebugError(std::string msg)
+{
+    GlobalLogger.Log(msg, Logger::CRITICAL_LEVEL_ERROR);
+#ifdef _DEBUG
+    assert(false);
+#endif
 }
