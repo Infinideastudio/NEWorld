@@ -32,30 +32,20 @@
 #include <functional>
 #include <algorithm>
 
-// CROSS PLATFORM REQUIRED `direct.h` and `io.h` are headerers offered by Microsoft
 #ifdef NEWORLD_TARGET_WINDOWS
 #include <direct.h>
 #include <io.h>
-#endif
-
-#ifdef NEWORLD_TARGET_MACOSX
+#elif NEWORLD_TARGET_MACOSX
 #include <unistd.h>
 #include <sys/stat.h>
 #endif
 
-using std::string;
-using std::vector;
-using std::pair;
-using std::unique_ptr;
-using std::map;
-using std::cout;
-using std::endl;
-using std::max;
-using std::min;
+using namespace std;
 
 //GLFW
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
+
 //GLEXT
 #ifdef NEWORLD_TARGET_MACOSX
 #include <OpenGL/gl.h>
@@ -63,6 +53,7 @@ using std::min;
 #else
 #include <GL/glext.h>
 #endif
+
 //FREETYPE
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -160,13 +151,13 @@ struct TILDP
 typedef block item;
 
 #ifdef NEWORLD_TARGET_WINDOWS
-typedef HANDLE Mutex_t;
-typedef HANDLE Thread_t;
+typedef HANDLE mutex_t;
+typedef HANDLE thread_t;
 typedef PTHREAD_START_ROUTINE ThreadFunc_t;
 #define ThreadFunc DWORD WINAPI
 #else
-typedef std::mutex* Mutex_t;
-typedef std::thread* Thread_t;
+typedef std::mutex* mutex_t;
+typedef std::thread* thread_t;
 typedef unsigned int(*ThreadFunc_t)(void* param);
 #define ThreadFunc unsigned int
 #endif
@@ -259,36 +250,36 @@ inline T clamp(T x, T min_value, T max_value)
 }
 
 #ifdef NEWORLD_TARGET_WINDOWS
-inline Mutex_t MutexCreate()
+inline mutex_t MutexCreate()
 {
-    return (Mutex_t)CreateMutex(NULL, FALSE, "");
+    return (mutex_t)CreateMutex(NULL, FALSE, "");
 }
 
-inline void MutexDestroy(Mutex_t _hMutex)
+inline void MutexDestroy(mutex_t _hMutex)
 {
     CloseHandle(_hMutex);
 }
-inline void MutexLock(Mutex_t _hMutex)
+inline void MutexLock(mutex_t _hMutex)
 {
     WaitForSingleObject(_hMutex, INFINITE);
 }
 
-inline void MutexUnlock(Mutex_t _hMutex)
+inline void MutexUnlock(mutex_t _hMutex)
 {
     ReleaseMutex(_hMutex);
 }
 
-inline Thread_t ThreadCreate(ThreadFunc_t func, void* param)
+inline thread_t ThreadCreate(ThreadFunc_t func, void* param)
 {
-    return (Thread_t)CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)func, param, 0, NULL);
+    return (thread_t)CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)func, param, 0, NULL);
 }
 
-inline void ThreadWait(Thread_t _hThread)
+inline void ThreadWait(thread_t _hThread)
 {
     WaitForSingleObject(_hThread, INFINITE);
 }
 
-inline void ThreadDestroy(Thread_t _hThread)
+inline void ThreadDestroy(thread_t _hThread)
 {
     CloseHandle(_hThread);
 }
@@ -312,37 +303,37 @@ double timer();
 
 #else
 
-inline Mutex_t MutexCreate()
+inline mutex_t MutexCreate()
 {
     return new std::mutex;
 }
 
-inline void MutexDestroy(Mutex_t _hMutex)
+inline void MutexDestroy(mutex_t _hMutex)
 {
     delete _hMutex;
 }
 
-inline void MutexLock(Mutex_t _hMutex)
+inline void MutexLock(mutex_t _hMutex)
 {
     _hMutex->lock();
 }
 
-inline void MutexUnlock(Mutex_t _hMutex)
+inline void MutexUnlock(mutex_t _hMutex)
 {
     _hMutex->unlock();
 }
 
-inline Thread_t ThreadCreate(ThreadFunc_t func, void* param)
+inline thread_t ThreadCreate(ThreadFunc_t func, void* param)
 {
     return new std::thread(func, param);
 }
 
-inline void ThreadWait(Thread_t _hThread)
+inline void ThreadWait(thread_t _hThread)
 {
     _hThread->join();
 }
 
-inline void ThreadDestroy(Thread_t _hThread)
+inline void ThreadDestroy(thread_t _hThread)
 {
     delete _hThread;
 }
@@ -438,8 +429,8 @@ extern bool multiplayer;
 extern string serverip;
 extern unsigned short port;
 
-extern Mutex_t Mutex;
-extern Thread_t updateThread;
+extern mutex_t Mutex;
+extern thread_t updateThread;
 extern double lastupdate, updateTimer;
 extern double lastframe;
 extern bool updateThreadRun, updateThreadPaused;
@@ -465,13 +456,6 @@ extern string inputstr;
 
 #include "RandGen.h"
 extern RandGen *pRandGen;
-
-#ifdef NEWORLD_DEBUG_PERFORMANCE_REC
-extern int c_getChunkPtrFromCPA;
-extern int c_getChunkPtrFromSearch;
-extern int c_getHeightFromHMap;
-extern int c_getHeightFromWorldGen;
-#endif
 
 extern Logger GlobalLogger;
 #endif

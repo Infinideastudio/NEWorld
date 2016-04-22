@@ -65,7 +65,7 @@ void chunk::buildTerrain(bool initIfEmpty)
 
     int H[16][16];
     int low, high, count;
-    int l = 2147483647, hi = WorldGen::WaterLevel;
+    int l = 2147483647, hi = pWorldGen->getWaterLevel();
 
     for (int x = 0; x < 16; ++x)
     {
@@ -111,8 +111,8 @@ void chunk::buildTerrain(bool initIfEmpty)
     int minh, maxh, cur_br;
 
     Empty = true;
-    sh = WorldGen::WaterLevel + 2 - (cy << 4);
-    wh = WorldGen::WaterLevel - (cy << 4);
+    sh = pWorldGen->getWaterLevel() + 2 - (cy << 4);
+    wh = pWorldGen->getWaterLevel() - (cy << 4);
 
     for (size_t x = 0; x < 16; ++x)
     {
@@ -141,7 +141,7 @@ void chunk::buildTerrain(bool initIfEmpty)
                 //Water layer
                 minh = min(max(0, h + 1), 16);
                 maxh = min(max(0, wh + 1), 16);
-                cur_br = BRIGHTNESSMAX - (WorldGen::WaterLevel - (maxh - 1 + (cy << 4))) * 2;
+                cur_br = BRIGHTNESSMAX - (pWorldGen->getWaterLevel() - (maxh - 1 + (cy << 4))) * 2;
                 if (cur_br < BRIGHTNESSMIN) cur_br = BRIGHTNESSMIN;
                 for (y = maxh - 1; y >= minh; --y)
                 {

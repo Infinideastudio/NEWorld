@@ -39,8 +39,8 @@ TextureID DestroyImage[11];
 TextureID DefaultSkin;
 
 //线程
-Mutex_t Mutex;
-Thread_t updateThread;
+mutex_t Mutex;
+thread_t updateThread;
 double lastupdate, updateTimer;
 double lastframe;
 bool updateThreadRun, updateThreadPaused;
@@ -68,9 +68,3 @@ double mxdelta, mydelta;
 //键盘输入数据
 string inputstr;
 
-#ifdef NEWORLD_DEBUG_PERFORMANCE_REC
-int c_getChunkPtrFromCPA;
-int c_getChunkPtrFromSearch;
-int c_getHeightFromHMap;
-int c_getHeightFromWorldGen;
-#endif
