@@ -7,28 +7,27 @@
 class Object
 {
 public:
-    Object(double x, double y, double z) :_x(x), _y(y), _z(z), VBO(0), vtxs(0) {};
+    Object(double x, double y, double z) : m_x(x), m_y(y), m_z(z), VBO(0), vtxs(0) {};
     virtual ~Object() {};
     virtual void render() const = 0;
     const double getXPos() const
     {
-        return _x;
+        return m_x;
     }
     const double getYPos() const
     {
-        return _y;
+        return m_y;
     }
     const double getZPos() const
     {
-        return _z;
+        return m_z;
     }
 
 protected:
-    int _id;
-    double _x, _y, _z;  //位置
+    int m_id;
+    double m_x, m_y, m_z;  //位置
     vtxCount vtxs;
     VBOID VBO;
-
 };
 
 #endif

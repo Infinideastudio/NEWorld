@@ -7,6 +7,7 @@
 namespace World
 {
 
+WorldGenerator *pWorldGen;
 string Name;
 brightness skylight = 15;         //Sky light level
 brightness BRIGHTNESSMAX = 15;    //Maximum brightness
@@ -43,7 +44,7 @@ void Init()
     mkdir(("Worlds/" + Name + "/chunks").c_str(), 644);
 #endif
 
-    WorldGen::perlinNoiseInit(3404);
+    pWorldGen = new WorldGenerator(3404);
     cpCachePtr = nullptr;
     cpCacheID = 0;
 
@@ -99,9 +100,6 @@ void DeleteChunk(int x, int y, int z)
 
 int getChunkPtrIndex(int x, int y, int z)
 {
-#ifdef NEWORLD_DEBUG_PERFORMANCE_REC
-    c_getChunkPtrFromSearch++;
-#endif
     chunkid cid = getChunkID(x, y, z);
     pair<int, int> pos = binary_search_chunks(cid);
     if (chunks[pos.second]->id == cid) return pos.second;
@@ -124,9 +122,6 @@ chunk* getChunkPtr(int x, int y, int z)
         }
         if (chunks.size())
         {
-#ifdef NEWORLD_DEBUG_PERFORMANCE_REC
-            c_getChunkPtrFromSearch++;
-#endif
             pair<int, int> pos = binary_search_chunks(cid);
             if (chunks[pos.second]->id == cid)
             {

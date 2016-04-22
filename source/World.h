@@ -2,6 +2,7 @@
 #define WORLD_H
 
 #include "Definitions.h"
+#include "WorldGen.h"
 #include "chunkPtrArray.h"
 #include "HeightMap.h"
 #include "Chunk.h"
@@ -17,6 +18,7 @@ class Frsutum;
 namespace World
 {
 void ProcessBuq();
+extern WorldGenerator *pWorldGen;
 extern string Name;
 const int worldsize = 134217728;
 const int worldheight = 128;

@@ -25,7 +25,7 @@ private:
     bool _important;
     std::function<void(void*, int)> _callback;
 };
-extern Mutex_t mutex;
+extern mutex_t mutex;
 void init(string ip, unsigned short port);
 int getRequestCount();
 SOCKET getClientSocket();
