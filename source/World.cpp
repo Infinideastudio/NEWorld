@@ -13,7 +13,6 @@ brightness BRIGHTNESSMAX = 15;    //Maximum brightness
 brightness BRIGHTNESSMIN = 2;     //Mimimum brightness
 brightness BRIGHTNESSDEC = 1;     //Brightness decrease
 chunk* EmptyChunkPtr = (chunk*)~0;
-unsigned int EmptyBuffer;
 int MaxChunkLoads = 64;
 int MaxChunkUnloads = 64;
 int MaxChunkRenders = 1;
@@ -79,8 +78,7 @@ chunk* AddChunk(int x, int y, int z)
     pair<int, int> pos = binary_search_chunks(cid);
     if (chunks.size() && chunks[pos.second]->id == cid)
     {
-        printf("[Console][Error]");
-        printf("Chunk(%d,%d,%d)has been loaded,when adding chunk.\n", x, y, z);
+        DebugError("Chunk(" + pack(x) + "," + pack(y) + "," + pack(z) + ") has been loaded,when adding chunk.");
         return chunks[pos.second];
     }
 
@@ -947,15 +945,9 @@ void saveAllChunks()
 
 void destroyAllChunks()
 {
-
     for (size_t i = 0; i < chunks.size(); i++)
-    {
         if (!chunks[i]->Empty)
-        {
-            chunks[i]->destroyRender();
             delete chunks[i];
-        }
-    }
     chunks.clear();
     cpArray = chunkPtrArray();
     HMap.destroy();
@@ -969,7 +961,6 @@ void destroyAllChunks()
     chunkBuildRenders = 0;
     chunkLoads = 0;
     chunkUnloads = 0;
-
 }
 
 void buildtree(int x, int y, int z)

@@ -25,7 +25,6 @@ extern brightness BRIGHTNESSMAX;    //Maximum brightness
 extern brightness BRIGHTNESSMIN;    //Mimimum brightness
 extern brightness BRIGHTNESSDEC;    //Brightness decree
 extern chunk* EmptyChunkPtr;
-extern unsigned int EmptyBuffer;
 extern int MaxChunkLoads;
 extern int MaxChunkUnloads;
 extern int MaxChunkRenders;

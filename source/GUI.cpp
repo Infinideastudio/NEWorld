@@ -1161,19 +1161,8 @@ void ProcessEvents()
     }
 }
 
-void AppCleanUp()
-{
-    World::destroyAllChunks();
-#ifdef NEWORLD_TARGET_WINDOWS
-    unload_plugins();
-#endif
-}
-
 void AppStart()
 {
-    glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glDisable(GL_CULL_FACE);
     ProcessEvents();
     TextRenderer::setFontColor(1.0, 1.0, 1.0, 1.0);
     while (!ViewStack.empty())
@@ -1184,7 +1173,10 @@ void AppStart()
             while (!ViewStack.empty())
                 PopView();
     }
-    AppCleanUp();
+    World::destroyAllChunks();
+#ifdef NEWORLD_TARGET_WINDOWS
+    unload_plugins();
+#endif
 }
 Form::~Form()
 {
