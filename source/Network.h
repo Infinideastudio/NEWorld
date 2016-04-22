@@ -4,6 +4,7 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "Definitions.h"
 
+#ifdef NEWORLD_TARGET_WINDOWS
 namespace Network
 {
 class Request
@@ -33,5 +34,6 @@ ThreadFunc networkThread(void*);
 void pushRequest(Request& r);
 void cleanUp();
 }
+#endif
 
 #endif
