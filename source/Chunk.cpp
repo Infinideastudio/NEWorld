@@ -2,14 +2,6 @@
 #include "WorldGen.h"
 #include "World.h"
 #include "Blocks.h"
-
-namespace ChunkRenderer
-{
-void RenderChunk(World::chunk* c);
-void MergeFaceRender(World::chunk* c);
-void RenderDepthModel(World::chunk* c);
-}
-
 namespace Renderer
 {
 extern bool AdvancedRender;
@@ -169,33 +161,6 @@ void chunk::buildTerrain(bool initIfEmpty)
     }
 }
 
-void chunk::buildDetail()
-{
-    int index = 0, x, y, z;
-    for (x = 0; x < 16; x++)
-    {
-        for (y = 0; y < 16; y++)
-        {
-            for (z = 0; z < 16; z++)
-            {
-                //Tree
-                if (pblocks[index] == block(Blocks::GRASS) && pRandGen->one_in(200))
-                {
-                    buildtree(cx * 16 + x, cy * 16 + y, cz * 16 + z);
-                }
-                index++;
-            }
-        }
-    }
-}
-
-void chunk::build(bool initIfEmpty)
-{
-    buildTerrain(initIfEmpty);
-    if (!Empty)
-        buildDetail();
-}
-
 void chunk::Load(bool initIfEmpty)
 {
     std::ifstream file(getChunkFileName(), std::ios::in | std::ios::binary);
@@ -206,7 +171,16 @@ void chunk::Load(bool initIfEmpty)
         file.read((char*)&DetailGenerated, sizeof(bool));
     }
     else
-        build(initIfEmpty);
+    {
+        buildTerrain(initIfEmpty);
+        if (!Empty)
+        {
+            //Build trees
+            for (size_t index = 0; index < 4096; index++)
+                if (pblocks[index] == block(Blocks::GRASS) && pRandGen->one_in(200))
+                    buildtree((cx << 4) ^ ((index&((1 << 12) - (1 << 8))) >> 8), (cy << 4) ^ ((index&((1 << 8) - (1 << 4))) >> 4), (cz << 4) ^ (index & 15));
+        }
+    }
     if (!Empty) updated = true;
 }
 
@@ -248,30 +222,27 @@ void chunk::buildRender()
     }
 
     if (MergeFace)
-        ChunkRenderer::MergeFaceRender(this);
+        MergeFaceRender();
     else
-        ChunkRenderer::RenderChunk(this);
+        Render();
 
     if (Renderer::AdvancedRender)
-        ChunkRenderer::RenderDepthModel(this);
+        RenderDepthModel();
 
     updated = false;
 }
 
 void chunk::destroyRender()
 {
-    if (!renderBuilt)
-        return;
-    if (vbuffer[0])
-        vbuffersShouldDelete.push_back(vbuffer[0]);
-    if (vbuffer[1])
-        vbuffersShouldDelete.push_back(vbuffer[1]);
-    if (vbuffer[2])
-        vbuffersShouldDelete.push_back(vbuffer[2]);
-    if (vbuffer[3])
-        vbuffersShouldDelete.push_back(vbuffer[3]);
-    vbuffer[0] = vbuffer[1] = vbuffer[2] = vbuffer[3] = 0;
-    renderBuilt = false;
+    if (renderBuilt)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            vbuffersShouldDelete.push_back(vbuffer[i]);
+            vbuffer[i] = 0;
+        }
+        renderBuilt = false;
+    }
 }
 
 Hitbox::AABB chunk::getBaseAABB()

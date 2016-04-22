@@ -187,7 +187,6 @@
     <ClInclude Include="source\ChunkPacket.h" />
     <ClInclude Include="source\ChunkPtrArray.h" />
     <ClInclude Include="source\Effect.h" />
-    <ClInclude Include="source\ChunkRenderer.h" />
     <ClInclude Include="source\GameView.h" />
     <ClInclude Include="source\GLProc.h" />
     <ClInclude Include="source\HeightMap.h" />
