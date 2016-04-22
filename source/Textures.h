@@ -45,7 +45,7 @@ public:
         }
         TEXTURE_RGB(const std::string& filename)
         {
-            std::ifstream bmpfile(filename, std::ios::binary | std::ios::in); //位图文件（二进制）
+            std::ifstream bmpfile(filename, std::ios::binary | std::ios::in);
             BITMAPINFOHEADER bih;
             BITMAPFILEHEADER bfh;
             bmpfile.read((char*)&bfh, sizeof(BITMAPFILEHEADER));

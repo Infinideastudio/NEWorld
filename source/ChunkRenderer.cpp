@@ -1,11 +1,35 @@
-#include "ChunkRenderer.h"
+#include "Textures.h"
 #include "Renderer.h"
 #include "World.h"
+#include "Chunk.h"
 
-namespace ChunkRenderer
+const int delta[6][3] = { { 1,0,0 },{ -1,0,0 },{ 0,1,0 },{ 0,-1,0 },{ 0,0,1 },{ 0,0,-1 } };
+
+//合并面的一整个面 | One face in merge face
+struct QuadPrimitive
 {
-using World::getbrightness;
+    int x, y, z, length, direction;
+    /*
+    * 如果顶点颜色不同（平滑光照启用时），这个方形就不能和别的方形拼合起来。
+    * 这个变量同时意味着四个顶点颜色是否不同。
+    * If the vertexes have different colors (smoothed lighting), the primitive cannot connect with others.
+    * This variable also means whether the vertexes have different colors.
+    */
+    bool once;
+    //顶点颜色 | Vertex colors
+    int col0, col1, col2, col3;
+    //纹理ID | Texture ID
+    TextureID tex;
+    QuadPrimitive() : x(0), y(0), z(0), length(0), direction(0), once(false),
+        tex(Textures::NULLBLOCK), col0(0), col1(0), col2(0), col3(0) {}
+};
 
+//深度模型的面 | Face in depth model
+struct QuadPrimitive_Depth
+{
+    int x, y, z, length, direction;
+    QuadPrimitive_Depth() : x(0), y(0), z(0), length(0), direction(0) {}
+};
 /*
 合并面的顶点顺序（以0到3标出）：
 
@@ -267,7 +291,7 @@ void RenderPrimitive_Depth(QuadPrimitive_Depth& p)
     }
 }
 
-void RenderChunk(World::chunk* c)
+void World::chunk::Render()
 {
     int x, y, z;
     if (Renderer::AdvancedRender) Renderer::Init(2, 3, 1);
@@ -278,13 +302,13 @@ void RenderChunk(World::chunk* c)
         {
             for (z = 0; z < 16; z++)
             {
-                block curr = c->getblock(x, y, z);
+                block curr = getblock(x, y, z);
                 if (curr == block(Blocks::AIR)) continue;
-                if (!BlockInfo(curr).isTranslucent()) renderblock(x, y, z, c);
+                if (!BlockInfo(curr).isTranslucent()) renderblock(x, y, z, this);
             }
         }
     }
-    Renderer::Flush(c->vbuffer[0], c->vertexes[0]);
+    Renderer::Flush(vbuffer[0], vertexes[0]);
     if (Renderer::AdvancedRender) Renderer::Init(2, 3, 1);
     else Renderer::Init(2, 3);
     for (x = 0; x < 16; x++)
@@ -293,13 +317,13 @@ void RenderChunk(World::chunk* c)
         {
             for (z = 0; z < 16; z++)
             {
-                block curr = c->getblock(x, y, z);
+                block curr = getblock(x, y, z);
                 if (curr == block(Blocks::AIR)) continue;
-                if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(x, y, z, c);
+                if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(x, y, z, this);
             }
         }
     }
-    Renderer::Flush(c->vbuffer[1], c->vertexes[1]);
+    Renderer::Flush(vbuffer[1], vertexes[1]);
     if (Renderer::AdvancedRender) Renderer::Init(2, 3, 1);
     else Renderer::Init(2, 3);
     for (x = 0; x < 16; x++)
@@ -308,22 +332,21 @@ void RenderChunk(World::chunk* c)
         {
             for (z = 0; z < 16; z++)
             {
-                block curr = c->getblock(x, y, z);
+                block curr = getblock(x, y, z);
                 if (curr == block(Blocks::AIR)) continue;
-                if (!BlockInfo(curr).isSolid()) renderblock(x, y, z, c);
+                if (!BlockInfo(curr).isSolid()) renderblock(x, y, z, this);
             }
         }
     }
-    Renderer::Flush(c->vbuffer[2], c->vertexes[2]);
+    Renderer::Flush(vbuffer[2], vertexes[2]);
 }
 
 //合并面大法好！！！
-void MergeFaceRender(World::chunk* c)
+void World::chunk::MergeFaceRender()
 {
     //话说我注释一会中文一会英文是不是有点奇怪。。。
     // -- qiaozhanrong
 
-    int cx = c->cx, cy = c->cy, cz = c->cz;
     int gx = 0, gy = 0, gz = 0;
     int x = 0, y = 0, z = 0, cur_l_mx, br;
     int col0 = 0, col1 = 0, col2 = 0, col3 = 0;
@@ -347,7 +370,8 @@ void MergeFaceRender(World::chunk* c)
             else if (d == 3) face = 3;
             else face = 2;
             //Render current face
-            for (int i = 0; i < 16; i++) for (int j = 0; j < 16; j++)
+            for (int i = 0; i < 16; i++)
+                for (int j = 0; j < 16; j++)
                 {
                     for (int k = 0; k < 16; k++)
                     {
@@ -358,13 +382,13 @@ void MergeFaceRender(World::chunk* c)
                             gx = cx * 16 + x;
                             gy = cy * 16 + y;
                             gz = cz * 16 + z;
-                            br = getbrightness(gx + 1, gy, gz, c);
+                            br = World::getbrightness(gx + 1, gy, gz, this);
                             if (SmoothLighting)
                             {
-                                col0 = br + getbrightness(gx + 1, gy - 1, gz, c) + getbrightness(gx + 1, gy, gz - 1, c) + getbrightness(gx + 1, gy - 1, gz - 1, c);
-                                col1 = br + getbrightness(gx + 1, gy + 1, gz, c) + getbrightness(gx + 1, gy, gz - 1, c) + getbrightness(gx + 1, gy + 1, gz - 1, c);
-                                col2 = br + getbrightness(gx + 1, gy + 1, gz, c) + getbrightness(gx + 1, gy, gz + 1, c) + getbrightness(gx + 1, gy + 1, gz + 1, c);
-                                col3 = br + getbrightness(gx + 1, gy - 1, gz, c) + getbrightness(gx + 1, gy, gz + 1, c) + getbrightness(gx + 1, gy - 1, gz + 1, c);
+                                col0 = br + World::getbrightness(gx + 1, gy - 1, gz, this) + World::getbrightness(gx + 1, gy, gz - 1, this) + World::getbrightness(gx + 1, gy - 1, gz - 1, this);
+                                col1 = br + World::getbrightness(gx + 1, gy + 1, gz, this) + World::getbrightness(gx + 1, gy, gz - 1, this) + World::getbrightness(gx + 1, gy + 1, gz - 1, this);
+                                col2 = br + World::getbrightness(gx + 1, gy + 1, gz, this) + World::getbrightness(gx + 1, gy, gz + 1, this) + World::getbrightness(gx + 1, gy + 1, gz + 1, this);
+                                col3 = br + World::getbrightness(gx + 1, gy - 1, gz, this) + World::getbrightness(gx + 1, gy, gz + 1, this) + World::getbrightness(gx + 1, gy - 1, gz + 1, this);
                             }
                             else col0 = col1 = col2 = col3 = br * 4;
                         }
@@ -374,13 +398,13 @@ void MergeFaceRender(World::chunk* c)
                             gx = cx * 16 + x;
                             gy = cy * 16 + y;
                             gz = cz * 16 + z;
-                            br = getbrightness(gx - 1, gy, gz, c);
+                            br = World::getbrightness(gx - 1, gy, gz, this);
                             if (SmoothLighting)
                             {
-                                col0 = br + getbrightness(gx - 1, gy + 1, gz, c) + getbrightness(gx - 1, gy, gz - 1, c) + getbrightness(gx - 1, gy + 1, gz - 1, c);
-                                col1 = br + getbrightness(gx - 1, gy - 1, gz, c) + getbrightness(gx - 1, gy, gz - 1, c) + getbrightness(gx - 1, gy - 1, gz - 1, c);
-                                col2 = br + getbrightness(gx - 1, gy - 1, gz, c) + getbrightness(gx - 1, gy, gz + 1, c) + getbrightness(gx - 1, gy - 1, gz + 1, c);
-                                col3 = br + getbrightness(gx - 1, gy + 1, gz, c) + getbrightness(gx - 1, gy, gz + 1, c) + getbrightness(gx - 1, gy + 1, gz + 1, c);
+                                col0 = br + World::getbrightness(gx - 1, gy + 1, gz, this) + World::getbrightness(gx - 1, gy, gz - 1, this) + World::getbrightness(gx - 1, gy + 1, gz - 1, this);
+                                col1 = br + World::getbrightness(gx - 1, gy - 1, gz, this) + World::getbrightness(gx - 1, gy, gz - 1, this) + World::getbrightness(gx - 1, gy - 1, gz - 1, this);
+                                col2 = br + World::getbrightness(gx - 1, gy - 1, gz, this) + World::getbrightness(gx - 1, gy, gz + 1, this) + World::getbrightness(gx - 1, gy - 1, gz + 1, this);
+                                col3 = br + World::getbrightness(gx - 1, gy + 1, gz, this) + World::getbrightness(gx - 1, gy, gz + 1, this) + World::getbrightness(gx - 1, gy + 1, gz + 1, this);
                             }
                             else col0 = col1 = col2 = col3 = br * 4;
                         }
@@ -390,13 +414,13 @@ void MergeFaceRender(World::chunk* c)
                             gx = cx * 16 + x;
                             gy = cy * 16 + y;
                             gz = cz * 16 + z;
-                            br = getbrightness(gx, gy + 1, gz, c);
+                            br = World::getbrightness(gx, gy + 1, gz, this);
                             if (SmoothLighting)
                             {
-                                col0 = br + getbrightness(gx + 1, gy + 1, gz, c) + getbrightness(gx, gy + 1, gz - 1, c) + getbrightness(gx + 1, gy + 1, gz - 1, c);
-                                col1 = br + getbrightness(gx - 1, gy + 1, gz, c) + getbrightness(gx, gy + 1, gz - 1, c) + getbrightness(gx - 1, gy + 1, gz - 1, c);
-                                col2 = br + getbrightness(gx - 1, gy + 1, gz, c) + getbrightness(gx, gy + 1, gz + 1, c) + getbrightness(gx - 1, gy + 1, gz + 1, c);
-                                col3 = br + getbrightness(gx + 1, gy + 1, gz, c) + getbrightness(gx, gy + 1, gz + 1, c) + getbrightness(gx + 1, gy + 1, gz + 1, c);
+                                col0 = br + World::getbrightness(gx + 1, gy + 1, gz, this) + World::getbrightness(gx, gy + 1, gz - 1, this) + World::getbrightness(gx + 1, gy + 1, gz - 1, this);
+                                col1 = br + World::getbrightness(gx - 1, gy + 1, gz, this) + World::getbrightness(gx, gy + 1, gz - 1, this) + World::getbrightness(gx - 1, gy + 1, gz - 1, this);
+                                col2 = br + World::getbrightness(gx - 1, gy + 1, gz, this) + World::getbrightness(gx, gy + 1, gz + 1, this) + World::getbrightness(gx - 1, gy + 1, gz + 1, this);
+                                col3 = br + World::getbrightness(gx + 1, gy + 1, gz, this) + World::getbrightness(gx, gy + 1, gz + 1, this) + World::getbrightness(gx + 1, gy + 1, gz + 1, this);
                             }
                             else col0 = col1 = col2 = col3 = br * 4;
                         }
@@ -406,13 +430,13 @@ void MergeFaceRender(World::chunk* c)
                             gx = cx * 16 + x;
                             gy = cy * 16 + y;
                             gz = cz * 16 + z;
-                            br = getbrightness(gx, gy - 1, gz, c);
+                            br = World::getbrightness(gx, gy - 1, gz, this);
                             if (SmoothLighting)
                             {
-                                col0 = br + getbrightness(gx - 1, gy - 1, gz, c) + getbrightness(gx, gy - 1, gz - 1, c) + getbrightness(gx - 1, gy - 1, gz - 1, c);
-                                col1 = br + getbrightness(gx + 1, gy - 1, gz, c) + getbrightness(gx, gy - 1, gz - 1, c) + getbrightness(gx + 1, gy - 1, gz - 1, c);
-                                col2 = br + getbrightness(gx + 1, gy - 1, gz, c) + getbrightness(gx, gy - 1, gz + 1, c) + getbrightness(gx + 1, gy - 1, gz + 1, c);
-                                col3 = br + getbrightness(gx - 1, gy - 1, gz, c) + getbrightness(gx, gy - 1, gz + 1, c) + getbrightness(gx - 1, gy - 1, gz + 1, c);
+                                col0 = br + World::getbrightness(gx - 1, gy - 1, gz, this) + World::getbrightness(gx, gy - 1, gz - 1, this) + World::getbrightness(gx - 1, gy - 1, gz - 1, this);
+                                col1 = br + World::getbrightness(gx + 1, gy - 1, gz, this) + World::getbrightness(gx, gy - 1, gz - 1, this) + World::getbrightness(gx + 1, gy - 1, gz - 1, this);
+                                col2 = br + World::getbrightness(gx + 1, gy - 1, gz, this) + World::getbrightness(gx, gy - 1, gz + 1, this) + World::getbrightness(gx + 1, gy - 1, gz + 1, this);
+                                col3 = br + World::getbrightness(gx - 1, gy - 1, gz, this) + World::getbrightness(gx, gy - 1, gz + 1, this) + World::getbrightness(gx - 1, gy - 1, gz + 1, this);
                             }
                             else col0 = col1 = col2 = col3 = br * 4;
                         }
@@ -422,13 +446,13 @@ void MergeFaceRender(World::chunk* c)
                             gx = cx * 16 + x;
                             gy = cy * 16 + y;
                             gz = cz * 16 + z;
-                            br = getbrightness(gx, gy, gz + 1, c);
+                            br = World::getbrightness(gx, gy, gz + 1, this);
                             if (SmoothLighting)
                             {
-                                col0 = br + getbrightness(gx - 1, gy, gz + 1, c) + getbrightness(gx, gy + 1, gz + 1, c) + getbrightness(gx - 1, gy + 1, gz + 1, c);
-                                col1 = br + getbrightness(gx - 1, gy, gz + 1, c) + getbrightness(gx, gy - 1, gz + 1, c) + getbrightness(gx - 1, gy - 1, gz + 1, c);
-                                col2 = br + getbrightness(gx + 1, gy, gz + 1, c) + getbrightness(gx, gy - 1, gz + 1, c) + getbrightness(gx + 1, gy - 1, gz + 1, c);
-                                col3 = br + getbrightness(gx + 1, gy, gz + 1, c) + getbrightness(gx, gy + 1, gz + 1, c) + getbrightness(gx + 1, gy + 1, gz + 1, c);
+                                col0 = br + World::getbrightness(gx - 1, gy, gz + 1, this) + World::getbrightness(gx, gy + 1, gz + 1, this) + World::getbrightness(gx - 1, gy + 1, gz + 1, this);
+                                col1 = br + World::getbrightness(gx - 1, gy, gz + 1, this) + World::getbrightness(gx, gy - 1, gz + 1, this) + World::getbrightness(gx - 1, gy - 1, gz + 1, this);
+                                col2 = br + World::getbrightness(gx + 1, gy, gz + 1, this) + World::getbrightness(gx, gy - 1, gz + 1, this) + World::getbrightness(gx + 1, gy - 1, gz + 1, this);
+                                col3 = br + World::getbrightness(gx + 1, gy, gz + 1, this) + World::getbrightness(gx, gy + 1, gz + 1, this) + World::getbrightness(gx + 1, gy + 1, gz + 1, this);
                             }
                             else col0 = col1 = col2 = col3 = br * 4;
                         }
@@ -438,26 +462,26 @@ void MergeFaceRender(World::chunk* c)
                             gx = cx * 16 + x;
                             gy = cy * 16 + y;
                             gz = cz * 16 + z;
-                            br = getbrightness(gx, gy, gz - 1, c);
+                            br = World::getbrightness(gx, gy, gz - 1, this);
                             if (SmoothLighting)
                             {
-                                col0 = br + getbrightness(gx - 1, gy, gz - 1, c) + getbrightness(gx, gy - 1, gz - 1, c) + getbrightness(gx - 1, gy - 1, gz - 1, c);
-                                col1 = br + getbrightness(gx - 1, gy, gz - 1, c) + getbrightness(gx, gy + 1, gz - 1, c) + getbrightness(gx - 1, gy + 1, gz - 1, c);
-                                col2 = br + getbrightness(gx + 1, gy, gz - 1, c) + getbrightness(gx, gy + 1, gz - 1, c) + getbrightness(gx + 1, gy + 1, gz - 1, c);
-                                col3 = br + getbrightness(gx + 1, gy, gz - 1, c) + getbrightness(gx, gy - 1, gz - 1, c) + getbrightness(gx + 1, gy - 1, gz - 1, c);
+                                col0 = br + World::getbrightness(gx - 1, gy, gz - 1, this) + World::getbrightness(gx, gy - 1, gz - 1, this) + World::getbrightness(gx - 1, gy - 1, gz - 1, this);
+                                col1 = br + World::getbrightness(gx - 1, gy, gz - 1, this) + World::getbrightness(gx, gy + 1, gz - 1, this) + World::getbrightness(gx - 1, gy + 1, gz - 1, this);
+                                col2 = br + World::getbrightness(gx + 1, gy, gz - 1, this) + World::getbrightness(gx, gy + 1, gz - 1, this) + World::getbrightness(gx + 1, gy + 1, gz - 1, this);
+                                col3 = br + World::getbrightness(gx + 1, gy, gz - 1, this) + World::getbrightness(gx, gy - 1, gz - 1, this) + World::getbrightness(gx + 1, gy - 1, gz - 1, this);
                             }
                             else col0 = col1 = col2 = col3 = br * 4;
                         }
                         //Get block ID
-                        bl = c->getblock(x, y, z);
+                        bl = getblock(x, y, z);
                         tex = Textures::getTextureIndex(bl, face);
-                        neighbour = World::getblock(gx + delta[d][0], gy + delta[d][1], gz + delta[d][2], block(Blocks::ROCK), c);
+                        neighbour = World::getblock(gx + delta[d][0], gy + delta[d][1], gz + delta[d][2], block(Blocks::ROCK), this);
                         if (NiceGrass && bl == block(Blocks::GRASS))
                         {
-                            if (d == 0 && getblock(gx + 1, gy - 1, gz, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
-                            else if (d == 1 && getblock(gx - 1, gy - 1, gz, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
-                            else if (d == 4 && getblock(gx, gy - 1, gz + 1, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
-                            else if (d == 5 && getblock(gx, gy - 1, gz - 1, block(Blocks::ROCK), c) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
+                            if (d == 0 && World::getblock(gx + 1, gy - 1, gz, block(Blocks::ROCK), this) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
+                            else if (d == 1 && World::getblock(gx - 1, gy - 1, gz, block(Blocks::ROCK), this) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
+                            else if (d == 4 && World::getblock(gx, gy - 1, gz + 1, block(Blocks::ROCK), this) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
+                            else if (d == 5 && World::getblock(gx, gy - 1, gz - 1, block(Blocks::ROCK), this) == block(Blocks::GRASS)) tex = Textures::getTextureIndex(bl, 1);
                         }
                         //Render
                         const Blocks::SingleBlock& info = BlockInfo(bl);
@@ -528,13 +552,12 @@ void MergeFaceRender(World::chunk* c)
                     }
                 }
         }
-        Renderer::Flush(c->vbuffer[steps], c->vertexes[steps]);
+        Renderer::Flush(vbuffer[steps], vertexes[steps]);
     }
 }
 
-void RenderDepthModel(World::chunk* c)
+void World::chunk::RenderDepthModel()
 {
-    int cx = c->cx, cy = c->cy, cz = c->cz;
     int x = 0, y = 0, z = 0;
     QuadPrimitive_Depth cur;
     int cur_l_mx;
@@ -547,7 +570,8 @@ void RenderDepthModel(World::chunk* c)
     for (int d = 0; d < 6; d++)
     {
         cur.direction = d;
-        for (int i = 0; i < 16; i++) for (int j = 0; j < 16; j++)
+        for (int i = 0; i < 16; i++)
+            for (int j = 0; j < 16; j++)
             {
                 for (int k = 0; k < 16; k++)
                 {
@@ -556,13 +580,13 @@ void RenderDepthModel(World::chunk* c)
                     else if (d < 4) x = i, y = j, z = k;
                     else x = k, y = i, z = j;
                     //Get block ID
-                    bl = c->getblock(x, y, z);
+                    bl = getblock(x, y, z);
                     //Get neighbour ID
                     int xx = x + delta[d][0], yy = y + delta[d][1], zz = z + delta[d][2];
                     int gx = cx * 16 + xx, gy = cy * 16 + yy, gz = cz * 16 + zz;
                     if (xx < 0 || xx >= 16 || yy < 0 || yy >= 16 || zz < 0 || zz >= 16)
                         neighbour = World::getblock(gx, gy, gz);
-                    else neighbour = c->getblock(xx, yy, zz);
+                    else neighbour = getblock(xx, yy, zz);
                     //Render
                     if (bl == block(Blocks::AIR) || bl == block(Blocks::GLASS) || bl == neighbour && bl != block(Blocks::LEAF) ||
                             BlockInfo(neighbour).isOpaque() || BlockInfo(bl).isTranslucent())
@@ -604,6 +628,5 @@ void RenderDepthModel(World::chunk* c)
                 }
             }
     }
-    Renderer::Flush(c->vbuffer[3], c->vertexes[3]);
-}
+    Renderer::Flush(vbuffer[3], vertexes[3]);
 }

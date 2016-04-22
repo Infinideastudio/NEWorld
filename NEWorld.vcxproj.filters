@@ -110,9 +110,6 @@
     <ClInclude Include="source\Menus.h">
       <Filter>源代码\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="source\ChunkRenderer.h">
-      <Filter>Source\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="source\OnlinePlayer.h">
       <Filter>Source\Network</Filter>
     </ClInclude>

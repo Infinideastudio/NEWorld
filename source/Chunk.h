@@ -53,8 +53,6 @@ public:
     ~chunk();
     void Load(bool initIfEmpty = true);
     void buildTerrain(bool initIfEmpty = true);
-    void buildDetail();
-    void build(bool initIfEmpty = true);
 
     string getChunkFileName()
     {
@@ -73,7 +71,6 @@ public:
     block& getblock(int x, int y, int z)
     {
 #ifdef _DEBUG
-        assert(pblocks != nullptr);
         assert(x >= 0 && x < 16 && y >= 0 && y < 16 && z >= 0 && z < 16);
 #endif
         return pblocks[(x << 8) ^ (y << 4) ^ z];
@@ -82,7 +79,6 @@ public:
     brightness getbrightness(int x, int y, int z)
     {
 #ifdef _DEBUG
-        assert(pbrightness != nullptr);
         assert(x >= 0 && x < 16 && y >= 0 && y < 16 && z >= 0 && z < 16);
 #endif
         return pbrightness[(x << 8) ^ (y << 4) ^ z];
@@ -132,6 +128,10 @@ public:
         visible = TestFrustum.FrustumTest(getRelativeAABB());
     }
 
+    //Rendering Functions
+    void Render();
+    void MergeFaceRender();
+    void RenderDepthModel();
 };
 }
 
