@@ -3,11 +3,12 @@
 
 WorldGenerator::WorldGenerator(int mapseed)
 {
-    RandGen *mersenne_gen = new MersenneRandGen(mapseed);
-    perlinNoiseInit(mapseed);
+    rng = new MersenneRandGen(mapseed);
     m_seed = mapseed;
     for (int i = 0; i < 256; i++)
         m_perm[i] = rng->get_double_ranged(0.0, 256.0);
+    m_NoiseScaleX = m_NoiseScaleZ = 64;
+    m_WaterLevel = 30;
 }
 
 WorldGenerator::~WorldGenerator()

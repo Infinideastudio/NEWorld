@@ -227,9 +227,6 @@
     <ClCompile Include="source\GUI.cpp">
       <Filter>源代码\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="source\ChunkRenderer.cpp">
-      <Filter>Source\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="source\OnlinePlayer.cpp">
       <Filter>Source\Network</Filter>
     </ClCompile>

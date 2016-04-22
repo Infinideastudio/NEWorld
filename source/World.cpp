@@ -55,14 +55,14 @@ void Init()
 pair<int,int> binary_search_chunks(chunkid cid)
 {
     int first = 0, last = chunks.size() - 1;
-    int middle = (first + last) >> 1;
+    int middle = (first + last) / 2;
     while (first <= last && chunks[middle]->id != cid)
     {
         if (chunks[middle]->id > cid)
             last = middle - 1;
         else if (chunks[middle]->id < cid)
             first = middle + 1;
-        middle = (first + last) >> 1;
+        middle = (first + last) / 2;
     }
     return make_pair(first, middle);
 }
