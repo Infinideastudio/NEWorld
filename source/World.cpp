@@ -40,8 +40,8 @@ void Init()
     _mkdir(("Worlds/" + Name + "/").c_str());
     _mkdir(("Worlds/" + Name + "/chunks").c_str());
 #elif NEWORLD_TARGET_MACOSX
-    mkdir(("Worlds/" + Name + "/").c_str(), 644);
-    mkdir(("Worlds/" + Name + "/chunks").c_str(), 644);
+    mkdir(("Worlds/" + Name + "/").c_str(), 777);
+    mkdir(("Worlds/" + Name + "/chunks").c_str(), 777);
 #endif
 
     pWorldGen = new WorldGenerator(3404);
@@ -52,24 +52,19 @@ void Init()
     HMap.create();
 }
 
-inline pair<int,int> binary_search_chunks(chunkid cid)
+pair<int,int> binary_search_chunks(chunkid cid)
 {
-    int first = 0;
-    int last = chunks.size() - 1;
-    int middle = (first + last) / 2;
+    int first = 0, last = chunks.size() - 1;
+    int middle = (first + last) >> 1;
     while (first <= last && chunks[middle]->id != cid)
     {
         if (chunks[middle]->id > cid)
-        {
             last = middle - 1;
-        }
-        if (chunks[middle]->id < cid)
-        {
+        else if (chunks[middle]->id < cid)
             first = middle + 1;
-        }
-        middle = (first + last) / 2;
+        middle = (first + last) >> 1;
     }
-    return std::make_pair(first, middle);
+    return make_pair(first, middle);
 }
 
 chunk* AddChunk(int x, int y, int z)
@@ -79,7 +74,7 @@ chunk* AddChunk(int x, int y, int z)
     pair<int, int> pos = binary_search_chunks(cid);
     if (chunks.size() && chunks[pos.second]->id == cid)
     {
-        DebugError("Chunk(" + pack(x) + "," + pack(y) + "," + pack(z) + ") has been loaded,when adding chunk.");
+        DebugError("Chunk(" + pack(x) + "," + pack(y) + "," + pack(z) + ") has already been loaded when adding such chunk.");
         return chunks[pos.second];
     }
 
@@ -102,7 +97,8 @@ int getChunkPtrIndex(int x, int y, int z)
 {
     chunkid cid = getChunkID(x, y, z);
     pair<int, int> pos = binary_search_chunks(cid);
-    if (chunks[pos.second]->id == cid) return pos.second;
+    if (chunks[pos.second]->id == cid)
+        return pos.second;
     assert(false);
     return -1;
 }
@@ -110,7 +106,10 @@ int getChunkPtrIndex(int x, int y, int z)
 chunk* getChunkPtr(int x, int y, int z)
 {
     chunkid cid = getChunkID(x, y, z);
-    if (cpCacheID == cid && cpCachePtr != nullptr) return cpCachePtr;
+    if (cpCacheID == cid && cpCachePtr != nullptr)
+    {
+        return cpCachePtr;
+    }
     else
     {
         chunk* ret = cpArray.getChunkPtr(x, y, z);
@@ -532,131 +531,128 @@ bool inWater(const Hitbox::AABB& box)
     return false;
 }
 
+// OPTIMIZATION REQUIRED
+// 存在优化空间
 void updateblock(int x, int y, int z, bool updated, int depth)
 {
-    //Blockupdate
-
-    if (depth > 4096) return;
+    if (depth > 4096)
+        return;
     depth++;
 
     int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
 
-    if (chunkOutOfBound(cx, cy, cz)) return;
+    if (chunkOutOfBound(cx, cy, cz))
+        return;
 
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
     chunk* cptr = getChunkPtr(cx, cy, cz);
-    if (cptr != nullptr)
+
+    if (cptr == nullptr)
+        return;
+
+    if (cptr == EmptyChunkPtr)
     {
-
-        if (cptr == EmptyChunkPtr)
-        {
-            cptr = World::AddChunk(cx, cy, cz);
-            cptr->Load();
-            cptr->Empty = false;
-        }
-        brightness oldbrightness = cptr->getbrightness(bx, by, bz);
-        bool skylighted = true;
-        int yi, cyi;
-        yi = y + 1;
-        cyi = getchunkpos(yi);
-        if (y < 0) skylighted = false;
-        else
-        {
-            while (!chunkOutOfBound(cx, cyi + 1, cz) && chunkLoaded(cx, cyi + 1, cz) && skylighted)
-            {
-                if (BlockInfo(getblock(x, yi, z)).isOpaque() || getblock(x, yi, z) == block(Blocks::WATER))
-                {
-                    skylighted = false;
-                }
-                yi++;
-                cyi = getchunkpos(yi);
-            }
-        }
-
-        if (!BlockInfo(getblock(x, y, z)).isOpaque())
-        {
-
-            brightness br;
-            int maxbrightness;
-            block blks[7] = { 0,
-                              getblock(x, y, z + 1),    //Front face
-                              getblock(x, y, z - 1),    //Back face
-                              getblock(x + 1, y, z),    //Right face
-                              getblock(x - 1, y, z),    //Left face
-                              getblock(x, y + 1, z),    //Top face
-                              getblock(x, y - 1, z)
-                            };  //Bottom face
-            brightness brts[7] = { 0,
-                                   getbrightness(x, y, z + 1),    //Front face
-                                   getbrightness(x, y, z - 1),    //Back face
-                                   getbrightness(x + 1, y, z),    //Right face
-                                   getbrightness(x - 1, y, z),    //Left face
-                                   getbrightness(x, y + 1, z),    //Top face
-                                   getbrightness(x, y - 1, z)
-                                 };  //Bottom face
-            maxbrightness = 1;
-            for (int i = 2; i <= 6; i++)
-            {
-                if (brts[maxbrightness] < brts[i]) maxbrightness = i;
-            }
-            br = brts[maxbrightness];
-            if (blks[maxbrightness] == block(Blocks::WATER))
-            {
-                if (br - 2 < BRIGHTNESSMIN) br = BRIGHTNESSMIN;
-                else br -= 2;
-            }
-            else
-            {
-                if (br - 1 < BRIGHTNESSMIN) br = BRIGHTNESSMIN;
-                else br--;
-            }
-
-            if (skylighted)
-            {
-                if (br < skylight) br = skylight;
-            }
-            if (br < BRIGHTNESSMIN) br = BRIGHTNESSMIN;
-            //Set brightness
-            cptr->setbrightness(bx, by, bz, br);
-
-        }
-        else
-        {
-
-            //Opaque block
-            cptr->setbrightness(bx, by, bz, 0);
-            if (getblock(x, y, z) == block(Blocks::GLOWSTONE) || getblock(x, y, z) == block(Blocks::LAVA))
-            {
-                cptr->setbrightness(bx, by, bz, BRIGHTNESSMAX);
-            }
-
-        }
-
-        if (oldbrightness != cptr->getbrightness(bx, by, bz)) updated = true;
-
-        if (updated)
-        {
-            int vec[6][3] = { {0, 1, 0}, {0, -1, 0}, {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1} };
-            for (int i = 0; i < 6; i++)
-                updateblock(x + vec[i][0], y + vec[i][1], z + vec[i][2], false, depth);
-        }
-
-        setChunkUpdated(cx, cy, cz, true);
-        if (bx == 15 && cx < worldsize - 1) setChunkUpdated(cx + 1, cy, cz, true);
-        if (bx == 0 && cx > -worldsize) setChunkUpdated(cx - 1, cy, cz, true);
-        if (by == 15 && cy < worldheight - 1) setChunkUpdated(cx, cy + 1, cz, true);
-        if (by == 0 && cy > -worldheight) setChunkUpdated(cx, cy - 1, cz, true);
-        if (bz == 15 && cz < worldsize - 1) setChunkUpdated(cx, cy, cz + 1, true);
-        if (bz == 0 && cz > -worldsize) setChunkUpdated(cx, cy, cz - 1, true);
-
+        cptr = World::AddChunk(cx, cy, cz);
+        cptr->Load();
+        cptr->Empty = false;
     }
+
+    brightness oldbrightness = cptr->getbrightness(bx, by, bz);
+    bool skylighted = true;
+    int yi, cyi;
+    yi = y + 1;
+    cyi = getchunkpos(yi);
+    if (y < 0)
+    {
+        skylighted = false;
+    }
+    else
+    {
+        while (!chunkOutOfBound(cx, cyi + 1, cz) && chunkLoaded(cx, cyi + 1, cz) && skylighted)
+        {
+            if (BlockInfo(getblock(x, yi, z)).isOpaque() || getblock(x, yi, z) == block(Blocks::WATER))
+            {
+                skylighted = false;
+            }
+            yi++;
+            cyi = getchunkpos(yi);
+        }
+    }
+
+    if (BlockInfo(getblock(x, y, z)).isOpaque())
+    {
+        cptr->setbrightness(bx, by, bz, 0);
+        if (getblock(x, y, z) == block(Blocks::GLOWSTONE) || getblock(x, y, z) == block(Blocks::LAVA))
+        {
+            cptr->setbrightness(bx, by, bz, BRIGHTNESSMAX);
+        }
+    }
+    else
+    {
+        brightness br;
+        int maxbrightness = 1;
+        block blks[7] = { 0,
+                          getblock(x, y, z + 1),    //Front face
+                          getblock(x, y, z - 1),    //Back face
+                          getblock(x + 1, y, z),    //Right face
+                          getblock(x - 1, y, z),    //Left face
+                          getblock(x, y + 1, z),    //Top face
+                          getblock(x, y - 1, z)
+                        };  //Bottom face
+        brightness brts[7] = { 0,
+                               getbrightness(x, y, z + 1),    //Front face
+                               getbrightness(x, y, z - 1),    //Back face
+                               getbrightness(x + 1, y, z),    //Right face
+                               getbrightness(x - 1, y, z),    //Left face
+                               getbrightness(x, y + 1, z),    //Top face
+                               getbrightness(x, y - 1, z)
+                             };  //Bottom face
+        for (int i = 2; i <= 6; i++)
+        {
+            if (brts[maxbrightness] < brts[i])
+                maxbrightness = i;
+        }
+        br = brts[maxbrightness];
+        if (blks[maxbrightness] == block(Blocks::WATER))
+            br = max(br - 2, BRIGHTNESSMIN);
+        else
+            br = max(br - 1, BRIGHTNESSMIN);
+        if (skylighted && br < skylight)
+            br = skylight;
+        br = max(br, BRIGHTNESSMIN);
+        cptr->setbrightness(bx, by, bz, br);
+    }
+
+    if (oldbrightness != cptr->getbrightness(bx, by, bz))
+        updated = true;
+
+    if (updated)
+    {
+        const int vec[6][3] = { {0, 1, 0}, {0, -1, 0}, {1, 0, 0}, {-1, 0, 0}, {0, 0, 1}, {0, 0, -1} };
+        for (int i = 0; i < 6; i++)
+            updateblock(x + vec[i][0], y + vec[i][1], z + vec[i][2], false, depth);
+    }
+
+    setChunkUpdated(cx, cy, cz, true);
+    if (bx == 15 && cx < worldsize - 1)
+        setChunkUpdated(cx + 1, cy, cz, true);
+    if (bx == 0 && cx > -worldsize)
+        setChunkUpdated(cx - 1, cy, cz, true);
+    if (by == 15 && cy < worldheight - 1)
+        setChunkUpdated(cx, cy + 1, cz, true);
+    if (by == 0 && cy > -worldheight)
+        setChunkUpdated(cx, cy - 1, cz, true);
+    if (bz == 15 && cz < worldsize - 1)
+        setChunkUpdated(cx, cy, cz + 1, true);
+    if (bz == 0 && cz > -worldsize)
+        setChunkUpdated(cx, cy, cz - 1, true);
 }
 
 void Modifyblock(int x, int y, int z, block Blockname, chunk* cptr)
 {
     //设置方块
-    int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
     if (cptr != nullptr && cptr != EmptyChunkPtr &&
@@ -703,16 +699,23 @@ brightness getbrightness(int x, int y, int z, chunk* cptr)
 {
     //获取亮度
     int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-    if (chunkOutOfBound(cx, cy, cz)) return skylight;
+    if (chunkOutOfBound(cx, cy, cz))
+        return skylight;
+
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
     if (cptr != nullptr && cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
-    {
         return cptr->getbrightness(bx, by, bz);
-    }
+
     chunk* ci = getChunkPtr(cx, cy, cz);
-    if (ci == EmptyChunkPtr) if (cy < 0) return BRIGHTNESSMIN;
-        else return skylight;
-    if (ci != nullptr)return ci->getbrightness(bx, by, bz);
+    if (ci == EmptyChunkPtr)
+    {
+        if (cy < 0)
+            return BRIGHTNESSMIN;
+        else
+            return skylight;
+    }
+    if (ci != nullptr)
+        return ci->getbrightness(bx, by, bz);
     return skylight;
 }
 
@@ -749,7 +752,7 @@ void setblock(int x, int y, int z, block Blockname, chunk* cptr)
 void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr)
 {
     //设置亮度
-    int    cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
 
     if (cptr != nullptr && cptr != EmptyChunkPtr &&
@@ -777,8 +780,10 @@ void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr)
 bool chunkUpdated(int x, int y, int z)
 {
     chunk* i = getChunkPtr(x, y, z);
-    if (i == nullptr || i == EmptyChunkPtr) return false;
-    return i->updated;
+    if (i == nullptr || i == EmptyChunkPtr)
+        return false;
+    else
+        return i->updated;
 }
 
 void setChunkUpdated(int x, int y, int z, bool value)
@@ -791,7 +796,8 @@ void setChunkUpdated(int x, int y, int z, bool value)
         cp->Empty = false;
         i = cp;
     }
-    if (i != nullptr) i->updated = value;
+    if (i != nullptr)
+        i->updated = value;
 }
 
 void sortChunkBuildRenderList(int xpos, int ypos, int zpos)
@@ -837,7 +843,6 @@ void sortChunkBuildRenderList(int xpos, int ypos, int zpos)
 
 void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
 {
-
     int cxp, cyp, czp, cx, cy, cz, pl = 0, pu = 0, i;
     int xd, yd, zd, distsqr, first, middle, last;
 
@@ -861,9 +866,11 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
             last = pl - 1;
             while (first <= last)
             {
-                middle = (first + last) / 2;
-                if (distsqr > chunkUnloadList[middle].second)last = middle - 1;
-                else first = middle + 1;
+                middle = (first + last) >> 1;
+                if (distsqr > chunkUnloadList[middle].second)
+                    last = middle - 1;
+                else
+                    first = middle + 1;
             }
             if (first > pl || first >= MaxChunkUnloads) continue;
             i = first;
@@ -899,9 +906,11 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
                     last = pu - 1;
                     while (first <= last)
                     {
-                        middle = (first + last) / 2;
-                        if (distsqr < chunkLoadList[middle][0]) last = middle - 1;
-                        else first = middle + 1;
+                        middle = (first + last) >> 1;
+                        if (distsqr < chunkLoadList[middle][0])
+                            last = middle - 1;
+                        else
+                            first = middle + 1;
                     }
                     if (first > pu || first >= MaxChunkLoads) continue;
                     i = first;
@@ -1076,12 +1085,20 @@ vector<Blocks::BUDDP> blockupdatequery;
 block* getblockptr(int x, int y, int z, block* mask)
 {
     //获取方块
+<<<<<<< HEAD
     int	cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
     if (chunkOutOfBound(cx, cy, cz)) return mask;
+=======
+    int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
+    if (chunkOutOfBound(cx, cy, cz))
+        return mask;
+>>>>>>> d410cff... 审计World.cpp
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
     chunk* ci = getChunkPtr(cx, cy, cz);
-    if (ci == EmptyChunkPtr) return mask;
-    if (ci != nullptr ) return ci->pblocks + (bx * 256 + by * 16 + bz);
+    if (ci == EmptyChunkPtr)
+        return mask;
+    if (ci != nullptr)
+        return ci->pblocks + (bx * 256 + by * 16 + bz);
     return mask;
 }
 
@@ -1109,7 +1126,6 @@ void ProcessBuq()
     block* b;
     int bx, by, bz;
     const int vec[6][3] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
-    //Please indent following the basic law
 
     for (Blocks::BUDDP B : swap)
     {
@@ -1162,7 +1178,7 @@ void picktree(int x, int y, int z)
                                  float(rnd()*0.02 + 0.03), int(rnd() * 60) + 30);
     }
     Modifyblock(x, y, z, block(Blocks::AIR));
-    int vec[5][3] = { {0, 1, 0}, {0, 0, 1}, {0, 0, -1}, {1, 0, 0}, {-1, 0, 0} };
+    const int vec[5][3] = { {0, 1, 0}, {0, 0, 1}, {0, 0, -1}, {1, 0, 0}, {-1, 0, 0} };
     for (int i = 0; i < 5; i++)
         if (getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]) == block(Blocks::WOOD) || getblock(x + vec[i][0], y + vec[i][1], z + vec[i][2]) == block(Blocks::LEAF))
             picktree(x + vec[i][0], y + vec[i][1], z + vec[i][2]);
@@ -1196,12 +1212,21 @@ bool chunkInRange(int x, int y, int z, int px, int py, int pz, int dist)
 
 chunkid getChunkID(int x, int y, int z)
 {
-    if (y == -128) y = 0;
-    if (y <= 0) y = abs(y) + (1LL << 7);
-    if (x == -134217728) x = 0;
-    if (x <= 0) x = abs(x) + (1LL << 27);
-    if (z == -134217728) z = 0;
-    if (z <= 0) z = abs(z) + (1LL << 27);
+    if (y == -128)
+        y = 0;
+    if (y <= 0)
+        y = abs(y) + (1LL << 7);
+
+    if (x == -134217728)
+        x = 0;
+    if (x <= 0)
+        x = abs(x) + (1LL << 27);
+
+    if (z == -134217728)
+        z = 0;
+    if (z <= 0)
+        z = abs(z) + (1LL << 27);
+
     return (chunkid(y) << 56) + (chunkid(x) << 28) + z;
 }
 
