@@ -1,3 +1,21 @@
+/*
+ * NEWorld: An free game with similar rules to Minecraft.
+ * Copyright (C) 2016 NEWorld Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 ﻿#include "World.h"
 #include "Textures.h"
 #include "Renderer.h"
@@ -1010,7 +1028,7 @@ bool buildtree(int x, int y, int z)
     h = static_cast<int>( min( (double)h, dirt * 15 / 268 * max(pRandGen->get_double_co(), 0.8) ) );
     if (h < 7)
         return false;
-    
+
     //使用lambda表达式递归模拟树生长
     int begin = y + h * 0.618;
     Vector3D middle(x, y + h, z);
@@ -1021,7 +1039,7 @@ bool buildtree(int x, int y, int z)
     function<void(Vector3D,int,block,bool)> grow = [=,&grow,&vec](Vector3D pos, int depth, block parent, bool up)->void
     {
         if ((depth == 0) || (getblock(pos) != Blocks::AIR) ||
-            ((!up) && (Distancen(middle.px, middle.py, middle.pz, pos.px, pos.py, pos.pz) > s * ((pos.py > y + h) ? 0.4 : 1.0))))
+        ((!up) && (Distancen(middle.px, middle.py, middle.pz, pos.px, pos.py, pos.pz) > s * ((pos.py > y + h) ? 0.4 : 1.0))))
         {
             return;
         }
