@@ -83,7 +83,7 @@ void calcVisible(double xpos, double ypos, double zpos, Frustum& frus);
 void saveAllChunks();
 void destroyAllChunks();
 
-void buildtree(int x, int y, int z);
+bool buildtree(int x, int y, int z);
 void explode(int x, int y, int z, int r, chunk* c = nullptr);
 
 }
