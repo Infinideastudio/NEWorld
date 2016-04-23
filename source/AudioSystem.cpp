@@ -190,7 +190,7 @@ void ClickEvent()
     SClick = Device.Play(Click, false, SoundGain, Pos, Vel);
     //Sleep(50);
     clock_t c = clock();
-    while (clock() - c > 50) {}
+    while (double(clock() - c)/double(CLOCKS_PER_SEC) < 0.05) {}
     Device.Stop(SClick);
     SClick = -1;
 }
