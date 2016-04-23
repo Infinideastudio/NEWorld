@@ -40,8 +40,8 @@ void Init()
     _mkdir(("Worlds/" + Name + "/").c_str());
     _mkdir(("Worlds/" + Name + "/chunks").c_str());
 #elif NEWORLD_TARGET_MACOSX
-    mkdir(("Worlds/" + Name + "/").c_str(), 777);
-    mkdir(("Worlds/" + Name + "/chunks").c_str(), 777);
+    mkdir(("Worlds/" + Name + "/").c_str(), 0755);
+    mkdir(("Worlds/" + Name + "/chunks").c_str(), 0755);
 #endif
 
     pWorldGen = new WorldGenerator(3404);

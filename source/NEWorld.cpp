@@ -90,8 +90,8 @@ int main()
     _mkdir("Worlds");
     _mkdir("Screenshots");
 #elif NEWORLD_TARGET_MACOSX
-    mkdir("Worlds", 644);
-    mkdir("Screenshots", 644);
+    mkdir("Worlds", 0755);
+    mkdir("Screenshots", 0755);
 #endif
     RandomGeneratorInit();
     glfwInit();

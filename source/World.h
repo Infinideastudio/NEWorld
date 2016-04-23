@@ -58,8 +58,8 @@ chunk* getChunkPtr(int x, int y, int z);
 #define getchunkpos(n) ((n)>>4)
 #define getblockpos(n) ((n)&15)
 
-inline bool chunkOutOfBound(int x, int y, int z);
-inline bool chunkLoaded(int x, int y, int z);
+bool chunkOutOfBound(int x, int y, int z);
+bool chunkLoaded(int x, int y, int z);
 vector<Hitbox::AABB> getHitboxes(const Hitbox::AABB& box);
 bool inWater(const Hitbox::AABB& box);
 void renderblock(int x, int y, int z, chunk* chunkptr);
