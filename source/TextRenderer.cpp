@@ -5,6 +5,7 @@ FT_Library TextRenderer::library;
 FT_Face TextRenderer::fontface;
 FT_GlyphSlot TextRenderer::slot;
 TextRenderer::UnicodeChar TextRenderer::chars[65536];
+map<string, wchar_t*> TextRenderer::wstr_cache;
 unsigned int TextRenderer::gbe, TextRenderer::Font;
 int TextRenderer::gloop, TextRenderer::ww, TextRenderer::wh;
 float TextRenderer::r = 0.0f, TextRenderer::g = 0.0f, TextRenderer::b = 0.0f, TextRenderer::a = 1.0f;
@@ -101,7 +102,17 @@ int TextRenderer::getStrWidth(string s)
     UnicodeChar c;
     int uc, res = 0;
     wchar_t* wstr = nullptr;
-    MBToWC(s.c_str(), wstr, s.length()+128);
+    if(wstr_cache.size() > max_cache_size)
+        clearCache();
+    if(wstr_cache.find(s) == wstr_cache.end())
+    {
+        MBToWC(s.c_str(), wstr, s.length()+128);
+        wstr_cache[s] = wstr;
+    }
+    else
+    {
+        wstr = wstr_cache[s];
+    }
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {
         uc = wstr[k];
@@ -113,7 +124,6 @@ int TextRenderer::getStrWidth(string s)
         }
         res += static_cast<int>(c.advance / stretch);
     }
-    free(wstr);
     return res;
 }
 
@@ -124,7 +134,17 @@ void TextRenderer::renderString(int x, int y, string glstring)
     int span = 0;
     double wid = pow(2, ceil(log2(32 * stretch)));
     wchar_t* wstr = nullptr;
-    MBToWC(glstring.c_str(), wstr, glstring.length()+128);
+    if(wstr_cache.size() > max_cache_size)
+        clearCache();
+    if(wstr_cache.find(glstring) == wstr_cache.end())
+    {
+        MBToWC(glstring.c_str(), wstr, glstring.length()+128);
+        wstr_cache[glstring] = wstr;
+    }
+    else
+    {
+        wstr = wstr_cache[glstring];
+    }
     glEnable(GL_TEXTURE_2D);
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {
@@ -174,7 +194,6 @@ void TextRenderer::renderString(int x, int y, string glstring)
         span += static_cast<int>(c.advance / stretch);
     }
     glColor4f(1.0, 1.0, 1.0, 1.0);
-    free(wstr);
 }
 
 void TextRenderer::renderASCIIString(int x, int y, string glstring)
@@ -191,4 +210,11 @@ void TextRenderer::renderASCIIString(int x, int y, string glstring)
     glListBase(gbe);
     glCallLists((GLsizei)glstring.length(), GL_UNSIGNED_BYTE, glstring.c_str());
     glPopMatrix();
+}
+
+void TextRenderer::clearCache()
+{
+    for(map<string, wchar_t*>::iterator it = wstr_cache.begin(); it != wstr_cache.end(); ++it)
+        free(it->second);
+    wstr_cache.clear();
 }

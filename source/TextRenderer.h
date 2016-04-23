@@ -23,7 +23,9 @@ public:
     static FT_Face fontface;
     static FT_GlyphSlot slot;
     static UnicodeChar chars[65536];
-
+    static map<string, wchar_t*> wstr_cache;
+    const static int max_cache_size = 1024;
+    
     static unsigned int gbe, Font;
     static int gloop, ww, wh;
     static float r, g, b, a;
@@ -50,6 +52,7 @@ public:
     static int getStrWidth(string s);
     static void renderString(int x, int y, string glstring);
     static void renderASCIIString(int x, int y, string glstring);
+    static void clearCache();
 };
 
 #endif
