@@ -236,6 +236,7 @@ int main()
 #endif
     delete World::pWorldGen;
     glfwTerminate();
+    TextRenderer::clearCache();
     AudioSystem::UnInit();
     RandomGeneratorUninit();
     return 0;
