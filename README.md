@@ -67,7 +67,7 @@ Font.ttf在此处下载：[Font.ttf](http://pan.baidu.com/s/1hr5TQjM)
 
 ## 在Mac OS X上编译
 
-NEWorld使用了OpenGL、OpenAL、GLFW3、FreeType、Vorbis、Ogg这几个外部依赖库。OpenGL是Mac OS X系统中自带的，不需要额外安装。虽然OpenAL在Mac OS X中也自带，但是NEWorld使用了一些系统内置的标准中OpenAL没有的功能，需要安装第三方的OpenAL软件实现。如果您安装了Homebrew包管理系统，您可以用
+NEWorld使用了OpenGL、OpenAL、GLFW3、FreeType、Vorbis、Ogg这几个外部依赖库。OpenGL是Mac OS X系统中自带的，不需要额外安装。虽然OpenAL在Mac OS X中也自带，但是NEWorld使用了一些系统内置的标准OpenAL中没有的功能，需要安装第三方的OpenAL软件实现。如果您安装了Homebrew包管理系统，您可以用
 
 ```
 brew install freetype openal-soft libogg libvorbis libvorbisfile glfw3
