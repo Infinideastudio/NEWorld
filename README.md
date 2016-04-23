@@ -8,6 +8,8 @@ Font.ttf在此处下载：[Font.ttf](http://pan.baidu.com/s/1hr5TQjM)
 
 最新进度在`0.5.0`分支。
 
+NEWorld采用GPLv3许可证发布。
+
 # 路线图
 
 这里列举一些主要的条目。全部条目和详细说明，请查看`roadmap.md`。
