@@ -49,9 +49,6 @@ void TextRenderer::loadchar(unsigned int uc)
     size_t index = FT_Get_Char_Index(fontface, uc);
     FT_Load_Glyph(fontface, index, FT_LOAD_DEFAULT);
     FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
-    //FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL);
-    //在Mac上的随机崩溃之一，运行十多次，有几次会在这一行崩溃，其他几次正常通过
-    //malloc: *** error for object 0x7fcf52cac4f8: incorrect checksum for freed object - object was probably modified after being freed.
     FT_Bitmap* bitmap = &(slot->bitmap);
     int wid = (int)pow(2, ceil(log2(32 * stretch)));
     ubyte *Texsrc = bitmap->buffer, *Tex = new ubyte[wid * wid * 4];
@@ -71,9 +68,6 @@ void TextRenderer::loadchar(unsigned int uc)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wid, wid, 0, GL_RGBA, GL_UNSIGNED_BYTE, Tex);
-    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, wid, wid, 0, GL_RGBA, GL_UNSIGNED_BYTE, Tex);
-    //在Mac上的随机崩溃之一，运行十多次，有几次会在这一行崩溃，其他几次正常通过
-    //malloc: *** error for object 0x1007d10a8: incorrect checksum for freed object - object was probably modified after being freed.
     delete[] Tex;
     chars[uc].aval = true;
     chars[uc].width = bitmap->width;
@@ -85,20 +79,21 @@ void TextRenderer::loadchar(unsigned int uc)
 
 void MBToWC(const char* lpcszStr, wchar_t*& lpwszStr, int dwSize)
 {
+    //原来的写法就是错的，dwSize是字符个数，不是字节数大小
+    //这种写法在Windows上居然能正常运行，真是奇葩 --DLaboratory
+    dwSize *= sizeof(wchar_t);
     lpwszStr = (wchar_t*)malloc(dwSize);
     memset(lpwszStr, 0, dwSize);
-    //原写法：
-    //int iSize = (MByteToWChar(lpwszStr, lpcszStr, strlen(lpcszStr)) + 1)*sizeof(wchar_t);
-    //在Mac上出现随机崩溃，有一定概率会因为这里崩溃
-    //运行7次程序，碰到了1次，lpwszStr尾部存在一些随机的乱码
     //根据man page中给出的描述
-    //The mbstowcs() function converts a multibyte character string s, beginning in the initial conversion state, into a wide character string pwcs. No more than n wide characters are stored. A terminating null wide character is appended, if there is room.
-    //由此推测，可能是由于没有位置存储\0结束符导致
-    //所以在这里预留5个位置留给\0结束符，富裕点压压惊
-    //MD耗了我一个小时，一直以为是其他地方有错，直到查看lpwszStr的值 --DLaboratory
+    //The mbstowcs() function converts a multibyte character string s,
+    //beginning in the initial conversion state, into a wide character
+    //string pwcs. No more than n wide characters are stored. A
+    //terminating null wide character is appended, if there is room.
+    //所以我们需要多预留几个位置给结束符 --DLaboratory
     int iSize = (MByteToWChar(lpwszStr, lpcszStr, strlen(lpcszStr) + 5) + 1)*sizeof(wchar_t);
-    //出现iSize < dwSize的情况
-    //lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
+    //出现iSize < dwSize的情况时就不应该再realloc了 --DLaboratory
+    if(iSize > dwSize)
+        lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
 }
 
 int TextRenderer::getStrWidth(string s)
@@ -130,7 +125,6 @@ void TextRenderer::renderString(int x, int y, string glstring)
     double wid = pow(2, ceil(log2(32 * stretch)));
     wchar_t* wstr = nullptr;
     MBToWC(glstring.c_str(), wstr, glstring.length()+128);
-
     glEnable(GL_TEXTURE_2D);
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {

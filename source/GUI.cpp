@@ -305,10 +305,8 @@ void label::render()
     }
     glEnable(GL_TEXTURE_2D);
     TextRenderer::setFontColor(fcR, fcG, fcB, fcA);
-    TextRenderer::renderString((xmin + xmax - TextRenderer::getStrWidth(text)) / 2, (ymin + ymax - 20) / 2, text);
-    //TextRenderer::renderString((xmin + xmax - TextRenderer::getStrWidth(text)) / 2, (ymin + ymax - 20) / 2, text);
-    //在Mac上的随机崩溃之一，运行十多次，有几次会在这一行崩溃，其他几次正常通过
-    //EXEC_BAD_ACCESS
+    int strwidth = TextRenderer::getStrWidth(text);
+    TextRenderer::renderString((xmin + xmax - strwidth) / 2, (ymin + ymax - 20) / 2, text);
 }
 
 void button::update()
