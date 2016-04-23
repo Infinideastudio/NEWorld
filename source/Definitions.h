@@ -119,6 +119,24 @@ struct block
     }
 };
 
+class Vector3D
+{
+public:
+    int px, py, pz;
+    Vector3D() = delete;
+    Vector3D(int ix, int iy, int iz)
+        :px(ix), py(iy), pz(iz) {}
+    ~Vector3D() {}
+    Vector3D operator + (const Vector3D& add) const
+    {
+        Vector3D rt = *this;
+        rt.px += add.px;
+        rt.py += add.py;
+        rt.pz += add.pz;
+        return rt;
+    }
+};
+
 namespace Blocks
 {
 struct BUDDP
