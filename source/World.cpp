@@ -967,14 +967,15 @@ void destroyAllChunks()
     chunkUnloads = 0;
 }
 
-void buildtree(int x, int y, int z)
+bool buildtree(int x, int y, int z)
 {
     //对生成条件进行更严格的检测
     //一：正上方五格必须为空气
     for (int i = y + 1; i < y + 6; i++)
     {
-        if (getblock(x, i, z) != block(Blocks::AIR))return;
+        if (getblock(x, i, z) != block(Blocks::AIR))return false;
     }
+    /*
     //二：周围五格不能有树
     for (int ix = x - 4; ix < x + 4; ix++)
     {
@@ -982,10 +983,11 @@ void buildtree(int x, int y, int z)
         {
             for (int iz = z - 4; iz < z + 4; iz++)
             {
-                if (getblock(ix, iy, iz) == block(Blocks::WOOD) || getblock(ix, iy, iz) == block(Blocks::LEAF))return;
+                if (getblock(ix, iy, iz) == block(Blocks::WOOD) || getblock(ix, iy, iz) == block(Blocks::LEAF))return false;
             }
         }
     }
+    */
     //开始生成
     //设置泥土
     setblock(x, y, z, block(Blocks::DIRT));
@@ -1017,7 +1019,8 @@ void buildtree(int x, int y, int z)
     }
     //取最小值
     h = static_cast<int>(min((double)h, Dirt * 15 / 268 * max(pRandGen->get_double_co(), 0.8)));
-    if (h < 7)return;
+    if (h < 7)return false;
+    /*
     //开始生成树干
     for (int i = y + 1; i < y + h + 1; i++)
     {
@@ -1049,6 +1052,47 @@ void buildtree(int x, int y, int z)
             }
         }
     }
+    */
+
+    //使用lambda表达式递归模拟树生长
+    int begin = y+h*0.618;
+    class Pos { public: int px, py, pz; Pos() = delete; Pos(int ix, int iy, int iz) :px(ix), py(iy), pz(iz) {}~Pos() {}Pos operator+(const Pos& add)const { Pos rt = *this;rt.px += add.px;rt.py += add.py;rt.pz += add.pz;return rt; } };
+    Pos middle(x,y+h,z);
+    float k=0.2;
+    float s = h*h*k;
+    Pos vec[5] = { { 0, 1, 0 },{ 0, 0, 1 },{ 0, 0, -1 },{ 1, 0, 0 },{ -1, 0, 0 } };
+    //random_shuffle(vec, vec + 5);
+    auto setblockex = [](Pos pos, block block) {do { setblock(pos.px, pos.py, pos.pz, block); } while (false&& getblock(pos.px, pos.py, pos.pz) != block);};
+    function<void(Pos,int,block,bool)> grow = [=,&grow,&vec](Pos pos,int depth,block call,bool up)->void{
+        if ((!depth)|| ((!up) && (Distancen(middle.px, middle.py, middle.pz, pos.px, pos.py, pos.pz)>s*((pos.py>y + h) ? 0.4 : 1.0)))|| (getblock(pos.px, pos.py, pos.pz) != Blocks::AIR))
+        {
+            return;
+        }
+        block cl;
+        switch (call.ID)
+        {
+        case Blocks::DIRT:cl = Blocks::WOOD;break;
+        case Blocks::WOOD:cl = up?Blocks::WOOD:(pRandGen->get_double_co()<0.1?Blocks::WOOD:Blocks::LEAF);break;
+        case Blocks::LEAF:cl = Blocks::LEAF;break;
+        }
+
+        setblockex(pos, cl);
+        
+        if (pos.py<begin)
+        {
+            grow(pos+Pos(0,1,0),depth-1,cl,true);
+        }else{
+            
+            for (size_t i = 0; i < 5; i++)
+            {
+                grow(pos + vec[i], depth - 1, cl, false);
+            }
+        }
+    
+    };
+    Pos pos(x,y+1,z);
+    grow(pos,h*1.5,Blocks::DIRT,true);
+    return true;
 }
 
 void explode(int x, int y, int z, int r, chunk* c)
@@ -1134,7 +1178,7 @@ void ProcessBuq()
         bz = B.cz;
         for (int i = 0; i < 6; i++)
         {
-            b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
+            b = World::getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
             if (b->ID != Blocks::AIR)
                 ExecBUPD(Blocks::BUDDP(B.origon, B.upd, b, B.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] ));
         }
