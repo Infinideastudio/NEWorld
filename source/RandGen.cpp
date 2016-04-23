@@ -187,8 +187,7 @@ unsigned int LinearRandGen::get_u32()
 #if (defined NEWORLD_TARGET_MACOSX) && (defined __RDRND__)
 unsigned int IntelRandGen::get_u32()
 {
-    int val;
-    _rdrand32_step(&val);
-    return val;
+    _rdrand32_step(&value);
+    return value;
 }
 #endif

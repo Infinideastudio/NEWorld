@@ -80,9 +80,12 @@ public:
 // Intel的RNRAND硬件随机数生成器
 class IntelRandGen : public RandGen
 {
+private:
+    unsigned int value;
+
 public:
     // dummy function
-    void seed() {}
+    void seed(unsigned int k) {}
 
     // generate an unsigned 32bit integer
     unsigned int get_u32();
