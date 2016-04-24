@@ -1,17 +1,17 @@
 /*
  * Copyright (c) 2006, Creative Labs Inc.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification, are permitted provided
  * that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice, this list of conditions and
  *          the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice, this list of conditions
  *          and the following disclaimer in the documentation and/or other materials provided with the distribution.
  *     * Neither the name of Creative Labs Inc. nor the names of its contributors may be used to endorse or
  *          promote products derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
  * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
@@ -114,14 +114,16 @@ ALboolean ALFWInitOpenAL()
     pDeviceList = new ALDeviceList();
     if ((pDeviceList) && (pDeviceList->GetNumDevices()))
     {
-       
-        for (i = 0; i < pDeviceList->GetNumDevices(); i++) 
+
+        for (i = 0; i < pDeviceList->GetNumDevices(); i++)
             //ALFWprintf("%d. %s%s\n", i + 1, pDeviceList->GetDeviceName(i), i == pDeviceList->GetDefaultDevice() ? "(DEFAULT)" : "");
-    
-        do {
-            //ALchar ch = _getch();
-            //i = atoi(&ch);
-        } while ((i < 1) || (i > pDeviceList->GetNumDevices()));
+
+            do
+            {
+                //ALchar ch = _getch();
+                //i = atoi(&ch);
+            }
+            while ((i < 1) || (i > pDeviceList->GetNumDevices()));
 
         pDevice = alcOpenDevice(pDeviceList->GetDeviceName(i - 1));
         if (pDevice)
@@ -152,7 +154,7 @@ ALboolean ALFWShutdownOpenAL()
 
     pContext = alcGetCurrentContext();
     pDevice = alcGetContextsDevice(pContext);
-    
+
     alcMakeContextCurrent(NULL);
     alcDestroyContext(pContext);
     alcCloseDevice(pDevice);
@@ -174,9 +176,9 @@ ALboolean ALFWLoadWaveToBuffer(const char *szWaveFile, ALuint uiBufferID, ALenum
         if (SUCCEEDED(g_pWaveLoader->LoadWaveFile(szWaveFile, &WaveID)))
         {
             if ((SUCCEEDED(g_pWaveLoader->GetWaveSize(WaveID, (unsigned long*)&iDataSize))) &&
-                (SUCCEEDED(g_pWaveLoader->GetWaveData(WaveID, (void**)&pData))) &&
-                (SUCCEEDED(g_pWaveLoader->GetWaveFrequency(WaveID, (unsigned long*)&iFrequency))) &&
-                (SUCCEEDED(g_pWaveLoader->GetWaveALBufferFormat(WaveID, &alGetEnumValue, (unsigned long*)&eBufferFormat))))
+                    (SUCCEEDED(g_pWaveLoader->GetWaveData(WaveID, (void**)&pData))) &&
+                    (SUCCEEDED(g_pWaveLoader->GetWaveFrequency(WaveID, (unsigned long*)&iFrequency))) &&
+                    (SUCCEEDED(g_pWaveLoader->GetWaveALBufferFormat(WaveID, &alGetEnumValue, (unsigned long*)&eBufferFormat))))
             {
                 // Set XRAM Mode (if application)
                 if (eaxSetBufferMode && eXRAMBufferMode)
@@ -218,7 +220,7 @@ ALboolean ALFWIsXRAMSupported()
 {
 #ifdef NEWORLD_TARGET_WINDOWS
     ALboolean bXRAM = AL_FALSE;
-    
+
     if (alIsExtensionPresent("EAX-RAM") == AL_TRUE)
     {
         // Get X-RAM Function pointers
@@ -292,13 +294,13 @@ ALboolean ALFWIsEFXSupported()
         alGetAuxiliaryEffectSlotfv = (LPALGETAUXILIARYEFFECTSLOTFV)alGetProcAddress("alGetAuxiliaryEffectSlotfv");
 
         if (alGenEffects &&    alDeleteEffects && alIsEffect && alEffecti && alEffectiv &&    alEffectf &&
-            alEffectfv && alGetEffecti && alGetEffectiv && alGetEffectf && alGetEffectfv &&    alGenFilters &&
-            alDeleteFilters && alIsFilter && alFilteri && alFilteriv &&    alFilterf && alFilterfv &&
-            alGetFilteri &&    alGetFilteriv && alGetFilterf && alGetFilterfv && alGenAuxiliaryEffectSlots &&
-            alDeleteAuxiliaryEffectSlots &&    alIsAuxiliaryEffectSlot && alAuxiliaryEffectSloti &&
-            alAuxiliaryEffectSlotiv && alAuxiliaryEffectSlotf && alAuxiliaryEffectSlotfv &&
-            alGetAuxiliaryEffectSloti && alGetAuxiliaryEffectSlotiv && alGetAuxiliaryEffectSlotf &&
-            alGetAuxiliaryEffectSlotfv)
+                alEffectfv && alGetEffecti && alGetEffectiv && alGetEffectf && alGetEffectfv &&    alGenFilters &&
+                alDeleteFilters && alIsFilter && alFilteri && alFilteriv &&    alFilterf && alFilterfv &&
+                alGetFilteri &&    alGetFilteriv && alGetFilterf && alGetFilterfv && alGenAuxiliaryEffectSlots &&
+                alDeleteAuxiliaryEffectSlots &&    alIsAuxiliaryEffectSlot && alAuxiliaryEffectSloti &&
+                alAuxiliaryEffectSlotiv && alAuxiliaryEffectSlotf && alAuxiliaryEffectSlotfv &&
+                alGetAuxiliaryEffectSloti && alGetAuxiliaryEffectSlotiv && alGetAuxiliaryEffectSlotf &&
+                alGetAuxiliaryEffectSlotfv)
             bEFXSupport = AL_TRUE;
     }
 

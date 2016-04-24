@@ -57,11 +57,11 @@ void Init()
     alEnable(AL_SPEED_OF_SOUND);
     //背景音乐
     char BGMName[256];
-    for (size_t i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
         BGM[i] = -1;
     }
-    for (size_t i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
 #ifdef NEWORLD_TARGET_WINDOWS
         sprintf_s(BGMName, "Audio\\BGM%d.wav", i);
@@ -74,15 +74,18 @@ void Init()
         }
     }
     //行走and跑步声音
-    if (!Device.load("Audio/Run.wav", &Run))Run = -1;
+    const char *wav_run = "Audio/Run.wav", *wav_click = "Audio/Click.wav",
+        *wav_fall = "Audio/Fall.wav", *wav_blockclick = "Audio/BlockClick.wav",
+        *wav_downwater = "Audio/DownWater.wav";
+    if (!Device.load(wav_run, &Run))Run = -1;
     //鼠标单击
-    if (!Device.load("Audio/Click.wav", &Click))Click = -1;
+    if (!Device.load(wav_click, &Click))Click = -1;
     //掉落
-    if (!Device.load("Audio/Fall.wav", &Fall))Fall = -1;
+    if (!Device.load(wav_fall, &Fall))Fall = -1;
     //击打方块
-    if (!Device.load("Audio/BlockClick.wav", &BlockClick))BlockClick = -1;
+    if (!Device.load(wav_blockclick, &BlockClick))BlockClick = -1;
     //下水
-    if (!Device.load("Audio/DownWater.wav", &DownWater))DownWater = -1;
+    if (!Device.load(wav_downwater, &DownWater))DownWater = -1;
     //播放BGM
     if (BGMNum > 0)
     {

@@ -767,10 +767,10 @@ void chunk::MergeFaceRender()
                         }
                         //Render
                         const Blocks::SingleBlock& info = BlockInfo(bl);
-                        if (bl == block(Blocks::AIR) || bl == neighbour && bl != block(Blocks::LEAF) || BlockInfo(neighbour).isOpaque() ||
-                                steps == 0 && info.isTranslucent() ||
-                                steps == 1 && (!info.isTranslucent() || !info.isSolid()) ||
-                                steps == 2 && (!info.isTranslucent() || info.isSolid()))
+                        if (bl == block(Blocks::AIR) || (bl == neighbour && bl != block(Blocks::LEAF)) || BlockInfo(neighbour).isOpaque() ||
+                                (steps == 0 && info.isTranslucent()) ||
+                                (steps == 1 && (!info.isTranslucent() || !info.isSolid())) ||
+                                (steps == 2 && (!info.isTranslucent() || info.isSolid())))
                         {
                             //Not valid block
                             if (valid)
@@ -870,7 +870,7 @@ void chunk::RenderDepthModel()
                         neighbour = World::getblock(gx, gy, gz);
                     else neighbour = getblock(xx, yy, zz);
                     //Render
-                    if (bl == block(Blocks::AIR) || bl == block(Blocks::GLASS) || bl == neighbour && bl != block(Blocks::LEAF) ||
+                    if (bl == block(Blocks::AIR) || bl == block(Blocks::GLASS) || (bl == neighbour && bl != block(Blocks::LEAF)) ||
                             BlockInfo(neighbour).isOpaque() || BlockInfo(bl).isTranslucent())
                     {
                         //Not valid block

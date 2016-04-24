@@ -41,7 +41,9 @@ void Logger::Log(std::string information, CriticalLevel level)
         ss << "(NI) ";
         break;
     default:
-        ss << "(??) ";
+        //为了规避“三字符转义序列”(trigraph convert)
+        //不得出现"??)"三个连续的字符
+        ss << "( ?) ";
     }
     ss << information << endl;
     m_logs.push_back(ss.str());

@@ -9,12 +9,12 @@
 
 namespace EFX
 {
-    extern EAXREVERBPROPERTIES EAXprop;
-    bool Init();
-    void set(ALuint Source);
-    bool UpdateEAXprop();
-    ALboolean CreateAuxEffectSlot(ALuint *puiAuxEffectSlot);
-    ALboolean CreateEffect(ALuint *puiEffect, ALenum eEffectType);
-    ALboolean SetEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect);
+extern EAXREVERBPROPERTIES EAXprop;
+bool Init();
+void set(ALuint Source);
+bool UpdateEAXprop();
+ALboolean CreateAuxEffectSlot(ALuint *puiAuxEffectSlot);
+ALboolean CreateEffect(ALuint *puiEffect, ALenum eEffectType);
+ALboolean SetEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect);
 }
 #endif

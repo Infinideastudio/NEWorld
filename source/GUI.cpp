@@ -339,7 +339,7 @@ void button::update()
         else
             mouseon = false;
 
-        if ((parent->mb == 1 && mouseon || parent->enterp) && focused)
+        if ((parent->mb == 1 && (mouseon || parent->enterp)) && focused)
             pressed = true;
         else
             pressed = false;
@@ -348,7 +348,7 @@ void button::update()
         if (parent->focusid == id) focused = true;
         else focused = false;
 
-        clicked = (parent->mb == 0 && parent->mbl == 1 && mouseon || parent->enterpl && parent->enterp == false) && focused;
+        clicked = (parent->mb == 0 && parent->mbl == 1 && (mouseon || parent->enterpl) && parent->enterp == false) && focused;
         //clicked = lp&&!pressed
 
         if (clicked)AudioSystem::ClickEvent();
@@ -576,7 +576,7 @@ void textbox::update()
         mouseon = true, parent->MouseOnTextbox = true;
     else mouseon = false;
 
-    if ((parent->mb == 1 && mouseon || parent->enterp) && focused) pressed = true;
+    if ((parent->mb == 1 && (mouseon || parent->enterp)) && focused) pressed = true;
     else pressed = false;
 
     if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;       //焦点在此
