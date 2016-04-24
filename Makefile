@@ -10,6 +10,10 @@ else
     CXXFLAGS += -O2
 endif
 
+ifeq ($(PUBLICBUILD), 1)
+    CXXFLAGS += -DPUBLIC_BUILD
+endif
+
 ifeq ($(NOWARNING), 1)
     CXXFLAGS += -w
 else
