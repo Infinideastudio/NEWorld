@@ -4,6 +4,9 @@ NEWORLD_OBJECTS = $(patsubst source/%.cpp, obj/%.o, $(NEWORLD_SOURCES))
 INCLUDE_SOURCES = $(wildcard include/AL/*.cpp)
 INCLUDE_OBJECTS = $(patsubst include/AL/%.cpp, obj/%.o, $(INCLUDE_SOURCES))
 
+PLUGINSDK_SOURCES = $(wildcard PluginSDK/src/*.cpp)
+PLUGINSDK_OBJECTS = $(patsubst PluginSDK/src/%.cpp, obj/%.o, $(PLUGINSDK_SOURCES))
+
 ifeq ($(DEBUG), 1)
     CXXFLAGS += -g -O0
 else
@@ -30,8 +33,8 @@ endif
 
 all: NEWorld
 
-NEWorld: obj/ $(NEWORLD_OBJECTS) $(INCLUDE_OBJECTS)
-	$(CXX) -o NEWorld $(LDFLAGS) -logg -lvorbis -lvorbisfile -lfreetype -lopenal -lglfw3 $(NEWORLD_OBJECTS) $(INCLUDE_OBJECTS)
+NEWorld: obj/ $(NEWORLD_OBJECTS) $(INCLUDE_OBJECTS) $(PLUGINSDK_OBJECTS)
+	$(CXX) -o NEWorld $(LDFLAGS) -logg -lvorbis -lvorbisfile -lfreetype -lopenal -lglfw3 $(NEWORLD_OBJECTS) $(INCLUDE_OBJECTS) $(PLUGINSDK_OBJECTS)
 
 obj/:
 	mkdir -p obj
@@ -41,6 +44,9 @@ obj/%.o: source/%.cpp
 
 obj/%.o: include/AL/%.cpp
 	$(CXX) -I include -std=c++11 $(CXXFLAGS) -c $< -o $@
+
+obj/%.o: PluginSDK/src/%.cpp
+	$(CXX) -fPIC -std=c++11 $(CXXFLAGS) -c $< -o $@
 
 clean:
 	rm -rf obj/*.o NEWorld

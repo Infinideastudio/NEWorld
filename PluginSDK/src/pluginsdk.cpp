@@ -10,7 +10,14 @@ std::map<std::wstring, void*> shared_data;
 
 void load_plugins(wchar_t const * const filename)
 {
+#ifdef NEWORLD_TARGET_WINDOWS
     std::wifstream file(filename, std::ios::in);
+#elif NEWORLD_TARGET_MACOSX
+    std::wifstream file;
+    std::unique_ptr<char> tmp(new char[(wcslen(filename)+1)*3]);
+    wcstombs(tmp.get(), filename, (wcslen(filename)+1));
+    file.open(tmp.get());
+#endif
     std::wstring plugin_location;
     while (file >>  plugin_location)
     {
