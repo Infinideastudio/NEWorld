@@ -13,9 +13,8 @@ using std::thread;
 map<int, PlayerPacket> players;
 std::mutex m;
 
-void handle(SOCKET sockConn)
+void handle(std::shared_ptr<ip::tcp::socket> sock)
 {
-    char receiveBuf[128]; //接收缓存区
     unsigned int onlineID = 0;
     bool IDSet = false;
     m.lock();
@@ -23,26 +22,30 @@ void handle(SOCKET sockConn)
     m.unlock();
     while (true)
     {
-        int recvbyte = recv(sockConn, receiveBuf, sizeof(receiveBuf), 0);
-        if (recvbyte == 0 || recvbyte == -1)
+        int signal[1];
+        try
+        {
+            sock->read_some(buffer(signal));
+        }
+        catch (std::exception&)
         {
             Print("A connection closed.");
-            closesocket(sockConn);
             m.lock();
             players.erase(onlineID);
             m.unlock();
             return;
         }
-        int signal = *receiveBuf; //强制截断，提取signal
-        char* data = receiveBuf + sizeof(int);
+        int len[1];
+        sock->read_some(buffer(len));
+        vector<char> data(len[0]);
         m.lock();
         Print("Online players:" + toString(players.size()));
-        switch (signal)
+        switch (signal[0])
         {
         case PLAYER_PACKET_SEND:
         {
             //客户端玩家数据更新
-            PlayerPacket* pp = (PlayerPacket*)data;
+            PlayerPacket* pp = (PlayerPacket*)data.data();
             if (IDSet&&pp->onlineID != onlineID)
             {
                 Print("The packet is trying to change other player's data. May cheat? (Packet from " + toString(onlineID) + ")", MESSAGE_WARNING);
@@ -75,14 +78,12 @@ void handle(SOCKET sockConn)
         {
             //客户端请求其他玩家的位置
             if (players.size() == 0) break;
-            PlayerPacket* playersData = new PlayerPacket[players.size()];
-            int i = 0;
-            for (auto iter = players.begin(); iter != players.end(); ++iter)
+            char buf[sizeof(PlayerPacket)];
+            for (map<int, PlayerPacket>::iterator it = players.begin(); it != players.end(); it++)
             {
-                playersData[i] = iter->second;
-                i++;
+                memcpy(buf, &it->second, sizeof(PlayerPacket));
+                sock->write_some(buffer(buf));
             }
-            send(sockConn, (const char*)playersData, players.size()*sizeof(PlayerPacket), 0);
             break;
         }
         }
@@ -94,19 +95,19 @@ int main()
 {
     Print("NEWorld Server 0.2.1(Dev.) for NEWorld Alpha 0.5.0(Dev.). Using the developing version to play is not recommended.");
     Print("The server is starting...");
-    Network::init();
+    Network::Init();
     Print("The server is running.");
-    vector<thread> clients;
+    vector<std::thread> clients;
     while (true)
     {
-        clients.push_back(thread(handle, Network::waitForClient()));
+        clients.push_back(std::thread(handle, Network::GetNextClient()));
     }
     Print("The server is stopping...");
-    std::for_each(clients.begin(), clients.end(), [](thread& t)
+    std::for_each(clients.begin(), clients.end(), [](std::thread& t)
     {
         t.join();
     });
-    Network::cleanUp();
+    Network::Clean();
     system("pause");
     return 0;
 }
