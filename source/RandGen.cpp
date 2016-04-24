@@ -107,7 +107,7 @@ inline unsigned int matrix(unsigned int x)
 
 MersenneRandGen::MersenneRandGen()
 {
-    seed(time(NULL));
+    seed((unsigned int)time(NULL));
 }
 
 MersenneRandGen::MersenneRandGen(unsigned int k)
@@ -174,7 +174,7 @@ LinearRandGen::LinearRandGen()
 {
     coefficient = 214013;
     offset = 2531011;
-    seed(time(NULL));
+    seed((unsigned int)time(NULL));
 }
 
 LinearRandGen::LinearRandGen(unsigned int k)
