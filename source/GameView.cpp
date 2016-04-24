@@ -1165,7 +1165,7 @@ public:
             char tmp[64];
             tm timeinfo;
             timeinfo = *localtime(&t);
-            strftime(tmp, sizeof(tmp), "%Y年%m月%d日%H时%M分%S秒", &timeinfo);
+            strftime(tmp, sizeof(tmp), "%Y-%m-%d %H:%M:%S", &timeinfo);
             std::stringstream ss;
             ss << "Screenshots/" << tmp << ".bmp";
             SaveScreenshot(0, 0, windowwidth, windowheight, ss.str());
