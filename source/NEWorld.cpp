@@ -193,7 +193,12 @@ int main()
         glTexCoord2f(0.0, 1.0 - 480.0f / 1024.0f);
         glVertex2i(-1, -1);
         glEnd();
+        Sleep(5);
     }
+#ifdef PUBLIC_BUILD
+    //在公共版本中，停留3秒，为了让用户看清GPLv3标示和法律提示。
+    Sleep(3000);
+#endif
     glDeleteTextures(1, &splTex);
     glfwSwapBuffers(MainWindow);
     glfwPollEvents();

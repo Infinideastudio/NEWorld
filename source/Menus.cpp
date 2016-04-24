@@ -36,19 +36,21 @@ void SaveOptions();
 
 string Str[] =
 {
-    "NEWorld Main Version:" + major_version + minor_version + ext_version ,
-    "Copyright (c) 2016 Infinideastudio under the Public Domain" ,
-    "Welcome to develop with us!",
-    "Contributers:" ,
-    "qiaozhanrong,Null,SuperSodaSea,ascchrvalstr,DREAMWORLDVOID," ,
-    "jacky8399,0u0,jelawat地鼠,HydroH,Michael R,dtcxzyw" ,
+    "NEWorld Main Version: " + major_version + minor_version + ext_version,
+    "Copyright (C) 2016 NEWorld Team",
+    "NEWorld is released under the terms of GPLv3, thus comes with ABSOLUTELY NO WARRANTY.",
+    "This is a free software, and you are welcome to redistribute it under certain conditions.",
+    "",
+    "Contributers:",
+    "qiaozhanrong, Null, SuperSodaSea, ascchrvalstr, DREAMWORLDVOID,",
+    "jacky8399, 0u0, jelawat地鼠, HydroH, Michael R, dtcxzyw, DLaboratory" ,
     "" ,
-    "PS: Since this is a version in development, we welcome any type of suggestion or question.",
-    "Everyone is welcomed to send issues on the following project site:",
-    "https://github.com/Infinideastudio/NEWorld",
-    "You can submit bug reports or request new features there.",
+    "PS: Since this is a version in development, any type of suggestions or questions are welcomed.",
+    "Feel free to submit bug reports, post your personal ideas, or join the development if you have",
+    "practical experience on C/C++, git, data structures & algorithms.",
+    "Git Repo is on [https://github.com/Infinideastudio/NEWorld]",
     "If you have any problems, please contact us.",
-    "Thank you very much!"
+    "DLaboratory's email address: dlaboratory@126.com"
 };
 
 namespace Menus
@@ -363,6 +365,8 @@ void WorldMenu::onUpdate()
         //删除世界文件
 #ifdef NEWORLD_TARGET_WINDOWS
         system((string("rd /s/q \"Worlds\\") + chosenWorldName + "\"").c_str());
+#elif NEWORLD_TARGET_MACOSX
+        system(((string)"rm -rf Worlds/" + chosenWorldName).c_str());
 #endif
         deletebtn.clicked = false;
         World::Name = "";
@@ -669,7 +673,7 @@ void Info::onLoad()
 
 void Info::onRender()
 {
-    for (int i = 0; i < 13; ++i)
+    for (int i = 0; i < 15; ++i)
         TextRenderer::renderString(10, 10+20*i, Str[i]);
 }
 
