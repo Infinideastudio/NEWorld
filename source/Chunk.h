@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-﻿#ifndef CHUNK_H
+#ifndef CHUNK_H
 #define CHUNK_H
 
 #include "Definitions.h"

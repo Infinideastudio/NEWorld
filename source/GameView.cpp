@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-﻿#include "GameView.h"
+#include "GameView.h"
 #include "Blocks.h"
 #include "Textures.h"
 #include "GLProc.h"
