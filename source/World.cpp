@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-﻿#include "World.h"
+#include "World.h"
 #include "Textures.h"
 #include "Renderer.h"
 #include "WorldGen.h"

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-﻿#include "Textures.h"
+#include "Textures.h"
 
 int BLOCKTEXTURE_SIZE = 256, BLOCKTEXTURE_UNITSIZE = 32, BLOCKTEXTURE_UNITS = 8;
 
