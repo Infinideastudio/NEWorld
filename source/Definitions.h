@@ -24,7 +24,7 @@
 // Optional macros above should be set in compiling settings
 
 #ifdef NEWORLD_TARGET_WINDOWS
-#include <WinSock2.h>
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #endif //NEWORLD_TARGET_WINDOWS
 

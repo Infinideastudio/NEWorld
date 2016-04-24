@@ -19,39 +19,36 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "Definitions.h"
+#define ASIO_STANDALONE
+#include <asio/asio.hpp>
+using namespace asio;
 
 #ifdef NEWORLD_TARGET_WINDOWS
 namespace Network
 {
-class Request
-{
-public:
-    Request(const char* dataSend, int dataLen, int signal, bool important = false) :
-        _dataSend(dataSend), _dataLen(dataLen), _signal(signal), _important(important) {}
-    Request(const char* dataSend, int dataLen, int signal, std::function<void(void*, int)> callback, bool important = false) :
-        _dataSend(dataSend), _dataLen(dataLen), _signal(signal), _callback(callback), _important(important) {}
-    friend ThreadFunc networkThread(void*);
-    bool isImportant()
-    {
-        return _important;
-    }
-private:
-    int _signal;
-    const char* _dataSend;
-    int _dataLen;
-    bool _important;
-    std::function<void(void*, int)> _callback;
-};
-extern mutex_t mutex;
-void init(string ip, unsigned short port);
-int getRequestCount();
-SOCKET getClientSocket();
-ThreadFunc networkThread(void*);
-void pushRequest(Request& r);
-void cleanUp();
-}
-#endif
+    void Init(const string& ip, uint16 port);
+    void Clean();
 
+    class Request
+    {
+    public:
+        Request(const vector<char>& _data, int signal) :
+            data(_data), _signal(signal) {}
+        Request(const vector<char>& _data, int signal, std::function<void(void*, int)> callback) :
+            data(_data), _signal(signal), _callback(callback) {}
+        int _signal;
+        vector<char> data;
+        std::function<void(void*, int)> _callback;
+    };
+
+    //private section
+    extern io_service m_ios;
+    extern ip::tcp::socket* m_socket;
+    extern thread_t m_thread;
+    extern bool m_thread_running;
+    extern queue<Request> m_req;
+
+    ThreadFunc NetworkThreadFunc(void*);
+}
 #endif
