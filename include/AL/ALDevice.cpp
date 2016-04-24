@@ -90,7 +90,7 @@ void ALDevice::Updatesource(ALuint Source, ALfloat sourcePos[], ALfloat sourceVe
     alSourcefv(Source, AL_POSITION, sourcePos);
     alSourcefv(Source, AL_VELOCITY, sourceVel);
 }
-bool ALDevice::load(char * FileName, ALuint *uiBuffer)
+bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
 {
     alGenBuffers(1, uiBuffer);
     ALchar            *pData = nullptr;
@@ -98,19 +98,20 @@ bool ALDevice::load(char * FileName, ALuint *uiBuffer)
     ALenum            eBufferFormat = 0;
     //WaveLoader
     {
-    CWaves WaveLoader;
-    WAVEID            WaveID;
-    if (SUCCEEDED(WaveLoader.LoadWaveFile(FileName, &WaveID))) {
-        if ((SUCCEEDED(WaveLoader.GetWaveSize(WaveID, (unsigned long*)&iDataSize))) &&
-            (SUCCEEDED(WaveLoader.GetWaveData(WaveID, (void**)&pData))) &&
-            (SUCCEEDED(WaveLoader.GetWaveFrequency(WaveID, (unsigned long*)&iFrequency))) &&
-            (SUCCEEDED(WaveLoader.GetWaveALBufferFormat(WaveID, &alGetEnumValue, (unsigned long*)&eBufferFormat))))
+        CWaves WaveLoader;
+        WAVEID            WaveID;
+        if (SUCCEEDED(WaveLoader.LoadWaveFile(FileName, &WaveID)))
         {
-            alBufferData(*uiBuffer, eBufferFormat, pData, iDataSize, iFrequency);
-            WaveLoader.DeleteWaveFile(WaveID);
-            return true;
+            if ((SUCCEEDED(WaveLoader.GetWaveSize(WaveID, (unsigned long*)&iDataSize))) &&
+                    (SUCCEEDED(WaveLoader.GetWaveData(WaveID, (void**)&pData))) &&
+                    (SUCCEEDED(WaveLoader.GetWaveFrequency(WaveID, (unsigned long*)&iFrequency))) &&
+                    (SUCCEEDED(WaveLoader.GetWaveALBufferFormat(WaveID, &alGetEnumValue, (unsigned long*)&eBufferFormat))))
+            {
+                alBufferData(*uiBuffer, eBufferFormat, pData, iDataSize, iFrequency);
+                WaveLoader.DeleteWaveFile(WaveID);
+                return true;
+            }
         }
-    }
     }
     //OggLoader
     {
@@ -121,7 +122,8 @@ bool ALDevice::load(char * FileName, ALuint *uiBuffer)
 
         pOggVorbisFile = fopen(FileName, "rb");
         if (!pOggVorbisFile)return false;
-        if (ov_open(pOggVorbisFile, &sOggVorbisFile, NULL, 0) == 0) {
+        if (ov_open(pOggVorbisFile, &sOggVorbisFile, NULL, 0) == 0)
+        {
             psVorbisInfo = ov_info(&sOggVorbisFile, -1);
             if (psVorbisInfo)
             {
@@ -173,9 +175,10 @@ bool ALDevice::load(char * FileName, ALuint *uiBuffer)
                     do
                     {
                         ulBytesWritten = DecodeOggVorbis(&sOggVorbisFile, pData, iDataSize, ulChannels);
-                       // for (unsigned long i = 0; i < ulBytesWritten; i++)data.push_back(pData[i]);
+                        // for (unsigned long i = 0; i < ulBytesWritten; i++)data.push_back(pData[i]);
                         copy(pData, pData + ulBytesWritten, iter);
-                    } while (ulBytesWritten);
+                    }
+                    while (ulBytesWritten);
                     alBufferData(*uiBuffer, eBufferFormat, data.data(), data.size(), iFrequency);
                     free(pData);
                     data.clear();
@@ -205,8 +208,8 @@ ALuint ALDevice::Play(ALuint uiBuffer, bool loop, float gain,  ALfloat sourcePos
     ALuint uiSource;
     alGenSources(1, &uiSource);
     alSourcei(uiSource, AL_BUFFER, uiBuffer);
-    alSourcei(uiSource, AL_LOOPING, loop);  // 设置音频播放是否为循环播放，AL_FALSE是不循环 
-    alSourcef(uiSource, AL_GAIN, gain);  //设置音量大小，1.0f表示最大音量。openAL动态调节音量大小就用这个方法 
+    alSourcei(uiSource, AL_LOOPING, loop);  // 设置音频播放是否为循环播放，AL_FALSE是不循环
+    alSourcef(uiSource, AL_GAIN, gain);  //设置音量大小，1.0f表示最大音量。openAL动态调节音量大小就用这个方法
     //为省事，直接统一设置衰减因子
     alSourcef(uiSource, AL_ROLLOFF_FACTOR, 5.0);
     //alSourcef(uiSource, AL_MAX_DISTANCE, 30.0);

@@ -231,3 +231,8 @@ NEWorld
 
 # NEWorld options.ini
 options.ini
+
+# Eclipse
+.project
+.cproject
+.settings
