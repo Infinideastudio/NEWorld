@@ -10,7 +10,7 @@ std::map<std::wstring, void*> shared_data;
 
 void load_plugins(wchar_t const * const filename)
 {
-#ifdef NEWORLD_TARGET_WINDOWS
+#ifdef _WIN32
     std::wifstream file(filename, std::ios::in);
 #elif NEWORLD_TARGET_MACOSX
     std::wifstream file;
