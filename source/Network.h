@@ -21,7 +21,13 @@
 
 #include "Definitions.h"
 #define ASIO_STANDALONE
+
+#ifdef NEWORLD_TARGET_WINDOWS
 #include <asio/asio.hpp>
+#elif NEWORLD_TARGET_MACOSX
+#include <asio.hpp>
+#endif
+
 using namespace asio;
 
 #ifdef NEWORLD_TARGET_WINDOWS
