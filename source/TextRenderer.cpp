@@ -1,3 +1,21 @@
+/*
+ * NEWorld: An free game with similar rules to Minecraft.
+ * Copyright (C) 2016 NEWorld Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "TextRenderer.h"
 #include "Textures.h"
 
@@ -5,6 +23,7 @@ FT_Library TextRenderer::library;
 FT_Face TextRenderer::fontface;
 FT_GlyphSlot TextRenderer::slot;
 TextRenderer::UnicodeChar TextRenderer::chars[65536];
+map<string, wchar_t*> TextRenderer::wstr_cache;
 unsigned int TextRenderer::gbe, TextRenderer::Font;
 int TextRenderer::gloop, TextRenderer::ww, TextRenderer::wh;
 float TextRenderer::r = 0.0f, TextRenderer::g = 0.0f, TextRenderer::b = 0.0f, TextRenderer::a = 1.0f;
@@ -79,10 +98,21 @@ void TextRenderer::loadchar(unsigned int uc)
 
 void MBToWC(const char* lpcszStr, wchar_t*& lpwszStr, int dwSize)
 {
+    //原来的写法就是错的，dwSize是字符个数，不是字节数大小
+    //这种写法在Windows上居然能正常运行，真是奇葩 --DLaboratory
+    dwSize *= sizeof(wchar_t);
     lpwszStr = (wchar_t*)malloc(dwSize);
     memset(lpwszStr, 0, dwSize);
-    int iSize = (MByteToWChar(lpwszStr, lpcszStr, strlen(lpcszStr)) + 1)*sizeof(wchar_t);
-    lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
+    //根据man page中给出的描述
+    //The mbstowcs() function converts a multibyte character string s,
+    //beginning in the initial conversion state, into a wide character
+    //string pwcs. No more than n wide characters are stored. A
+    //terminating null wide character is appended, if there is room.
+    //所以我们需要多预留几个位置给结束符 --DLaboratory
+    int iSize = (MByteToWChar(lpwszStr, lpcszStr, strlen(lpcszStr) + 5) + 1)*sizeof(wchar_t);
+    //出现iSize < dwSize的情况时就不应该再realloc了 --DLaboratory
+    if(iSize > dwSize)
+        lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
 }
 
 int TextRenderer::getStrWidth(string s)
@@ -90,7 +120,17 @@ int TextRenderer::getStrWidth(string s)
     UnicodeChar c;
     int uc, res = 0;
     wchar_t* wstr = nullptr;
-    MBToWC(s.c_str(), wstr, s.length()+128);
+    if(wstr_cache.size() > max_cache_size)
+        clearCache();
+    if(wstr_cache.find(s) == wstr_cache.end())
+    {
+        MBToWC(s.c_str(), wstr, s.length()+128);
+        wstr_cache[s] = wstr;
+    }
+    else
+    {
+        wstr = wstr_cache[s];
+    }
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {
         uc = wstr[k];
@@ -102,7 +142,6 @@ int TextRenderer::getStrWidth(string s)
         }
         res += static_cast<int>(c.advance / stretch);
     }
-    free(wstr);
     return res;
 }
 
@@ -113,12 +152,20 @@ void TextRenderer::renderString(int x, int y, string glstring)
     int span = 0;
     double wid = pow(2, ceil(log2(32 * stretch)));
     wchar_t* wstr = nullptr;
-    MBToWC(glstring.c_str(), wstr, glstring.length()+128);
-
+    if(wstr_cache.size() > max_cache_size)
+        clearCache();
+    if(wstr_cache.find(glstring) == wstr_cache.end())
+    {
+        MBToWC(glstring.c_str(), wstr, glstring.length()+128);
+        wstr_cache[glstring] = wstr;
+    }
+    else
+    {
+        wstr = wstr_cache[glstring];
+    }
     glEnable(GL_TEXTURE_2D);
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {
-
         uc = wstr[k];
         c = chars[uc];
         if (uc == (int)'\n')
@@ -165,7 +212,6 @@ void TextRenderer::renderString(int x, int y, string glstring)
         span += static_cast<int>(c.advance / stretch);
     }
     glColor4f(1.0, 1.0, 1.0, 1.0);
-    free(wstr);
 }
 
 void TextRenderer::renderASCIIString(int x, int y, string glstring)
@@ -182,4 +228,11 @@ void TextRenderer::renderASCIIString(int x, int y, string glstring)
     glListBase(gbe);
     glCallLists((GLsizei)glstring.length(), GL_UNSIGNED_BYTE, glstring.c_str());
     glPopMatrix();
+}
+
+void TextRenderer::clearCache()
+{
+    for(map<string, wchar_t*>::iterator it = wstr_cache.begin(); it != wstr_cache.end(); ++it)
+        free(it->second);
+    wstr_cache.clear();
 }

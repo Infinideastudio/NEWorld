@@ -1,4 +1,22 @@
-﻿#include "World.h"
+/*
+ * NEWorld: An free game with similar rules to Minecraft.
+ * Copyright (C) 2016 NEWorld Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "World.h"
 #include "Textures.h"
 #include "Renderer.h"
 #include "WorldGen.h"
@@ -40,8 +58,8 @@ void Init()
     _mkdir(("Worlds/" + Name + "/").c_str());
     _mkdir(("Worlds/" + Name + "/chunks").c_str());
 #elif NEWORLD_TARGET_MACOSX
-    mkdir(("Worlds/" + Name + "/").c_str(), 777);
-    mkdir(("Worlds/" + Name + "/chunks").c_str(), 777);
+    mkdir(("Worlds/" + Name + "/").c_str(), 0755);
+    mkdir(("Worlds/" + Name + "/chunks").c_str(), 0755);
 #endif
 
     pWorldGen = new WorldGenerator(3404);
@@ -615,9 +633,9 @@ void updateblock(int x, int y, int z, bool updated, int depth)
         }
         br = brts[maxbrightness];
         if (blks[maxbrightness] == block(Blocks::WATER))
-            br = max(br - 2, BRIGHTNESSMIN);
+            br = max(br - 2, (int)BRIGHTNESSMIN);
         else
-            br = max(br - 1, BRIGHTNESSMIN);
+            br = max(br - 1, (int)BRIGHTNESSMIN);
         if (skylighted && br < skylight)
             br = skylight;
         br = max(br, BRIGHTNESSMIN);
@@ -683,16 +701,22 @@ block getblock(int x, int y, int z, block mask, chunk* cptr)
 {
     //获取方块
     int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
-    if (chunkOutOfBound(cx, cy, cz)) return block(Blocks::AIR);
+    if (chunkOutOfBound(cx, cy, cz))
+        return block(Blocks::AIR);
     int bx = getblockpos(x), by = getblockpos(y), bz = getblockpos(z);
     if (cptr != nullptr && cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
-    {
         return cptr->getblock(bx, by, bz);
-    }
     chunk* ci = getChunkPtr(cx, cy, cz);
-    if (ci == EmptyChunkPtr) return block(Blocks::AIR);
-    if (ci != nullptr) return ci->getblock(bx, by, bz);
+    if (ci == EmptyChunkPtr)
+        return block(Blocks::AIR);
+    if (ci != nullptr)
+        return ci->getblock(bx, by, bz);
     return mask;
+}
+
+block getblock(const Vector3D &pos)
+{
+    return getblock(pos.px, pos.py, pos.pz);
 }
 
 brightness getbrightness(int x, int y, int z, chunk* cptr)
@@ -719,7 +743,7 @@ brightness getbrightness(int x, int y, int z, chunk* cptr)
     return skylight;
 }
 
-void setblock(int x, int y, int z, block Blockname, chunk* cptr)
+void setblock(int x, int y, int z, const block &Block, chunk* cptr)
 {
     //设置方块
     int cx = getchunkpos(x), cy = getchunkpos(y), cz = getchunkpos(z);
@@ -728,7 +752,7 @@ void setblock(int x, int y, int z, block Blockname, chunk* cptr)
     if (cptr != nullptr && cptr != EmptyChunkPtr &&
             cx == cptr->cx && cy == cptr->cy && cz == cptr->cz)
     {
-        cptr->setblock(bx, by, bz, Blockname);
+        cptr->setblock(bx, by, bz, Block);
         updateblock(x, y, z, true);
     }
     if (!chunkOutOfBound(cx, cy, cz))
@@ -743,10 +767,15 @@ void setblock(int x, int y, int z, block Blockname, chunk* cptr)
         }
         if (i != nullptr)
         {
-            i->setblock(bx, by, bz, Blockname);
+            i->setblock(bx, by, bz, Block);
             updateblock(x, y, z, true);
         }
     }
+}
+
+void setblock(const Vector3D &pos, const block &Block)
+{
+    setblock(pos.px, pos.py, pos.pz, Block);
 }
 
 void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr)
@@ -967,88 +996,90 @@ void destroyAllChunks()
     chunkUnloads = 0;
 }
 
-void buildtree(int x, int y, int z)
+bool buildtree(int x, int y, int z)
 {
+    int i, ix, iy, iz;
     //对生成条件进行更严格的检测
-    //一：正上方五格必须为空气
-    for (int i = y + 1; i < y + 6; i++)
+    //正上方五格必须为空气
+    for (i = y + 1; i < y + 6; i++)
     {
-        if (getblock(x, i, z) != block(Blocks::AIR))return;
-    }
-    //二：周围五格不能有树
-    for (int ix = x - 4; ix < x + 4; ix++)
-    {
-        for (int iy = y - 4; iy < y + 4; iy++)
-        {
-            for (int iz = z - 4; iz < z + 4; iz++)
-            {
-                if (getblock(ix, iy, iz) == block(Blocks::WOOD) || getblock(ix, iy, iz) == block(Blocks::LEAF))return;
-            }
-        }
+        if (getblock(x, i, z) != block(Blocks::AIR))
+            return false;
     }
     //开始生成
     //设置泥土
     setblock(x, y, z, block(Blocks::DIRT));
     //设置树干
-    int h = 0;//高度
-    //测算泥土数量
-    int Dirt = 0;//泥土数
-    for (int ix = x - 4; ix < x + 4; ix++)
+    int h = 0, dirt = 0;//泥土数
+    for (ix = x - 4; ix < x + 4; ix++)
     {
-        for (int iy = y - 4; iy < y; iy++)
+        for (iy = y - 4; iy < y; iy++)
         {
-            for (int iz = z - 4; iz < z + 4; iz++)
+            for (iz = z - 4; iz < z + 4; iz++)
             {
-                if (getblock(ix, iy, iz) == block(Blocks::DIRT))Dirt++;
+                if (getblock(ix, iy, iz) == block(Blocks::DIRT))
+                    ++dirt;
             }
         }
     }
     //测算最高高度
-    for (int i = y + 1; i < y + 16; i++)
+    for (h = 0; h < 16 && (getblock(x, y + 1 + h, z) == block(Blocks::AIR)); h++);
+    //取最小值
+    h = static_cast<int>( min( (double)h, dirt * 15 / 268 * max(pRandGen->get_double_co(), 0.8) ) );
+    if (h < 7)
+        return false;
+
+    //使用lambda表达式递归模拟树生长
+    int begin = y + h * 0.618;
+    Vector3D middle(x, y + h, z);
+    Vector3D vec[5] = { { 0, 1, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 1, 0, 0 }, { -1, 0, 0 } };
+    float k = 0.2f;
+    float s = h * h * k;
+    //random_shuffle(vec, vec + 5);
+    function<void(Vector3D,int,block,bool)> grow = [=,&grow,&vec](Vector3D pos, int depth, block parent, bool up)->void
     {
-        if (getblock(x, i, z) == block(Blocks::AIR))
+        if ((depth == 0) || (getblock(pos) != Blocks::AIR) ||
+        ((!up) && (Distancen(middle.px, middle.py, middle.pz, pos.px, pos.py, pos.pz) > s * ((pos.py > y + h) ? 0.4 : 1.0))))
         {
-            h++;
+            return;
+        }
+        block current;
+        switch (parent.ID)
+        {
+        case Blocks::DIRT:
+            current = Blocks::WOOD;
+            break;
+
+        case Blocks::WOOD:
+            if(up)
+                current = Blocks::WOOD;
+            else
+                current = pRandGen->one_in(10) ? Blocks::WOOD : Blocks::LEAF;
+            break;
+
+        case Blocks::LEAF:
+            current = Blocks::LEAF;
+            break;
+        }
+
+        setblock(pos.px, pos.py, pos.pz, current);
+
+        if (pos.py < begin)
+        {
+            grow(pos + Vector3D(0, 1, 0), depth - 1, current, true);
         }
         else
         {
-            break;
-        }
-    }
-    //取最小值
-    h = static_cast<int>(min((double)h, Dirt * 15 / 268 * max(pRandGen->get_double_co(), 0.8)));
-    if (h < 7)return;
-    //开始生成树干
-    for (int i = y + 1; i < y + h + 1; i++)
-    {
-        setblock(x, i, z, block(Blocks::WOOD));
-    }
-    //设置树叶及枝杈
-    //计算树叶起始生成高度
-    int leafh = int(double(h)*0.618) + 1;//黄金分割比大法好！！！
-    int distancen2 = int(double((h - leafh + 1)*(h - leafh + 1))) + 1;
-    for (int iy = y + leafh; iy < y + int(double(h)*1.382) + 2; iy++)
-    {
-        for (int ix = x - 6; ix < x + 6; ix++)
-        {
-            for (int iz = z - 6; iz < z + 6; iz++)
+            for (int i = 0; i < 5; i++)
             {
-                int distancen = Distancen(ix, iy, iz, x, y + leafh + 1, z);
-                if ((getblock(ix, iy, iz) == block(Blocks::AIR)) && (distancen <distancen2))
-                {
-                    if ((distancen <= distancen2 / 9) && (pRandGen->x_in_y(7, 10)))//生成枝杈
-                    {
-                        setblock(ix, iy, iz, block(Blocks::WOOD));
-                    }
-                    else//生成树叶
-                    {
-                        //鉴于残缺树叶的bug,不考虑树叶密度
-                        setblock(ix, iy, iz, block(Blocks::LEAF));
-                    }
-                }
+                grow(pos + vec[i], depth - 1, current, false);
             }
         }
-    }
+
+    };
+    Vector3D pos(x, y + 1, z);
+    grow(pos, h * 1.5, Blocks::DIRT, true);
+    return true;
 }
 
 void explode(int x, int y, int z, int r, chunk* c)
@@ -1062,7 +1093,7 @@ void explode(int x, int y, int z, int r, chunk* c)
             {
                 int distsqr = (fx - x)*(fx - x) + (fy - y)*(fy - y) + (fz - z)*(fz - z);
                 if (distsqr <= maxdistsqr*0.75 ||
-                        distsqr <= maxdistsqr && pRandGen->get_double_co() > (distsqr - maxdistsqr*0.6) / (maxdistsqr*0.4))
+                        (distsqr <= maxdistsqr && pRandGen->get_double_co() > (distsqr - maxdistsqr*0.6) / (maxdistsqr*0.4)))
                 {
                     block e = World::getblock(fx, fy, fz);
                     if (e == block(Blocks::AIR)) continue;
@@ -1132,7 +1163,7 @@ void ProcessBuq()
         bz = B.cz;
         for (int i = 0; i < 6; i++)
         {
-            b = getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
+            b = World::getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);
             if (b->ID != Blocks::AIR)
                 ExecBUPD(Blocks::BUDDP(B.origon, B.upd, b, B.dudp, nullptr, bx + vec[i][0], by + vec[i][1], bz + vec[i][2] ));
         }
