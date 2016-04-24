@@ -225,7 +225,6 @@ int main()
     BlockTextures = Textures::LoadRGBATexture("Textures/blocks/Terrain.bmp", "Textures/blocks/Terrainmask.bmp");
     BlockTextures3D = Textures::LoadBlock3DTexture("Textures/blocks/Terrain3D.bmp", "Textures/blocks/Terrain3Dmask.bmp");
     LoadItemsTextures();
-#ifdef NEWORLD_TARGET_WINDOWS
     //Init plugin sdk
     init([](int x, int y, int z) -> unsigned short
     {
@@ -235,7 +234,6 @@ int main()
         World::updateblock(x, y, z, val);
     });
     load_plugins(L"plugins.ini");
-#endif
     AudioSystem::Init();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -254,9 +252,7 @@ int main()
 
     //Clean
     World::destroyAllChunks();
-#ifdef NEWORLD_TARGET_WINDOWS
     unload_plugins();
-#endif
     delete World::pWorldGen;
     glfwTerminate();
     TextRenderer::clearCache();
