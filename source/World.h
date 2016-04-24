@@ -1,3 +1,21 @@
+/*
+ * NEWorld: An free game with similar rules to Minecraft.
+ * Copyright (C) 2016 NEWorld Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef WORLD_H
 #define WORLD_H
 
@@ -58,15 +76,17 @@ chunk* getChunkPtr(int x, int y, int z);
 #define getchunkpos(n) ((n)>>4)
 #define getblockpos(n) ((n)&15)
 
-inline bool chunkOutOfBound(int x, int y, int z);
-inline bool chunkLoaded(int x, int y, int z);
+bool chunkOutOfBound(int x, int y, int z);
+bool chunkLoaded(int x, int y, int z);
 vector<Hitbox::AABB> getHitboxes(const Hitbox::AABB& box);
 bool inWater(const Hitbox::AABB& box);
 void renderblock(int x, int y, int z, chunk* chunkptr);
 void updateblock(int x, int y, int z, bool blockchanged, int depth = 0);
 block getblock(int x, int y, int z, block mask = block(Blocks::AIR), chunk* cptr = nullptr);
+block getblock(const Vector3D &pos);
 brightness getbrightness(int x, int y, int z, chunk* cptr = nullptr);
-void setblock(int x, int y, int z, block Block, chunk* cptr = nullptr);
+void setblock(int x, int y, int z, const block &Block, chunk* cptr = nullptr);
+void setblock(const Vector3D &pos, const block &Block);
 void Modifyblock(int x, int y, int z, block Block, chunk* cptr = nullptr);
 void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr = nullptr);
 void putblock(int x, int y, int z, block Block);
@@ -83,7 +103,7 @@ void calcVisible(double xpos, double ypos, double zpos, Frustum& frus);
 void saveAllChunks();
 void destroyAllChunks();
 
-void buildtree(int x, int y, int z);
+bool buildtree(int x, int y, int z);
 void explode(int x, int y, int z, int r, chunk* c = nullptr);
 
 }
