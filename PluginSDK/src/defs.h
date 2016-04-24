@@ -21,25 +21,27 @@ inline void unload_library(dll_handle handle)
     FreeLibrary(handle);
 }
 
-#elif defined(__unix__) || defined(unix)
+#elif defined(__unix__) || defined(unix) || defined(NEWORLD_TARGET_MACOSX)
 #include <dlfcn.h>
+#include <wchar.h>
+#include <memory>
+#include <cstdlib>
+using std::size_t;
+using std::unique_ptr;
 
 typedef void* dll_handle;
 
 inline dll_handle load_library(wchar_t const * const file_name)
 {
-    size_t len = wcslen(file_name);
+    size_t len = wcslen(file_name)+1;
     unique_ptr<char> tmp(new char[len * 3]);
     wcstombs(tmp.get(), file_name, len);
-    return dlopen(tmp.get(), RTLD_DEFAULT);
+    return dlopen(tmp.get(), RTLD_NOW);
 }
 
 inline void* get_address(dll_handle handle, char const * const symbol_name)
 {
-    size_t len = wcslen(symbol_name);
-    unique_ptr<char> tmp(new char[len * 3]);
-    wcstombs(tmp.get(), symbol_name, len);
-    return dlsym(handle, tmp.get());
+    return dlsym(handle, symbol_name);
 }
 
 inline void unload_library(dll_handle handle)
