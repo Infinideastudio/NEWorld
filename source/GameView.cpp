@@ -1400,11 +1400,7 @@ public:
             TextRenderer::renderASCIIString(0, (pos++) * 16, "load:" + pack(World::chunks.size()) + " unload:" + pack(World::unloadedChunks) + " render:" + pack(WorldRenderer::RenderChunkList.size()) + " update:" + pack(World::updatedChunks));
 
             if (multiplayer)
-            {
-                MutexLock(Network::mutex);
-                TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::getRequestCount) + "/" + pack(NetworkRequestMax) + " network requests");
-                MutexUnlock(Network::mutex);
-            }
+                TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::m_req.size()) + "/" + pack(NetworkRequestMax) + " network requests");
         }
         else
         {
@@ -1868,7 +1864,7 @@ public:
         {
             Player::name = "";
             Player::onlineID = pRandGen->get_u16();
-            Network::init(serverip, port);
+            Network::Init(serverip, port);
         }
         //初始化游戏状态
         if (LoadGame())
@@ -1943,7 +1939,7 @@ public:
             glDeleteBuffersARB(World::vbuffersShouldDelete.size(), World::vbuffersShouldDelete.data());
             World::vbuffersShouldDelete.clear();
         }
-        if (multiplayer) Network::cleanUp();
+        if (multiplayer) Network::Clean();
         chatMessages.clear();
         GUI::BackToMain();
     }
