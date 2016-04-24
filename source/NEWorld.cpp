@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-﻿#include "Definitions.h"
+#include "Definitions.h"
 #include "Renderer.h"
 #include "TextRenderer.h"
 #include "World.h"
