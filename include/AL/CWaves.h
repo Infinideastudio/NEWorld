@@ -13,7 +13,8 @@
 
 typedef unsigned short      WORD;
 typedef unsigned long       DWORD;
-struct GUIDX {
+struct GUIDX
+{
     unsigned long  Data1;
     unsigned short Data2;
     unsigned short Data3;
@@ -66,15 +67,17 @@ typedef struct tWAVEFORMATEX
 
 #ifndef _WAVEFORMATEXTENSIBLE_
 #define _WAVEFORMATEXTENSIBLE_
-typedef struct {
+typedef struct
+{
     WAVEFORMATEX    Format;
-    union {
+    union
+    {
         WORD wValidBitsPerSample;       /* bits of precision  */
         WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
         WORD wReserved;                 /* If neither applies, set to zero. */
     } Samples;
     DWORD           dwChannelMask;      /* which channels are */
-                                        /* present in stream  */
+    /* present in stream  */
     GUIDX            SubFormat;
 } WAVEFORMATEXTENSIBLE, *PWAVEFORMATEXTENSIBLE;
 #endif // !_WAVEFORMATEXTENSIBLE_
@@ -92,7 +95,7 @@ typedef struct
 typedef int (__cdecl *PFNALGETENUMVALUE)( const char *szEnumName );
 typedef int    WAVEID;
 
-class CWaves  
+class CWaves
 {
 public:
     CWaves();
@@ -118,7 +121,7 @@ public:
 private:
     WAVERESULT ParseFile(const char *szFilename, LPWAVEFILEINFO pWaveInfo);
     WAVEID InsertWaveID(LPWAVEFILEINFO pWaveFileInfo);
-    
+
     LPWAVEFILEINFO    m_WaveIDs[MAX_NUM_WAVEID];
 };
 

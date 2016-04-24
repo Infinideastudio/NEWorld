@@ -1,6 +1,8 @@
 #ifndef EXPORT_VARIABLES_H
 #define EXPORT_VARIABLES_H
 
+#ifdef NEWORLD_TARGET_WINDOWS
+
 #include "pluginsdk.h"
 #include <vector>
 #include <string>
@@ -37,4 +39,7 @@ extern get_block_func get_func;
 extern update_block_func update_func;
 DLLIMPEXP extern std::map<std::wstring, command> commands;
 extern "C" DLLIMPEXP void init(get_block_func _get, update_block_func _update);
-#endif
+
+#endif //NEWORLD_TARGET_WINDOWS
+
+#endif //EXPORT_VARIABLES_H

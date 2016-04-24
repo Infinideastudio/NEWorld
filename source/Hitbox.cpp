@@ -26,22 +26,22 @@ bool stuck = false;
 
 bool inXclip(const AABB& boxA, const AABB& boxB)
 {
-    if (boxA.xmin > boxB.xmin && boxA.xmin < boxB.xmax || boxA.xmax > boxB.xmin && boxA.xmax < boxB.xmax) return true;
-    if (boxB.xmin > boxA.xmin && boxB.xmin < boxA.xmax || boxB.xmax > boxA.xmin && boxB.xmax < boxA.xmax) return true;
+    if ((boxA.xmin > boxB.xmin && boxA.xmin < boxB.xmax) || (boxA.xmax > boxB.xmin && boxA.xmax < boxB.xmax) || 
+        (boxB.xmin > boxA.xmin && boxB.xmin < boxA.xmax) || (boxB.xmax > boxA.xmin && boxB.xmax < boxA.xmax)) return true;
     return false;
 }
 
 bool inYclip(const AABB& boxA, const AABB& boxB)
 {
-    if (boxA.ymin > boxB.ymin && boxA.ymin < boxB.ymax || boxA.ymax > boxB.ymin && boxA.ymax < boxB.ymax) return true;
-    if (boxB.ymin > boxA.ymin && boxB.ymin < boxA.ymax || boxB.ymax > boxA.ymin && boxB.ymax < boxA.ymax) return true;
+    if ((boxA.ymin > boxB.ymin && boxA.ymin < boxB.ymax) || (boxA.ymax > boxB.ymin && boxA.ymax < boxB.ymax) ||
+        (boxB.ymin > boxA.ymin && boxB.ymin < boxA.ymax) || (boxB.ymax > boxA.ymin && boxB.ymax < boxA.ymax)) return true;
     return false;
 }
 
 bool inZclip(const AABB& boxA, const AABB& boxB)
 {
-    if (boxA.zmin > boxB.zmin && boxA.zmin < boxB.zmax || boxA.zmax > boxB.zmin && boxA.zmax < boxB.zmax) return true;
-    if (boxB.zmin > boxA.zmin && boxB.zmin < boxA.zmax || boxB.zmax > boxA.zmin && boxB.zmax < boxA.zmax) return true;
+    if ((boxA.zmin > boxB.zmin && boxA.zmin < boxB.zmax) || (boxA.zmax > boxB.zmin && boxA.zmax < boxB.zmax) ||
+        (boxB.zmin > boxA.zmin && boxB.zmin < boxA.zmax) || (boxB.zmax > boxA.zmin && boxB.zmax < boxA.zmax)) return true;
     return false;
 }
 

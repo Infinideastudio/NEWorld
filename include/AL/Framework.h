@@ -26,7 +26,7 @@ ALboolean ALFWShutdownOpenAL();
 // File loading functions
 ALboolean ALFWLoadWaveToBuffer(const char *szWaveFile, ALuint uiBufferID, ALenum eXRAMBufferMode = 0);
 
-// Extension Queries 
+// Extension Queries
 ALboolean ALFWIsXRAMSupported();
 ALboolean ALFWIsEFXSupported();
 

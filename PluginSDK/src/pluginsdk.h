@@ -1,6 +1,8 @@
 #ifndef EXPORT_FUNCS_H
 #define EXPORT_FUNCS_H
 
+#ifdef NEWORLD_TARGET_WINDOWS
+
 #ifdef PLUGINSDK_EXPORTS
 #define DLLIMPEXP __declspec(dllexport)
 #else
@@ -37,4 +39,6 @@ DLLIMPEXP void update_block(int x, int y, int z, char val);
 }
 #endif
 
-#endif
+#endif //NEWORLD_TARGET_WINDOWS
+
+#endif //EXPORT_FUNCS_H
