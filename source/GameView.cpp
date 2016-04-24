@@ -1165,7 +1165,7 @@ public:
             char tmp[64];
             tm timeinfo;
             timeinfo = *localtime(&t);
-            strftime(tmp, sizeof(tmp), "%Y年%m月%d日%H时%M分%S秒", &timeinfo);
+            strftime(tmp, sizeof(tmp), "%Y-%m-%d %H:%M:%S", &timeinfo);
             std::stringstream ss;
             ss << "Screenshots/" << tmp << ".bmp";
             SaveScreenshot(0, 0, windowwidth, windowheight, ss.str());
@@ -1418,15 +1418,7 @@ public:
             TextRenderer::renderASCIIString(0, (pos++) * 16, "load:" + pack(World::chunks.size()) + " unload:" + pack(World::unloadedChunks) + " render:" + pack(WorldRenderer::RenderChunkList.size()) + " update:" + pack(World::updatedChunks));
 
             if (multiplayer)
-            {
-                // CROSS PLATFORM REQUIRED
-                // 暂时关闭网络代码
-#ifdef NEWORLD_TARGET_WINDOWS
-                MutexLock(Network::mutex);
-                TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::getRequestCount) + "/" + pack(NetworkRequestMax) + " network requests");
-                MutexUnlock(Network::mutex);
-#endif
-            }
+                TextRenderer::renderASCIIString(0, (pos++) * 16, pack(Network::m_req.size()) + "/" + pack(NetworkRequestMax) + " network requests");
         }
         else
         {
@@ -1888,13 +1880,9 @@ public:
         updateThread = ThreadCreate(&UpdateThreadFunc, NULL);
         if (multiplayer)
         {
-            // CROSS PLATFORM REQUIRED
-            // 暂时关闭网络代码
-#ifdef NEWORLD_TARGET_WINDOWS
             Player::name = "";
             Player::onlineID = pRandGen->get_u16();
-            Network::init(serverip, port);
-#endif
+            Network::Init(serverip, port);
         }
         //初始化游戏状态
         if (LoadGame())
@@ -1969,11 +1957,8 @@ public:
             glDeleteBuffersARB(World::vbuffersShouldDelete.size(), World::vbuffersShouldDelete.data());
             World::vbuffersShouldDelete.clear();
         }
-        // CROSS PLATFORM REQUIRED
-        // 暂时关闭网络代码
-#ifdef NEWORLD_TARGET_WINDOWS
-        if (multiplayer) Network::cleanUp();
-#endif
+        if (multiplayer)
+		    Network::Clean();
         chatMessages.clear();
         GUI::BackToMain();
     }
