@@ -19,6 +19,7 @@
 #include "Player.h"
 #include "World.h"
 #include "OnlinePlayer.h"
+#include "World.h"
 
 int Player::gamemode = GameMode::Survival;
 bool Player::Glide, Player::Flying, Player::CrossWall;
@@ -204,10 +205,10 @@ bool Player::putBlock(int x, int y, int z, block blockname)
     return success;
 }
 
-bool Player::save(string worldn)
+bool Player::save()
 {
     uint32 curversion = version;
-    std::ofstream isave("Worlds/" + worldn + "/player.NEWorldPlayer", std::ios::binary | std::ios::out);
+    std::ofstream isave("Worlds/" + World::Name + "/player.NEWorldPlayer", std::ios::binary | std::ios::out);
     if (!isave.is_open()) return false;
     isave.write((char*)&curversion, sizeof(curversion));
     isave.write((char*)&xpos, sizeof(xpos));
@@ -231,9 +232,9 @@ bool Player::save(string worldn)
     return true;
 }
 
-bool Player::load(string worldn)
+bool Player::load()
 {
-    std::ifstream iload("Worlds/" + worldn + "/player.NEWorldPlayer", std::ios::binary | std::ios::in);
+    std::ifstream iload("Worlds/" + World::Name + "/player.NEWorldPlayer", std::ios::binary | std::ios::in);
     if (!iload.is_open()) return false;
     uint32 targetVersion;
     iload.read((char*)&targetVersion, sizeof(targetVersion));

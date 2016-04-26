@@ -377,22 +377,14 @@ inline void ThreadDestroy(thread_t _hThread)
 inline unsigned int MByteToWChar(wchar_t* dst, const char* src, unsigned int n)
 {
     size_t res;
-#ifdef NEWORLD_TARGET_MACOSX
     res = mbstowcs(dst, src, n);
-#else
-    mbstowcs_s(&res, dst, n, src, _TRUNCATE);
-#endif
     return res;
 }
 
 inline unsigned int WCharToMByte(char* dst, const wchar_t* src, unsigned int n)
 {
     size_t res;
-#ifdef NEWORLD_TARGET_MACOSX
     res = wcstombs(dst, src, n);
-#else
-    wcstombs_s(&res, dst, n, src, _TRUNCATE);
-#endif
     return res;
 }
 

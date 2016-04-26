@@ -23,7 +23,6 @@
 #include "Hitbox.h"
 #include "Blocks.h"
 #include "Frustum.h"
-#include "World.h"
 
 class Object;
 
@@ -50,7 +49,7 @@ private:
 public:
     block* pblocks; //moved here for blockupd would get block ptr directly
     chunk(int cxi, int cyi, int czi, chunkid idi) : cx(cxi), cy(cyi), cz(czi), id(idi),
-        Modified(false), Empty(false), updated(false), renderBuilt(false), DetailGenerated(false), loadAnim(0.0)
+        Modified(false), Empty(false), updated(false), renderBuilt(false), loadAnim(0.0)
     {
         memset(vertexes, 0, sizeof(vertexes));
         memset(vbuffer, 0, sizeof(vbuffer));
@@ -61,7 +60,7 @@ public:
 
     int cx, cy, cz;
     Hitbox::AABB aabb;
-    bool Empty, updated, renderBuilt, Modified, DetailGenerated;
+    bool Empty, updated, renderBuilt, Modified;
     chunkid id;
     vtxCount vertexes[4];
     VBOID vbuffer[4];
@@ -70,7 +69,6 @@ public:
 
     ~chunk();
     void Load(bool initIfEmpty = true);
-    void buildTerrain(bool initIfEmpty = true);
 
     string getChunkFileName()
     {

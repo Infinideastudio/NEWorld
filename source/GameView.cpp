@@ -137,7 +137,7 @@ public:
     void SaveGame()
     {
         World::saveAllChunks();
-        if (!Player::save(World::Name))
+        if (!Player::save())
         {
             DebugWarning("Failed saving player info!");
         }
@@ -145,7 +145,7 @@ public:
 
     bool LoadGame()
     {
-        if (!Player::load(World::Name))
+        if (!Player::load())
         {
             DebugWarning("Failed loading player info!");
             return false;
