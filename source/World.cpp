@@ -966,14 +966,14 @@ void sortChunkLoadUnloadList(int xpos, int ypos, int zpos)
 void calcVisible(double xpos, double ypos, double zpos, Frustum& frus)
 {
     chunk::setRelativeBase(xpos, ypos, zpos, frus);
-    for (size_t ci = 0; ci < chunks.size(); ci++)
-        chunks[ci]->calcVisible();
+    for (chunk* it : chunks)
+        it->calcVisible();
 }
 
 void saveAllChunks()
 {
-    for (size_t i = 0; i < chunks.size(); i++)
-        chunks[i]->SaveToFile();
+    for (chunk* it : chunks)
+        it->SaveToFile();
 }
 
 void destroyAllChunks()
