@@ -101,11 +101,11 @@ TextureID Textures::LoadBlock3DTexture(string Filename, string MkFilename)
 
 void Textures::Build2DMipmaps(GLenum format, int w, int h, int level, const ubyte* src)
 {
-    int sum = 0, scale = 1, cur_w = 0, cur_h = 0, cc = 0;
+    size_t sum = 0, scale = 1, cur_w = 0, cur_h = 0, cc = 0;
     if (format == GL_RGBA) cc = 4;
     else if (format == GL_RGB) cc = 3;
-    ubyte *cur = new ubyte[w*h*cc];
-    memset(cur, 0, w*h*cc);
+    unique_ptr<ubyte[]> cur(new ubyte[w*h*cc]);
+    memset(cur.get(), 0, w*h*cc);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, level);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
@@ -117,15 +117,16 @@ void Textures::Build2DMipmaps(GLenum format, int w, int h, int level, const ubyt
         scale <<= 1;
         cur_w = w / scale;
         cur_h = h / scale;
-        for (int y = 0; y < cur_h; y++) for (int x = 0; x < cur_w; x++)
-                for (int col = 0; col < cc; col++)
+        for (size_t y = 0; y < cur_h; y++)
+            for (size_t x = 0; x < cur_w; x++)
+                for (size_t col = 0; col < cc; col++)
                 {
                     sum = 0;
-                    for (int yy = 0; yy < scale; yy++) for (int xx = 0; xx < scale; xx++)
+                    for (size_t yy = 0; yy < scale; yy++)
+                        for (size_t xx = 0; xx < scale; xx++)
                             sum += src[((y * scale + yy) * w + x * scale + xx) * cc + col];
                     cur[(y * cur_w + x) * cc + col] = (ubyte)(sum / (scale*scale));
                 }
-        glTexImage2D(GL_TEXTURE_2D, i, format, cur_w, cur_h, 0, format, GL_UNSIGNED_BYTE, cur);
+        glTexImage2D(GL_TEXTURE_2D, i, format, cur_w, cur_h, 0, format, GL_UNSIGNED_BYTE, cur.get());
     }
-    delete[] cur;
 }

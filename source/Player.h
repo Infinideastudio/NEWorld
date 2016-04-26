@@ -40,8 +40,8 @@ public:
 
     static void updatePosition();
 
-    static bool save(string worldn);
-    static bool load(string worldn);
+    static bool save();
+    static bool load();
 
     static bool AddItem(item itemname, short amount = 1);
     static bool putBlock(int x, int y, int z, block blockname);

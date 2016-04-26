@@ -71,7 +71,7 @@ public:
             *this = TEXTURE_RGB(bih.biWidth, bih.biHeight);
             bmpfile.read((char*)buffer.get(), sizeX * sizeY * 3);
             bmpfile.close();
-            for (unsigned int i = 0; i < sizeX * sizeY; i++)
+            for (size_t i = 0; i < sizeX * sizeY; i++)
                 std::swap(buffer[i * 3], buffer[i * 3 + 2]);
         }
         void Save(const std::string& filename)
@@ -82,7 +82,7 @@ public:
             bitmapinfoheader.biWidth = sizeX;
             bitmapinfoheader.biHeight = sizeY;
             bitmapinfoheader.biSizeImage = sizeX * sizeY * 3;
-            for (unsigned int i = 0; i != sizeX * sizeY * 3; i += 3)
+            for (size_t i = 0; i != sizeX * sizeY * 3; i += 3)
                 std::swap(buffer[i], buffer[i + 2]);
             std::ofstream ofs(filename, std::ios::out | std::ios::binary);
             ofs.write((char*)&bitmapfileheader, sizeof(bitmapfileheader));
