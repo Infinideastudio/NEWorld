@@ -1193,10 +1193,9 @@ void AppStart()
                 PopView();
     }
     World::destroyAllChunks();
-#ifdef NEWORLD_TARGET_WINDOWS
     unload_plugins();
-#endif
 }
+
 Form::~Form()
 {
     //Transition backward

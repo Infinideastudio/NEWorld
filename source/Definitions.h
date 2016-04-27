@@ -68,6 +68,8 @@ using namespace std;
 #ifdef NEWORLD_TARGET_MACOSX
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
+//#include <OpenGL/gl3.h>
+//#include <OpenGL/gl3ext.h>
 #else
 #include <GL/glext.h>
 #endif
