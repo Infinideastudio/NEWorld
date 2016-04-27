@@ -25,7 +25,7 @@ endif
 
 ifeq ($(shell sh -c 'uname -s'), Darwin)
     CXXFLAGS += -DNEWORLD_TARGET_MACOSX -I /usr/local/include -I /usr/local/include/freetype2
-    LDFLAGS += -L /usr/local/lib -framework OpenGL
+    LDFLAGS += -L /usr/local/lib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
     ifeq ($(CXX), c++)
 	CXX = clang++
     endif
