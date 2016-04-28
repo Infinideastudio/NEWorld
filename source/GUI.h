@@ -106,10 +106,10 @@ class trackbar :public control
 public:
     //该控件的中文名我不造
     string text;
-    int barwidth;
-    int barpos;
+    int barwidth, barpos;
     bool mouseon, focused, pressed, enabled;
-    trackbar() : mouseon(false), focused(false), pressed(false), enabled(false) {};
+    trackbar() : mouseon(false), focused(false), pressed(false), enabled(false) , 
+        barwidth(0), barpos(0){};
     trackbar(string t, int w, int s,
              int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
     void update();
@@ -136,7 +136,9 @@ public:
     int barheight, barpos;
     bool mouseon, focused, pressed, enabled;
     bool defaultv, msup, msdown, psup, psdown;
-    vscroll() : mouseon(false), focused(false), pressed(false), enabled(false) {};
+    vscroll() : mouseon(false), focused(false), pressed(false), enabled(false),
+        defaultv(false), msup(false), msdown(false), psup(false), psdown(false) ,
+        barheight(0), barpos(0){};
     vscroll(int h, int s,
             int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
     void update();
@@ -149,7 +151,8 @@ public:
     //图片框
     float txmin, txmax, tymin, tymax;
     TextureID imageid;
-    imagebox() : imageid(0) {};
+    imagebox() : imageid(0),
+        txmin(0.0f), txmax(0.0f), tymin(0.0f), tymax(0.0f){};
     imagebox(float _txmin, float _txmax, float _tymin, float _tymax, TextureID iid,
              int xi_r, int xa_r, int yi_r, int ya_r, double xi_b, double xa_b, double yi_b, double ya_b);
     void update();
@@ -187,7 +190,11 @@ public:
     UIVoidF Background;
     virtual void onRender() {}
     virtual void onLeave() {}
-    Form() :maxid(0), currentid(0), focusid(-1), Background(&drawBackground)
+    Form() :bool tabp(false), shiftp(false), enterp(false), enterpl(false),
+        upkp(false), downkp(false), upkpl(false), downkpl(false), leftkp(false), rightkp(false),
+        leftkpl(false), rightkpl(false), backspacep(false), backspacepl(false), updated(false),
+        mx(0), my(0), mw(0), mb(0), mxl(0), myl(0), mwl(0), mbl(0),displaylist(0),
+        MouseOnTextbox(false), maxid(0), currentid(0), focusid(-1), Background(&drawBackground)
     {
         //Transition forward
         if (transitionList) glDeleteLists(transitionList, 1);
