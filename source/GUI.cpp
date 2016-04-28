@@ -676,7 +676,6 @@ void vscroll::update()
         mouseon = false, focused = false, pressed = false;
         return;
     }
-    static double lstime;
     msup = false;
     msdown = false;
     psup = false;
