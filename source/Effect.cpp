@@ -87,7 +87,7 @@ void blurGaussianX(int w, int h, uint8_t* src, uint8_t* dst, int rx)
             }
         }
     }
-    delete mat;
+    delete []mat;
 }
 
 void blurGaussianY(int w, int h, uint8_t* src, uint8_t* dst, int ry)
@@ -132,7 +132,7 @@ void blurGaussianY(int w, int h, uint8_t* src, uint8_t* dst, int ry)
             }
         }
     }
-    delete mat;
+    delete []mat;
 }
 
 }
