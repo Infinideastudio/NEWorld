@@ -187,7 +187,7 @@ void chunk::Load(bool initIfEmpty)
         {
             //Build trees
             for (size_t index = 0; index < 4096; index++)
-                if (pblocks[index] == block(Blocks::GRASS) && pRandGen->one_in(200))
+                if (pblocks[index] == block(Blocks::GRASS) && ((cx&cy^cz|~index)%233)==0)
                     buildtree((cx << 4) ^ ((index&((1 << 12) - (1 << 8))) >> 8), (cy << 4) ^ ((index&((1 << 8) - (1 << 4))) >> 4), (cz << 4) ^ (index & 15));
         }
     }
