@@ -1000,16 +1000,12 @@ bool buildtree(int x, int y, int z)
 {
     int i, ix, iy, iz;
     //对生成条件进行更严格的检测
-    //正上方五格必须为空气
-    for (i = y + 1; i < y + 6; i++)
+    //正上方七格必须为空气
+    for (i = y + 1; i < y + 8; i++)
     {
         if (getblock(x, i, z) != block(Blocks::AIR))
             return false;
     }
-    //开始生成
-    //设置泥土
-    setblock(x, y, z, block(Blocks::DIRT));
-    //设置树干
     int h = 0, dirt = 0;//泥土数
     for (ix = x - 4; ix < x + 4; ix++)
     {
@@ -1028,7 +1024,10 @@ bool buildtree(int x, int y, int z)
     h = static_cast<int>( min( (double)h, dirt * 15 / 268 * max(pRandGen->get_double_co(), 0.8) ) );
     if (h < 7)
         return false;
+    //开始生成
 
+    //设置泥土
+    setblock(x, y, z, block(Blocks::DIRT));
     //使用lambda表达式递归模拟树生长
     int begin = y + h * 0.618;
     Vector3D middle(x, y + h, z);
