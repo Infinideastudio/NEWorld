@@ -681,6 +681,7 @@ void vscroll::update()
     psup = false;
     psdown = false;
 
+    static double lstime;
     //更新滚动条状态
     //鼠标悬停
     mouseon = (parent->my >= ymin + barpos + 20 && parent->my <= ymin + barpos + barheight + 20 && parent->mx >= xmin && parent->mx <= xmax);
