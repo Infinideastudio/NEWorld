@@ -190,7 +190,7 @@ public:
     UIVoidF Background;
     virtual void onRender() {}
     virtual void onLeave() {}
-    Form() :bool tabp(false), shiftp(false), enterp(false), enterpl(false),
+    Form() :tabp(false), shiftp(false), enterp(false), enterpl(false),
         upkp(false), downkp(false), upkpl(false), downkpl(false), leftkp(false), rightkp(false),
         leftkpl(false), rightkpl(false), backspacep(false), backspacepl(false), updated(false),
         mx(0), my(0), mw(0), mb(0), mxl(0), myl(0), mwl(0), mbl(0),displaylist(0),
