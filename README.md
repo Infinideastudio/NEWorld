@@ -1,4 +1,4 @@
-# NEWorld
+﻿# NEWorld
 
 全新的NEWorld!
 
@@ -8,7 +8,7 @@ NEWorld采用[GPLv3许可证](http://www.gnu.org/licenses/gpl.html)发布并受�
 
 ## 资源文件
 
-* [libraries](http://pan.baidu.com/s/1jHz7rAe)
+* [libraries](http://pan.baidu.com/s/1bo3wOnd)
 
 ## 更多文档
 
