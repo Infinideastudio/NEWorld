@@ -281,18 +281,6 @@
     <ClCompile Include="source\GameView.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="include\AL\ALDevice.cpp">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClCompile>
-    <ClCompile Include="include\AL\aldlist.cpp">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClCompile>
-    <ClCompile Include="include\AL\AL-EFX.cpp">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClCompile>
-    <ClCompile Include="include\AL\CWaves.cpp">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClCompile>
     <ClCompile Include="source\AudioSystem.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
@@ -304,9 +292,6 @@
     </ClCompile>
     <ClCompile Include="source\RandGen.cpp">
       <Filter>Source\Common\RandGen</Filter>
-    </ClCompile>
-    <ClCompile Include="include\AL\Framework.cpp">
-      <Filter>Source\Common\OpenAL</Filter>
     </ClCompile>
     <ClCompile Include="source\logger.cpp">
       <Filter>Source\Common</Filter>
