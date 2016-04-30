@@ -82,7 +82,7 @@ void chunk::Load(bool initIfEmpty)
             //Part2 out of geomentry area
 
             int H[16][16];
-            int low, high, count;
+            int low, high;
             int l = 2147483647, hi = pWorldGen->getWaterLevel();
 
             for (int x = 0; x < 16; ++x)
@@ -97,7 +97,6 @@ void chunk::Load(bool initIfEmpty)
                 }
             }
             low = (l - 21) >> 4, high = (hi + 16) >> 4;
-            count = 0;
             if (cy > high)
             {
                 Empty = true;
@@ -623,7 +622,7 @@ void chunk::MergeFaceRender()
     // -- qiaozhanrong
 
     int gx = 0, gy = 0, gz = 0;
-    int x = 0, y = 0, z = 0, cur_l_mx, br;
+    int x = 0, y = 0, z = 0, br;
     int col0 = 0, col1 = 0, col2 = 0, col3 = 0;
     QuadPrimitive cur;
     block bl, neighbour;
@@ -633,7 +632,7 @@ void chunk::MergeFaceRender()
     for (int steps = 0; steps < 3; steps++)
     {
         cur = QuadPrimitive();
-        cur_l_mx = 0;
+        int cur_l_mx = 0;
         bl = neighbour = block(0);
         //Linear merge
         if (Renderer::AdvancedRender) Renderer::Init(3, 3, 1);

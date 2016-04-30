@@ -198,7 +198,7 @@ FakesAssemblies/
 # NEWorld files
 [Ww]orlds/
 [Ss]creen[Ss]hots/
-[Cc]onfigs/
+/options.ini
 
 # Some binary files
 *.lib

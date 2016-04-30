@@ -59,7 +59,6 @@ bool WaterBUF(Blocks::BUDDP* args)
     else if (args->slf->Data81 == 0)
     {
         int bx = args->cx, by = args->cy, bz = args->cz;
-        bool u = false;
         block b = World::getblock(bx, by - 1, bz);
         if (b.ID == Blocks::WATER && b.Data81 == 0 && b.Data82 != 255)
         {
@@ -87,7 +86,7 @@ bool WaterBUF(Blocks::BUDDP* args)
         if (args->slf->Data82 > 16)
         {
             const int vec[4][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
-            bool pos[4] = { false, false, false, false };
+            bool pos[4] = { false, false, false, false }, u = false;
             int total = args->slf->Data82, bcount = 1;
             for (int i = 0; i < 4; i++)
             {
@@ -146,7 +145,6 @@ bool LavaBUF(Blocks::BUDDP * args)
         int bx = args->cx;
         int by = args->cy;
         int bz = args->cz;
-        bool u = false;
         block b = World::getblock(bx, by - 1, bz);
         if (b.ID == Blocks::LAVA && b.Data81 == 0 && b.Data82 != 255)
         {
@@ -173,7 +171,7 @@ bool LavaBUF(Blocks::BUDDP * args)
         if (args->slf->Data82 > 16)
         {
             const int vec[4][3] = { { -1, 0, 0 },{ 1, 0, 0 },{ 0, 0, -1 },{ 0, 0, 1 } };
-            bool pos[4] = { false, false, false, false };
+            bool pos[4] = { false, false, false, false }, u = false;
             int total = args->slf->Data82, bcount = 1;
             for (int i = 0; i < 4; i++)
             {

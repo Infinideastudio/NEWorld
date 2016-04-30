@@ -1154,14 +1154,11 @@ void ProcessBuq()
     blockupdatequery.clear();
     block Mask = block(Blocks::AIR);
     block* b;
-    int bx, by, bz;
     const int vec[6][3] = { { -1, 0, 0 }, { 1, 0, 0 }, { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 } };
 
     for (Blocks::BUDDP B : swap)
     {
-        bx = B.cx;
-        by = B.cy;
-        bz = B.cz;
+        int bx = B.cx, by = B.cy, bz = B.cz;
         for (int i = 0; i < 6; i++)
         {
             b = World::getblockptr(bx + vec[i][0], by + vec[i][1], bz + vec[i][2], &Mask);

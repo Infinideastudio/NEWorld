@@ -21,17 +21,12 @@
 
 WorldGenerator::WorldGenerator(int mapseed)
 {
-    rng = new MersenneRandGen(mapseed);
+    rng = unique_ptr<RandGen>(new MersenneRandGen);
     m_seed = mapseed;
     for (int i = 0; i < 256; i++)
         m_perm[i] = rng->get_double_ranged(0.0, 256.0);
     m_NoiseScaleX = m_NoiseScaleZ = 64;
     m_WaterLevel = 30;
-}
-
-WorldGenerator::~WorldGenerator()
-{
-    delete rng;
 }
 
 double WorldGenerator::Noise(int x, int y)

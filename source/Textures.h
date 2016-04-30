@@ -50,18 +50,18 @@ public:
 
     struct TEXTURE_RGB
     {
-        unsigned int sizeX;
-        unsigned int sizeY;
+        size_t sizeX;
+        size_t sizeY;
         unique_ptr<ubyte[]> buffer;
         TEXTURE_RGB()
         {
         }
-        TEXTURE_RGB(unsigned int _sizeX, unsigned int _sizeY)
+        TEXTURE_RGB(size_t _sizeX, size_t _sizeY)
             :sizeX(_sizeX), sizeY(_sizeY)
         {
             buffer = unique_ptr<ubyte[]>(new ubyte[_sizeX * _sizeY * 3]);
         }
-        TEXTURE_RGB(const std::string& filename)
+        explicit TEXTURE_RGB(const std::string& filename)
         {
             std::ifstream bmpfile(filename, std::ios::binary | std::ios::in);
             BITMAPINFOHEADER bih;
@@ -94,13 +94,13 @@ public:
 
     struct TEXTURE_RGBA
     {
-        unsigned int sizeX;
-        unsigned int sizeY;
+        size_t sizeX;
+        size_t sizeY;
         unique_ptr<ubyte[]> buffer;
         TEXTURE_RGBA()
         {
         }
-        TEXTURE_RGBA(unsigned int _sizeX, unsigned int _sizeY)
+        TEXTURE_RGBA(size_t _sizeX, size_t _sizeY)
             :sizeX(_sizeX), sizeY(_sizeY), buffer(unique_ptr<ubyte[]>(new ubyte[_sizeX * _sizeY * 4]))
         {
         }
@@ -118,19 +118,17 @@ public:
             bmpfile.read((char*)&bfh, sizeof(BITMAPFILEHEADER));
             bmpfile.read((char*)&bih, sizeof(BITMAPINFOHEADER));
             *this = TEXTURE_RGBA(bih.biWidth, bih.biHeight);
-            ubyte* rgb = new ubyte[sizeX * sizeY * 3], *a = new ubyte[sizeX * sizeY * 3];
+            unique_ptr<ubyte[]> rgb(new ubyte[sizeX * sizeY * 3]), a(new ubyte[sizeX * sizeY * 3]);
             if (mask != "")
-                maskfile.read((char*)a, sizeX * sizeY * 3);
-            bmpfile.read((char*)rgb, sizeX * sizeY * 3);
-            for (unsigned int i = 0; i < sizeX * sizeY; i++)
+                maskfile.read((char*)a.get(), sizeX * sizeY * 3);
+            bmpfile.read((char*)rgb.get(), sizeX * sizeY * 3);
+            for (size_t i = 0; i < sizeX * sizeY; i++)
             {
                 buffer[i << 2] = rgb[i * 3 + 2];
                 buffer[(i << 2) ^ 1] = rgb[i * 3 + 1];
                 buffer[(i << 2) + 2] = rgb[i * 3];
                 buffer[(i << 2) + 3] = mask == "" ? 255 : 255 - a[i * 3];
             }
-            delete[] a;
-            delete[] rgb;
         }
     };
 

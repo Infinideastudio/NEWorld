@@ -49,7 +49,7 @@ void gray(int w, int h, uint8_t* src, uint8_t* dst)
 
 void blurGaussianX(int w, int h, uint8_t* src, uint8_t* dst, int rx)
 {
-    int size = rx * 2 + 1, i, j, dx, x, indexsrc, indexdst;
+    int size = rx * 2 + 1, i, j, x, indexsrc, indexdst;
     float* mat = new float[size];
     float sigma = (rx - 1) * 0.3f + 0.8f, val, sum = 0.0f;
     sigma = -0.5f / (sigma * sigma);
@@ -68,7 +68,7 @@ void blurGaussianX(int w, int h, uint8_t* src, uint8_t* dst, int rx)
         dst[i] = dst[i + 1] = dst[i + 2] = 0;
     for (i = 0; i < size; i++)
     {
-        dx = i - rx;
+        int dx = i - rx;
         val = mat[i];
         for (j = 0; j < w; j++)
         {
@@ -92,7 +92,7 @@ void blurGaussianX(int w, int h, uint8_t* src, uint8_t* dst, int rx)
 
 void blurGaussianY(int w, int h, uint8_t* src, uint8_t* dst, int ry)
 {
-    int size = ry * 2 + 1, i, j, k, dy, y, indexsrc, indexdst;
+    int size = ry * 2 + 1, i, j, k, y, indexsrc, indexdst;
     float* mat = new float[size];
     float sigma = (ry - 1) * 0.3f + 0.8f, sum = 0.0f, val;
     sigma = -0.5f / (sigma * sigma);
@@ -113,7 +113,7 @@ void blurGaussianY(int w, int h, uint8_t* src, uint8_t* dst, int ry)
 
     for (i = 0; i < size; i++)
     {
-        dy = i - ry;
+        int dy = i - ry;
         val = mat[i];
         for (j = 0; j < h; j++)
         {

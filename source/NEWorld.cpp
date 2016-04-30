@@ -76,7 +76,6 @@ void LoadOptions()
 
 void SaveOptions()
 {
-    std::map<string, string> options;
     std::ofstream fileout("options.ini", std::ios::out);
     if (!fileout.is_open()) return;
     saveoption(fileout, "Language", Globalization::Cur_Lang);
