@@ -4,7 +4,7 @@
 
 0. 运行NEWorld，请务必安装[Visual C++ Redistributable for Visual Studio 2015] (https://www.microsoft.com/zh-cn/download/details.aspx?id=48145)
 
-0. 请解压[NEWorld Redistributable] (http://pan.baidu.com/s/1i5963fn) 到`NEWorld.exe`所在目录
+0. 请解压[NEWorld Redistributable] (http://pan.baidu.com/s/1qXNphMG) 到`NEWorld.exe`所在目录
 
 0. 若程序在运行中出现任何意外状况，
 
