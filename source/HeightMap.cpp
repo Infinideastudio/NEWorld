@@ -43,7 +43,7 @@ void HeightMap::destroy()
 
 void HeightMap::move(int xd, int zd)
 {
-    int* arrTemp = new int[size2];
+    vector<int> arrTemp(size2);
     for (int x = 0; x < size; x++)
     {
         for (int z = 0; z < size; z++)
@@ -53,8 +53,7 @@ void HeightMap::move(int xd, int zd)
             else arrTemp[x*size + z] = -1;
         }
     }
-    delete[] array;
-    array = arrTemp;
+    copy(&arrTemp[0], &arrTemp.back() + 1, array);
     originX += xd;
     originZ += zd;
 }

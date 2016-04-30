@@ -19,6 +19,7 @@
 #ifndef WORLDGEN_H
 #define WORLDGEN_H
 
+#include "Definitions.h"
 #include "RandGen.h"
 
 class WorldGenerator
@@ -28,12 +29,10 @@ private:
     int m_seed;
     double m_NoiseScaleX, m_NoiseScaleZ;
     int m_WaterLevel;
-    RandGen *rng;
+    unique_ptr<RandGen> rng;
 
     // 禁止无参数创建WorldGenerator实例
     WorldGenerator();
-
-    void perlinNoiseInit(int mapseed);
 
     double Noise(int x, int y);
 
@@ -49,9 +48,7 @@ private:
     double PerlinNoise2D(double x, double y);
 
 public:
-    WorldGenerator(int mapseed);
-
-    ~WorldGenerator();
+    explicit WorldGenerator(int mapseed);
 
     int getHeight(int x, int y)
     {

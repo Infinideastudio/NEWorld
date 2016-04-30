@@ -35,7 +35,7 @@ void Particles::updateall()
                 iter = ptcs.erase(iter);
             }
             else
-                iter++;
+                ++iter;
         }
 }
 

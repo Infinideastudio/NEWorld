@@ -51,9 +51,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source\Common\OpenAL">
-      <UniqueIdentifier>{756831cf-7167-4c1f-9d20-e33d38861d08}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Renderer\Shader">
       <UniqueIdentifier>{033d1b67-aa91-4782-ac09-87d8bffaafd4}</UniqueIdentifier>
     </Filter>
@@ -165,18 +162,6 @@
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="source\resource.h" />
-    <ClInclude Include="include\AL\ALDevice.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\aldlist.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\AL-EFX.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\CWaves.h">
-      <Filter>Source\Common\OpenAL</Filter>
-    </ClInclude>
     <ClInclude Include="source\AudioSystem.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
@@ -185,9 +170,6 @@
     </ClInclude>
     <ClInclude Include="source\RandGen.h">
       <Filter>Source\Common\RandGen</Filter>
-    </ClInclude>
-    <ClInclude Include="include\AL\Framework.h">
-      <Filter>Source\Common\OpenAL</Filter>
     </ClInclude>
     <ClInclude Include="source\logger.h">
       <Filter>Source\Common</Filter>
