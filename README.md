@@ -1,4 +1,4 @@
-﻿# NEWorld
+# NEWorld
 
 NEWorld是一个开放源代码的模仿Minecraft游戏规则的游戏。
 
@@ -8,7 +8,7 @@ NEWorld采用[GPLv3许可证](http://www.gnu.org/licenses/gpl.html)发布并受�
 
 ## 资源文件
 
-* [libraries](http://pan.baidu.com/s/1bo3wOnd)
+* [libraries](http://pan.baidu.com/s/1eRZKKgU)
 
 ## 更多文档
 

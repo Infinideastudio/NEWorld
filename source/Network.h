@@ -23,12 +23,12 @@
 #define ASIO_STANDALONE
 
 #ifdef NEWORLD_TARGET_WINDOWS
-#include <boost/asio.hpp>
+#include <asio/asio.hpp>
 #elif NEWORLD_TARGET_MACOSX
 #include <asio.hpp>
 #endif
 
-using namespace boost::asio;
+using namespace asio;
 
 #ifdef NEWORLD_TARGET_WINDOWS
 namespace Network
