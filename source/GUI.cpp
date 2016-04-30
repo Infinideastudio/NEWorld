@@ -681,12 +681,12 @@ void vscroll::update()
     psup = false;
     psdown = false;
 
-    static double lstime;
     //更新滚动条状态
     //鼠标悬停
     mouseon = (parent->my >= ymin + barpos + 20 && parent->my <= ymin + barpos + barheight + 20 && parent->mx >= xmin && parent->mx <= xmax);
     if (parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax)
     {
+        static double lstime;
         if (parent->mb == 1) parent->focusid = id;
         if (parent->my <= ymin + 20)
         {
@@ -1102,13 +1102,13 @@ control* Form::getControlByID(int cid)
 
 void Form::singleloop()
 {
-    double dmx, dmy;
     mxl = mx;
     myl = my;
     mwl = mw;
     mbl = mb;
     mb = GUI::GetMouseButton();
     mw = GUI::GetMouseScroll();
+    double dmx, dmy;
     glfwGetCursorPos(MainWindow, &dmx, &dmy);
     mx = (int)(dmx / stretch), my = (int)(dmy / stretch);
     update();
