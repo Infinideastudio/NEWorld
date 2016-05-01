@@ -1192,8 +1192,6 @@ void AppStart()
             while (!ViewStack.empty())
                 PopView();
     }
-    World::destroyAllChunks();
-    unload_plugins();
 }
 
 Form::~Form()
