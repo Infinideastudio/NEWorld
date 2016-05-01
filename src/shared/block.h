@@ -24,8 +24,9 @@
 
 #include <string>
 #include "fundamental_structure.h"
+#include "fundamental_algorithm.h"
 
-// 一种方块
+// 方块类型
 class BlockType
 {
     private:
@@ -45,36 +46,37 @@ class BlockType
         {
             return m_guid;
         }
+
+        // 获取这个方块类型的内部符号名称
+        virtual std::string get_symbol();
+        
+        // 获取翻译后准备显示在屏幕上的名称
+        virtual std::string get_translated_name();
+        
+        virtual void norm_update(Block& b, Block& ori);
+
+        virtual void tick_update(Block& b);
+        
+        virtual AABB get_hitbox();
 };
 
-#ifdef BLOCKTYPE2
-class BlockType2
-{
-    private:
-        std::string symbol;
-        u16 ID; //This value is dynamic!!
-    public:
-        virtual std::string get_translation(Block& b); //函数体略 缺省翻译键为symbol
-        virtual void norm_update(Block& b, Block& ori);//normal bupdate function
-        virtual void tick_update(Block& b);
-        virtual AABB get_hitbox(Block& b);
-        //以下省略一些获取属性的函数
-}
+std::map<std::string, BlockType> BlockTypesTable;
 
-//为了避免一些evil的方块ID问题，同时尽可能减小内存使用，ID做如下调整
-std::vector<BlockType2*> BlockTypes;//储存BT的序列，为提升性能可能会牺牲少量内存（空ID）
-std::set<u16> occupied_ids; // 储存了被占用的ID
-//BT管理函数
-void add_block(std::string symbol);// TODO:将第一个空ID分配给标示为Symbol的方块
-void del_block(u16 ID);//TODO:移除ID上的BlockType
-//加载
-void load_blocktypes();//TODO:先从世界存档的config里读取每个ID对应的方块，然后通过Mod以及游戏主程序中的void* getobject(std::string symbol)函数获取BlockType
-void finalize();//TODO:释放并保存
-#endif
+// 初始化方块类型表
+void init_block_types_table();
 
-// 一个方块实例
+// 方块实例
 class Block : public BlockType
 {
 };
+
+class BlockOven : public Block
+{
+    private:
+        // 被烤的物品
+        // 燃料物品
+        // 成品物品
+        // 烘烤的状态
+}
 
 #endif
