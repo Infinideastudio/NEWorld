@@ -435,7 +435,7 @@ enum
     NetworkRequestFrequency = 3,
     NetworkRequestMax = 20
 };
-const string major_version = "Alpha 0.", minor_version = "5", ext_version = " Technical Perview";
+const string major_version = "Alpha 0.", minor_version = "5", ext_version = " Technical Preview";
 extern float FOVyNormal;
 extern float mousemove;
 extern int ViewDistance;
