@@ -1,5 +1,5 @@
 /*
- * NEWorld: An free game with similar rules to Minecraft.
+ * NEWorld: A free game with similar rules to Minecraft.
  * Copyright (C) 2016 NEWorld Team
  *
  * This program is free software: you can redistribute it and/or modify
@@ -21,15 +21,21 @@
 #ifndef CHUNK_H
 #define CHUNK_H
 
+#include "fundamental_structure.h"
+
 class Chunk
 {
     public:
+        // Chunk的大小为32 x 32 x 32
         static const int chunk_size = 32;
 
     private:
+        // Chunk内的物体
         vector<Object*> m_objects;
+        // Chunk内的方块
         Block m_blocks[chunk_size][chunk_size][chunk_size];
-        int m_chunk_x, m_chunk_y, m_chunk_z;
+        // Chunk相对于坐标轴原点的位置向量
+        v3s32 chunk_position;
 };
 
 #endif
