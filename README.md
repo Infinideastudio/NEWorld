@@ -8,7 +8,7 @@ NEWorld采用[GPLv3许可证](http://www.gnu.org/licenses/gpl.html)发布并受�
 
 ## 资源文件
 
-* [libraries](http://pan.baidu.com/s/1i5feqvr)
+* [libraries](http://pan.baidu.com/s/1bIXYPo)
 
 ## 更多文档
 
