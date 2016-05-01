@@ -217,7 +217,10 @@ cscope.*
 /NEWorld.VC.VC.opendb
 
 # Unnecessary binary asset
-Fonts/
+[Ff]onts/
+[Aa]udio/
+[Ll]ocale/
+[Tt]extures/
 
 # Unittest
 *.unittest.cpp
