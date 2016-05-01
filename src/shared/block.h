@@ -19,25 +19,37 @@
 // 新代码
 // 仅供示例，无法编译
 
-#ifndef CHUNK_H
-#define CHUNK_H
+#ifndef BLOCK_H
+#define BLOCH_H
 
+#include <string>
 #include "fundamental_structure.h"
 
-class Chunk
+// 一种方块
+class BlockType
 {
-    public:
-        // Chunk的大小为32 x 32 x 32
-        static const int chunk_size = 32;
-
-        // 计算Chunk的哈希值
-        u64 calc_hash();
-
     private:
-        // Chunk内的方块
-        Block m_blocks[chunk_size][chunk_size][chunk_size];
-        // Chunk相对于坐标轴原点的位置向量
-        v3s32 chunk_position;
+        // 内部方块名称
+        std::string m_name;
+
+        // 翻译后的名称
+        std::string m_name_translated;
+
+        // 为了避免Minecraft中evil的ID重号问题，在NEWorld中，
+        // 统一使用由内部方块名称哈希计算得到的GUID作为标识符。
+        u64 m_guid;
+
+    public:
+        // 获取GUID
+        u64 get_guid()
+        {
+            return m_guid;
+        }
+};
+
+// 一个方块实例
+class Block : public BlockType
+{
 };
 
 #endif
