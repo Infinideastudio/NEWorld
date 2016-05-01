@@ -117,7 +117,7 @@ MersenneRandGen::MersenneRandGen(unsigned int k)
 
 void MersenneRandGen::generate_numbers()
 {
-    unsigned int y, i = 0, j;
+    unsigned int y, i = 0;
 
     while ( i < (diff-1) )
     {
