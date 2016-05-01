@@ -25,8 +25,8 @@
 #include "Setup.h"
 #include "AudioSystem.h"
 #include "Textures.h"
-#include "../PluginSDK/src/pluginsdk.h"
-#include "../PluginSDK/src/export_variables.h"
+#include "PluginSDK/pluginsdk.h"
+#include "PluginSDK/export_variables.h"
 
 template<typename T>
 void loadoption(std::map<string, string> &m, const char* name, T &value)
