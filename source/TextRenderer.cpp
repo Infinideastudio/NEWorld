@@ -34,13 +34,11 @@ void TextRenderer::BuildFont(int w, int h)
     wh = h;
     Font = Textures::LoadFontTexture("Fonts/ASCII.bmp");
 
-    float cx, cy;
     gbe = glGenLists(256);
     glBindTexture(GL_TEXTURE_2D, Font);
     for (gloop = 0; gloop < 256; gloop++)
     {
-        cx = (float)(gloop % 16) / 16.0f;
-        cy = (float)(gloop / 16) / 16.0f;
+		float cx = (float)(gloop % 16) / 16.0f, cy = (float)(gloop / 16) / 16.0f;
 
         glNewList(gbe + gloop, GL_COMPILE);
         glBegin(GL_QUADS);
@@ -118,7 +116,7 @@ void MBToWC(const char* lpcszStr, wchar_t*& lpwszStr, int dwSize)
 int TextRenderer::getStrWidth(string s)
 {
     UnicodeChar c;
-    int uc, res = 0;
+    int res = 0;
     wchar_t* wstr = nullptr;
     if(wstr_cache.size() > max_cache_size)
         clearCache();
@@ -133,7 +131,7 @@ int TextRenderer::getStrWidth(string s)
     }
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {
-        uc = wstr[k];
+        int uc = wstr[k];
         c = chars[uc];
         if (!c.aval)
         {
@@ -148,7 +146,6 @@ int TextRenderer::getStrWidth(string s)
 void TextRenderer::renderString(int x, int y, string glstring)
 {
     UnicodeChar c;
-    int uc;
     int span = 0;
     double wid = pow(2, ceil(log2(32 * stretch)));
     wchar_t* wstr = nullptr;
@@ -166,7 +163,7 @@ void TextRenderer::renderString(int x, int y, string glstring)
     glEnable(GL_TEXTURE_2D);
     for (unsigned int k = 0; k < wstrlen(wstr); k++)
     {
-        uc = wstr[k];
+        int uc = wstr[k];
         c = chars[uc];
         if (uc == (int)'\n')
         {

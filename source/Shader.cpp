@@ -135,13 +135,11 @@ void Shader::checkErrors(GLhandleARB res, int status, string errorMessage)
     glGetObjectParameterivARB(res, status, &st);
     if (st == GL_FALSE) DebugWarning(errorMessage);
     int infologLength, charsWritten;
-    char* infoLog;
     glGetObjectParameterivARB(res, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infologLength);
     if (infologLength > 1)
     {
-        infoLog = new char[infologLength];
-        glGetInfoLogARB(res, infologLength, &charsWritten, infoLog);
-        cout << infoLog << endl;
-        delete[] infoLog;
+        unique_ptr<char[]> infoLog(new char[infologLength]);
+        glGetInfoLogARB(res, infologLength, &charsWritten, infoLog.get());
+        cout << infoLog.get() << endl;
     }
 }

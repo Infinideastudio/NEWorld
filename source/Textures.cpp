@@ -101,7 +101,7 @@ TextureID Textures::LoadBlock3DTexture(string Filename, string MkFilename)
 
 void Textures::Build2DMipmaps(GLenum format, int w, int h, int level, const ubyte* src)
 {
-    size_t sum = 0, scale = 1, cur_w = 0, cur_h = 0, cc = 0;
+    size_t sum = 0, scale = 1, cc = 0;
     if (format == GL_RGBA) cc = 4;
     else if (format == GL_RGB) cc = 3;
     unique_ptr<ubyte[]> cur(new ubyte[w*h*cc]);
@@ -115,8 +115,7 @@ void Textures::Build2DMipmaps(GLenum format, int w, int h, int level, const ubyt
     for (int i = 1; i <= level; i++)
     {
         scale <<= 1;
-        cur_w = w / scale;
-        cur_h = h / scale;
+        size_t cur_w = w / scale, cur_h = h / scale;
         for (size_t y = 0; y < cur_h; y++)
             for (size_t x = 0; x < cur_w; x++)
                 for (size_t col = 0; col < cc; col++)

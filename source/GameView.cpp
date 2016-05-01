@@ -298,7 +298,7 @@ public:
         World::ProcessBuq();
 
         //判断选中的方块
-        double lx, ly, lz, lxl, lyl, lzl;
+        double lx, ly, lz;
         lx = Player::xpos;
         ly = Player::ypos + Player::height + Player::heightExt;
         lz = Player::zpos;
@@ -312,9 +312,7 @@ public:
             //从玩家位置发射一条线段
             for (int i = 0; i < selectPrecision*selectDistance; i++)
             {
-                lxl = lx;
-                lyl = ly;
-                lzl = lz;
+                double lxl = lx, lyl = ly, lzl = lz;
 
                 //线段延伸
                 lx += sin(M_PI / 180 * (Player::heading - 180))*sin(M_PI / 180 * (Player::lookupdown + 90)) / (double)selectPrecision;
@@ -1383,7 +1381,6 @@ public:
 
         if (DebugMode)
         {
-            std::stringstream ss;
             int pos = 0;
             TextRenderer::renderASCIIString(0, (pos++) * 16, "NEWorld v" + pack(version) + "[OpenGL " + pack(gl_version_major) + "." + pack(gl_version_minor) + "|" + pack(gl_version_rev) + "]");
             TextRenderer::renderASCIIString(0, (pos++) * 16, "Fps:" + pack(fps) + "|" + "Ups:" + pack(ups));
@@ -1438,7 +1435,6 @@ public:
         static int vtxs[128];
         static float f;
         static int l;
-        int i, j;
 
         if (ltimer == 0.0)
             ltimer = timer();
@@ -1454,16 +1450,16 @@ public:
         if (!generated)
         {
             generated = true;
-            for (i = 0; i < 128; i++)
-                for (j = 0; j < 128; j++)
+            for (int i = 0; i < 128; i++)
+                for (int j = 0; j < 128; j++)
                     World::cloud[i][j] = pRandGen->get_s32_ranged(0, 2); // CHECK REQUIRED 真的是[0, 2) ?
 
             glGenBuffersARB(128, cloudvb);
 
-            for (i = 0; i < 128; i++)
+            for (int i = 0; i < 128; i++)
             {
                 Renderer::Init(0, 0);
-                for (j = 0; j < 128; j++)
+                for (int j = 0; j < 128; j++)
                 {
                     if (World::cloud[i][j] != 0)
                     {
@@ -1771,7 +1767,7 @@ public:
 
     void SaveScreenshot(int x, int y, int w, int h, string filename)
     {
-        int bufw = ((w >> 2) << 2) + (w & 3 ? 4 : 0), bufh = ((h >> 2) << 2) + (h & 3 ? 4 : 0);
+        int bufw = ((w >> 2) << 2) + ((w & 3) ? 4 : 0), bufh = ((h >> 2) << 2) + ((h & 3) ? 4 : 0);
         Textures::TEXTURE_RGB scrBuffer(bufw, bufh);
         glReadPixels(x, y, bufw, bufh, GL_RGB, GL_UNSIGNED_BYTE, scrBuffer.buffer.get());
         scrBuffer.Save(filename);
