@@ -273,8 +273,8 @@ void DrawBorder(int xmin, int xmax, int ymin, int ymax, bool focused, bool enabl
         UIVertex(xmin + 1, ymin + 1);
         UIVertex(xmax - 1, ymin + 1);
         glColor4f(0.4f, 0.4f, 0.4f, linealpha);
-        UIVertex(xmin + 1, ymax - 1);
         UIVertex(xmax - 1, ymax - 1);
+        UIVertex(xmin + 1, ymax - 1);
         glEnd();
     }
 }
