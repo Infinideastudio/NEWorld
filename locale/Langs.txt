@@ -1,5 +1,0 @@
-4
-en_US
-zh_CN
-zh_CN_UTF8
-zh_TW
