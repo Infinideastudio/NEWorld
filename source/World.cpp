@@ -716,7 +716,7 @@ block getblock(int x, int y, int z, block mask, chunk* cptr)
 
 block getblock(const Vector3D<> &pos)
 {
-    return getblock(pos.px, pos.py, pos.pz);
+    return getblock(pos.x, pos.y, pos.z);
 }
 
 brightness getbrightness(int x, int y, int z, chunk* cptr)
@@ -775,7 +775,7 @@ void setblock(int x, int y, int z, const block &Block, chunk* cptr)
 
 void setblock(const Vector3D<> &pos, const block &Block)
 {
-    setblock(pos.px, pos.py, pos.pz, Block);
+    setblock(pos.x, pos.y, pos.z, Block);
 }
 
 void setbrightness(int x, int y, int z, brightness Brightness, chunk* cptr)
@@ -1038,7 +1038,7 @@ bool buildtree(int x, int y, int z)
     function<void(Vector3D<>,int,block,bool)> grow = [=,&grow,&vec](Vector3D<> pos, int depth, block parent, bool up)->void
     {
         if ((depth == 0) || (getblock(pos) != Blocks::AIR) ||
-        ((!up) && (Distancen(middle.px, middle.py, middle.pz, pos.px, pos.py, pos.pz) > s * ((pos.py > y + h) ? 0.4 : 1.0))))
+        ((!up) && (Distancen(middle.x, middle.y, middle.z, pos.x, pos.y, pos.z) > s * ((pos.y > y + h) ? 0.4 : 1.0))))
         {
             return;
         }
@@ -1061,9 +1061,9 @@ bool buildtree(int x, int y, int z)
             break;
         }
 
-        setblock(pos.px, pos.py, pos.pz, current);
+        setblock(pos.x, pos.y, pos.z, current);
 
-        if (pos.py < begin)
+        if (pos.y < begin)
         {
             grow(pos + Vector3D<>(0, 1, 0), depth - 1, current, true);
         }
