@@ -21,7 +21,7 @@
 #include "Textures.h"
 
 vector<Particles::Particle> Particles::ptcs;
-double Particles::pxpos, Particles::pypos, Particles::pzpos;
+Vector3D<double> Particles::ppos;
 
 void Particles::updateall()
 {
@@ -39,11 +39,9 @@ void Particles::updateall()
         }
 }
 
-void Particles::renderall(double xpos, double ypos, double zpos)
+void Particles::renderall(const Vector3D<double>& pos)
 {
-    pxpos = xpos;
-    pypos = ypos;
-    pzpos = zpos;
+    ppos = pos;
     for (Particle it:ptcs)
         if (it.exist)
             it.Render();
@@ -51,16 +49,11 @@ void Particles::renderall(double xpos, double ypos, double zpos)
 
 void Particles::throwParticle(block pt, float x, float y, float z, float xs, float ys, float zs, float psz, int last)
 {
-    float tcX1 = (float)Textures::getTexcoordX(pt, 2);
-    float tcY1 = (float)Textures::getTexcoordY(pt, 2);
+    float tcX1 = (float)Textures::getTexcoordX(pt, 2), tcY1 = (float)Textures::getTexcoordY(pt, 2);
     Particle ptc;
     ptc.exist = true;
-    ptc.xpos = x;
-    ptc.ypos = y;
-    ptc.zpos = z;
-    ptc.xsp = xs;
-    ptc.ysp = ys;
-    ptc.zsp = zs;
+    ptc.pos = Vector3D<double>(x, y, z);
+    ptc.sp = Vector3D<float>(xs, ys, zs);
     ptc.psize = psz;
     ptc.hb = Hitbox::AABB(x - psz, y - psz, z - psz, x + psz, y + psz, z + psz);
     ptc.lasts = last;
@@ -71,13 +64,10 @@ void Particles::throwParticle(block pt, float x, float y, float z, float xs, flo
 
 void Particles::Particle::Update()
 {
-    double dx, dy, dz;
     float psz = psize;
 
-    hb = Hitbox::AABB(xpos - psz, ypos - psz, zpos - psz, xpos + psz, ypos + psz, zpos + psz);
-    dx = xsp;
-    dy = ysp;
-    dz = zsp;
+    hb = Hitbox::AABB(pos.x - psz, pos.y - psz, pos.z - psz, pos.x + psz, pos.y + psz, pos.z + psz);
+    double dx = sp.x, dy = sp.y, dz = sp.z;
 
     vector<Hitbox::AABB> Hitboxes = World::getHitboxes(Hitbox::Expand(hb, dx, dy, dz));
     for (size_t i = 0; i < Hitboxes.size(); i++)
@@ -96,13 +86,11 @@ void Particles::Particle::Update()
     }
     Hitbox::Move(hb, 0.0, 0.0, dz);
 
-    xpos += dx;
-    ypos += dy;
-    zpos += dz;
-    if (dy != ysp) ysp = 0.0;
-    xsp *= 0.6f;
-    zsp *= 0.6f;
-    ysp -= 0.01f;
+    pos += Vector3D<double>(dx, dy, dz);
+    if (dy != sp.y) sp.y = 0.0;
+    sp.x *= 0.6f;
+    sp.y *= 0.6f;
+    sp.z -= 0.01f;
     lasts -= 1;
 }
 
@@ -110,13 +98,13 @@ void Particles::Particle::Render()
 {
     //if (!Frustum::aabbInFrustum(hb)) return;
     float size = (float)BLOCKTEXTURE_UNITSIZE / BLOCKTEXTURE_SIZE * (psize <= 1.0f ? psize : 1.0f);
-    float col = World::getbrightness(RoundInt(xpos), RoundInt(ypos), RoundInt(zpos)) / (float)World::BRIGHTNESSMAX;
+    float col = World::getbrightness(RoundInt(pos.x), RoundInt(pos.y), RoundInt(pos.z)) / (float)World::BRIGHTNESSMAX;
     float col1 = col * 0.5f;
     float col2 = col * 0.7f;
     double palpha = (lasts < 30 ? lasts / 30.0 : 1.0);
-    double xpos = this->xpos - pxpos;
-    double ypos = this->ypos - pypos;
-    double zpos = this->zpos - pzpos;
+    double xpos = this->pos.x - ppos.x;
+    double ypos = this->pos.y - ppos.y;
+    double zpos = this->pos.z - ppos.z;
 
     glBegin(GL_QUADS);
     glColor4d(col1, col1, col1, palpha);

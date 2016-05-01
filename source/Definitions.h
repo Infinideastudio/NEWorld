@@ -142,16 +142,20 @@ template<typename T = int>
 class Vector3D
 {
 public:
-    T px, py, pz;
-    Vector3D<T>() = delete;
+    T x, y, z;
+    Vector3D<T>()
+        :x(), y(), z()
+    { };
     Vector3D<T>(T ix, T iy, T iz)
-        :px(ix), py(iy), pz(iz) {}
-    ~Vector3D<T>() {}
+        :x(ix), y(iy), z(iz)
+    { }
+    ~Vector3D<T>()
+    { }
     Vector3D<T>& operator += (const Vector3D<T>& add)
     {
-        px += add.px;
-        py += add.py;
-        pz += add.pz;
+        x += add.x;
+        y += add.y;
+        z += add.z;
         return *this;
     }
     Vector3D<T> operator + (const Vector3D<T>& add) const

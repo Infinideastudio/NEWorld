@@ -1017,7 +1017,7 @@ public:
             glTranslated(-selx + xpos, -sely + ypos, -selz + zpos);
         }
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
-        Particles::renderall(xpos, ypos, zpos);
+        Particles::renderall(Vector3D<double>(xpos, ypos, zpos));
 
         glDisable(GL_TEXTURE_2D);
         if (GUIrenderswitch&&sel)

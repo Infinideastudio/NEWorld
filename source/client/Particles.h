@@ -25,21 +25,21 @@
 class Particles
 {
 public:
-    const int PARTICALE_MAX = 4096;
     struct Particle
     {
         bool exist = false;
-        double xpos, ypos, zpos;
-        float xsp, ysp, zsp, psize, tcX, tcY;
+        Vector3D<double> pos;
+        Vector3D<float> sp;
+        float psize, tcX, tcY;
         int lasts;
         Hitbox::AABB hb;
         void Update();
         void Render();
     };
     static vector<Particle> ptcs;
-    static double pxpos, pypos, pzpos;
+    static Vector3D<double> ppos;
     static void updateall();
-    static void renderall(double xpos, double ypos, double zpos);
+    static void renderall(const Vector3D<double>& pos);
     static void throwParticle(block pt, float x, float y, float z, float xs, float ys, float zs, float psz, int last);
 };
 
