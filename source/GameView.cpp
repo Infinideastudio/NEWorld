@@ -115,7 +115,7 @@ public:
             if (updateTimer - lastupdate >= 5.0)
                 lastupdate = updateTimer;
 
-            while ((updateTimer - lastupdate) >= 1.0 / 30.0 && upsc < 60)
+            while ((updateTimer - lastupdate) >= 1.0 / 30.0)
             {
                 lastupdate += 1.0 / 30.0;
                 upsc++;
@@ -1392,7 +1392,7 @@ public:
             TextRenderer::renderASCIIString(0, (pos++) * 16, "Direction:" + pack(Player::heading) + " Head:" + pack(Player::lookupdown) + " Jump speed:" + pack(Player::jump));
 
             {
-                string tmp = "Stats:";
+                string tmp = "Player state:";
                 if (Player::Flying) tmp += " Flying";
                 if (Player::OnGround) tmp += " On_ground";
                 if (Player::NearWall) tmp += " Near_wall";
