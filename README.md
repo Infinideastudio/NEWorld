@@ -12,7 +12,13 @@ NEWorld采用[GPLv3许可证](http://www.gnu.org/licenses/gpl.html)发布并受�
 
 ## 更多文档
 
-* [开发者规范] (doc/regulations.md)
-* [路线图] (doc/roadmap.md)
-* [编译教程] (doc/compiling.md)
 * [用户指南] (doc/usermanual.md)
+
+如果希望加入NEWorld的开发，请阅读
+* [开发者规范] (doc/regulations.md)
+
+如果想要查看NEWorld的发展计划，请阅读
+* [路线图] (doc/roadmap.md)
+
+如果想要自己编译NEWorld，请阅读
+* [编译教程] (doc/compiling.md)
