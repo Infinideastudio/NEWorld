@@ -36,8 +36,8 @@
 #include "Effect.h"
 #include "Items.h"
 #include "Globalization.h"
-#include "../PluginSDK/src/export_variables.h"
-#include "../PluginSDK/src/pluginsdk.h"
+#include "PluginSDK/export_variables.h"
+#include "PluginSDK/pluginsdk.h"
 #include "Setup.h"
 #include "AudioSystem.h"
 
