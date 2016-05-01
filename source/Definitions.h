@@ -56,6 +56,10 @@
 #elif NEWORLD_TARGET_MACOSX
 #include <unistd.h>
 #include <sys/stat.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+//#include <OpenGL/gl3.h>
+//#include <OpenGL/gl3ext.h>
 #endif
 
 using namespace std;
@@ -65,12 +69,7 @@ using namespace std;
 #include <GLFW/glfw3.h>
 
 //GLEXT
-#ifdef NEWORLD_TARGET_MACOSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-//#include <OpenGL/gl3.h>
-//#include <OpenGL/gl3ext.h>
-#else
+#ifndef NEWORLD_TARGET_MACOSX
 #include <GL/glext.h>
 #endif
 
@@ -139,21 +138,27 @@ struct block
     }
 };
 
+template<typename T = int>
 class Vector3D
 {
 public:
-    int px, py, pz;
-    Vector3D() = delete;
-    Vector3D(int ix, int iy, int iz)
+    T px, py, pz;
+    Vector3D<T>() = delete;
+    Vector3D<T>(T ix, T iy, T iz)
         :px(ix), py(iy), pz(iz) {}
-    ~Vector3D() {}
-    Vector3D operator + (const Vector3D& add) const
+    ~Vector3D<T>() {}
+    Vector3D<T>& operator += (const Vector3D<T>& add)
     {
-        Vector3D rt = *this;
-        rt.px += add.px;
-        rt.py += add.py;
-        rt.pz += add.pz;
-        return rt;
+        px += add.px;
+        py += add.py;
+        pz += add.pz;
+        return *this;
+    }
+    Vector3D<T> operator + (const Vector3D<T>& add) const
+    {
+        Vector3D<T> ret = *this;
+        ret += add;
+        return ret;
     }
 };
 
