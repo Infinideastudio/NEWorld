@@ -77,29 +77,14 @@
     <ClInclude Include="source\Frustum.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="source\Renderer.h">
-      <Filter>Source\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="source\GUI.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Menus.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="source\Player.h">
       <Filter>Source\Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Network.h">
-      <Filter>Source\Network</Filter>
     </ClInclude>
     <ClInclude Include="source\PlayerPacket.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
     <ClInclude Include="source\ChunkPacket.h">
       <Filter>Source\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Particles.h">
-      <Filter>Source\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="source\GUI.h">
       <Filter>源代码\GUI</Filter>
@@ -110,32 +95,17 @@
     <ClInclude Include="source\OnlinePlayer.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
-    <ClInclude Include="source\Globalization.h">
-      <Filter>Source\GUI\Globalization</Filter>
-    </ClInclude>
-    <ClInclude Include="source\TextRenderer.h">
-      <Filter>Source\Renderer\GUIRenderer</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Effect.h">
-      <Filter>Source\Renderer\GUIRenderer</Filter>
-    </ClInclude>
     <ClInclude Include="source\HeightMap.h">
       <Filter>Source\Game\World\TerrainGen</Filter>
     </ClInclude>
     <ClInclude Include="source\WorldGen.h">
       <Filter>Source\Game\World\TerrainGen</Filter>
     </ClInclude>
-    <ClInclude Include="source\Textures.h">
-      <Filter>Source\Game\Textures</Filter>
-    </ClInclude>
     <ClInclude Include="source\Items.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="source\Blocks.h">
       <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="source\ShadowMaps.h">
-      <Filter>Source\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="source\WorldRenderer.h">
       <Filter>Source\Renderer</Filter>
@@ -146,33 +116,63 @@
     <ClInclude Include="source\Blocks.h">
       <Filter>源代码\Game</Filter>
     </ClInclude>
-    <ClInclude Include="source\GLProc.h">
-      <Filter>Source\Common\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="source\Hitbox.h">
       <Filter>源代码\Game\Hitbox</Filter>
     </ClInclude>
-    <ClInclude Include="source\Setup.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="source\Shader.h">
-      <Filter>Source\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="source\GameView.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="source\resource.h" />
-    <ClInclude Include="source\AudioSystem.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="source\BlockFuncs.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="source\RandGen.h">
+    <ClInclude Include="source\client\resource.h" />
+    <ClInclude Include="source\client\AudioSystem.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\Effect.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\GLProc.h">
+      <Filter>Source\Common\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\Globalization.h">
+      <Filter>Source\GUI\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\GUI.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\Menus.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shared\logger.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\ShadowMaps.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shared\Network.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\Particles.h">
+      <Filter>Source\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="source\shared\RandGen.h">
       <Filter>Source\Common\RandGen</Filter>
     </ClInclude>
-    <ClInclude Include="source\logger.h">
-      <Filter>Source\Common</Filter>
+    <ClInclude Include="source\client\Renderer.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\Setup.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\Shader.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\TextRenderer.h">
+      <Filter>Source\Renderer\GUIRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\client\Textures.h">
+      <Filter>Source\Game\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,17 +194,8 @@
     <ClCompile Include="source\Frustum.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="source\Renderer.cpp">
-      <Filter>Source\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\GUI.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="source\Player.cpp">
       <Filter>Source\Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Particles.cpp">
-      <Filter>Source\Game\Objects</Filter>
     </ClCompile>
     <ClCompile Include="source\GUI.cpp">
       <Filter>源代码\GUI</Filter>
@@ -212,32 +203,14 @@
     <ClCompile Include="source\OnlinePlayer.cpp">
       <Filter>Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="source\Network.cpp">
-      <Filter>Source\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Globalization.cpp">
-      <Filter>Source\GUI\Globalization</Filter>
-    </ClCompile>
-    <ClCompile Include="source\TextRenderer.cpp">
-      <Filter>Source\Renderer\GUIRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Effect.cpp">
-      <Filter>Source\Renderer\GUIRenderer</Filter>
-    </ClCompile>
     <ClCompile Include="source\HeightMap.cpp">
       <Filter>Source\Game\World\TerrainGen</Filter>
     </ClCompile>
     <ClCompile Include="source\WorldGen.cpp">
       <Filter>Source\Game\World\TerrainGen</Filter>
     </ClCompile>
-    <ClCompile Include="source\Textures.cpp">
-      <Filter>Source\Game\Textures</Filter>
-    </ClCompile>
     <ClCompile Include="source\Items.cpp">
       <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="source\ShadowMaps.cpp">
-      <Filter>Source\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="source\WorldRenderer.cpp">
       <Filter>Source\Renderer</Filter>
@@ -248,35 +221,62 @@
     <ClCompile Include="source\Hitbox.cpp">
       <Filter>源代码\Game\Hitbox</Filter>
     </ClCompile>
-    <ClCompile Include="source\GLProc.cpp">
-      <Filter>Source\Common\OpenGL</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Setup.cpp">
-      <Filter>Source\Common</Filter>
-    </ClCompile>
     <ClCompile Include="source\FunctionsKit.cpp">
       <Filter>Source\Common</Filter>
     </ClCompile>
-    <ClCompile Include="source\Shader.cpp">
-      <Filter>Source\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="source\GameView.cpp">
-      <Filter>Source\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="source\AudioSystem.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="source\BlockFuncs.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="source\Menus.cpp">
+    <ClCompile Include="source\client\AudioSystem.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\Effect.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\GLProc.cpp">
+      <Filter>Source\Common\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\GUI.cpp">
       <Filter>Source\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="source\RandGen.cpp">
+    <ClCompile Include="source\client\Globalization.cpp">
+      <Filter>Source\GUI\Globalization</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\Menus.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shared\logger.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\ShadowMaps.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shared\Network.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\Particles.cpp">
+      <Filter>Source\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="source\shared\RandGen.cpp">
       <Filter>Source\Common\RandGen</Filter>
     </ClCompile>
-    <ClCompile Include="source\logger.cpp">
-      <Filter>Source\Common</Filter>
+    <ClCompile Include="source\client\Renderer.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\Setup.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\Shader.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\TextRenderer.cpp">
+      <Filter>Source\Renderer\GUIRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\client\Textures.cpp">
+      <Filter>Source\Game\Textures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

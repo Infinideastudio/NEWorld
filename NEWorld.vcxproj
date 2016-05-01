@@ -63,17 +63,17 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)include\AL;$(ProjectDir)include;$(ProjectDir)include\asio;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include\AL;$(ProjectDir)include;$(ProjectDir)include\asio;$(ProjectDir)source\shared;$(ProjectDir)source;$(ProjectDir)source\client;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\Debug;$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)include\AL;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include\AL;$(ProjectDir)include;$(ProjectDir)include\asio;$(ProjectDir)source\shared;$(ProjectDir)source;$(ProjectDir)source\client;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\Release;$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
-    <IncludePath>$(SolutionDir)include\AL;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include\AL;$(ProjectDir)include;$(ProjectDir)include\asio;$(ProjectDir)source\shared;$(ProjectDir)source;$(ProjectDir)source\client;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib\Debug;$(ProjectDir)lib;$(ProjectDir)$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -175,72 +175,72 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="source\AudioSystem.h" />
+    <ClInclude Include="source\client\AudioSystem.h" />
     <ClInclude Include="source\BlockFuncs.h" />
     <ClInclude Include="source\Blocks.h" />
     <ClInclude Include="source\Chunk.h" />
     <ClInclude Include="source\ChunkPacket.h" />
     <ClInclude Include="source\ChunkPtrArray.h" />
-    <ClInclude Include="source\Effect.h" />
+    <ClInclude Include="source\client\Effect.h" />
     <ClInclude Include="source\GameView.h" />
-    <ClInclude Include="source\GLProc.h" />
+    <ClInclude Include="source\client\GLProc.h" />
     <ClInclude Include="source\HeightMap.h" />
     <ClInclude Include="source\Definitions.h" />
     <ClInclude Include="source\Frustum.h" />
-    <ClInclude Include="source\GUI.h" />
+    <ClInclude Include="source\client\GUI.h" />
     <ClInclude Include="source\Hitbox.h" />
-    <ClInclude Include="source\Globalization.h" />
+    <ClInclude Include="source\client\Globalization.h" />
     <ClInclude Include="source\Items.h" />
-    <ClInclude Include="source\logger.h" />
-    <ClInclude Include="source\Menus.h" />
-    <ClInclude Include="source\Network.h" />
+    <ClInclude Include="source\shared\logger.h" />
+    <ClInclude Include="source\client\Menus.h" />
+    <ClInclude Include="source\shared\Network.h" />
     <ClInclude Include="source\Object.h" />
     <ClInclude Include="source\OnlinePlayer.h" />
-    <ClInclude Include="source\Particles.h" />
+    <ClInclude Include="source\client\Particles.h" />
     <ClInclude Include="source\Player.h" />
     <ClInclude Include="source\PlayerPacket.h" />
-    <ClInclude Include="source\RandGen.h" />
-    <ClInclude Include="source\Renderer.h" />
-    <ClInclude Include="source\resource.h" />
-    <ClInclude Include="source\Setup.h" />
-    <ClInclude Include="source\Shader.h" />
-    <ClInclude Include="source\ShadowMaps.h" />
-    <ClInclude Include="source\TextRenderer.h" />
-    <ClInclude Include="source\Textures.h" />
+    <ClInclude Include="source\shared\RandGen.h" />
+    <ClInclude Include="source\client\Renderer.h" />
+    <ClInclude Include="source\client\resource.h" />
+    <ClInclude Include="source\client\Setup.h" />
+    <ClInclude Include="source\client\Shader.h" />
+    <ClInclude Include="source\client\ShadowMaps.h" />
+    <ClInclude Include="source\client\TextRenderer.h" />
+    <ClInclude Include="source\client\Textures.h" />
     <ClInclude Include="source\World.h" />
     <ClInclude Include="source\WorldGen.h" />
     <ClInclude Include="source\WorldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\AudioSystem.cpp" />
+    <ClCompile Include="source\client\AudioSystem.cpp" />
     <ClCompile Include="source\BlockFuncs.cpp" />
     <ClCompile Include="source\Chunk.cpp" />
     <ClCompile Include="source\ChunkPtrArray.cpp" />
-    <ClCompile Include="source\Effect.cpp" />
+    <ClCompile Include="source\client\Effect.cpp" />
     <ClCompile Include="source\FunctionsKit.cpp" />
     <ClCompile Include="source\GameView.cpp" />
-    <ClCompile Include="source\GLProc.cpp" />
+    <ClCompile Include="source\client\GLProc.cpp" />
     <ClCompile Include="source\HeightMap.cpp" />
     <ClCompile Include="source\Definitions.cpp" />
     <ClCompile Include="source\Frustum.cpp" />
-    <ClCompile Include="source\GUI.cpp" />
+    <ClCompile Include="source\client\GUI.cpp" />
     <ClCompile Include="source\Hitbox.cpp" />
-    <ClCompile Include="source\Globalization.cpp" />
+    <ClCompile Include="source\client\Globalization.cpp" />
     <ClCompile Include="source\Items.cpp" />
-    <ClCompile Include="source\logger.cpp" />
-    <ClCompile Include="source\Menus.cpp" />
-    <ClCompile Include="source\Network.cpp" />
+    <ClCompile Include="source\shared\logger.cpp" />
+    <ClCompile Include="source\client\Menus.cpp" />
+    <ClCompile Include="source\shared\Network.cpp" />
     <ClCompile Include="source\NEWorld.cpp" />
     <ClCompile Include="source\OnlinePlayer.cpp" />
-    <ClCompile Include="source\Particles.cpp" />
+    <ClCompile Include="source\client\Particles.cpp" />
     <ClCompile Include="source\Player.cpp" />
-    <ClCompile Include="source\RandGen.cpp" />
-    <ClCompile Include="source\Renderer.cpp" />
-    <ClCompile Include="source\Setup.cpp" />
-    <ClCompile Include="source\Shader.cpp" />
-    <ClCompile Include="source\ShadowMaps.cpp" />
-    <ClCompile Include="source\TextRenderer.cpp" />
-    <ClCompile Include="source\Textures.cpp" />
+    <ClCompile Include="source\shared\RandGen.cpp" />
+    <ClCompile Include="source\client\Renderer.cpp" />
+    <ClCompile Include="source\client\Setup.cpp" />
+    <ClCompile Include="source\client\Shader.cpp" />
+    <ClCompile Include="source\client\ShadowMaps.cpp" />
+    <ClCompile Include="source\client\TextRenderer.cpp" />
+    <ClCompile Include="source\client\Textures.cpp" />
     <ClCompile Include="source\World.cpp" />
     <ClCompile Include="source\WorldGen.cpp" />
     <ClCompile Include="source\WorldRenderer.cpp" />

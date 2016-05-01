@@ -335,7 +335,7 @@ void button::update()
         //更新按钮状态
         mouseon = parent->mx >= xmin && parent->mx <= xmax && parent->my >= ymin && parent->my <= ymax;
 
-        pressed = (parent->mb == 1 && (mouseon || parent->enterp)) && focused);
+        pressed = (parent->mb == 1 && (mouseon || parent->enterp)) && focused;
 
         if (parent->mb == 1 && parent->mbl == 0 && mouseon) parent->focusid = id;
         focused = parent->focusid == id;
@@ -407,7 +407,7 @@ void trackbar::render()
     glColor4f(fcR, fcG, fcB, fcA);
     DrawRect(xmin + barpos, xmin + barpos + barwidth, ymin, ymax);
     
-    DrawBorder(xinm, xmax, ymin, ymax, focused, enabled);
+    DrawBorder(xmin, xmax, ymin, ymax, focused, enabled);
     
     glEnable(GL_TEXTURE_2D);
     TextRenderer::setFontColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -650,7 +650,7 @@ void Form::update()
     updated = updated || (enterp = glfwGetKey(MainWindow, GLFW_KEY_ENTER) == GLFW_PRESS);
 
     upkpl = upkp;                                                              //方向键上
-    updated = updated || (upkd = glfwGetKey(MainWindow, GLFW_KEY_UP) == GLFW_PRESS);
+    updated = updated || (upkp = glfwGetKey(MainWindow, GLFW_KEY_UP) == GLFW_PRESS);
 
     downkpl = downkp;                                                          //方向键下
     downkp = glfwGetKey(MainWindow, GLFW_KEY_DOWN) == GLFW_PRESS;
