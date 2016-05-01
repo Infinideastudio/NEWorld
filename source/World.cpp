@@ -714,7 +714,7 @@ block getblock(int x, int y, int z, block mask, chunk* cptr)
     return mask;
 }
 
-block getblock(const Vector3D &pos)
+block getblock(const Vector3D<> &pos)
 {
     return getblock(pos.px, pos.py, pos.pz);
 }
@@ -773,7 +773,7 @@ void setblock(int x, int y, int z, const block &Block, chunk* cptr)
     }
 }
 
-void setblock(const Vector3D &pos, const block &Block)
+void setblock(const Vector3D<> &pos, const block &Block)
 {
     setblock(pos.px, pos.py, pos.pz, Block);
 }
@@ -1030,12 +1030,12 @@ bool buildtree(int x, int y, int z)
     setblock(x, y, z, block(Blocks::DIRT));
     //使用lambda表达式递归模拟树生长
     int begin = y + h * 0.618;
-    Vector3D middle(x, y + h, z);
-    Vector3D vec[5] = { { 0, 1, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 1, 0, 0 }, { -1, 0, 0 } };
+    Vector3D<> middle(x, y + h, z);
+    Vector3D<> vec[5] = { { 0, 1, 0 }, { 0, 0, 1 }, { 0, 0, -1 }, { 1, 0, 0 }, { -1, 0, 0 } };
     float k = 0.2f;
     float s = h * h * k;
     //random_shuffle(vec, vec + 5);
-    function<void(Vector3D,int,block,bool)> grow = [=,&grow,&vec](Vector3D pos, int depth, block parent, bool up)->void
+    function<void(Vector3D<>,int,block,bool)> grow = [=,&grow,&vec](Vector3D<> pos, int depth, block parent, bool up)->void
     {
         if ((depth == 0) || (getblock(pos) != Blocks::AIR) ||
         ((!up) && (Distancen(middle.px, middle.py, middle.pz, pos.px, pos.py, pos.pz) > s * ((pos.py > y + h) ? 0.4 : 1.0))))
@@ -1065,7 +1065,7 @@ bool buildtree(int x, int y, int z)
 
         if (pos.py < begin)
         {
-            grow(pos + Vector3D(0, 1, 0), depth - 1, current, true);
+            grow(pos + Vector3D<>(0, 1, 0), depth - 1, current, true);
         }
         else
         {
@@ -1076,7 +1076,7 @@ bool buildtree(int x, int y, int z)
         }
 
     };
-    Vector3D pos(x, y + 1, z);
+    Vector3D<> pos(x, y + 1, z);
     grow(pos, h * 1.5, Blocks::DIRT, true);
     return true;
 }
