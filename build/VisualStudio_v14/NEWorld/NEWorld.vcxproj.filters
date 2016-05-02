@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source\Network">
+      <UniqueIdentifier>{b6623145-3e33-48a1-be11-1cf4ad2065bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer">
+      <UniqueIdentifier>{a448efda-cf30-4017-8d62-e5feed0408dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\GUIRenderer">
+      <UniqueIdentifier>{bf28355f-5546-46a9-b6d5-c273483456e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Common">
+      <UniqueIdentifier>{2942a024-6889-447e-9918-2cd547c7a601}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Common\OpenGL">
+      <UniqueIdentifier>{f6aa1cb9-6009-404f-b1cc-68775a8f0ece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game">
+      <UniqueIdentifier>{ef7833db-0c84-4c19-a567-6c4833d0e663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\World">
+      <UniqueIdentifier>{0873facd-4fad-448a-a88b-afa8accfd800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\World\TerrainGen">
+      <UniqueIdentifier>{6d859d87-a9b9-43d4-9dc7-49bb51e82557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Objects">
+      <UniqueIdentifier>{fd42ef38-5e12-4c31-bc56-4f954b4953d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Player">
+      <UniqueIdentifier>{40ea1808-71f0-4c4c-a9ee-d3c04da07f95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Textures">
+      <UniqueIdentifier>{1302ac14-18ec-431c-a891-8bbfe96b9099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Hitbox">
+      <UniqueIdentifier>{e671892d-d7a8-41a7-81ad-57abd5613c9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source\Common\RandGen">
+      <UniqueIdentifier>{a5ec2aab-4a00-410f-8b9a-c94635754c70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Shaders">
+      <UniqueIdentifier>{78ae7a31-fc47-4fc7-918b-eeebda79d553}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI">
+      <UniqueIdentifier>{e52faa8e-12e7-4cc9-87b9-ffa4f3b03b4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Globalization">
+      <UniqueIdentifier>{59a4ffae-77d8-4c1f-89ef-1955d49bb547}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\Blocks.h">
+      <Filter>源代码\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Hitbox.h">
+      <Filter>源代码\Game\Hitbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\resource.h" />
+    <ClInclude Include="..\..\..\src\client\Effect.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Frustum.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Renderer.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\ShadowMaps.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\WorldRenderer.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Shader.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\TextRenderer.h">
+      <Filter>Source\Renderer\GUIRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ChunkPacket.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\OnlinePlayer.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\PlayerPacket.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Network.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\GLProc.h">
+      <Filter>Source\Common\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Definitions.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\logger.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\RandGen.h">
+      <Filter>Source\Common\RandGen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Setup.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\GameView.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Items.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\BlockFuncs.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Blocks.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\AudioSystem.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\HeightMap.h">
+      <Filter>Source\Game\World\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\WorldGen.h">
+      <Filter>Source\Game\World\TerrainGen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Chunk.h">
+      <Filter>Source\Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\ChunkPtrArray.h">
+      <Filter>Source\Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\World.h">
+      <Filter>Source\Game\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Textures.h">
+      <Filter>Source\Game\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Player.h">
+      <Filter>Source\Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Object.h">
+      <Filter>Source\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Particles.h">
+      <Filter>Source\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Hitbox.h">
+      <Filter>Source\Game\Hitbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\GUI.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Globalization.h">
+      <Filter>Source\GUI\Globalization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Menus.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Hitbox.cpp">
+      <Filter>源代码\Game\Hitbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\NEWorld.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Effect.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Frustum.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Renderer.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\ShadowMaps.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\WorldRenderer.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Shader.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\TextRenderer.cpp">
+      <Filter>Source\Renderer\GUIRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\OnlinePlayer.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\Network.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\GLProc.cpp">
+      <Filter>Source\Common\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Definitions.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\FunctionsKit.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\logger.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\RandGen.cpp">
+      <Filter>Source\Common\RandGen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Setup.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\GameView.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Items.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\BlockFuncs.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\AudioSystem.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\HeightMap.cpp">
+      <Filter>Source\Game\World\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\WorldGen.cpp">
+      <Filter>Source\Game\World\TerrainGen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Chunk.cpp">
+      <Filter>Source\Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\ChunkPtrArray.cpp">
+      <Filter>Source\Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\World.cpp">
+      <Filter>Source\Game\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Textures.cpp">
+      <Filter>Source\Game\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Player.cpp">
+      <Filter>Source\Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Particles.cpp">
+      <Filter>Source\Game\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\Hitbox.cpp">
+      <Filter>Source\Game\Hitbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\GUI.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Globalization.cpp">
+      <Filter>Source\GUI\Globalization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Menus.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\src\client\Icon.ico">
+      <Filter>Resources</Filter>
+    </Image>
+    <Image Include="..\..\..\src\neworld.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\src\resource.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Shaders\Depth.fsh">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="..\..\..\Shaders\Main.fsh">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="..\..\..\Shaders\Shadow.fsh">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="..\..\..\Shaders\Depth.vsh">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="..\..\..\Shaders\Main.vsh">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+    <None Include="..\..\..\Shaders\Shadow.vsh">
+      <Filter>Resources\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

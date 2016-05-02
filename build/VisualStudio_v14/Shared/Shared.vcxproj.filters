@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Headers\PluginSDK">
+      <UniqueIdentifier>{80b6d6b8-c426-4152-b94c-18dc6fe0c985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\PluginSDK">
+      <UniqueIdentifier>{074e2af5-c194-448c-a75f-872206443dab}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\shared\chunk.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\logger.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Network.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\RandGen.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\fundamental_structure.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\block.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\fundamental_algorithm.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\PluginSDK\pluginsdk.h">
+      <Filter>Headers\PluginSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\PluginSDK\export_variables.h">
+      <Filter>Headers\PluginSDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\PluginSDK\defs.h">
+      <Filter>Headers\PluginSDK</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\shared\logger.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\Network.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\RandGen.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\chunk.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\fundamental_algorithm.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\PluginSDK\export_variables.cpp">
+      <Filter>Source\PluginSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\PluginSDK\pluginsdk.cpp">
+      <Filter>Source\PluginSDK</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

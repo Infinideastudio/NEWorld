@@ -38,14 +38,14 @@ namespace Network
 
     class Request
     {
-    public:
-        Request(const vector<char>& _data, int signal) :
-            data(_data), _signal(signal) {}
-        Request(const vector<char>& _data, int signal, std::function<void(void*, int)> callback) :
-            data(_data), _signal(signal), _callback(callback) {}
-        int _signal;
-        vector<char> data;
-        std::function<void(void*, int)> _callback;
+        public:
+            Request(const vector<char>& _data, int signal) :
+                data(_data), _signal(signal) {}
+            Request(const vector<char>& _data, int signal, std::function<void(void*, int)> callback) :
+                data(_data), _signal(signal), _callback(callback) {}
+            int _signal;
+            vector<char> data;
+            std::function<void(void*, int)> _callback;
     };
 
     //private section

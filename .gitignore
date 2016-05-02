@@ -16,7 +16,7 @@
 [Rr]elease/
 x64/
 x86/
-[Bb]uild/
+# [Bb]uild/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -217,10 +217,7 @@ cscope.*
 /NEWorld.VC.VC.opendb
 
 # Unnecessary binary asset
-[Ff]onts/
-[Aa]udio/
-[Ll]ocale/
-[Tt]extures/
+[Aa]ssets/
 
 # Unittest
 *.unittest.cpp
@@ -231,6 +228,7 @@ a.out
 
 # Final NEWorld executable
 NEWorld
+!NEWorld/
 
 # NEWorld options.ini
 options.ini

@@ -24,8 +24,9 @@
 
 #include <string>
 #include "fundamental_structure.h"
+#include "fundamental_algorithm.h"
 
-// 一种方块
+// 方块类型
 class BlockType
 {
     private:
@@ -45,11 +46,37 @@ class BlockType
         {
             return m_guid;
         }
+
+        // 获取这个方块类型的内部符号名称
+        virtual std::string get_symbol();
+        
+        // 获取翻译后准备显示在屏幕上的名称
+        virtual std::string get_translated_name();
+        
+        virtual void norm_update(Block& b, Block& ori);
+
+        virtual void tick_update(Block& b);
+        
+        virtual AABB get_hitbox();
 };
 
-// 一个方块实例
+std::map<std::string, BlockType> BlockTypesTable;
+
+// 初始化方块类型表
+void init_block_types_table();
+
+// 方块实例
 class Block : public BlockType
 {
 };
+
+class BlockOven : public Block
+{
+    private:
+        // 被烤的物品
+        // 燃料物品
+        // 成品物品
+        // 烘烤的状态
+}
 
 #endif
