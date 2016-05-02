@@ -49,14 +49,14 @@ class BlockType
 
         // 获取这个方块类型的内部符号名称
         virtual std::string get_symbol();
-        
+
         // 获取翻译后准备显示在屏幕上的名称
         virtual std::string get_translated_name();
-        
+
         virtual void norm_update(Block& b, Block& ori);
 
         virtual void tick_update(Block& b);
-        
+
         virtual AABB get_hitbox();
 };
 

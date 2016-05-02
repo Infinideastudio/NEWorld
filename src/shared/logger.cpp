@@ -22,7 +22,7 @@
 
 Logger GlobalLogger;
 
-void Logger::Log(std::string information, CriticalLevel level)
+void Logger::log(std::string information, CriticalLevel level)
 {
     std::stringstream ss;
     ss << '[' << clock() * 1.0 / CLOCKS_PER_SEC << "] ";
@@ -53,7 +53,7 @@ void Logger::Log(std::string information, CriticalLevel level)
 #endif
 }
 
-string Logger::ExportAll()
+string Logger::export_to_string()
 {
     std::string ret;
     for (vector<string>::iterator it = m_logs.begin(); it != m_logs.end(); ++it)
@@ -63,12 +63,12 @@ string Logger::ExportAll()
 
 void DebugWarning(std::string msg)
 {
-    GlobalLogger.Log(msg, Logger::CRITICAL_LEVEL_WARNING);
+    GlobalLogger.log(msg, Logger::CRITICAL_LEVEL_WARNING);
 }
 
 void DebugError(std::string msg)
 {
-    GlobalLogger.Log(msg, Logger::CRITICAL_LEVEL_ERROR);
+    GlobalLogger.log(msg, Logger::CRITICAL_LEVEL_ERROR);
 #ifdef _DEBUG
     assert(false);
 #endif
