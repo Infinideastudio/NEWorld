@@ -21,7 +21,7 @@
 #include "Frustum.h"
 #include "AudioSystem.h"
 #include "World.h"
-#include "../PluginSDK/src/pluginsdk.h"
+#include "PluginSDK/pluginsdk.h"
 
 extern string inputstr;
 
