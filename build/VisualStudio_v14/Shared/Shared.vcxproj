@@ -113,10 +113,6 @@
     <ClInclude Include="..\..\..\src\PluginSDK\defs.h" />
     <ClInclude Include="..\..\..\src\PluginSDK\export_variables.h" />
     <ClInclude Include="..\..\..\src\PluginSDK\pluginsdk.h" />
-    <ClInclude Include="..\..\..\src\shared\block.h" />
-    <ClInclude Include="..\..\..\src\shared\chunk.h" />
-    <ClInclude Include="..\..\..\src\shared\fundamental_algorithm.h" />
-    <ClInclude Include="..\..\..\src\shared\fundamental_structure.h" />
     <ClInclude Include="..\..\..\src\shared\logger.h" />
     <ClInclude Include="..\..\..\src\shared\Network.h" />
     <ClInclude Include="..\..\..\src\shared\RandGen.h" />
@@ -124,8 +120,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\PluginSDK\export_variables.cpp" />
     <ClCompile Include="..\..\..\src\PluginSDK\pluginsdk.cpp" />
-    <ClCompile Include="..\..\..\src\shared\chunk.cpp" />
-    <ClCompile Include="..\..\..\src\shared\fundamental_algorithm.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\Network.cpp" />
     <ClCompile Include="..\..\..\src\shared\RandGen.cpp" />

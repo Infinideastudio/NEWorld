@@ -17,9 +17,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\shared\chunk.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\shared\logger.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -27,15 +24,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\RandGen.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\fundamental_structure.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\block.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\fundamental_algorithm.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\PluginSDK\pluginsdk.h">
@@ -56,12 +44,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\RandGen.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\chunk.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\fundamental_algorithm.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\PluginSDK\export_variables.cpp">
