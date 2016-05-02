@@ -221,6 +221,7 @@ cscope.*
 [Aa]udio/
 [Ll]ocale/
 [Tt]extures/
+assets/
 
 # Unittest
 *.unittest.cpp
