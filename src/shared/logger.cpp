@@ -20,8 +20,6 @@
 #include "logger.h"
 #include <assert.h>
 
-Logger GlobalLogger;
-
 void Logger::log(std::string information, CriticalLevel level)
 {
     std::stringstream ss;
@@ -53,7 +51,7 @@ void Logger::log(std::string information, CriticalLevel level)
 #endif
 }
 
-string Logger::export_to_string()
+string Logger::exportToString()
 {
     std::string ret;
     for (vector<string>::iterator it = m_logs.begin(); it != m_logs.end(); ++it)
@@ -61,15 +59,4 @@ string Logger::export_to_string()
     return ret;
 }
 
-void DebugWarning(std::string msg)
-{
-    GlobalLogger.log(msg, Logger::CRITICAL_LEVEL_WARNING);
-}
 
-void DebugError(std::string msg)
-{
-    GlobalLogger.log(msg, Logger::CRITICAL_LEVEL_ERROR);
-#ifdef _DEBUG
-    assert(false);
-#endif
-}

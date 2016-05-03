@@ -265,8 +265,8 @@ inline bool beginWith(const wstring& str, const wstring& begin)
     return str.substr(0, begin.size()) == begin;
 }
 
-void DebugWarning(string msg);
-void DebugError(string msg);
+void logWarning(string msg);
+void logError(string msg);
 
 template<typename T>
 inline T extract(const wstring& str)

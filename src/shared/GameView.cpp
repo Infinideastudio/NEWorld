@@ -139,7 +139,7 @@ public:
         World::saveAllChunks();
         if (!Player::save())
         {
-            DebugWarning("Failed saving player info!");
+            logWarning("Failed saving player info!");
         }
     }
 
@@ -147,7 +147,7 @@ public:
     {
         if (!Player::load())
         {
-            DebugWarning("Failed loading player info!");
+            logWarning("Failed loading player info!");
             return false;
         }
         return true;
@@ -665,7 +665,7 @@ public:
                         vector<string> command = split(chatword, " ");
                         if (!ExecuteCommand(command))   //执行失败
                         {
-                            DebugWarning("Fail to execute the command: " + chatword);
+                            logWarning("Fail to execute the command: " + chatword);
                             chatMessages.push_back("Fail to execute the command: " + chatword);
                         }
                     }

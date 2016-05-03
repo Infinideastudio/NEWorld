@@ -56,8 +56,30 @@ class Logger
         void log(std::string information, CriticalLevel level = CRITICAL_LEVEL_INFORMATION);
 
         //导出存储的所有日志信息到一个std::string中。
-        std::string export_to_string();
+        std::string exportToString();
+
+		void clear() {
+			m_logs.clear();
+		}
 };
 
+inline void logWarning(std::string msg)
+{
+	GlobalLogger.log(msg, Logger::CRITICAL_LEVEL_WARNING);
+}
+
+inline void logError(std::string msg)
+{
+	GlobalLogger.log(msg, Logger::CRITICAL_LEVEL_ERROR);
+#ifdef _DEBUG
+	assert(false);
+#endif
+}
+
+inline Logger& getGlobalLogger()
+{
+	static Logger globalLogger;
+	return globalLogger;
+}
 
 #endif

@@ -7,9 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\server\Console.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\server\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -18,9 +15,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\server\Console.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\server\Network.h">
       <Filter>Source</Filter>
     </ClInclude>

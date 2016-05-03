@@ -221,6 +221,7 @@
     <ClCompile Include="..\..\..\src\client\GLProc.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI.cpp" />
     <ClCompile Include="..\..\..\src\client\Menus.cpp" />
+    <ClCompile Include="..\..\..\src\client\NEWorld.cpp" />
     <ClCompile Include="..\..\..\src\client\Particles.cpp" />
     <ClCompile Include="..\..\..\src\client\Renderer.cpp" />
     <ClCompile Include="..\..\..\src\client\Setup.cpp" />
@@ -235,7 +236,6 @@
     <ClCompile Include="..\..\..\src\HeightMap.cpp" />
     <ClCompile Include="..\..\..\src\Hitbox.cpp" />
     <ClCompile Include="..\..\..\src\Items.cpp" />
-    <ClCompile Include="..\..\..\src\NEWorld.cpp" />
     <ClCompile Include="..\..\..\src\OnlinePlayer.cpp" />
     <ClCompile Include="..\..\..\src\Player.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />

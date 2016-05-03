@@ -92,7 +92,7 @@ chunk* AddChunk(int x, int y, int z)
     pair<int, int> pos = binary_search_chunks(cid);
     if (chunks.size() && chunks[pos.second]->id == cid)
     {
-        DebugError("Chunk(" + pack(x) + "," + pack(y) + "," + pack(z) + ") has already been loaded when adding such chunk.");
+        logError("Chunk(" + pack(x) + "," + pack(y) + "," + pack(z) + ") has already been loaded when adding such chunk.");
         return chunks[pos.second];
     }
 

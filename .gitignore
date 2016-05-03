@@ -213,8 +213,8 @@ include/
 # CScope database
 cscope.*
 *.o
-/NEWorld.VC.db
-/NEWorld.VC.VC.opendb
+*.VC.db
+*.VC.VC.opendb
 
 # Unnecessary binary asset
 [Aa]ssets/

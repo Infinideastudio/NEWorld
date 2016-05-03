@@ -15,12 +15,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\server\Console.cpp" />
     <ClCompile Include="..\..\..\src\server\Main.cpp" />
     <ClCompile Include="..\..\..\src\server\Network.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\server\Console.h" />
     <ClInclude Include="..\..\..\src\server\Network.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
