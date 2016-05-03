@@ -74,6 +74,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NEWORLD_TARGET_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -91,6 +92,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NEWORLD_TARGET_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -112,8 +114,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\b\src\shared\Globalization.h" />
-    <ClInclude Include="..\..\..\..\..\b\src\shared\Network.h" />
     <ClInclude Include="..\..\..\src\PluginSDK\defs.h" />
     <ClInclude Include="..\..\..\src\PluginSDK\export_variables.h" />
     <ClInclude Include="..\..\..\src\PluginSDK\pluginsdk.h" />
@@ -124,23 +124,19 @@
     <ClInclude Include="..\..\..\src\shared\ChunkPtrArray.h" />
     <ClInclude Include="..\..\..\src\shared\Definitions.h" />
     <ClInclude Include="..\..\..\src\shared\Frustum.h" />
-    <ClInclude Include="..\..\..\src\shared\GameView.h" />
     <ClInclude Include="..\..\..\src\shared\HeightMap.h" />
     <ClInclude Include="..\..\..\src\shared\Hitbox.h" />
     <ClInclude Include="..\..\..\src\shared\Items.h" />
     <ClInclude Include="..\..\..\src\shared\logger.h" />
     <ClInclude Include="..\..\..\src\shared\Network.h" />
     <ClInclude Include="..\..\..\src\shared\Object.h" />
-    <ClInclude Include="..\..\..\src\shared\Player.h" />
     <ClInclude Include="..\..\..\src\shared\PlayerPacket.h" />
     <ClInclude Include="..\..\..\src\shared\RandGen.h" />
-    <ClInclude Include="..\..\..\src\shared\World.h" />
+    <ClInclude Include="..\..\..\src\shared\WorldUpdate.h" />
     <ClInclude Include="..\..\..\src\shared\WorldGen.h" />
     <ClInclude Include="..\..\..\src\shared\WorldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\b\src\shared\Globalization.cpp" />
-    <ClCompile Include="..\..\..\..\..\b\src\shared\Network.cpp" />
     <ClCompile Include="..\..\..\src\PluginSDK\export_variables.cpp" />
     <ClCompile Include="..\..\..\src\PluginSDK\pluginsdk.cpp" />
     <ClCompile Include="..\..\..\src\shared\BlockFuncs.cpp" />
@@ -149,17 +145,15 @@
     <ClCompile Include="..\..\..\src\shared\Definitions.cpp" />
     <ClCompile Include="..\..\..\src\shared\Frustum.cpp" />
     <ClCompile Include="..\..\..\src\shared\FunctionsKit.cpp" />
-    <ClCompile Include="..\..\..\src\shared\GameView.cpp" />
     <ClCompile Include="..\..\..\src\shared\HeightMap.cpp" />
     <ClCompile Include="..\..\..\src\shared\Hitbox.cpp" />
     <ClCompile Include="..\..\..\src\shared\Items.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\Network.cpp" />
-    <ClCompile Include="..\..\..\src\shared\Player.cpp" />
     <ClCompile Include="..\..\..\src\shared\RandGen.cpp" />
-    <ClCompile Include="..\..\..\src\shared\World.cpp" />
     <ClCompile Include="..\..\..\src\shared\WorldGen.cpp" />
     <ClCompile Include="..\..\..\src\shared\WorldRenderer.cpp" />
+    <ClCompile Include="..\..\..\src\shared\WorldUpdate.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

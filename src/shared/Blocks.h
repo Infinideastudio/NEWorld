@@ -20,7 +20,6 @@
 #define BLOCKS_H
 
 #include "Definitions.h"
-#include "Globalization.h"
 #include "BlockFuncs.h"
 namespace Blocks
 {
@@ -71,10 +70,10 @@ public:
     SingleBlock(string blockName, bool solid, bool opaque, bool translucent, bool _explosive, float _hardness, BUDF _buf) :
         name(blockName), Solid(solid), Opaque(opaque), Translucent(translucent), explosive(_explosive), Hardness(_hardness), BlockUpdateFunc(_buf) {};
 
-    string getBlockName() const
-    {
-        return Globalization::GetStrbyKey(name);
-    }
+    //string getBlockName() const;
+    //{
+    //    return Globalization::GetStrbyKey(name);
+    //}
 
     bool isSolid() const
     {

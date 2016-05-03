@@ -27,7 +27,6 @@
 #include "Hitbox.h"
 #include "Blocks.h"
 #include "Player.h"
-#include "Particles.h"
 #include "Items.h"
 
 extern int ViewDistance;

@@ -175,18 +175,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\b\src\client\OnlinePlayer.h" />
-    <ClInclude Include="..\..\..\src\BlockFuncs.h" />
-    <ClInclude Include="..\..\..\src\Blocks.h" />
-    <ClInclude Include="..\..\..\src\Chunk.h" />
-    <ClInclude Include="..\..\..\src\ChunkPacket.h" />
-    <ClInclude Include="..\..\..\src\ChunkPtrArray.h" />
     <ClInclude Include="..\..\..\src\client\AudioSystem.h" />
     <ClInclude Include="..\..\..\src\client\Effect.h" />
+    <ClInclude Include="..\..\..\src\client\Foundation.h" />
+    <ClInclude Include="..\..\..\src\client\GameView.h" />
+    <ClInclude Include="..\..\..\src\client\Globalization.h" />
     <ClInclude Include="..\..\..\src\client\GLProc.h" />
     <ClInclude Include="..\..\..\src\client\GUI.h" />
     <ClInclude Include="..\..\..\src\client\Menus.h" />
     <ClInclude Include="..\..\..\src\client\Particles.h" />
+    <ClInclude Include="..\..\..\src\client\Player.h" />
     <ClInclude Include="..\..\..\src\client\Renderer.h" />
     <ClInclude Include="..\..\..\src\client\resource.h" />
     <ClInclude Include="..\..\..\src\client\Setup.h" />
@@ -194,54 +192,33 @@
     <ClInclude Include="..\..\..\src\client\ShadowMaps.h" />
     <ClInclude Include="..\..\..\src\client\TextRenderer.h" />
     <ClInclude Include="..\..\..\src\client\Textures.h" />
-    <ClInclude Include="..\..\..\src\Definitions.h" />
-    <ClInclude Include="..\..\..\src\Frustum.h" />
-    <ClInclude Include="..\..\..\src\GameView.h" />
-    <ClInclude Include="..\..\..\src\HeightMap.h" />
-    <ClInclude Include="..\..\..\src\Hitbox.h" />
-    <ClInclude Include="..\..\..\src\Items.h" />
-    <ClInclude Include="..\..\..\src\Object.h" />
-    <ClInclude Include="..\..\..\src\Player.h" />
-    <ClInclude Include="..\..\..\src\PlayerPacket.h" />
+    <ClInclude Include="..\..\..\src\client\WorldRenderer.h" />
     <ClInclude Include="..\..\..\src\shared\logger.h" />
     <ClInclude Include="..\..\..\src\shared\Network.h" />
     <ClInclude Include="..\..\..\src\shared\RandGen.h" />
-    <ClInclude Include="..\..\..\src\World.h" />
-    <ClInclude Include="..\..\..\src\WorldGen.h" />
-    <ClInclude Include="..\..\..\src\WorldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\b\src\client\OnlinePlayer.cpp" />
-    <ClCompile Include="..\..\..\src\BlockFuncs.cpp" />
-    <ClCompile Include="..\..\..\src\Chunk.cpp" />
-    <ClCompile Include="..\..\..\src\ChunkPtrArray.cpp" />
     <ClCompile Include="..\..\..\src\client\AudioSystem.cpp" />
     <ClCompile Include="..\..\..\src\client\Effect.cpp" />
+    <ClCompile Include="..\..\..\src\client\GameView.cpp" />
+    <ClCompile Include="..\..\..\src\client\Globalization.cpp" />
     <ClCompile Include="..\..\..\src\client\GLProc.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI.cpp" />
     <ClCompile Include="..\..\..\src\client\Menus.cpp" />
     <ClCompile Include="..\..\..\src\client\NEWorld.cpp" />
     <ClCompile Include="..\..\..\src\client\Particles.cpp" />
+    <ClCompile Include="..\..\..\src\client\Player.cpp" />
     <ClCompile Include="..\..\..\src\client\Renderer.cpp" />
     <ClCompile Include="..\..\..\src\client\Setup.cpp" />
     <ClCompile Include="..\..\..\src\client\Shader.cpp" />
     <ClCompile Include="..\..\..\src\client\ShadowMaps.cpp" />
     <ClCompile Include="..\..\..\src\client\TextRenderer.cpp" />
     <ClCompile Include="..\..\..\src\client\Textures.cpp" />
-    <ClCompile Include="..\..\..\src\Definitions.cpp" />
-    <ClCompile Include="..\..\..\src\Frustum.cpp" />
-    <ClCompile Include="..\..\..\src\FunctionsKit.cpp" />
-    <ClCompile Include="..\..\..\src\GameView.cpp" />
-    <ClCompile Include="..\..\..\src\HeightMap.cpp" />
-    <ClCompile Include="..\..\..\src\Hitbox.cpp" />
-    <ClCompile Include="..\..\..\src\Items.cpp" />
-    <ClCompile Include="..\..\..\src\Player.cpp" />
+    <ClCompile Include="..\..\..\src\client\World.cpp" />
+    <ClCompile Include="..\..\..\src\client\WorldRenderer.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\Network.cpp" />
     <ClCompile Include="..\..\..\src\shared\RandGen.cpp" />
-    <ClCompile Include="..\..\..\src\World.cpp" />
-    <ClCompile Include="..\..\..\src\WorldGen.cpp" />
-    <ClCompile Include="..\..\..\src\WorldRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico" />

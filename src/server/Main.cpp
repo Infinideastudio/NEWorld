@@ -22,8 +22,6 @@
 #include <vector>
 #include <map>
 #include "Network.h"
-#include "Console.h"
-#include "..\..\source\PlayerPacket.h"
 using std::map;
 using std::vector;
 using std::thread;

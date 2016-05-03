@@ -17,6 +17,7 @@
  */
 
 #include "WorldRenderer.h"
+#include "..\shared\Shared.h"
 
 namespace WorldRenderer
 {
