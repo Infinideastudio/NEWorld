@@ -182,7 +182,7 @@ void chunk::Load(bool initIfEmpty)
                 }
             }
         }
-		/*
+        /*
         if (!Empty)
         {
             //Build trees
@@ -190,7 +190,7 @@ void chunk::Load(bool initIfEmpty)
                 if (pblocks[index] == block(Blocks::GRASS) && ((cx&cy^cz|~index)%233)==0)
                     buildtree((cx << 4) ^ ((index&((1 << 12) - (1 << 8))) >> 8), (cy << 4) ^ ((index&((1 << 8) - (1 << 4))) >> 4), (cz << 4) ^ (index & 15));
         }
-		*/
+        */
     }
     if (!Empty) updated = true;
 }

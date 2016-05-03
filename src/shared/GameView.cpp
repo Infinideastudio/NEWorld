@@ -1955,7 +1955,8 @@ public:
             glDeleteBuffersARB(World::vbuffersShouldDelete.size(), World::vbuffersShouldDelete.data());
             World::vbuffersShouldDelete.clear();
         }
-        if (multiplayer) Network::Clean();
+        if (multiplayer)
+            Network::Clean();
         chatMessages.clear();
         GUI::BackToMain();
     }

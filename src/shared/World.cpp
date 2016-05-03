@@ -1213,7 +1213,7 @@ void picktree(int x, int y, int z)
 
 void pickblock(int x, int y, int z)
 {
-	/*
+    /*
     if (getblock(x, y, z) == block(Blocks::WOOD) &&
             ((getblock(x, y+1, z) == block(Blocks::WOOD))|| (getblock(x, y + 1, z) == block(Blocks::LEAF))) &&
             (getblock(x, y, z + 1) == block(Blocks::AIR)) && (getblock(x, y, z - 1) == block(Blocks::AIR)) &&
@@ -1223,7 +1223,7 @@ void pickblock(int x, int y, int z)
     {
         picktree(x, y + 1, z);    //触发砍树模式
     }
-	*/
+    */
     //击打树叶
     if (getblock(x, y, z) == block(Blocks::LEAF))
         pickleaf();

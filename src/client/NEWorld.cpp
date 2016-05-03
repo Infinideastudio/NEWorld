@@ -31,7 +31,7 @@
 template<typename T>
 void loadoption(std::map<string, string> &m, const char* name, T &value)
 {
-	auto iter = m.find(name);
+    auto iter = m.find(name);
     if (iter == m.end()) return;
     std::stringstream ss;
     ss << *iter->second;

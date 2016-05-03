@@ -55,32 +55,33 @@ class Logger
         //导出存储的所有日志信息到一个std::string中。
         std::string exportAll();
 
-		void clear() {
-			m_logs.clear();
-		}
+        void clear() {
+            m_logs.clear();
+        }
 
 private:
-	std::vector<std::string> m_logs;
+    std::vector<std::string> m_logs;
 
 };
 
+inline Logger& getGlobalLogger()
+{
+    static Logger globalLogger;
+    return globalLogger;
+}
+
 inline void logWarning(std::string msg)
 {
-	getGlobalLogger().log(msg, Logger::CRITICAL_LEVEL_WARNING);
+    getGlobalLogger().log(msg, Logger::CRITICAL_LEVEL_WARNING);
 }
 
 inline void logError(std::string msg)
 {
-	getGlobalLogger().log(msg, Logger::CRITICAL_LEVEL_ERROR);
+    getGlobalLogger().log(msg, Logger::CRITICAL_LEVEL_ERROR);
 #ifdef _DEBUG
-	assert(false);
+    assert(false);
 #endif
 }
 
-inline Logger& getGlobalLogger()
-{
-	static Logger globalLogger;
-	return globalLogger;
-}
 
 #endif

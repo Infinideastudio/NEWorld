@@ -38,7 +38,7 @@ void TextRenderer::BuildFont(int w, int h)
     glBindTexture(GL_TEXTURE_2D, Font);
     for (gloop = 0; gloop < 256; gloop++)
     {
-		float cx = (float)(gloop % 16) / 16.0f, cy = (float)(gloop / 16) / 16.0f;
+        float cx = (float)(gloop % 16) / 16.0f, cy = (float)(gloop / 16) / 16.0f;
 
         glNewList(gbe + gloop, GL_COMPILE);
         glBegin(GL_QUADS);

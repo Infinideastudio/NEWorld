@@ -89,6 +89,9 @@
     <ClInclude Include="..\..\..\src\shared\OnlinePlayer.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\b\src\shared\Network.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\logger.cpp">
@@ -149,6 +152,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\WorldRenderer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\b\src\shared\Network.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
