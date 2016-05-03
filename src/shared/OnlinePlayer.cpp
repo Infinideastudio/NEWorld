@@ -17,7 +17,6 @@
  */
 
 #include "OnlinePlayer.h"
-#include "Renderer.h"
 
 map<SkinID, pair<VBOID, vtxCount>> playerSkins;
 vector<OnlinePlayer> players;

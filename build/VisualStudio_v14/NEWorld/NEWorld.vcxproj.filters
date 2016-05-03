@@ -54,9 +54,6 @@
     <Filter Include="Source\GUI">
       <UniqueIdentifier>{e52faa8e-12e7-4cc9-87b9-ffa4f3b03b4d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\GUI\Globalization">
-      <UniqueIdentifier>{59a4ffae-77d8-4c1f-89ef-1955d49bb547}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\resource.h" />
@@ -82,9 +79,6 @@
       <Filter>Source\Renderer\GUIRenderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\ChunkPacket.h">
-      <Filter>Source\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\OnlinePlayer.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\PlayerPacket.h">
@@ -156,11 +150,11 @@
     <ClInclude Include="..\..\..\src\client\GUI.h">
       <Filter>Source\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\client\Globalization.h">
-      <Filter>Source\GUI\Globalization</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\client\Menus.h">
       <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\b\src\client\OnlinePlayer.h">
+      <Filter>Source\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +178,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\TextRenderer.cpp">
       <Filter>Source\Renderer\GUIRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\OnlinePlayer.cpp">
-      <Filter>Source\Network</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\Network.cpp">
       <Filter>Source\Network</Filter>
@@ -251,14 +242,14 @@
     <ClCompile Include="..\..\..\src\client\GUI.cpp">
       <Filter>Source\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\client\Globalization.cpp">
-      <Filter>Source\GUI\Globalization</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\client\Menus.cpp">
       <Filter>Source\GUI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\NEWorld.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\b\src\client\OnlinePlayer.cpp">
+      <Filter>Source\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

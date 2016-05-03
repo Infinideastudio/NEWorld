@@ -86,10 +86,10 @@
     <ClInclude Include="..\..\..\src\shared\Object.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\OnlinePlayer.h">
+    <ClInclude Include="..\..\..\..\..\b\src\shared\Network.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\b\src\shared\Network.h">
+    <ClInclude Include="..\..\..\..\..\b\src\shared\Globalization.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -139,9 +139,6 @@
     <ClCompile Include="..\..\..\src\shared\Items.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\OnlinePlayer.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\Player.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -155,6 +152,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\b\src\shared\Network.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\b\src\shared\Globalization.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

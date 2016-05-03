@@ -17,6 +17,7 @@
  */
 
 #include "Definitions.h"
+#include "RandGen.h"
 
 using namespace std;
 RandGen *pRandGen;

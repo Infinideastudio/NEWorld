@@ -44,6 +44,14 @@ void saveoption(std::ofstream &out, const char* name, T &value)
     out << string(name) << " " << value << endl;
 }
 
+void LoadItemsTextures()
+{
+    itemsinfo[BuiltInItems::STICK - theFirstItem.ID].texture =
+        Textures::LoadRGBTexture("Textures/Items/stick.bmp");
+    itemsinfo[BuiltInItems::APPLE - theFirstItem.ID].texture =
+        Textures::LoadRGBTexture("Textures/Items/apple.bmp");
+}
+
 void LoadOptions()
 {
     std::map<string, string> options;

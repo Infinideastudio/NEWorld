@@ -175,6 +175,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\b\src\client\OnlinePlayer.h" />
     <ClInclude Include="..\..\..\src\BlockFuncs.h" />
     <ClInclude Include="..\..\..\src\Blocks.h" />
     <ClInclude Include="..\..\..\src\Chunk.h" />
@@ -182,7 +183,6 @@
     <ClInclude Include="..\..\..\src\ChunkPtrArray.h" />
     <ClInclude Include="..\..\..\src\client\AudioSystem.h" />
     <ClInclude Include="..\..\..\src\client\Effect.h" />
-    <ClInclude Include="..\..\..\src\client\Globalization.h" />
     <ClInclude Include="..\..\..\src\client\GLProc.h" />
     <ClInclude Include="..\..\..\src\client\GUI.h" />
     <ClInclude Include="..\..\..\src\client\Menus.h" />
@@ -201,7 +201,6 @@
     <ClInclude Include="..\..\..\src\Hitbox.h" />
     <ClInclude Include="..\..\..\src\Items.h" />
     <ClInclude Include="..\..\..\src\Object.h" />
-    <ClInclude Include="..\..\..\src\OnlinePlayer.h" />
     <ClInclude Include="..\..\..\src\Player.h" />
     <ClInclude Include="..\..\..\src\PlayerPacket.h" />
     <ClInclude Include="..\..\..\src\shared\logger.h" />
@@ -212,12 +211,12 @@
     <ClInclude Include="..\..\..\src\WorldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\b\src\client\OnlinePlayer.cpp" />
     <ClCompile Include="..\..\..\src\BlockFuncs.cpp" />
     <ClCompile Include="..\..\..\src\Chunk.cpp" />
     <ClCompile Include="..\..\..\src\ChunkPtrArray.cpp" />
     <ClCompile Include="..\..\..\src\client\AudioSystem.cpp" />
     <ClCompile Include="..\..\..\src\client\Effect.cpp" />
-    <ClCompile Include="..\..\..\src\client\Globalization.cpp" />
     <ClCompile Include="..\..\..\src\client\GLProc.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI.cpp" />
     <ClCompile Include="..\..\..\src\client\Menus.cpp" />
@@ -236,7 +235,6 @@
     <ClCompile Include="..\..\..\src\HeightMap.cpp" />
     <ClCompile Include="..\..\..\src\Hitbox.cpp" />
     <ClCompile Include="..\..\..\src\Items.cpp" />
-    <ClCompile Include="..\..\..\src\OnlinePlayer.cpp" />
     <ClCompile Include="..\..\..\src\Player.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\Network.cpp" />
@@ -267,6 +265,11 @@
     <None Include="..\..\..\Shaders\Shadow.vsh">
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.vcxproj">
+      <Project>{286102d2-39f0-4578-8328-fb6b3836393b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -25,26 +25,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -112,6 +112,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\b\src\shared\Globalization.h" />
     <ClInclude Include="..\..\..\..\..\b\src\shared\Network.h" />
     <ClInclude Include="..\..\..\src\PluginSDK\defs.h" />
     <ClInclude Include="..\..\..\src\PluginSDK\export_variables.h" />
@@ -130,7 +131,6 @@
     <ClInclude Include="..\..\..\src\shared\logger.h" />
     <ClInclude Include="..\..\..\src\shared\Network.h" />
     <ClInclude Include="..\..\..\src\shared\Object.h" />
-    <ClInclude Include="..\..\..\src\shared\OnlinePlayer.h" />
     <ClInclude Include="..\..\..\src\shared\Player.h" />
     <ClInclude Include="..\..\..\src\shared\PlayerPacket.h" />
     <ClInclude Include="..\..\..\src\shared\RandGen.h" />
@@ -139,6 +139,7 @@
     <ClInclude Include="..\..\..\src\shared\WorldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\b\src\shared\Globalization.cpp" />
     <ClCompile Include="..\..\..\..\..\b\src\shared\Network.cpp" />
     <ClCompile Include="..\..\..\src\PluginSDK\export_variables.cpp" />
     <ClCompile Include="..\..\..\src\PluginSDK\pluginsdk.cpp" />
@@ -154,7 +155,6 @@
     <ClCompile Include="..\..\..\src\shared\Items.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\Network.cpp" />
-    <ClCompile Include="..\..\..\src\shared\OnlinePlayer.cpp" />
     <ClCompile Include="..\..\..\src\shared\Player.cpp" />
     <ClCompile Include="..\..\..\src\shared\RandGen.cpp" />
     <ClCompile Include="..\..\..\src\shared\World.cpp" />
