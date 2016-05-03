@@ -498,8 +498,7 @@ extern int mw, mb, mbp, mbl, mwl;
 extern double mxdelta, mydelta;
 extern string inputstr;
 
-#include "RandGen.h"
-extern RandGen *pRandGen;
+class RandGen;
+extern RandGen* pRandGen;
 
-extern Logger GlobalLogger;
 #endif

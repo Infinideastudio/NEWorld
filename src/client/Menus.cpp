@@ -400,7 +400,7 @@ void WorldMenu::onUpdate()
                     {
                         worldnames.push_back(fileinfo.name);
                         std::fstream file;
-                        file.open(("Worlds\\" + string(fileinfo.name) + "\\Thumbnail.bmp").c_str(), std::ios::in);
+                        file.open(("Worlds\\" + string(fileinfo.name) + "\    humbnail.bmp").c_str(), std::ios::in);
                         thumbnails.push_back(0);
                         texSizeX.push_back(0);
                         texSizeY.push_back(0);
@@ -410,7 +410,7 @@ void WorldMenu::onUpdate()
                             glBindTexture(GL_TEXTURE_2D, thumbnails[thumbnails.size() - 1]);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                            Textures::TEXTURE_RGB tmb("Worlds\\" + string(fileinfo.name) + "\\Thumbnail.bmp");
+                            Textures::TEXTURE_RGB tmb("Worlds\\" + string(fileinfo.name) + "\    humbnail.bmp");
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tmb.sizeX, tmb.sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, tmb.buffer.get());
                             texSizeX[texSizeX.size() - 1] = tmb.sizeX;
                             texSizeY[texSizeY.size() - 1] = tmb.sizeY;

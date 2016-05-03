@@ -31,9 +31,10 @@
 template<typename T>
 void loadoption(std::map<string, string> &m, const char* name, T &value)
 {
-    if (m.find(name) == m.end()) return;
+	auto iter = m.find(name);
+    if (iter == m.end()) return;
     std::stringstream ss;
-    ss << m[name];
+    ss << *iter->second;
     ss >> value;
 }
 
@@ -132,7 +133,7 @@ int main()
              << "Technical Information:" << endl
              << "Reason:" << endl << desc << endl
              << "Logs:" << endl;
-        cout << GlobalLogger.ExportAll() << endl;
+        cout << getGlobalLogger().exportAll() << endl;
     });
     if (Multisample)
         glfwWindowHint(GLFW_SAMPLES, Multisample);
@@ -183,7 +184,7 @@ int main()
     const GLubyte *renderer = glGetString(GL_RENDERER);
     const GLubyte *version = glGetString(GL_VERSION);
     ss << "Renderer: " << renderer << ", Version: " << version;
-    GlobalLogger.Log(ss.str());
+    getGlobalLogger().Log(ss.str());
 
     if (ppistretch) GUI::InitStretch();
     SetupScreen();

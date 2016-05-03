@@ -51,7 +51,7 @@ void Logger::log(std::string information, CriticalLevel level)
 #endif
 }
 
-string Logger::exportToString()
+string Logger::exportAll()
 {
     std::string ret;
     for (vector<string>::iterator it = m_logs.begin(); it != m_logs.end(); ++it)
