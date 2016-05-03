@@ -21,7 +21,6 @@
 
 #include "Definitions.h"
 
-#ifndef NEWORLD_TARGET_MACOSX
 extern PFNGLTEXIMAGE3DPROC glTexImage3D;
 extern PFNGLTEXSUBIMAGE3DPROC glTexSubImage3D;
 extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
@@ -80,6 +79,5 @@ extern PFNGLGETUNIFORMFVARBPROC glGetUniformfvARB;
 extern PFNGLGETUNIFORMIVARBPROC glGetUniformivARB;
 
 void InitGLProc();
-#endif
 
 #endif

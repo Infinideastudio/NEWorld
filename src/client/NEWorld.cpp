@@ -111,25 +111,10 @@ int main()
 {
     LoadOptions();
     Globalization::Load();
-#ifdef NEWORLD_TARGET_WINDOWS
     _mkdir("Worlds");
     _mkdir("Screenshots");
-#elif NEWORLD_TARGET_MACOSX
-    mkdir("Worlds", 0755);
-    mkdir("Screenshots", 0755);
-#endif
     RandomGeneratorInit();
     glfwInit();
-#if defined(NEWORLD_USE_CORE_PROFILE) && defined(NEWORLD_TARGET_MACOSX)
-    //在Mac OS X上，若要使用OpenGL 3.0和更高的OpenGL版本，必须使用Core Profile。
-    //否则，只能使用传统的OpenGL 2.1。
-    //以下四行用于在Mac上钦定OpenGL 4.1 API。
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    //2011年左右及之后发布的Mac电脑在运行OS X 10.9时都可以支持到OpenGL 4.1。
-#endif
     glfwSetErrorCallback([](int, const char* desc)
     {
         cout << "We are sorry to inform you that NEWorld has crashed." << endl
@@ -187,13 +172,6 @@ int main()
             inputstr += (char)c;
     });
 
-    //记录OpenGL版本信息
-    stringstream ss;
-    const GLubyte *renderer = glGetString(GL_RENDERER);
-    const GLubyte *version = glGetString(GL_VERSION);
-    ss << "Renderer: " << renderer << ", Version: " << version;
-    getGlobalLogger().Log(ss.str());
-
     if (ppistretch) GUI::InitStretch();
     SetupScreen();
     glDisable(GL_CULL_FACE);
@@ -220,10 +198,6 @@ int main()
         glEnd();
         Sleep(5);
     }
-#ifdef PUBLIC_BUILD
-    //在公共版本中，停留3秒，为了让用户看清GPLv3标示和法律提示。
-    Sleep(3000);
-#endif
     glDeleteTextures(1, &splTex);
     glfwSwapBuffers(MainWindow);
     glfwPollEvents();
