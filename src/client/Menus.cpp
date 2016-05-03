@@ -27,11 +27,6 @@
 #include <deque>
 #include <sstream>
 
-#ifdef NEWORLD_TARGET_MACOSX
-#include <sys/stat.h>
-#include <dirent.h>
-#include <unistd.h>
-#endif
 void SaveOptions();
 
 string Str[] =
@@ -78,9 +73,7 @@ void MultiplayerMenu::onLoad()
 void MultiplayerMenu::onUpdate()
 {
     static bool serveripChanged = false;
-#ifdef NEWORLD_TARGET_WINDOWS
     if (runbtn.clicked) WinExec("NEWorldServer.exe", SW_SHOWDEFAULT);
-#endif
     if (okbtn.clicked)
     {
         serverip = serveriptb.text;
@@ -363,11 +356,7 @@ void WorldMenu::onUpdate()
     if (deletebtn.clicked)
     {
         //删除世界文件
-#ifdef NEWORLD_TARGET_WINDOWS
         system((string("rd /s/q \"Worlds\\") + chosenWorldName + "\"").c_str());
-#elif NEWORLD_TARGET_MACOSX
-        system(((string)"rm -rf Worlds/" + chosenWorldName).c_str());
-#endif
         deletebtn.clicked = false;
         World::Name = "";
         enterbtn.enabled = false;
@@ -387,7 +376,6 @@ void WorldMenu::onUpdate()
         chosenWorldName = "";
         //查找所有世界存档
         // CROSS PLATFORM REQUIRED
-#ifdef NEWORLD_TARGET_WINDOWS
         long hFile = 0;
         _finddata_t fileinfo;
         if ((hFile = _findfirst("Worlds\\*", &fileinfo)) != -1)
@@ -421,40 +409,6 @@ void WorldMenu::onUpdate()
             while (_findnext(hFile, &fileinfo) == 0);
             _findclose(hFile);
         }
-#elif NEWORLD_TARGET_MACOSX
-        DIR *dirp;
-        dirent *dp;
-        struct stat status;
-        if( ( (dirp = opendir("Worlds/")) != NULL ) && ( (dp = readdir(dirp)) != NULL) )
-        {
-            do
-            {
-                if(strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0)
-                    continue;
-                lstat(( "Worlds/" + (string)dp->d_name ).c_str(), &status);
-                if(!S_ISDIR(status.st_mode))
-                    continue;
-                worldnames.push_back(dp->d_name);
-                std::fstream file;
-                file.open(("Worlds/" + (string)dp->d_name + "/Thumbnail.bmp").c_str(), std::ios::in);
-                thumbnails.push_back(0);
-                texSizeX.push_back(0);
-                texSizeY.push_back(0);
-                if (file.is_open())
-                {
-                    glGenTextures(1, &thumbnails[thumbnails.size() - 1]);
-                    glBindTexture(GL_TEXTURE_2D, thumbnails[thumbnails.size() - 1]);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                    Textures::TEXTURE_RGB tmb("Worlds/" + (string)dp->d_name + "/Thumbnail.bmp");
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tmb.sizeX, tmb.sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, tmb.buffer.get());
-                    texSizeX[texSizeX.size() - 1] = tmb.sizeX;
-                    texSizeY[texSizeY.size() - 1] = tmb.sizeY;
-                }
-            }
-            while( (dp = readdir(dirp)) != NULL );
-        }
-#endif
         refresh = false;
     }
     enterbtn.enabled = chosenWorldName != "";
@@ -571,17 +525,9 @@ void SoundMenu::onUpdate()
     char text[100];
     AudioSystem::BGMGain = float(Musicbar.barpos) / 300.0f;
     AudioSystem::SoundGain = float(SoundBar.barpos) / 300.0f;
-#ifdef NEWORLD_TARGET_WINDOWS
     sprintf_s(text, ":%d%%", Musicbar.barpos/3);
-#elif NEWORLD_TARGET_MACOSX
-    sprintf(text, ":%d%%", Musicbar.barpos/3);
-#endif
     Musicbar.text = GetStrbyKey("NEWorld.Sound.MusicGain") + text;
-#ifdef NEWORLD_TARGET_WINDOWS
     sprintf_s(text, ":%d%%", SoundBar.barpos/3);
-#elif NEWORLD_TARGET_MACOSX
-    sprintf(text, ":%d%%", SoundBar.barpos/3);
-#endif
     SoundBar.text = GetStrbyKey("NEWorld.Sound.SoundGain") + text;
     AudioSystem::GUIUpdate();
     if (backbtn.clicked) GUI::PopPage();

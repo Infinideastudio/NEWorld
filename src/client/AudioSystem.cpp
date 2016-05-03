@@ -63,11 +63,7 @@ void Init()
     }
     for (int i = 0; i < 10; i++)
     {
-#ifdef NEWORLD_TARGET_WINDOWS
         sprintf_s(BGMName, "Audio\\BGM%d.wav", i);
-#elif NEWORLD_TARGET_MACOSX
-        sprintf(BGMName, "Audio\\BGM%d.wav", i);
-#endif
         if (Device.load(BGMName, &BGM[BGMNum]))
         {
             BGMNum++;
@@ -109,7 +105,6 @@ void Update(ALfloat PlayerPos[3],bool BFall, bool BBlockClick, ALfloat BlockPos[
     if (SFall != -1)alSourcef(SFall, AL_GAIN, SoundGain);
     if (SBlockClick != -1)alSourcef(SBlockClick, AL_GAIN, SoundGain);
     if (SDownWater != -1)alSourcef(SDownWater, AL_GAIN, SoundGain);
-#ifdef NEWORLD_TARGET_WINDOWS
     //更新环境
     if (SBGM != -1)EFX::set(SBGM);
     if (SRun != -1)EFX::set(SRun);
@@ -117,7 +112,6 @@ void Update(ALfloat PlayerPos[3],bool BFall, bool BBlockClick, ALfloat BlockPos[
     if (SFall != -1)EFX::set(SFall);
     if (SBlockClick != -1)EFX::set(SBlockClick);
     if (SDownWater != -1)EFX::set(SDownWater);
-#endif
     //更新位置
     PlayerPos[1] += 0.74;
     ALfloat Vel[] = { 0.0,0.0,0.0 };
@@ -218,10 +212,8 @@ void ClickEvent()
 void GUIUpdate()
 {
     SpeedOfSound = Air_SpeedOfSound;
-#ifdef NEWORLD_TARGET_WINDOWS
     EFX::EAXprop = Generic;
     EFX::UpdateEAXprop();
-#endif
     float Pos[] = { 0.0f,0.0f,0.0f };
     Update(Pos, false, false, Pos, false, false);
 }
