@@ -96,19 +96,10 @@ void TextRenderer::loadchar(unsigned int uc)
 
 void MBToWC(const char* lpcszStr, wchar_t*& lpwszStr, int dwSize)
 {
-    //原来的写法就是错的，dwSize是字符个数，不是字节数大小
-    //这种写法在Windows上居然能正常运行，真是奇葩 --DLaboratory
     dwSize *= sizeof(wchar_t);
     lpwszStr = (wchar_t*)malloc(dwSize);
     memset(lpwszStr, 0, dwSize);
-    //根据man page中给出的描述
-    //The mbstowcs() function converts a multibyte character string s,
-    //beginning in the initial conversion state, into a wide character
-    //string pwcs. No more than n wide characters are stored. A
-    //terminating null wide character is appended, if there is room.
-    //所以我们需要多预留几个位置给结束符 --DLaboratory
     int iSize = (MByteToWChar(lpwszStr, lpcszStr, strlen(lpcszStr) + 5) + 1)*sizeof(wchar_t);
-    //出现iSize < dwSize的情况时就不应该再realloc了 --DLaboratory
     if(iSize > dwSize)
         lpwszStr = (wchar_t*)realloc(lpwszStr, iSize);
 }
