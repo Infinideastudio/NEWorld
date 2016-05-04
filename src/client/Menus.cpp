@@ -38,14 +38,14 @@ string Str[] =
     "",
     "Contributers:",
     "qiaozhanrong, Null, SuperSodaSea, ascchrvalstr, DREAMWORLDVOID,",
-    "jacky8399, 0u0, jelawat地鼠, HydroH, Michael R, dtcxzyw, DLaboratory" ,
-    "" ,
+    "jacky8399, 0u0, jelawat地鼠, HydroH, Michael R, dtcxzyw",
+    "Observer & Navigator: DLaboratory"
+    "",
     "PS: Since this is a version in development, any type of suggestions or questions are welcomed.",
     "Feel free to submit bug reports, post your personal ideas, or join the development if you have",
     "practical experience on C/C++, git, data structures & algorithms.",
     "Git Repo is on [https://github.com/Infinideastudio/NEWorld]",
     "If you have any problems, please contact us.",
-    "DLaboratory's email address: dlaboratory@126.com"
 };
 
 namespace Menus
