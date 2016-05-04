@@ -23,10 +23,10 @@
 
 class ItemInfo
 {
-public:
-    ItemInfo(item itemid, TextureID itemtexture=0) :id(itemid), texture(itemtexture) {}
-    item id;
-    TextureID texture;
+    public:
+        ItemInfo(item itemid, TextureID itemtexture=0) :id(itemid), texture(itemtexture) {}
+        item id;
+        TextureID texture;
 };
 
 enum BuiltInItems

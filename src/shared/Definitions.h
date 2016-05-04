@@ -26,7 +26,14 @@
 #ifdef NEWORLD_TARGET_WINDOWS
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#endif //NEWORLD_TARGET_WINDOWS
+#include <direct.h>
+#include <io.h>
+#elif NEWORLD_TARGET_MACOSX
+#include <unistd.h>
+#include <sys/stat.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#endif
 
 #include <thread>
 #include <mutex>
@@ -49,18 +56,6 @@
 #include <queue>
 #include <functional>
 #include <algorithm>
-
-#ifdef NEWORLD_TARGET_WINDOWS
-#include <direct.h>
-#include <io.h>
-#elif NEWORLD_TARGET_MACOSX
-#include <unistd.h>
-#include <sys/stat.h>
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-//#include <OpenGL/gl3.h>
-//#include <OpenGL/gl3ext.h>
-#endif
 
 using namespace std;
 
@@ -95,6 +90,47 @@ typedef int vtxCount;
 typedef int SkinID;
 typedef uint64 chunkid;
 typedef unsigned int onlineid;
+
+template<typename T = int>
+class Vector3D
+{
+    public:
+        T x, y, z;
+        Vector3D<T>() : x(), y(), z() { }
+        Vector3D<T>(T ix, T iy, T iz) : x(ix), y(iy), z(iz) { }
+        ~Vector3D<T>() { }
+        Vector3D<T>& operator += (const Vector3D<T>& add)
+        {
+            x += add.x;
+            y += add.y;
+            z += add.z;
+            return *this;
+        }
+        Vector3D<T> operator + (const Vector3D<T>& add) const
+        {
+            Vector3D<T> ret = *this;
+            ret += add;
+            return ret;
+        }
+};
+
+// DLaboratory's typedefs
+// 若万不得已必须更改，请务必事后通知
+typedef unsigned short u16;
+typedef short s16;
+typedef unsigned int u32;
+typedef int u32;
+typedef unsigned long long u64;
+typedef long long s64;
+
+typedef Vector3D<u16> v3u16;
+typedef Vector3D<s16> v3s16;
+typedef Vector3D<u32> v3u32;
+typedef Vector3D<s32> v3s32;
+typedef Vector3D<u64> v3u64;
+typedef Vector3D<s64> v3s64;
+typedef Vector3D<float> v3f;
+typedef Vector3D<double> v3d;
 
 struct block
 {
@@ -138,62 +174,34 @@ struct block
     }
 };
 
-template<typename T = int>
-class Vector3D
-{
-public:
-    T x, y, z;
-    Vector3D<T>()
-        :x(), y(), z()
-    { };
-    Vector3D<T>(T ix, T iy, T iz)
-        :x(ix), y(iy), z(iz)
-    { }
-    ~Vector3D<T>()
-    { }
-    Vector3D<T>& operator += (const Vector3D<T>& add)
-    {
-        x += add.x;
-        y += add.y;
-        z += add.z;
-        return *this;
-    }
-    Vector3D<T> operator + (const Vector3D<T>& add) const
-    {
-        Vector3D<T> ret = *this;
-        ret += add;
-        return ret;
-    }
-};
-
 namespace Blocks
 {
-struct BUDDP
-{
-    block origon;
-    block* upd;
-    block* slf;
-    void* dudp;
-    void* dslf;
-    int cx, cy, cz;
-    BUDDP(block iOri, block* _upd, block* _slf, void* _dudp, void* _dslf,
-          int _cx, int _cy, int _cz) :
-        origon(iOri), upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-    bool operator == (const BUDDP& i)
+    struct BUDDP
     {
-        return cx == i.cx && cy == i.cy && cz == i.cz;
-    }
-};
+        block origon;
+        block* upd;
+        block* slf;
+        void* dudp;
+        void* dslf;
+        int cx, cy, cz;
+        BUDDP(block iOri, block* _upd, block* _slf, void* _dudp, void* _dslf,
+              int _cx, int _cy, int _cz) :
+            origon(iOri), upd(_upd), slf(_slf), dudp(_dudp), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
+        bool operator == (const BUDDP& i)
+        {
+            return cx == i.cx && cy == i.cy && cz == i.cz;
+        }
+    };
 
-struct TILDP
-{
-    block* slf;
-    void* dslf;
-    long long cx, cy, cz;
+    struct TILDP
+    {
+        block* slf;
+        void* dslf;
+        long long cx, cy, cz;
 
-    TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
-        slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
-};
+        TILDP(block* _slf, void* _dslf, long long _cx, long long _cy, long long _cz) :
+            slf(_slf), dslf(_dslf), cx(_cx), cy(_cy), cz(_cz) {};
+    };
 }
 typedef block item;
 

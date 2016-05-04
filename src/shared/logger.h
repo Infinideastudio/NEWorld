@@ -55,12 +55,13 @@ class Logger
         //导出存储的所有日志信息到一个std::string中。
         std::string exportAll();
 
-        void clear() {
+        void clear()
+        {
             m_logs.clear();
         }
 
-private:
-    std::vector<std::string> m_logs;
+    private:
+        std::vector<std::string> m_logs;
 
 };
 

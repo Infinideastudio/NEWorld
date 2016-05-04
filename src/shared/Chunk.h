@@ -29,126 +29,126 @@ class Object;
 namespace World
 {
 
-void MarkBlockUpdate(Blocks::BUDDP Block);
-extern string Name;
-extern brightness BRIGHTNESSMIN;
-extern brightness skylight;
+    void MarkBlockUpdate(Blocks::BUDDP Block);
+    extern string Name;
+    extern brightness BRIGHTNESSMIN;
+    extern brightness skylight;
 
-class chunk;
-chunkid getChunkID(int x, int y, int z);
-void explode(int x, int y, int z, int r, chunk* c);
+    class chunk;
+    chunkid getChunkID(int x, int y, int z);
+    void explode(int x, int y, int z, int r, chunk* c);
 
-class chunk
-{
-private:
-    brightness* pbrightness;
-    vector<Object*> objects;
-    static double relBaseX, relBaseY, relBaseZ;
-    static Frustum TestFrustum;
-
-public:
-    block* pblocks; //moved here for blockupd would get block ptr directly
-    chunk(int cxi, int cyi, int czi, chunkid idi) : cx(cxi), cy(cyi), cz(czi), id(idi),
-        Modified(false), Empty(false), updated(false), renderBuilt(false), loadAnim(0.0)
+    class chunk
     {
-        memset(vertexes, 0, sizeof(vertexes));
-        memset(vbuffer, 0, sizeof(vbuffer));
-        aabb = getBaseAABB();
-        pblocks = new block[4096];
-        pbrightness = new brightness[4096];
-    }
+        private:
+            brightness* pbrightness;
+            vector<Object*> objects;
+            static double relBaseX, relBaseY, relBaseZ;
+            static Frustum TestFrustum;
 
-    int cx, cy, cz;
-    Hitbox::AABB aabb;
-    bool Empty, updated, renderBuilt, Modified;
-    chunkid id;
-    vtxCount vertexes[4];
-    VBOID vbuffer[4];
-    double loadAnim;
-    bool visible;
+        public:
+            block* pblocks; //moved here for blockupd would get block ptr directly
+            chunk(int cxi, int cyi, int czi, chunkid idi) : cx(cxi), cy(cyi), cz(czi), id(idi),
+                Modified(false), Empty(false), updated(false), renderBuilt(false), loadAnim(0.0)
+            {
+                memset(vertexes, 0, sizeof(vertexes));
+                memset(vbuffer, 0, sizeof(vbuffer));
+                aabb = getBaseAABB();
+                pblocks = new block[4096];
+                pbrightness = new brightness[4096];
+            }
 
-    ~chunk();
-    void Load(bool initIfEmpty = true);
+            int cx, cy, cz;
+            Hitbox::AABB aabb;
+            bool Empty, updated, renderBuilt, Modified;
+            chunkid id;
+            vtxCount vertexes[4];
+            VBOID vbuffer[4];
+            double loadAnim;
+            bool visible;
 
-    string getChunkFileName()
-    {
-        std::stringstream ss;
-        ss << "Worlds/" << Name << "/chunks/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldChunk";
-        return ss.str();
-    }
+            ~chunk();
+            void Load(bool initIfEmpty = true);
 
-    void SaveToFile();
-    void buildRender();
-    void destroyRender();
+            string getChunkFileName()
+            {
+                std::stringstream ss;
+                ss << "Worlds/" << Name << "/chunks/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldChunk";
+                return ss.str();
+            }
 
-    // Member functions implemented inside the declaration of a class
-    // are regarded as inline functions by default. Please learn
-    // the correct usage of C++ programming language.
-    block& getblock(int x, int y, int z)
-    {
+            void SaveToFile();
+            void buildRender();
+            void destroyRender();
+
+            // Member functions implemented inside the declaration of a class
+            // are regarded as inline functions by default. Please learn
+            // the correct usage of C++ programming language.
+            block& getblock(int x, int y, int z)
+            {
 #ifdef _DEBUG
-        assert(x >= 0 && x < 16 && y >= 0 && y < 16 && z >= 0 && z < 16);
+                assert(x >= 0 && x < 16 && y >= 0 && y < 16 && z >= 0 && z < 16);
 #endif
-        return pblocks[(x << 8) ^ (y << 4) ^ z];
-    }
+                return pblocks[(x << 8) ^ (y << 4) ^ z];
+            }
 
-    brightness getbrightness(int x, int y, int z)
-    {
+            brightness getbrightness(int x, int y, int z)
+            {
 #ifdef _DEBUG
-        assert(x >= 0 && x < 16 && y >= 0 && y < 16 && z >= 0 && z < 16);
+                assert(x >= 0 && x < 16 && y >= 0 && y < 16 && z >= 0 && z < 16);
 #endif
-        return pbrightness[(x << 8) ^ (y << 4) ^ z];
-    }
+                return pbrightness[(x << 8) ^ (y << 4) ^ z];
+            }
 
-    void setblock(int x, int y, int z, block iblock)
-    {
-        if (iblock == block(Blocks::TNT))
-        {
-            World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
-            return;
-        }
-        pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-        Modified = true;
-    }
+            void setblock(int x, int y, int z, block iblock)
+            {
+                if (iblock == block(Blocks::TNT))
+                {
+                    World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
+                    return;
+                }
+                pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
+                Modified = true;
+            }
 
-    void Modifyblock(int x, int y, int z, block iblock)
-    {
-        if (iblock == block(Blocks::TNT))
-        {
-            World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
-            return;
-        }
-        MarkBlockUpdate(Blocks::BUDDP(*(pblocks + ((x << 8) ^ (y << 4) ^ z)), pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
-        pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
-        Modified = true;
-    }
+            void Modifyblock(int x, int y, int z, block iblock)
+            {
+                if (iblock == block(Blocks::TNT))
+                {
+                    World::explode(cx * 16 + x, cy * 16 + y, cz * 16 + z, 8, this);
+                    return;
+                }
+                MarkBlockUpdate(Blocks::BUDDP(*(pblocks + ((x << 8) ^ (y << 4) ^ z)), pblocks + ((x << 8) ^ (y << 4) ^ z), nullptr, nullptr, nullptr, cx * 16 + x, cy * 16 + y, cz * 16 + z));
+                pblocks[(x << 8) ^ (y << 4) ^ z] = iblock;
+                Modified = true;
+            }
 
-    void setbrightness(int x, int y, int z, brightness ibrightness)
-    {
-        pbrightness[(x << 8) ^ (y << 4) ^ z] = ibrightness;
-        Modified = true;
-    }
+            void setbrightness(int x, int y, int z, brightness ibrightness)
+            {
+                pbrightness[(x << 8) ^ (y << 4) ^ z] = ibrightness;
+                Modified = true;
+            }
 
-    static void setRelativeBase(double x, double y, double z, Frustum& frus)
-    {
-        relBaseX = x;
-        relBaseY = y;
-        relBaseZ = z;
-        TestFrustum = frus;
-    }
+            static void setRelativeBase(double x, double y, double z, Frustum& frus)
+            {
+                relBaseX = x;
+                relBaseY = y;
+                relBaseZ = z;
+                TestFrustum = frus;
+            }
 
-    Hitbox::AABB getBaseAABB();
-    Frustum::ChunkBox getRelativeAABB();
-    void calcVisible()
-    {
-        visible = TestFrustum.FrustumTest(getRelativeAABB());
-    }
+            Hitbox::AABB getBaseAABB();
+            Frustum::ChunkBox getRelativeAABB();
+            void calcVisible()
+            {
+                visible = TestFrustum.FrustumTest(getRelativeAABB());
+            }
 
-    //Rendering Functions
-    void Render();
-    void MergeFaceRender();
-    void RenderDepthModel();
-};
+            //Rendering Functions
+            void Render();
+            void MergeFaceRender();
+            void RenderDepthModel();
+    };
 }
 
 #endif
