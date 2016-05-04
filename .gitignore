@@ -237,3 +237,4 @@ options.ini
 .project
 .cproject
 .settings
+/build/VisualStudio_v14/NEWorld.VC.db
