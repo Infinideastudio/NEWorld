@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Source">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="World">
       <UniqueIdentifier>{27bc80a4-8683-4fb8-97e2-230f7b102a53}</UniqueIdentifier>
     </Filter>
@@ -27,32 +19,11 @@
     <Filter Include="Utils\Logger">
       <UniqueIdentifier>{92688bda-53da-4afb-a8ed-00ecf0e4d121}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Others">
+      <UniqueIdentifier>{b678bf02-5cb2-4aea-879d-19bed9dd45bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\shared\RandGen.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\PlayerPacket.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\BlockFuncs.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Blocks.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Definitions.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Frustum.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Items.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Object.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\shared\Hitbox.h">
       <Filter>Utils\Hitbox</Filter>
     </ClInclude>
@@ -80,9 +51,6 @@
     <ClInclude Include="..\..\..\src\shared\Network.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\logger.h">
-      <Filter>Utils\Logger</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\PluginSDK\defs.h">
       <Filter>PluginSDK</Filter>
     </ClInclude>
@@ -92,26 +60,36 @@
     <ClInclude Include="..\..\..\src\PluginSDK\pluginsdk.h">
       <Filter>PluginSDK</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\RandGen.h">
+      <Filter>Others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\BlockFuncs.h">
+      <Filter>Others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Blocks.h">
+      <Filter>Others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Definitions.h">
+      <Filter>Others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Frustum.h">
+      <Filter>Others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Items.h">
+      <Filter>Others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Object.h">
+      <Filter>Others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\PlayerPacket.h">
+      <Filter>Others</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Shared.h" />
+    <ClInclude Include="..\..\..\src\shared\Logger.h">
+      <Filter>Utils\Logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\shared\RandGen.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\BlockFuncs.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\Definitions.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\Frustum.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\FunctionsKit.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\Items.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\Hitbox.cpp">
       <Filter>Utils\Hitbox</Filter>
     </ClCompile>
@@ -136,14 +114,32 @@
     <ClCompile Include="..\..\..\src\shared\Network.cpp">
       <Filter>Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\logger.cpp">
-      <Filter>Utils\Logger</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\PluginSDK\export_variables.cpp">
       <Filter>PluginSDK</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\PluginSDK\pluginsdk.cpp">
       <Filter>PluginSDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\BlockFuncs.cpp">
+      <Filter>Others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\Definitions.cpp">
+      <Filter>Others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\Frustum.cpp">
+      <Filter>Others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\FunctionsKit.cpp">
+      <Filter>Others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\Items.cpp">
+      <Filter>Others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\RandGen.cpp">
+      <Filter>Others</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\Logger.cpp">
+      <Filter>Utils\Logger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
