@@ -176,6 +176,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\resource.h" />
+    <ClInclude Include="..\..\..\src\client\window.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico" />
@@ -204,6 +205,9 @@
     <ProjectReference Include="..\Shared\Shared.vcxproj">
       <Project>{286102d2-39f0-4578-8328-fb6b3836393b}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\client\window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

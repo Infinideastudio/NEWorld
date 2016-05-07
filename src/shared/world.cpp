@@ -100,15 +100,9 @@ World::World()
 
 World::~World()
 {
-    if (chunks)
-    {
-        // Save and destroy chunks
-        free(chunks);
-    }
-
 }
 
-Chunk* World::addChunk(const Vec3& chunkPos)
+Chunk* World::AddChunk(Vec3 chunkPos)
 {
     ChunkID id = getChunkID(chunkPos);
     int index = getChunkIndex(id);

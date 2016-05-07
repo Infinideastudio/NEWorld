@@ -63,6 +63,9 @@ public:
     World();
     ~World();
 
+    // Release resources
+    ~World();
+
     // Add chunk
     Chunk* addChunk(const Vec3& chunkPos);
     // Delete chunk

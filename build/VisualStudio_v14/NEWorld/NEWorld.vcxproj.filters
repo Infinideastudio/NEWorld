@@ -12,9 +12,15 @@
     <Filter Include="Resources\Shaders">
       <UniqueIdentifier>{78ae7a31-fc47-4fc7-918b-eeebda79d553}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Window">
+      <UniqueIdentifier>{3af037d3-556b-496c-8f61-b46246f07a45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\resource.h" />
+    <ClInclude Include="..\..\..\src\client\window.h">
+      <Filter>Source\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico">
@@ -48,5 +54,10 @@
     <None Include="..\..\..\Shaders\Shadow.vsh">
       <Filter>Resources\Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\client\window.cpp">
+      <Filter>Source\Window</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

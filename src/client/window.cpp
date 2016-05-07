@@ -12,7 +12,7 @@ bool Window::init()
         inited = true;
     }
 
-    _win = glfwCreateWindow(WindowH, WindowW, WindowName, NULL, NULL);
+    _win = glfwCreateWindow(WindowH, WindowW, WindowName, nullptr, nullptr);
 
     if (!_win)
     {
