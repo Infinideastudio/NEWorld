@@ -2,6 +2,9 @@
 #define WORLD_H_
 
 #include <algorithm>
+#include <string>
+#include <cstring> // malloc, realloc
+
 #include "common.h"
 #include "chunk.h"
 
@@ -18,39 +21,52 @@ private:
     // All chunks (chunk array)
     Chunk** chunks;
     // Size of chunk array
-    int chunkSize;
+    int chunkArraySize;
     // Loaded chunks count
     int chunkCount;
 
+    // Expand chunk array
+    void expandChunkArray(int expandCount);
+    // Reduce chunk array
+    void reduceChunkArray(int reduceCount);
+    // New pointer at chunks[index]
+    void newChunkPtr(int index);
+    // Erase pointer at chunks[index]
+    void eraseChunkPtr(int index);
     // Get chunk ID
-    ChunkID getChunkID(Vec3 chunkPos);
+    ChunkID getChunkID(const Vec3& chunkPos) const;
     // Search chunk index, or the index the chunk should insert into
-    int getChunkIndex(ChunkID chunkID);
+    int getChunkIndex(ChunkID chunkID) const;
 
 public:
+    // World name
+    std::string name;
+
     // Initializes world
     World();
 
     // Add chunk
-    Chunk* AddChunk(Vec3 chunkPos);
+    Chunk* addChunk(const Vec3& chunkPos);
     // Delete chunk
-    int DeleteChunk(Vec3 chunkPos);
+    int deleteChunk(const Vec3& chunkPos);
     // Get chunk pointer by index
-    Chunk* getChunkPtr(int index);
+    Chunk* getChunkPtr(int index) const;
     // Get chunk pointer by chunk coordinates
-    Chunk* getChunkPtr(Vec3 chunkPos);
+    Chunk* getChunkPtr(const Vec3& chunkPos) const;
+
     // Convert world position to chunk coordinate (one axis)
-    int getChunkPos(int pos) { return pos >> ChunkSizeLog2; }
+    int getChunkPos(int pos) const { return pos >> ChunkSizeLog2; }
     // Convert world position to chunk coordinate (all axes)
-    Vec3 getChunkPos(Vec3 pos) { return Vec3(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z)); }
+    Vec3 getChunkPos(const Vec3& pos) const { return Vec3(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z)); }
     // Convert world position to block coordinate in chunk (one axis)
-    int getBlockPos(int pos) { return pos & (ChunkSize - 1); }
+    int getBlockPos(int pos) const { return pos & (ChunkSize - 1); }
     // Convert world position to block coordinate in chunk (all axes)
-    Vec3 getBlockPos(Vec3 pos) { return Vec3(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z)); }
+    Vec3 getBlockPos(const Vec3& pos) const { return Vec3(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z)); }
+    
     // Get block data
-    BlockData getBlock(Vec3 pos);
+    BlockData getBlock(const Vec3& pos) const;
     // Set block data
-    void setBlock(Vec3 pos, BlockData block);
+    void setBlock(const Vec3& pos, BlockData block);
 
 };
 

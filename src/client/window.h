@@ -11,9 +11,9 @@ private:
 public:
     Window() : _win(nullptr) { init(); }
     bool init();
-    bool isKeyPressed(int key) { return glfwGetKey(_win, key); }
-    void setCurrentDraw() { glfwMakeContextCurrent(_win); }
-    operator GLFWwindow*() { return _win; }
+    bool isKeyPressed(int key) const { return glfwGetKey(_win, key); }
+    void setCurrentDraw() const { glfwMakeContextCurrent(_win); }
+    operator GLFWwindow*() const { return _win; }
 };
 
 #endif // !WINDOW_H_

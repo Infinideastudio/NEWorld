@@ -6,12 +6,12 @@
 class BlockType
 {
 private:
-    const std::string name;
-    const bool solid;
-    const bool translucent;
-    const bool opaque;
-    const int explodePower;
-    const int hardness;
+    std::string name;
+    bool solid;
+    bool translucent;
+    bool opaque;
+    int explodePower;
+    int hardness;
 
 public:
     BlockType(const char* name_, bool solid_, bool translucent_, bool opaque_, int explodePower_, int hardness_) :
