@@ -23,6 +23,9 @@
     <ClInclude Include="..\..\..\src\shared\world.h">
       <Filter>World</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Common.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">

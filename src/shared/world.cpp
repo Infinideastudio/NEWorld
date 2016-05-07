@@ -1,25 +1,10 @@
 #include "world.h"
-
+#include "chunk.h"
 using std::abs;
 
-int World::getChunkIndex(ChunkID id)
+ChunkID getChunkID(Vec3 chunkPos)
 {
-    // Binary search
-    int first = 0, last = chunkCount - 1, middle;
-    do
-    {
-        ChunkID cur = getChunkID(chunks[middle]->getPos());
-        if (chunks[middle]->id > cid)
-            last = middle - 1;
-        else if (chunks[middle]->id < cid)
-            first = middle + 1;
-        middle = (first + last) / 2;
-    }
-    return middle;
-}
-
-ChunkID getChunkID(int x, int y, int z)
-{
+    int x = chunkPos.x, y = chunkPos.y, z = chunkPos.z;
     if (y == -worldBoundY)
         y = 0;
     if (y <= 0)
@@ -36,6 +21,23 @@ ChunkID getChunkID(int x, int y, int z)
         z = abs(z) + (ChunkID(1) << worldBoundZLog2);
 
     return (ChunkID(x) << (worldBoundYLog2 + worldBoundZLog2)) ^ (ChunkID(y) << worldBoundZLog2) ^ ChunkID(z);
+}
+
+int World::getChunkIndex(ChunkID id)
+{
+    // Binary search
+    int first = 0, last = chunkCount - 1, middle;
+    do
+    {
+        ChunkID cur = getChunkID(chunks[middle]->getPos());
+        if (chunks[middle]->getID() > cur)
+            last = middle - 1;
+        else if (chunks[middle]->getID() < cur)
+            first = middle + 1;
+        middle = (first + last) / 2;
+    }
+    while (true/*fix it*/);
+    return middle;
 }
 
 Chunk* World::getChunkPtr(int index)
