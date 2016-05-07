@@ -33,6 +33,7 @@ void World::expandChunkArray(int c)
 
 void World::reduceChunkArray(int c)
 {
+    // No need to reduce chunk array really
     chunkCount -= c;
 //    assert(chunkCount >= 0);
 }
