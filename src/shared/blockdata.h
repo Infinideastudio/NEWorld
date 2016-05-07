@@ -14,12 +14,31 @@ class BlockData
         };
 
     public:
-        int getID() const;
-        int getBrightness() const;
-        int getState() const;
-        void setID(int id);
-        void setBrightness(int brightness);
-        void setState(int state);
+        int getID() const
+        {
+            return id;
+        }
+        int getBrightness() const
+        {
+            return brightness;
+        }
+        int getState() const
+        {
+            return state;
+        }
+        void setID(int id_)
+        {
+            id = id_;
+        }
+        void setBrightness(int brightness_)
+        {
+            brightness = brightness_;
+        }
+
+        void setState(int state_)
+        {
+            state = state_;
+        }
 
 };
 

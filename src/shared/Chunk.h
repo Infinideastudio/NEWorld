@@ -1,21 +1,28 @@
 #ifndef CHUNK_H_
 #define CHUNK_H_
 
-#include "blockdata.h"
-#include "aabb.h"
-
-const int CHUNK_SIZE = 32;
+#include "BlockData.h"
+#include "AABB.h"
 
 class Chunk
 {
-    private:
-        BlockData blocks[CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE];
+public:
+    // Get block data in this chunk
+    BlockData getBlock(int x, int y, int z) const
+    {
+        return blocks[x*chunkSize*chunkSize + y*chunkSize + z];
+    }
+    // Set block data in this chunk
+    void setBlock(int x, int y, int z, BlockData block)
+    {
+        blocks[x*chunkSize*chunkSize + y*chunkSize + z] = block;
+    }
 
-    public:
-        // Get block data in this chunk
-        BlockData getBlock(int x, int y, int z) const;
-        // Set block data in this chunk
-        void setBlock(int x, int y, int z, BlockData block);
+
+    static const int chunkSize = 32;
+
+private:
+    BlockData blocks[chunkSize*chunkSize*chunkSize];
 
 };
 

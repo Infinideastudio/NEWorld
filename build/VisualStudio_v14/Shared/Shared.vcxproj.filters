@@ -1,145 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="World">
-      <UniqueIdentifier>{27bc80a4-8683-4fb8-97e2-230f7b102a53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Network">
-      <UniqueIdentifier>{ba7345fe-1610-4387-ac25-f26879142ed2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PluginSDK">
-      <UniqueIdentifier>{1c0461d0-5103-4b17-9877-d09733e0de54}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{21c30db8-9461-4b87-9d8d-77bf091ef91f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\Hitbox">
-      <UniqueIdentifier>{53ff7237-2fd7-4ff6-b6c6-0f4233c8326b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\Logger">
-      <UniqueIdentifier>{92688bda-53da-4afb-a8ed-00ecf0e4d121}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Others">
-      <UniqueIdentifier>{b678bf02-5cb2-4aea-879d-19bed9dd45bf}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\src\shared\Hitbox.h">
-      <Filter>Utils\Hitbox</Filter>
+    <ClInclude Include="..\..\..\src\shared\AABB.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\WorldRenderer.h">
+    <ClInclude Include="..\..\..\src\shared\BlockData.h">
       <Filter>World</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\WorldUpdate.h">
-      <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\WorldGen.h">
-      <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\ChunkPacket.h">
-      <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\ChunkPtrArray.h">
+    <ClInclude Include="..\..\..\src\shared\BlockType.h">
       <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\Chunk.h">
       <Filter>World</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\HeightMap.h">
-      <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Network.h">
-      <Filter>Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\PluginSDK\defs.h">
-      <Filter>PluginSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\PluginSDK\export_variables.h">
-      <Filter>PluginSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\PluginSDK\pluginsdk.h">
-      <Filter>PluginSDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\RandGen.h">
-      <Filter>Others</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\BlockFuncs.h">
-      <Filter>Others</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Blocks.h">
-      <Filter>Others</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Definitions.h">
-      <Filter>Others</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Frustum.h">
-      <Filter>Others</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Items.h">
-      <Filter>Others</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Object.h">
-      <Filter>Others</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\PlayerPacket.h">
-      <Filter>Others</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\shared\Shared.h" />
-    <ClInclude Include="..\..\..\src\shared\Logger.h">
-      <Filter>Utils\Logger</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\shared\Hitbox.cpp">
-      <Filter>Utils\Hitbox</Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{d8ff50ba-254a-4417-a46d-0bfbfa05819f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{9d424b71-c4b6-463f-b95b-cffeea273210}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\shared\AABB.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\ChunkPtrArray.cpp">
+    <ClCompile Include="..\..\..\src\shared\BlockData.cpp">
       <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\Chunk.cpp">
       <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\WorldUpdate.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\WorldRenderer.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\WorldGen.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\HeightMap.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\Network.cpp">
-      <Filter>Network</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\PluginSDK\export_variables.cpp">
-      <Filter>PluginSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\PluginSDK\pluginsdk.cpp">
-      <Filter>PluginSDK</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\BlockFuncs.cpp">
-      <Filter>Others</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\Definitions.cpp">
-      <Filter>Others</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\Frustum.cpp">
-      <Filter>Others</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\FunctionsKit.cpp">
-      <Filter>Others</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\Items.cpp">
-      <Filter>Others</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\RandGen.cpp">
-      <Filter>Others</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\Logger.cpp">
-      <Filter>Utils\Logger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
