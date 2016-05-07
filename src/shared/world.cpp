@@ -8,17 +8,17 @@ ChunkID getChunkID(Vec3 chunkPos)
     if (y == -worldBoundY)
         y = 0;
     if (y <= 0)
-        y = abs(y) + (ChunkID(1) << worldBoundYLog2);
+        y = abs(y) + worldBoundY;
 
     if (x == -worldBoundX)
         x = 0;
     if (x <= 0)
-        x = abs(x) + (ChunkID(1) << worldBoundXLog2);
+        x = abs(x) + worldBoundX;
 
     if (z == -worldBoundZ)
         z = 0;
     if (z <= 0)
-        z = abs(z) + (ChunkID(1) << worldBoundZLog2);
+        z = abs(z) + worldBoundZ;
 
     return (ChunkID(x) << (worldBoundYLog2 + worldBoundZLog2)) ^ (ChunkID(y) << worldBoundZLog2) ^ ChunkID(z);
 }
