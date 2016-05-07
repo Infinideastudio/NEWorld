@@ -17,6 +17,8 @@ public:
 
     vec3 getSize() const { return size; }
 
+    virtual void update() = 0;
+
 private:
     vec3 position, size, rotation;
     int health;
