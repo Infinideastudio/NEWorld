@@ -7,5 +7,4 @@
 #include "chunk.h"
 #include "vec3.h"
 
-
 #endif // !SHARED_H_

@@ -4,7 +4,8 @@
 #include "blockdata.h"
 #include "Common.h"
 
-const int ChunkSize = 32;
+const int ChunkSizeLog2 = 5;
+const int ChunkSize = 1 << ChunkSizeLog2; // 2 ^ ChunkSizeLog2
 
 class Chunk
 {

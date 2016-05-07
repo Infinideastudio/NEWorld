@@ -1,26 +1,27 @@
 #include "world.h"
 #include "chunk.h"
+
 using std::abs;
 
-ChunkID getChunkID(Vec3 chunkPos)
+ChunkID World::getChunkID(Vec3 chunkPos)
 {
     int x = chunkPos.x, y = chunkPos.y, z = chunkPos.z;
-    if (y == -worldBoundY)
+    if (y == -WorldBoundY)
         y = 0;
     if (y <= 0)
-        y = abs(y) + worldBoundY;
+        y = abs(y) + WorldBoundY;
 
-    if (x == -worldBoundX)
+    if (x == -WorldBoundX)
         x = 0;
     if (x <= 0)
-        x = abs(x) + worldBoundX;
+        x = abs(x) + WorldBoundX;
 
-    if (z == -worldBoundZ)
+    if (z == -WorldBoundZ)
         z = 0;
     if (z <= 0)
-        z = abs(z) + worldBoundZ;
+        z = abs(z) + WorldBoundZ;
 
-    return (ChunkID(x) << (worldBoundYLog2 + worldBoundZLog2)) ^ (ChunkID(y) << worldBoundZLog2) ^ ChunkID(z);
+    return (ChunkID(x) << (WorldBoundYLog2 + WorldBoundZLog2)) ^ (ChunkID(y) << WorldBoundZLog2) ^ ChunkID(z);
 }
 
 int World::getChunkIndex(ChunkID id)
@@ -40,19 +41,69 @@ int World::getChunkIndex(ChunkID id)
     return middle;
 }
 
-// Initializes world
 World::World()
 {
+    // Initialize world
+}
 
+Chunk * World::AddChunk(Vec3 chunkPos)
+{
+    ChunkID id = getChunkID(chunkPos);
+    int index = getChunkIndex(id);
+    if (chunkCount && getChunkID(chunks[index]->getPos()) == id)
+    {
+        // Error: chunk already exist
+    }
+    // Append chunk Array
+    // Move elements to get slot
+    // Insert into slot
+    // Update chunk pointer chache
+    // Update chunk pointer array
+    // Return pointer
+    return chunks[index];
+}
+
+int World::DeleteChunk(Vec3 chunkPos)
+{
+    ChunkID id = getChunkID(chunkPos);
+    int index = getChunkIndex(id);
+    if (!chunkCount || getChunkID(chunks[index]->getPos()) != id)
+    {
+        // Error: chunk isn't exist
+    }
+    delete chunks[index];
+    // Move elements to overwrite
+    // Reduce chunk array
+    // Update chunk pointer array
+    return 0;
 }
 
 Chunk* World::getChunkPtr(int index)
 {
-    //assert(index >= 0 && index <= chunkCount);
+//    assert(index >= 0 && index <= chunkCount);
     return chunks[index];
 }
 
 Chunk* World::getChunkPtr(Vec3 chunkPos)
 {
-    return getChunkPtr(getChunkIndex(getChunkID(chunkPos)));
+//    assert(index >= 0 && index <= chunkCount);
+    // Try chunk pointer cache
+    // Try chunk pointer array
+    return chunks[getChunkIndex(getChunkID(chunkPos))];
+    // Update chunk pointer array
+    // Update chunk pointer cache
+}
+
+BlockData World::getBlock(Vec3 pos)
+{
+    Chunk* chunk = getChunkPtr(getChunkPos(pos));
+//    assert(chunk != nullptr);
+    return chunk->getBlock(getBlockPos(pos));
+}
+
+void World::setBlock(Vec3 pos, BlockData block)
+{
+    Chunk* chunk = getChunkPtr(getChunkPos(pos));
+//    assert(chunk != nullptr);
+    chunk->setBlock(getBlockPos(pos), block);
 }

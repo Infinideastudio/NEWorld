@@ -14,25 +14,25 @@ public:
     AABB(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax);
 
     // Is intersect on X axis
-    bool intersectX(const AABB &another_aabb) const;
+    bool intersectX(const AABB &anotherAABB) const;
     // Is intersect on Y axis
-    bool intersectY(const AABB &another_aabb) const;
+    bool intersectY(const AABB &anotherAABB) const;
     // Is intersect on Z axis
-    bool intersectZ(const AABB &another_aabb) const;
+    bool intersectZ(const AABB &anotherAABB) const;
     // Is intersect on all axes
-    bool intersect(const AABB &another_aabb) const;
+    bool intersect(const AABB &anotherAABB) const;
     // Get max move distance <= original_move_distance on X axis, when blocked by another AABB
-    double maxMoveOnXclip(const AABB &another_aabb, double original_move_distance) const;
+    double maxMoveOnXclip(const AABB &anotherAABB, double originalMoveDistance) const;
     // Get max move distance <= original_move_distance on Y axis, when blocked by another AABB
-    double maxMoveOnYclip(const AABB &another_aabb, double original_move_distance) const;
+    double maxMoveOnYclip(const AABB &anotherAABB, double originalMoveDistance) const;
     // Get max move distance <= original_move_distance on Z axis, when blocked by another AABB
-    double maxMoveOnZclip(const AABB &another_aabb, double original_move_distance) const;
+    double maxMoveOnZclip(const AABB &anotherAABB, double originalMoveDistance) const;
     // Get expanded AABB
-    AABB expand(double expand_x, double expand_y, double expand_z) const;
+    AABB expand(double expandX, double expandY, double expandZ) const;
     // Move AABB
-    void move(double delta_x, double delta_y, double delta_z);
+    void move(double deltaX, double deltaY, double deltaZ);
     // Move the center of this AABB to target position
-    void moveTo(double target_x, double target_y, double target_z);
+    void moveTo(double targetX, double targetY, double targetZ);
 
 };
 
