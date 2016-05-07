@@ -8,6 +8,8 @@ public:
     bool init();
     bool isKeyPressed(int key) { return glfwGetKey(_win, key); }
     void setCurrent() { glfwMakeContextCurrent(_win); }
+    GLFWwindow* getGLFWWindow() { return _win; }
+
 private:
     GLFWwindow* _win;
 };
