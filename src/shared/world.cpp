@@ -8,7 +8,7 @@ int World::getChunkIndex(ChunkID id)
     int first = 0, last = chunkCount - 1, middle;
     do
     {
-        ChunkID cur = getChunkID(chunks[middle]->getX(), chunks[middle]->getY(), chunks[middle]->getZ);
+        ChunkID cur = getChunkID(chunks[middle]->getPos());
         if (chunks[middle]->id > cid)
             last = middle - 1;
         else if (chunks[middle]->id < cid)
@@ -18,40 +18,33 @@ int World::getChunkIndex(ChunkID id)
     return middle;
 }
 
-World::World()
-{
-
-}
-
 ChunkID getChunkID(int x, int y, int z)
 {
-    if (y == -WORLD_BOUND_Y)
+    if (y == -worldBoundY)
         y = 0;
     if (y <= 0)
-        y = abs(y) + (ChunkID(1) << WORLD_BOUND_Y_LOG2);
+        y = abs(y) + (ChunkID(1) << worldBoundYLog2);
 
-    if (x == -WORLD_BOUND_X)
+    if (x == -worldBoundX)
         x = 0;
     if (x <= 0)
-        x = abs(x) + (ChunkID(1) << WORLD_BOUND_X_LOG2);
+        x = abs(x) + (ChunkID(1) << worldBoundXLog2);
 
-    if (z == -WORLD_BOUND_Z)
+    if (z == -worldBoundZ)
         z = 0;
     if (z <= 0)
-        z = abs(z) + (ChunkID(1) << WORLD_BOUND_Z_LOG2);
+        z = abs(z) + (ChunkID(1) << worldBoundZLog2);
 
-    return (ChunkID(x) << (WORLD_BOUND_Y_LOG2 + WORLD_BOUND_Z_LOG2)) ^ (ChunkID(y) << WORLD_BOUND_Z_LOG2) ^ ChunkID(z);
+    return (ChunkID(x) << (worldBoundYLog2 + worldBoundZLog2)) ^ (ChunkID(y) << worldBoundZLog2) ^ ChunkID(z);
 }
 
 Chunk* World::getChunkPtr(int index)
 {
-//    assert(index >= 0 && index <= chunkCount);
+    //assert(index >= 0 && index <= chunkCount);
     return chunks[index];
 }
 
-Chunk* World::getChunkPtr(int x, int y, int z)
+Chunk* World::getChunkPtr(Vec3 chunkPos)
 {
-    unsigned long long id = getChunkID(x, y, z);
-
-
+    return getChunkPtr(getChunkIndex(getChunkID(chunkPos)));
 }

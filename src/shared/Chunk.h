@@ -4,23 +4,23 @@
 #include "blockdata.h"
 #include "vec3.h"
 
-const int CHUNK_SIZE = 32;
+const int chunkSize = 32;
 
 class Chunk
 {
 private:
     Vec3 pos;
-    BlockData blocks[CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE];
+    BlockData blocks[chunkSize*chunkSize*chunkSize];
 
 public:
-    Chunk(Vec3 chunk_pos);
+    Chunk(Vec3 chunk_pos) :pos(chunk_pos) {}
 
     // Get chunk position
-    Vec3 getPos() const;
+    Vec3 getPos() const { return pos; }
     // Get block data in this chunk
-    BlockData getBlock(Vec3 pos) const;
+    BlockData getBlock(Vec3 pos) const { return blocks[pos.x*chunkSize*chunkSize + pos.y*chunkSize + pos.z]; }
     // Set block data in this chunk
-    void setBlock(Vec3 pos, BlockData block);
+    void setBlock(Vec3 pos, BlockData block) { blocks[pos.x*chunkSize*chunkSize + pos.y*chunkSize + pos.z] = block; }
 
 };
 
