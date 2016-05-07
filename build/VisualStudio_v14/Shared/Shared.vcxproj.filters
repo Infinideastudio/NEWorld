@@ -14,6 +14,9 @@
       <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\Shared.h" />
+    <ClInclude Include="..\..\..\src\shared\Object.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -21,6 +24,9 @@
     </Filter>
     <Filter Include="World">
       <UniqueIdentifier>{9d424b71-c4b6-463f-b95b-cffeea273210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{1b541d8d-7466-461f-98b9-194f998a9f7f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
