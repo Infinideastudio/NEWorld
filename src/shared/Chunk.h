@@ -8,19 +8,19 @@ const int CHUNK_SIZE = 32;
 
 class Chunk
 {
-    private:
-        Vec3 pos;
-        BlockData blocks[CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE];
+private:
+    Vec3 pos;
+    BlockData blocks[CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE];
 
-    public:
-        Chunk(Vec3 chunk_pos);
+public:
+    Chunk(Vec3 chunk_pos);
 
-        // Get chunk position
-        Vec3 getPos() const;
-        // Get block data in this chunk
-        BlockData getBlock(Vec3 pos) const;
-        // Set block data in this chunk
-        void setBlock(Vec3 pos, BlockData block);
+    // Get chunk position
+    Vec3 getPos() const;
+    // Get block data in this chunk
+    BlockData getBlock(Vec3 pos) const;
+    // Set block data in this chunk
+    void setBlock(Vec3 pos, BlockData block);
 
 };
 
