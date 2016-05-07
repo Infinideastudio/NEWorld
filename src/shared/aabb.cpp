@@ -3,6 +3,15 @@
 using std::max;
 using std::min;
 
+AABB::AABB() :xmin(0.0), xmax(0.0), ymin(0.0), ymax(0.0), zmin(0.0), zmax(0.0)
+{
+}
+
+AABB::AABB(double _xmin, double _ymin, double _zmin, double _xmax, double _ymax, double _zmax)
+    :xmin(_xmin), ymin(_ymin), zmin(_zmin), xmax(_xmax), ymax(_ymax), zmax(_xmax)
+{
+}
+
 bool AABB::intersectX(const AABB &box) const
 {
     if ((xmin > box.xmin && xmin < box.xmax) || (xmax > box.xmin && xmax < box.xmax) ||

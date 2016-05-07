@@ -1,28 +1,26 @@
 #ifndef CHUNK_H_
 #define CHUNK_H_
 
-#include "BlockData.h"
-#include "AABB.h"
+#include "blockdata.h"
+#include "vec3.h"
+
+const int CHUNK_SIZE = 32;
 
 class Chunk
 {
-public:
-    // Get block data in this chunk
-    BlockData getBlock(int x, int y, int z) const
-    {
-        return blocks[x*chunkSize*chunkSize + y*chunkSize + z];
-    }
-    // Set block data in this chunk
-    void setBlock(int x, int y, int z, BlockData block)
-    {
-        blocks[x*chunkSize*chunkSize + y*chunkSize + z] = block;
-    }
+    private:
+        Vec3 pos;
+        BlockData blocks[CHUNK_SIZE*CHUNK_SIZE*CHUNK_SIZE];
 
+    public:
+        Chunk(Vec3 chunk_pos);
 
-    static const int chunkSize = 32;
-
-private:
-    BlockData blocks[chunkSize*chunkSize*chunkSize];
+        // Get chunk position
+        Vec3 getPos() const;
+        // Get block data in this chunk
+        BlockData getBlock(Vec3 pos) const;
+        // Set block data in this chunk
+        void setBlock(Vec3 pos, BlockData block);
 
 };
 
