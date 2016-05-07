@@ -115,15 +115,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\shared\AABB.h" />
-    <ClInclude Include="..\..\..\src\shared\BlockData.h" />
-    <ClInclude Include="..\..\..\src\shared\BlockType.h" />
-    <ClInclude Include="..\..\..\src\shared\Chunk.h" />
+    <ClInclude Include="..\..\..\src\shared\blockdata.h" />
+    <ClInclude Include="..\..\..\src\shared\blocktype.h" />
+    <ClInclude Include="..\..\..\src\shared\chunk.h" />
     <ClInclude Include="..\..\..\src\shared\Object.h" />
     <ClInclude Include="..\..\..\src\shared\Shared.h" />
+    <ClInclude Include="..\..\..\src\shared\vec3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\AABB.cpp" />
-    <ClCompile Include="..\..\..\src\shared\Chunk.cpp" />
+    <ClCompile Include="..\..\..\src\shared\chunk.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
