@@ -14,6 +14,12 @@ class BlockData
         };
 
     public:
+
+        bool operator=(const BlockData& rhs)
+        {
+            return id==rhs.id;
+        }
+
         int getID() const
         {
             return id;
