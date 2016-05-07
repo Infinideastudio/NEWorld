@@ -122,7 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\AABB.cpp" />
-    <ClCompile Include="..\..\..\src\shared\BlockData.cpp" />
     <ClCompile Include="..\..\..\src\shared\Chunk.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

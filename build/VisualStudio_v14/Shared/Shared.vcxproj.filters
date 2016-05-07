@@ -27,9 +27,6 @@
     <ClCompile Include="..\..\..\src\shared\AABB.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\BlockData.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\Chunk.cpp">
       <Filter>World</Filter>
     </ClCompile>
