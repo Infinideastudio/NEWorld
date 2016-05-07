@@ -23,7 +23,7 @@ public:
     bool isSolid() const { return solid; }
     // Transparency determines how it will rendered
     bool isTranslucent() const { return translucent; }
-    // Opaque means it blocks light 
+    // Opaque means it blocks light
     bool isOpaque() const { return opaque; }
     // Explode power, if it isn't a explosive set this to 0
     int getExplodePower() const { return explodePower; }
