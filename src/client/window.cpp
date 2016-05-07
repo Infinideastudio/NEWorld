@@ -1,7 +1,7 @@
-#include "Window.h"
+#include "window.h"
 
 const char* WindowName = "NEWorld";
-const int WindowH = 800, WindowW = 600;
+const int WindowH = 852, WindowW = 480;
 
 bool Window::init()
 {
@@ -20,13 +20,7 @@ bool Window::init()
         return false;
     }
 
-    setCurrent();
+    setCurrentDraw();
 
     return true;
-}
-
-Window& getWindow()
-{
-    static Window win;
-    return win;
 }
