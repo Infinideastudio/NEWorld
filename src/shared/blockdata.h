@@ -6,19 +6,18 @@ class BlockData
 private:
     union
     {
+        unsigned int data;
         struct
         {
             unsigned int id : 12; // Block ID
             unsigned int brightness : 4; // Brightness
             unsigned int state : 16; // Block state
         };
-
-        unsigned int data; // Collection of all above
     };
 
 public:
 
-    bool operator=(const BlockData& rhs) { return id == rhs.id; }
+    bool operator== (const BlockData& rhs) { return id == rhs.id; }
 
     int getID() const { return id; }
     int getBrightness() const { return brightness; }

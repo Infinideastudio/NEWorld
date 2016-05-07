@@ -1,11 +1,16 @@
-#ifndef Object_h__
-#define Object_h__
+#ifndef OBJECT_H_
+#define OBJECT_H_
 
-#include "AABB.h"
+#include "aabb.h"
 #include "vec3.h"
 
 class Object
 {
+private:
+    Vec3 _position, _size, _rotation;
+    int _health;
+    AABB _hitbox;
+
 public:
     int getHealth() const { return _health; }
     void setHealth(int val) { _health = val; }
@@ -22,11 +27,6 @@ public:
 
     virtual void update() = 0;
 
-private:
-    Vec3 _position, _size, _rotation;
-    int _health;
-    AABB _hitbox;
-
 };
 
-#endif // Object_h__
+#endif // OBJECT_H_

@@ -29,15 +29,21 @@ int World::getChunkIndex(ChunkID id)
     int first = 0, last = chunkCount - 1, middle;
     do
     {
-        ChunkID cur = getChunkID(chunks[middle]->getPos());
-        if (chunks[middle]->getID() > cur)
-            last = middle - 1;
-        else if (chunks[middle]->getID() < cur)
-            first = middle + 1;
         middle = (first + last) / 2;
+        ChunkID cur = getChunkID(chunks[middle]->getPos());
+        if (cur > id)
+            last = middle - 1;
+        else if (cur < id)
+            first = middle + 1;
     }
-    while (true/*fix it*/);
+    while (first <= last);
     return middle;
+}
+
+// Initializes world
+World::World()
+{
+
 }
 
 Chunk* World::getChunkPtr(int index)

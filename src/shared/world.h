@@ -2,21 +2,20 @@
 #define WORLD_H_
 
 #include <algorithm>
-#include "Common.h"
+#include "common.h"
+#include "chunk.h"
 
-const int worldBoundXLog2 = 26;
-const int worldBoundYLog2 = 9;
-const int worldBoundZLog2 = 26;
-const int worldBoundX = 1 << worldBoundXLog2; // 2 ^ worldBoundXLog2
-const int worldBoundY = 1 << worldBoundYLog2; // 2 ^ worldBoundYLog2
-const int worldBoundZ = 1 << worldBoundZLog2; // 2 ^ worldBoundZLog2
-
-class Chunk;
+const int WorldBoundXLog2 = 26;
+const int WorldBoundYLog2 = 9;
+const int WorldBoundZLog2 = 26;
+const int WorldBoundX = 1 << WorldBoundXLog2; // 2 ^ WorldBoundXLog2
+const int WorldBoundY = 1 << WorldBoundYLog2; // 2 ^ WorldBoundYLog2
+const int WorldBoundZ = 1 << WorldBoundZLog2; // 2 ^ WorldBoundZLog2
 
 class World
 {
 public:
-    World() {};
+    World();
 
     // Get chunk pointer by index
     Chunk* getChunkPtr(int index);
