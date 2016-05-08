@@ -177,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\resource.h" />
     <ClInclude Include="..\..\..\src\client\window.h" />
+    <ClInclude Include="..\..\..\src\client\worldloader.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico" />
@@ -208,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\window.cpp" />
+    <ClCompile Include="..\..\..\src\client\worldloader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

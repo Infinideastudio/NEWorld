@@ -123,13 +123,11 @@
     <ClInclude Include="..\..\..\src\shared\Shared.h" />
     <ClInclude Include="..\..\..\src\shared\vec3.h" />
     <ClInclude Include="..\..\..\src\shared\world.h" />
-    <ClInclude Include="..\..\..\src\shared\worldloader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\AABB.cpp" />
     <ClCompile Include="..\..\..\src\shared\chunk.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
-    <ClCompile Include="..\..\..\src\shared\worldloader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

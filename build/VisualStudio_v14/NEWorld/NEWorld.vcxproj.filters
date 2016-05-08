@@ -21,6 +21,9 @@
     <ClInclude Include="..\..\..\src\client\window.h">
       <Filter>Source\Window</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\client\worldloader.h">
+      <Filter>Source\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico">
@@ -57,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\window.cpp">
+      <Filter>Source\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\worldloader.cpp">
       <Filter>Source\Window</Filter>
     </ClCompile>
   </ItemGroup>
