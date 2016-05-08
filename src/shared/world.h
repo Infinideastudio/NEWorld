@@ -26,13 +26,6 @@
 #include "common.h"
 #include "chunk.h"
 
-const int WorldBoundXLog2 = 26;
-const int WorldBoundYLog2 = 9;
-const int WorldBoundZLog2 = 26;
-const int WorldBoundX = 1 << WorldBoundXLog2; // 2 ^ WorldBoundXLog2
-const int WorldBoundY = 1 << WorldBoundYLog2; // 2 ^ WorldBoundYLog2
-const int WorldBoundZ = 1 << WorldBoundZLog2; // 2 ^ WorldBoundZLog2
-
 class World
 {
 private:
@@ -51,10 +44,8 @@ private:
     void newChunkPtr(int index);
     // Erase pointer at chunks[index]
     void eraseChunkPtr(int index);
-    // Get chunk ID
-    ChunkID getChunkID(const Vec3& chunkPos) const;
     // Search chunk index, or the index the chunk should insert into
-    int getChunkIndex(ChunkID chunkID) const;
+    int getChunkIndex(const Vec3& chunkPos) const;
 
 public:
     // World name

@@ -40,6 +40,13 @@ public:
         if (z < rhs.z) return true; return false;
     }
 
+    bool operator> (const Vec3& rhs) const
+    {
+        if (x > rhs.x) return true; if (x < rhs.x) return false;
+        if (y > rhs.y) return true; if (y < rhs.y) return false;
+        if (z > rhs.z) return true; return false;
+    }
+
     bool operator== (const Vec3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
     bool operator!= (const Vec3& rhs) const { return x != rhs.x || y != rhs.y || z != rhs.z; }
     Vec3 operator+ (const Vec3& rhs) const { return Vec3(x + rhs.x, y + rhs.y, z + rhs.z); }

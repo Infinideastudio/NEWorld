@@ -20,7 +20,7 @@
 #define CHUNK_H_
 
 #include "blockdata.h"
-#include "Common.h"
+#include "common.h"
 
 const int ChunkSizeLog2 = 5;
 const int ChunkSize = 1 << ChunkSizeLog2; // 2 ^ ChunkSizeLog2
