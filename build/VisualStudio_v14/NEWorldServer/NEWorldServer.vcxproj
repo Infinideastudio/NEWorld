@@ -15,16 +15,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\server\Main.cpp" />
-    <ClCompile Include="..\..\..\src\server\Network.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.vcxproj">
       <Project>{286102d2-39f0-4578-8328-fb6b3836393b}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\src\server\Network.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ABBA7A56-1D26-4C66-AED9-67C8F7CC3AE7}</ProjectGuid>

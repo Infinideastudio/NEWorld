@@ -54,8 +54,8 @@ public:
     World();
     ~World();
 
-    // Release resources
-    ~World();
+    // Get chunk count
+    int getChunkCount() const { return chunkCount; }
 
     // Add chunk
     Chunk* addChunk(const Vec3& chunkPos);

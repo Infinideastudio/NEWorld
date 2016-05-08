@@ -19,6 +19,8 @@
 #ifndef VEC3_H_
 #define VEC3_H_
 
+#include <cmath>
+
 class Vec3
 {
 public:
@@ -28,6 +30,18 @@ public:
     Vec3::Vec3(int x_, int y_, int z_) :x(x_), y(y_), z(z_) {}
     Vec3::Vec3(const Vec3& rhs) :x(rhs.x), y(rhs.y), z(rhs.z) {}
 
+    // Get vector length ^ 2
+    const int lengthSqr()
+    {
+        return x*x + y*y + z*z;
+    }
+
+    // Get vector length
+    const double length()
+    {
+        return sqrt(double(lengthSqr()));
+    }
+
     void operator= (const Vec3& rhs)
     {
         x = rhs.x; y = rhs.y; z = rhs.z;
@@ -36,15 +50,15 @@ public:
     bool operator< (const Vec3& rhs) const
     {
         if (x < rhs.x) return true; if (x > rhs.x) return false;
-        if (y < rhs.y) return true; if (y > rhs.y) return false;
-        if (z < rhs.z) return true; return false;
+        if (z < rhs.z) return true; if (z > rhs.z) return false;
+        if (y < rhs.y) return true; return false;
     }
 
     bool operator> (const Vec3& rhs) const
     {
         if (x > rhs.x) return true; if (x < rhs.x) return false;
-        if (y > rhs.y) return true; if (y < rhs.y) return false;
-        if (z > rhs.z) return true; return false;
+        if (z > rhs.z) return true; if (z < rhs.z) return false;
+        if (y > rhs.y) return true; return false;
     }
 
     bool operator== (const Vec3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }

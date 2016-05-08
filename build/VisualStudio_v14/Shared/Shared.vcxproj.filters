@@ -26,6 +26,9 @@
     <ClInclude Include="..\..\..\src\shared\common.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\worldloader.h">
+      <Filter>World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -46,6 +49,9 @@
       <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\worldloader.cpp">
       <Filter>World</Filter>
     </ClCompile>
   </ItemGroup>

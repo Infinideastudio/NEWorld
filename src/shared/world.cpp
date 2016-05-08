@@ -118,11 +118,12 @@ Chunk* World::getChunkPtr(int index) const
 Chunk* World::getChunkPtr(const Vec3& chunkPos) const
 {
 //    assert(index >= 0 && index <= chunkCount);
-    // Try chunk pointer cache
-    // Try chunk pointer array
-    return chunks[getChunkIndex(getChunkID(chunkPos))];
-    // Update chunk pointer array
-    // Update chunk pointer cache
+    // TODO: Try chunk pointer cache
+    // TODO: Try chunk pointer array
+    Chunk* res = chunks[getChunkIndex(chunkPos)];
+    // TODO: Update chunk pointer array
+    // TODO: Update chunk pointer cache
+    return res;
 }
 
 BlockData World::getBlock(const Vec3& pos) const
