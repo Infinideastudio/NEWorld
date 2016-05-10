@@ -101,7 +101,7 @@ int World::deleteChunk(const Vec3& chunkPos)
     int index = getChunkIndex(chunkPos);
     if (!chunkCount || chunks[index]->getPos() != chunkPos)
     {
-        // Error: chunk isn't exist
+        // Error: chunk doesn't exist
     }
     delete chunks[index];
     eraseChunkPtr(index);

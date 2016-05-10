@@ -32,14 +32,23 @@ private:
     BlockData blocks[ChunkSize*ChunkSize*ChunkSize];
 
 public:
-    Chunk(const Vec3& chunkPos) :pos(chunkPos) {}
+    explicit Chunk(const Vec3& chunkPos) :pos(chunkPos) {}
 
     // Get chunk position
-    Vec3 getPos() const { return pos; }
+    Vec3 getPos() const
+    { return pos; }
+
     // Get block data in this chunk
-    BlockData getBlock(const Vec3& pos) const { return blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
+    BlockData getBlock(const Vec3& pos) const
+    { return blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
+
+    // Get a specific block's reference
+    BlockData& getBlock(const Vec3& pos)
+    { return blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
+
     // Set block data in this chunk
-    void setBlock(const Vec3& pos, BlockData block) { blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z] = block; }
+    void setBlock(const Vec3& pos, BlockData block)
+    { blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z] = block; }
 
 };
 

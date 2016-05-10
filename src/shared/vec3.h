@@ -26,46 +26,55 @@ class Vec3
 public:
     int x, y, z;
 
-    Vec3::Vec3() :x(0), y(0), z(0) {}
-    Vec3::Vec3(int x_, int y_, int z_) :x(x_), y(y_), z(z_) {}
-    Vec3::Vec3(const Vec3& rhs) :x(rhs.x), y(rhs.y), z(rhs.z) {}
+    Vec3::Vec3() :x(0), y(0), z(0)
+    {}
 
-    // Get vector length ^ 2
-    const int lengthSqr()
+    Vec3::Vec3(int x_, int y_, int z_) :x(x_), y(y_), z(z_)
+    {}
+
+    // Get the square of vector length
+    int lengthSqr()
     {
         return x*x + y*y + z*z;
     }
 
     // Get vector length
-    const double length()
+    double length()
     {
         return sqrt(double(lengthSqr()));
     }
 
-    void operator= (const Vec3& rhs)
-    {
-        x = rhs.x; y = rhs.y; z = rhs.z;
-    }
-
     bool operator< (const Vec3& rhs) const
     {
-        if (x < rhs.x) return true; if (x > rhs.x) return false;
-        if (z < rhs.z) return true; if (z > rhs.z) return false;
-        if (y < rhs.y) return true; return false;
+        if (x != rhs.x)
+            return x < rhs.x;
+        if (y != rhs.y)
+            return y < rhs.y;
+        if (z != rhs.z)
+            return z < rhs.z;
+        return false;
     }
 
     bool operator> (const Vec3& rhs) const
-    {
-        if (x > rhs.x) return true; if (x < rhs.x) return false;
-        if (z > rhs.z) return true; if (z < rhs.z) return false;
-        if (y > rhs.y) return true; return false;
-    }
+    { return rhs < *this; }
 
-    bool operator== (const Vec3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
-    bool operator!= (const Vec3& rhs) const { return x != rhs.x || y != rhs.y || z != rhs.z; }
-    Vec3 operator+ (const Vec3& rhs) const { return Vec3(x + rhs.x, y + rhs.y, z + rhs.z); }
-    Vec3 operator- (const Vec3& rhs) const { return Vec3(x - rhs.x, y - rhs.y, z - rhs.z); }
+    bool operator<= (const Vec3& rhs) const
+    { return !(rhs < *this); }
 
+    bool operator>= (const Vec3& rhs) const
+    { return !(*this < rhs); }
+
+    bool operator== (const Vec3& rhs) const
+    { return x == rhs.x && y == rhs.y && z == rhs.z; }
+
+    bool operator!= (const Vec3& rhs) const
+    { return !(*this == rhs) }
+
+    Vec3 operator+ (const Vec3& rhs) const
+    { return Vec3(x + rhs.x, y + rhs.y, z + rhs.z); }
+
+    Vec3 operator- (const Vec3& rhs) const
+    { return Vec3(x - rhs.x, y - rhs.y, z - rhs.z); }
 };
 
 #endif // !VEC3_H_
