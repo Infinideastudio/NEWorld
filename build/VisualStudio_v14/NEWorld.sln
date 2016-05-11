@@ -15,8 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NEWorldServer", "NEWorldSer
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shared", "Shared\Shared.vcxproj", "{286102D2-39F0-4578-8328-FB6B3836393B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIEngine", "UIEngine\UIEngine.vcxproj", "{42B029E7-5362-497E-BA3D-F10B49E1C274}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -57,18 +55,6 @@ Global
 		{286102D2-39F0-4578-8328-FB6B3836393B}.Release|x64.Build.0 = Release|x64
 		{286102D2-39F0-4578-8328-FB6B3836393B}.Release|x86.ActiveCfg = Release|Win32
 		{286102D2-39F0-4578-8328-FB6B3836393B}.Release|x86.Build.0 = Release|Win32
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Debug|x64.ActiveCfg = Debug|x64
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Debug|x64.Build.0 = Debug|x64
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Debug|x86.ActiveCfg = Debug|Win32
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Debug|x86.Build.0 = Debug|Win32
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Profile|x64.ActiveCfg = Release|x64
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Profile|x64.Build.0 = Release|x64
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Profile|x86.ActiveCfg = Release|Win32
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Profile|x86.Build.0 = Release|Win32
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Release|x64.ActiveCfg = Release|x64
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Release|x64.Build.0 = Release|x64
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Release|x86.ActiveCfg = Release|Win32
-		{42B029E7-5362-497E-BA3D-F10B49E1C274}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
