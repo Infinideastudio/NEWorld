@@ -17,6 +17,10 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+Margine::Margine()
+{
+}
+
 Margine::Margine(Rect _Relative_ps, Rect _Relative_pc)
 {
 }
@@ -24,4 +28,17 @@ Margine::Margine(Rect _Relative_ps, Rect _Relative_pc)
 Rect Margine::GetAbsolutePos(Rect Parent_Rect)
 {
     return Rect();
+}
+
+Control::Control()
+{
+}
+
+Control::Control(std::string _xName, Margine _Margine)
+    :xName(_xName), CMargine(_Margine)
+{
+}
+
+Control::~Control()
+{
 }

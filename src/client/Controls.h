@@ -26,8 +26,29 @@ class Margine : public Object
 private:
     Rect Relative_ps, Relative_pc;
 public:
+    Margine();
     Margine(Rect _Relative_ps, Rect _Relative_pc);
     Rect GetAbsolutePos(Rect Parent_Rect);
+};
+
+enum FocusOp
+{
+    Lose, Gain
+};
+
+enum ButtonAction
+{
+    Press, Release, Repeat
+};
+
+enum MouseButton
+{
+    Left, Middle, Right, Spare1, Spare2
+};
+
+enum CursorOp
+{
+    Leave, Enter
 };
 
 class Control :public Object
@@ -39,7 +60,27 @@ public:
     Control* Parent;
     std::string xName;
     Control();
-    Control(std::string xName, Margine _Margine);
+    Control(std::string _xName, Margine _Margine);
+    virtual void FocusFunc(FocusOp Stat) = 0;
+    virtual void MouseButtonFunc(MouseButton Button, ButtonAction Action) = 0;
+    virtual void CursorPosFunc(double x, double y) = 0;
+    virtual void CrusorEnterFunc(CursorOp Stat) = 0;
+    virtual void ScrollFunc(double dx, double dy) = 0;
+    virtual void KeyFunc(int Key, ButtonAction Action) = 0;
+    virtual void CharInputFunc(wchar_t Char) = 0;
+    virtual void DropFunc(int DropCount, const char** Paths) = 0;
+
     virtual ~Control();
 };
+
+typedef void (Control::*NotifyFunc) (Control* Sender);
+typedef void (Control::*OnFocusFunc) (Control* Sender, FocusOp Stat);
+typedef void (Control::*OnMouseButtonFunc) (Control* Sender, MouseButton Button, ButtonAction Action);
+typedef void (Control::*OnCursorPosFunc) (Control* Sender, double x, double y);
+typedef void (Control::*OnCrusorEnterFunc) (Control* Sender, CursorOp Stat);
+typedef void (Control::*OnScrollFunc) (Control* Sender, double dx, double dy);
+typedef void (Control::*OnKeyFunc) (Control* Sender, int Key, ButtonAction Action);
+typedef void (Control::*OnCharInputFunc) (Control* Sender, wchar_t Char);
+typedef void (Control::*OnDropFunc) (Control* Sender, int DropCount, const char** Paths);
+
 #endif // !_CONTROLS_H_

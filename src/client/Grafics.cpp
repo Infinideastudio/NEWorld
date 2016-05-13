@@ -20,7 +20,7 @@
 
 Color::Color() :r(0.0f), g(0.0f), b(0.0f), a(0.0f) {};
 
-Color::Color(double _r, double _g, double _b, double _a = 1.0f) :
+Color::Color(double _r, double _g, double _b, double _a) :
     r(_r), g(_g), b(_b), a(_a) {};
 
 void Color::Set(double _r, double _g, double _b, double _a)
@@ -145,7 +145,7 @@ Image::Image(std::string path)
 
 Image Image::Sub(Rect pos)
 {
-
+    return Image();
 }
 
 Image::~Image()

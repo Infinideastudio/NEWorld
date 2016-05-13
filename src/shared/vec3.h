@@ -68,7 +68,9 @@ public:
     { return x == rhs.x && y == rhs.y && z == rhs.z; }
 
     bool operator!= (const Vec3& rhs) const
-    { return !(*this == rhs) }
+    {
+        return !(*this == rhs);
+    }
 
     Vec3 operator+ (const Vec3& rhs) const
     { return Vec3(x + rhs.x, y + rhs.y, z + rhs.z); }
