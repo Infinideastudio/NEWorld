@@ -16,30 +16,4 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "controls.h"
-
-Margin::Margin()
-{
-}
-
-Margin::Margin(Rect _Relative_ps, Rect _Relative_pc)
-{
-}
-
-Rect Margin::GetAbsolutePos(Rect Parent_Rect)
-{
-    return Rect();
-}
-
-Control::Control()
-{
-}
-
-Control::Control(std::string _xName, Margin _Margin)
-    :xName(_xName), CMargin(_Margin)
-{
-}
-
-Control::~Control()
-{
-}
+#include "vertexarray.h"

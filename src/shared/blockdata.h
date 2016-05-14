@@ -37,10 +37,10 @@ public:
 
     BlockData() :data(0) {}
     BlockData(int id_, int brightness_, int state_) :id(id_), brightness(brightness_), state(state_) {}
-    BlockData(int data_) :data(data_) {}
+    explicit BlockData(int data_) :data(data_) {}
     BlockData(const BlockData& rhs) :data(rhs.data) {}
 
-    void operator= (const BlockData& rhs) { data = rhs.data; }
+//    void operator= (const BlockData& rhs) { data = rhs.data; }
     bool operator== (const BlockData& rhs) const { return id == rhs.id; }
 
     int getID() const { return id; }
