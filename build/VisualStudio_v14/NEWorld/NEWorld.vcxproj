@@ -176,8 +176,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\Controls.h" />
-    <ClInclude Include="..\..\..\src\client\Grafics.h" />
+    <ClInclude Include="..\..\..\src\client\graphics.h" />
+    <ClInclude Include="..\..\..\src\client\renderer.h" />
     <ClInclude Include="..\..\..\src\client\resource.h" />
+    <ClInclude Include="..\..\..\src\client\vertexarray.h" />
     <ClInclude Include="..\..\..\src\client\window.h" />
     <ClInclude Include="..\..\..\src\client\worldloader.h" />
   </ItemGroup>
@@ -211,9 +213,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\Controls.cpp" />
-    <ClCompile Include="..\..\..\src\client\Grafics.cpp" />
+    <ClCompile Include="..\..\..\src\client\graphics.cpp" />
+    <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
     <ClCompile Include="..\..\..\src\client\window.cpp" />
     <ClCompile Include="..\..\..\src\client\worldloader.cpp" />
+    <ClCompile Include="..\..\..\src\client\renderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

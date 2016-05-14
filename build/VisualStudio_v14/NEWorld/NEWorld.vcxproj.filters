@@ -12,23 +12,32 @@
     <Filter Include="Resources\Shaders">
       <UniqueIdentifier>{78ae7a31-fc47-4fc7-918b-eeebda79d553}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Window">
+    <Filter Include="Source\GUI">
       <UniqueIdentifier>{3af037d3-556b-496c-8f61-b46246f07a45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer">
+      <UniqueIdentifier>{e5e29554-de32-45ec-93f7-18a3f8986c29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\resource.h" />
     <ClInclude Include="..\..\..\src\client\window.h">
-      <Filter>Source\Window</Filter>
+      <Filter>Source\GUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\worldloader.h">
-      <Filter>Source\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\Grafics.h">
-      <Filter>Source\Window</Filter>
+      <Filter>Source\GUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\Controls.h">
-      <Filter>Source\Window</Filter>
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\graphics.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\renderer.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\vertexarray.h">
+      <Filter>Source\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -66,16 +75,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\window.cpp">
-      <Filter>Source\Window</Filter>
+      <Filter>Source\GUI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\worldloader.cpp">
-      <Filter>Source\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\Grafics.cpp">
-      <Filter>Source\Window</Filter>
+      <Filter>Source\GUI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\Controls.cpp">
-      <Filter>Source\Window</Filter>
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\graphics.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\renderer.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\vertexarray.cpp">
+      <Filter>Source\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
