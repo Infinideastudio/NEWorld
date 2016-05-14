@@ -26,11 +26,11 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3& centerPos)
     int distsqr, first, middle, last;
 
     // centerPos to chunk coords
-    centerCPos = _world->getChunkPos(centerPos);
-
-    for (size_t ci = 0; ci < _world->getChunkCount(); ci++)
+    centerCPos = m_world->getChunkPos(centerPos);
+    
+    for (size_t ci = 0; ci < m_world->getChunkCount(); ci++)
     {
-        cur = _world->getChunkPtr(ci)->getPos();
+        cur = m_world->getChunkPtr(ci)->getPos();
         // Get chunk center pos
         cur.x = (cur.x << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
         cur.y = (cur.y << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
@@ -49,7 +49,7 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3& centerPos)
             while (first <= last)
             {
                 middle = (first + last) >> 1;
-                if (distsqr > _chunkUnloadList[middle].second)
+                if (distsqr > m_chunkUnloadList[middle].second)
                     last = middle - 1;
                 else
                     first = middle + 1;
@@ -61,19 +61,19 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3& centerPos)
             // Move elements to make place
             for (int j = MaxChunkUnloadCount - 1; j > first; j--)
             {
-                _chunkUnloadList[j].first = _chunkUnloadList[j - 1].first;
-                _chunkUnloadList[j].second = _chunkUnloadList[j - 1].second;
+                m_chunkUnloadList[j].first = m_chunkUnloadList[j - 1].first;
+                m_chunkUnloadList[j].second = m_chunkUnloadList[j - 1].second;
             }
 
             // Insert into list
-            _chunkUnloadList[first].first = _world->getChunkPtr(ci);
-            _chunkUnloadList[first].second = distsqr;
+            m_chunkUnloadList[first].first = m_world->getChunkPtr(ci);
+            m_chunkUnloadList[first].second = distsqr;
 
             // Add counter
             if (pl < MaxChunkUnloadCount) pl++;
         }
     }
-    _chunkUnloadCount = pl;
+    m_chunkUnloadCount = pl;
 
     // NOT FINISHED YET
 

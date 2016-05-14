@@ -25,66 +25,66 @@ class VertexArray
 {
     private:
         // Vertex count
-        int _vertexes, _maxVertexes;
+        int m_vertexes, m_maxVertexes;
         // Vertex Attribute Count
-        int _textureCount, _colorCount, _attributeCount, _coordinateCount;
+        int m_textureCount, m_colorCount, m_attributeCount, m_coordinateCount;
         // Vertex Attributes
-        float *_vertexAttributes;
+        float *m_vertexAttributes;
         // Attributes count
-        int _vertexAttributeCount;
+        int m_vertexAttributeCount;
         // Array
-        float *_data;
+        float *m_data;
 
     public:
         VertexArray(int maxVertexes, int textureElementCount, int colorElementCount, int attributeElementCount, int coordinateElementCount)
-            :_maxVertexes(maxVertexes), _vertexAttributeCount(textureElementCount + colorElementCount + attributeElementCount + coordinateElementCount),
-            _textureCount(textureElementCount), _colorCount(colorElementCount), _attributeCount(attributeElementCount), _coordinateCount(coordinateElementCount)
+            :m_maxVertexes(maxVertexes), m_vertexAttributeCount(textureElementCount + colorElementCount + attributeElementCount + coordinateElementCount),
+            m_textureCount(textureElementCount), m_colorCount(colorElementCount), m_attributeCount(attributeElementCount), m_coordinateCount(coordinateElementCount)
         {
-            _data = new float[_maxVertexes*_vertexAttributeCount];
-            _vertexAttributes = new float[_vertexAttributeCount];
+            m_data = new float[m_maxVertexes*m_vertexAttributeCount];
+            m_vertexAttributes = new float[m_vertexAttributeCount];
             clear();
         }
         
         ~VertexArray()
         {
-            delete[] _data;
-            delete[] _vertexAttributes;
+            delete[] m_data;
+            delete[] m_vertexAttributes;
         }
         
         void clear()
         {
-            memset(_data, 0, _maxVertexes*_vertexAttributeCount*sizeof(float));
-            memset(_vertexAttributes, 0, _vertexAttributeCount*sizeof(float));
-            _vertexes = 0;
+            memset(m_data, 0, m_maxVertexes*m_vertexAttributeCount*sizeof(float));
+            memset(m_vertexAttributes, 0, m_vertexAttributeCount*sizeof(float));
+            m_vertexes = 0;
         }
 
         // Set texture coordinates
         void setTexture(const int size, const float* texture)
         {
-            // TODO: Check if (size > _textureCount)
-            memcpy(_vertexAttributes, texture, size*sizeof(float));
+            // TODO: Check if (size > m_textureCount)
+            memcpy(m_vertexAttributes, texture, size*sizeof(float));
         }
 
         // Set color value
         void setColor(const int size, const float* color)
         {
-            // TODO: Check if (size > _colorCount)
-            memcpy(_vertexAttributes + _textureCount, color, size*sizeof(float));
+            // TODO: Check if (size > m_colorCount)
+            memcpy(m_vertexAttributes + m_textureCount, color, size*sizeof(float));
         }
 
         // Set extra vertex attributes value
         void setAttribute(const int size, const float* attribute)
         {
-            // TODO: Check if (size > _attributeCount)
-            memcpy(_vertexAttributes + _textureCount + _colorCount, attribute, size*sizeof(float));
+            // TODO: Check if (size > m_attributeCount)
+            memcpy(m_vertexAttributes + m_textureCount + m_colorCount, attribute, size*sizeof(float));
         }
 
         // Add vertex
         void addVertex(const float* coords)
         {
-            memcpy(_data + _vertexes*sizeof(float), _vertexAttributes, _vertexAttributeCount*sizeof(float));
-            memcpy(_data + _vertexes + _vertexAttributeCount*sizeof(float), coords, _coordinateCount*sizeof(float));
-            _vertexes++;
+            memcpy(m_data + m_vertexes*sizeof(float), m_vertexAttributes, m_vertexAttributeCount*sizeof(float));
+            memcpy(m_data + m_vertexes + m_vertexAttributeCount*sizeof(float), coords, m_coordinateCount*sizeof(float));
+            m_vertexes++;
         }
 
         // Generate vertex buffer for rendering
