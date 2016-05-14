@@ -17,3 +17,29 @@
 */
 
 #include "vertexarray.h"
+
+void /* Replace "void" with VBO ID type */ VertexArray::flush()
+{
+    // #ifdef NEWORLD_USE_OPENGL
+    // glGenBuffersARB(...)
+    // #else
+    // #ifdef NEWORLD_USE_DIRECT3D
+    // ...
+    // #else
+    // #error "No graphics API selected!"
+    // #endif
+    // #endif
+}
+
+void VertexArray::render(void /* Replace "void" with VBO ID type */)
+{
+    // #ifdef NEWORLD_USE_OPENGL
+    // glBindBufferARB(...)
+    // #else
+    // #ifdef NEWORLD_USE_DIRECT3D
+    // ...
+    // #else
+    // #error "No graphics API selected!"
+    // #endif
+    // #endif
+}

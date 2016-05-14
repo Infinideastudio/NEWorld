@@ -58,15 +58,28 @@ class VertexArray
             _vertexes = 0;
         }
 
+        // Set texture coordinates
         void setTexture(const int size, const float* texture)
-        { memcpy(_vertexAttributes, texture, size*sizeof(float)); }
+        {
+            // TODO: Check if (size > _textureCount)
+            memcpy(_vertexAttributes, texture, size*sizeof(float));
+        }
 
+        // Set color value
         void setColor(const int size, const float* color)
-        { memcpy(_vertexAttributes + _textureCount, color, size*sizeof(float)); }
+        {
+            // TODO: Check if (size > _colorCount)
+            memcpy(_vertexAttributes + _textureCount, color, size*sizeof(float));
+        }
 
+        // Set extra vertex attributes value
         void setAttribute(const int size, const float* attribute)
-        { memcpy(_vertexAttributes + _textureCount + _colorCount, attribute, size*sizeof(float)); }
+        {
+            // TODO: Check if (size > _attributeCount)
+            memcpy(_vertexAttributes + _textureCount + _colorCount, attribute, size*sizeof(float));
+        }
 
+        // Add vertex
         void addVertex(const float* coords)
         {
             memcpy(_data + _vertexes*sizeof(float), _vertexAttributes, _vertexAttributeCount*sizeof(float));
@@ -74,10 +87,10 @@ class VertexArray
             _vertexes++;
         }
 
-        void flush()
-        {
-
-        }
+        // Generate vertex buffer for rendering
+        void flush();
+        // Render vertex buffer
+        static void render();
 
 };
 

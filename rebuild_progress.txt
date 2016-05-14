@@ -1,0 +1,37 @@
+DELETE THIS FILE AFTER REBUILD FINISHED!!!
+
+Project Shared:
+
+class BlockData - Finished
+	Description: 方块的不同种类及特性
+class BlockType - Finished
+	Description: 存储于Chunk中的方块表示
+class Chunk - Finished
+	Description: 基本Chunk
+class World - Not Finished
+	Description: 基本世界系统
+class Object - Finished
+	Description: 基本实体
+class Vec3 - Finished
+	Description: 3个元素的向量，用于表示位置
+class AABB - Finished
+	Description: 轴对齐包围盒及其碰撞计算
+
+Project NEWorldServer:
+
+[None]
+
+Project NEWorld:
+
+class WorldLoader - Not Finished
+	Description: 世界中的Chunk加载顺序
+class VertexArray - Nearly Finished
+	Description: 渲染所用的顶点数组
+class Renderer - Not Finished
+	Description: 封装的渲染器
+class Window - Nearly Finished
+	Description: 封装的程序窗口
+class Graphics - ?
+	Description: 【DWVoid你来写吧233】
+class Controls - ?
+	Description: 【DWVoid你来写吧233】
