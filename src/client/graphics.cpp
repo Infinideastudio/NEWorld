@@ -1,4 +1,3 @@
-#include "Grafics.h"
 /*
 * NEWorld: An free game with similar rules to Minecraft.
 * Copyright (C) 2016 NEWorld Team
@@ -17,6 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "Graphics.h"
 
 Color::Color() :r(0.0f), g(0.0f), b(0.0f), a(0.0f) {};
 

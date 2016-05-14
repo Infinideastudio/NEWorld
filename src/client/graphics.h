@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _GRAFICS_H_
-#define _GRAFICS_H_
+#ifndef GRAPHICS_H_
+#define GRAPHICS_H_
 
 #include <string>
 #include <vector>
@@ -114,4 +114,4 @@ public:
     virtual void DrawPolygon(std::vector<Vec2>& Points, BrushDrawMood Mode) = 0;
     virtual ~Brush() = 0;
 };
-#endif // !_GRAFICS_H_
+#endif // !GRAPHICS_H_

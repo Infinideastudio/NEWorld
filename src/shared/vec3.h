@@ -34,15 +34,11 @@ public:
 
     // Get the square of vector length
     int lengthSqr()
-    {
-        return x*x + y*y + z*z;
-    }
+    { return x*x + y*y + z*z; }
 
     // Get vector length
     double length()
-    {
-        return sqrt(double(lengthSqr()));
-    }
+    { return sqrt(double(lengthSqr())); }
 
     bool operator< (const Vec3& rhs) const
     {
@@ -68,9 +64,7 @@ public:
     { return x == rhs.x && y == rhs.y && z == rhs.z; }
 
     bool operator!= (const Vec3& rhs) const
-    {
-        return !(*this == rhs);
-    }
+    { return !(*this == rhs); }
 
     Vec3 operator+ (const Vec3& rhs) const
     { return Vec3(x + rhs.x, y + rhs.y, z + rhs.z); }

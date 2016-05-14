@@ -17,15 +17,15 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-Margine::Margine()
+Margin::Margin()
 {
 }
 
-Margine::Margine(Rect _Relative_ps, Rect _Relative_pc)
+Margin::Margin(Rect _Relative_ps, Rect _Relative_pc)
 {
 }
 
-Rect Margine::GetAbsolutePos(Rect Parent_Rect)
+Rect Margin::GetAbsolutePos(Rect Parent_Rect)
 {
     return Rect();
 }
@@ -34,8 +34,8 @@ Control::Control()
 {
 }
 
-Control::Control(std::string _xName, Margine _Margine)
-    :xName(_xName), CMargine(_Margine)
+Control::Control(std::string _xName, Margin _Margin)
+    :xName(_xName), CMargin(_Margin)
 {
 }
 

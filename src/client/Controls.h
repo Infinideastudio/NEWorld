@@ -16,18 +16,18 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _CONTROLS_H_
-#define _CONTROLS_H_
+#ifndef CONTROLS_H_
+#define CONTROLS_H_
 
-#include "Grafics.h"
+#include "Graphics.h"
 
-class Margine : public Object
+class Margin : public Object
 {
 private:
     Rect Relative_ps, Relative_pc;
 public:
-    Margine();
-    Margine(Rect _Relative_ps, Rect _Relative_pc);
+    Margin();
+    Margin(Rect _Relative_ps, Rect _Relative_pc);
     Rect GetAbsolutePos(Rect Parent_Rect);
 };
 
@@ -43,7 +43,7 @@ enum ButtonAction
 
 enum MouseButton
 {
-    Left, Middle, Right, Spare1, Spare2
+    Left, Middle, Right, Preserved1, Preserved2
 };
 
 enum CursorOp
@@ -54,13 +54,15 @@ enum CursorOp
 class Control :public Object
 {
 private:
-    Margine CMargine;
+    Margin CMargin;
 public:
     Rect TempAbsoluteRect;
     Control* Parent;
     std::string xName;
+
     Control();
-    Control(std::string _xName, Margine _Margine);
+    Control(std::string _xName, Margin _Margin);
+
     virtual void FocusFunc(FocusOp Stat) = 0;
     virtual void MouseButtonFunc(MouseButton Button, ButtonAction Action) = 0;
     virtual void CursorPosFunc(double x, double y) = 0;
@@ -83,4 +85,4 @@ typedef void (Control::*OnKeyFunc) (Control* Sender, int Key, ButtonAction Actio
 typedef void (Control::*OnCharInputFunc) (Control* Sender, wchar_t Char);
 typedef void (Control::*OnDropFunc) (Control* Sender, int DropCount, const char** Paths);
 
-#endif // !_CONTROLS_H_
+#endif // !CONTROLS_H_
