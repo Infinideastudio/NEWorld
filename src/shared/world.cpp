@@ -132,9 +132,7 @@ Chunk* World::getChunkPtr(const Vec3i& chunkPos) const
 BlockData World::getBlock(const Vec3i& pos) const
 {
     Chunk* chunk = getChunkPtr(getChunkPos(pos));
-    if (chunk == nullptr) {
-
-    }
+    assert(chunk != nullptr);
     return chunk->getBlock(getBlockPos(pos));
 }
 
