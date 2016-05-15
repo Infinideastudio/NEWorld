@@ -19,22 +19,21 @@
 #include "world.h"
 #include "chunk.h"
 
-using std::abs;
-
 void World::expandChunkArray(size_t c)
 {
     chunkCount += c;
-    if (chunkCount > chunkArraySize) {
-        chunkArraySize *= 2;
+    if (chunkCount > chunkArraySize)
+    {
+        chunkArraySize <<= 1;
         chunks = (Chunk**)realloc(chunks, chunkArraySize * sizeof(Chunk*));
-//        assert(!chunkCount || chunks);
+        assert(chunks != NULL);
     }
 }
 
 void World::reduceChunkArray(size_t c)
 {
+    assert(chunkCount >= c);
     chunkCount -= c;
-//    assert(chunkCount >= 0);
 }
 
 void World::newChunkPtr(size_t index)
@@ -52,11 +51,11 @@ void World::eraseChunkPtr(size_t index)
     reduceChunkArray(1);
 }
 
-int World::getChunkIndex(const Vec3i& pos) const
+size_t World::getChunkIndex(const Vec3i& pos) const
 {
     // Binary search
-//    assert(chunkCount);
-    int first = 0, last = chunkCount - 1, middle;
+    assert(chunkCount);
+    size_t first = 0, last = chunkCount - 1, middle;
     do
     {
         middle = (first + last) / 2;
@@ -85,7 +84,8 @@ Chunk* World::addChunk(const Vec3i& chunkPos)
     int index = getChunkIndex(chunkPos);
     if (chunkCount && chunks[index]->getPos() == chunkPos)
     {
-        // Error: chunk already exist
+        assert(false);
+        return nullptr;
     }
     newChunkPtr(index);
     chunks[index] = new Chunk(chunkPos);
@@ -100,7 +100,8 @@ int World::deleteChunk(const Vec3i& chunkPos)
     int index = getChunkIndex(chunkPos);
     if (chunkCount == 0 || chunks[index]->getPos() != chunkPos)
     {
-        // Error: chunk doesn't exist
+        assert(false);
+        return 1;
     }
     delete chunks[index];
     eraseChunkPtr(index);
@@ -108,15 +109,18 @@ int World::deleteChunk(const Vec3i& chunkPos)
     return 0;
 }
 
-Chunk* World::getChunkPtr(int index) const
+Chunk* World::getChunkPtr(size_t index) const
 {
-//    assert(index >= 0 && index <= chunkCount);
+    if (index >= chunkCount)
+    {
+        assert(false);
+        return nullptr;
+    }
     return chunks[index];
 }
 
 Chunk* World::getChunkPtr(const Vec3i& chunkPos) const
 {
-//    assert(index >= 0 && index <= chunkCount);
     // TODO: Try chunk pointer cache
     // TODO: Try chunk pointer array
     Chunk* res = chunks[getChunkIndex(chunkPos)];
@@ -128,13 +132,15 @@ Chunk* World::getChunkPtr(const Vec3i& chunkPos) const
 BlockData World::getBlock(const Vec3i& pos) const
 {
     Chunk* chunk = getChunkPtr(getChunkPos(pos));
-//    assert(chunk != nullptr);
+    if (chunk == nullptr) {
+
+    }
     return chunk->getBlock(getBlockPos(pos));
 }
 
 void World::setBlock(const Vec3i& pos, BlockData block)
 {
     Chunk* chunk = getChunkPtr(getChunkPos(pos));
-//    assert(chunk != nullptr);
+    assert(chunk != nullptr);
     chunk->setBlock(getBlockPos(pos), block);
 }

@@ -20,20 +20,23 @@
 #define VERTEXARRAY_H_
 
 #include <cstring>
+#include "common.h"
 
 class VertexArray
 {
 private:
     // Vertex count
-    int m_vertexes, m_maxVertexes;
+    int m_vertexes;
+    // Max vertex count
+    const int m_maxVertexes;
     // Vertex Attribute Count
-    int m_textureCount, m_colorCount, m_attributeCount, m_coordinateCount;
-    // Vertex Attributes
-    float *m_vertexAttributes;
-    // Attributes count
-    int m_vertexAttributeCount;
-    // Array
+    const int m_textureCount, m_colorCount, m_attributeCount, m_coordinateCount;
+    // Vertex attributes count (sum of all)
+    const int m_vertexAttributeCount;
+    // Vertex array
     float *m_data;
+    // Current vertex attributes
+    float *m_vertexAttributes;
 
     VertexArray(const VertexArray&) = delete;
     VertexArray& operator=(const VertexArray&) = delete;
@@ -64,21 +67,21 @@ public:
     // Set texture coordinates
     void setTexture(const int size, const float* texture)
     {
-        // TODO: Check if (size > m_textureCount)
+        assert(size <= m_textureCount);
         memcpy(m_vertexAttributes, texture, size*sizeof(float));
     }
 
     // Set color value
     void setColor(const int size, const float* color)
     {
-        // TODO: Check if (size > m_colorCount)
+        assert(size <= m_colorCount);
         memcpy(m_vertexAttributes + m_textureCount, color, size*sizeof(float));
     }
 
     // Set extra vertex attributes value
     void setAttribute(const int size, const float* attribute)
     {
-        // TODO: Check if (size > m_attributeCount)
+        assert(size <= m_attributeCount);
         memcpy(m_vertexAttributes + m_textureCount + m_colorCount, attribute, size*sizeof(float));
     }
 

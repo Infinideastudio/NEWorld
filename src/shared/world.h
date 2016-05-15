@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <string>
 #include <cstring> // malloc, realloc, free
+using std::abs;
 
 #include "common.h"
 #include "chunk.h"
@@ -45,7 +46,7 @@ private:
     // Erase pointer at chunks[index]
     void eraseChunkPtr(size_t index);
     // Search chunk index, or the index the chunk should insert into
-    int getChunkIndex(const Vec3i& chunkPos) const;
+    size_t getChunkIndex(const Vec3i& chunkPos) const;
 
 public:
     // World name
@@ -54,7 +55,7 @@ public:
     World();
     ~World();
     World(const World&) = delete;
-    World& operator=(const World&) = delete;
+    World& operator= (const World&) = delete;
 
     // Get chunk count
     size_t getChunkCount() const { return chunkCount; }
@@ -63,7 +64,7 @@ public:
     // Delete chunk
     int deleteChunk(const Vec3i& chunkPos);
     // Get chunk pointer by index
-    Chunk* getChunkPtr(int index) const;
+    Chunk* getChunkPtr(size_t index) const;
     // Get chunk pointer by chunk coordinates
     Chunk* getChunkPtr(const Vec3i& chunkPos) const;
 

@@ -19,6 +19,26 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-#include "vec3.h"
+#ifdef _DEBUG
+    #define NEWORLD_DEBUG // Main debug flag
+#endif
+
+#define NEWORLD_USE_WINAPI
+#define NEWORLD_USE_OPENGL
+//#define NEWORLD_USE_DIRECT3D
+
+#ifdef NEWORLD_DEBUG
+//    ...
+#else
+    #define NDEBUG // NDEBUG flag for cassert
+#endif
+
+#ifdef NEWORLD_USE_WINAPI
+    #include <Windows.h> // Windows API
+#else
+//    #include <pthread.h> // Or <thread> <mutex>
+#endif
+
+#include <cassert>
 
 #endif // !COMMON_H_
