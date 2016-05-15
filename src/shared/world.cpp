@@ -60,10 +60,10 @@ int World::getChunkIndex(const Vec3& pos) const
     do
     {
         middle = (first + last) / 2;
-        Vec3& cur = chunks[middle]->getPos();
-        if (cur > pos)
+        Vec3& curr = chunks[middle]->getPos();
+        if (curr > pos)
             last = middle - 1;
-        else if (cur < pos)
+        else if (curr < pos)
             first = middle + 1;
     }
     while (first <= last);
