@@ -18,22 +18,10 @@
 
 #include "aabb.h"
 
-using std::max;
-using std::min;
-
-AABB::AABB() :xmin(0.0), xmax(0.0), ymin(0.0), ymax(0.0), zmin(0.0), zmax(0.0)
-{
-}
-
-AABB::AABB(double _xmin, double _ymin, double _zmin, double _xmax, double _ymax, double _zmax)
-    :xmin(_xmin), ymin(_ymin), zmin(_zmin), xmax(_xmax), ymax(_ymax), zmax(_xmax)
-{
-}
-
 bool AABB::intersectX(const AABB &box) const
 {
-    if ((xmin > box.xmin && xmin < box.xmax) || (xmax > box.xmin && xmax < box.xmax) ||
-            (box.xmin > xmin && box.xmin < xmax) || (box.xmax > xmin && box.xmax < xmax))
+    if ((min.x > box.min.x && min.x < box.max.x) || (max.x > box.min.x && max.x < box.max.x) ||
+            (box.min.x > min.x && box.min.x < max.x) || (box.max.x > min.x && box.max.x < max.x))
         return true;
 
     return false;
@@ -41,8 +29,8 @@ bool AABB::intersectX(const AABB &box) const
 
 bool AABB::intersectY(const AABB &box) const
 {
-    if ((ymin > box.ymin && ymin < box.ymax) || (ymax > box.ymin && ymax < box.ymax) ||
-            (box.ymin > ymin && box.ymin < ymax) || (box.ymax > ymin && box.ymax < ymax))
+    if ((min.y > box.min.y && min.y < box.max.y) || (max.y > box.min.y && max.y < box.max.y) ||
+            (box.min.y > min.y && box.min.y < max.y) || (box.max.y > min.y && box.max.y < max.y))
         return true;
 
     return false;
@@ -50,8 +38,8 @@ bool AABB::intersectY(const AABB &box) const
 
 bool AABB::intersectZ(const AABB &box) const
 {
-    if ((zmin > box.zmin && zmin < box.zmax) || (zmax > box.zmin && zmax < box.zmax) ||
-            (box.zmin > zmin && box.zmin < zmax) || (box.zmax > zmin && box.zmax < zmax))
+    if ((min.z > box.min.z && min.z < box.max.z) || (max.z > box.min.z && max.z < box.max.z) ||
+            (box.min.z > min.z && box.min.z < max.z) || (box.max.z > min.z && box.max.z < max.z))
         return true;
 
     return false;
@@ -67,11 +55,11 @@ double AABB::maxMoveOnXclip(const AABB &box, double orgmove) const
     if (!(intersectY(box) && intersectZ(box)))
         return orgmove;
 
-    else if (xmin >= box.xmax && orgmove < 0.0)
-        return max(box.xmax - xmin, orgmove);
+    else if (min.x >= box.max.x && orgmove < 0.0)
+        return std::max(box.max.x - min.x, orgmove);
 
-    else if (xmax <= box.xmin && orgmove > 0.0)
-        return min(box.xmin - xmax, orgmove);
+    else if (max.x <= box.min.x && orgmove > 0.0)
+        return std::min(box.min.x - max.x, orgmove);
 
     return orgmove;
 }
@@ -81,11 +69,11 @@ double AABB::maxMoveOnYclip(const AABB &box, double orgmove) const
     if (!(intersectX(box) && intersectZ(box)))
         return orgmove;
 
-    else if (ymin >= box.ymax && orgmove < 0.0)
-        return max(box.ymax - ymin, orgmove);
+    else if (min.y >= box.max.y && orgmove < 0.0)
+        return std::max(box.max.y - min.y, orgmove);
 
-    else if (ymax <= box.ymin && orgmove > 0.0)
-        return min(box.ymin - ymax, orgmove);
+    else if (max.y <= box.min.y && orgmove > 0.0)
+        return std::min(box.min.y - max.y, orgmove);
 
     return orgmove;
 }
@@ -95,11 +83,11 @@ double AABB::maxMoveOnZclip(const AABB &box, double orgmove) const
     if (!(intersectX(box) && intersectY(box)))
         return orgmove;
 
-    else if (zmin >= box.zmax && orgmove < 0.0)
-        return max(box.zmax - zmin, orgmove);
+    else if (min.z >= box.max.z && orgmove < 0.0)
+        return std::max(box.max.z - min.z, orgmove);
 
-    else if (zmax <= box.zmin && orgmove > 0.0)
-        return min(box.zmin - zmax, orgmove);
+    else if (max.z <= box.min.z && orgmove > 0.0)
+        return std::min(box.min.z - max.z, orgmove);
 
     return orgmove;
 }
@@ -109,43 +97,43 @@ AABB AABB::expand(double x, double y, double z) const
     AABB res = *this;
 
     if (x > 0.0)
-        res.xmax += x;
+        res.max.x += x;
     else
-        res.xmin += x;
+        res.min.x += x;
 
     if (y > 0.0)
-        res.ymax += y;
+        res.max.y += y;
     else
-        res.ymin += y;
+        res.min.y += y;
 
     if (z > 0.0)
-        res.zmax += z;
+        res.max.z += z;
     else
-        res.zmin += z;
+        res.min.z += z;
 
     return res;
 }
 
 void AABB::move(double x, double y, double z)
 {
-    xmin += x;
-    ymin += y;
-    zmin += z;
-    xmax += x;
-    ymax += y;
-    zmax += z;
+    min.x += x;
+    min.y += y;
+    min.z += z;
+    max.x += x;
+    max.y += y;
+    max.z += z;
 }
 
 void AABB::moveTo(double x, double y, double z)
 {
     double l, w, h;
-    l = (xmax - xmin) / 2;
-    w = (ymax - ymin) / 2;
-    h = (zmax - zmin) / 2;
-    xmin = x - l;
-    ymin = y - w;
-    zmin = z - h;
-    xmax = x + l;
-    ymax = y + w;
-    zmax = z + h;
+    l = (max.x - min.x) / 2;
+    w = (max.y - min.y) / 2;
+    h = (max.z - min.z) / 2;
+    min.x = x - l;
+    min.y = y - w;
+    min.z = z - h;
+    max.x = x + l;
+    max.y = y + w;
+    max.z = z + h;
 }

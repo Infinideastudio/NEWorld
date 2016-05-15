@@ -21,24 +21,25 @@
 
 #include <cmath>
 
+template<typename T = int>
 class Vec3
 {
 public:
-    int x, y, z;
+    T x, y, z;
 
-    Vec3::Vec3() :x(0), y(0), z(0)
+    Vec3() :x(0), y(0), z(0)
     {}
 
-    Vec3::Vec3(int x_, int y_, int z_) :x(x_), y(y_), z(z_)
+    Vec3(T x_, T y_, T z_) :x(x_), y(y_), z(z_)
     {}
 
     // Get the square of vector length
-    int lengthSqr()
+    T lengthSqr()
     { return x*x + y*y + z*z; }
 
     // Get vector length
     double length()
-    { return sqrt(double(lengthSqr())); }
+    { return sqrt(lengthSqr()); }
 
     bool operator< (const Vec3& rhs) const
     {
@@ -73,4 +74,6 @@ public:
     { return Vec3(x - rhs.x, y - rhs.y, z - rhs.z); }
 };
 
+using DoubleVec3 = Vec3<double>;
+using IntVec3 = Vec3<int>;
 #endif // !VEC3_H_

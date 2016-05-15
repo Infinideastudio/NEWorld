@@ -29,7 +29,7 @@ private:
 public:
     Window() : m_win(nullptr) { init(); }
     bool init();
-    bool isKeyPressed(int key) const { return glfwGetKey(m_win, key); }
+    bool isKeyPressed(int key) const { return glfwGetKey(m_win, key) == GLFW_PRESS; }
     void setCurrentDraw() const { glfwMakeContextCurrent(m_win); }
     operator GLFWwindow*() const { return m_win; }
 };

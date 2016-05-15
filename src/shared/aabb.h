@@ -20,16 +20,17 @@
 #define AABB_H_
 
 #include <algorithm>
+#include "vec3.h"
 
 // Axis aligned bounding box
 class AABB
 {
 public:
-    double xmin, ymin, zmin; // Min bound
-    double xmax, ymax, zmax; // Max bound
+    DoubleVec3 min; // Min bound
+    DoubleVec3 max; // Max bound
 
-    AABB();
-    AABB(double xmin, double ymin, double zmin, double xmax, double ymax, double zmax);
+    AABB() {}
+    AABB(DoubleVec3 _min, DoubleVec3 _max) :min(_min), max(_max) {}
 
     // Is intersect on X axis
     bool intersectX(const AABB &anotherAABB) const;

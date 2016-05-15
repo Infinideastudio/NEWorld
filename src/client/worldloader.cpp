@@ -18,29 +18,29 @@
 
 #include "worldloader.h"
 
-void WorldLoader::sortChunkLoadUnloadList(const Vec3& centerPos)
+void WorldLoader::sortChunkLoadUnloadList(const IntVec3& centerPos)
 {
-    Vec3 centerCPos, cur, distvec;
-    Chunk* cur;
+    IntVec3 centerCPos;
+    Chunk* curChunk;
     int pl = 0, pu = 0;
     int distsqr, first, middle, last;
 
     // centerPos to chunk coords
     centerCPos = m_world->getChunkPos(centerPos);
-    
+
     for (size_t ci = 0; ci < m_world->getChunkCount(); ci++)
     {
-        cur = m_world->getChunkPtr(ci)->getPos();
+        IntVec3 curPos = m_world->getChunkPtr(ci)->getPos();
         // Get chunk center pos
-        cur.x = (cur.x << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
-        cur.y = (cur.y << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
-        cur.z = (cur.z << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
+        curPos.x = (curPos.x << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
+        curPos.y = (curPos.y << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
+        curPos.z = (curPos.z << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
 
         // Out of load range, pending to unload
         if (/*!chunkInRange(cx, cy, cz, cxp, cyp, czp, ViewDistance + 1)*/ true /* NOT FINISHED YET */)
         {
             // Distance from centerPos
-            distvec = cur - centerPos;
+            IntVec3 distvec = curPos - centerPos;
             distsqr = distvec.lengthSqr();
 
             // Binary search in unload list

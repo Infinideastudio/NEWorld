@@ -23,32 +23,32 @@
 #include "common.h"
 
 const int ChunkSizeLog2 = 5;
-const int ChunkSize = 1 << ChunkSizeLog2; // 2 ^ ChunkSizeLog2
+const int ChunkSize = 1 << ChunkSizeLog2; // 2 ^ ChunkSizeLog2 == 32
 
 class Chunk
 {
 private:
-    Vec3 pos;
-    BlockData blocks[ChunkSize*ChunkSize*ChunkSize];
+    IntVec3 m_pos;
+    BlockData m_blocks[ChunkSize*ChunkSize*ChunkSize];
 
 public:
-    explicit Chunk(const Vec3& chunkPos) :pos(chunkPos) {}
+    explicit Chunk(const IntVec3& chunkPos) :m_pos(chunkPos) {}
 
     // Get chunk position
-    Vec3 getPos() const
-    { return pos; }
+    IntVec3 getPos() const
+    { return m_pos; }
 
     // Get block data in this chunk
-    BlockData getBlock(const Vec3& pos) const
-    { return blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
+    BlockData getBlock(const IntVec3& pos) const
+    { return m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
 
     // Get a specific block's reference
-    BlockData& getBlock(const Vec3& pos)
-    { return blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
+    BlockData& getBlock(const IntVec3& pos)
+    { return m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
 
     // Set block data in this chunk
-    void setBlock(const Vec3& pos, BlockData block)
-    { blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z] = block; }
+    void setBlock(const IntVec3& pos, BlockData block)
+    { m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z] = block; }
 
 };
 

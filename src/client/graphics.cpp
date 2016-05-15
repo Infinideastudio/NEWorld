@@ -25,12 +25,18 @@ Color::Color(double _r, double _g, double _b, double _a) :
 
 void Color::Set(double _r, double _g, double _b, double _a)
 {
-    r = _r; g = _g; b = _b; a = _a;
+    r = _r;
+    g = _g;
+    b = _b;
+    a = _a;
 }
 
 void Color::Get(double & _r, double & _g, double & _b, double & _a) const
 {
-    _r = r; _g = g; _b = b; _a = a;
+    _r = r;
+    _g = g;
+    _b = b;
+    _a = a;
 }
 
 bool Color::operator==(const Color rhs) const
@@ -84,7 +90,8 @@ void Vec2::Set(double _x, double _y)
 
 void Vec2::Get(double & _x, double & _y) const
 {
-    _x = x; _y = y;
+    _x = x;
+    _y = y;
 }
 
 bool Vec2::operator==(const Vec2 v) const
@@ -120,12 +127,18 @@ Rect::Rect(double _xmin, double _xmax, double _ymin, double _ymax) :xmin(_xmin),
 
 void Rect::Set(double _xmin, double _xmax, double _ymin, double _ymax)
 {
-    xmin = _xmin; xmax = _xmax; ymin = _ymin; ymax = _ymax;
+    xmin = _xmin;
+    xmax = _xmax;
+    ymin = _ymin;
+    ymax = _ymax;
 }
 
 void Rect::Get(double& _xmin, double& _xmax, double& _ymin, double& _ymax) const
 {
-    _xmin = xmin; _xmax = xmax; _ymin = ymin; _ymax = ymax;
+    _xmin = xmin;
+    _xmax = xmax;
+    _ymin = ymin;
+    _ymax = ymax;
 }
 
 Image::Image()

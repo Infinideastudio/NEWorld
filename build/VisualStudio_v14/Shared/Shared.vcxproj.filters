@@ -5,9 +5,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\Shared.h" />
-    <ClInclude Include="..\..\..\src\shared\Object.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\shared\vec3.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -25,6 +22,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\common.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\object.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

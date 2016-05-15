@@ -24,9 +24,6 @@
     <ClInclude Include="..\..\..\src\client\window.h">
       <Filter>Source\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\client\worldloader.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\client\Controls.h">
       <Filter>Source\GUI</Filter>
     </ClInclude>
@@ -38,6 +35,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\vertexarray.h">
       <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\worldloader.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +77,6 @@
     <ClCompile Include="..\..\..\src\client\window.cpp">
       <Filter>Source\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\client\worldloader.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\client\Controls.cpp">
       <Filter>Source\GUI</Filter>
     </ClCompile>
@@ -91,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp">
       <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\worldloader.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
