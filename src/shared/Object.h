@@ -25,7 +25,7 @@
 class Object
 {
 private:
-    DoubleVec3 _position, _size, _rotation;
+    Vec3d _position, _size, _rotation;
     int _health;
     AABB _hitbox;
 
@@ -33,13 +33,13 @@ public:
     int getHealth() const { return _health; }
     void setHealth(int val) { _health = val; }
 
-    DoubleVec3 getPosition() const { return _position; }
-    void setPosition(DoubleVec3 val) { _position = val; }
+    Vec3d getPosition() const { return _position; }
+    void setPosition(Vec3d val) { _position = val; }
 
-    DoubleVec3 getRotation() const { return _rotation; }
-    void setRotation(DoubleVec3 val) { _rotation = val; }
+    Vec3d getRotation() const { return _rotation; }
+    void setRotation(Vec3d val) { _rotation = val; }
 
-    DoubleVec3 getSize() const { return _size; }
+    Vec3d getSize() const { return _size; }
 
     AABB getHitbox() const { return _hitbox; }
 

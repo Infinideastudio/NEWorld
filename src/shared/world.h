@@ -45,7 +45,7 @@ private:
     // Erase pointer at chunks[index]
     void eraseChunkPtr(size_t index);
     // Search chunk index, or the index the chunk should insert into
-    int getChunkIndex(const IntVec3& chunkPos) const;
+    int getChunkIndex(const Vec3i& chunkPos) const;
 
 public:
     // World name
@@ -58,29 +58,30 @@ public:
 
     // Get chunk count
     size_t getChunkCount() const { return chunkCount; }
-
     // Add chunk
-    Chunk* addChunk(const IntVec3& chunkPos);
+    Chunk* addChunk(const Vec3i& chunkPos);
     // Delete chunk
-    int deleteChunk(const IntVec3& chunkPos);
+    int deleteChunk(const Vec3i& chunkPos);
     // Get chunk pointer by index
     Chunk* getChunkPtr(int index) const;
     // Get chunk pointer by chunk coordinates
-    Chunk* getChunkPtr(const IntVec3& chunkPos) const;
+    Chunk* getChunkPtr(const Vec3i& chunkPos) const;
 
     // Convert world position to chunk coordinate (one axis)
     int getChunkPos(int pos) const { return pos >> ChunkSizeLog2; }
     // Convert world position to chunk coordinate (all axes)
-    IntVec3 getChunkPos(const IntVec3& pos) const { return IntVec3(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z)); }
+    Vec3i getChunkPos(const Vec3i& pos) const { return Vec3i(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z)); }
     // Convert world position to block coordinate in chunk (one axis)
     int getBlockPos(int pos) const { return pos & (ChunkSize - 1); }
     // Convert world position to block coordinate in chunk (all axes)
-    IntVec3 getBlockPos(const IntVec3& pos) const { return IntVec3(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z)); }
+    Vec3i getBlockPos(const Vec3i& pos) const { return Vec3i(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z)); }
 
     // Get block data
-    BlockData getBlock(const IntVec3& pos) const;
+    BlockData getBlock(const Vec3i& pos) const;
+    // Get block reference
+//    BlockData& getBlock(const Vec3i& pos);
     // Set block data
-    void setBlock(const IntVec3& pos, BlockData block);
+    void setBlock(const Vec3i& pos, BlockData block);
 
 };
 

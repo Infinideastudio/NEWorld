@@ -52,7 +52,7 @@ void World::eraseChunkPtr(size_t index)
     reduceChunkArray(1);
 }
 
-int World::getChunkIndex(const IntVec3& pos) const
+int World::getChunkIndex(const Vec3i& pos) const
 {
     // Binary search
 //    assert(chunkCount);
@@ -60,7 +60,7 @@ int World::getChunkIndex(const IntVec3& pos) const
     do
     {
         middle = (first + last) / 2;
-        IntVec3& curr = chunks[middle]->getPos();
+        Vec3i& curr = chunks[middle]->getPos();
         if (curr > pos)
             last = middle - 1;
         else if (curr < pos)
@@ -80,7 +80,7 @@ World::~World()
 {
 }
 
-Chunk* World::addChunk(const IntVec3& chunkPos)
+Chunk* World::addChunk(const Vec3i& chunkPos)
 {
     int index = getChunkIndex(chunkPos);
     if (chunkCount && chunks[index]->getPos() == chunkPos)
@@ -95,7 +95,7 @@ Chunk* World::addChunk(const IntVec3& chunkPos)
     return chunks[index];
 }
 
-int World::deleteChunk(const IntVec3& chunkPos)
+int World::deleteChunk(const Vec3i& chunkPos)
 {
     int index = getChunkIndex(chunkPos);
     if (chunkCount == 0 || chunks[index]->getPos() != chunkPos)
@@ -114,7 +114,7 @@ Chunk* World::getChunkPtr(int index) const
     return chunks[index];
 }
 
-Chunk* World::getChunkPtr(const IntVec3& chunkPos) const
+Chunk* World::getChunkPtr(const Vec3i& chunkPos) const
 {
 //    assert(index >= 0 && index <= chunkCount);
     // TODO: Try chunk pointer cache
@@ -125,14 +125,14 @@ Chunk* World::getChunkPtr(const IntVec3& chunkPos) const
     return res;
 }
 
-BlockData World::getBlock(const IntVec3& pos) const
+BlockData World::getBlock(const Vec3i& pos) const
 {
     Chunk* chunk = getChunkPtr(getChunkPos(pos));
 //    assert(chunk != nullptr);
     return chunk->getBlock(getBlockPos(pos));
 }
 
-void World::setBlock(const IntVec3& pos, BlockData block)
+void World::setBlock(const Vec3i& pos, BlockData block)
 {
     Chunk* chunk = getChunkPtr(getChunkPos(pos));
 //    assert(chunk != nullptr);

@@ -31,14 +31,14 @@ class WorldLoader
 private:
     World* m_world;
     int m_chunkLoadCount, m_chunkUnloadCount;
-    pair<IntVec3, int> m_chunkLoadList[256]; // Chunk load list <position, distance>
+    pair<Vec3i, int> m_chunkLoadList[256]; // Chunk load list <position, distance>
     pair<Chunk*, int> m_chunkUnloadList[256]; // Chunk unload list <pointer, distance>
 
 public:
     WorldLoader(World* _world_) :m_world(_world_) {}
 
     // Find the nearest chunks in load distance to load, fartherest chunks out of load distance to unload
-    void sortChunkLoadUnloadList(const IntVec3& centerPos);
+    void sortChunkLoadUnloadList(const Vec3i& centerPos);
     // Load & Unload chunks
     void loadUnloadChunks();
 

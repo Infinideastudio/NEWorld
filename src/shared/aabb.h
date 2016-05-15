@@ -26,11 +26,11 @@
 class AABB
 {
 public:
-    DoubleVec3 min; // Min bound
-    DoubleVec3 max; // Max bound
+    Vec3d min; // Min bound
+    Vec3d max; // Max bound
 
     AABB() {}
-    AABB(DoubleVec3 _min, DoubleVec3 _max) :min(_min), max(_max) {}
+    AABB(Vec3d _min, Vec3d _max) :min(_min), max(_max) {}
 
     // Is intersect on X axis
     bool intersectX(const AABB &anotherAABB) const;

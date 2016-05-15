@@ -21,16 +21,16 @@
 
 #include <cmath>
 
-template<typename T = int>
+template<typename T>
 class Vec3
 {
 public:
     T x, y, z;
 
-    Vec3() :x(0), y(0), z(0)
+    Vec3i() :x(0), y(0), z(0)
     {}
 
-    Vec3(T x_, T y_, T z_) :x(x_), y(y_), z(z_)
+    Vec3i(T x_, T y_, T z_) :x(x_), y(y_), z(z_)
     {}
 
     // Get the square of vector length
@@ -39,9 +39,9 @@ public:
 
     // Get vector length
     double length()
-    { return sqrt(lengthSqr()); }
+    { return sqrt(double(lengthSqr())); }
 
-    bool operator< (const Vec3& rhs) const
+    bool operator< (const Vec3i& rhs) const
     {
         if (x != rhs.x)
             return x < rhs.x;
@@ -52,28 +52,30 @@ public:
         return false;
     }
 
-    bool operator> (const Vec3& rhs) const
+    bool operator> (const Vec3i& rhs) const
     { return rhs < *this; }
 
-    bool operator<= (const Vec3& rhs) const
+    bool operator<= (const Vec3i& rhs) const
     { return !(rhs < *this); }
 
-    bool operator>= (const Vec3& rhs) const
+    bool operator>= (const Vec3i& rhs) const
     { return !(*this < rhs); }
 
-    bool operator== (const Vec3& rhs) const
+    bool operator== (const Vec3i& rhs) const
     { return x == rhs.x && y == rhs.y && z == rhs.z; }
 
-    bool operator!= (const Vec3& rhs) const
+    bool operator!= (const Vec3i& rhs) const
     { return !(*this == rhs); }
 
-    Vec3 operator+ (const Vec3& rhs) const
-    { return Vec3(x + rhs.x, y + rhs.y, z + rhs.z); }
+    Vec3i operator+ (const Vec3i& rhs) const
+    { return Vec3i(x + rhs.x, y + rhs.y, z + rhs.z); }
 
-    Vec3 operator- (const Vec3& rhs) const
-    { return Vec3(x - rhs.x, y - rhs.y, z - rhs.z); }
+    Vec3i operator- (const Vec3i& rhs) const
+    { return Vec3i(x - rhs.x, y - rhs.y, z - rhs.z); }
 };
 
-using DoubleVec3 = Vec3<double>;
-using IntVec3 = Vec3<int>;
+typedef Vec3<int> Vec3i;
+using Vec3f = Vec3<float>;
+using Vec3d = Vec3<double>;
+
 #endif // !VEC3_H_

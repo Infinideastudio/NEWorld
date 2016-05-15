@@ -28,26 +28,26 @@ const int ChunkSize = 1 << ChunkSizeLog2; // 2 ^ ChunkSizeLog2 == 32
 class Chunk
 {
 private:
-    IntVec3 m_pos;
+    Vec3i m_pos;
     BlockData m_blocks[ChunkSize*ChunkSize*ChunkSize];
 
 public:
-    explicit Chunk(const IntVec3& chunkPos) :m_pos(chunkPos) {}
+    explicit Chunk(const Vec3i& chunkPos) :m_pos(chunkPos) {}
 
     // Get chunk position
-    IntVec3 getPos() const
+    Vec3i getPos() const
     { return m_pos; }
 
     // Get block data in this chunk
-    BlockData getBlock(const IntVec3& pos) const
+    BlockData getBlock(const Vec3i& pos) const
     { return m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
 
     // Get a specific block's reference
-    BlockData& getBlock(const IntVec3& pos)
+    BlockData& getBlock(const Vec3i& pos)
     { return m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z]; }
 
     // Set block data in this chunk
-    void setBlock(const IntVec3& pos, BlockData block)
+    void setBlock(const Vec3i& pos, BlockData block)
     { m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z] = block; }
 
 };
