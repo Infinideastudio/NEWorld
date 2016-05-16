@@ -3,19 +3,19 @@ DELETE THIS FILE AFTER THE REBUILD IS DONE!!!
 Project Shared:
 
 class BlockData - Finished
-	Description: ����Ĳ�ͬ���༰����
+	Description: 方块的不同种类及特性
 class BlockType - Finished
-	Description: �洢��Chunk�еķ����ʾ
+	Description: 存储于Chunk中的方块表示
 class Chunk - Finished
-	Description: ����Chunk
+	Description: 基本Chunk
 class World - Not Finished
-	Description: ��������ϵͳ
+	Description: 基本世界系统
 class Object - Finished
-	Description: ����ʵ��
+	Description: 基本实体
 class Vec3 - Finished
-	Description: 3��Ԫ�ص����������ڱ�ʾλ��
+	Description: 3个元素的向量，用于表示位置
 class AABB - Finished
-	Description: ������Χ�м�����ײ����
+	Description: 轴对齐包围盒及其碰撞计算
 
 Project NEWorldServer:
 
@@ -24,14 +24,52 @@ Project NEWorldServer:
 Project NEWorld:
 
 class WorldLoader - Not Finished
-	Description: �����е�Chunk����˳��
+	Description: 世界中的Chunk加载顺序
 class VertexArray - Nearly Finished
-	Description: ��Ⱦ���õĶ�������
+	Description: 渲染所用的顶点数组
 class Renderer - Not Finished
-	Description: ��װ����Ⱦ��
+	Description: 封装的渲染器
 class Window - Nearly Finished
-	Description: ��װ�ĳ��򴰿�
-class Graphics - ?
-	Description: ��DWVoid����д��233��
-class Controls - ?
-	Description: ��DWVoid����д��233��
+	Description: 封装的程序窗口
+class Object - Finished
+	Description: 所有GUI类的基类，为未来的SDK提供统一基础接口
+class Color - Finished
+	Description: RGBA颜色定义，提供了基础的颜色计算
+class Vec2 - Almost Finished
+	Description: 2元素向量，用于表示坐标
+class Rect - Alomost Finished
+	Description: 表示平面上的矩形
+class Image - Not Finished
+	Description: 图像类，继承于材质类，提供基本图像访问以及资源回收
+class Brush - Almost Finished
+	Description: 画刷基类，为封装的基础图形绘制提供接口
+class Margine - Half Finished
+	Description: 表示控件位置，提供参照位置的计算
+class Control - Almost Finished
+	Description: 控件基类
+class Label - Not Finished
+	Description: 标题控件
+class Button - Not Finished
+	Description: 按钮控件
+class TextBox - Not Finished
+	Description: 输入框控件
+class CheckBox - Not Finished
+	Description: 选择框控件
+class ScrollBox - Not Finished
+	Description: 下拉式选择菜单控件
+class SpinEdit - Not Finished
+	Description: 数值编辑控件
+class ImageView- Not Finished
+	Description: 图像显示控件
+class ScrollBar - Not Finished
+	Description: 控件
+class ProcessBar - Not Finished
+	Description: 进度条控件
+class EventWaiter - Not Finished
+	Description: 进度条的一种，未知长度进度的表示控件
+class Grid - Not Finished
+	Description: 表单式控件容器控件（用过WPF的人应该知道这是什么)
+class Page - Not Finished
+	Description: 页面，容纳Grid并作导航页面
+class Application - Not Finished
+	Description: GUI应用程序入口基类
