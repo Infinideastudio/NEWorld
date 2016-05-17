@@ -23,8 +23,8 @@
 #include "world.h"
 using std::pair;
 
-const int MaxChunkLoadCount = 64;
-const int MaxChunkUnloadCount = 64;
+constexpr int MaxChunkLoadCount = 64;
+constexpr int MaxChunkUnloadCount = 64;
 
 class WorldLoader
 {

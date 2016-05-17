@@ -18,8 +18,8 @@
 
 #include "window.h"
 
-const char* WindowName = "NEWorld";
-const int WindowH = 852, WindowW = 480;
+constexpr char* WindowName = "NEWorld";
+constexpr int WindowH = 852, WindowW = 480;
 
 bool Window::init()
 {

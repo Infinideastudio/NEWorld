@@ -34,11 +34,11 @@ public:
     {}
 
     // Get the square of vector length
-    T lengthSqr()
+    T lengthSqr() const
     { return x*x + y*y + z*z; }
 
     // Get vector length
-    double length()
+    double length() const
     { return sqrt(double(lengthSqr())); }
 
     bool operator< (const Vec3& rhs) const
@@ -74,8 +74,8 @@ public:
     { return Vec3(x - rhs.x, y - rhs.y, z - rhs.z); }
 };
 
-using Vec3i = Vec3<int>;
-using Vec3f = Vec3<float>;
-using Vec3d = Vec3<double>;
+typedef Vec3<int> Vec3i;
+typedef Vec3<float> Vec3f;
+typedef Vec3<double> Vec3d;
 
 #endif // !VEC3_H_
