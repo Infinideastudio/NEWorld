@@ -2,7 +2,7 @@ DELETE THIS FILE AFTER THE REBUILD IS DONE!!!
 
 Project Shared:
 
-class BlockType- Finished
+class BlockType - Finished
 	Description: 方块的不同种类及特性
 class BlockData - Finished
 	Description: 存储于Chunk中的方块表示
@@ -50,6 +50,8 @@ class Textures - Not Finished
 	Description: 加载纹理
 class TextRenderer - Not Finished
 	Description: 文字渲染
+class ClientNetwork - Not Finished
+	Description: 客户端网络连接
 class Window - Nearly Finished
 	Description: 封装的程序窗口
 class Object - Finished
