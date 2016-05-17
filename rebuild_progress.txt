@@ -1,4 +1,4 @@
-DELETE THIS FILE AFTER THE REBUILD IS DONE!!!
+﻿DELETE THIS FILE AFTER THE REBUILD IS DONE!!!
 
 Project Shared:
 
@@ -29,6 +29,10 @@ class VertexArray - Nearly Finished
 	Description: 渲染所用的顶点数组
 class Renderer - Not Finished
 	Description: 封装的渲染器
+class ChunkRenderer - Not Finished
+	Description: 区块渲染控制
+class WorldRenderer - Not Finished
+	Description: 世界渲染控制
 class Window - Nearly Finished
 	Description: 封装的程序窗口
 class Object - Finished
