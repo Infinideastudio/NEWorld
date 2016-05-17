@@ -2,9 +2,9 @@
 
 Project Shared:
 
-class BlockData - Finished
+class BlockType- Finished
 	Description: 方块的不同种类及特性
-class BlockType - Finished
+class BlockData - Finished
 	Description: 存储于Chunk中的方块表示
 class Chunk - Finished
 	Description: 基本Chunk
@@ -16,10 +16,19 @@ class Vec3 - Finished
 	Description: 3个元素的向量，用于表示位置
 class AABB - Finished
 	Description: 轴对齐包围盒及其碰撞计算
+class ChunkPointerArray - Not Finished
+	Description: 缓存区块指针，优化查找
+class WorldGen - Not Finished
+	Description: Perlin Noise 2D与地形生成
+class HeightMap - Not Finished
+	Description: 缓存高度，优化地形生成
+class Locale - Not Finished
+	Description: 加载语言文件
 
 Project NEWorldServer:
 
-[None]
+class ServerNetwork - Not Finished
+	Description: 服务端网络连接
 
 Project NEWorld:
 
@@ -33,6 +42,14 @@ class ChunkRenderer - Not Finished
 	Description: 区块渲染控制
 class WorldRenderer - Not Finished
 	Description: 世界渲染控制
+class Frustum - Not Finished
+	Description: 视口平截头体剔除计算，优化渲染
+class Shader - Not Finished
+	Description: 加载与使用着色器
+class Textures - Not Finished
+	Description: 加载纹理
+class TextRenderer - Not Finished
+	Description: 文字渲染
 class Window - Nearly Finished
 	Description: 封装的程序窗口
 class Object - Finished
@@ -47,7 +64,7 @@ class Image - Not Finished
 	Description: 图像类，继承于材质类，提供基本图像访问以及资源回收
 class Brush - Almost Finished
 	Description: 画刷基类，为封装的基础图形绘制提供接口
-class Margine - Half Finished
+class Margin - Half Finished
 	Description: 表示控件位置，提供参照位置的计算
 class Control - Almost Finished
 	Description: 控件基类
@@ -67,7 +84,7 @@ class ImageView- Not Finished
 	Description: 图像显示控件
 class ScrollBar - Not Finished
 	Description: 控件
-class ProcessBar - Not Finished
+class ProgressBar - Not Finished
 	Description: 进度条控件
 class EventWaiter - Not Finished
 	Description: 进度条的一种，未知长度进度的表示控件

@@ -24,12 +24,13 @@ void ChunkRenderer::buildVertexArray()
 {
     if (mergeFace)
     {
-        // struct Primitive
+        // Use struct Primitive
         // ...
     }
     else
     {
-
+        // Iterate blocks and render
+        // ...
     }
 }
 
