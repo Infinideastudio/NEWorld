@@ -175,6 +175,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
     <ClInclude Include="..\..\..\src\client\Controls.h" />
     <ClInclude Include="..\..\..\src\client\graphics.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
@@ -212,6 +213,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp" />
     <ClCompile Include="..\..\..\src\client\Controls.cpp" />
     <ClCompile Include="..\..\..\src\client\graphics.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />

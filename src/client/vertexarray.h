@@ -38,9 +38,6 @@ private:
     // Current vertex attributes
     float *m_vertexAttributes;
 
-    VertexArray(const VertexArray&) = delete;
-    VertexArray& operator=(const VertexArray&) = delete;
-
 public:
     VertexArray(int maxVertexes, int textureElementCount, int colorElementCount, int attributeElementCount, int coordinateElementCount)
         :m_maxVertexes(maxVertexes), m_vertexAttributeCount(textureElementCount + colorElementCount + attributeElementCount + coordinateElementCount),
@@ -56,6 +53,9 @@ public:
         delete[] m_data;
         delete[] m_vertexAttributes;
     }
+
+    VertexArray(const VertexArray&) = delete;
+    VertexArray& operator=(const VertexArray&) = delete;
 
     void clear()
     {

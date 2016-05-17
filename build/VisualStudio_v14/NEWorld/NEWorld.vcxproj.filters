@@ -39,6 +39,9 @@
     <ClInclude Include="..\..\..\src\client\worldloader.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\client\chunkrenderer.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico">
@@ -91,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\worldloader.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp">
+      <Filter>Source\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
