@@ -1,5 +1,5 @@
 /*
- * NEWorld: An free game with similar rules to Minecraft.
+ * NEWorld: A free game with similar rules to Minecraft.
  * Copyright (C) 2016 NEWorld Team
  *
  * This program is free software: you can redistribute it and/or modify
