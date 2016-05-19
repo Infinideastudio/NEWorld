@@ -26,9 +26,9 @@ class Margin : public Object
 private:
     Rect Relative_ps, Relative_pc;
 public:
-    Margin();
-    Margin(Rect _Relative_ps, Rect _Relative_pc);
-    Rect GetAbsolutePos(Rect Parent_Rect);
+    Margin() {};
+    Margin(Rect _Relative_ps, Rect _Relative_pc) {};
+    Rect GetAbsolutePos(Rect Parent_Rect) { return Rect(); };
 };
 
 enum FocusOp
@@ -60,8 +60,8 @@ public:
     Control* Parent;
     std::string xName;
 
-    Control();
-    Control(std::string _xName, Margin _Margin);
+    Control() {}
+    Control(std::string _xName, Margin _Margin) {}
 
     virtual void FocusFunc(FocusOp Stat) = 0;
     virtual void MouseButtonFunc(MouseButton Button, ButtonAction Action) = 0;
@@ -72,7 +72,7 @@ public:
     virtual void CharInputFunc(wchar_t Char) = 0;
     virtual void DropFunc(int DropCount, const char** Paths) = 0;
 
-    virtual ~Control();
+    virtual ~Control() {}
 };
 
 typedef void (Control::*NotifyFunc) (Control* Sender);
