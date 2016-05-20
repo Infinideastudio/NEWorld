@@ -32,9 +32,12 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
     {
         Vec3i curPos = m_world->getChunkPtr(ci)->getPos();
         // Get chunk center pos
-        curPos.x = (curPos.x << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
-        curPos.y = (curPos.y << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
-        curPos.z = (curPos.z << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
+//        curPos.x = (curPos.x << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);//curPos.x*ChunkSize + ChunkSize /2 - 1
+//        curPos.y = (curPos.y << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
+//        curPos.z = (curPos.z << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
+        curPos.x = curPos.x*ChunkSize + ChunkSize / 2 - 1;
+        curPos.y = curPos.y*ChunkSize + ChunkSize / 2 - 1;
+        curPos.z = curPos.z*ChunkSize + ChunkSize / 2 - 1;
 
         // Out of load range, pending to unload
         if (/*!chunkInRange(cx, cy, cz, cxp, cyp, czp, ViewDistance + 1)*/ true /* NOT FINISHED YET */)

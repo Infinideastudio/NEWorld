@@ -24,7 +24,7 @@ void World::expandChunkArray(size_t c)
     chunkCount += c;
     if (chunkCount > chunkArraySize)
     {
-        chunkArraySize <<= 1;
+        chunkArraySize *= 2;
         chunks = (Chunk**)realloc(chunks, chunkArraySize * sizeof(Chunk*));
         assert(chunks != NULL);
     }

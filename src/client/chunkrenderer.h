@@ -37,12 +37,10 @@ private:
 
 public:
     ChunkRenderer(World* world, Chunk* chunk) :m_world(world), m_chunk(chunk)
-    {
-    }
+    {}
 
     ~ChunkRenderer()
-    {
-    }
+    {}
 
     ChunkRenderer(const ChunkRenderer&) = delete;
     ChunkRenderer& operator=(const ChunkRenderer&) = delete;

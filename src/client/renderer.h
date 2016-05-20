@@ -21,6 +21,4 @@
 
 #include "vertexarray.h"
 
-
-
 #endif // !RENDERER_H_

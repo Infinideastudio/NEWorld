@@ -40,12 +40,12 @@ private:
 
 public:
     VertexArray(int maxVertexes, int textureElementCount, int colorElementCount, int attributeElementCount, int coordinateElementCount)
-        :m_maxVertexes(maxVertexes), m_vertexAttributeCount(textureElementCount + colorElementCount + attributeElementCount + coordinateElementCount),
-         m_textureCount(textureElementCount), m_colorCount(colorElementCount), m_attributeCount(attributeElementCount), m_coordinateCount(coordinateElementCount)
+        :m_maxVertexes(maxVertexes), m_vertexes(0),
+         m_textureCount(textureElementCount), m_colorCount(colorElementCount), m_attributeCount(attributeElementCount), m_coordinateCount(coordinateElementCount),
+         m_vertexAttributeCount(textureElementCount + colorElementCount + attributeElementCount + coordinateElementCount)
     {
-        m_data = new float[m_maxVertexes*m_vertexAttributeCount];
-        m_vertexAttributes = new float[m_vertexAttributeCount];
-        clear();
+        m_data = new float[m_maxVertexes*m_vertexAttributeCount]();
+        m_vertexAttributes = new float[m_vertexAttributeCount]();
     }
 
     ~VertexArray()

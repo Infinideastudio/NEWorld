@@ -33,7 +33,7 @@ public:
     Vec3(T x_, T y_, T z_) :x(x_), y(y_), z(z_)
     {}
 
-    // Get the square of vector length
+    // Get the square of vector length, notice that the result can overflow. TODO: fixit
     T lengthSqr() const
     { return x*x + y*y + z*z; }
 

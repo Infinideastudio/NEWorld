@@ -69,11 +69,11 @@ public:
     Chunk* getChunkPtr(const Vec3i& chunkPos) const;
 
     // Convert world position to chunk coordinate (one axis)
-    static int getChunkPos(int pos) { return pos >> ChunkSizeLog2; }
+    static int getChunkPos(int pos) { return pos / ChunkSize; }
     // Convert world position to chunk coordinate (all axes)
     static Vec3i getChunkPos(const Vec3i& pos) { return Vec3i(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z)); }
     // Convert world position to block coordinate in chunk (one axis)
-    static int getBlockPos(int pos) { return pos & (ChunkSize - 1); }
+    static int getBlockPos(int pos) { return pos & (ChunkSize - 1); /* Considering the pos can be negative. */}
     // Convert world position to block coordinate in chunk (all axes)
     static Vec3i getBlockPos(const Vec3i& pos) { return Vec3i(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z)); }
 

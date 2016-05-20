@@ -179,7 +179,6 @@
     <ClInclude Include="..\..\..\src\client\Controls.h" />
     <ClInclude Include="..\..\..\src\client\graphics.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
-    <ClInclude Include="..\..\..\src\client\resource.h" />
     <ClInclude Include="..\..\..\src\client\vertexarray.h" />
     <ClInclude Include="..\..\..\src\client\window.h" />
     <ClInclude Include="..\..\..\src\client\worldloader.h" />
