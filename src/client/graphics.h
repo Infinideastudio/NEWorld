@@ -26,13 +26,13 @@
 class Object
 {
 public:
-    virtual ~Object() = 0;
+    virtual ~Object() {};
 };
 
 class Color :public Object
 {
-public:
     double r, g, b, a;
+public:
     Color();
     Color(double _r, double _g, double _b, double _a = 1.0f);
 

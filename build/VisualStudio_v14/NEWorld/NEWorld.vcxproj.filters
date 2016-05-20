@@ -18,9 +18,11 @@
     <Filter Include="Source\Renderer">
       <UniqueIdentifier>{e5e29554-de32-45ec-93f7-18a3f8986c29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Audio">
+      <UniqueIdentifier>{abe6467e-99d1-4a20-a726-66ba84d0eb14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\client\resource.h" />
     <ClInclude Include="..\..\..\src\client\window.h">
       <Filter>Source\GUI</Filter>
     </ClInclude>
@@ -41,6 +43,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h">
       <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\aldlist.h">
+      <Filter>Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\AL-EFX.h">
+      <Filter>Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\CWaves.h">
+      <Filter>Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\Framework.h">
+      <Filter>Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\ALDevice.h">
+      <Filter>Source\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +114,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp">
       <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\aldlist.cpp">
+      <Filter>Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\AL-EFX.cpp">
+      <Filter>Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\CWaves.cpp">
+      <Filter>Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\Framework.cpp">
+      <Filter>Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\ALDevice.cpp">
+      <Filter>Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\main.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
