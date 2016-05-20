@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include<cstring>
 
+
 typedef unsigned short      WORD;
 typedef unsigned long       DWORD;
 struct GUIDX

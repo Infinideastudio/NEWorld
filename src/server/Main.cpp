@@ -95,7 +95,7 @@ void handle(std::shared_ptr<ip::tcp::socket> sock)
             //客户端请求其他玩家的位置
             if (players.size() == 0) break;
             char buf[sizeof(PlayerPacket)];
-            for (map<int, PlayerPacket>::iterator it = players.begin(); it != players.end(); it++)
+            for (map<int, PlayerPacket>::iterator it = players.begin(); it != players.end(); ++it)
             {
                 memcpy(buf, &it->second, sizeof(PlayerPacket));
                 sock->write_some(buffer(buf));

@@ -52,7 +52,10 @@ public:
     // World name
     std::string name;
 
-    World();
+    World() :chunkCount(0), chunkArraySize(1024)
+    {
+        chunks = (Chunk**)malloc(chunkArraySize * sizeof(Chunk*));
+    }
     ~World();
     World(const World&) = delete;
     World& operator= (const World&) = delete;

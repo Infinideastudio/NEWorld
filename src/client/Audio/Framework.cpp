@@ -25,7 +25,7 @@
 // Win32 version of the Creative Labs OpenAL 1.1 Framework for samples
 //#include<windows.h>
 #include<stdio.h>
-
+#include<memory>
 #include "Framework.h"
 #include "CWaves.h"
 #include "aldlist.h"
@@ -98,42 +98,22 @@ void ALFWShutdown()
         delete g_pWaveLoader;
         g_pWaveLoader = NULL;
     }
-
-
-    //ALchar ch = _getch();
 }
 
 ALboolean ALFWInitOpenAL()
 {
-    ALDeviceList *pDeviceList = NULL;
-    ALCcontext *pContext = NULL;
-    ALCdevice *pDevice = NULL;
-    ALint i;
-    ALboolean bReturn = AL_FALSE;
+    auto pDeviceList = std::make_unique<ALDeviceList>();
 
-    pDeviceList = new ALDeviceList();
-    if ((pDeviceList) && (pDeviceList->GetNumDevices()))
+    if (pDeviceList->GetNumDevices())
     {
-
-        for (i = 0; i < pDeviceList->GetNumDevices(); i++)
-            //ALFWprintf("%d. %s%s\n", i + 1, pDeviceList->GetDeviceName(i), i == pDeviceList->GetDefaultDevice() ? "(DEFAULT)" : "");
-
-            do
-            {
-                //ALchar ch = _getch();
-                //i = atoi(&ch);
-            }
-            while ((i < 1) || (i > pDeviceList->GetNumDevices()));
-
-        pDevice = alcOpenDevice(pDeviceList->GetDeviceName(i - 1));
+        ALCdevice * pDevice = alcOpenDevice(pDeviceList->GetDeviceName(pDeviceList->GetDefaultDevice()));
         if (pDevice)
         {
-            pContext = alcCreateContext(pDevice, NULL);
+            ALCcontext *pContext = alcCreateContext(pDevice, NULL);
             if (pContext)
             {
-                //ALFWprintf("\nOpened %s Device\n", alcGetString(pDevice, ALC_DEVICE_SPECIFIER));
                 alcMakeContextCurrent(pContext);
-                bReturn = AL_TRUE;
+                return AL_TRUE;
             }
             else
             {
@@ -141,10 +121,9 @@ ALboolean ALFWInitOpenAL()
             }
         }
 
-        delete pDeviceList;
     }
 
-    return bReturn;
+    return AL_FALSE;
 }
 
 ALboolean ALFWShutdownOpenAL()
@@ -195,23 +174,6 @@ ALboolean ALFWLoadWaveToBuffer(const char *szWaveFile, ALuint uiBufferID, ALenum
     }
 
     return bReturn;
-}
-
-#ifdef NEWORLD_TARGET_WINDOWS
-ALchar fullPath[_MAX_PATH];
-#elif NEWORLD_TARGET_MACOSX
-ALchar fullPath[1024];
-#endif
-ALchar *ALFWaddMediaPath(const ALchar *filename)
-{
-    sprintf(fullPath, "%s%s", "..\\..\\Media\\", filename);
-    return fullPath;
-}
-
-ALint ALFWKeyPress(void)
-{
-    //return _kbhit();
-    return 0;
 }
 
 // Extension Queries

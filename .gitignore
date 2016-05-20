@@ -242,3 +242,5 @@ options.ini
 # Original source
 # WILL BE REMOVED AFTER REBUILD
 /src/original
+
+dependencies/

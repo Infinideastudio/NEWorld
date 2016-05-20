@@ -12,14 +12,10 @@ using namespace std;
 unsigned long DecodeOggVorbis(OggVorbis_File *psOggVorbisFile, char *pDecodeBuffer, unsigned long ulBufferSize, unsigned long ulChannels)
 {
     int current_section;
-    long lDecodeSize;
-    unsigned long ulSamples;
-    short *pSamples;
-
     unsigned long ulBytesDone = 0;
     while (1)
     {
-        lDecodeSize = ov_read(psOggVorbisFile, pDecodeBuffer + ulBytesDone, ulBufferSize - ulBytesDone, 0, 2, 1, &current_section);
+		long lDecodeSize = ov_read(psOggVorbisFile, pDecodeBuffer + ulBytesDone, ulBufferSize - ulBytesDone, 0, 2, 1, &current_section);
         if (lDecodeSize > 0)
         {
             ulBytesDone += lDecodeSize;
@@ -37,24 +33,20 @@ unsigned long DecodeOggVorbis(OggVorbis_File *psOggVorbisFile, char *pDecodeBuff
     // however 6-Channels files need to be re-ordered
     if (ulChannels == 6)
     {
-        pSamples = (short*)pDecodeBuffer;
-        for (ulSamples = 0; ulSamples < (ulBufferSize >> 1); ulSamples += 6)
+        short * pSamples = (short*)pDecodeBuffer;
+        for (unsigned long ulSamples = 0; ulSamples < (ulBufferSize >> 1); ulSamples += 6)
         {
             // WAVEFORMATEXTENSIBLE Order : FL, FR, FC, LFE, RL, RR
             // OggVorbis Order            : FL, FC, FR,  RL, RR, LFE
-            Swap(pSamples[ulSamples + 1], pSamples[ulSamples + 2]);
-            Swap(pSamples[ulSamples + 3], pSamples[ulSamples + 5]);
-            Swap(pSamples[ulSamples + 4], pSamples[ulSamples + 5]);
+            swap(pSamples[ulSamples + 1], pSamples[ulSamples + 2]);
+            swap(pSamples[ulSamples + 3], pSamples[ulSamples + 5]);
+            swap(pSamples[ulSamples + 4], pSamples[ulSamples + 5]);
         }
     }
 
     return ulBytesDone;
 }
-ALDeviceList * ALDevice::GetALDeviceList()//用完请Delete
-{
-    ALDeviceList * pDeviceList = new ALDeviceList();
-    return pDeviceList;
-}
+
 bool ALDevice::init(ALCchar * DeviceName)//初始化
 {
     Device = alcOpenDevice(DeviceName);
@@ -65,7 +57,7 @@ bool ALDevice::init(ALCchar * DeviceName)//初始化
         {
             alcMakeContextCurrent(Context);
 #ifdef NEWORLD_TARGET_WINDOWS
-            EFX::Init();
+            EFX::init();
 #endif
             return true;
         }
@@ -87,9 +79,9 @@ void ALDevice::updateSource(ALuint Source, ALfloat sourcePos[], ALfloat sourceVe
 bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
 {
     alGenBuffers(1, uiBuffer);
-    ALchar            *pData = nullptr;
-    ALint            iDataSize = 0, iFrequency = 0;
-    ALenum            eBufferFormat = 0;
+    ALchar *pData = nullptr;
+    ALint iDataSize = 0, iFrequency = 0;
+    ALenum eBufferFormat = 0;
     //WaveLoader
     {
         CWaves WaveLoader;
@@ -109,9 +101,8 @@ bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
     }
     //OggLoader
     {
-        OggVorbis_File	sOggVorbisFile;
-        vorbis_info		*psVorbisInfo;
-        unsigned long	ulChannels = 0;
+        OggVorbis_File sOggVorbisFile;
+        vorbis_info *psVorbisInfo;
         FILE *pOggVorbisFile;
 
         pOggVorbisFile = fopen(FileName, "rb");
@@ -122,7 +113,7 @@ bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
             if (psVorbisInfo)
             {
                 iFrequency = psVorbisInfo->rate;
-                ulChannels = psVorbisInfo->channels;
+                 unsigned long ulChannels = psVorbisInfo->channels;
                 if (psVorbisInfo->channels == 1)
                 {
                     eBufferFormat = AL_FORMAT_MONO16;

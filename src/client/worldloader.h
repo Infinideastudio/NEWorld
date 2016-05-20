@@ -35,7 +35,7 @@ private:
     pair<Chunk*, int> m_chunkUnloadList[256]; // Chunk unload list <pointer, distance>
 
 public:
-    WorldLoader(World* _world_) :m_world(_world_) {}
+    explicit WorldLoader(World* _world_) :m_world(_world_), m_chunkLoadCount(0), m_chunkUnloadCount(90) {}
 
     // Find the nearest chunks in load distance to load, fartherest chunks out of load distance to unload
     void sortChunkLoadUnloadList(const Vec3i& centerPos);

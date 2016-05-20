@@ -13,7 +13,7 @@ typedef struct
     int                iMajorVersion;
     int                iMinorVersion;
     unsigned int    uiSourceCount;
-    vector<string>    *pvstrExtensions;
+    vector<string>    pvstrExtensions;
     bool            bSelected;
 } ALDEVICEINFO, *LPALDEVICEINFO;
 

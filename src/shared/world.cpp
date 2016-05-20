@@ -25,8 +25,10 @@ void World::expandChunkArray(size_t c)
     if (chunkCount > chunkArraySize)
     {
         chunkArraySize *= 2;
-        chunks = (Chunk**)realloc(chunks, chunkArraySize * sizeof(Chunk*));
-        assert(chunks != NULL);
+        auto newChunks = (Chunk**)realloc(chunks, chunkArraySize * sizeof(Chunk*));
+        assert(newChunks != NULL);
+        //TODO: reallocÊ§°ÜµÄ´¦Àí
+        chunks = newChunks;
     }
 }
 
@@ -67,12 +69,6 @@ size_t World::getChunkIndex(const Vec3i& pos) const
     }
     while (first <= last);
     return middle;
-}
-
-World::World()
-{
-    chunkArraySize = 1024;
-    chunks = (Chunk**)malloc(chunkArraySize * sizeof(Chunk*));
 }
 
 World::~World()

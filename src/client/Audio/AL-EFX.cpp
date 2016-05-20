@@ -5,16 +5,16 @@ namespace EFX
 ALuint uiEffectSlot, uiEffect;
 EFXEAXREVERBPROPERTIES efxReverb;
 EAXREVERBPROPERTIES EAXprop = Generic;
-ALboolean CreateEffect(ALuint *puiEffect, ALenum eEffectType);
-ALboolean CreateAuxEffectSlot(ALuint *puiAuxEffectSlot);
-ALboolean SetEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect);
+ALboolean createEffect(ALuint *puiEffect, ALenum eEffectType);
+ALboolean createAuxEffectSlot(ALuint *puiAuxEffectSlot);
+ALboolean setEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect);
 
-bool UpdateEAXprop();
+bool updateEAXprop();
 
-bool Init()
+bool init()
 {
-    if (ALFWIsEFXSupported() && CreateAuxEffectSlot(&uiEffectSlot) && CreateEffect(&uiEffect, AL_EFFECT_EAXREVERB))
-        return UpdateEAXprop();
+    if (ALFWIsEFXSupported() && createAuxEffectSlot(&uiEffectSlot) && createEffect(&uiEffect, AL_EFFECT_EAXREVERB))
+        return updateEAXprop();
     return false;
 
 }
@@ -24,10 +24,10 @@ void set(ALuint Source)
     alSource3i(Source, AL_AUXILIARY_SEND_FILTER, uiEffectSlot, 0, AL_FILTER_NULL);
 }
 
-bool UpdateEAXprop()
+bool updateEAXprop()
 {
     ConvertReverbParameters(&EAXprop, &efxReverb);
-    if (SetEFXEAXReverbProperties(&efxReverb, uiEffect))
+    if (setEFXEAXReverbProperties(&efxReverb, uiEffect))
     {
         alAuxiliaryEffectSloti(uiEffectSlot, AL_EFFECTSLOT_EFFECT, uiEffect);
         return true;
@@ -38,7 +38,7 @@ bool UpdateEAXprop()
     }
 }
 
-ALboolean CreateAuxEffectSlot(ALuint *puiAuxEffectSlot)
+ALboolean createAuxEffectSlot(ALuint *puiAuxEffectSlot)
 {
     ALboolean bReturn = AL_FALSE;
 
@@ -53,7 +53,7 @@ ALboolean CreateAuxEffectSlot(ALuint *puiAuxEffectSlot)
     return bReturn;
 }
 
-ALboolean CreateEffect(ALuint *puiEffect, ALenum eEffectType)
+ALboolean createEffect(ALuint *puiEffect, ALenum eEffectType)
 {
     ALboolean bReturn = AL_FALSE;
 
@@ -77,7 +77,7 @@ ALboolean CreateEffect(ALuint *puiEffect, ALenum eEffectType)
     return bReturn;
 }
 
-ALboolean SetEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect)
+ALboolean setEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect)
 {
     ALboolean bReturn = AL_FALSE;
 

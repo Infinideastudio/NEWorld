@@ -30,12 +30,6 @@ ALboolean ALFWLoadWaveToBuffer(const char *szWaveFile, ALuint uiBufferID, ALenum
 ALboolean ALFWIsXRAMSupported();
 ALboolean ALFWIsEFXSupported();
 
-
-// Utilities
-
-ALchar *ALFWaddMediaPath(const ALchar *filename);
-ALint ALFWKeyPress(void);
-
 // EFX Extension function pointer variables
 
 // Effect objects

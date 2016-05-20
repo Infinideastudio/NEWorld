@@ -10,11 +10,11 @@
 namespace EFX
 {
 extern EAXREVERBPROPERTIES EAXprop;
-bool Init();
+bool init();
 void set(ALuint Source);
-bool UpdateEAXprop();
-ALboolean CreateAuxEffectSlot(ALuint *puiAuxEffectSlot);
-ALboolean CreateEffect(ALuint *puiEffect, ALenum eEffectType);
-ALboolean SetEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect);
+bool updateEAXprop();
+ALboolean createAuxEffectSlot(ALuint *puiAuxEffectSlot);
+ALboolean createEffect(ALuint *puiEffect, ALenum eEffectType);
+ALboolean setEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect);
 }
 #endif
