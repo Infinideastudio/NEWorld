@@ -44,6 +44,8 @@ public:
     (WW) Configured Mouse: No Device specified, looking for one...
      */
 
+    // 卧槽NVIDIA什么鬼！ --qiaozhanrong
+
     enum CriticalLevel
     {
         CRITICAL_LEVEL_INFORMATION,
