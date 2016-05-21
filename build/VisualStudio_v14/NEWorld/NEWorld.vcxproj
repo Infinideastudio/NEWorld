@@ -64,17 +64,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)..\..\..\include\AL;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\include\asio;$(ProjectDir)..\..\..\src\shared;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\src\client;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\..\lib\Debug;$(ProjectDir)..\..\..\lib;$(SolutionDir)$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;$(ProjectDir)..\..\..\dependencies\libs;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)..\..\..\include\AL;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\include\asio;$(ProjectDir)..\..\..\src\shared;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\src\client;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\..\lib\Release;$(ProjectDir)..\..\..\lib;$(SolutionDir)$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;$(ProjectDir)..\..\..\dependencies\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
     <IncludePath>$(SolutionDir)..\..\..\include\AL;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\include\asio;$(ProjectDir)..\..\..\src\shared;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\src\client;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\..\lib\Debug;$(ProjectDir)..\..\..\lib;$(SolutionDir)$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;$(ProjectDir)..\..\..\dependencies\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -101,6 +101,7 @@
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <OptimizeReferences>false</OptimizeReferences>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,6 +142,7 @@
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
@@ -172,6 +174,7 @@
       <SubSystem>Console</SubSystem>
       <AssemblyDebug>true</AssemblyDebug>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -230,6 +233,7 @@
     <ClCompile Include="..\..\..\src\client\GUI\graphics.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\window.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
+    <ClCompile Include="..\..\..\src\client\networkutil.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
     <ClCompile Include="..\..\..\src\client\worldloader.cpp" />
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />

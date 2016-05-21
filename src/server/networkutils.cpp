@@ -15,17 +15,11 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#ifndef SHARED_H_
-#define SHARED_H_
-
-#include "aabb.h"
-#include "blockdata.h"
-#include "blocktype.h"
-#include "chunk.h"
-#include "vec3.h"
-#include "request.h"
-#include "network_structures.h"
-#include "logger.h"
-
-#endif // !SHARED_H_
+#include "..\shared\shared.h"
+#include <climits>
+RequestCallback makeRequestCallback(const RequestCallback::callbackFunc& func)
+{
+    static unsigned short id = 0;
+    if(id== USHRT_MAX)
+        return RequestCallback(func, { id++,0 });
+}

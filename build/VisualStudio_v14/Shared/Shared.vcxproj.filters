@@ -26,6 +26,15 @@
     <ClInclude Include="..\..\..\src\shared\object.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\request.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\network_structures.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\logger.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -37,6 +46,9 @@
     <Filter Include="Object">
       <UniqueIdentifier>{1b541d8d-7466-461f-98b9-194f998a9f7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{84937af5-654e-442b-93b7-8c2f8bb5c802}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\AABB.cpp">
@@ -47,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
       <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\logger.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

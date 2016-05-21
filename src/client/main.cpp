@@ -15,14 +15,6 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "Audio/AudioSystem.h"
 int main()
 {
-    //Audio Test
-    AudioSystem::Init();
-    float a1[3] = { 0,0,0 }, a2[3] = { 3,3,3 };
-    AudioSystem::Update(a1, true, true, a2, true, false);
-    system("pause");
-    AudioSystem::UnInit();
-    system("pause");
 }

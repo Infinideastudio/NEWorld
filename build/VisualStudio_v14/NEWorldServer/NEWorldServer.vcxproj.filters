@@ -10,5 +10,8 @@
     <ClCompile Include="..\..\..\src\server\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\server\networkutils.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

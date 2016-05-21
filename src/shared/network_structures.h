@@ -15,17 +15,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef network_structures_h__
+#define network_structures_h__
 
-#ifndef SHARED_H_
-#define SHARED_H_
-
-#include "aabb.h"
-#include "blockdata.h"
-#include "blocktype.h"
-#include "chunk.h"
-#include "vec3.h"
-#include "request.h"
-#include "network_structures.h"
-#include "logger.h"
-
-#endif // !SHARED_H_
+#endif // network_structures_h__

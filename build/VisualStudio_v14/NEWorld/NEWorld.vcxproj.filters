@@ -24,6 +24,9 @@
     <Filter Include="Source\Audio\Engine">
       <UniqueIdentifier>{1abdec87-16e5-440c-9166-db7e4ede6bf4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Network">
+      <UniqueIdentifier>{34fd62fe-88d1-43c6-8653-498c89996b51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\renderer.h">
@@ -144,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\Audio\AudioSystem.cpp">
       <Filter>Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\networkutil.cpp">
+      <Filter>Source\Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

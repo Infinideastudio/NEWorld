@@ -27,6 +27,7 @@ namespace AudioSystem
 struct Sound
 {
     static const ALuint INVALID_SOURCE= static_cast<ALuint>(-1);
+    Sound() {}
     explicit Sound(ALuint buffer) :buffer(buffer), source(INVALID_SOURCE) {}
 
     ALuint buffer;
@@ -46,9 +47,6 @@ const ALfloat Water_SpeedOfSound = 1473.0f;
 extern std::map<string, Sound> sounds;
 
 void init();
-void Update(ALfloat PlayerPos[3], bool BFall, bool BBlockClick, ALfloat BlockPos[3], int Run, bool BDownWater);
-void ClickEvent();
-void GUIUpdate();
 void unload();
 
 void play(string name, bool loop, float gain, Vec3d sourcePos);
