@@ -35,9 +35,6 @@
     <ClInclude Include="..\..\..\src\client\vertexarray.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\client\worldloader.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
@@ -111,9 +108,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp">
       <Filter>Source\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\worldloader.cpp">
-      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp">
       <Filter>Source\Renderer</Filter>

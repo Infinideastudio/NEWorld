@@ -22,6 +22,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\server\main.cpp" />
     <ClCompile Include="..\..\..\src\server\networkutils.cpp" />
+    <ClCompile Include="..\..\..\src\server\worldloader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\server\worldloader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ABBA7A56-1D26-4C66-AED9-67C8F7CC3AE7}</ProjectGuid>

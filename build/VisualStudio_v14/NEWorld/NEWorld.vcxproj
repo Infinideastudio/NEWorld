@@ -191,7 +191,6 @@
     <ClInclude Include="..\..\..\src\client\GUI\window.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
     <ClInclude Include="..\..\..\src\client\vertexarray.h" />
-    <ClInclude Include="..\..\..\src\client\worldloader.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico" />
@@ -235,7 +234,6 @@
     <ClCompile Include="..\..\..\src\client\main.cpp" />
     <ClCompile Include="..\..\..\src\client\networkutil.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
-    <ClCompile Include="..\..\..\src\client\worldloader.cpp" />
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
