@@ -22,7 +22,7 @@ public:
 
 };
 
-ALDevice& getALDevice()
+inline ALDevice& getALDevice()
 {
     static ALDevice device;
     return device;

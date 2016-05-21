@@ -21,6 +21,9 @@
     <Filter Include="Source\Audio">
       <UniqueIdentifier>{abe6467e-99d1-4a20-a726-66ba84d0eb14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Audio\Engine">
+      <UniqueIdentifier>{1abdec87-16e5-440c-9166-db7e4ede6bf4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\renderer.h">
@@ -35,21 +38,6 @@
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\client\Audio\aldlist.h">
-      <Filter>Source\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\Audio\AL-EFX.h">
-      <Filter>Source\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\Audio\CWaves.h">
-      <Filter>Source\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\Audio\Framework.h">
-      <Filter>Source\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\Audio\ALDevice.h">
-      <Filter>Source\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\client\GUI\window.h">
       <Filter>Source\GUI</Filter>
     </ClInclude>
@@ -61,6 +49,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\GUI\gui.h">
       <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\ALDevice.h">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\aldlist.h">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\AL-EFX.h">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\CWaves.h">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\Framework.h">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\Audio\AudioSystem.h">
+      <Filter>Source\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -109,21 +115,6 @@
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\client\Audio\aldlist.cpp">
-      <Filter>Source\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\Audio\AL-EFX.cpp">
-      <Filter>Source\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\Audio\CWaves.cpp">
-      <Filter>Source\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\Audio\Framework.cpp">
-      <Filter>Source\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\Audio\ALDevice.cpp">
-      <Filter>Source\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\client\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -135,6 +126,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\GUI\graphics.cpp">
       <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\ALDevice.cpp">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\aldlist.cpp">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\AL-EFX.cpp">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\CWaves.cpp">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\Framework.cpp">
+      <Filter>Source\Audio\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\Audio\AudioSystem.cpp">
+      <Filter>Source\Audio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

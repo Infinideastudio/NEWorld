@@ -178,6 +178,7 @@
     <ClInclude Include="..\..\..\src\client\Audio\AL-EFX.h" />
     <ClInclude Include="..\..\..\src\client\Audio\ALDevice.h" />
     <ClInclude Include="..\..\..\src\client\Audio\aldlist.h" />
+    <ClInclude Include="..\..\..\src\client\Audio\AudioSystem.h" />
     <ClInclude Include="..\..\..\src\client\Audio\CWaves.h" />
     <ClInclude Include="..\..\..\src\client\Audio\Framework.h" />
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="..\..\..\src\client\Audio\AL-EFX.cpp" />
     <ClCompile Include="..\..\..\src\client\Audio\ALDevice.cpp" />
     <ClCompile Include="..\..\..\src\client\Audio\aldlist.cpp" />
+    <ClCompile Include="..\..\..\src\client\Audio\AudioSystem.cpp" />
     <ClCompile Include="..\..\..\src\client\Audio\CWaves.cpp" />
     <ClCompile Include="..\..\..\src\client\Audio\Framework.cpp" />
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp" />

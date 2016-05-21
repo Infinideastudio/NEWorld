@@ -243,4 +243,7 @@ options.ini
 # WILL BE REMOVED AFTER REBUILD
 /src/original
 
-dependencies/
+/dependencies/
+/Audio/
+/Fonts/
+/Textures/
