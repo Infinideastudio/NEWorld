@@ -10,11 +10,11 @@ using namespace std;
 typedef struct
 {
     string            strDeviceName;
-    int                iMajorVersion;
-    int                iMinorVersion;
-    unsigned int    uiSourceCount;
+    int               iMajorVersion;
+    int               iMinorVersion;
+    unsigned int      uiSourceCount;
     vector<string>    pvstrExtensions;
-    bool            bSelected;
+    bool              bSelected;
 } ALDEVICEINFO, *LPALDEVICEINFO;
 
 class ALDeviceList

@@ -46,7 +46,7 @@ void load_plugins(wchar_t const * const filename)
         init_function init = (init_function)get_address(handle,"on_init");
         if (init != nullptr && !init())
             unload_library(handle);
-        continue;
+        continue;//TODO: fixit
         plugins[plugin_name] = internal_plugin_info(handle, plugin_name, plugin_desc);
         
     }
@@ -54,7 +54,7 @@ void load_plugins(wchar_t const * const filename)
 
 void unload_plugins()
 {
-    for (std::map<std::wstring, internal_plugin_info>::iterator it = plugins.begin(); it != plugins.end(); it++)
+    for (std::map<std::wstring, internal_plugin_info>::iterator it = plugins.begin(); it != plugins.end(); ++it)
     {
         dll_handle handle = it->second.handle;
         unload_function unload = (unload_function)get_address(handle, "on_unload");

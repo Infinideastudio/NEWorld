@@ -181,11 +181,12 @@
     <ClInclude Include="..\..\..\src\client\Audio\CWaves.h" />
     <ClInclude Include="..\..\..\src\client\Audio\Framework.h" />
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
-    <ClInclude Include="..\..\..\src\client\Controls.h" />
-    <ClInclude Include="..\..\..\src\client\graphics.h" />
+    <ClInclude Include="..\..\..\src\client\GUI\controls.h" />
+    <ClInclude Include="..\..\..\src\client\GUI\graphics.h" />
+    <ClInclude Include="..\..\..\src\client\GUI\gui.h" />
+    <ClInclude Include="..\..\..\src\client\GUI\window.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
     <ClInclude Include="..\..\..\src\client\vertexarray.h" />
-    <ClInclude Include="..\..\..\src\client\window.h" />
     <ClInclude Include="..\..\..\src\client\worldloader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -223,11 +224,11 @@
     <ClCompile Include="..\..\..\src\client\Audio\CWaves.cpp" />
     <ClCompile Include="..\..\..\src\client\Audio\Framework.cpp" />
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp" />
-    <ClCompile Include="..\..\..\src\client\Controls.cpp" />
-    <ClCompile Include="..\..\..\src\client\graphics.cpp" />
+    <ClCompile Include="..\..\..\src\client\GUI\controls.cpp" />
+    <ClCompile Include="..\..\..\src\client\GUI\graphics.cpp" />
+    <ClCompile Include="..\..\..\src\client\GUI\window.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
-    <ClCompile Include="..\..\..\src\client\window.cpp" />
     <ClCompile Include="..\..\..\src\client\worldloader.cpp" />
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />
   </ItemGroup>

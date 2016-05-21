@@ -15,7 +15,7 @@ unsigned long DecodeOggVorbis(OggVorbis_File *psOggVorbisFile, char *pDecodeBuff
     unsigned long ulBytesDone = 0;
     while (1)
     {
-		long lDecodeSize = ov_read(psOggVorbisFile, pDecodeBuffer + ulBytesDone, ulBufferSize - ulBytesDone, 0, 2, 1, &current_section);
+        long lDecodeSize = ov_read(psOggVorbisFile, pDecodeBuffer + ulBytesDone, ulBufferSize - ulBytesDone, 0, 2, 1, &current_section);
         if (lDecodeSize > 0)
         {
             ulBytesDone += lDecodeSize;
@@ -113,68 +113,67 @@ bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
             if (psVorbisInfo)
             {
                 iFrequency = psVorbisInfo->rate;
-                 unsigned long ulChannels = psVorbisInfo->channels;
-                if (psVorbisInfo->channels == 1)
+                switch (psVorbisInfo->channels)
                 {
+                case 1:
                     eBufferFormat = AL_FORMAT_MONO16;
                     // Set BufferSize to 250ms (Frequency * 2 (16bit) divided by 4 (quarter of a second))
                     iDataSize = iFrequency >> 1;
                     // IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
                     iDataSize -= (iDataSize % 2);
-                }
-                else if (psVorbisInfo->channels == 2)
-                {
+                    break;
+                case 2:
                     eBufferFormat = AL_FORMAT_STEREO16;
                     // Set BufferSize to 250ms (Frequency * 4 (16bit stereo) divided by 4 (quarter of a second))
                     iDataSize = iFrequency;
                     // IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
                     iDataSize -= (iDataSize % 4);
-                }
-                else if (psVorbisInfo->channels == 4)
-                {
+                    break;
+                case 4:
                     eBufferFormat = alGetEnumValue("AL_FORMAT_QUAD16");
                     // Set BufferSize to 250ms (Frequency * 8 (16bit 4-channel) divided by 4 (quarter of a second))
                     iDataSize = iFrequency * 2;
                     // IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
                     iDataSize -= (iDataSize % 8);
-                }
-                else if (psVorbisInfo->channels == 6)
-                {
+                    break;
+                case 6:
                     eBufferFormat = alGetEnumValue("AL_FORMAT_51CHN16");
                     // Set BufferSize to 250ms (Frequency * 12 (16bit 6-channel) divided by 4 (quarter of a second))
                     iDataSize = iFrequency * 3;
                     // IMPORTANT : The Buffer Size must be an exact multiple of the BlockAlignment ...
                     iDataSize -= (iDataSize % 12);
+                    break;
                 }
-            }
-            if (eBufferFormat != 0)
-            {
-                // Allocate a buffer to be used to store decoded data for all Buffers
-                pData = (char*)malloc(iDataSize);
-                if (!pData)ov_clear(&sOggVorbisFile);
-                else
+
+                if (eBufferFormat != 0)
                 {
-                    vector<char> data;
-                    unsigned long ulBytesWritten;
-                    back_insert_iterator<vector<char> > iter(data);
-                    do
+                    // Allocate a buffer to be used to store decoded data for all Buffers
+                    pData = (char*)malloc(iDataSize);
+                    if (!pData)ov_clear(&sOggVorbisFile);
+                    else
                     {
-                        ulBytesWritten = DecodeOggVorbis(&sOggVorbisFile, pData, iDataSize, ulChannels);
-                        // for (unsigned long i = 0; i < ulBytesWritten; i++)data.push_back(pData[i]);
-                        copy(pData, pData + ulBytesWritten, iter);
+                        vector<char> data;
+                        unsigned long ulBytesWritten;
+                        back_insert_iterator<vector<char> > iter(data);
+                        do
+                        {
+                            ulBytesWritten = DecodeOggVorbis(&sOggVorbisFile, pData, iDataSize, psVorbisInfo->channels);
+                            // for (unsigned long i = 0; i < ulBytesWritten; i++)data.push_back(pData[i]);
+                            copy(pData, pData + ulBytesWritten, iter);
+                        }
+                        while (ulBytesWritten);
+                        alBufferData(*uiBuffer, eBufferFormat, data.data(), data.size(), iFrequency);
+                        free(pData);
+                        data.clear();
+                        ov_clear(&sOggVorbisFile);
+                        fclose(pOggVorbisFile);
+                        return true;
                     }
-                    while (ulBytesWritten);
-                    alBufferData(*uiBuffer, eBufferFormat, data.data(), data.size(), iFrequency);
-                    free(pData);
-                    data.clear();
-                    ov_clear(&sOggVorbisFile);
-                    fclose(pOggVorbisFile);
-                    return true;
                 }
             }
         }
     }
-    //FlacLoader
+//FlacLoader
     {
         /*
         FLAC__StreamDecoder *decoder= FLAC__stream_decoder_new();

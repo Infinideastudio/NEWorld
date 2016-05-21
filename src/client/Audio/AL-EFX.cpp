@@ -77,7 +77,7 @@ ALboolean createEffect(ALuint *puiEffect, ALenum eEffectType)
     return bReturn;
 }
 
-ALboolean setEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffect)
+ALboolean setEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuint uiEffectSet)
 {
     ALboolean bReturn = AL_FALSE;
 
@@ -86,29 +86,29 @@ ALboolean setEFXEAXReverbProperties(EFXEAXREVERBPROPERTIES *pEFXEAXReverb, ALuin
         // Clear AL Error code
         alGetError();
 
-        alEffectf(uiEffect, AL_EAXREVERB_DENSITY, pEFXEAXReverb->flDensity);
-        alEffectf(uiEffect, AL_EAXREVERB_DIFFUSION, pEFXEAXReverb->flDiffusion);
-        alEffectf(uiEffect, AL_EAXREVERB_GAIN, pEFXEAXReverb->flGain);
-        alEffectf(uiEffect, AL_EAXREVERB_GAINHF, pEFXEAXReverb->flGainHF);
-        alEffectf(uiEffect, AL_EAXREVERB_GAINLF, pEFXEAXReverb->flGainLF);
-        alEffectf(uiEffect, AL_EAXREVERB_DECAY_TIME, pEFXEAXReverb->flDecayTime);
-        alEffectf(uiEffect, AL_EAXREVERB_DECAY_HFRATIO, pEFXEAXReverb->flDecayHFRatio);
-        alEffectf(uiEffect, AL_EAXREVERB_DECAY_LFRATIO, pEFXEAXReverb->flDecayLFRatio);
-        alEffectf(uiEffect, AL_EAXREVERB_REFLECTIONS_GAIN, pEFXEAXReverb->flReflectionsGain);
-        alEffectf(uiEffect, AL_EAXREVERB_REFLECTIONS_DELAY, pEFXEAXReverb->flReflectionsDelay);
-        alEffectfv(uiEffect, AL_EAXREVERB_REFLECTIONS_PAN, pEFXEAXReverb->flReflectionsPan);
-        alEffectf(uiEffect, AL_EAXREVERB_LATE_REVERB_GAIN, pEFXEAXReverb->flLateReverbGain);
-        alEffectf(uiEffect, AL_EAXREVERB_LATE_REVERB_DELAY, pEFXEAXReverb->flLateReverbDelay);
-        alEffectfv(uiEffect, AL_EAXREVERB_LATE_REVERB_PAN, pEFXEAXReverb->flLateReverbPan);
-        alEffectf(uiEffect, AL_EAXREVERB_ECHO_TIME, pEFXEAXReverb->flEchoTime);
-        alEffectf(uiEffect, AL_EAXREVERB_ECHO_DEPTH, pEFXEAXReverb->flEchoDepth);
-        alEffectf(uiEffect, AL_EAXREVERB_MODULATION_TIME, pEFXEAXReverb->flModulationTime);
-        alEffectf(uiEffect, AL_EAXREVERB_MODULATION_DEPTH, pEFXEAXReverb->flModulationDepth);
-        alEffectf(uiEffect, AL_EAXREVERB_AIR_ABSORPTION_GAINHF, pEFXEAXReverb->flAirAbsorptionGainHF);
-        alEffectf(uiEffect, AL_EAXREVERB_HFREFERENCE, pEFXEAXReverb->flHFReference);
-        alEffectf(uiEffect, AL_EAXREVERB_LFREFERENCE, pEFXEAXReverb->flLFReference);
-        alEffectf(uiEffect, AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, pEFXEAXReverb->flRoomRolloffFactor);
-        alEffecti(uiEffect, AL_EAXREVERB_DECAY_HFLIMIT, pEFXEAXReverb->iDecayHFLimit);
+        alEffectf(uiEffectSet, AL_EAXREVERB_DENSITY, pEFXEAXReverb->flDensity);
+        alEffectf(uiEffectSet, AL_EAXREVERB_DIFFUSION, pEFXEAXReverb->flDiffusion);
+        alEffectf(uiEffectSet, AL_EAXREVERB_GAIN, pEFXEAXReverb->flGain);
+        alEffectf(uiEffectSet, AL_EAXREVERB_GAINHF, pEFXEAXReverb->flGainHF);
+        alEffectf(uiEffectSet, AL_EAXREVERB_GAINLF, pEFXEAXReverb->flGainLF);
+        alEffectf(uiEffectSet, AL_EAXREVERB_DECAY_TIME, pEFXEAXReverb->flDecayTime);
+        alEffectf(uiEffectSet, AL_EAXREVERB_DECAY_HFRATIO, pEFXEAXReverb->flDecayHFRatio);
+        alEffectf(uiEffectSet, AL_EAXREVERB_DECAY_LFRATIO, pEFXEAXReverb->flDecayLFRatio);
+        alEffectf(uiEffectSet, AL_EAXREVERB_REFLECTIONS_GAIN, pEFXEAXReverb->flReflectionsGain);
+        alEffectf(uiEffectSet, AL_EAXREVERB_REFLECTIONS_DELAY, pEFXEAXReverb->flReflectionsDelay);
+        alEffectfv(uiEffectSet, AL_EAXREVERB_REFLECTIONS_PAN, pEFXEAXReverb->flReflectionsPan);
+        alEffectf(uiEffectSet, AL_EAXREVERB_LATE_REVERB_GAIN, pEFXEAXReverb->flLateReverbGain);
+        alEffectf(uiEffectSet, AL_EAXREVERB_LATE_REVERB_DELAY, pEFXEAXReverb->flLateReverbDelay);
+        alEffectfv(uiEffectSet, AL_EAXREVERB_LATE_REVERB_PAN, pEFXEAXReverb->flLateReverbPan);
+        alEffectf(uiEffectSet, AL_EAXREVERB_ECHO_TIME, pEFXEAXReverb->flEchoTime);
+        alEffectf(uiEffectSet, AL_EAXREVERB_ECHO_DEPTH, pEFXEAXReverb->flEchoDepth);
+        alEffectf(uiEffectSet, AL_EAXREVERB_MODULATION_TIME, pEFXEAXReverb->flModulationTime);
+        alEffectf(uiEffectSet, AL_EAXREVERB_MODULATION_DEPTH, pEFXEAXReverb->flModulationDepth);
+        alEffectf(uiEffectSet, AL_EAXREVERB_AIR_ABSORPTION_GAINHF, pEFXEAXReverb->flAirAbsorptionGainHF);
+        alEffectf(uiEffectSet, AL_EAXREVERB_HFREFERENCE, pEFXEAXReverb->flHFReference);
+        alEffectf(uiEffectSet, AL_EAXREVERB_LFREFERENCE, pEFXEAXReverb->flLFReference);
+        alEffectf(uiEffectSet, AL_EAXREVERB_ROOM_ROLLOFF_FACTOR, pEFXEAXReverb->flRoomRolloffFactor);
+        alEffecti(uiEffectSet, AL_EAXREVERB_DECAY_HFLIMIT, pEFXEAXReverb->iDecayHFLimit);
 
         if (alGetError() == AL_NO_ERROR)
             bReturn = AL_TRUE;

@@ -36,10 +36,6 @@
 ALDeviceList::ALDeviceList()
 {
     ALDEVICEINFO ALDeviceInfo;
-    char *devices;
-    int index;
-    const char *defaultDeviceName;
-    const char *actualDeviceName;
 
     // DeviceInfo vector stores, for each enumerated device, it's device name, selection status, spec version #, and extension support
     vDeviceInfo.clear();
@@ -51,9 +47,9 @@ ALDeviceList::ALDeviceList()
 
     if (alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT"))
     {
-        devices = (char *)alcGetString(NULL, ALC_DEVICE_SPECIFIER);
-        defaultDeviceName = (char *)alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
-        index = 0;
+        const char* devices = alcGetString(NULL, ALC_DEVICE_SPECIFIER);
+        const char* defaultDeviceName = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
+        int index = 0;
         // go through device list (each device terminated with a single NULL, list terminated with double NULL)
         // 原写法: while (*devices != NULL)
         while (devices[0] != '\0')
@@ -70,7 +66,7 @@ ALDeviceList::ALDeviceList()
                 {
                     alcMakeContextCurrent(context);
                     // if new actual device name isn't already in the list, then add it...
-                    actualDeviceName = alcGetString(device, ALC_DEVICE_SPECIFIER);
+                    const char* actualDeviceName = alcGetString(device, ALC_DEVICE_SPECIFIER);
                     bool bNewName = true;
                     for (int i = 0; i < GetNumDevices(); i++)
                     {
@@ -251,11 +247,9 @@ void ALDeviceList::FilterDevicesMaxVer(int major, int minor)
  */
 void ALDeviceList::FilterDevicesExtension(char *szExtName)
 {
-    bool bFound;
-
     for (unsigned int i = 0; i < vDeviceInfo.size(); i++)
     {
-        bFound = false;
+        bool bFound = false;
         for (unsigned int j = 0; j < vDeviceInfo[i].pvstrExtensions.size(); j++)
         {
             if (!strcasecmp(vDeviceInfo[i].pvstrExtensions.at(j).c_str(), szExtName))

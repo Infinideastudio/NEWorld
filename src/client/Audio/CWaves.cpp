@@ -276,12 +276,11 @@ WAVERESULT CWaves::ReadWaveData(WAVEID WaveID, void *pData, unsigned long ulData
 
 WAVERESULT CWaves::SetWaveDataOffset(WAVEID WaveID, unsigned long ulOffset)
 {
-    LPWAVEFILEINFO pWaveInfo;
     WAVERESULT wr = WR_INVALIDPARAM;
 
     if (IsWaveID(WaveID))
     {
-        pWaveInfo = m_WaveIDs[WaveID];
+        LPWAVEFILEINFO pWaveInfo = m_WaveIDs[WaveID];
         if (pWaveInfo->pFile)
         {
             // Seek into audio data
@@ -299,12 +298,11 @@ WAVERESULT CWaves::SetWaveDataOffset(WAVEID WaveID, unsigned long ulOffset)
 
 WAVERESULT CWaves::GetWaveDataOffset(WAVEID WaveID, unsigned long *pulOffset)
 {
-    LPWAVEFILEINFO pWaveInfo;
     WAVERESULT wr = WR_INVALIDPARAM;
 
     if (IsWaveID(WaveID))
     {
-        pWaveInfo = m_WaveIDs[WaveID];
+        LPWAVEFILEINFO pWaveInfo = m_WaveIDs[WaveID];
         if ((pWaveInfo->pFile) && (pulOffset))
         {
             // Get current position

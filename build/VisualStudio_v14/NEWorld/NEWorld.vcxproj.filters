@@ -23,15 +23,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\client\window.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\Controls.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\graphics.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\client\renderer.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
@@ -58,6 +49,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\Audio\ALDevice.h">
       <Filter>Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\GUI\window.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\GUI\controls.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\GUI\graphics.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\GUI\gui.h">
+      <Filter>Source\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -94,15 +97,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\client\window.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\Controls.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\graphics.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\client\renderer.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>
@@ -132,6 +126,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\main.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\GUI\controls.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\GUI\window.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\GUI\graphics.cpp">
+      <Filter>Source\GUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
