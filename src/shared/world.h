@@ -92,7 +92,7 @@ public:
     // Get block data
     BlockData getBlock(const Vec3i& pos) const;
     // Get block reference
-//    BlockData& getBlock(const Vec3i& pos);
+    BlockData& getBlock(const Vec3i& pos);
     // Set block data
     void setBlock(const Vec3i& pos, BlockData block);
 

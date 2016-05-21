@@ -27,7 +27,8 @@ void World::expandChunkArray(size_t c)
         chunkArraySize *= 2;
         auto newChunks = (Chunk**)realloc(chunks, chunkArraySize * sizeof(Chunk*));
         assert(newChunks != NULL);
-        //TODO: realloc失败的处理
+        // TODO: realloc失败的处理
+        // 我问一下，realloc失败会不会释放原内存？ --qiaozhanrong
         chunks = newChunks;
     }
 }
@@ -126,6 +127,13 @@ Chunk* World::getChunkPtr(const Vec3i& chunkPos) const
 }
 
 BlockData World::getBlock(const Vec3i& pos) const
+{
+    Chunk* chunk = getChunkPtr(getChunkPos(pos));
+    assert(chunk != nullptr);
+    return chunk->getBlock(getBlockPos(pos));
+}
+
+BlockData& World::getBlock(const Vec3i& pos)
 {
     Chunk* chunk = getChunkPtr(getChunkPos(pos));
     assert(chunk != nullptr);

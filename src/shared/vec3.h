@@ -20,6 +20,9 @@
 #define VEC3_H_
 
 #include <cmath>
+#include <algorithm>
+using std::abs;
+using std::max;
 
 template<typename T>
 class Vec3
@@ -40,6 +43,18 @@ public:
     // Get vector length
     double length() const
     { return sqrt(double(lengthSqr())); }
+
+    // Get the Euclidean Distance between vectors
+    double euclideanDistance(const Vec3& rhs) const
+    { return (*this - rhs).length(); }
+
+    // Get the Chebyshev Distance between vectors
+    T chebyshevDistance(const Vec3& rhs) const
+    { return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z)); }
+
+    // Get the Manhattan Distance between vectors
+    T manhattanDistance(const Vec3& rhs) const
+    { return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z); }
 
     bool operator< (const Vec3& rhs) const
     {
