@@ -32,19 +32,15 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
     {
         Vec3i curPos = m_world->getChunkPtr(ci)->getPos();
         // Get chunk center pos
-//        curPos.x = (curPos.x << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);//curPos.x*ChunkSize + ChunkSize /2 - 1
-//        curPos.y = (curPos.y << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
-//        curPos.z = (curPos.z << ChunkSizeLog2) + ((ChunkSize >> 1) - 1);
         curPos.x = curPos.x*ChunkSize + ChunkSize / 2 - 1;
         curPos.y = curPos.y*ChunkSize + ChunkSize / 2 - 1;
         curPos.z = curPos.z*ChunkSize + ChunkSize / 2 - 1;
 
         // Out of load range, pending to unload
-        if (/*!chunkInRange(cx, cy, cz, cxp, cyp, czp, ViewDistance + 1)*/ true /* NOT FINISHED YET */)
+        if (centerPos.chebyshevDistance(curPos) > m_loadRange)
         {
             // Distance from centerPos
-            Vec3i distvec = curPos - centerPos;
-            distsqr = distvec.lengthSqr();
+            distsqr = (curPos - centerPos).lengthSqr();
 
             // Binary search in unload list
             first = 0;
@@ -63,10 +59,7 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
 
             // Move elements to make place
             for (int j = MaxChunkUnloadCount - 1; j > first; j--)
-            {
-                m_chunkUnloadList[j].first = m_chunkUnloadList[j - 1].first;
-                m_chunkUnloadList[j].second = m_chunkUnloadList[j - 1].second;
-            }
+                m_chunkUnloadList[j] = m_chunkUnloadList[j - 1];
 
             // Insert into list
             m_chunkUnloadList[first].first = m_world->getChunkPtr(ci);
@@ -78,57 +71,51 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
     }
     m_chunkUnloadCount = pl;
 
-    // NOT FINISHED YET
-
-    /*
-    for (cx = cxp - ViewDistance - 1; cx <= cxp + ViewDistance; cx++)
-    {
-        for (cy = cyp - ViewDistance - 1; cy <= cyp + ViewDistance; cy++)
-        {
-            for (cz = czp - ViewDistance - 1; cz <= czp + ViewDistance; cz++)
-            {
-                if (chunkOutOfBound(cx, cy, cz)) continue;
-                if (cpArray.getChunkPtr(cx, cy, cz) == nullptr)
+    for (int x = centerPos.x - m_loadRange; x <= centerPos.x + m_loadRange; x++)
+        for (int y = centerPos.y - m_loadRange; y <= centerPos.y + m_loadRange; y++)
+            for (int z = centerPos.z - m_loadRange; z <= centerPos.z + m_loadRange; z++)
+                // In load range, pending to load
+                if (/*cpArray.getChunkPtr(cx, cy, cz) == nullptr*/ true /* NOT FINISHED */)
                 {
-                    xd = cx * 16 + 7 - xpos;
-                    yd = cy * 16 + 7 - ypos;
-                    zd = cz * 16 + 7 - zpos;
-                    distsqr = xd*xd + yd*yd + zd*zd;
+                    Vec3i curPos;
+                    // Get chunk center pos
+                    curPos.x = x*ChunkSize + ChunkSize / 2 - 1;
+                    curPos.y = y*ChunkSize + ChunkSize / 2 - 1;
+                    curPos.z = z*ChunkSize + ChunkSize / 2 - 1;
 
+                    // Distance from centerPos
+                    distsqr = (curPos - centerPos).lengthSqr();
+
+                    // Binary search in load list
                     first = 0;
                     last = pu - 1;
                     while (first <= last)
                     {
                         middle = (first + last) >> 1;
-                        if (distsqr < chunkLoadList[middle][0])
+                        if (distsqr < m_chunkLoadList[middle].second)
                             last = middle - 1;
                         else
                             first = middle + 1;
                     }
-                    if (first > pu || first >= MaxChunkLoads) continue;
-                    i = first;
 
-                    for (int j = MaxChunkLoads - 1; j > i; j--)
-                    {
-                        chunkLoadList[j][0] = chunkLoadList[j - 1][0];
-                        chunkLoadList[j][1] = chunkLoadList[j - 1][1];
-                        chunkLoadList[j][2] = chunkLoadList[j - 1][2];
-                        chunkLoadList[j][3] = chunkLoadList[j - 1][3];
-                    }
-                    chunkLoadList[i][0] = distsqr;
-                    chunkLoadList[i][1] = cx;
-                    chunkLoadList[i][2] = cy;
-                    chunkLoadList[i][3] = cz;
-                    if (pu < MaxChunkLoads) pu++;
+                    // Not very near, don't load now
+                    if (first > pu || first >= MaxChunkLoadCount) continue;
+
+                    // Move elements to make place
+                    for (int j = MaxChunkLoadCount - 1; j > first; j--)
+                        m_chunkLoadList[j] = m_chunkLoadList[j - 1];
+
+                    // Insert into list
+                    m_chunkLoadList[first].first = Vec3i(x, y, z);
+                    m_chunkLoadList[first].second = distsqr;
+
+                    // Add counter
+                    if (pu < MaxChunkLoadCount) pu++;
                 }
-            }
-        }
-    }
-    chunkLoads = pu;
-    */
+    m_chunkLoadCount = pu;
 }
 
 void WorldLoader::loadUnloadChunks()
 {
-    // NOT FINISHED YET
+    // NOT FINISHED
 }

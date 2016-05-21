@@ -61,7 +61,8 @@ public:
     World& operator= (const World&) = delete;
 
     // Get chunk count
-    size_t getChunkCount() const { return chunkCount; }
+    size_t getChunkCount() const
+    { return chunkCount; }
     // Add chunk
     Chunk* addChunk(const Vec3i& chunkPos);
     // Delete chunk
@@ -73,7 +74,8 @@ public:
 
 #ifdef NEWORLD_COMPILER_RSHIFT_ARITH
     // Convert world position to chunk coordinate (one axis)
-    static int getChunkPos(int pos) { return pos >> ChunkSizeLog2; }
+    static int getChunkPos(int pos)
+    { return pos >> ChunkSizeLog2; }
 #else
     // Convert world position to chunk coordinate (one axis)
     static int getChunkPos(int pos)
@@ -83,11 +85,14 @@ public:
     }
 #endif
     // Convert world position to chunk coordinate (all axes)
-    static Vec3i getChunkPos(const Vec3i& pos) { return Vec3i(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z)); }
+    static Vec3i getChunkPos(const Vec3i& pos)
+    { return Vec3i(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z)); }
     // Convert world position to block coordinate in chunk (one axis)
-    static int getBlockPos(int pos) { return pos & (ChunkSize - 1); }
+    static int getBlockPos(int pos)
+    { return pos & (ChunkSize - 1); }
     // Convert world position to block coordinate in chunk (all axes)
-    static Vec3i getBlockPos(const Vec3i& pos) { return Vec3i(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z)); }
+    static Vec3i getBlockPos(const Vec3i& pos)
+    { return Vec3i(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z)); }
 
     // Get block data
     BlockData getBlock(const Vec3i& pos) const;
