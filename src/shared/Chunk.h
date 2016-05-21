@@ -23,9 +23,8 @@
 #include "vec3.h"
 #include "blockdata.h"
 
-//constexpr int ChunkSizeLog2 = 5;
-//constexpr int ChunkSize = 1 << ChunkSizeLog2; // 2 ^ ChunkSizeLog2 == 32
-constexpr int ChunkSize = 32;
+constexpr int ChunkSizeLog2 = 5;
+constexpr int ChunkSize = 1 << ChunkSizeLog2; // 2 ^ ChunkSizeLog2 == 32
 
 class Chunk
 {

@@ -41,4 +41,8 @@
 
 #include <cassert>
 
+#if (-1)>>1 == -1
+    #define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
+#endif
+
 #endif // !COMMON_H_
