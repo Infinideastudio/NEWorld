@@ -73,6 +73,7 @@ ipch/
 *.sdf
 *.opendb
 *.cachefile
+*.VC.db
 
 # Visual Studio profiler
 *.psess
@@ -237,7 +238,6 @@ options.ini
 .project
 .cproject
 .settings
-/build/VisualStudio_v14/NEWorld.VC.db
 
 # Original source
 # WILL BE REMOVED AFTER REBUILD
