@@ -15,15 +15,18 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef request_h__
-#define request_h__
+
+#ifndef REQUEST_H_
+#define REQUEST_H_
+
 #include <functional>
-//Used for the requests that have callback
-struct RequestCallback
+
+// Used for the requests that have callback
+class RequestCallback
 {
 public:
     /*
-    callbackFunc is a callback function.
+    callbackFunc() is a callback function.
     Its first parameter gives the pointer to data, and the second one give the length of the data.
     */
     using callbackFunc = std::function<void(const char*, size_t)>;
@@ -39,8 +42,9 @@ public:
 
 private:
     RequestCallback(const callbackFunc& func, RequestID id) :callback(func), identifier(id) {}
+
 };
 
 RequestCallback makeRequestCallback(const RequestCallback::callbackFunc& func);
 
-#endif // request_h__
+#endif // !REQUEST_H_

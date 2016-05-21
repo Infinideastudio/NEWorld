@@ -15,7 +15,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef network_structures_h__
-#define network_structures_h__
+#ifndef NETWORK_STRUCTURES_H_
+#define NETWORK_STRUCTURES_H_
 
-#endif // network_structures_h__
+#endif // !NETWORK_STRUCTURES_H_

@@ -15,8 +15,10 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "..\shared\shared.h"
 #include <climits>
+
 RequestCallback makeRequestCallback(const RequestCallback::callbackFunc& func)
 {
     static unsigned short id = 0;

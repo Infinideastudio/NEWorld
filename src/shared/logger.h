@@ -93,5 +93,4 @@ inline void logError(std::string msg)
     assert(false);
 }
 
-
 #endif
