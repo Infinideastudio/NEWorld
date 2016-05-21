@@ -11,10 +11,11 @@ private:
     ALCcontext *Context = nullptr;
 
 public:
-    bool init(ALCchar* DeviceName);
+    static const ALuint INVALID_BUFFER = static_cast<ALuint>(-1);
+    bool init();
     void updateListener(ALfloat listenerPos[], ALfloat listenerVel[], ALfloat listenerOri[]);
     void updateSource(ALuint Source,ALfloat sourcePos[], ALfloat sourceVel[]);
-    bool load(const char* FileName, ALuint* uiBuffer);
+    ALuint ALDevice::load(string FileName);
     ALuint play(ALuint uiBuffer,bool loop,float gain, ALfloat sourcePos[], ALfloat sourceVel[]);
     void stop(ALuint Source);
     void unload(ALuint uiBuffer);

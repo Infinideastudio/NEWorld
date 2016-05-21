@@ -47,23 +47,27 @@ unsigned long DecodeOggVorbis(OggVorbis_File *psOggVorbisFile, char *pDecodeBuff
     return ulBytesDone;
 }
 
-bool ALDevice::init(ALCchar * DeviceName)//初始化
+bool ALDevice::init()//初始化
 {
-    Device = alcOpenDevice(DeviceName);
-    if (Device)
+    //初始化设备
+    auto pDeviceList = std::make_unique<ALDeviceList>();
+    Device = alcOpenDevice(pDeviceList->GetDeviceName(pDeviceList->GetDefaultDevice()));
+    if (!Device) return false;
+    Context = alcCreateContext(Device, NULL);
+    if (!Context)
     {
-        Context = alcCreateContext(Device, NULL);
-        if (Context)
-        {
-            alcMakeContextCurrent(Context);
-#ifdef NEWORLD_TARGET_WINDOWS
-            EFX::init();
-#endif
-            return true;
-        }
         alcCloseDevice(Device);
+        return false;
     }
-    return false;
+    alcMakeContextCurrent(Context);
+#ifdef NEWORLD_TARGET_WINDOWS
+    EFX::init();
+#endif
+    //开启所有功能
+    alEnable(AL_DOPPLER_FACTOR);
+    alEnable(AL_DISTANCE_MODEL);
+    alEnable(AL_SPEED_OF_SOUND);
+    return true;
 }
 void ALDevice::updateListener(ALfloat listenerPos[], ALfloat listenerVel[], ALfloat listenerOri[])
 {
@@ -76,26 +80,27 @@ void ALDevice::updateSource(ALuint Source, ALfloat sourcePos[], ALfloat sourceVe
     alSourcefv(Source, AL_POSITION, sourcePos);
     alSourcefv(Source, AL_VELOCITY, sourceVel);
 }
-bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
+ALuint ALDevice::load(string FileName)
 {
-    alGenBuffers(1, uiBuffer);
+    ALuint ret;
+    alGenBuffers(1, &ret);
     ALchar *pData = nullptr;
     ALint iDataSize = 0, iFrequency = 0;
     ALenum eBufferFormat = 0;
     //WaveLoader
     {
         CWaves WaveLoader;
-        WAVEID            WaveID;
-        if (SUCCEEDED(WaveLoader.LoadWaveFile(FileName, &WaveID)))
+        WAVEID WaveID;
+        if (SUCCEEDED(WaveLoader.LoadWaveFile(FileName.c_str(), &WaveID)))
         {
             if ((SUCCEEDED(WaveLoader.GetWaveSize(WaveID, (unsigned long*)&iDataSize))) &&
                     (SUCCEEDED(WaveLoader.GetWaveData(WaveID, (void**)&pData))) &&
                     (SUCCEEDED(WaveLoader.GetWaveFrequency(WaveID, (unsigned long*)&iFrequency))) &&
                     (SUCCEEDED(WaveLoader.GetWaveALBufferFormat(WaveID, &alGetEnumValue, (unsigned long*)&eBufferFormat))))
             {
-                alBufferData(*uiBuffer, eBufferFormat, pData, iDataSize, iFrequency);
+                alBufferData(ret, eBufferFormat, pData, iDataSize, iFrequency);
                 WaveLoader.DeleteWaveFile(WaveID);
-                return true;
+                return ret;
             }
         }
     }
@@ -105,8 +110,8 @@ bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
         vorbis_info *psVorbisInfo;
         FILE *pOggVorbisFile;
 
-        pOggVorbisFile = fopen(FileName, "rb");
-        if (!pOggVorbisFile)return false;
+        pOggVorbisFile = fopen(FileName.c_str(), "rb");
+        if (!pOggVorbisFile) return INVALID_BUFFER;
         if (ov_open(pOggVorbisFile, &sOggVorbisFile, NULL, 0) == 0)
         {
             psVorbisInfo = ov_info(&sOggVorbisFile, -1);
@@ -162,12 +167,12 @@ bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
                             copy(pData, pData + ulBytesWritten, iter);
                         }
                         while (ulBytesWritten);
-                        alBufferData(*uiBuffer, eBufferFormat, data.data(), data.size(), iFrequency);
+                        alBufferData(ret, eBufferFormat, data.data(), data.size(), iFrequency);
                         free(pData);
                         data.clear();
                         ov_clear(&sOggVorbisFile);
                         fclose(pOggVorbisFile);
-                        return true;
+                        return ret;
                     }
                 }
             }
@@ -185,7 +190,7 @@ bool ALDevice::load(const char * FileName, ALuint *uiBuffer)
         }
         FLAC__stream_decoder_delete(decoder);*/
     }
-    return false;
+    return INVALID_BUFFER;
 }
 ALuint ALDevice::play(ALuint uiBuffer, bool loop, float gain,  ALfloat sourcePos[], ALfloat sourceVel[])
 {

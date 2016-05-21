@@ -17,8 +17,8 @@
 */
 #include "ALDevice.h"
 #include "AudioSystem.h"
-#include "framework.h"
 #include <memory>
+#include <ctime>
 namespace AudioSystem
 {
 //Gain
@@ -32,68 +32,29 @@ ALfloat SpeedOfSound = Air_SpeedOfSound;//声速
 bool FallBefore = false;//OnGround
 bool DownWaterBefore = false;//InWater
 int BGMNum = 0;
-//Buffer
-ALuint BGM[10];
-ALuint Run = -1;
-ALuint Click = -1;
-ALuint Fall = -1;
-ALuint BlockClick = -1;
-ALuint DownWater = -1;
-//Source
-ALuint SBGM = -1;
-ALuint SRun = -1;
-ALuint SClick = -1;
-ALuint SFall = -1;
-ALuint SBlockClick = -1;
-ALuint SDownWater = -1;
-void Init()
+
+std::map<string, Sound> sounds;
+
+void init()
 {
-    //初始化设备
-    //ALDeviceList *DL = getALDevice().GetALDeviceList();
-    //getALDevice().init(DL->GetDeviceName(DL->GetDefaultDevice()));
-    //delete DL;
-    auto pDeviceList = std::make_unique<ALDeviceList>();
-    getALDevice().init(pDeviceList->GetDeviceName(pDeviceList->GetDefaultDevice()));
-    //ALFWInitOpenAL();
-    //开启所有功能
-    alEnable(AL_DOPPLER_FACTOR);
-    alEnable(AL_DISTANCE_MODEL);
-    alEnable(AL_SPEED_OF_SOUND);
-    //背景音乐
-    char BGMName[256];
+    getALDevice().init();
+    //加载音乐
     for (int i = 0; i < 10; i++)
     {
-        BGM[i] = -1;
-    }
-    for (int i = 0; i < 10; i++)
-    {
-        sprintf_s(BGMName, "Audio\\BGM%d.wav", i);
-        if (getALDevice().load(BGMName, &BGM[BGMNum]))
-        {
+        string strID = std::to_string(i);
+        if (load("BGM" + strID, "Audio\\BGM" + strID + ".wav"))
             BGMNum++;
-        }
+        else
+            break;
     }
-    //行走and跑步声音
-    const char *wav_run = "Audio/Run.wav", *wav_click = "Audio/Click.wav",
-                *wav_fall = "Audio/Fall.wav", *wav_blockclick = "Audio/BlockClick.wav",
-                 *wav_downwater = "Audio/DownWater.wav";
-    if (!getALDevice().load(wav_run, &Run))Run = -1;
-    //鼠标单击
-    if (!getALDevice().load(wav_click, &Click))Click = -1;
-    //掉落
-    if (!getALDevice().load(wav_fall, &Fall))Fall = -1;
-    //击打方块
-    if (!getALDevice().load(wav_blockclick, &BlockClick))BlockClick = -1;
-    //下水
-    if (!getALDevice().load(wav_downwater, &DownWater))DownWater = -1;
+    load("Run", "Audio/Run.wav");
+    load("Click", "Audio/Click.wav");
+    load("Fall", "Audio/Fall.wav");
+    load("BlockClick", "Audio/BlockClick.wav");
+    load("DownWater", "Audio/DownWater.wav");
     //播放BGM
     if (BGMNum > 0)
-    {
-        int size = clock() % BGMNum;
-        ALfloat Pos[] = { 0.0,0.0,0.0 };
-        ALfloat Vel[] = { 0.0,0.0,0.0 };
-        SBGM = getALDevice().play(BGM[size], false, BGMGain, Pos, Vel);
-    }
+        play("BGM" + std::to_string(clock() % BGMNum), false, BGMGain, { 0.0,0.0,0.0 });
 }
 
 void Update(ALfloat PlayerPos[3], bool BFall, bool BBlockClick, ALfloat BlockPos[3], int BRun, bool BDownWater)
@@ -102,20 +63,13 @@ void Update(ALfloat PlayerPos[3], bool BFall, bool BBlockClick, ALfloat BlockPos
     alDopplerFactor(DopplerFactor);
     alDistanceModel(DopplerModel);
     alSpeedOfSound(SpeedOfSound);
-    //更新音量
-    if (SBGM != -1)alSourcef(SBGM, AL_GAIN, BGMGain);
-    if (SRun != -1)alSourcef(SRun, AL_GAIN, SoundGain);
-    if (SClick != -1)alSourcef(SClick, AL_GAIN, SoundGain);
-    if (SFall != -1)alSourcef(SFall, AL_GAIN, SoundGain);
-    if (SBlockClick != -1)alSourcef(SBlockClick, AL_GAIN, SoundGain);
-    if (SDownWater != -1)alSourcef(SDownWater, AL_GAIN, SoundGain);
-    //更新环境
-    if (SBGM != -1)EFX::set(SBGM);
-    if (SRun != -1)EFX::set(SRun);
-    if (SClick != -1)EFX::set(SClick);
-    if (SFall != -1)EFX::set(SFall);
-    if (SBlockClick != -1)EFX::set(SBlockClick);
-    if (SDownWater != -1)EFX::set(SDownWater);
+    for (auto& s : sounds)
+    {
+        if(s.second.source==Sound::INVALID_SOURCE) continue;
+        alSourcef(s.second.source, AL_GAIN, BGMGain);
+        EFX::set(s.second.source);
+    }
+
     //更新位置
     PlayerPos[1] += 0.74;
     ALfloat Vel[] = { 0.0,0.0,0.0 };
@@ -221,25 +175,46 @@ void GUIUpdate()
     float Pos[] = { 0.0f,0.0f,0.0f };
     Update(Pos, false, false, Pos, false, false);
 }
-void UnInit()
+
+void unload()
 {
-    if (SBGM != -1)getALDevice().stop(SBGM);
-    if (SRun != -1)getALDevice().stop(SRun);
-    if (SClick != -1)getALDevice().stop(SClick);
-    if (SFall != -1)getALDevice().stop(SFall);
-    if (SBlockClick != -1)getALDevice().stop(SBlockClick);
-    if (SDownWater != -1)getALDevice().stop(SDownWater);
-
-    for (size_t i = 0; i < 10; i++)
+    for (auto& s : sounds)
     {
-        if (BGM[i] != -1)getALDevice().unload(BGM[i]);
+        getALDevice().stop(s.second.source);
+        getALDevice().unload(s.second.buffer);
     }
-    if (Run != -1)getALDevice().unload(Run);
-    if (Click != -1)getALDevice().unload(Click);
-    if (Fall != -1)getALDevice().unload(Fall);
-    if (BlockClick != -1)getALDevice().unload(BlockClick);
-    if (DownWater != -1)getALDevice().unload(DownWater);
-
+    sounds.clear();
     getALDevice().clean();
 }
+void play(string name, bool loop, float gain, Vec3d sourcePos)
+{
+    Sound& s = sounds[name];
+    //设置全局常量
+    alDopplerFactor(DopplerFactor);
+    alDistanceModel(DopplerModel);
+    alSpeedOfSound(SpeedOfSound);
+    for (auto& s : sounds)
+    {
+        if (s.second.source == Sound::INVALID_SOURCE) continue;
+        alSourcef(s.second.source, AL_GAIN, BGMGain);
+        EFX::set(s.second.source);
+    }
+    ALfloat pos[3] = { sourcePos.x,sourcePos.y,sourcePos.z };
+    ALfloat Vel[] = { 0.0,0.0,0.0 };
+    s.source = getALDevice().play(s.buffer, loop, gain, pos, Vel);
+}
+void stop(string name)
+{
+    Sound& s = sounds[name];
+    if(s.source!=Sound::INVALID_SOURCE)
+        getALDevice().stop(s.source);
+}
+bool load(string name, string path)
+{
+    Sound s = Sound(getALDevice().load(path));
+    if (s.buffer == ALDevice::INVALID_BUFFER) return false;
+    sounds.insert(std::make_pair(name, s));
+    return true;
+}
+
 }
