@@ -75,7 +75,7 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
         for (int y = centerPos.y - m_loadRange; y <= centerPos.y + m_loadRange; y++)
             for (int z = centerPos.z - m_loadRange; z <= centerPos.z + m_loadRange; z++)
                 // In load range, pending to load
-                if (/*cpArray.getChunkPtr(cx, cy, cz) == nullptr*/ true /* NOT FINISHED */)
+                if (m_cpa->getChunkPtr(Vec3i(x, y, z)) == nullptr)
                 {
                     Vec3i curPos;
                     // Get chunk center pos

@@ -1,4 +1,4 @@
-DELETE THIS FILE AFTER THE REBUILD IS DONE!!!
+﻿DELETE THIS FILE AFTER THE REBUILD IS DONE!!!
 
 Project Shared:
 
@@ -16,12 +16,6 @@ class Vec3 - Finished
 	Description: 3个元素的向量，用于表示位置
 class AABB - Finished
 	Description: 轴对齐包围盒及其碰撞计算
-class ChunkPointerArray - Not Finished
-	Description: 缓存区块指针，优化查找
-class WorldGen - Not Finished
-	Description: Perlin Noise 2D与地形生成
-class HeightMap - Not Finished
-	Description: 缓存高度，优化地形生成
 class Locale - Not Finished
 	Description: 加载语言文件
 
@@ -29,11 +23,17 @@ Project NEWorldServer:
 
 class ServerNetwork - Not Finished
 	Description: 服务端网络连接
+class WorldGen - Not Finished
+	Description: Perlin Noise 2D与地形生成
+class HeightMap - Not Finished
+	Description: 缓存高度，优化地形生成
+class WorldLoader - Nearly Finished
+	Description: 世界中的Chunk加载顺序
+class ChunkPointerArray - Finished
+	Description: 缓存区块指针，优化查找
 
 Project NEWorld:
 
-class WorldLoader - Not Finished
-	Description: 世界中的Chunk加载顺序
 class VertexArray - Nearly Finished
 	Description: 渲染所用的顶点数组
 class Renderer - Not Finished
@@ -54,7 +54,7 @@ class ClientNetwork - Not Finished
 	Description: 客户端网络连接
 class Window - Nearly Finished
 	Description: 封装的程序窗口
-class Object - Finished
+class GUIObject - Finished
 	Description: 所有GUI类的基类，为未来的SDK提供统一基础接口
 class Color - Finished
 	Description: RGBA颜色定义，提供了基础的颜色计算
