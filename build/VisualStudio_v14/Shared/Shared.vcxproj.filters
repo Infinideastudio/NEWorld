@@ -39,6 +39,9 @@
     <ClInclude Include="..\..\..\src\shared\network.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h">
+      <Filter>World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
