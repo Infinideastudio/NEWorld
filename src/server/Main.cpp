@@ -27,29 +27,90 @@ using boost::asio::ip::tcp;
 const int MaxLength = 1024;
 
 const int Port = 8090;
+using boost::asio::ip::tcp;
 
-void session(tcp::socket sock)
+class session
+    : public std::enable_shared_from_this<session>
 {
-    try
+public:
+    session(tcp::socket socket)
+        : m_socket(std::move(socket))
     {
-        while(true)
-        {
-            char data[MaxLength];
-            boost::system::error_code error;
-            size_t length = sock.read_some(boost::asio::buffer(data), error);
-            if (error == boost::asio::error::eof)
-                break; // Connection closed cleanly by peer.
-            else if (error)
-                throw boost::system::system_error(error); // Some other error.
-
-            boost::asio::write(sock, boost::asio::buffer(data, length));
-        }
     }
-    catch (std::exception& e)
-    { logError("Exception: " + std::string(e.what())); }
 
-    logInfo(sock.remote_endpoint().address().to_string() + " disconnected");
-}
+    void start()
+    {
+        doRead();
+    }
+
+private:
+    void doRead()
+    {
+        auto self(shared_from_this());
+        m_socket.async_read_some(boost::asio::buffer(m_data, max_length),
+                                 [this, self](boost::system::error_code ec, std::size_t length)
+        {
+            if (!ec)
+            {
+                doWrite(length);
+            }
+            else
+            {
+                logInfo(m_socket.remote_endpoint().address().to_string() + " disconnected");
+            }
+        });
+    }
+
+    void doWrite(std::size_t length)
+    {
+        auto self(shared_from_this());
+        boost::asio::async_write(m_socket, boost::asio::buffer(m_data, length),
+                                 [this, self](boost::system::error_code ec, std::size_t /*length*/)
+        {
+            if (!ec)
+            {
+                doRead();
+            }
+            else
+            {
+                logInfo(m_socket.remote_endpoint().address().to_string() + " disconnected");
+            }
+        });
+    }
+
+    tcp::socket m_socket;
+    enum { max_length = 1024 };
+    char m_data[max_length];
+};
+
+class server
+{
+public:
+    server(boost::asio::io_service& io_service, short port)
+        : m_acceptor(io_service, tcp::endpoint(tcp::v4(), port)),
+          m_socket(io_service)
+    {
+        doAccept();
+    }
+
+private:
+    void doAccept()
+    {
+        m_acceptor.async_accept(m_socket,
+                                [this](boost::system::error_code ec)
+        {
+            if (!ec)
+            {
+                logInfo(m_socket.remote_endpoint().address().to_string() + " connects to the server");
+                std::make_shared<session>(std::move(m_socket))->start();
+            }
+            doAccept();
+        });
+    }
+
+    tcp::acceptor m_acceptor;
+    tcp::socket m_socket;
+};
 
 int main(int argc, char* argv[])
 {
@@ -59,14 +120,10 @@ int main(int argc, char* argv[])
     try
     {
         boost::asio::io_service io_service;
-        tcp::acceptor a(io_service, tcp::endpoint(tcp::v4(), Port));
-        while (true)
-        {
-            tcp::socket sock(io_service);
-            a.accept(sock);
-            logInfo(sock.remote_endpoint().address().to_string() + " connects to the server");
-            std::thread(session, std::move(sock)).detach();
-        }
+
+        server s(io_service, Port);
+
+        io_service.run();
     }
     catch (std::exception& e)
     { logError("Exception: " + std::string(e.what())); }
