@@ -35,6 +35,9 @@
     <ClInclude Include="..\..\..\src\shared\logger.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h">
+      <Filter>World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\logger.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp">
+      <Filter>World</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

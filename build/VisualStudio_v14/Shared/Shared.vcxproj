@@ -120,6 +120,7 @@
     <ClInclude Include="..\..\..\src\shared\blockdata.h" />
     <ClInclude Include="..\..\..\src\shared\blocktype.h" />
     <ClInclude Include="..\..\..\src\shared\chunk.h" />
+    <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h" />
     <ClInclude Include="..\..\..\src\shared\common.h" />
     <ClInclude Include="..\..\..\src\shared\logger.h" />
     <ClInclude Include="..\..\..\src\shared\network_structures.h" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\AABB.cpp" />
     <ClCompile Include="..\..\..\src\shared\chunk.cpp" />
+    <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
   </ItemGroup>
