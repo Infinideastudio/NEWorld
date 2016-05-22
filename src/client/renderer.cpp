@@ -17,3 +17,8 @@
 */
 
 #include "renderer.h"
+
+void Renderer::init()
+{
+    // TODO: Setup OpenGL/DirectX parameters
+}

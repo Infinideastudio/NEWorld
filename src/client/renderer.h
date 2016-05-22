@@ -21,4 +21,15 @@
 
 #include "vertexarray.h"
 
+// 理论上是单例？ --qiaozhanrong
+class Renderer
+{
+private:
+
+public:
+    // Setup rendering
+    void init();
+
+};
+
 #endif // !RENDERER_H_
