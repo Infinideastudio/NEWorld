@@ -28,9 +28,6 @@
     <ClInclude Include="..\..\..\src\shared\request.h">
       <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\network_structures.h">
-      <Filter>Network</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\shared\logger.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -41,6 +38,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h">
       <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\networkstructures.h">
+      <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

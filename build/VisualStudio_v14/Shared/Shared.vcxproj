@@ -128,7 +128,7 @@
     <ClInclude Include="..\..\..\src\shared\common.h" />
     <ClInclude Include="..\..\..\src\shared\logger.h" />
     <ClInclude Include="..\..\..\src\shared\network.h" />
-    <ClInclude Include="..\..\..\src\shared\network_structures.h" />
+    <ClInclude Include="..\..\..\src\shared\networkstructures.h" />
     <ClInclude Include="..\..\..\src\shared\object.h" />
     <ClInclude Include="..\..\..\src\shared\request.h" />
     <ClInclude Include="..\..\..\src\shared\vec3.h" />

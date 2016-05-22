@@ -21,7 +21,7 @@
 
 #include "vertexarray.h"
 
-// 理论上是单例？ --qiaozhanrong
+// Renderer理论上是单例？ --qiaozhanrong
 class Renderer
 {
 private:

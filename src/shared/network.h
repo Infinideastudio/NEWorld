@@ -20,7 +20,7 @@
 #define NETWORK_H_
 
 #include <boost/asio.hpp>
-#include "network_structures.h"
+#include "networkstructures.h"
 #include "request.h"
 
 using boost::asio::ip::tcp;
