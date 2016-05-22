@@ -70,14 +70,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <IncludePath>$(SolutionDir)..\..\dependencies\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\dependencies\lib;$(SolutionDir)..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)..\..\dependencies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\dependencies\libs;$(SolutionDir)..\..\dependencies\libs\boostlibs;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\..\dependencies\lib;$(SolutionDir)..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NEWORLD_TARGET_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -93,12 +95,16 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NEWORLD_TARGET_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -136,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\AABB.cpp" />
-    <ClCompile Include="..\..\..\src\shared\chunk.cpp" />
     <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />

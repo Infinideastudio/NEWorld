@@ -61,9 +61,6 @@
     <ClCompile Include="..\..\..\src\shared\AABB.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\chunk.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
       <Filter>World</Filter>
     </ClCompile>
