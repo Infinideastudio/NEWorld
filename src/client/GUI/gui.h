@@ -1,8 +1,8 @@
-#ifndef gui_h__
-#define gui_h__
+#ifndef GUI_H_
+#define GUI_H_
 
 #include "controls.h"
 #include "graphics.h"
 #include "window.h"
 
-#endif // gui_h__
+#endif // !GUI_H_
