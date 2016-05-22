@@ -1,11 +1,11 @@
-# NEWorld±àÒëÖ¸ÄÏ
+# NEWorldç¼–è¯‘æŒ‡å—
 
-0. ÇëÏÂÔØËùÓĞËùĞè[×ÊÔ´](.\Notfinishedyet)£¬²¢½âÑ¹µ½.\resÎÄ¼ş¼Ğ  
-0. Çë×ÔĞĞÏÂÔØÒÔÏÂËùÓĞÒÀÀµ¿â£¨»ò´Ó[ÕâÀï](.\Notfinishedyet)Ö±½ÓÏÂÔØWindows°æ±¾µÄÕûºÏ°ü£©£¬²¢½«Í·ÎÄ¼ş¸´ÖÆ»òÁ´½Óµ½\dependencies\includeÎÄ¼ş¼Ğ£¬½«¿âÎÄ¼ş¸´ÖÆ»òÁ´½Óµ½\dependencies\libsÎÄ¼ş¼Ğ£º
+0. è¯·ä¸‹è½½æ‰€æœ‰æ‰€éœ€[èµ„æº](./Notfinishedyet)ï¼Œå¹¶è§£å‹åˆ°/resæ–‡ä»¶å¤¹  
+0. è¯·è‡ªè¡Œä¸‹è½½ä»¥ä¸‹æ‰€æœ‰ä¾èµ–åº“ï¼ˆæˆ–ä»[è¿™é‡Œ](./Notfinishedyet)ç›´æ¥ä¸‹è½½Windowsç‰ˆæœ¬çš„æ•´åˆåŒ…ï¼‰ï¼Œå¹¶å°†å¤´æ–‡ä»¶å¤åˆ¶æˆ–é“¾æ¥åˆ°/dependencies/includeæ–‡ä»¶å¤¹ï¼Œå°†åº“æ–‡ä»¶å¤åˆ¶æˆ–é“¾æ¥åˆ°/dependencies/libæ–‡ä»¶å¤¹ï¼š
 
-    - OpenAL 1.1 [¹ÙÍø](http://www.openal.org/)  
-    - boost 1.61.0 [¹ÙÍø](http://www.boost.org/)  
-    - freetype [¹ÙÍø](https://www.freetype.org/)  
-    - OpenGL [¹ÙÍø](https://www.opengl.org/)  
-    - libogg 1.3.2 [¹ÙÍø](https://www.xiph.org/)  
-    - libvorbis 1.3.5 [¹ÙÍø](https://www.xiph.org/)  
+    - OpenAL 1.1 [å®˜ç½‘](http://www.openal.org/)  
+    - boost 1.61.0 [å®˜ç½‘](http://www.boost.org/)  
+    - freetype [å®˜ç½‘](https://www.freetype.org/)  
+    - OpenGL [å®˜ç½‘](https://www.opengl.org/)  
+    - libogg 1.3.2 [å®˜ç½‘](https://www.xiph.org/)  
+    - libvorbis 1.3.5 [å®˜ç½‘](https://www.xiph.org/)  

@@ -21,7 +21,7 @@
 
 #include "vertexarray.h"
 
-// RendererÀíÂÛÉÏÊÇµ¥Àı£¿ --qiaozhanrong
+// Rendererç†è®ºä¸Šæ˜¯å•ä¾‹ï¼Ÿ --qiaozhanrong
 class Renderer
 {
 private:
