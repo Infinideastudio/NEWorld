@@ -20,7 +20,7 @@
 #define VERTEXARRAY_H_
 
 #include <cstring>
-#include "common.h"
+#include "..\shared\Common.h"
 
 class VertexArray
 {

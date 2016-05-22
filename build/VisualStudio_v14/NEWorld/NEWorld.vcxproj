@@ -69,8 +69,8 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)..\..\..\include\AL;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\include\asio;$(ProjectDir)..\..\..\src\shared;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\src\client;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;$(ProjectDir)..\..\..\dependencies\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\..\dependencies\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\dependencies\libs;$(SolutionDir)..\..\dependencies\libs\boostlibs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
     <IncludePath>$(SolutionDir)..\..\..\include\AL;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\include\asio;$(ProjectDir)..\..\..\src\shared;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\src\client;$(IncludePath)</IncludePath>
@@ -142,7 +142,7 @@
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\dependencies\libs;$(ProjectDir)..\..\..\dependencies\libs\boostlibs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">

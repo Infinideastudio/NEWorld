@@ -19,6 +19,7 @@
 #include "chunkrenderer.h"
 
 VertexArray ChunkRenderer::va(262144, 2, 3, 1, 3);
+bool ChunkRenderer::mergeFace;
 
 void ChunkRenderer::buildVertexArray()
 {

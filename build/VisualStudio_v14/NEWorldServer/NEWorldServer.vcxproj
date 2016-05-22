@@ -77,8 +77,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\..\..\include\AL;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\include\asio;$(ProjectDir)..\..\..\src\shared;$(ProjectDir)..\..\..\src;$(ProjectDir)..\..\..\src\client;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\..\dependencies\libs\boostlibs;$(ProjectDir)..\..\..\dependencies\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\..\dependencies\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\dependencies\libs;$(SolutionDir)..\..\dependencies\libs\boostlibs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
     <LinkIncremental>false</LinkIncremental>

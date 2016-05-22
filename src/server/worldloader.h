@@ -20,7 +20,7 @@
 #define WORLDLOADER_H_
 
 #include <utility>
-#include "world.h"
+#include "..\shared\world.h"
 using std::pair;
 
 constexpr int MaxChunkLoadCount = 64;
