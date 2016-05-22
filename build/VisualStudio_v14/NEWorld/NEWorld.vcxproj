@@ -189,7 +189,9 @@
     <ClInclude Include="..\..\..\src\client\GUI\graphics.h" />
     <ClInclude Include="..\..\..\src\client\GUI\gui.h" />
     <ClInclude Include="..\..\..\src\client\GUI\window.h" />
+    <ClInclude Include="..\..\..\src\client\receiver.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
+    <ClInclude Include="..\..\..\src\client\sender.h" />
     <ClInclude Include="..\..\..\src\client\vertexarray.h" />
   </ItemGroup>
   <ItemGroup>

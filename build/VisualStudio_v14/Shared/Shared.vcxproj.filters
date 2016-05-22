@@ -4,7 +4,6 @@
     <ClInclude Include="..\..\..\src\shared\AABB.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\Shared.h" />
     <ClInclude Include="..\..\..\src\shared\vec3.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -37,6 +36,8 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h">
       <Filter>World</Filter>
+    <ClInclude Include="..\..\..\src\shared\network.h">
+      <Filter>Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

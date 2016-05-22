@@ -16,18 +16,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <boost/asio.hpp>
-#include "..\shared\Shared.h"
+#include "network.h"
+#include "logger.h"
 #include <cstdlib>
 #include <thread>
 #include <utility>
-
-using boost::asio::ip::tcp;
-
-const int MaxLength = 1024;
-
-const int Port = 8090;
-using boost::asio::ip::tcp;
 
 class session
     : public std::enable_shared_from_this<session>
@@ -47,7 +40,7 @@ private:
     void doRead()
     {
         auto self(shared_from_this());
-        m_socket.async_read_some(boost::asio::buffer(m_data, max_length),
+        m_socket.async_read_some(boost::asio::buffer(m_data, PacketMaxLength),
                                  [this, self](boost::system::error_code ec, std::size_t length)
         {
             if (!ec)
@@ -79,8 +72,7 @@ private:
     }
 
     tcp::socket m_socket;
-    enum { max_length = 1024 };
-    char m_data[max_length];
+    char m_data[PacketMaxLength];
 };
 
 class server
@@ -96,8 +88,7 @@ public:
 private:
     void doAccept()
     {
-        m_acceptor.async_accept(m_socket,
-                                [this](boost::system::error_code ec)
+        m_acceptor.async_accept(m_socket, [this](boost::system::error_code ec)
         {
             if (!ec)
             {
@@ -119,8 +110,6 @@ int main(int argc, char* argv[])
     logInfo("Server started");
     try
     {
-        boost::asio::io_service io_service;
-
         server s(io_service, Port);
 
         io_service.run();

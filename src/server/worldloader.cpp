@@ -47,7 +47,7 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
             last = pl - 1;
             while (first <= last)
             {
-                middle = (first + last) >> 1;
+                middle = (first + last) / 2;
                 if (distsqr > m_chunkUnloadList[middle].second)
                     last = middle - 1;
                 else

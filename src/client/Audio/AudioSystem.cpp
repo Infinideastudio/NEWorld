@@ -73,14 +73,14 @@ void play(string name, bool loop, float gain, Vec3d sourcePos)
     alDopplerFactor(DopplerFactor);
     alDistanceModel(DopplerModel);
     alSpeedOfSound(SpeedOfSound);
-    for (auto& s : sounds)
+    for (auto& fs : sounds)
     {
-        if (s.second.source == Sound::INVALID_SOURCE) continue;
-        alSourcef(s.second.source, AL_GAIN, BGMGain);
-        EFX::set(s.second.source);
+        if (fs.second.source == Sound::INVALID_SOURCE) continue;
+        alSourcef(fs.second.source, AL_GAIN, BGMGain);
+        EFX::set(fs.second.source);
     }
-    ALfloat pos[3] = { sourcePos.x,sourcePos.y,sourcePos.z };
-    ALfloat Vel[] = { 0.0,0.0,0.0 };
+    ALfloat pos[3] = { (ALfloat)sourcePos.x,(ALfloat)sourcePos.y,(ALfloat)sourcePos.z };
+    ALfloat Vel[] = { 0,0,0 };
     s.source = getALDevice().play(s.buffer, loop, gain, pos, Vel);
 }
 void stop(string name)

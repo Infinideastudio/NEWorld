@@ -68,6 +68,12 @@
     <ClInclude Include="..\..\..\src\client\Audio\AudioSystem.h">
       <Filter>Source\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\client\sender.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\receiver.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico">

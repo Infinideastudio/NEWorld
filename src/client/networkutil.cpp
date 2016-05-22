@@ -16,12 +16,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "..\shared\shared.h"
+#include "network.h"
 #include <climits>
+
+boost::asio::io_service io_service;
 
 RequestCallback makeRequestCallback(const RequestCallback::callbackFunc& func)
 {
     static unsigned short id = 0;
-    if (id == USHRT_MAX)
-        return RequestCallback(func, { 0,id++ });
+    if (id == USHRT_MAX) id = 0;
+    return RequestCallback(func, { 0,id++ });
 }

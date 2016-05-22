@@ -16,16 +16,23 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SHARED_H_
-#define SHARED_H_
+#ifndef RECEIVER_H_
+#define RECEIVER_H_
 
-#include "aabb.h"
-#include "blockdata.h"
-#include "blocktype.h"
-#include "chunk.h"
-#include "vec3.h"
-#include "request.h"
-#include "network_structures.h"
-#include "logger.h"
+#include "network.h"
+#include <cstdlib>
+#include <cstring>
 
-#endif // !SHARED_H_
+void receiverThread()
+{
+    boost::asio::io_service io_service;
+
+    tcp::socket s(io_service);
+    tcp::resolver resolver(io_service);
+    boost::asio::connect(s, resolver.resolve({ "ip", std::to_string(Port) }));
+
+    char reply[PacketMaxLength];
+    size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, request_length));
+}
+
+#endif // RECEIVER_H_
