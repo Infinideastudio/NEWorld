@@ -66,13 +66,13 @@ public:
     Control(std::string _xName, Margin _Margin):parent(nullptr) {}
 
     virtual void focusFunc(FocusOp Stat) = 0;
-    virtual void mouseButtonFunc(MouseButton Button, ButtonAction Action) = 0;
-    virtual void cursorPosFunc(double x, double y) = 0;
-    virtual void crusorEnterFunc(CursorOp Stat) = 0;
-    virtual void scrollFunc(double dx, double dy) = 0;
-    virtual void keyFunc(int Key, ButtonAction Action) = 0;
-    virtual void charInputFunc(wchar_t Char) = 0;
-    virtual void dropFunc(int DropCount, const char** Paths) = 0;
+    virtual void mouseButtonFunc(MouseButton Button, ButtonAction Action) {};
+    virtual void cursorPosFunc(double x, double y) {};
+    virtual void crusorEnterFunc(CursorOp Stat) {};
+    virtual void scrollFunc(double dx, double dy) {};
+    virtual void keyFunc(int Key, ButtonAction Action) {};
+    virtual void charInputFunc(wchar_t Char) {};
+    virtual void dropFunc(int DropCount, const char** Paths) {};
 
     virtual ~Control() {}
 };
