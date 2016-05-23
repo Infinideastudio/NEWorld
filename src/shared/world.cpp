@@ -27,8 +27,8 @@ void World::expandChunkArray(size_t c)
         chunkArraySize *= 2;
         auto newChunks = (Chunk**)realloc(chunks, chunkArraySize * sizeof(Chunk*));
         assert(newChunks != NULL);
-        // TODO: reallocʧ�ܵĴ���
-        // ����һ�£�reallocʧ�ܻ᲻���ͷ�ԭ�ڴ棿 --qiaozhanrong
+        // TODO: realloc失败的处理
+        // 我问一下，realloc失败会不会释放原内存？ --qiaozhanrong
         chunks = newChunks;
     }
 }

@@ -22,12 +22,12 @@
 namespace AudioSystem
 {
 //Gain
-ALfloat BGMGain = 0.1f;//±³¾°ÒôÀÖ
-ALfloat SoundGain = 0.17f;//ÒôĞ§
+ALfloat BGMGain = 0.1f;//èƒŒæ™¯éŸ³ä¹
+ALfloat SoundGain = 0.17f;//éŸ³æ•ˆ
 //Set
-ALenum DopplerModel = AL_INVERSE_DISTANCE_CLAMPED;//ÉèÖÃOpenALµÄ¾àÀëÄ£ĞÍ
-ALfloat DopplerFactor = 1.0f;//¶àÆÕÀÕÒò×Ó
-ALfloat SpeedOfSound = Air_SpeedOfSound;//ÉùËÙ
+ALenum DopplerModel = AL_INVERSE_DISTANCE_CLAMPED;//è®¾ç½®OpenALçš„è·ç¦»æ¨¡å‹
+ALfloat DopplerFactor = 1.0f;//å¤šæ™®å‹’å› å­
+ALfloat SpeedOfSound = Air_SpeedOfSound;//å£°é€Ÿ
 //Update
 bool FallBefore = false;//OnGround
 bool DownWaterBefore = false;//InWater
@@ -38,7 +38,7 @@ std::map<string, Sound> sounds;
 void init()
 {
     getALDevice().init();
-    //¼ÓÔØÒôÀÖ
+    //åŠ è½½éŸ³ä¹
     for (int i = 0; i < 10; i++)
     {
         string strID = std::to_string(i);
@@ -52,7 +52,7 @@ void init()
     load("Fall", "Audio/Fall.wav");
     load("BlockClick", "Audio/BlockClick.wav");
     load("DownWater", "Audio/DownWater.wav");
-    //²¥·ÅBGM
+    //æ’­æ”¾BGM
     if (BGMNum > 0)
         play("BGM" + std::to_string(clock() % BGMNum), false, BGMGain, { 0.0,0.0,0.0 });
 }
@@ -69,7 +69,7 @@ void unload()
 void play(string name, bool loop, float gain, Vec3d sourcePos)
 {
     Sound& s = sounds[name];
-    //ÉèÖÃÈ«¾Ö³£Á¿
+    //è®¾ç½®å…¨å±€å¸¸é‡
     alDopplerFactor(DopplerFactor);
     alDistanceModel(DopplerModel);
     alSpeedOfSound(SpeedOfSound);

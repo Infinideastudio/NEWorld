@@ -47,9 +47,9 @@ unsigned long DecodeOggVorbis(OggVorbis_File *psOggVorbisFile, char *pDecodeBuff
     return ulBytesDone;
 }
 
-bool ALDevice::init()//³õÊ¼»¯
+bool ALDevice::init()//åˆå§‹åŒ–
 {
-    //³õÊ¼»¯Éè±¸
+    //åˆå§‹åŒ–è®¾å¤‡
     auto pDeviceList = std::make_unique<ALDeviceList>();
     Device = alcOpenDevice(pDeviceList->GetDeviceName(pDeviceList->GetDefaultDevice()));
     if (!Device) return false;
@@ -63,7 +63,7 @@ bool ALDevice::init()//³õÊ¼»¯
 #ifdef NEWORLD_TARGET_WINDOWS
     EFX::init();
 #endif
-    //¿ªÆôËùÓĞ¹¦ÄÜ
+    //å¼€å¯æ‰€æœ‰åŠŸèƒ½
     alEnable(AL_DOPPLER_FACTOR);
     alEnable(AL_DISTANCE_MODEL);
     alEnable(AL_SPEED_OF_SOUND);
@@ -197,15 +197,15 @@ ALuint ALDevice::play(ALuint uiBuffer, bool loop, float gain,  ALfloat sourcePos
     ALuint uiSource;
     alGenSources(1, &uiSource);
     alSourcei(uiSource, AL_BUFFER, uiBuffer);
-    alSourcei(uiSource, AL_LOOPING, loop);  // ÉèÖÃÒôÆµ²¥·ÅÊÇ·ñÎªÑ­»·²¥·Å£¬AL_FALSEÊÇ²»Ñ­»·
-    alSourcef(uiSource, AL_GAIN, gain);  //ÉèÖÃÒôÁ¿´óĞ¡£¬1.0f±íÊ¾×î´óÒôÁ¿¡£openAL¶¯Ì¬µ÷½ÚÒôÁ¿´óĞ¡¾ÍÓÃÕâ¸ö·½·¨
-    //ÎªÊ¡ÊÂ£¬Ö±½ÓÍ³Ò»ÉèÖÃË¥¼õÒò×Ó
+    alSourcei(uiSource, AL_LOOPING, loop);  // è®¾ç½®éŸ³é¢‘æ’­æ”¾æ˜¯å¦ä¸ºå¾ªç¯æ’­æ”¾ï¼ŒAL_FALSEæ˜¯ä¸å¾ªç¯
+    alSourcef(uiSource, AL_GAIN, gain);  //è®¾ç½®éŸ³é‡å¤§å°ï¼Œ1.0fè¡¨ç¤ºæœ€å¤§éŸ³é‡ã€‚openALåŠ¨æ€è°ƒèŠ‚éŸ³é‡å¤§å°å°±ç”¨è¿™ä¸ªæ–¹æ³•
+    //ä¸ºçœäº‹ï¼Œç›´æ¥ç»Ÿä¸€è®¾ç½®è¡°å‡å› å­
     alSourcef(uiSource, AL_ROLLOFF_FACTOR, 5.0);
     //alSourcef(uiSource, AL_MAX_DISTANCE, 30.0);
     alSourcef(uiSource, AL_REFERENCE_DISTANCE, 1.0);
-    //ÉèÖÃÎ»ÖÃ
+    //è®¾ç½®ä½ç½®
     updateSource(uiSource,sourcePos,sourceVel);
-    //¿ªÆôEFX
+    //å¼€å¯EFX
 #ifdef NEWORLD_TARGET_WINDOWS
     EFX::set(uiSource);
 #endif
