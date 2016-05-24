@@ -36,7 +36,7 @@ public:
     explicit Chunk(const Vec3i& chunkPos) :m_pos(chunkPos) {}
 
     // Get chunk position
-    Vec3i getPos() const
+    const Vec3i& getPos() const
     { return m_pos; }
 
     // Get block data in this chunk

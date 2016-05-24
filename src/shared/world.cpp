@@ -27,9 +27,11 @@ void World::expandChunkArray(size_t c)
         chunkArraySize *= 2;
         auto newChunks = (Chunk**)realloc(chunks, chunkArraySize * sizeof(Chunk*));
         assert(newChunks != NULL);
-        // TODO: realloc失败的处理
-        // 我问一下，realloc失败会不会释放原内存？ --qiaozhanrong
-        chunks = newChunks;
+        if (newChunks == NULL)
+        {
+            // TODO: Mark crash signal and exit world
+        }
+        else chunks = newChunks;
     }
 }
 
@@ -62,7 +64,7 @@ size_t World::getChunkIndex(const Vec3i& pos) const
     do
     {
         middle = (first + last) / 2;
-        Vec3i& curr = chunks[middle]->getPos();
+        const Vec3i& curr = chunks[middle]->getPos();
         if (curr > pos)
             last = middle - 1;
         else if (curr < pos)

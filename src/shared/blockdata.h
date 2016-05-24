@@ -34,21 +34,26 @@ private:
     };
 
 public:
-
     BlockData() :data(0) {}
     BlockData(int id_, int brightness_, int state_) :id(id_), brightness(brightness_), state(state_) {}
     explicit BlockData(int data_) :data(data_) {}
     BlockData(const BlockData& rhs) :data(rhs.data) {}
 
-//    void operator= (const BlockData& rhs) { data = rhs.data; }
-    bool operator== (const BlockData& rhs) const { return id == rhs.id; }
+    bool operator== (const BlockData& rhs) const
+    { return id == rhs.id; }
 
-    int getID() const { return id; }
-    int getBrightness() const { return brightness; }
-    int getState() const { return state; }
-    void setID(int id_) { id = id_; }
-    void setBrightness(int brightness_) { brightness = brightness_; }
-    void setState(int state_) { state = state_; }
+    int getID() const
+    { return id; }
+    int getBrightness() const
+    { return brightness; }
+    int getState() const
+    { return state; }
+    void setID(int id_)
+    { id = id_; }
+    void setBrightness(int brightness_)
+    { brightness = brightness_; }
+    void setState(int state_)
+    { state = state_; }
 
 };
 

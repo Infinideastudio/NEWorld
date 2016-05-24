@@ -36,7 +36,7 @@ public:
         name(name_), solid(solid_), translucent(translucent_), opaque(opaque_), explodePower(explodePower_), hardness(hardness_) {}
 
     // Internal block name
-    std::string getName() const { return name; }
+    const std::string& getName() const { return name; }
     // Is solid block
     bool isSolid() const { return solid; }
     // Transparency determines how it will rendered
