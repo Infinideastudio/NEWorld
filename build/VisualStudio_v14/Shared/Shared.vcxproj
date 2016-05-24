@@ -70,12 +70,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <IncludePath>$(SolutionDir)..\..\dependencies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\dependencies\lib;$(SolutionDir)..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\..\dependencies\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib;$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)..\..\dependencies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\dependencies\lib;$(SolutionDir)..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\..\dependencies\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib;$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
