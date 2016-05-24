@@ -187,7 +187,6 @@
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
     <ClInclude Include="..\..\..\src\client\GUI\controls.h" />
     <ClInclude Include="..\..\..\src\client\GUI\graphics.h" />
-    <ClInclude Include="..\..\..\src\client\GUI\gui.h" />
     <ClInclude Include="..\..\..\src\client\GUI\window.h" />
     <ClInclude Include="..\..\..\src\client\receiver.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
