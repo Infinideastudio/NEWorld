@@ -30,7 +30,9 @@
 #ifdef NEWORLD_DEBUG
 //    ...
 #else
+#ifndef NDEBUG
     #define NDEBUG // NDEBUG flag for cassert
+#endif
 #endif
 
 #ifdef NEWORLD_USE_WINAPI
