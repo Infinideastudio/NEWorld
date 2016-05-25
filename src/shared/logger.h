@@ -1,6 +1,7 @@
 /*
- * NEWorld: An free game with similar rules to Minecraft.
- * Copyright (C) 2016 NEWorld Team
+ * This file is part of NGWorld.
+ * Then DLaboratory copied this file from NGWorld to NEWorld.
+ * (C) Copyright 2016 DLaboratory
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,87 +17,122 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MESSAGE_H
-#define MESSAGE_H
+#ifndef _LOGGER_H_
+#define _LOGGER_H_
 
 #include <vector>
 #include <string>
-#include <assert.h>
+#include <fstream>
+#include <sstream>
+
+enum CriticalLevel
+{
+    CriticalLevelVerbose,
+    CriticalLevelInfo,
+    CriticalLevelWarning,
+    CriticalLevelError,
+    CriticalLevelCount
+};
+
+static const char CriticalLevelString[][5] =
+{
+    "(VB)", // CriticalLevelVerbose
+    "(II)", // CriticalLevelInfo
+    "(WW)", // CriticalLevelWarning
+    "(EE)", // CriticalLevelError
+};
+
+class LoggerForwarder
+{
+public:
+    LoggerForwarder() {}
+    virtual ~LoggerForwarder() {}
+    virtual void forwardLog(const std::string &str) = 0;
+};
+
+class LoggerForwarderConsole : public LoggerForwarder
+{
+public:
+    void forwardLog(const std::string &str);
+};
+
+class LoggerForwarderFile : public LoggerForwarder
+{
+private:
+    const std::string m_file_name;
+    std::ofstream m_fout;
+public:
+    LoggerForwarderFile();
+    LoggerForwarderFile(const std::string &file_name);
+    ~LoggerForwarderFile();
+    void forwardLog(const std::string &str);
+};
+
+class LoggerMessageEnding
+{
+};
 
 class Logger
 {
-public:
-    /* 根据Xorg的日志信息级别，有
-     * (II) Information 信息
-     * (EE) Error 错误
-     * (WW) Warning 警告
-     * (NI) Not Implemented 没有实现
-     * 四个级别。四种级别的信息分别用括号括起来的双大写字母表示其等级。
-     * 若级别未知，用(??)表示。
-     *
-     * 从/var/log/Xorg.0.log截取下来的样例：
-    (WW) warning, (EE) error, (NI) not implemented, (??) unknown.
-    (WW) The directory "/usr/share/fonts/X11/cyrillic" does not exist.
-    (WW) NVIDIA(0):
-    (WW) NVIDIA(0): No modes were requested; the default mode "nvidia-auto-select"
-    (WW) NVIDIA(0): will be used as the requested mode.
-    (WW) NVIDIA(0):
-    (WW) Configured Mouse: No Device specified, looking for one...
-     */
-
-    // 卧槽NVIDIA什么鬼！ --qiaozhanrong
-
-    enum CriticalLevel
-    {
-        CRITICAL_LEVEL_INFORMATION,
-        CRITICAL_LEVEL_WARNING,
-        CRITICAL_LEVEL_ERROR,
-        CRITICAL_LEVEL_NOT_IMPLEMENTED
-    };
-
-    //存入一个消息，默认为(II)级别
-    void log(std::string information, CriticalLevel level = CRITICAL_LEVEL_INFORMATION);
-
-    //导出存储的所有日志信息到一个std::string中。
-    std::string exportAll();
-
-    void clear()
-    {
-        m_logs.clear();
-    }
-
-    void setDisplayToConsole(bool display)
-    {
-        m_displayToConsole = display;
-    }
-
 private:
-    std::vector<std::string> m_logs;
-    bool m_displayToConsole = false;
+    static const int forwarder_buffer_size = 8;
+    std::string m_forwarder_buffer[forwarder_buffer_size];
+    int m_forward_buf_position;
+    std::vector<std::pair<LoggerForwarder*, bool> > m_forwarders;
+    CriticalLevel m_notice_level;
+
+    // 在调制消息头的过程中，防止频繁地分配和释放内存，
+    // 提前一次性分配好一个长度为128字节的缓存空间。
+    // 在不够用的情况下，再临时分配和释放所需的内存。
+    char m_message_buffer[128];
+
+public:
+    Logger();
+    ~Logger();
+
+    void setNoticeLevel(CriticalLevel level)
+    {
+        m_notice_level = level;
+    }
+
+    void log(const std::string &str, CriticalLevel level = CriticalLevelVerbose);
 };
 
-inline Logger& getGlobalLogger()
+class LoggerStream
 {
-    static Logger globalLogger;
-    return globalLogger;
-}
+private:
+    const CriticalLevel m_notice_level;
+    Logger *m_logger;
+    std::ostringstream m_stream_buffer;
 
-inline void logInfo(std::string msg)
-{
-    getGlobalLogger().log(msg);
-}
+    // Initialize a LoggerStream instance without explicitly
+    // declare its notive level and bound logger is prohibited.
+    LoggerStream();
 
-inline void logWarning(std::string msg)
-{
-    getGlobalLogger().log(msg, Logger::CRITICAL_LEVEL_WARNING);
-}
+public:
+    LoggerStream(Logger *logger, const CriticalLevel notice_level)
+        : m_logger(logger), m_notice_level(notice_level) {}
 
-inline void logError(std::string msg)
-{
-    getGlobalLogger().log(msg, Logger::CRITICAL_LEVEL_ERROR);
-    assert(false);
-    // 顺便说一句，assert(false)在代码中的行为和assert(qiaozhanrong::AbstractSystems::LoveSystem::getCurrentGirlfriend()!=nullptr)的行为完全相同 --qiaozhanrong
-    // （好久没在注释里卖过萌了2333） --qiaozhanrong
-}
+    LoggerStream& operator << (const LoggerMessageEnding&)
+    {
+        m_logger->log(m_stream_buffer.str(), m_notice_level);
+        m_stream_buffer.str("");
+        return *this;
+    }
+
+    template <typename T>
+    LoggerStream& operator << (const T &val)
+    {
+        m_stream_buffer << val;
+        return *this;
+    }
+};
+
+extern LoggerMessageEnding logendl;
+extern Logger logger;
+extern LoggerStream verbosestream;
+extern LoggerStream infostream;
+extern LoggerStream warningstream;
+extern LoggerStream errorstream;
 
 #endif

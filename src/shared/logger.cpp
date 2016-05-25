@@ -1,6 +1,7 @@
 /*
- * NEWorld: An free game with similar rules to Minecraft.
- * Copyright (C) 2016 NEWorld Team
+ * This file is part of NGWorld.
+ * Then DLaboratory copied this file from NGWorld to NEWorld.
+ * (C) Copyright 2016 DLaboratory
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,60 +18,97 @@
  */
 
 #include "logger.h"
-#include <assert.h>
 #include <ctime>
-#include <sstream>
+#include <fstream>
 #include <iostream>
-#include <chrono>
-#include <ctime>
-#include <iomanip>
+#include <sstream>
+using namespace std;
 
-void Logger::log(std::string information, CriticalLevel level)
+void LoggerForwarderConsole::forwardLog(const std::string &str)
 {
-    std::stringstream ss;
+    cout << str;
+}
 
-    using namespace std::chrono;
-    auto now = system_clock::now();
-    time_t t = system_clock::to_time_t(now);
-    auto time = std::put_time(std::localtime(&t), "%Y/%m/%d %H:%M:%S");
-    ss << '[' << time << "] ";
-    switch (level)
-    {
-    case CRITICAL_LEVEL_INFORMATION:
-        ss << "(II) ";
-        break;
-    case CRITICAL_LEVEL_WARNING:
-        ss << "(WW) ";
-        break;
-    case CRITICAL_LEVEL_ERROR:
-        ss << "(EE) ";
-        break;
-    case CRITICAL_LEVEL_NOT_IMPLEMENTED:
-        ss << "(NI) ";
-        break;
-    default:
-        ss << "(?\?) ";
-    }
-    ss << information << std::endl;
-    m_logs.push_back(ss.str());
+LoggerForwarderFile::LoggerForwarderFile() : m_file_name("ngworld.log")
+{
+    m_fout.open(m_file_name.c_str(), ios::out | ios::app);
+}
 
-    if (m_displayToConsole)
+LoggerForwarderFile::LoggerForwarderFile(const string &file_name) : m_file_name(file_name)
+{
+    m_fout.open(m_file_name.c_str(), ios::out | ios::app);
+}
+
+LoggerForwarderFile::~LoggerForwarderFile()
+{
+    m_fout.close();
+}
+
+void LoggerForwarderFile::forwardLog(const std::string &str)
+{
+    m_fout << str;
+}
+
+// 使用默认配置，一个终端转发器，一个文件转发器
+Logger::Logger()
+{
+    m_forwarders.push_back(make_pair(new LoggerForwarderConsole(), true));
+    m_forwarders.push_back(make_pair(new LoggerForwarderFile(), false));
+    m_forward_buf_position = 0;
+    m_notice_level = CriticalLevelVerbose;
+}
+
+Logger::~Logger()
+{
+    int i;
+    for (vector<pair<LoggerForwarder*, bool> >::iterator it = m_forwarders.begin(); it != m_forwarders.end(); ++it)
     {
-        if (level == CRITICAL_LEVEL_ERROR)
+        if (it->second == false)
         {
-            std::cerr << ss.str();
+            for (i = 0; i < m_forward_buf_position; i++)
+                it->first->forwardLog(m_forwarder_buffer[i]);
         }
-        else
-        {
-            std::cout << ss.str();
-        }
+        delete it->first;
     }
 }
 
-std::string Logger::exportAll()
+void Logger::log(const string &str, CriticalLevel level)
 {
-    std::string ret;
-    for (std::vector<std::string>::iterator it = m_logs.begin(); it != m_logs.end(); ++it)
-        ret += *it;
-    return ret;
+    if(level < m_notice_level)
+        return;
+
+    // 制作消息头
+    char *p = m_message_buffer;
+    if(str.size() > 100) // 对于长消息，临时分配缓存
+        p = new char[str.size() + 20];
+    sprintf(p, "[%.3lf] %s %s\n", clock() * 1.0 / CLOCKS_PER_SEC, CriticalLevelString[level], str.c_str());
+    m_forwarder_buffer[m_forward_buf_position++] = (string)p;
+
+    // 转发消息
+    int i;
+    for (vector<pair<LoggerForwarder*, bool> >::iterator it = m_forwarders.begin(); it != m_forwarders.end(); ++it)
+    {
+        if (it->second) // 实时输出
+        {
+            it->first->forwardLog(p);
+        }
+        else if (m_forward_buf_position == forwarder_buffer_size) // dump缓存
+        {
+            for (i = 0; i < forwarder_buffer_size; i++)
+                it->first->forwardLog(m_forwarder_buffer[i]);
+        }
+    }
+
+    if (m_forward_buf_position == forwarder_buffer_size)
+        m_forward_buf_position = 0;
+
+    if(str.size() > 100)
+        delete p;
 }
+
+Logger logger;
+LoggerMessageEnding logendl;
+LoggerStream verbosestream(&logger, CriticalLevelVerbose);
+LoggerStream infostream(&logger, CriticalLevelInfo);
+LoggerStream warningstream(&logger, CriticalLevelWarning);
+LoggerStream errorstream(&logger, CriticalLevelError);

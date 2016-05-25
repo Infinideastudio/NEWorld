@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "network.h"
-#include "logger.h"
+#include <network.h>
+#include <logger.h>
 #include <cstdlib>
 #include <thread>
 #include <utility>
@@ -49,7 +49,7 @@ private:
             }
             else
             {
-                logInfo(m_socket.remote_endpoint().address().to_string() + " disconnected");
+                infostream << m_socket.remote_endpoint().address().to_string() << " disconnected" << logendl;
             }
         });
     }
@@ -66,7 +66,7 @@ private:
             }
             else
             {
-                logInfo(m_socket.remote_endpoint().address().to_string() + " disconnected");
+                infostream << m_socket.remote_endpoint().address().to_string() << " disconnected" << logendl;
             }
         });
     }
@@ -92,7 +92,7 @@ private:
         {
             if (!ec)
             {
-                logInfo(m_socket.remote_endpoint().address().to_string() + " connects to the server");
+                infostream << m_socket.remote_endpoint().address().to_string() << " connects to the server" << logendl;
                 std::make_shared<session>(std::move(m_socket))->start();
             }
             doAccept();
@@ -105,17 +105,17 @@ private:
 
 int main(int argc, char* argv[])
 {
-    getGlobalLogger().setDisplayToConsole(true);
-    logInfo("Server starts...");
-    logInfo("Server started");
+    infostream << "Server is starting..." << logendl;
+    infostream << "Server started" << logendl;
     try
     {
         server s(io_service, Port);
-
         io_service.run();
     }
     catch (std::exception& e)
-    { logError("Exception: " + std::string(e.what())); }
-    getGlobalLogger().log("Server is stoping...");
+    {
+        errorstream << "Exception: " << e.what() << logendl;
+    }
+    infostream << "Server is stoping..." << logendl;
     return 0;
 }
