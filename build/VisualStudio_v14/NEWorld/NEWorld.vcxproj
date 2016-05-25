@@ -234,6 +234,8 @@
     <ClCompile Include="..\..\..\src\client\GUI\window.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
     <ClCompile Include="..\..\..\src\client\networkutil.cpp" />
+    <ClCompile Include="..\..\..\src\client\receiver.cpp" />
+    <ClCompile Include="..\..\..\src\client\sender.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />
   </ItemGroup>

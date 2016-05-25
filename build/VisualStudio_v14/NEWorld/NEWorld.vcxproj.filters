@@ -148,5 +148,11 @@
     <ClCompile Include="..\..\..\src\client\networkutil.cpp">
       <Filter>Source\Network</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\client\receiver.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\sender.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
