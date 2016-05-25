@@ -9,3 +9,9 @@
     - OpenGL [官网](https://www.opengl.org/)  
     - libogg 1.3.2 [官网](https://www.xiph.org/)  
     - libvorbis 1.3.5 [官网](https://www.xiph.org/)  
+
+# 开发者注意事项
+
+0. 在Visual Studio中配置缩进为4个空格。
+0. 安装AStyle插件，设置`--style=allman --indent=spaces=4 --indent-namespaces --mode=c`选项。
+0. 在Git中配置行尾，在本地以CRLF(Windows)行尾保存文件，而远程以LF(UNIX)行尾提交文件。
