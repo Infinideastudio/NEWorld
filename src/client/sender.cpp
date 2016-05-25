@@ -20,11 +20,11 @@
 
 void senderThread()
 {
-	tcp::socket s(io_service);
-	tcp::resolver resolver(io_service);
-	boost::asio::connect(s, resolver.resolve({ "ip", std::to_string(Port) }));
+    tcp::socket s(io_service);
+    tcp::resolver resolver(io_service);
+    boost::asio::connect(s, resolver.resolve({ "ip", std::to_string(Port) }));
 
-	char request[PacketMaxLength];
-	size_t request_length = std::strlen(request);
-	boost::asio::write(s, boost::asio::buffer(request, request_length));
+    char request[PacketMaxLength];
+    size_t request_length = std::strlen(request);
+    boost::asio::write(s, boost::asio::buffer(request, request_length));
 }

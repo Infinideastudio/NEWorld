@@ -38,23 +38,33 @@ public:
 
     // Get the square of vector length, notice that the result can overflow. TODO: fixit
     T lengthSqr() const
-    { return x*x + y*y + z*z; }
+    {
+        return x*x + y*y + z*z;
+    }
 
     // Get vector length
     double length() const
-    { return sqrt(double(lengthSqr())); }
+    {
+        return sqrt(double(lengthSqr()));
+    }
 
     // Get the Euclidean Distance between vectors
     double euclideanDistance(const Vec3& rhs) const
-    { return (*this - rhs).length(); }
+    {
+        return (*this - rhs).length();
+    }
 
     // Get the Chebyshev Distance between vectors
     T chebyshevDistance(const Vec3& rhs) const
-    { return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z)); }
+    {
+        return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z));
+    }
 
     // Get the Manhattan Distance between vectors
     T manhattanDistance(const Vec3& rhs) const
-    { return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z); }
+    {
+        return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z);
+    }
 
     bool operator< (const Vec3& rhs) const
     {
@@ -68,25 +78,39 @@ public:
     }
 
     bool operator> (const Vec3& rhs) const
-    { return rhs < *this; }
+    {
+        return rhs < *this;
+    }
 
     bool operator<= (const Vec3& rhs) const
-    { return !(rhs < *this); }
+    {
+        return !(rhs < *this);
+    }
 
     bool operator>= (const Vec3& rhs) const
-    { return !(*this < rhs); }
+    {
+        return !(*this < rhs);
+    }
 
     bool operator== (const Vec3& rhs) const
-    { return x == rhs.x && y == rhs.y && z == rhs.z; }
+    {
+        return x == rhs.x && y == rhs.y && z == rhs.z;
+    }
 
     bool operator!= (const Vec3& rhs) const
-    { return !(*this == rhs); }
+    {
+        return !(*this == rhs);
+    }
 
     Vec3 operator+ (const Vec3& rhs) const
-    { return Vec3(x + rhs.x, y + rhs.y, z + rhs.z); }
+    {
+        return Vec3(x + rhs.x, y + rhs.y, z + rhs.z);
+    }
 
     Vec3 operator- (const Vec3& rhs) const
-    { return Vec3(x - rhs.x, y - rhs.y, z - rhs.z); }
+    {
+        return Vec3(x - rhs.x, y - rhs.y, z - rhs.z);
+    }
 };
 
 using  Vec3i = Vec3<int>;

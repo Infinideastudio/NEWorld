@@ -36,17 +36,35 @@ public:
         name(name_), solid(solid_), translucent(translucent_), opaque(opaque_), explodePower(explodePower_), hardness(hardness_) {}
 
     // Internal block name
-    const std::string& getName() const { return name; }
+    const std::string& getName() const
+    {
+        return name;
+    }
     // Is solid block
-    bool isSolid() const { return solid; }
+    bool isSolid() const
+    {
+        return solid;
+    }
     // Transparency determines how it will rendered
-    bool isTranslucent() const { return translucent; }
+    bool isTranslucent() const
+    {
+        return translucent;
+    }
     // Opaque means it blocks light
-    bool isOpaque() const { return opaque; }
+    bool isOpaque() const
+    {
+        return opaque;
+    }
     // Explode power, if it isn't a explosive set this to 0
-    int getExplodePower() const { return explodePower; }
+    int getExplodePower() const
+    {
+        return explodePower;
+    }
     // Hardness
-    int getHardness() const { return hardness; }
+    int getHardness() const
+    {
+        return hardness;
+    }
 
 };
 

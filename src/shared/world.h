@@ -36,8 +36,8 @@ private:
     size_t m_chunkArraySize;
     // Loaded chunks count
     size_t m_chunkCount;
-	// World name
-	std::string m_name;
+    // World name
+    std::string m_name;
 
     // Expand chunk array
     void expandChunkArray(size_t expandCount);
@@ -51,29 +51,29 @@ private:
     size_t getChunkIndex(const Vec3i& chunkPos) const;
 
 public:
-	World() : m_chunkCount(0), m_chunkArraySize(1024)
+    World() : m_chunkCount(0), m_chunkArraySize(1024)
     {
-		m_chunks = new Chunk*[m_chunkArraySize];
+        m_chunks = new Chunk*[m_chunkArraySize];
         // m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
     }
     ~World();
     World(const World&) = delete;
     World& operator= (const World&) = delete;
-	
-	// Get world name
-	std::string getWorldName()
-	{
-		return m_name;
-	}
+
+    // Get world name
+    std::string getWorldName()
+    {
+        return m_name;
+    }
     // Get chunk count
     size_t getChunkCount() const
     {
-		return m_chunkCount;
-	}
-	// Get chunk pointer by index
-	Chunk* getChunkPtr(size_t index) const;
-	// Get chunk pointer by chunk coordinates
-	Chunk* getChunkPtr(const Vec3i& chunkPos) const;
+        return m_chunkCount;
+    }
+    // Get chunk pointer by index
+    Chunk* getChunkPtr(size_t index) const;
+    // Get chunk pointer by chunk coordinates
+    Chunk* getChunkPtr(const Vec3i& chunkPos) const;
     // Add chunk
     Chunk* addChunk(const Vec3i& chunkPos);
     // Delete chunk
@@ -83,8 +83,8 @@ public:
     // Convert world position to chunk coordinate (one axis)
     static int getChunkPos(int pos)
     {
-		return pos >> ChunkSizeLog2;
-	}
+        return pos >> ChunkSizeLog2;
+    }
 #else
     // Convert world position to chunk coordinate (one axis)
     static int getChunkPos(int pos)
@@ -96,18 +96,18 @@ public:
     // Convert world position to chunk coordinate (all axes)
     static Vec3i&& getChunkPos(const Vec3i& pos)
     {
-		return Vec3i(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z));
-	}
+        return Vec3i(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z));
+    }
     // Convert world position to block coordinate in chunk (one axis)
     static int getBlockPos(int pos)
     {
-		return pos & (ChunkSize - 1);
-	}
+        return pos & (ChunkSize - 1);
+    }
     // Convert world position to block coordinate in chunk (all axes)
     static Vec3i&& getBlockPos(const Vec3i& pos)
     {
-		return Vec3i(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z));
-	}
+        return Vec3i(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z));
+    }
     // Get block data
     BlockData getBlock(const Vec3i& pos) const;
     // Get block reference

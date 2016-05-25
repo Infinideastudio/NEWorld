@@ -20,7 +20,7 @@
 #define COMMON_H_
 
 #ifdef _DEBUG
-    #define NEWORLD_DEBUG // Main debug flag
+#define NEWORLD_DEBUG // Main debug flag
 #endif
 
 #define NEWORLD_USE_WINAPI
@@ -31,12 +31,12 @@
 //    ...
 #else
 #ifndef NDEBUG
-    #define NDEBUG // NDEBUG flag for cassert
+#define NDEBUG // NDEBUG flag for cassert
 #endif
 #endif
 
 #ifdef NEWORLD_USE_WINAPI
-    #include <Windows.h> // Windows API
+#include <Windows.h> // Windows API
 #else
 //    #include <pthread.h> // Or <thread> <mutex>
 #endif
@@ -44,7 +44,7 @@
 #include <cassert>
 
 #if (-1)>>1 == -1
-    #define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
+#define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
 #endif
 
 #endif // !COMMON_H_

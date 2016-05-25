@@ -26,9 +26,9 @@ class ChunkPointerArray
 {
 private:
     // Array
-	Chunk** m_array;
+    Chunk** m_array;
     // Array size
-	int m_size, m_size2, m_size3;
+    int m_size, m_size2, m_size3;
     // Origin
     Vec3i m_org;
 
@@ -42,16 +42,22 @@ public:
         memset(m_array, 0, m_size3*sizeof(Chunk*));
     }
     ~ChunkPointerArray()
-    { delete[] m_array; }
+    {
+        delete[] m_array;
+    }
 
     // Move array by delta
-	void move(const Vec3i& delta);
+    void move(const Vec3i& delta);
     // Move array to pos
-	void moveTo(const Vec3i& pos)
-    { move(pos - m_org); }
+    void moveTo(const Vec3i& pos)
+    {
+        move(pos - m_org);
+    }
     // Check if specific element is inside array range
-	bool elementExists(const Vec3i& pos) const
-    { return pos.x >= 0 && pos.x < m_size && pos.z >= 0 && pos.z < m_size && pos.y >= 0 && pos.y < m_size; }
+    bool elementExists(const Vec3i& pos) const
+    {
+        return pos.x >= 0 && pos.x < m_size && pos.z >= 0 && pos.z < m_size && pos.y >= 0 && pos.y < m_size;
+    }
     // Get chunk pointer from array
     Chunk* getChunkPtr(Vec3i pos) const
     {

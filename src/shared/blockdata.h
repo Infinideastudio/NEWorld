@@ -40,20 +40,34 @@ public:
     BlockData(const BlockData& rhs) :data(rhs.data) {}
 
     bool operator== (const BlockData& rhs) const
-    { return id == rhs.id; }
+    {
+        return id == rhs.id;
+    }
 
     int getID() const
-    { return id; }
+    {
+        return id;
+    }
     int getBrightness() const
-    { return brightness; }
+    {
+        return brightness;
+    }
     int getState() const
-    { return state; }
+    {
+        return state;
+    }
     void setID(int id_)
-    { id = id_; }
+    {
+        id = id_;
+    }
     void setBrightness(int brightness_)
-    { brightness = brightness_; }
+    {
+        brightness = brightness_;
+    }
     void setState(int state_)
-    { state = state_; }
+    {
+        state = state_;
+    }
 
 };
 

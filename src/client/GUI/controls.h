@@ -30,7 +30,10 @@ private:
 public:
     Margin() {};
     Margin(Rect _relative_ps, Rect _relative_pc) {};
-    Rect getAbsolutePos(Rect Parent_Rect) { return Rect(); };
+    Rect getAbsolutePos(Rect Parent_Rect)
+    {
+        return Rect();
+    };
 };
 
 enum FocusOp

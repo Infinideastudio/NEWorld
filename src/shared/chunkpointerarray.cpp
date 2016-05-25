@@ -20,18 +20,22 @@
 
 void ChunkPointerArray::move(const Vec3i& delta)
 {
-	Chunk** arr = new Chunk*[m_size3];
+    Chunk** arr = new Chunk*[m_size3];
     Vec3i pos;
-	for (pos.x = 0; pos.x < m_size; pos.x++) {
-		for (pos.y = 0; pos.y < m_size; pos.y++) {
-			for (pos.z = 0; pos.z < m_size; pos.z++) {
-				if (elementExists(pos + delta))
+    for (pos.x = 0; pos.x < m_size; pos.x++)
+    {
+        for (pos.y = 0; pos.y < m_size; pos.y++)
+        {
+            for (pos.z = 0; pos.z < m_size; pos.z++)
+            {
+                if (elementExists(pos + delta))
                     arr[pos.x*m_size2 + pos.y*m_size + pos.z] = m_array[(pos.x + delta.x)*m_size2 + (pos.y + delta.y)*m_size + (pos.z + delta.z)];
-				else arr[pos.x*m_size2 + pos.y*m_size + pos.z] = nullptr;
-			}
-		}
-	}
-	delete[] m_array;
-	m_array = arr;
+                else
+                    arr[pos.x*m_size2 + pos.y*m_size + pos.z] = nullptr;
+            }
+        }
+    }
+    delete[] m_array;
+    m_array = arr;
     m_org = m_org + delta;
 }

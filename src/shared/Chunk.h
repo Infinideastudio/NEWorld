@@ -37,7 +37,9 @@ public:
 
     // Get chunk position
     const Vec3i& getPos() const
-    { return m_pos; }
+    {
+        return m_pos;
+    }
 
     // Get block data in this chunk
     BlockData getBlock(const Vec3i& pos) const
