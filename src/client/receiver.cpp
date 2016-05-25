@@ -16,13 +16,16 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SENDER_H_
-#define SENDER_H_
+#include "receiver.h"
 
-#include <network.h>
-#include <cstdlib>
-#include <cstring>
+void receiverThread()
+{
+	boost::asio::io_service io_service;
 
-void senderThread();
+	tcp::socket s(io_service);
+	tcp::resolver resolver(io_service);
+	boost::asio::connect(s, resolver.resolve({ "ip", std::to_string(Port) }));
 
-#endif // SENDER_H_
+	char reply[PacketMaxLength];
+	size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, request_length));
+}

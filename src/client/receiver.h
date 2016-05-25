@@ -19,20 +19,10 @@
 #ifndef RECEIVER_H_
 #define RECEIVER_H_
 
-#include "network.h"
+#include <network.h>
 #include <cstdlib>
 #include <cstring>
 
-void receiverThread()
-{
-    boost::asio::io_service io_service;
-
-    tcp::socket s(io_service);
-    tcp::resolver resolver(io_service);
-    boost::asio::connect(s, resolver.resolve({ "ip", std::to_string(Port) }));
-
-    char reply[PacketMaxLength];
-    size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, request_length));
-}
+void ReceiverThread();
 
 #endif // RECEIVER_H_
