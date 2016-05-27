@@ -28,7 +28,7 @@ using std::max;
 
 template<typename T>
 class Vec3:
-    boost::totally_ordered<Vec3<T> >
+    boost::totally_ordered<Vec3<T>, boost::additive<Vec3<T> > >
 {
 public:
     T x, y, z;
@@ -85,14 +85,20 @@ public:
         return x == rhs.x && y == rhs.y && z == rhs.z;
     }
 
-    Vec3 operator+ (const Vec3& rhs) const
+    Vec3& operator+= (const Vec3& rhs)
     {
-        return Vec3(x + rhs.x, y + rhs.y, z + rhs.z);
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        return *this;
     }
 
-    Vec3 operator- (const Vec3& rhs) const
+    Vec3& operator-= (const Vec3& rhs)
     {
-        return Vec3(x - rhs.x, y - rhs.y, z - rhs.z);
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        return *this;
     }
 };
 
