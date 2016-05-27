@@ -19,7 +19,7 @@
 #ifndef RECEIVER_H_
 #define RECEIVER_H_
 
-#include <network.h>
+#include "network.h"
 #include <cstdlib>
 #include <cstring>
 
