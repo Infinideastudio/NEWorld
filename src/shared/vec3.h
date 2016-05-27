@@ -24,8 +24,11 @@
 using std::abs;
 using std::max;
 
+#include <boost/operators.hpp>
+
 template<typename T>
-class Vec3
+class Vec3:
+    boost::totally_ordered<Vec3<T> >
 {
 public:
     T x, y, z;
@@ -77,29 +80,9 @@ public:
         return false;
     }
 
-    bool operator> (const Vec3& rhs) const
-    {
-        return rhs < *this;
-    }
-
-    bool operator<= (const Vec3& rhs) const
-    {
-        return !(rhs < *this);
-    }
-
-    bool operator>= (const Vec3& rhs) const
-    {
-        return !(*this < rhs);
-    }
-
     bool operator== (const Vec3& rhs) const
     {
         return x == rhs.x && y == rhs.y && z == rhs.z;
-    }
-
-    bool operator!= (const Vec3& rhs) const
-    {
-        return !(*this == rhs);
     }
 
     Vec3 operator+ (const Vec3& rhs) const
