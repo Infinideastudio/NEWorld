@@ -27,5 +27,5 @@ void receiverThread()
     boost::asio::connect(s, resolver.resolve({ "ip", std::to_string(Port) }));
 
     char reply[PacketMaxLength];
-    size_t reply_length = boost::asio::read(s, boost::asio::buffer(reply, request_length));
+    size_t reply_length = s.read_some(boost::asio::buffer(reply, request_length));
 }
