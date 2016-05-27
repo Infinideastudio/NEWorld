@@ -21,6 +21,9 @@
 
 #include "Graphics.h"
 #include <functional>
+#include <memory>
+#include <map>
+#include <vector>
 
 class Margin : public UIObject
 {
@@ -58,8 +61,9 @@ enum CursorOp
 
 class Control :public UIObject
 {
-private:
+protected:
     Margin cMargin;
+    bool enabled, mouseOn, pressed, focused;
 public:
     Rect tempAbsoluteRect;
     Control* parent;
@@ -91,18 +95,146 @@ using OnKeyFunc         = std::function<void(Control* Sender, int Key, ButtonAct
 using OnCharInputFunc   = std::function<void(Control* Sender, wchar_t Char)>;
 using OnDropFunc        = std::function<void(Control* Sender, int DropCount, const char** Paths)>;
 
-class Button
+////////////////////////////////////////////////////////////
+
+//    Basic Control Definitions
+
+////////////////////////////////////////////////////////////
+
+class Label :public Control
 {
 public:
-    Brush& backgroundBrush;
-    Brush& borderBrush;
-    Brush& backgroundHighlightBrush;
-    Brush& borderHighlightBrush;
-    Brush& backgroundOnPressBrush;
-    Brush& borderOnPressBrush;
+    std::shared_ptr<Brush> backgroundBrush;
+    std::shared_ptr<Brush> borderBrush;
+
+    std::string caption;
+    void render();
     
+    Label();
+    Label(std::string _xName, Margin _Margin, std::string _caption);
+};
+
+class Button :public Control
+{
+public:
+    std::shared_ptr<Brush> backgroundBrush;
+    std::shared_ptr<Brush> borderBrush;
+    std::shared_ptr<Brush> backgroundHighlightBrush;
+    std::shared_ptr<Brush> borderHighlightBrush;
+    std::shared_ptr<Brush> backgroundOnPressBrush;
+    std::shared_ptr<Brush> borderOnPressBrush;
+    
+    NotifyFunc onClick;
+
     std::string caption;
     void render();
     void mouseButtonFunc(MouseButton Button, ButtonAction Action);
-}
+
+    Button();
+    Button(std::string _xName, Margin _Margin, std::string caption, NotifyFunc _onClick);
+};
+
+class TextBox :public Control
+{
+public:
+    std::shared_ptr<Brush> backgroundBrush;
+    std::shared_ptr<Brush> borderBrush;
+    std::shared_ptr<Brush> backgroundHighlightBrush;
+    std::shared_ptr<Brush> borderHighlightBrush;
+    std::shared_ptr<Brush> crusorBrush;
+
+    NotifyFunc onEditDone;
+
+    std::wstring text;
+    std::string mask;
+
+    void render();
+    void mouseButtonFunc(MouseButton Button, ButtonAction Action);
+    void charInputFunc(wchar_t Char);
+
+    TextBox();
+    TextBox(std::string _xName, Margin _Margin, std::wstring _text, std::string _mask, NotifyFunc _onEditDone);
+};
+
+enum CheckStat
+{
+    Unchecked = 0, Checked, UnKnown
+};
+
+class CheckBox :public Control
+{
+public:
+    std::shared_ptr<Brush> backgroundBrush;
+    std::shared_ptr<Brush> borderBrush;
+    std::shared_ptr<Brush> backgroundHighlightBrush;
+    std::shared_ptr<Brush> borderHighlightBrush;
+    std::shared_ptr<Brush> checkBrush;
+    std::shared_ptr<Brush> checkHeightLightBrush;
+
+    NotifyFunc onStatChange;
+    
+    bool threeStatus;
+    CheckStat stat;
+
+    void render();
+    void mouseButtonFunc(MouseButton Button, ButtonAction Action);
+
+    CheckBox();
+    CheckBox(std::string _xName, Margin _Margin, bool _threeStat, CheckStat _stat, NotifyFunc _onStatChange);
+};
+
+struct GridChildRecord
+{
+    std::shared_ptr<Control> control;
+    int gridX, gridY;
+};
+
+class Grid : public Control
+{
+protected:
+    std::vector<GridChildRecord> children;   //where the table is actualy stored
+    std::map<std::string, int> childReference; //only a reference by xName
+public:
+    void addControls(std::vector<GridChildRecord> newControls);
+    void deleteControl(std::string name);
+
+    GridChildRecord* getControl(std::string name);
+
+    void render();
+    void focusFunc(FocusOp Stat);
+    void mouseButtonFunc(MouseButton Button, ButtonAction Action);
+    void cursorPosFunc(double x, double y);
+    void crusorEnterFunc(CursorOp Stat);
+    void scrollFunc(double dx, double dy);
+    void keyFunc(int Key, ButtonAction Action);
+    void charInputFunc(wchar_t Char);
+    void dropFunc(int DropCount, const char** Paths);
+
+    Grid();
+    Grid(std::string _xName, Margin _Margin, std::vector<GridChildRecord> newControls);
+};
+
+class Window;
+
+class Page : public Control
+{
+public:
+    Window* parent;
+    std::shared_ptr<Grid> content;
+
+    void render();
+    void focusFunc(FocusOp Stat);
+    void mouseButtonFunc(MouseButton Button, ButtonAction Action);
+    void cursorPosFunc(double x, double y);
+    void crusorEnterFunc(CursorOp Stat);
+    void scrollFunc(double dx, double dy);
+    void keyFunc(int Key, ButtonAction Action);
+    void charInputFunc(wchar_t Char);
+    void dropFunc(int DropCount, const char** Paths);
+    
+    Page();
+    Page(std::string _xName);
+
+    virtual ~Page();
+};
 #endif // !CONTROLS_H_

@@ -42,3 +42,11 @@ bool Window::init()
 
     return true;
 }
+
+void Window::pushNavigationOperation(const NavigationOperation & operation)
+{
+}
+
+void Window::processNavigationOperations()
+{
+}

@@ -20,18 +20,38 @@
 #define WINDOW_H_
 
 #include <GLFW/glfw3.h>
+#include "controls.h"
+#include <memory>
+#include <deque>
+
+enum NavigationOperationTypes
+{
+    PushPage, PopPage, ClearPages, BackToFrontPage
+};
+
+struct NavigationOperation
+{
+    NavigationOperationTypes operation;
+    std::shared_ptr<Page> arg;
+};
 
 class Window
 {
 private:
     GLFWwindow* m_win;
-
+    //For Navigation Service
+    std::deque<std::shared_ptr<Page>> pages;
+    std::deque<NavigationOperation> operationquery;
 public:
     Window() : m_win(nullptr) { init(); }
     bool init();
     bool isKeyPressed(int key) const { return glfwGetKey(m_win, key) == GLFW_PRESS; }
     void setCurrentDraw() const { glfwMakeContextCurrent(m_win); }
     operator GLFWwindow*() const { return m_win; }
+
+    //Navigation Operations
+    void pushNavigationOperation(const NavigationOperation& operation);
+    void processNavigationOperations();
 };
 
 #endif // !WINDOW_H_
