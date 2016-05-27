@@ -34,7 +34,7 @@ private:
     Chunk** m_chunks;
     // Size of chunk array
     size_t m_chunkArraySize;
-    // Loaded chunks count
+    // Loaded chunk count
     size_t m_chunkCount;
     // World name
     std::string m_name;
@@ -42,11 +42,29 @@ private:
     // Expand chunk array
     void expandChunkArray(size_t expandCount);
     // Reduce chunk array
-    void reduceChunkArray(size_t reduceCount);
+    void reduceChunkArray(size_t reduceCount)
+    {
+        assert(m_chunkCount >= reduceCount);
+        m_chunkCount -= reduceCount;
+    }
+    
     // New pointer at chunks[index]
-    void newChunkPtr(size_t index);
+    void newChunkPtr(size_t index)
+    {
+        expandChunkArray(1);
+        for (size_t i = m_chunkCount - 1; i > index; i--)
+            m_chunks[i] = m_chunks[i - 1];
+        m_chunks[index] = nullptr;
+    }
+    
     // Erase pointer at chunks[index]
-    void eraseChunkPtr(size_t index);
+    void eraseChunkPtr(size_t index)
+    {
+        for (size_t i = index; i < m_chunkCount - 1; i++)
+            m_chunks[i] = m_chunks[i + 1];
+        reduceChunkArray(1);
+    }
+    
     // Search chunk index, or the index the chunk should insert into
     size_t getChunkIndex(const Vec3i& chunkPos) const;
 

@@ -35,27 +35,6 @@ void World::expandChunkArray(size_t c)
     }
 }
 
-void World::reduceChunkArray(size_t c)
-{
-    assert(m_chunkCount >= c);
-    m_chunkCount -= c;
-}
-
-void World::newChunkPtr(size_t index)
-{
-    expandChunkArray(1);
-    for (size_t i = m_chunkCount - 1; i > index; i--)
-        m_chunks[i] = m_chunks[i - 1];
-    m_chunks[index] = nullptr;
-}
-
-void World::eraseChunkPtr(size_t index)
-{
-    for (size_t i = index; i < m_chunkCount - 1; i++)
-        m_chunks[i] = m_chunks[i + 1];
-    reduceChunkArray(1);
-}
-
 size_t World::getChunkIndex(const Vec3i& pos) const
 {
     // Binary search
