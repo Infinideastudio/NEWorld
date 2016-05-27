@@ -92,36 +92,32 @@ double AABB::maxMoveOnZclip(const AABB &box, double orgmove) const
     return orgmove;
 }
 
-AABB AABB::expand(double x, double y, double z) const
+AABB AABB::expand(const Vec3d& arg) const
 {
     AABB res = *this;
 
-    if (x > 0.0)
-        res.max.x += x;
+    if (arg.x > 0.0)
+        res.max.x += arg.x;
     else
-        res.min.x += x;
+        res.min.x += arg.x;
 
-    if (y > 0.0)
-        res.max.y += y;
+    if (arg.y > 0.0)
+        res.max.y += arg.y;
     else
-        res.min.y += y;
+        res.min.y += arg.y;
 
-    if (z > 0.0)
-        res.max.z += z;
+    if (arg.z > 0.0)
+        res.max.z += arg.z;
     else
-        res.min.z += z;
+        res.min.z += arg.z;
 
     return res;
 }
 
-void AABB::move(double x, double y, double z)
+void AABB::move(const Vec3d& arg)
 {
-    min.x += x;
-    min.y += y;
-    min.z += z;
-    max.x += x;
-    max.y += y;
-    max.z += z;
+    min += arg;
+    max += arg;
 }
 
 void AABB::moveTo(double x, double y, double z)

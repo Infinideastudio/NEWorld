@@ -30,7 +30,9 @@ public:
     Vec3d max; // Max bound
 
     AABB() {}
-    AABB(Vec3d _min, Vec3d _max) :min(_min), max(_max) {}
+    AABB(const Vec3d& _min, const Vec3d& _max) :min(_min), max(_max) {}
+    AABB(const AABB&) = default;
+    AABB(AABB&&) = default;
 
     // Is intersect on X axis
     bool intersectX(const AABB &anotherAABB) const;
@@ -47,9 +49,9 @@ public:
     // Get max move distance <= original_move_distance on Z axis, when blocked by another AABB
     double maxMoveOnZclip(const AABB &anotherAABB, double originalMoveDistance) const;
     // Get expanded AABB
-    AABB expand(double expandX, double expandY, double expandZ) const;
+    AABB expand(const Vec3d& arg) const;
     // Move AABB
-    void move(double deltaX, double deltaY, double deltaZ);
+    void move(const Vec3d& arg);
     // Move the center of this AABB to target position
     void moveTo(double targetX, double targetY, double targetZ);
 
