@@ -110,7 +110,7 @@ public:
     std::string caption;
     void render();
     
-    Label();
+    Label() {};
     Label(std::string _xName, Margin _Margin, std::string _caption);
 };
 
@@ -130,8 +130,8 @@ public:
     void render();
     void mouseButtonFunc(MouseButton Button, ButtonAction Action);
 
-    Button();
-    Button(std::string _xName, Margin _Margin, std::string caption, NotifyFunc _onClick);
+    Button() {};
+    Button(std::string _xName, Margin _Margin, std::string _caption, NotifyFunc _onClick);
 };
 
 class TextBox :public Control
@@ -152,7 +152,7 @@ public:
     void mouseButtonFunc(MouseButton Button, ButtonAction Action);
     void charInputFunc(wchar_t Char);
 
-    TextBox();
+    TextBox() {};
     TextBox(std::string _xName, Margin _Margin, std::wstring _text, std::string _mask, NotifyFunc _onEditDone);
 };
 
@@ -179,7 +179,7 @@ public:
     void render();
     void mouseButtonFunc(MouseButton Button, ButtonAction Action);
 
-    CheckBox();
+    CheckBox() {};
     CheckBox(std::string _xName, Margin _Margin, bool _threeStat, CheckStat _stat, NotifyFunc _onStatChange);
 };
 
@@ -210,7 +210,7 @@ public:
     void charInputFunc(wchar_t Char);
     void dropFunc(int DropCount, const char** Paths);
 
-    Grid();
+    Grid() {};
     Grid(std::string _xName, Margin _Margin, std::vector<GridChildRecord> newControls);
 };
 
@@ -232,9 +232,9 @@ public:
     void charInputFunc(wchar_t Char);
     void dropFunc(int DropCount, const char** Paths);
     
-    Page();
+    Page() {};
     Page(std::string _xName);
 
-    virtual ~Page();
+    virtual ~Page() {};
 };
 #endif // !CONTROLS_H_

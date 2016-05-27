@@ -17,3 +17,148 @@
 */
 
 #include "controls.h"
+
+void Label::render()
+{
+}
+
+Label::Label(std::string _xName, Margin _Margin, std::string _caption):
+    Control(_xName, _Margin), caption(_caption)
+{
+}
+
+void Button::render()
+{
+}
+
+void Button::mouseButtonFunc(MouseButton Button, ButtonAction Action)
+{
+}
+
+Button::Button(std::string _xName, Margin _Margin, std::string _caption, NotifyFunc _onClick):
+    Control(_xName, _Margin), caption(_caption), onClick(_onClick)
+{
+}
+
+void TextBox::render()
+{
+}
+
+void TextBox::mouseButtonFunc(MouseButton Button, ButtonAction Action)
+{
+}
+
+void TextBox::charInputFunc(wchar_t Char)
+{
+}
+
+TextBox::TextBox(std::string _xName, Margin _Margin, std::wstring _text, std::string _mask, NotifyFunc _onEditDone) :
+    Control(_xName, _Margin), text(_text), mask(_mask), onEditDone(_onEditDone)
+{
+}
+
+void CheckBox::render()
+{
+}
+
+void CheckBox::mouseButtonFunc(MouseButton Button, ButtonAction Action)
+{
+}
+
+CheckBox::CheckBox(std::string _xName, Margin _Margin, bool _threeStat, CheckStat _stat, NotifyFunc _onStatChange) :
+    Control(_xName, _Margin), threeStatus(_threeStat), stat(_stat), onStatChange(_onStatChange)
+{
+}
+
+void Grid::addControls(std::vector<GridChildRecord> newControls)
+{
+}
+
+void Grid::deleteControl(std::string name)
+{
+}
+
+GridChildRecord * Grid::getControl(std::string name)
+{
+    return nullptr;
+}
+
+void Grid::render()
+{
+}
+
+void Grid::focusFunc(FocusOp Stat)
+{
+}
+
+void Grid::mouseButtonFunc(MouseButton Button, ButtonAction Action)
+{
+}
+
+void Grid::cursorPosFunc(double x, double y)
+{
+}
+
+void Grid::crusorEnterFunc(CursorOp Stat)
+{
+}
+
+void Grid::scrollFunc(double dx, double dy)
+{
+}
+
+void Grid::keyFunc(int Key, ButtonAction Action)
+{
+}
+
+void Grid::charInputFunc(wchar_t Char)
+{
+}
+
+void Grid::dropFunc(int DropCount, const char ** Paths)
+{
+}
+
+Grid::Grid(std::string _xName, Margin _Margin, std::vector<GridChildRecord> newControls)
+{
+}
+
+void Page::render()
+{
+}
+
+void Page::focusFunc(FocusOp Stat)
+{
+}
+
+void Page::mouseButtonFunc(MouseButton Button, ButtonAction Action)
+{
+}
+
+void Page::cursorPosFunc(double x, double y)
+{
+}
+
+void Page::crusorEnterFunc(CursorOp Stat)
+{
+}
+
+void Page::scrollFunc(double dx, double dy)
+{
+}
+
+void Page::keyFunc(int Key, ButtonAction Action)
+{
+}
+
+void Page::charInputFunc(wchar_t Char)
+{
+}
+
+void Page::dropFunc(int DropCount, const char ** Paths)
+{
+}
+
+Page::Page(std::string _xName)
+{
+}
