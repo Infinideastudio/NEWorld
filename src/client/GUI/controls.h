@@ -68,7 +68,8 @@ public:
     Control() {}
     Control(std::string _xName, Margin _Margin):parent(nullptr) {}
 
-    virtual void focusFunc(FocusOp Stat) = 0;
+    virtual void render() {};
+    virtual void focusFunc(FocusOp Stat) {};
     virtual void mouseButtonFunc(MouseButton Button, ButtonAction Action) {};
     virtual void cursorPosFunc(double x, double y) {};
     virtual void crusorEnterFunc(CursorOp Stat) {};
@@ -90,4 +91,18 @@ using OnKeyFunc         = std::function<void(Control* Sender, int Key, ButtonAct
 using OnCharInputFunc   = std::function<void(Control* Sender, wchar_t Char)>;
 using OnDropFunc        = std::function<void(Control* Sender, int DropCount, const char** Paths)>;
 
+class Button
+{
+public:
+    Brush& backgroundBrush;
+    Brush& borderBrush;
+    Brush& backgroundHighlightBrush;
+    Brush& borderHighlightBrush;
+    Brush& backgroundOnPressBrush;
+    Brush& borderOnPressBrush;
+    
+    std::string caption;
+    void render();
+    void mouseButtonFunc(MouseButton Button, ButtonAction Action);
+}
 #endif // !CONTROLS_H_
