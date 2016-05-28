@@ -37,9 +37,34 @@ bool Window::init()
         glfwTerminate();
         return false;
     }
-
     makeCurrentDrawTarget();
-
+    glfwSetMouseButtonCallback(m_win, [this](GLFWwindow*, int button, int action, int) mutable ->void
+    {
+        MouseButton b;
+        switch (button)
+        {
+        case GLFW_MOUSE_BUTTON_LEFT:
+            button = MouseButton::Left;
+            break;
+        case GLFW_MOUSE_BUTTON_RIGHT:
+            button = MouseButton::Right;
+            break;
+        case GLFW_MOUSE_BUTTON_MIDDLE:
+            button = MouseButton::Middle;
+            break;
+        case GLFW_MOUSE_BUTTON_5:
+            button = MouseButton::Preserved1;
+            break;
+        case GLFW_MOUSE_BUTTON_6:
+            button = MouseButton::Preserved2;
+            break;
+        default:
+            break;
+        }
+        m_pages[0]->content->mouseButtonFunc(b, (ButtonAction)action);
+        return;
+    }
+    );
     return true;
 }
 
@@ -54,13 +79,24 @@ void Window::processNavigationOperations()
     {
         NavigationOperation curr = m_operationQueries.front();
         m_operationQueries.pop();
-        if (curr.operation == NavigationOperationTypes::PushPage) m_pages.push(curr.arg);
-        else if (curr.operation == NavigationOperationTypes::PopPage) m_pages.pop();
-        else if (curr.operation == NavigationOperationTypes::ClearPages) while (!m_pages.empty()) m_pages.pop();
-        else if (curr.operation == NavigationOperationTypes::BackToFrontPage)
+        switch (curr.operation)
         {
+        case NavigationOperationTypes::PushPage:
+            m_pages.push_front(curr.arg);
+            break;
+        case NavigationOperationTypes::PopPage:
+            m_pages.pop_front();
+            break;
+        case NavigationOperationTypes::ClearPages:
+            m_pages.clear();
+            break;
+        case NavigationOperationTypes::BackToFrontPage:
             assert(m_pages.size() >= 1);
-            while (m_pages.size() > 1) m_pages.pop();
+            while (m_pages.size() > 1) m_pages.pop_front();
+            break;
+        default:
+            break;
         }
+        
     }
 }

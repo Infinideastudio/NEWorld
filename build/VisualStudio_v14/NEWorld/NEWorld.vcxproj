@@ -185,6 +185,7 @@
     <ClInclude Include="..\..\..\src\client\Audio\CWaves.h" />
     <ClInclude Include="..\..\..\src\client\Audio\Framework.h" />
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
+    <ClInclude Include="..\..\..\src\client\GUI\application.h" />
     <ClInclude Include="..\..\..\src\client\GUI\controls.h" />
     <ClInclude Include="..\..\..\src\client\GUI\graphics.h" />
     <ClInclude Include="..\..\..\src\client\GUI\window.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="..\..\..\src\client\Audio\CWaves.cpp" />
     <ClCompile Include="..\..\..\src\client\Audio\Framework.cpp" />
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp" />
+    <ClCompile Include="..\..\..\src\client\GUI\application.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\controls.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\graphics.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\window.cpp" />

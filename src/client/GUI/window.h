@@ -21,6 +21,7 @@
 
 #include <GLFW/glfw3.h>
 #include <memory>
+#include <deque>
 #include <queue>
 #include <common.h>
 #include "controls.h"
@@ -41,7 +42,7 @@ class Window
 private:
     GLFWwindow* m_win;
     // For navigation
-    std::queue<std::shared_ptr<Page> > m_pages;
+    std::deque<std::shared_ptr<Page>> m_pages;
     std::queue<NavigationOperation> m_operationQueries;
 
 public:

@@ -71,6 +71,9 @@
     <ClInclude Include="..\..\..\src\client\receiver.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\client\GUI\application.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico">
@@ -156,6 +159,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\networkstructures.cpp">
       <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\GUI\application.cpp">
+      <Filter>Source\GUI</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

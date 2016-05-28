@@ -46,7 +46,7 @@ enum FocusOp
 
 enum ButtonAction
 {
-    Press, Release, Repeat
+    Release = 0, Press, Repeat
 };
 
 enum MouseButton
@@ -223,16 +223,6 @@ public:
     Window* parent;
     std::shared_ptr<Grid> content;
 
-    void render();
-    void focusFunc(FocusOp Stat);
-    void mouseButtonFunc(MouseButton Button, ButtonAction Action);
-    void cursorPosFunc(double x, double y);
-    void crusorEnterFunc(CursorOp Stat);
-    void scrollFunc(double dx, double dy);
-    void keyFunc(int Key, ButtonAction Action);
-    void charInputFunc(wchar_t Char);
-    void dropFunc(int DropCount, const char** Paths);
-    
     Page() {};
     Page(std::string _xName);
 
