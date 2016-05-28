@@ -21,8 +21,9 @@
 
 #include <utility>
 using std::pair;
-#include "../shared/world.h"
-#include "../shared/chunkpointerarray.h"
+#include <world.h>
+#include <chunkpointerarray.h>
+#include "chunkloader.h"
 
 constexpr int MaxChunkLoadCount = 64;
 constexpr int MaxChunkUnloadCount = 64;
@@ -33,11 +34,11 @@ private:
     World* m_world; // World
     ChunkPointerArray* m_cpa; // ChunkPointerArray used to detect unloaded chunks in load range
     int m_chunkLoadCount, m_chunkUnloadCount, m_loadRange;
-    pair<Vec3i, int> m_chunkLoadList[256]; // Chunk load list <position, distance>
-    pair<Chunk*, int> m_chunkUnloadList[256]; // Chunk unload list <pointer, distance>
+    pair<Vec3i, int> m_chunkLoadList[MaxChunkLoadCount]; // Chunk load list <position, distance>
+    pair<Chunk*, int> m_chunkUnloadList[MaxChunkUnloadCount]; // Chunk unload list <pointer, distance>
 
 public:
-    explicit WorldLoader(World* world, ChunkPointerArray* cpa)
+    WorldLoader(World* world, ChunkPointerArray* cpa)
         :m_world(world), m_cpa(cpa), m_chunkLoadCount(0), m_chunkUnloadCount(0) {}
 
     // Set load range

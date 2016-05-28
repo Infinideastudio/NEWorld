@@ -117,5 +117,14 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
 
 void WorldLoader::loadUnloadChunks()
 {
-    // NOT FINISHED
+    for (int i = 0; i < m_chunkLoadCount; i++)
+    {
+        // TODO: Try to read in file
+        ChunkLoader(m_world->addChunk(m_chunkLoadList[i].first)).build();
+    }
+    for (int i = 0; i < m_chunkUnloadCount; i++)
+    {
+        // TODO: Save chunk
+        m_world->deleteChunk(m_chunkUnloadList[i].first->getPos());
+    }
 }

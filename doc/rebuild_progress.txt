@@ -28,7 +28,9 @@ class WorldGen - Not Finished
 class HeightMap - Not Finished
 	Description: 缓存高度，优化地形生成
 class WorldLoader - Nearly Finished
-	Description: 世界中的Chunk加载顺序
+	Description: 世界中的Chunk加载
+class ChunkLoader - Nearly Finished
+	Description: Chunk生成
 class ChunkPointerArray - Finished
 	Description: 缓存区块指针，优化查找
 

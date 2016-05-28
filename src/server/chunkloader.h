@@ -27,7 +27,7 @@ private:
     Chunk* const m_chunk;
 
 public:
-    ChunkLoader(Chunk* chunk) :m_chunk(chunk)
+    explicit ChunkLoader(Chunk* chunk) :m_chunk(chunk)
     {}
 
     ChunkLoader(const ChunkLoader&) = delete;
