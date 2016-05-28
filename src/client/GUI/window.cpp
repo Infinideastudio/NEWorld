@@ -75,7 +75,7 @@ bool Window::init()
         default:
             break;
         }
-        m_pages[0]->content->mouseButtonFunc(b, (ButtonAction)action); //TODO: fixit(b未初始化)
+        m_pages.top()->content->mouseButtonFunc(b, (ButtonAction)action); //TODO: fixit(b未初始化)
         return;
     });
     return true;
@@ -95,17 +95,17 @@ void Window::processNavigationOperations()
         switch (curr.operation)
         {
         case NavigationOperationTypes::PushPage:
-            m_pages.push_front(curr.arg);
+            m_pages.push(curr.arg);
             break;
         case NavigationOperationTypes::PopPage:
-            m_pages.pop_front();
+            m_pages.pop();
             break;
         case NavigationOperationTypes::ClearPages:
-            m_pages.clear();
+            while (!m_pages.empty()) m_pages.pop();
             break;
         case NavigationOperationTypes::BackToFrontPage:
             assert(m_pages.size() >= 1);
-            while (m_pages.size() > 1) m_pages.pop_front();
+            while (m_pages.size() > 1) m_pages.pop();
             break;
         default:
             break;
