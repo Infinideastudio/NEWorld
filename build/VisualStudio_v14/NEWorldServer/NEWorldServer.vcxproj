@@ -20,11 +20,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\server\chunkloader.cpp" />
     <ClCompile Include="..\..\..\src\server\main.cpp" />
     <ClCompile Include="..\..\..\src\server\networkutils.cpp" />
     <ClCompile Include="..\..\..\src\server\worldloader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\server\chunkloader.h" />
     <ClInclude Include="..\..\..\src\server\worldloader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

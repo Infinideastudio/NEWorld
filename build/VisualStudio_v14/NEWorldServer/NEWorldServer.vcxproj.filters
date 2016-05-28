@@ -16,9 +16,15 @@
     <ClCompile Include="..\..\..\src\server\worldloader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\server\chunkloader.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\server\worldloader.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\server\chunkloader.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
