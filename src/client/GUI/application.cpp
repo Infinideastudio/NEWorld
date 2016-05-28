@@ -30,5 +30,5 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Page> firstpage)
     }
 
     glfwTerminate();
-    return 0;
+    return;
 }

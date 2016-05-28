@@ -17,9 +17,22 @@
 */
 
 #include "window.h"
+#include <functional>
 
 constexpr char* WindowName = "NEWorld";
 constexpr int WindowH = 852, WindowW = 480;
+std::function<void(GLFWwindow*, int button, int action, int)> mouseButtonCallback;
+void glfwMouseButtonCallback(GLFWwindow* win, int button, int action, int val)
+{
+    mouseButtonCallback(win, button, action, val);
+}
+
+void glfwSetMouseButtonCallbackHelper(GLFWwindow* win, std::function<void(GLFWwindow*, int button, int action, int)> func)
+{
+    mouseButtonCallback = func;
+    glfwSetMouseButtonCallbackHelper(win, glfwMouseButtonCallback);
+}
+
 
 bool Window::init()
 {
@@ -38,7 +51,8 @@ bool Window::init()
         return false;
     }
     makeCurrentDrawTarget();
-    glfwSetMouseButtonCallback(m_win, [this](GLFWwindow*, int button, int action, int) mutable ->void
+
+    glfwSetMouseButtonCallbackHelper(m_win, [this](GLFWwindow*, int button, int action, int)
     {
         MouseButton b;
         switch (button)
@@ -61,10 +75,9 @@ bool Window::init()
         default:
             break;
         }
-        m_pages[0]->content->mouseButtonFunc(b, (ButtonAction)action);
+        m_pages[0]->content->mouseButtonFunc(b, (ButtonAction)action); //TODO: fixit(bŒ¥≥ı ºªØ)
         return;
-    }
-    );
+    });
     return true;
 }
 
@@ -97,6 +110,6 @@ void Window::processNavigationOperations()
         default:
             break;
         }
-        
+
     }
 }
