@@ -92,7 +92,7 @@ double AABB::maxMoveOnZclip(const AABB &box, double orgmove) const
     return orgmove;
 }
 
-AABB&& AABB::expand(const Vec3d& arg) const
+AABB AABB::expand(const Vec3d& arg) const
 {
     AABB res = *this;
 

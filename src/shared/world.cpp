@@ -21,6 +21,9 @@
 
 void World::expandChunkArray(size_t c)
 {
+    Vec3i a(1, 1, 1);
+    Vec3i b;
+    b = a;
     m_chunkCount += c;
     if (m_chunkCount > m_chunkArraySize)
     {
