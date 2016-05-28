@@ -60,7 +60,7 @@ void Window::processNavigationOperations()
         else if (curr.operation == NavigationOperationTypes::BackToFrontPage)
         {
             assert(m_pages.size() >= 1);
-            while (!m_pages.size() > 1) m_pages.pop();
+            while (!m_pages.size() > 1) m_pages.pop(); //TODO: fixit
         }
     }
 }

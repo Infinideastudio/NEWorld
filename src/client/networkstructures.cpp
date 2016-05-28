@@ -15,37 +15,10 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef NETWORKSTRUCTURES_H_
-#define NETWORKSTRUCTURES_H_
-#include <string>
-enum Identifier
+
+#include "networkstructures.h"
+
+void ChatPacket::process()
 {
-    //Client to server
-    Login
-    //Server to client
-
-    //Common
-
-};
-
-class NetworkStructure
-{
-public:
-    virtual void process() = 0;
-    virtual ~NetworkStructure() {}
-};
-
-class ChatPacket : public NetworkStructure
-{
-public:
-    ChatPacket(std::string userSend, std::string content) :m_userSend(userSend), m_content(content) {}
-
-    virtual void process() override;
-
-private:
-    std::string m_userSend;
-    std::string m_content;
-
-};
-
-#endif // !NETWORKSTRUCTURES_H_
+    //输出到屏幕上之类的
+}

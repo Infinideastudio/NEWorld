@@ -22,11 +22,11 @@
 #include <thread>
 #include <utility>
 
-class session
-    : public std::enable_shared_from_this<session>
+class Session
+    : public std::enable_shared_from_this<Session>
 {
 public:
-    session(tcp::socket socket)
+    Session(tcp::socket socket)
         : m_socket(std::move(socket))
     {
     }
@@ -74,10 +74,10 @@ private:
     tcp::socket m_socket;
 };
 
-class server
+class Server
 {
 public:
-    server(boost::asio::io_service& io_service, short port)
+    Server(boost::asio::io_service& io_service, short port)
         : m_acceptor(io_service, tcp::endpoint(tcp::v4(), port)),
           m_socket(io_service)
     {
@@ -92,7 +92,7 @@ private:
             if (!ec)
             {
                 infostream << m_socket.remote_endpoint().address().to_string() << " connects to the server" << logendl;
-                std::make_shared<session>(std::move(m_socket))->start();
+                std::make_shared<Session>(std::move(m_socket))->start();
             }
             doAccept();
         });
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
     infostream << "Server started" << logendl;
     try
     {
-        server s(io_service, Port);
+        Server s(io_service, Port);
         io_service.run();
     }
     catch (std::exception& e)

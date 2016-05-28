@@ -233,6 +233,7 @@
     <ClCompile Include="..\..\..\src\client\GUI\graphics.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\window.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
+    <ClCompile Include="..\..\..\src\client\networkstructures.cpp" />
     <ClCompile Include="..\..\..\src\client\networkutil.cpp" />
     <ClCompile Include="..\..\..\src\client\receiver.cpp" />
     <ClCompile Include="..\..\..\src\client\sender.cpp" />

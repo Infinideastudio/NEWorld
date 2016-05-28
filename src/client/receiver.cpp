@@ -19,11 +19,28 @@
 #include "receiver.h"
 #include "network.h"
 #include "logger.h"
+#include <memory>
 std::string hostIp;
 
 void setServerIp(std::string ip)
 {
     hostIp = ip;
+}
+
+std::unique_ptr<NetworkStructure> readData(tcp::socket& s, Identifier identifier)
+{
+    switch (identifier)
+    {
+    case Login:
+        uint32_t length1, length2;
+        std::string username, content;
+        boost::asio::read(s, boost::asio::buffer(&length1, sizeof(uint32_t)));
+        boost::asio::read(s, boost::asio::buffer(&length2, sizeof(uint32_t)));
+        boost::asio::read(s, boost::asio::buffer(username, length1));
+        boost::asio::read(s, boost::asio::buffer(content, length2));
+        return std::make_unique<ChatPacket>(username, content);
+    }
+    return nullptr;
 }
 
 void receiverThread()
@@ -41,7 +58,7 @@ void receiverThread()
             //Read the identifier
             Identifier identifier;
             boost::asio::read(s, boost::asio::buffer(&identifier, sizeof(Identifier)));
-
+            readData(s, identifier)->process();
         }
     }
     catch (std::exception& e)
@@ -49,5 +66,3 @@ void receiverThread()
         errorstream << "Exception: " << e.what() << logendl;
     }
 }
-
-
