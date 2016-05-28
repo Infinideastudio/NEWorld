@@ -16,37 +16,26 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CHUNKRENDERER_H_
-#define CHUNKRENDERER_H_
+#ifndef CHUNKLOADER_H_
+#define CHUNKLOADER_H_
 
-#include "../shared/chunk.h"
-#include "../shared/world.h"
-#include "renderer.h"
+#include <chunk.h>
 
-class ChunkRenderer
+class ChunkLoader
 {
 private:
-    // Target world
-    const World* m_world;
-    // Target chunk
-    const Chunk* m_chunk;
-    // Vertex array
-    static VertexArray va;
-    // Merge face rendering
-    static bool mergeFace;
+    Chunk* const m_chunk;
 
 public:
-    ChunkRenderer(World* world, Chunk* chunk) :m_world(world), m_chunk(chunk)
+    ChunkLoader(Chunk* chunk) :m_chunk(chunk)
     {}
 
-    ChunkRenderer(const ChunkRenderer&) = delete;
-    ChunkRenderer& operator=(const ChunkRenderer&) = delete;
+    ChunkLoader(const ChunkLoader&) = delete;
+    ChunkLoader& operator=(const ChunkLoader&) = delete;
 
-    // Build VBO(Mesh)
-    void buildVertexArray();
-    // Draw call
-    void renderVertexArray();
+    // Build chunk
+    void build();
 
 };
 
-#endif // !CHUNKRENDERER_H_
+#endif // !CHUNKLOADER_H_
