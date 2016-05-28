@@ -34,7 +34,7 @@ public:
     ChunkLoader& operator=(const ChunkLoader&) = delete;
 
     // Build chunk
-    void build();
+    void build() const;
 
 };
 

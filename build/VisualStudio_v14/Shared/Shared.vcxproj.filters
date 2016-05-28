@@ -42,6 +42,9 @@
     <ClInclude Include="..\..\..\src\shared\packet.h">
       <Filter>Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\plugin.h">
+      <Filter>Plugin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -56,6 +59,9 @@
     <Filter Include="Network">
       <UniqueIdentifier>{84937af5-654e-442b-93b7-8c2f8bb5c802}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Plugin">
+      <UniqueIdentifier>{e761470c-5131-4ce2-9fb2-cbdf243d84f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\AABB.cpp">
@@ -69,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp">
       <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\plugin.cpp">
+      <Filter>Plugin</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -137,6 +137,7 @@
     <ClInclude Include="..\..\..\src\shared\networkstructures.h" />
     <ClInclude Include="..\..\..\src\shared\object.h" />
     <ClInclude Include="..\..\..\src\shared\packet.h" />
+    <ClInclude Include="..\..\..\src\shared\plugin.h" />
     <ClInclude Include="..\..\..\src\shared\vec3.h" />
     <ClInclude Include="..\..\..\src\shared\world.h" />
   </ItemGroup>
@@ -144,6 +145,7 @@
     <ClCompile Include="..\..\..\src\shared\AABB.cpp" />
     <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
+    <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

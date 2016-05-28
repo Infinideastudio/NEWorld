@@ -18,7 +18,7 @@
 
 #include "chunkloader.h"
 
-void ChunkLoader::build()
+void ChunkLoader::build() const
 {
     // TODO: Try to use terrain generators written in plugins
     // This is the default terrain generator. Use this when no generators were loaded from plugins.
