@@ -18,4 +18,14 @@
 #ifndef NETWORKSTRUCTURES_H_
 #define NETWORKSTRUCTURES_H_
 
+enum Identifier
+{
+    //Client to server
+    Login
+    //Server to client
+
+    //Common
+
+};
+
 #endif // !NETWORKSTRUCTURES_H_

@@ -20,9 +20,10 @@
 #define RECEIVER_H_
 
 #include "network.h"
-#include <cstdlib>
-#include <cstring>
+#include <string>
 
-void ReceiverThread();
+void setServerIp(std::string ip);
+
+void receiverThread();
 
 #endif // RECEIVER_H_

@@ -21,11 +21,10 @@
 
 #include <boost/asio.hpp>
 #include "networkstructures.h"
-#include "request.h"
+#include "packet.h"
 
 using boost::asio::ip::tcp;
 
-constexpr int PacketMaxLength = 256 * 1024; //256kb
 constexpr int Port = 8090;
 extern boost::asio::io_service io_service;
 

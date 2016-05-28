@@ -17,6 +17,14 @@
 */
 
 #include "receiver.h"
+#include "network.h"
+#include "logger.h"
+std::string hostIp;
+
+void setServerIp(std::string ip)
+{
+    hostIp = ip;
+}
 
 void receiverThread()
 {
@@ -24,8 +32,22 @@ void receiverThread()
 
     tcp::socket s(io_service);
     tcp::resolver resolver(io_service);
-    boost::asio::connect(s, resolver.resolve({ "ip", std::to_string(Port) }));
+    try
+    {
+        //connect to the server
+        boost::asio::connect(s, resolver.resolve({ hostIp, std::to_string(Port) }));
+        while (true)
+        {
+            //Read the identifier
+            Identifier identifier;
+            boost::asio::read(s, boost::asio::buffer(&identifier, sizeof(Identifier)));
 
-    char reply[PacketMaxLength];
-    size_t reply_length = s.read_some(boost::asio::buffer(reply, request_length));
+        }
+    }
+    catch (std::exception& e)
+    {
+        errorstream << "Exception: " << e.what() << logendl;
+    }
 }
+
+

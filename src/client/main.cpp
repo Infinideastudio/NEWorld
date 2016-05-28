@@ -15,8 +15,13 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include <thread>
+#include "receiver.h"
+#include "sender.h"
 int main()
 {
+    std::thread(receiverThread).detach();
+    std::thread(senderThread).detach();
+    while (1);
     return 0;
 }

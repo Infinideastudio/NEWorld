@@ -17,14 +17,48 @@
 */
 
 #include "sender.h"
+#include "logger.h"
+#include <queue>
+#include <mutex>
+//The packets which are waiting to send
+std::queue<Packet> packets;
+
+//mutex
+std::mutex senderMutex;
 
 void senderThread()
 {
+    extern std::string hostIp;
     tcp::socket s(io_service);
     tcp::resolver resolver(io_service);
-    boost::asio::connect(s, resolver.resolve({ "ip", std::to_string(Port) }));
+    try
+    {
+        //Connect to the server
+        boost::asio::connect(s, resolver.resolve({ hostIp, std::to_string(Port) }));
 
-    char request[PacketMaxLength];
-    size_t request_length = std::strlen(request);
-    boost::asio::write(s, boost::asio::buffer(request, request_length));
+        //Make a loop to send packets
+        while (true)
+        {
+            senderMutex.lock();
+
+            if (packets.empty()) continue;
+            Packet p = packets.front();
+            packets.pop();
+
+            senderMutex.unlock();
+
+            boost::asio::write(s, boost::asio::buffer(&p.identifier, sizeof(Identifier)));
+            boost::asio::write(s, boost::asio::buffer(&p.data, p.length));
+        }
+    }
+    catch (std::exception& e)
+    {
+        errorstream << "Exception: " << e.what() << logendl;
+    }
+}
+
+void addRequest(Packet p)
+{
+    std::lock_guard<std::mutex> lock(senderMutex);
+    packets.push(p);
 }

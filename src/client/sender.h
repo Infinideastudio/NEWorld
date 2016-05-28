@@ -20,9 +20,8 @@
 #define SENDER_H_
 
 #include "network.h"
-#include <cstdlib>
-#include <cstring>
 
 void senderThread();
+void addRequest(Packet p);
 
 #endif // SENDER_H_

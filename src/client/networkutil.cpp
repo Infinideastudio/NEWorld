@@ -21,9 +21,3 @@
 
 boost::asio::io_service io_service;
 
-RequestCallback makeRequestCallback(const RequestCallback::callbackFunc& func)
-{
-    static unsigned short id = 0;
-    if (id == USHRT_MAX) id = 0;
-    return RequestCallback(func, { 0,id++ });
-}

@@ -72,7 +72,6 @@ private:
     }
 
     tcp::socket m_socket;
-    char m_data[PacketMaxLength];
 };
 
 class server

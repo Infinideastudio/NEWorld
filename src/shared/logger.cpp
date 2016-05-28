@@ -29,7 +29,7 @@ void LoggerForwarderConsole::forwardLog(const std::string &str)
     cout << str;
 }
 
-LoggerForwarderFile::LoggerForwarderFile() : m_file_name("ngworld.log")
+LoggerForwarderFile::LoggerForwarderFile() : m_file_name("neworld.log")
 {
     m_fout.open(m_file_name.c_str(), ios::out | ios::app);
 }

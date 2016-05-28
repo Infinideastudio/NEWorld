@@ -24,7 +24,7 @@ class BlockData
 private:
     union
     {
-        unsigned int data;
+        unsigned int m_data;
         struct
         {
             unsigned int id : 12; // Block ID
@@ -34,10 +34,10 @@ private:
     };
 
 public:
-    BlockData() :data(0) {}
+    BlockData() :m_data(0) {}
     BlockData(int id_, int brightness_, int state_) :id(id_), brightness(brightness_), state(state_) {}
-    explicit BlockData(int data_) :data(data_) {}
-    BlockData(const BlockData& rhs) :data(rhs.data) {}
+    explicit BlockData(int data_) :m_data(data_) {}
+    BlockData(const BlockData& rhs) :m_data(rhs.m_data) {}
 
     bool operator== (const BlockData& rhs) const
     {
