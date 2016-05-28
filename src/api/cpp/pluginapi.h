@@ -19,6 +19,40 @@
 #ifndef PLUGINAPI_H_
 #define PLUGINAPI_H_
 
+namespace NEWorld
+{
+    class Vec3i
+    {
+    public:
+        int x, y, z;
+    };
 
+    class BlockType
+    {
+    public:
+        const char* blockname = nullptr;
+        bool solid;
+        bool translucent;
+        bool opaque;
+        int explodePower;
+        int hardness;
+    };
+
+    class BlockData
+    {
+    public:
+        unsigned int id : 12;
+        unsigned int brightness : 4;
+        unsigned int state : 16;
+    };
+
+    class PluginData
+    {
+    public:
+        int blocksCount;
+        BlockType* blocks = nullptr;
+        BlockData* (*buildChunk)(const Vec3i&) = nullptr;
+    };
+}
 
 #endif

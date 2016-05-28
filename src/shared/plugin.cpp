@@ -16,10 +16,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <boost/dll/import.hpp>
 #include "plugin.h"
 
 int Plugin::loadFrom(const string& filename)
 {
-    // TODO: Load plugin from dynamic link library
+    init = boost::dll::import<void(*)()>(filename, "init", boost::dll::load_mode::append_decorations);
+
     return 0;
 }

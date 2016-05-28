@@ -20,24 +20,27 @@
 #define PLUGIN_H_
 
 #include <string>
+#include <cstring> // memcpy
 using std::string;
 #include "vec3.h"
 #include "blocktype.h"
 #include "blockdata.h"
 
-struct PluginData
+class PluginData
 {
+public:
     // Declared block types
     int blocksCount;
-    BlockType* blocks;
+    BlockType* blocks = nullptr;
     // Declared terrain generator
-    BlockData* (*buildChunk)(Vec3i) = nullptr;
+    BlockData* (*buildChunk)(const Vec3i&) = nullptr;
 };
 
 class Plugin
 {
 private:
     string name;
+    boost::shared_ptr<void(*)()> init;
     PluginData data;
 
 public:

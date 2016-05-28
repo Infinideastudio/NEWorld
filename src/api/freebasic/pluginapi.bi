@@ -16,10 +16,39 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '/
 
-#ifndef PLUGINAPI_H_
-#define PLUGINAPI_H_
+#ifndef PLUGINAPI_BI_
+#define PLUGINAPI_BI_
 
+type int32_t as long
+type uint32_t as unsigned long
 
+namespace NEWorld
+    
+    type Vec3i
+        dim as int32_t x,y,z
+    end type
+    
+    type BlockType
+        dim blockname as byte ptr = 0
+        dim solid as byte
+        dim translucent as byte
+        dim opaque as byte
+        dim explodePower as int32_t
+        dim hardness as int32_t
+    end type
+    
+    type BlockData field = 1
+        dim id : 12 as uint32_t
+        dim brightness : 4 as uint32_t
+        dim state : 16 as uint32_t
+    end type
+    
+    type PluginData
+        dim blocksCount as int32_t
+        dim blocks as BlockType ptr = 0
+        dim buildChunk as function(byref as const Vec3i)as BlockData ptr
+    end type
+    
+end namespace
 
 #endif
-
