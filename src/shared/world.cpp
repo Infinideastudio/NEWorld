@@ -25,13 +25,13 @@ void World::expandChunkArray(size_t c)
     if (m_chunkCount > m_chunkArraySize)
     {
         m_chunkArraySize *= 2;
-        auto newm_chunks = (Chunk**)realloc(m_chunks, m_chunkArraySize * sizeof(Chunk*));
-        assert(newm_chunks != NULL);
-        if (newm_chunks == NULL)
+        auto newchunks = (Chunk**)realloc(m_chunks, m_chunkArraySize * sizeof(Chunk*));
+        assert(newchunks != NULL);
+        if (newchunks == NULL)
         {
             // TODO: Mark crash signal and exit world
         }
-        else m_chunks = newm_chunks;
+        else m_chunks = newchunks;
     }
 }
 
@@ -57,7 +57,7 @@ World::~World()
 {
     if (m_chunks)
     {
-        // TODO: Save and destroy m_chunks
+        // TODO: Save and destroy chunks
         free(m_chunks);
     }
 }
