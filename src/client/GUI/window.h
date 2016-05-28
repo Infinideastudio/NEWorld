@@ -20,9 +20,10 @@
 #define WINDOW_H_
 
 #include <GLFW/glfw3.h>
-#include "controls.h"
 #include <memory>
-#include <deque>
+#include <queue>
+#include <common.h>
+#include "controls.h"
 
 enum NavigationOperationTypes
 {
@@ -39,9 +40,10 @@ class Window
 {
 private:
     GLFWwindow* m_win;
-    //For Navigation Service
-    std::deque<std::shared_ptr<Page>> pages;
-    std::deque<NavigationOperation> operationquery;
+    // For navigation
+    std::queue<std::shared_ptr<Page> > m_pages;
+    std::queue<NavigationOperation> m_operationQueries;
+
 public:
     Window() : m_win(nullptr) { init(); }
     bool init();
@@ -49,9 +51,10 @@ public:
     void setCurrentDraw() const { glfwMakeContextCurrent(m_win); }
     operator GLFWwindow*() const { return m_win; }
 
-    //Navigation Operations
+    // Navigation operations
     void pushNavigationOperation(const NavigationOperation& operation);
     void processNavigationOperations();
+
 };
 
 #endif // !WINDOW_H_

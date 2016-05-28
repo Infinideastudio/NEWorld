@@ -43,10 +43,24 @@ bool Window::init()
     return true;
 }
 
-void Window::pushNavigationOperation(const NavigationOperation & operation)
+void Window::pushNavigationOperation(const NavigationOperation& operation)
 {
+    m_operationQueries.push(operation);
 }
 
 void Window::processNavigationOperations()
 {
+    while (!m_operationQueries.empty())
+    {
+        NavigationOperation curr = m_operationQueries.front();
+        m_operationQueries.pop();
+        if (curr.operation == NavigationOperationTypes::PushPage) m_pages.push(curr.arg);
+        else if (curr.operation == NavigationOperationTypes::PopPage) m_pages.pop();
+        else if (curr.operation == NavigationOperationTypes::ClearPages) while (!m_pages.empty()) m_pages.pop();
+        else if (curr.operation == NavigationOperationTypes::BackToFrontPage)
+        {
+            assert(m_pages.size() >= 1);
+            while (!m_pages.size() > 1) m_pages.pop();
+        }
+    }
 }

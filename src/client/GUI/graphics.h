@@ -171,4 +171,5 @@ public:
     virtual void DrawPolygon(std::vector<Vec2>& Points, BrushDrawMood Mode) = 0;
     virtual ~Brush() = 0;
 };
+
 #endif // !GRAPHICS_H_
