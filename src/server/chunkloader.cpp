@@ -26,16 +26,7 @@ void ChunkLoader::build()
         for (int z = 0; z < ChunkSize; z++)
             for (int y = 0; y < ChunkSize; y++)
             {
-                int height = y + m_chunk->getPos().y * ChunkSize;
-                if (height <= 32)
-                {
-                    // TODO: Set block to BlockData(Stone, 0, 0)
-                    m_chunk->setBlock(Vec3i(x, y, z), BlockData(0, 0, 0)); // NOT FINISHED
-                }
-                else
-                {
-                    // TODO: Set block to BlockData(Air, DaylightBrightness, 0)
-                    m_chunk->setBlock(Vec3i(x, y, z), BlockData(0, 0, 0)); // NOT FINISHED
-                }
+                // TODO: Set block to BlockData(0, DaylightBrightness, 0)
+                m_chunk->setBlock(Vec3i(x, y, z), BlockData(0, 0, 0)); // NOT FINISHED
             }
 }

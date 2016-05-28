@@ -31,7 +31,7 @@ enum CriticalLevel
     CriticalLevelInfo,
     CriticalLevelWarning,
     CriticalLevelError,
-    CriticalLevelCount
+    CriticalLevelsCount
 };
 
 static const char CriticalLevelString[][5] =

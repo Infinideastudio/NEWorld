@@ -123,42 +123,6 @@ Grid::Grid(std::string _xName, Margin _Margin, std::vector<GridChildRecord> newC
 {
 }
 
-void Page::render()
-{
-}
-
-void Page::focusFunc(FocusOp Stat)
-{
-}
-
-void Page::mouseButtonFunc(MouseButton Button, ButtonAction Action)
-{
-}
-
-void Page::cursorPosFunc(double x, double y)
-{
-}
-
-void Page::crusorEnterFunc(CursorOp Stat)
-{
-}
-
-void Page::scrollFunc(double dx, double dy)
-{
-}
-
-void Page::keyFunc(int Key, ButtonAction Action)
-{
-}
-
-void Page::charInputFunc(wchar_t Char)
-{
-}
-
-void Page::dropFunc(int DropCount, const char ** Paths)
-{
-}
-
 Page::Page(std::string _xName)
 {
 }

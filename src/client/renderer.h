@@ -29,6 +29,13 @@ private:
 public:
     // Setup rendering
     void init();
+    // Reset translations/rotations (Restore transform matrixes)
+    void restoreScale();
+    // Apply translations
+    void translate(int x, int y, int z);
+    // Apply rotations
+    void rotate(double degrees, double x, double y, double z);
+
 
 };
 

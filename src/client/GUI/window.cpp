@@ -38,7 +38,7 @@ bool Window::init()
         return false;
     }
 
-    setCurrentDraw();
+    makeCurrentDrawTarget();
 
     return true;
 }

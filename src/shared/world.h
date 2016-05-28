@@ -47,8 +47,7 @@ private:
         assert(m_chunkCount >= reduceCount);
         m_chunkCount -= reduceCount;
     }
-    
-    // New pointer at chunks[index]
+    // New pointer at m_chunks[index]
     void newChunkPtr(size_t index)
     {
         expandChunkArray(1);
@@ -56,23 +55,22 @@ private:
             m_chunks[i] = m_chunks[i - 1];
         m_chunks[index] = nullptr;
     }
-    
-    // Erase pointer at chunks[index]
+    // Erase pointer at m_chunks[index]
     void eraseChunkPtr(size_t index)
     {
         for (size_t i = index; i < m_chunkCount - 1; i++)
             m_chunks[i] = m_chunks[i + 1];
         reduceChunkArray(1);
     }
-    
     // Search chunk index, or the index the chunk should insert into
     size_t getChunkIndex(const Vec3i& chunkPos) const;
 
 public:
     World() : m_chunkCount(0), m_chunkArraySize(1024)
     {
-        m_chunks = new Chunk*[m_chunkArraySize];
-        // m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
+        // 看着new和realloc混用有点别扭。。。 --qiaozhanrong
+        //m_chunks = new Chunk*[m_chunkArraySize];
+        m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
     }
     ~World();
     World(const World&) = delete;

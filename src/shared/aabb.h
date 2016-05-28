@@ -49,7 +49,7 @@ public:
     // Get max move distance <= original_move_distance on Z axis, when blocked by another AABB
     double maxMoveOnZclip(const AABB &anotherAABB, double originalMoveDistance) const;
     // Get expanded AABB
-    AABB expand(const Vec3d& arg) const;
+    AABB&& expand(const Vec3d& arg) const;
     // Move AABB
     void move(const Vec3d& arg);
     // Move the center of this AABB to target position

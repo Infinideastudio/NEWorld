@@ -192,8 +192,9 @@ struct GridChildRecord
 class Grid : public Control
 {
 protected:
-    std::vector<GridChildRecord> children;   //where the table is actualy stored
-    std::map<std::string, int> childReference; //only a reference by xName
+    std::vector<GridChildRecord> children;   // where the table is actualy stored
+    std::map<std::string, int> childReference; // only a reference by xName
+
 public:
     void addControls(std::vector<GridChildRecord> newControls);
     void deleteControl(std::string name);

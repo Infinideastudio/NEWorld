@@ -21,10 +21,9 @@
 
 #include <cmath>
 #include <algorithm>
+#include <boost/operators.hpp>
 using std::abs;
 using std::max;
-
-#include <boost/operators.hpp>
 
 template<typename T>
 class Vec3:
