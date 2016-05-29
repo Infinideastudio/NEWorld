@@ -25,7 +25,7 @@ type uint32_t as unsigned long
 namespace NEWorld
     
     type Vec3i
-        dim as int32_t x,y,z
+        dim as int32_t x, y, z
     end type
     
     type BlockType
@@ -37,16 +37,17 @@ namespace NEWorld
         dim hardness as int32_t
     end type
     
-    type BlockData field = 1
+    type BlockData
         dim id : 12 as uint32_t
         dim brightness : 4 as uint32_t
         dim state : 16 as uint32_t
     end type
     
     type PluginData
+        dim pluginName as byte ptr
         dim blocksCount as int32_t
         dim blocks as BlockType ptr = 0
-        dim buildChunk as function(byref as const Vec3i)as BlockData ptr
+        dim buildChunk as function(byref as const Vec3i) as BlockData ptr = 0
     end type
     
 end namespace

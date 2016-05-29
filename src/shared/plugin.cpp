@@ -21,7 +21,7 @@
 
 int Plugin::loadFrom(const string& filename)
 {
-    init = boost::dll::import<void(*)()>(filename, "init", boost::dll::load_mode::append_decorations);
-
+    init = *boost::dll::import<PluginData*(*)()>(filename, "init", boost::dll::load_mode::append_decorations).get();
+    data = init();
     return 0;
 }

@@ -29,6 +29,8 @@ using std::string;
 class PluginData
 {
 public:
+    // Plugin name
+    char* pluginName;
     // Declared block types
     int blocksCount;
     BlockType* blocks = nullptr;
@@ -39,9 +41,12 @@ public:
 class Plugin
 {
 private:
+    // Plugin name
     string name;
-    boost::shared_ptr<void(*)()> init;
-    PluginData data;
+    // Main plugin function
+    PluginData* (*init)();
+    // Plugin Data
+    PluginData* data;
 
 public:
     Plugin()
@@ -54,7 +59,7 @@ public:
     const string& getName() const
     { return name; }
     // Get plugin data
-    const PluginData& getData() const
+    const PluginData* getData() const
     { return data; }
     // Load plugin, return 0 for success
     int loadFrom(const string& filename);

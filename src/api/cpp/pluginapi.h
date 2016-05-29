@@ -49,6 +49,7 @@ namespace NEWorld
     class PluginData
     {
     public:
+        char* pluginName;
         int blocksCount;
         BlockType* blocks = nullptr;
         BlockData* (*buildChunk)(const Vec3i&) = nullptr;
