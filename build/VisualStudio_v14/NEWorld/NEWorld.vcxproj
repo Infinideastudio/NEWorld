@@ -63,13 +63,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\dependencies\include\AL;$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\dependencies\include\asio;$(ProjectDir)..\..\..\src\shared;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\dependencies\include\AL;$(ProjectDir)..\..\..\src\shared;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(ProjectDir)..\..\..\dependencies\lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\..\..\dependencies\include\AL;$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\dependencies\includ\asio;$(ProjectDir)..\..\..\src\shared;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\dependencies\include\AL;$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\src\shared;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(ProjectDir)..\..\..\dependencies\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
