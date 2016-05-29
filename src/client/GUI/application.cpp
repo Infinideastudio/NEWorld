@@ -1,5 +1,5 @@
 #include "application.h"
-#include <GLFW\glfw3.h>
+#include <GLFW/glfw3.h>
 #include <functional>
 
 using GLFWWindowPosASSF = std::function<void(GLFWwindow*, int, int)>;
@@ -58,10 +58,7 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Page> firstpage)
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(480, 320, "Hello World", NULL, NULL);
     if (!window)
-    {
         glfwTerminate();
-        ;
-    }
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);

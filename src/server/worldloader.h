@@ -25,28 +25,31 @@ using std::pair;
 #include <chunkpointerarray.h>
 #include "chunkloader.h"
 
-constexpr int MaxChunkLoadCount = 64;
-constexpr int MaxChunkUnloadCount = 64;
+constexpr int MaxChunkLoadCount = 64, int MaxChunkUnloadCount = 64;
 
 class WorldLoader
 {
 private:
-    World* m_world; // World
-    ChunkPointerArray* m_cpa; // ChunkPointerArray used to detect unloaded chunks in load range
+    /// World
+    World* m_world;
+    /// ChunkPointerArray used to detect unloaded chunks in load range
+    ChunkPointerArray* m_cpa;
     int m_chunkLoadCount, m_chunkUnloadCount, m_loadRange;
-    pair<Vec3i, int> m_chunkLoadList[MaxChunkLoadCount]; // Chunk load list <position, distance>
-    pair<Chunk*, int> m_chunkUnloadList[MaxChunkUnloadCount]; // Chunk unload list <pointer, distance>
+    /// Chunk load list [position, distance]
+    pair<Vec3i, int> m_chunkLoadList[MaxChunkLoadCount];
+    /// Chunk unload list [pointer, distance]
+    pair<Chunk*, int> m_chunkUnloadList[MaxChunkUnloadCount];
 
 public:
     WorldLoader(World* world, ChunkPointerArray* cpa)
         :m_world(world), m_cpa(cpa), m_chunkLoadCount(0), m_chunkUnloadCount(0) {}
 
-    // Set load range
+    /// Set load range
     void setLoadRange(int x)
     { m_loadRange = x; }
-    // Find the nearest chunks in load range to load, fartherest chunks out of load range to unload
+    /// Find the nearest chunks in load range to load, fartherest chunks out of load range to unload
     void sortChunkLoadUnloadList(const Vec3i& centerPos);
-    // Load & unload chunks
+    /// Load & unload chunks
     void loadUnloadChunks();
 
 };

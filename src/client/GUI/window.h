@@ -39,12 +39,6 @@ struct NavigationOperation
 
 class Window
 {
-private:
-    GLFWwindow* m_win;
-    // For navigation
-    std::stack<std::shared_ptr<Page>> m_pages;
-    std::queue<NavigationOperation> m_operationQueries;
-
 public:
     Window() : m_win(nullptr) { init(); }
     bool init();
@@ -53,8 +47,17 @@ public:
     operator GLFWwindow*() const { return m_win; }
 
     // Navigation operations
-    void pushNavigationOperation(const NavigationOperation& operation);
+    void pushNavigationOperation(const NavigationOperation& operation)
+    {
+        m_operationQueries.push(operation);
+    }
     void processNavigationOperations();
+
+private:
+    GLFWwindow* m_win;
+    // For navigation
+    std::stack<std::shared_ptr<Page>> m_pages;
+    std::queue<NavigationOperation> m_operationQueries;
 
 };
 

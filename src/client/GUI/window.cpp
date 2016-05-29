@@ -23,15 +23,14 @@ constexpr char* WindowName = "NEWorld";
 constexpr int WindowH = 852, WindowW = 480;
 
 std::function<void(GLFWwindow*, int button, int action, int)> mouseButtonCallback;
-void glfwMouseButtonCallback(GLFWwindow* win, int button, int action, int val)
-{
-    mouseButtonCallback(win, button, action, val);
-}
 
 void glfwSetMouseButtonCallbackHelper(GLFWwindow* win, std::function<void(GLFWwindow*, int button, int action, int)> func)
 {
     mouseButtonCallback = func;
-    glfwSetMouseButtonCallback(win, glfwMouseButtonCallback);
+    glfwSetMouseButtonCallback(win, [](GLFWwindow* win, int button, int action, int val) 
+    {
+        mouseButtonCallback(win, button, action, val);
+    });
 }
 
 
@@ -80,11 +79,6 @@ bool Window::init()
         return;
     });
     return true;
-}
-
-void Window::pushNavigationOperation(const NavigationOperation& operation)
-{
-    m_operationQueries.push(operation);
 }
 
 void Window::processNavigationOperations()

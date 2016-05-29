@@ -8,7 +8,7 @@
 class Application :public UIObject
 {
 public:
-    std::map<std::string, std::shared_ptr<Window>> windows;
+    std::map<std::string, std::shared_ptr<Window> > windows;
     virtual void ApplicationDoBeforeLaunch();
     virtual void ApplicationDoAfterLaunch();
     virtual void ApplicationDoEnteringBackground();

@@ -27,9 +27,6 @@
 
 class Margin : public UIObject
 {
-private:
-    Rect relativeps, relativepc;
-
 public:
     Margin() {};
     Margin(Rect _relative_ps, Rect _relative_pc) {};
@@ -37,6 +34,8 @@ public:
     {
         return Rect();
     };
+private:
+    Rect relativeps, relativepc;
 };
 
 enum FocusOp
@@ -61,9 +60,6 @@ enum CursorOp
 
 class Control :public UIObject
 {
-protected:
-    Margin cMargin;
-    bool enabled, mouseOn, pressed, focused;
 public:
     Rect tempAbsoluteRect;
     Control* parent;
@@ -83,6 +79,9 @@ public:
     virtual void dropFunc(int DropCount, const char** Paths) {};
 
     virtual ~Control() {}
+protected:
+    Margin cMargin;
+    bool enabled, mouseOn, pressed, focused;
 };
 
 using NotifyFunc        = std::function<void(Control* Sender)>;
@@ -117,12 +116,7 @@ public:
 class Button :public Control
 {
 public:
-    std::shared_ptr<Brush> backgroundBrush;
-    std::shared_ptr<Brush> borderBrush;
-    std::shared_ptr<Brush> backgroundHighlightBrush;
-    std::shared_ptr<Brush> borderHighlightBrush;
-    std::shared_ptr<Brush> backgroundOnPressBrush;
-    std::shared_ptr<Brush> borderOnPressBrush;
+    std::shared_ptr<Brush> backgroundBrush, borderBrush, backgroundHighlightBrush, borderHighlightBrush, backgroundOnPressBrush, borderOnPressBrush;
     
     NotifyFunc onClick;
 
@@ -130,18 +124,14 @@ public:
     void render();
     void mouseButtonFunc(MouseButton Button, ButtonAction Action);
 
-    Button() {};
+    Button() = default;
     Button(std::string _xName, Margin _Margin, std::string _caption, NotifyFunc _onClick);
 };
 
 class TextBox :public Control
 {
 public:
-    std::shared_ptr<Brush> backgroundBrush;
-    std::shared_ptr<Brush> borderBrush;
-    std::shared_ptr<Brush> backgroundHighlightBrush;
-    std::shared_ptr<Brush> borderHighlightBrush;
-    std::shared_ptr<Brush> crusorBrush;
+    std::shared_ptr<Brush> backgroundBrush, borderBrush, backgroundHighlightBrush, borderHighlightBrush, crusorBrush;
 
     NotifyFunc onEditDone;
 
@@ -164,12 +154,7 @@ enum CheckStat
 class CheckBox :public Control
 {
 public:
-    std::shared_ptr<Brush> backgroundBrush;
-    std::shared_ptr<Brush> borderBrush;
-    std::shared_ptr<Brush> backgroundHighlightBrush;
-    std::shared_ptr<Brush> borderHighlightBrush;
-    std::shared_ptr<Brush> checkBrush;
-    std::shared_ptr<Brush> checkHeightLightBrush;
+    std::shared_ptr<Brush> backgroundBrush, borderBrush, backgroundHighlightBrush, borderHighlightBrush, checkBrush, checkHeightLightBrush;
 
     NotifyFunc onStatChange;
     
@@ -179,7 +164,7 @@ public:
     void render();
     void mouseButtonFunc(MouseButton Button, ButtonAction Action);
 
-    CheckBox() {};
+    CheckBox() = default;
     CheckBox(std::string _xName, Margin _Margin, bool _threeStat, CheckStat _stat, NotifyFunc _onStatChange);
 };
 
@@ -191,10 +176,6 @@ struct GridChildRecord
 
 class Grid : public Control
 {
-protected:
-    std::vector<GridChildRecord> children;   // where the table is actualy stored
-    std::map<std::string, int> childReference; // only a reference by xName
-
 public:
     void addControls(std::vector<GridChildRecord> newControls);
     void deleteControl(std::string name);
@@ -211,8 +192,11 @@ public:
     void charInputFunc(wchar_t Char);
     void dropFunc(int DropCount, const char** Paths);
 
-    Grid() {};
+    Grid() = default;
     Grid(std::string _xName, Margin _Margin, std::vector<GridChildRecord> newControls);
+protected:
+    std::vector<GridChildRecord> children;   // where the table is actualy stored
+    std::map<std::string, int> childReference; // only a reference by xName
 };
 
 class Window;
@@ -223,7 +207,7 @@ public:
     Window* parent;
     std::shared_ptr<Grid> content;
 
-    Page() {};
+    Page() = default;
     Page(std::string _xName);
 
     virtual ~Page() {};

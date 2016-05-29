@@ -29,7 +29,7 @@ public:
     Vec3d min; // Min bound
     Vec3d max; // Max bound
 
-    AABB() {}
+    AABB() = default;
     AABB(const Vec3d& _min, const Vec3d& _max) :min(_min), max(_max) {}
     AABB(const AABB&) = default;
     AABB(AABB&&) = default;

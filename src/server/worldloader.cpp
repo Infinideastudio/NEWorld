@@ -31,9 +31,8 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
     {
         Vec3i curPos = m_world->getChunkPtr(ci)->getPos();
         // Get chunk center pos
-        curPos.x = curPos.x*ChunkSize + ChunkSize / 2 - 1;
-        curPos.y = curPos.y*ChunkSize + ChunkSize / 2 - 1;
-        curPos.z = curPos.z*ChunkSize + ChunkSize / 2 - 1;
+        curPos.for_each([](int& x)
+        { x = x * ChunkSize + ChunkSize / 2 - 1; });
 
         // Out of load range, pending to unload
         if (centerPos.chebyshevDistance(curPos) > m_loadRange)
@@ -76,11 +75,10 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
                 // In load range, pending to load
                 if (m_cpa->getChunkPtr(Vec3i(x, y, z)) == nullptr)
                 {
-                    Vec3i curPos;
+                    Vec3i curPos(x, y, z);
                     // Get chunk center pos
-                    curPos.x = x*ChunkSize + ChunkSize / 2 - 1;
-                    curPos.y = y*ChunkSize + ChunkSize / 2 - 1;
-                    curPos.z = z*ChunkSize + ChunkSize / 2 - 1;
+                    curPos.for_each([](int& x)
+                    { x = x * ChunkSize + ChunkSize / 2 - 1; });
 
                     // Distance from centerPos
                     distsqr = (curPos - centerPos).lengthSqr();

@@ -19,7 +19,7 @@
 #ifndef CHUNKRENDERER_H_
 #define CHUNKRENDERER_H_
 
-#include <boost/noncopyable.hpp>
+#include <boost/core/noncopyable.hpp>
 #include "../shared/chunk.h"
 #include "../shared/world.h"
 #include "renderer.h"

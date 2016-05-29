@@ -19,10 +19,12 @@
 #ifndef CHUNKPOINTERARRAY_H_
 #define CHUNKPOINTERARRAY_H_
 
-#include <cstring> // memset
+#include <cstring>
+#include <boost/core/noncopyable.hpp>
 #include "chunk.h"
 
 class ChunkPointerArray
+	:boost::noncopyable
 {
 private:
     // Array
@@ -45,8 +47,7 @@ public:
     {
         delete[] m_array;
     }
-    ChunkPointerArray(const ChunkPointerArray&)=delete;
-    ChunkPointerArray& operator= (const ChunkPointerArray&) = delete;
+
     // Move array by delta
     void move(const Vec3i& delta);
     // Move array to pos

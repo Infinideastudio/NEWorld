@@ -20,6 +20,7 @@
 #define VEC3_H_
 
 #include <cmath>
+#include <functional>
 #include <algorithm>
 #include <boost/operators.hpp>
 using std::abs;
@@ -32,37 +33,35 @@ class Vec3:
 public:
     T x, y, z;
 
-    Vec3() :x(0), y(0), z(0)
-    {}
+    Vec3() :x(), y(), z() {}
 
-    Vec3(T x_, T y_, T z_) :x(x_), y(y_), z(z_)
-    {}
+    Vec3(T x_, T y_, T z_) :x(x_), y(y_), z(z_) {}
 
-    // Get the square of vector length, notice that the result can overflow. TODO: fixit
+    /// Get the square of vector length, notice that the result can overflow. TODO: fixit
     T lengthSqr() const
     {
         return x*x + y*y + z*z;
     }
 
-    // Get vector length
+    /// Get vector length
     double length() const
     {
         return sqrt(double(lengthSqr()));
     }
 
-    // Get the Euclidean Distance between vectors
+    /// Get the Euclidean Distance between vectors
     double euclideanDistance(const Vec3& rhs) const
     {
         return (*this - rhs).length();
     }
 
-    // Get the Chebyshev Distance between vectors
+    /// Get the Chebyshev Distance between vectors
     T chebyshevDistance(const Vec3& rhs) const
     {
         return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z));
     }
 
-    // Get the Manhattan Distance between vectors
+    /// Get the Manhattan Distance between vectors
     T manhattanDistance(const Vec3& rhs) const
     {
         return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z);
@@ -98,6 +97,43 @@ public:
         y -= rhs.y;
         z -= rhs.z;
         return *this;
+    }
+
+    void swap(Vec3& rhs)
+    {
+        swap(x, rhs.x);
+        swap(y, rhs.y);
+        swap(z, rhs.z);
+    }
+
+    void for_each(std::function<void(T)> func) const
+    {
+        func(x);
+        func(y);
+        func(z);
+    }
+
+    void for_each(std::function<void(T&)> func)
+    {
+        func(x);
+        func(y);
+        func(z);
+    }
+
+    template<typename... arg>
+    void for_each(std::function<void(T, arg)> func, arg) const
+    {
+        func(x, arg);
+        func(y, arg);
+        func(z, arg);
+    }
+
+    template<typename... arg>
+    void for_each(std::function<void(T&, arg)> func, arg)
+    {
+        func(x, rhs.x);
+        func(y, rhs.y);
+        func(z, rhs.z);
     }
 };
 

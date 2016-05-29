@@ -20,9 +20,11 @@
 #define VERTEXARRAY_H_
 
 #include <cstring>
+#include <boost/core/noncopyable.hpp>
 #include "..\shared\Common.h"
 
 class VertexArray
+    :boost::noncopyable
 {
 private:
     // Vertex count
@@ -54,9 +56,6 @@ public:
         delete[] m_vertexAttributes;
     }
 
-    VertexArray(const VertexArray&) = delete;
-    VertexArray& operator=(const VertexArray&) = delete;
-
     void clear()
     {
         memset(m_data, 0, m_maxVertexes*m_vertexAttributeCount*sizeof(float));
@@ -65,21 +64,21 @@ public:
     }
 
     // Set texture coordinates
-    void setTexture(const int size, const float* texture)
+    void setTexture(int size, const float* texture)
     {
         assert(size <= m_textureCount);
         memcpy(m_vertexAttributes, texture, size*sizeof(float));
     }
 
     // Set color value
-    void setColor(const int size, const float* color)
+    void setColor(int size, const float* color)
     {
         assert(size <= m_colorCount);
         memcpy(m_vertexAttributes + m_textureCount, color, size*sizeof(float));
     }
 
     // Set extra vertex attributes value
-    void setAttribute(const int size, const float* attribute)
+    void setAttribute(int size, const float* attribute)
     {
         assert(size <= m_attributeCount);
         memcpy(m_vertexAttributes + m_textureCount + m_colorCount, attribute, size*sizeof(float));

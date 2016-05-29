@@ -15,31 +15,25 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "ALDevice.h"
-#include "AudioSystem.h"
 #include <memory>
 #include <ctime>
+#include <cassert>
+#include "ALDevice.h"
+#include "AudioSystem.h"
 namespace AudioSystem
 {
-//Gain
-ALfloat BGMGain = 0.1f;//背景音乐
-ALfloat SoundGain = 0.17f;//音效
-//Set
-ALenum DopplerModel = AL_INVERSE_DISTANCE_CLAMPED;//设置OpenAL的距离模型
-ALfloat DopplerFactor = 1.0f;//多普勒因子
-ALfloat SpeedOfSound = Air_SpeedOfSound;//声速
-//Update
-bool FallBefore = false;//OnGround
-bool DownWaterBefore = false;//InWater
+ALfloat BGMGain = 0.1f, SoundGain = 0.17f,DopplerFactor = 1.0f, SpeedOfSound = Air_SpeedOfSound;
+ALenum DopplerModel = AL_INVERSE_DISTANCE_CLAMPED;
+bool FallBefore = false, DownWaterBefore = false;
 int BGMNum = 0;
 
 std::map<string, Sound> sounds;
 
 void init()
 {
-    getALDevice().init();
+    device.init();
     //加载音乐
-    for (int i = 0; i < 10; i++)
+    for (int i = 0;; i++)
     {
         string strID = std::to_string(i);
         if (load("BGM" + strID, "Audio\\BGM" + strID + ".wav"))
@@ -52,47 +46,46 @@ void init()
     load("Fall", "Audio/Fall.wav");
     load("BlockClick", "Audio/BlockClick.wav");
     load("DownWater", "Audio/DownWater.wav");
-    //播放BGM
     if (BGMNum > 0)
         play("BGM" + std::to_string(clock() % BGMNum), false, BGMGain, { 0.0,0.0,0.0 });
 }
 void unload()
 {
-    for (auto& s : sounds)
+    for (auto s : sounds)
     {
-        getALDevice().stop(s.second.source);
-        getALDevice().unload(s.second.buffer);
+        device.stop(s.second.source);
+        device.unload(s.second.buffer);
     }
     sounds.clear();
-    getALDevice().clean();
+    device.clean();
 }
-void play(string name, bool loop, float gain, Vec3d sourcePos)
+void play(const string& name, bool loop, float gain, const Vec3d& sourcePos)
 {
     Sound& s = sounds[name];
     //设置全局常量
     alDopplerFactor(DopplerFactor);
     alDistanceModel(DopplerModel);
     alSpeedOfSound(SpeedOfSound);
-    for (auto& fs : sounds)
+    for (auto fs : sounds)
     {
-        if (fs.second.source == Sound::INVALID_SOURCE) continue;
+        assert(fs.second.source != Sound::INVALID_SOURCE);
         alSourcef(fs.second.source, AL_GAIN, BGMGain);
         EFX::set(fs.second.source);
     }
     ALfloat pos[3] = { (ALfloat)sourcePos.x,(ALfloat)sourcePos.y,(ALfloat)sourcePos.z };
     ALfloat Vel[] = { 0,0,0 };
-    s.source = getALDevice().play(s.buffer, loop, gain, pos, Vel);
+    s.source = device.play(s.buffer, loop, gain, pos, Vel);
 }
-void stop(string name)
+void stop(const string& name)
 {
-    Sound& s = sounds[name];
-    if(s.source!=Sound::INVALID_SOURCE)
-        getALDevice().stop(s.source);
+    ALuint s = sounds[name].source;
+    assert(s != Sound::INVALID_SOURCE);
+    device.stop(s);
 }
-bool load(string name, string path)
+bool load(const string& name, const string& path)
 {
-    Sound s = Sound(getALDevice().load(path));
-    if (s.buffer == ALDevice::INVALID_BUFFER) return false;
+    Sound s(device.load(path));
+    assert(s.buffer == ALDevice::INVALID_BUFFER);
     sounds.insert(std::make_pair(name, s));
     return true;
 }

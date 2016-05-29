@@ -1,13 +1,8 @@
-// Waves.h: interface for the CWaves class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #ifndef _CWAVES_H_
 #define _CWAVES_H_
 
-//#include <windows.h>
 #include <stdio.h>
-#include<cstring>
+#include <cstring>
 
 
 typedef unsigned short      WORD;
