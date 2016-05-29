@@ -15,4 +15,3 @@ for parent,dirnames,filenames in os.walk(".\\"):
 		file.close()
 
 print("Finished!")
-		

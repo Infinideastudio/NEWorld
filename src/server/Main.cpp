@@ -68,7 +68,7 @@ std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
     case Chat:
         uint32_t length1 = tdh.take<uint32_t>(), length2 = packet.length - length1;
         std::string username = tdh.getString(length1), content = tdh.getString(length2);
-		delete[] packet.data;
+        delete[] packet.data;
         return std::make_unique<ChatPacket>(username, content);
     }
     return nullptr;

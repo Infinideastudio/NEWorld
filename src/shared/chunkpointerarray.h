@@ -45,8 +45,8 @@ public:
     {
         delete[] m_array;
     }
-	ChunkPointerArray(const ChunkPointerArray&)=delete;
-	ChunkPointerArray& operator= (const ChunkPointerArray&) = delete;
+    ChunkPointerArray(const ChunkPointerArray&)=delete;
+    ChunkPointerArray& operator= (const ChunkPointerArray&) = delete;
     // Move array by delta
     void move(const Vec3i& delta);
     // Move array to pos
