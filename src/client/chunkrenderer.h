@@ -19,11 +19,13 @@
 #ifndef CHUNKRENDERER_H_
 #define CHUNKRENDERER_H_
 
+#include <boost/noncopyable.hpp>
 #include "../shared/chunk.h"
 #include "../shared/world.h"
 #include "renderer.h"
 
 class ChunkRenderer
+    :boost::noncopyable
 {
 private:
     // Target world
@@ -38,9 +40,6 @@ private:
 public:
     ChunkRenderer(World* world, Chunk* chunk) :m_world(world), m_chunk(chunk)
     {}
-
-    ChunkRenderer(const ChunkRenderer&) = delete;
-    ChunkRenderer& operator=(const ChunkRenderer&) = delete;
 
     // Build VBO(Mesh)
     void buildVertexArray();
