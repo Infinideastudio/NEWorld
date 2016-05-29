@@ -20,24 +20,27 @@
 
 using NEWorld
 
-' Plugin attributes
-dim shared pluginName as zstring*22 = "infinideas.testplugin"
-dim shared testPlugin as PluginData
-dim shared blocks as BlockType ptr
+' Plugin constants
+const PluginName as string = "infinideas.testplugin"
 
-' Block attributes storage
-dim shared name_rock as zstring*5 = "rock"
-dim shared name_soil as zstring*5 = "soil"
-dim shared name_grass as zstring*6 = "grass"
+' Plugin data
+dim shared blocks as BlockType ptr
 
 ' NEWorld constants
 const ChunkSize as integer = 32
 
+' Convert const string to zstring ptr
+function c_str(byref s as const string) as zstring ptr
+    dim res as zstring ptr = new byte[len(s) + 1]
+    *res = s
+    return res
+end function
+
 ' Add block
-sub registerblock(byval index as integer, byval blockname as byte ptr, _
-    byval solid as byte, byval translucent as byte, byval opaque as byte, _
-    byval explodePower as int32_t, byval hardness as int32_t)
-    blocks[index].blockname = blockname
+sub registerBlock(index as integer, byref blockName as const string, _
+    solid as byte, translucent as byte, opaque as byte, _
+    explodePower as int32, hardness as int32)
+    blocks[index].blockName = c_str(blockName)
     blocks[index].solid = solid
     blocks[index].translucent = translucent
     blocks[index].opaque = opaque
@@ -47,7 +50,7 @@ end sub
 
 ' Chunk generator
 function buildChunk(byref cpos as const Vec3i) as BlockData ptr
-    dim res as BlockData ptr = callocate(ChunkSize*ChunkSize*ChunkSize, sizeof(BlockData))
+    dim res as BlockData ptr = new BlockData[ChunkSize*ChunkSize*ChunkSize]
     if cpos.y>=0 then
         dim i as integer
         for i=0 to ChunkSize*ChunkSize*ChunkSize - 1
@@ -60,13 +63,14 @@ end function
 
 ' Main function
 function init() as PluginData ptr
-    blocks = callocate(3, sizeof(BlockType))
-    registerblock(0, @name_rock, 1, 0, 1, 0, 10)
-    registerBlock(1, @name_soil, 1, 0, 1, 0, 5)
-    registerBlock(2, @name_grass, 1, 0, 1, 0, 5)
-    testPlugin.pluginName = @pluginName
-    testPlugin.blocksCount = 3
-    testPlugin.blocks = blocks
-    testPlugin.buildChunk = @buildchunk
-    return @testPlugin
+    blocks = new BlockType[3]
+    registerBlock(0, "rock", 1, 0, 1, 0, 10)
+    registerBlock(1, "soil", 1, 0, 1, 0, 5)
+    registerBlock(2, "grass", 1, 0, 1, 0, 5)
+    dim testPlugin as PluginData ptr = new PluginData
+    testPlugin->pluginName = c_str(PluginName)
+    testPlugin->blocksCount = 3
+    testPlugin->blocks = blocks
+    testPlugin->buildChunk = @buildChunk
+    return testPlugin
 end function

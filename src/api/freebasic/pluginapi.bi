@@ -19,35 +19,37 @@
 #ifndef PLUGINAPI_BI_
 #define PLUGINAPI_BI_
 
-type int32_t as long
-type uint32_t as unsigned long
-
 namespace NEWorld
     
+    type int32 as long
+    type uint32 as unsigned long
+    
     type Vec3i
-        dim as int32_t x, y, z
+        dim as int32 x, y, z
     end type
     
     type BlockType
-        dim blockname as byte ptr = 0
+        dim blockname as zstring ptr = 0
         dim solid as byte
         dim translucent as byte
         dim opaque as byte
-        dim explodePower as int32_t
-        dim hardness as int32_t
+        dim explodePower as int32
+        dim hardness as int32
     end type
     
     type BlockData
-        dim id : 12 as uint32_t
-        dim brightness : 4 as uint32_t
-        dim state : 16 as uint32_t
+        dim id : 12 as uint32
+        dim brightness : 4 as uint32
+        dim state : 16 as uint32
     end type
     
+    type buildChunkFunc as function(byref as const Vec3i) as BlockData ptr
+    
     type PluginData
-        dim pluginName as byte ptr
-        dim blocksCount as int32_t
+        dim pluginName as zstring ptr = 0
+        dim blocksCount as int32
         dim blocks as BlockType ptr = 0
-        dim buildChunk as function(byref as const Vec3i) as BlockData ptr = 0
+        dim buildChunk as buildChunkFunc = 0
     end type
     
 end namespace

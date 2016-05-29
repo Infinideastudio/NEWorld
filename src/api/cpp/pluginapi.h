@@ -21,39 +21,42 @@
 
 namespace NEWorld
 {
-    class Vec3i
+
+    typedef int int32;
+    typedef unsigned int uint32;
+
+    struct Vec3i
     {
-    public:
-        int x, y, z;
+        int32 x, y, z;
     };
 
-    class BlockType
+    struct BlockType
     {
-    public:
-        const char* blockname = nullptr;
+        char* blockname = nullptr;
         bool solid;
         bool translucent;
         bool opaque;
-        int explodePower;
-        int hardness;
+        int32 explodePower;
+        int32 hardness;
     };
 
-    class BlockData
+    struct BlockData
     {
-    public:
-        unsigned int id : 12;
-        unsigned int brightness : 4;
-        unsigned int state : 16;
+        uint32 id : 12;
+        uint32 brightness : 4;
+        uint32 state : 16;
     };
 
-    class PluginData
+    typedef BlockData* (*buildChunkFunc)(const Vec3i&);
+
+    struct PluginData
     {
-    public:
-        char* pluginName;
-        int blocksCount;
+        char* pluginName = nullptr;
+        int32 blocksCount;
         BlockType* blocks = nullptr;
-        BlockData* (*buildChunk)(const Vec3i&) = nullptr;
+        buildChunkFunc buildChunk = nullptr;
     };
+
 }
 
 #endif
