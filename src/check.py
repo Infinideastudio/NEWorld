@@ -1,5 +1,7 @@
 import os  
 import os.path  
+
+# Check tool, python3+
 # check newline at the end of file
 for parent,dirnames,filenames in os.walk(".\\"):  
 	for rawfilename in filenames:
@@ -11,3 +13,6 @@ for parent,dirnames,filenames in os.walk(".\\"):
 		if filecontent[-1]!="\n":
 			print("No newline at the end of file: " + filename)
 		file.close()
+
+print("Finished!")
+		
