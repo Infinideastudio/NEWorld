@@ -75,7 +75,7 @@ bool Window::init()
         default:
             break;
         }
-        m_pages.top()->content->mouseButtonFunc(b, (ButtonAction)action); //TODO: fixit(bÎ´³õÊ¼»¯)
+        m_pages.top()->content->mouseButtonFunc(b, (ButtonAction)action); //TODO: fixit(bæœªåˆå§‹åŒ–)
         return;
     });
     return true;
