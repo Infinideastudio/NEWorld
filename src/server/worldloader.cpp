@@ -21,7 +21,6 @@
 void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
 {
     Vec3i centerCPos;
-    Chunk* curChunk;
     int pl = 0, pu = 0;
     int distsqr, first, middle, last;
 

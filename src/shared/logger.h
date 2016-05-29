@@ -63,7 +63,7 @@ private:
     std::ofstream m_fout;
 public:
     LoggerForwarderFile();
-    LoggerForwarderFile(const std::string &file_name);
+    explicit LoggerForwarderFile(const std::string &file_name);
     ~LoggerForwarderFile();
     void forwardLog(const std::string &str);
 };
