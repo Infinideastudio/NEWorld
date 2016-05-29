@@ -16,8 +16,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <network.h>
-#include <climits>
+#include "networkstructures.h"
 
-boost::asio::io_service ioService;
-
+void ChatPacket::process()
+{
+    //转发给所有玩家之类的
+}

@@ -22,6 +22,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\server\chunkloader.cpp" />
     <ClCompile Include="..\..\..\src\server\main.cpp" />
+    <ClCompile Include="..\..\..\src\server\networkstructures.cpp" />
     <ClCompile Include="..\..\..\src\server\networkutils.cpp" />
     <ClCompile Include="..\..\..\src\server\worldloader.cpp" />
   </ItemGroup>

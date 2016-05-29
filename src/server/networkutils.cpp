@@ -19,5 +19,5 @@
 #include "network.h"
 #include <climits>
 
-boost::asio::io_service io_service;
+boost::asio::io_service ioService;
 

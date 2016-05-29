@@ -17,7 +17,7 @@
 */
 
 #include "sender.h"
-#include "logger.h"
+#include <logger.h>
 #include <queue>
 #include <mutex>
 //The packets which are waiting to send
@@ -29,8 +29,8 @@ std::mutex senderMutex;
 void senderThread()
 {
     extern std::string hostIp;
-    tcp::socket s(io_service);
-    tcp::resolver resolver(io_service);
+    tcp::socket s(ioService);
+    tcp::resolver resolver(ioService);
     try
     {
         //Connect to the server
@@ -48,6 +48,7 @@ void senderThread()
             senderMutex.unlock();
 
             boost::asio::write(s, boost::asio::buffer(&p.identifier, sizeof(Identifier)));
+            boost::asio::write(s, boost::asio::buffer(&p.length, sizeof(p.length)));
             boost::asio::write(s, boost::asio::buffer(&p.data, p.length));
         }
     }

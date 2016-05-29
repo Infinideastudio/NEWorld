@@ -21,11 +21,11 @@
 enum Identifier
 {
     //Client to server
-    Login
+
     //Server to client
 
     //Common
-
+    Chat
 };
 
 class NetworkStructure

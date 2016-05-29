@@ -17,8 +17,8 @@
 */
 
 #include "receiver.h"
-#include "network.h"
-#include "logger.h"
+#include <network.h>
+#include <logger.h>
 #include <memory>
 std::string hostIp;
 
@@ -31,7 +31,7 @@ std::unique_ptr<NetworkStructure> readData(tcp::socket& s, Identifier identifier
 {
     switch (identifier)
     {
-    case Login:
+    case Chat: //example
         uint32_t length1, length2;
         std::string username, content;
         boost::asio::read(s, boost::asio::buffer(&length1, sizeof(uint32_t)));
@@ -45,10 +45,8 @@ std::unique_ptr<NetworkStructure> readData(tcp::socket& s, Identifier identifier
 
 void receiverThread()
 {
-    boost::asio::io_service io_service;
-
-    tcp::socket s(io_service);
-    tcp::resolver resolver(io_service);
+    tcp::socket s(ioService);
+    tcp::resolver resolver(ioService);
     try
     {
         //connect to the server

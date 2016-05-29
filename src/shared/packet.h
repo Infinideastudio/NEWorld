@@ -4,7 +4,7 @@
 struct Packet
 {
     Identifier identifier;
-    int length;
+    uint32_t length;
     void* data;
 };
 

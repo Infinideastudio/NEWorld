@@ -19,6 +19,9 @@
     <ClCompile Include="..\..\..\src\server\chunkloader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\server\networkstructures.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\server\worldloader.h">

@@ -19,7 +19,7 @@
 #ifndef SENDER_H_
 #define SENDER_H_
 
-#include "network.h"
+#include <network.h>
 
 void senderThread();
 void addRequest(Packet p);
