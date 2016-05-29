@@ -18,7 +18,7 @@
 
 #include "../src/api/freebasic/pluginapi.bi"
 
-using NEWorld
+using NWAPI
 
 ' Plugin constants
 const PluginName as string = "infinideas.testplugin"

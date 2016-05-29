@@ -19,7 +19,7 @@
 #ifndef PLUGINAPI_BI_
 #define PLUGINAPI_BI_
 
-namespace NEWorld
+namespace NWAPI
     
     type int32 as long
     type uint32 as unsigned long

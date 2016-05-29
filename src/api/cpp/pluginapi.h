@@ -19,7 +19,7 @@
 #ifndef PLUGINAPI_H_
 #define PLUGINAPI_H_
 
-namespace NEWorld
+namespace NWAPI
 {
 
     typedef int int32;

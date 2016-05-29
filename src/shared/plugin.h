@@ -22,21 +22,9 @@
 #include <string>
 #include <cstring> // memcpy
 using std::string;
-#include "vec3.h"
-#include "blocktype.h"
-#include "blockdata.h"
+#include "../api/cpp/pluginapi.h" // Use struct definitions in PluginAPI
 
-class PluginData
-{
-public:
-    // Plugin name
-    char* pluginName;
-    // Declared block types
-    int blocksCount;
-    BlockType* blocks = nullptr;
-    // Declared terrain generator
-    BlockData* (*buildChunk)(const Vec3i&) = nullptr;
-};
+using NWAPI::PluginData;
 
 class Plugin
 {
