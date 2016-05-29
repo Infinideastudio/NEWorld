@@ -3,6 +3,7 @@
 
 #include "controls.h"
 #include "window.h"
+#include <functional>
 
 class Application :public UIObject
 {
@@ -14,6 +15,7 @@ public:
     virtual void ApplicationDoEnteringForeground();
     virtual void ApplicationDoFinalizing();
     // This is the main loop!!!!!
+    void AddWindow(std::shared_ptr<Window> newWin);
     void Run(int argc, char ** argv, std::shared_ptr<Page> firstpage);
 };
 

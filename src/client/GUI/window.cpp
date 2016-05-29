@@ -21,6 +21,7 @@
 
 constexpr char* WindowName = "NEWorld";
 constexpr int WindowH = 852, WindowW = 480;
+
 std::function<void(GLFWwindow*, int button, int action, int)> mouseButtonCallback;
 void glfwMouseButtonCallback(GLFWwindow* win, int button, int action, int val)
 {
@@ -30,7 +31,7 @@ void glfwMouseButtonCallback(GLFWwindow* win, int button, int action, int val)
 void glfwSetMouseButtonCallbackHelper(GLFWwindow* win, std::function<void(GLFWwindow*, int button, int action, int)> func)
 {
     mouseButtonCallback = func;
-    glfwSetMouseButtonCallbackHelper(win, glfwMouseButtonCallback);
+    glfwSetMouseButtonCallback(win, glfwMouseButtonCallback);
 }
 
 
