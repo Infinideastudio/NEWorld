@@ -68,7 +68,7 @@ private:
 public:
     World() : m_chunkCount(0), m_chunkArraySize(1024)
     {
-        // ¿´×ÅnewºÍrealloc»ìÓÃÓĞµã±ğÅ¤¡£¡£¡£ --qiaozhanrong
+        // çœ‹ç€newå’Œreallocæ··ç”¨æœ‰ç‚¹åˆ«æ‰­ã€‚ã€‚ã€‚ --qiaozhanrong
         //m_chunks = new Chunk*[m_chunkArraySize];
         m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
     }
