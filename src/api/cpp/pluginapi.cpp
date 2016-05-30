@@ -16,11 +16,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "plugin.h"
+#include "pluginapi.h"
 
-int Plugin::loadFrom(const string& filename)
-{
-    init = boost::dll::import<PluginData*(*)()>(filename, "init", boost::dll::load_mode::append_decorations);
-    data = (*init.get())();
-    return 0;
-}
+

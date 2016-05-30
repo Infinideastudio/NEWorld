@@ -22,6 +22,8 @@
 #include <string>
 #include <cstring> // memcpy
 using std::string;
+#include <boost/shared_ptr.hpp>
+#include <boost/dll/import.hpp>
 #include "../api/cpp/pluginapi.h" // Use struct definitions in PluginAPI
 
 using NWAPI::PluginData;
@@ -32,7 +34,7 @@ private:
     // Plugin name
     string name;
     // Main plugin function
-    PluginData* (*init)();
+    boost::shared_ptr<PluginData*(*)()> init;
     // Plugin Data
     PluginData* data;
 

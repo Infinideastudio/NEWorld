@@ -19,43 +19,69 @@
 #ifndef PLUGINAPI_H_
 #define PLUGINAPI_H_
 
-namespace NWAPI
+#if defined _WIN32 || defined __CYGWIN__
+    #ifdef PLUGINSDK_EXPORTS
+        #ifdef _MSC_VER
+            #define NWAPIENTRY __declspec(dllexport)
+        #else
+            #define NWAPIENTRY __attribute__ ((dllexport))
+        #endif
+    #else
+        #ifdef _MSC_VER
+            #define NWAPIENTRY __declspec(dllimport)
+        #else
+            #define NWAPIENTRY __attribute__ ((dllimport))
+        #endif
+    #endif
+#else
+    #define NWAPIENTRY __attribute__ ((visibility ("default")))
+#endif
+
+extern "C"
 {
 
-    typedef int int32;
-    typedef unsigned int uint32;
-
-    struct Vec3i
+    namespace NWAPI
     {
-        int32 x, y, z;
-    };
 
-    struct BlockType
-    {
-        char* blockname = nullptr;
-        bool solid;
-        bool translucent;
-        bool opaque;
-        int32 explodePower;
-        int32 hardness;
-    };
+        typedef int int32;
+        typedef unsigned int uint32;
 
-    struct BlockData
-    {
-        uint32 id : 12;
-        uint32 brightness : 4;
-        uint32 state : 16;
-    };
+        struct Vec3i
+        {
+            int32 x, y, z;
+        };
 
-    typedef BlockData* (*buildChunkFunc)(const Vec3i&);
+        struct BlockType
+        {
+            char* blockname = nullptr;
+            bool solid;
+            bool translucent;
+            bool opaque;
+            int32 explodePower;
+            int32 hardness;
+        };
 
-    struct PluginData
-    {
-        char* pluginName = nullptr;
-        int32 blocksCount;
-        BlockType* blocks = nullptr;
-        buildChunkFunc buildChunk = nullptr;
-    };
+        struct BlockData
+        {
+            uint32 id : 12;
+            uint32 brightness : 4;
+            uint32 state : 16;
+        };
+
+        typedef BlockData* (*buildChunkFunc)(const Vec3i*);
+
+        struct PluginData
+        {
+            char* pluginName = nullptr;
+            int32 blocksCount;
+            BlockType* blocks = nullptr;
+            buildChunkFunc buildChunk = nullptr;
+        };
+
+        NWAPIENTRY BlockData getBlock(const Vec3i*);
+        NWAPIENTRY void setBlock(const Vec3i*, BlockData);
+
+    }
 
 }
 
