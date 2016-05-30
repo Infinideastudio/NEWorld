@@ -68,6 +68,7 @@ void Application::AddWindow(std::shared_ptr<Window> newWin)
         GLFWDropCASSF(win, count, paths);
     });
     windows.insert({ "",newWin });
+    winByGLFWWin.insert({(*newWin), newWin});
 }
 
 void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
@@ -82,27 +83,76 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
     };
     GLFWWindowFocusCASSF = [this](GLFWwindow* win, int focused) 
     {
+        FocusOp op;
+        switch (focused)
+        {
+        case GL_TRUE:
+            op = Gain;
+            break;
+        case GL_FALSE:
+            op = Lose;
+            break;
+        }
+        winByGLFWWin[win]->getCurPage()->content->focusFunc(op);
     };
     GLFWMouseButtonCASSF = [this](GLFWwindow* win, int button, int action, int mods) 
     {
+        MouseButton b;
+        switch (button)
+        {
+        case GLFW_MOUSE_BUTTON_LEFT:
+            button = MouseButton::Left;
+            break;
+        case GLFW_MOUSE_BUTTON_RIGHT:
+            button = MouseButton::Right;
+            break;
+        case GLFW_MOUSE_BUTTON_MIDDLE:
+            button = MouseButton::Middle;
+            break;
+        case GLFW_MOUSE_BUTTON_5:
+            button = MouseButton::Preserved1;
+            break;
+        case GLFW_MOUSE_BUTTON_6:
+            button = MouseButton::Preserved2;
+            break;
+        default:
+            break;
+        }
+        winByGLFWWin[win]->getCurPage()->content->mouseButtonFunc(b, (ButtonAction)action); 
     };
     GLFWCursorPosCASSF = [this](GLFWwindow* win, double xpos, double ypos) 
     {
+        winByGLFWWin[win]->getCurPage()->content->cursorPosFunc(xpos, ypos);
     };
     GLFWCursorEnterCASSF = [this](GLFWwindow* win, int entered) 
     {
+        CursorOp op;
+        switch (entered)
+        {
+        case GL_TRUE:
+            op = Enter;
+            break;
+        case GL_FALSE:
+            op = Leave;
+            break;
+        }
+        winByGLFWWin[win]->getCurPage()->content->crusorEnterFunc(op);
     };
     GLFWScrollCASSF = [this](GLFWwindow* win, double xoffset, double yoffset) 
     {
+        winByGLFWWin[win]->getCurPage()->content->scrollFunc(xoffset, yoffset); 
     };
     GLFWKeyCASSF = [this](GLFWwindow*, GLFWwindow* win, int key, int scancode, int action, int mods) 
     {
+        winByGLFWWin[win]->getCurPage()->content->keyFunc(key, (ButtonAction)action);
     };
     GLFWCharCASSF = [this](GLFWwindow* win, unsigned int codepoint) 
     {
+        winByGLFWWin[win]->getCurPage()->content->charInputFunc((wchar_t codepoint);
     };
     GLFWDropCASSF = [this](GLFWwindow* win, int count, const char** paths) 
     {
+        winByGLFWWin[win]->getCurPage()->content->dropFunc(count, paths);
     };
     // Initialize the library 
     if (!glfwInit());
@@ -110,7 +160,7 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
     AddWindow(firstWin);
     ApplicationDoAfterLaunch();
 
-    while (1)
+    while (sigTerminiate)
     {
         for (auto win : windows)
         {

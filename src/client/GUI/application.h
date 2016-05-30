@@ -4,11 +4,12 @@
 #include "controls.h"
 #include "window.h"
 #include <functional>
+#include <GLFW/glfw3.h>
 
 class Application :public UIObject
 {
 public:
-    std::map<std::string, std::shared_ptr<Window> > windows;
+    std::map<std::string, std::shared_ptr<Window>> windows;
     virtual void ApplicationDoBeforeLaunch();
     virtual void ApplicationDoAfterLaunch();
     virtual void ApplicationDoEnteringBackground();
@@ -20,6 +21,7 @@ public:
     void Terminate();
 private:
     bool sigTerminate;
+    std::map<GLFWwindow*, std::shared_ptr<Window>> winByGLFWWin;
 };
 
 #endif // !APPLICATION_H
