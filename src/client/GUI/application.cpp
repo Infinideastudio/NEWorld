@@ -73,7 +73,7 @@ void Application::AddWindow(std::shared_ptr<Window> newWin)
 
 void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
 {
-    sigTerminiate = false;
+    sigTerminate = false;
     ApplicationDoBeforeLaunch();
     GLFWWindowPosCASSF = [this](GLFWwindow* win, int xpos, int ypos) 
     {
@@ -148,7 +148,7 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
     };
     GLFWCharCASSF = [this](GLFWwindow* win, unsigned int codepoint) 
     {
-        winByGLFWWin[win]->getCurPage()->content->charInputFunc((wchar_t codepoint);
+        winByGLFWWin[win]->getCurPage()->content->charInputFunc((wchar_t) codepoint);
     };
     GLFWDropCASSF = [this](GLFWwindow* win, int count, const char** paths) 
     {
@@ -160,7 +160,7 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
     AddWindow(firstWin);
     ApplicationDoAfterLaunch();
 
-    while (sigTerminiate)
+    while (sigTerminate)
     {
         for (auto win : windows)
         {
