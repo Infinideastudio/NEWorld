@@ -14,9 +14,12 @@ public:
     virtual void ApplicationDoEnteringBackground();
     virtual void ApplicationDoEnteringForeground();
     virtual void ApplicationDoFinalizing();
-    // This is the main loop!!!!!
     void AddWindow(std::shared_ptr<Window> newWin);
+    // This is the main loop!!!!!
     void Run(int argc, char ** argv, std::shared_ptr<Window> firstWin);
+    void Terminate();
+private:
+    bool sigTerminate;
 };
 
 #endif // !APPLICATION_H

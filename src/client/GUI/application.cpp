@@ -27,53 +27,84 @@ GLFWDropASSF GLFWDropCASSF;
 void Application::AddWindow(std::shared_ptr<Window> newWin)
 {
     newWin->init();
-    glfwSetWindowPosCallback((*newWin), [](GLFWwindow*, int, int) {});   
-    glfwSetWindowSizeCallback((*newWin), [](GLFWwindow*, int, int) {});
-    glfwSetWindowFocusCallback((*newWin), [](GLFWwindow*, int) {});
-    glfwSetMouseButtonCallback((*newWin), [](GLFWwindow*, int, int, int) {});
-    glfwSetCursorPosCallback((*newWin), [](GLFWwindow*, double, double) {});
-    glfwSetCursorEnterCallback((*newWin), [](GLFWwindow*, int) {});
-    glfwSetScrollCallback((*newWin), [](GLFWwindow*, double, double) {});
-    glfwSetKeyCallback((*newWin), [](GLFWwindow*, int, int, int, int) {});
-    glfwSetCharCallback((*newWin), [](GLFWwindow*, unsigned int) {});
-    glfwSetDropCallback((*newWin), [](GLFWwindow*, int, const char**) {});
+    glfwSetWindowPosCallback((*newWin), [](GLFWwindow* win, int xpos, int ypos) 
+    {
+        GLFWWindowPosCASSF(win, xpos, ypos);
+    });   
+    glfwSetWindowSizeCallback((*newWin), [](GLFWwindow* win, int width, int height)
+    {
+        GLFWWindowSizeCASSF(win, width, height);
+    });
+    glfwSetWindowFocusCallback((*newWin), [](GLFWwindow* win, int focused)
+    {
+        GLFWWindowFocusCASSF(win, focused);
+    });
+    glfwSetMouseButtonCallback((*newWin), [](GLFWwindow* win, int button, int action, int mods) 
+    {
+        GLFWMouseButtonCASSF(win, button, action, mods);
+    });
+    glfwSetCursorPosCallback((*newWin), [](GLFWwindow* win, double xpos, double ypos) 
+    {
+        GLFWCursorPosCASSF(win, xpos, ypos);
+    });
+    glfwSetCursorEnterCallback((*newWin), [](GLFWwindow* win, int entered) 
+    {
+        GLFWCursorEnterCASSF(win, entered);
+    });
+    glfwSetScrollCallback((*newWin), [](GLFWwindow* win, double xoffset, double yoffset) 
+    {
+        GLFWScrollCASSF(win, xoffset, yoffset);
+    });
+    glfwSetKeyCallback((*newWin), [](GLFWwindow* win, int key, int scancode, int action, int mods) 
+    {
+        GLFWKeyCASSF(win, key, scancode, action, mods);
+    });
+    glfwSetCharCallback((*newWin), [](GLFWwindow* win, unsigned int codepoint) 
+    {
+        GLFWCharCASSF(win, codepoint);
+    });
+    glfwSetDropCallback((*newWin), [](GLFWwindow* win, int count, const char** paths) 
+    {
+        GLFWDropCASSF(win, count, paths);
+    });
     windows.insert({ "",newWin });
 }
 
 void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
 {
+    sigTerminiate = false;
     ApplicationDoBeforeLaunch();
-    GLFWWindowPosCASSF = [this](GLFWwindow*, int, int) 
+    GLFWWindowPosCASSF = [this](GLFWwindow* win, int xpos, int ypos) 
     {
     };
-    GLFWWindowSizeCASSF = [this](GLFWwindow*, int, int) 
+    GLFWWindowSizeCASSF = [this](GLFWwindow* win, int width, int height) 
     {
     };
-    GLFWWindowFocusCASSF = [this](GLFWwindow*, int) 
+    GLFWWindowFocusCASSF = [this](GLFWwindow* win, int focused) 
     {
     };
-    GLFWMouseButtonCASSF = [this](GLFWwindow*, int, int, int) 
+    GLFWMouseButtonCASSF = [this](GLFWwindow* win, int button, int action, int mods) 
     {
     };
-    GLFWCursorPosCASSF = [this](GLFWwindow*, double, double) 
+    GLFWCursorPosCASSF = [this](GLFWwindow* win, double xpos, double ypos) 
     {
     };
-    GLFWCursorEnterCASSF = [this](GLFWwindow*, int) 
+    GLFWCursorEnterCASSF = [this](GLFWwindow* win, int entered) 
     {
     };
-    GLFWScrollCASSF = [this](GLFWwindow*, double, double) 
+    GLFWScrollCASSF = [this](GLFWwindow* win, double xoffset, double yoffset) 
     {
     };
-    GLFWKeyCASSF = [this](GLFWwindow*, int, int, int, int) 
+    GLFWKeyCASSF = [this](GLFWwindow*, GLFWwindow* win, int key, int scancode, int action, int mods) 
     {
     };
-    GLFWCharCASSF = [this](GLFWwindow*, unsigned int) 
+    GLFWCharCASSF = [this](GLFWwindow* win, unsigned int codepoint) 
     {
     };
-    GLFWDropCASSF = [this](GLFWwindow*, int, const char**) 
+    GLFWDropCASSF = [this](GLFWwindow* win, int count, const char** paths) 
     {
     };
-    /* Initialize the library */
+    // Initialize the library 
     if (!glfwInit());
 
     AddWindow(firstWin);
@@ -87,7 +118,7 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
             win.second->getCurPage()->content->render();
             glfwSwapBuffers(*(win.second));
         }
-        /* Poll for and process events */
+        // Poll for and process events 
         glfwPollEvents();
     }
     ApplicationDoFinalizing();
