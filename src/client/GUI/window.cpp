@@ -50,7 +50,6 @@ bool Window::init()
         glfwTerminate();
         return false;
     }
-    makeCurrentDrawTarget();
 
     glfwSetMouseButtonCallbackHelper(m_win, [this](GLFWwindow*, int button, int action, int)
     {
@@ -107,4 +106,9 @@ void Window::processNavigationOperations()
         }
 
     }
+}
+
+std::shared_ptr<Page> Window::getCurPage()
+{
+    return m_pages.top();
 }

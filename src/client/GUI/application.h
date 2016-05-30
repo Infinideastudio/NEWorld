@@ -16,7 +16,7 @@ public:
     virtual void ApplicationDoFinalizing();
     // This is the main loop!!!!!
     void AddWindow(std::shared_ptr<Window> newWin);
-    void Run(int argc, char ** argv, std::shared_ptr<Page> firstpage);
+    void Run(int argc, char ** argv, std::shared_ptr<Window> firstWin);
 };
 
 #endif // !APPLICATION_H

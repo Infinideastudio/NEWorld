@@ -42,8 +42,8 @@ class Window
 public:
     Window() : m_win(nullptr) { init(); }
     bool init();
+    std::shared_ptr<Page> getCurPage();
     bool isKeyPressed(int key) const { return glfwGetKey(m_win, key) == GLFW_PRESS; }
-    void makeCurrentDrawTarget() const { glfwMakeContextCurrent(m_win); }
     operator GLFWwindow*() const { return m_win; }
 
     // Navigation operations

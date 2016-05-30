@@ -37,42 +37,60 @@ void Application::AddWindow(std::shared_ptr<Window> newWin)
     glfwSetKeyCallback((*newWin), [](GLFWwindow*, int, int, int, int) {});
     glfwSetCharCallback((*newWin), [](GLFWwindow*, unsigned int) {});
     glfwSetDropCallback((*newWin), [](GLFWwindow*, int, const char**) {});
+    windows.insert({ "",newWin });
 }
 
-void Application::Run(int argc, char ** argv, std::shared_ptr<Page> firstpage)
+void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
 {
-    GLFWwindow* window;
-    GLFWWindowPosCASSF = [this](GLFWwindow*, int, int) {};
-    GLFWWindowSizeCASSF = [this](GLFWwindow*, int, int) {};
-    GLFWWindowFocusCASSF = [this](GLFWwindow*, int) {};
-    GLFWMouseButtonCASSF = [this](GLFWwindow*, int, int, int) {};
-    GLFWCursorPosCASSF = [this](GLFWwindow*, double, double) {};
-    GLFWCursorEnterCASSF = [this](GLFWwindow*, int) {};
-    GLFWScrollCASSF = [this](GLFWwindow*, double, double) {};
-    GLFWKeyCASSF = [this](GLFWwindow*, int, int, int, int) {};
-    GLFWCharCASSF = [this](GLFWwindow*, unsigned int) {};
-    GLFWDropCASSF = [this](GLFWwindow*, int, const char**) {};
+    ApplicationDoBeforeLaunch();
+    GLFWWindowPosCASSF = [this](GLFWwindow*, int, int) 
+    {
+    };
+    GLFWWindowSizeCASSF = [this](GLFWwindow*, int, int) 
+    {
+    };
+    GLFWWindowFocusCASSF = [this](GLFWwindow*, int) 
+    {
+    };
+    GLFWMouseButtonCASSF = [this](GLFWwindow*, int, int, int) 
+    {
+    };
+    GLFWCursorPosCASSF = [this](GLFWwindow*, double, double) 
+    {
+    };
+    GLFWCursorEnterCASSF = [this](GLFWwindow*, int) 
+    {
+    };
+    GLFWScrollCASSF = [this](GLFWwindow*, double, double) 
+    {
+    };
+    GLFWKeyCASSF = [this](GLFWwindow*, int, int, int, int) 
+    {
+    };
+    GLFWCharCASSF = [this](GLFWwindow*, unsigned int) 
+    {
+    };
+    GLFWDropCASSF = [this](GLFWwindow*, int, const char**) 
+    {
+    };
     /* Initialize the library */
     if (!glfwInit());
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(480, 320, "Hello World", NULL, NULL);
-    if (!window)
-        glfwTerminate();
+    AddWindow(firstWin);
+    ApplicationDoAfterLaunch();
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-    //glfwSetMouseButtonCallback(window);
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
+    while (1)
     {
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
+        for (auto win : windows)
+        {
+            glfwMakeContextCurrent(*(win.second));
+            win.second->getCurPage()->content->render();
+            glfwSwapBuffers(*(win.second));
+        }
         /* Poll for and process events */
         glfwPollEvents();
     }
-
+    ApplicationDoFinalizing();
     glfwTerminate();
     return;
 }
