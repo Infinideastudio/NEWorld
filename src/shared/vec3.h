@@ -120,6 +120,16 @@ public:
         func(z);
     }
 
+    Vec3<T> for_each(std::function<T(T)> func) const
+    {
+        return Vec3<T>(func(x), func(y), func(z));
+    }
+
+    Vec3<T> for_each(std::function<T(T&)> func)
+    {
+        return Vec3<T>(func(x), func(y), func(z));
+    }
+
     template<typename... arg>
     void for_each(std::function<void(T, arg)> func, arg) const
     {
@@ -134,6 +144,26 @@ public:
         func(x, rhs.x);
         func(y, rhs.y);
         func(z, rhs.z);
+    }
+
+    static void for_range(const T& begin, const T& end, std::function<void(const Vec3<T>&)> func)
+    {
+        Vec3<T> tmp;
+        for (tmp.x = begin; tmp.x != end; tmp.x++)
+            for (tmp.y = begin; tmp.y != end; tmp.y++)
+                for (tmp.z = begin; tmp.z != end; tmp.z++)
+                    func(tmp);
+    }
+
+    T encode(const T& base)
+    {
+        return (x*base + y)*base + z;
+    }
+
+    template<typename U, class = typename std::enable_if<std::is_convertible<T, U>::value>::type>
+    operator Vec3<U>() const
+    {
+        return Vec3<U>(x, y, z);
     }
 };
 
