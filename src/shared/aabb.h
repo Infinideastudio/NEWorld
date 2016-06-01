@@ -22,37 +22,39 @@
 #include <algorithm>
 #include "vec3.h"
 
-// Axis aligned bounding box
+/// Axis aligned bounding box
 class AABB
 {
 public:
-    Vec3d min; // Min bound
-    Vec3d max; // Max bound
+    /// Min bound
+    Vec3d min;
+    /// Max bound
+    Vec3d max;
 
     AABB() = default;
     AABB(const Vec3d& _min, const Vec3d& _max) :min(_min), max(_max) {}
     AABB(const AABB&) = default;
     AABB(AABB&&) = default;
 
-    // Is intersect on X axis
+    /// Is intersect on X axis
     bool intersectX(const AABB &anotherAABB) const;
-    // Is intersect on Y axis
+    /// Is intersect on Y axis
     bool intersectY(const AABB &anotherAABB) const;
-    // Is intersect on Z axis
+    /// Is intersect on Z axis
     bool intersectZ(const AABB &anotherAABB) const;
-    // Is intersect on all axes
+    /// Is intersect on all axes
     bool intersect(const AABB &anotherAABB) const;
-    // Get max move distance <= original_move_distance on X axis, when blocked by another AABB
+    /// Get max move distance <= original_move_distance on X axis, when blocked by another AABB
     double maxMoveOnXclip(const AABB &anotherAABB, double originalMoveDistance) const;
-    // Get max move distance <= original_move_distance on Y axis, when blocked by another AABB
+    /// Get max move distance <= original_move_distance on Y axis, when blocked by another AABB
     double maxMoveOnYclip(const AABB &anotherAABB, double originalMoveDistance) const;
-    // Get max move distance <= original_move_distance on Z axis, when blocked by another AABB
+    /// Get max move distance <= original_move_distance on Z axis, when blocked by another AABB
     double maxMoveOnZclip(const AABB &anotherAABB, double originalMoveDistance) const;
-    // Get expanded AABB
+    /// Get expanded AABB
     AABB expand(const Vec3d& arg) const;
-    // Move AABB
+    /// Move AABB
     void move(const Vec3d& arg);
-    // Move the center of this AABB to target position
+    /// Move the center of this AABB to target position
     void moveTo(double targetX, double targetY, double targetZ);
 
 };
