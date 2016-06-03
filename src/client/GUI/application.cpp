@@ -55,7 +55,7 @@ void Application::AddWindow(std::shared_ptr<Window> newWin)
     {
         GLFWScrollCASSF(win, xoffset, yoffset);
     });
-    glfwSetKeyCallback((*newWin), [](GLFWwindow* win, int key, int scancode, int action, int mods) 
+    glfwSetKeyCallback((*newWin), [](GLFWwindow* win, int key, int scancode, int action, int mods)
     {
         GLFWKeyCASSF(win, key, scancode, action, mods);
     });
@@ -142,7 +142,7 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
     {
         winByGLFWWin[win]->getCurPage()->content->scrollFunc(xoffset, yoffset); 
     };
-    GLFWKeyCASSF = [this](GLFWwindow*, GLFWwindow* win, int key, int scancode, int action, int mods) 
+    GLFWKeyCASSF = [this](GLFWwindow* win, int key, int scancode, int action, int mods)
     {
         winByGLFWWin[win]->getCurPage()->content->keyFunc(key, (ButtonAction)action);
     };

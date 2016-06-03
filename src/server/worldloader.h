@@ -25,7 +25,7 @@ using std::pair;
 #include <chunkpointerarray.h>
 #include "chunkloader.h"
 
-constexpr int MaxChunkLoadCount = 64, int MaxChunkUnloadCount = 64;
+constexpr int MaxChunkLoadCount = 64, MaxChunkUnloadCount = 64;
 
 class WorldLoader
 {

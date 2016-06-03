@@ -28,6 +28,7 @@ struct Sound
 {
     ALuint buffer, source;
     static constexpr ALuint INVALID_SOURCE = static_cast<ALuint>(-1);
+    Sound() :source(INVALID_SOURCE) {}
     explicit Sound(ALuint _buffer) :buffer(_buffer), source(INVALID_SOURCE) {}
 };
 extern ALfloat BGMGain;//背景音乐
