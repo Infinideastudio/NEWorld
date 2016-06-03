@@ -130,22 +130,6 @@ public:
         return Vec3<T>(func(x), func(y), func(z));
     }
 
-    template<typename... arg>
-    void for_each(std::function<void(T, arg)> func, arg) const
-    {
-        func(x, arg);
-        func(y, arg);
-        func(z, arg);
-    }
-
-    template<typename... arg>
-    void for_each(std::function<void(T&, arg)> func, arg)
-    {
-        func(x, rhs.x);
-        func(y, rhs.y);
-        func(z, rhs.z);
-    }
-
     static void for_range(const T& begin, const T& end, std::function<void(const Vec3<T>&)> func)
     {
         Vec3<T> tmp;
@@ -155,12 +139,39 @@ public:
                     func(tmp);
     }
 
-    T encode(const T& base)
+    static void for_range(const Vec3<T>& begin, const Vec3<T>& end, std::function<void(const Vec3<T>&)> func)
+    {
+        Vec3<T> tmp;
+        for (tmp.x = begin.x; tmp.x != end.x; tmp.x++)
+            for (tmp.y = begin.y; tmp.y != end.y; tmp.y++)
+                for (tmp.z = begin.z; tmp.z != end.z; tmp.z++)
+                    func(tmp);
+    }
+
+    template<typename T, T base>
+    T encode()
     {
         return (x*base + y)*base + z;
     }
 
-    template<typename U, class = typename std::enable_if<std::is_convertible<T, U>::value>::type>
+    template<typename T, T base, typename = typename std::enable_if<(bool)(sizeof(T) > sizeof(char*))>::type>
+    static Vec3<T> decode(const T& arg)
+    {
+        T tmp = arg;
+        T z = tmp % base;
+        tmp /= base;
+        return Vec3<T>(tmp / base, tmp % base, z);
+    }
+
+    template<typename T, T base, typename = typename std::enable_if<(bool)(sizeof(T) <= sizeof(char*))>::type>
+    static Vec3<T> decode(T arg)
+    {
+        T z = arg % base;
+        arg /= base;
+        return Vec3<T>(arg / base, arg % base, z);
+    }
+
+    template<typename U, typename = typename std::enable_if<std::is_convertible<T, U>::value>::type>
     operator Vec3<U>() const
     {
         return Vec3<U>(x, y, z);
