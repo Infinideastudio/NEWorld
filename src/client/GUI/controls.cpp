@@ -20,6 +20,7 @@
 
 void Label::render()
 {
+
 }
 
 Label::Label(std::string _xName, Margin _Margin, std::string _caption):

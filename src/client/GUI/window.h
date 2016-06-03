@@ -56,7 +56,7 @@ public:
 private:
     GLFWwindow* m_win;
     // For navigation
-    std::stack<std::shared_ptr<Page>> m_pages;
+    std::stack<std::shared_ptr<Page> > m_pages;
     std::queue<NavigationOperation> m_operationQueries;
 
 };

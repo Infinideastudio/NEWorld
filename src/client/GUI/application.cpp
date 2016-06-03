@@ -101,19 +101,19 @@ void Application::Run(int argc, char ** argv, std::shared_ptr<Window> firstWin)
         switch (button)
         {
         case GLFW_MOUSE_BUTTON_LEFT:
-            button = MouseButton::Left;
+            b = MouseButton::Left;
             break;
         case GLFW_MOUSE_BUTTON_RIGHT:
-            button = MouseButton::Right;
+            b = MouseButton::Right;
             break;
         case GLFW_MOUSE_BUTTON_MIDDLE:
-            button = MouseButton::Middle;
+            b = MouseButton::Middle;
             break;
         case GLFW_MOUSE_BUTTON_5:
-            button = MouseButton::Preserved1;
+            b = MouseButton::Preserved1;
             break;
         case GLFW_MOUSE_BUTTON_6:
-            button = MouseButton::Preserved2;
+            b = MouseButton::Preserved2;
             break;
         default:
             break;

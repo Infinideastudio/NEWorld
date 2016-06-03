@@ -188,6 +188,7 @@
     <ClInclude Include="..\..\..\src\client\GUI\application.h" />
     <ClInclude Include="..\..\..\src\client\GUI\controls.h" />
     <ClInclude Include="..\..\..\src\client\GUI\graphics.h" />
+    <ClInclude Include="..\..\..\src\client\GUI\textrenderer.h" />
     <ClInclude Include="..\..\..\src\client\GUI\window.h" />
     <ClInclude Include="..\..\..\src\client\receiver.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="..\..\..\src\client\GUI\application.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\controls.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\graphics.cpp" />
+    <ClCompile Include="..\..\..\src\client\GUI\textrenderer.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\window.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
     <ClCompile Include="..\..\..\src\client\networkstructures.cpp" />
