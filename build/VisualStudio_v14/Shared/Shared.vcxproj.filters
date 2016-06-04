@@ -70,14 +70,12 @@
     <ClCompile Include="..\..\..\src\shared\world.cpp">
       <Filter>World</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\logger.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp">
       <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\plugin.cpp">
       <Filter>Plugin</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\logger.cpp" />
   </ItemGroup>
 </Project>

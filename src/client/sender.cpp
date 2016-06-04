@@ -54,7 +54,7 @@ void senderThread()
     }
     catch (std::exception& e)
     {
-        errorstream << "Exception: " << e.what() << logendl;
+        errorstream << "Exception: " << e.what();
     }
 }
 

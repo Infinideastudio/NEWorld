@@ -31,7 +31,7 @@ const int globalUpdateInterval = 10;
 
 void errorHandle(const tcp::socket& m_socket, error_code ec)
 {
-    infostream << m_socket.remote_endpoint().address().to_string() << " disconnected" << ec.value() << logendl;
+    infostream << m_socket.remote_endpoint().address().to_string() << " disconnected" << ec.value();
 }
 
 class takeDataHelper
@@ -186,7 +186,7 @@ private:
         {
             if (!ec)
             {
-                infostream << m_socket.remote_endpoint().address().to_string() << " connects to the server" << logendl;
+                infostream << m_socket.remote_endpoint().address().to_string() << " connects to the server";
                 std::make_shared<Session>(std::move(m_socket))->start();
             }
             doAccept();
@@ -219,9 +219,10 @@ const std::string getCurrentSystemTime()
 }
 int main(int argc, char* argv[])
 {
-    infostream << "System time: " << getCurrentSystemTime() << logendl;
-    infostream << "Server is starting..." << logendl;
-    infostream << "Server started" << logendl;
+    loggerInit();
+    infostream << "System time: " << getCurrentSystemTime();
+    infostream << "Server is starting...";
+    infostream << "Server started";
     try
     {
         Server s(ioService, Port);
@@ -229,8 +230,8 @@ int main(int argc, char* argv[])
     }
     catch (std::exception& e)
     {
-        errorstream << "Exception: " << e.what() << logendl;
+        errorstream << "Exception: " << e.what();
     }
-    infostream << "Server is stoping..." << logendl;
+    infostream << "Server is stoping...";
     return 0;
 }

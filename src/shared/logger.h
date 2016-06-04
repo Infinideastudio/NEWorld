@@ -20,119 +20,34 @@
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/log/support/date_time.hpp>
+#include <boost/log/common.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/expressions/keyword.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/attributes/timer.hpp>
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
+#include <boost/log/sinks/text_file_backend.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/attributes/named_scope.hpp>
+namespace logging = boost::log;
+namespace src = boost::log::sources;
+namespace expr = boost::log::expressions;
+namespace sinks = boost::log::sinks;
+namespace attrs = boost::log::attributes;
+namespace keywords = boost::log::keywords;
 
-enum CriticalLevel
-{
-    CriticalLevelVerbose,
-    CriticalLevelInfo,
-    CriticalLevelWarning,
-    CriticalLevelError,
-    CriticalLevelsCount
-};
+#define debugstream BOOST_LOG_TRIVIAL(debug)     //给开发者看的信息
+#define infostream BOOST_LOG_TRIVIAL(info)       //给普通用户看的问题
+#define warningstream BOOST_LOG_TRIVIAL(warning) //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
+#define errorstream BOOST_LOG_TRIVIAL(error)     //影响游戏运行的问题
+#define fatalstream BOOST_LOG_TRIVIAL(fatal)     //无法恢复的错误
 
-static const char CriticalLevelString[][5] =
-{
-    "(VB)", // CriticalLevelVerbose
-    "(II)", // CriticalLevelInfo
-    "(WW)", // CriticalLevelWarning
-    "(EE)", // CriticalLevelError
-};
-
-class LoggerForwarder
-{
-public:
-    LoggerForwarder() {}
-    virtual ~LoggerForwarder() {}
-    virtual void forwardLog(const std::string &str) = 0;
-};
-
-class LoggerForwarderConsole : public LoggerForwarder
-{
-public:
-    void forwardLog(const std::string &str);
-};
-
-class LoggerForwarderFile : public LoggerForwarder
-{
-private:
-    const std::string m_file_name;
-    std::ofstream m_fout;
-public:
-    LoggerForwarderFile();
-    explicit LoggerForwarderFile(const std::string &file_name);
-    ~LoggerForwarderFile();
-    void forwardLog(const std::string &str);
-};
-
-class LoggerMessageEnding
-{
-};
-
-class Logger
-{
-private:
-    static const int forwarder_buffer_size = 8;
-    std::string m_forwarder_buffer[forwarder_buffer_size];
-    int m_forward_buf_position;
-    std::vector<std::pair<LoggerForwarder*, bool> > m_forwarders;
-    CriticalLevel m_notice_level;
-
-    // 在调制消息头的过程中，防止频繁地分配和释放内存，
-    // 提前一次性分配好一个长度为128字节的缓存空间。
-    // 在不够用的情况下，再临时分配和释放所需的内存。
-    char m_message_buffer[128];
-
-public:
-    Logger();
-    ~Logger();
-
-    void setNoticeLevel(CriticalLevel level)
-    {
-        m_notice_level = level;
-    }
-
-    void log(const std::string &str, CriticalLevel level = CriticalLevelVerbose);
-};
-
-class LoggerStream
-{
-private:
-    const CriticalLevel m_notice_level;
-    Logger *m_logger;
-    std::ostringstream m_stream_buffer;
-
-    // Initialize a LoggerStream instance without explicitly
-    // declare its notive level and bound logger is prohibited.
-    LoggerStream();
-
-public:
-    LoggerStream(Logger *logger, const CriticalLevel notice_level)
-        : m_logger(logger), m_notice_level(notice_level) {}
-
-    LoggerStream& operator << (const LoggerMessageEnding&)
-    {
-        m_logger->log(m_stream_buffer.str(), m_notice_level);
-        m_stream_buffer.str("");
-        return *this;
-    }
-
-    template <typename T>
-    LoggerStream& operator << (const T &val)
-    {
-        m_stream_buffer << val;
-        return *this;
-    }
-};
-
-extern LoggerMessageEnding logendl;
-extern Logger logger;
-extern LoggerStream verbosestream;
-extern LoggerStream infostream;
-extern LoggerStream warningstream;
-extern LoggerStream errorstream;
-
+void loggerInit();
 #endif
