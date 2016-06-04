@@ -23,13 +23,13 @@
 
 // NWAPIEXPORT
 #if defined NEWORLD_TARGET_WINDOWS
-    #ifdef NEWORLD_COMPILER_MSVC
-        #define NWAPIEXPORT __declspec(dllexport)
-    #else
-        #define NWAPIEXPORT __attribute__((dllexport))
-    #endif
+#ifdef NEWORLD_COMPILER_MSVC
+#define NWAPIEXPORT __declspec(dllexport)
 #else
-    #define NWAPIEXPORT __attribute__((visibility("default")))
+#define NWAPIEXPORT __attribute__((dllexport))
+#endif
+#else
+#define NWAPIEXPORT __attribute__((visibility("default")))
 #endif
 
 // Prefix NW_ means it is an interface to NEWorld main program
@@ -58,9 +58,7 @@ struct PL_BlockType
 // Conversions between plugin structures and NEWorld structures
 // This is used when structure definitions in NEWorld and in Plugin API are different
 NW_BlockType convertBlockType(const PL_BlockType& src)
-{
-    return NW_BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness);
-}
+{ return NW_BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness); }
 
 // Pointer to procedure types
 typedef NW_BlockData(*NW_getBlockFunc)(const NW_Vec3i&);
