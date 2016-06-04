@@ -20,7 +20,7 @@
 #define PLUGINAPI_H_
 
 #if defined _WIN32 || defined __CYGWIN__
-    #ifdef PLUGINSDK_EXPORTS
+    #ifdef NEWORLD_PLUGIN_API_EXPORT
         #ifdef _MSC_VER
             #define NWAPIENTRY __declspec(dllexport)
         #else
@@ -40,48 +40,43 @@
 extern "C"
 {
 
-    namespace NWAPI
+    typedef int int32;
+    typedef unsigned int uint32;
+
+    struct Vec3i
     {
+        int32 x, y, z;
+    };
 
-        typedef int int32;
-        typedef unsigned int uint32;
+    struct BlockType
+    {
+        char* blockname = nullptr;
+        bool solid;
+        bool translucent;
+        bool opaque;
+        int32 explodePower;
+        int32 hardness;
+    };
 
-        struct Vec3i
-        {
-            int32 x, y, z;
-        };
+    struct BlockData
+    {
+        uint32 id : 12;
+        uint32 brightness : 4;
+        uint32 state : 16;
+    };
 
-        struct BlockType
-        {
-            char* blockname = nullptr;
-            bool solid;
-            bool translucent;
-            bool opaque;
-            int32 explodePower;
-            int32 hardness;
-        };
+    typedef BlockData* (*buildChunkFunc)(const Vec3i*);
 
-        struct BlockData
-        {
-            uint32 id : 12;
-            uint32 brightness : 4;
-            uint32 state : 16;
-        };
+    struct PluginData
+    {
+        char* pluginName = nullptr;
+        int32 blocksCount;
+        BlockType* blocks = nullptr;
+        buildChunkFunc buildChunk = nullptr;
+    };
 
-        typedef BlockData* (*buildChunkFunc)(const Vec3i*);
-
-        struct PluginData
-        {
-            char* pluginName = nullptr;
-            int32 blocksCount;
-            BlockType* blocks = nullptr;
-            buildChunkFunc buildChunk = nullptr;
-        };
-
-        NWAPIENTRY BlockData getBlock(const Vec3i*);
-        NWAPIENTRY void setBlock(const Vec3i*, BlockData);
-
-    }
+    NWAPIENTRY BlockData getBlock(const Vec3i*);
+    NWAPIENTRY void setBlock(const Vec3i*, BlockData);
 
 }
 

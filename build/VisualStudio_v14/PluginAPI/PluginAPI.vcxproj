@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\api\cpp\pluginapi.h" />
+    <ClCompile Include="..\..\..\src\api\src\pluginapi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\src\api\freebasic\pluginapi.bi" />
+    <ClInclude Include="..\..\..\src\api\cpp\pluginapi.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F6319E84-33B6-4C97-90EF-F7815B6A3EE1}</ProjectGuid>
