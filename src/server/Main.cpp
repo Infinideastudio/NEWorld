@@ -163,7 +163,7 @@ private:
         Packet& packet = m_packets.front();
         m_packets.pop();
         auto self(shared_from_this());
-        async_write(m_socket, buffer(&packet.identifier, sizeof(Identifier)+sizeof(packet.length)), //Send identifier
+        async_write(m_socket, buffer(&packet.identifier, sizeof(Identifier)+sizeof(packet.length)), //Send identifier and length
                     [this, self, &packet](error_code ec, std::size_t)
         {
             if (!ec)

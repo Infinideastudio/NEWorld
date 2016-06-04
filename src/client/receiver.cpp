@@ -31,13 +31,11 @@ std::unique_ptr<NetworkStructure> readData(tcp::socket& s, Identifier identifier
         uint32_t length1, length2;
         boost::asio::read(s, boost::asio::buffer(&length1, sizeof(uint32_t)));
         boost::asio::read(s, boost::asio::buffer(&length2, sizeof(uint32_t)));
-        char* unBuffer = new char[length1];
-        char* cnBuffer = new char[length2];
-        boost::asio::read(s, boost::asio::buffer(unBuffer, length1));
-        boost::asio::read(s, boost::asio::buffer(cnBuffer, length2));
-        std::string username = unBuffer, content = cnBuffer;
-        delete[] unBuffer;
-        delete[] cnBuffer;
+        std::unique_ptr<char[]> unBuffer(new char[length1]);
+        std::unique_ptr<char[]> cnBuffer(new char[length2]);
+        boost::asio::read(s, boost::asio::buffer(unBuffer.get(), length1));
+        boost::asio::read(s, boost::asio::buffer(cnBuffer.get(), length2));
+        std::string username = unBuffer.get(), content = cnBuffer.get();
         return std::make_unique<ChatPacket>(username, content);
     }
     return nullptr;

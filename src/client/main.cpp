@@ -27,4 +27,4 @@ int main()
     std::thread(senderThread).detach();
     system("pause");
     return 0;
-}
+} //cannot quit normally
