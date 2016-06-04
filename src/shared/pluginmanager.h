@@ -16,42 +16,28 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PLUGIN_H_
-#define PLUGIN_H_
+#ifndef PLUGINMANAGER_H_
+#define PLUGINMANAGER_H_
 
-#include <string>
-#include <cstring> // memcpy
-using std::string;
-#include <boost/shared_ptr.hpp>
-#include <boost/dll/import.hpp>
+#include "plugin.h"
 
-// Single plugin
-class Plugin
+// Plugin system
+class PluginManager
 {
-private:
-    // Plugin name
-    string name;
-    // Main plugin function
-    boost::shared_ptr<PluginData*(*)()> init;
-    // Plugin Data
-    PluginData* data;
-
 public:
-    Plugin()
+    PluginManager()
     {}
-    explicit Plugin(const string& filename)
-    { loadFrom(filename); }
-    Plugin(const Plugin&) = delete;
 
-    // Get plugin name
-    const string& getName() const
-    { return name; }
-    // Get plugin data
-    const PluginData* getData() const
-    { return data; }
-    // Load plugin, return 0 for success
-    int loadFrom(const string& filename);
+    void initPluginAPI()
+    {
+        // TODO: Init PluginAPI DLL with procedure pointers
+    }
+
+    void loadPlugins()
+    {
+        // TODO: Load plugins
+    }
 
 };
 
-#endif // !PLUGIN_H_
+#endif // !PLUGINMANAGER_H_

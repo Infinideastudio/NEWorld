@@ -20,18 +20,10 @@
 #define PLUGINAPI_H_
 
 #if defined _WIN32 || defined __CYGWIN__
-    #ifdef NEWORLD_PLUGIN_API_EXPORT
-        #ifdef _MSC_VER
-            #define NWAPIENTRY __declspec(dllexport)
-        #else
-            #define NWAPIENTRY __attribute__ ((dllexport))
-        #endif
+    #ifdef _MSC_VER
+        #define NWAPIENTRY __declspec(dllimport)
     #else
-        #ifdef _MSC_VER
-            #define NWAPIENTRY __declspec(dllimport)
-        #else
-            #define NWAPIENTRY __attribute__ ((dllimport))
-        #endif
+        #define NWAPIENTRY __attribute__ ((dllimport))
     #endif
 #else
     #define NWAPIENTRY __attribute__ ((visibility ("default")))

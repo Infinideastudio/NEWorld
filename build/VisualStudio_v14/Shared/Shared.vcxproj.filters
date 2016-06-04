@@ -45,6 +45,9 @@
     <ClInclude Include="..\..\..\src\shared\plugin.h">
       <Filter>Plugin</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\pluginmanager.h">
+      <Filter>Plugin</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -77,5 +80,8 @@
       <Filter>Plugin</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
+    <ClCompile Include="..\..\..\src\shared\pluginmanager.cpp">
+      <Filter>Plugin</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
