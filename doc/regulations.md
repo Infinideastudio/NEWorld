@@ -29,7 +29,7 @@
 #### 4.1 缩进风格
 
 0. 所有代码使用**4个空格**缩进(大多数IDE都可以设置缩进方法)。
-0. 原则上使用Allman/BSD代码风格，`namespace`中的代码缩进(推荐使用AStyle工具进行自动格式化，标准参数为`--style=allman --indent=spaces=4 --indent-namespaces --keep-one-line-blocks --mode=c`)。
+0. 原则上使用Allman/BSD代码风格，`namespace`中的代码缩进(推荐使用AStyle工具进行自动格式化，标准参数为`--style=allman --indent=spaces=4 --indent-namespaces --keep-one-line-blocks --indent-preproc-block --indent-preproc-define --mode=c`)。
 
 ```C++
 namespace Hashing

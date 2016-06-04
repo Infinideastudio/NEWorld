@@ -23,13 +23,13 @@
 
 // NWAPIEXPORT
 #if defined NEWORLD_TARGET_WINDOWS
-#ifdef NEWORLD_COMPILER_MSVC
-#define NWAPIEXPORT __declspec(dllexport)
+    #ifdef NEWORLD_COMPILER_MSVC
+        #define NWAPIEXPORT __declspec(dllexport)
+    #else
+        #define NWAPIEXPORT __attribute__((dllexport))
+    #endif
 #else
-#define NWAPIEXPORT __attribute__((dllexport))
-#endif
-#else
-#define NWAPIEXPORT __attribute__((visibility("default")))
+    #define NWAPIEXPORT __attribute__((visibility("default")))
 #endif
 
 // Prefix NW_ means it is an interface to NEWorld main program
