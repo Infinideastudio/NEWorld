@@ -18,4 +18,12 @@
 
 #include "pluginmanager.h"
 
+void PluginManager::initPluginAPI()
+{
+    // TODO: Init PluginAPI DLL with procedure pointers
+}
 
+void PluginManager::loadPlugins()
+{
+    // TODO: Load plugins
+}

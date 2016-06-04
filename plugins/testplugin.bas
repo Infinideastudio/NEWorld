@@ -16,9 +16,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '/
 
-#include "../src/api/freebasic/pluginapi.bi"
+' NOT FINISHED
 
-using NWAPI
+#include "../api/freebasic/pluginapi.bi"
 
 ' Plugin constants
 const PluginName as string = "infinideas.testplugin"
@@ -35,18 +35,6 @@ function c_str(byref s as const string) as zstring ptr
     *res = s
     return res
 end function
-
-' Add block
-sub registerBlock(index as integer, byref blockName as const string, _
-    solid as byte, translucent as byte, opaque as byte, _
-    explodePower as int32, hardness as int32)
-    blocks[index].blockName = c_str(blockName)
-    blocks[index].solid = solid
-    blocks[index].translucent = translucent
-    blocks[index].opaque = opaque
-    blocks[index].explodePower = explodePower
-    blocks[index].hardness = hardness
-end sub
 
 ' Chunk generator
 function buildChunk(byref cpos as const Vec3i) as BlockData ptr

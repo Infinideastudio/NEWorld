@@ -23,53 +23,51 @@
     #ifdef _MSC_VER
         #define NWAPIENTRY __declspec(dllimport)
     #else
-        #define NWAPIENTRY __attribute__ ((dllimport))
+        #define NWAPIENTRY __attribute__((dllimport))
     #endif
 #else
-    #define NWAPIENTRY __attribute__ ((visibility ("default")))
+    #define NWAPIENTRY __attribute__((visibility("default")))
 #endif
+
+using int32 = int;
+using uint32 = unsigned int;
+
+struct Vec3i
+{
+    int32 x, y, z;
+};
+
+struct BlockType
+{
+    char* blockname = nullptr;
+    bool solid;
+    bool translucent;
+    bool opaque;
+    int32 explodePower;
+    int32 hardness;
+};
+
+struct BlockData
+{
+    uint32 id : 12;
+    uint32 brightness : 4;
+    uint32 state : 16;
+};
+
+typedef BlockData* (*buildChunkFunc)(const Vec3i*);
+
+struct PluginData
+{
+    char* pluginName = nullptr;
+    int32 blocksCount;
+    BlockType* blocks = nullptr;
+    buildChunkFunc buildChunk = nullptr;
+};
 
 extern "C"
 {
-
-    typedef int int32;
-    typedef unsigned int uint32;
-
-    struct Vec3i
-    {
-        int32 x, y, z;
-    };
-
-    struct BlockType
-    {
-        char* blockname = nullptr;
-        bool solid;
-        bool translucent;
-        bool opaque;
-        int32 explodePower;
-        int32 hardness;
-    };
-
-    struct BlockData
-    {
-        uint32 id : 12;
-        uint32 brightness : 4;
-        uint32 state : 16;
-    };
-
-    typedef BlockData* (*buildChunkFunc)(const Vec3i*);
-
-    struct PluginData
-    {
-        char* pluginName = nullptr;
-        int32 blocksCount;
-        BlockType* blocks = nullptr;
-        buildChunkFunc buildChunk = nullptr;
-    };
-
     NWAPIENTRY BlockData getBlock(const Vec3i*);
     NWAPIENTRY void setBlock(const Vec3i*, BlockData);
-
 }
 
 #endif

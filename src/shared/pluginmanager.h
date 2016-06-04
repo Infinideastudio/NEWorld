@@ -28,15 +28,10 @@ public:
     PluginManager()
     {}
 
-    void initPluginAPI()
-    {
-        // TODO: Init PluginAPI DLL with procedure pointers
-    }
-
-    void loadPlugins()
-    {
-        // TODO: Load plugins
-    }
+    // Initialize PluginAPI DLL
+    void initPluginAPI();
+    // Load plugins
+    void loadPlugins();
 
 };
 

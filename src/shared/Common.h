@@ -19,24 +19,34 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-#ifdef _DEBUG
-#define NEWORLD_DEBUG // Main debug flag
+// Compiler flags
+#ifdef _MSC_VER
+    #define NEWORLD_COMPILER_MSVC
 #endif
 
-#define NEWORLD_USE_WINAPI
+// OS flags
+#if defined _WIN32 || defined __CYGWIN__
+    #define NEWORLD_TARGET_WINDOWS
+    #define NEWORLD_USE_WINAPI // Windows native API
+#endif
+
+#ifdef _DEBUG
+    #define NEWORLD_DEBUG // Main debug flag
+#endif
+
 #define NEWORLD_USE_OPENGL
 //#define NEWORLD_USE_DIRECT3D
 
 #ifdef NEWORLD_DEBUG
-//    ...
+    //    ...
 #else
-#ifndef NDEBUG
-#define NDEBUG // NDEBUG flag for cassert
-#endif
+    #ifndef NDEBUG
+        #define NDEBUG // NDEBUG flag for cassert
+    #endif
 #endif
 
 #ifdef NEWORLD_USE_WINAPI
-#include <Windows.h> // Windows API
+    #include <Windows.h> // Windows API
 #else
 //    #include <pthread.h> // Or <thread> <mutex>
 #endif
@@ -44,7 +54,7 @@
 #include <cassert>
 
 #if (-1)>>1 == -1
-#define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
+    #define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
 #endif
 
 #endif // !COMMON_H_
