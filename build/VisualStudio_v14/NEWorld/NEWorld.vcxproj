@@ -85,13 +85,14 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
-      <PreprocessorDefinitions>NEWORLD_TARGET_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NEWORLD_TARGET_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <ControlFlowGuard>false</ControlFlowGuard>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <UndefinePreprocessorDefinitions>GL_GLEXT_PROTOTYPES</UndefinePreprocessorDefinitions>
+      <DisableSpecificWarnings>4714</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,7 +123,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <TreatWarningAsError>false</TreatWarningAsError>
-      <PreprocessorDefinitions>NEWORLD_TARGET_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NEWORLD_TARGET_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <ControlFlowGuard>Guard</ControlFlowGuard>
@@ -162,7 +163,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <PreprocessorDefinitions>NEWORLD_TARGET_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NEWORLD_TARGET_WINDOWS;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CallingConvention>Cdecl</CallingConvention>
       <UndefinePreprocessorDefinitions>GL_GLEXT_PROTOTYPES</UndefinePreprocessorDefinitions>
     </ClCompile>
@@ -190,6 +191,7 @@
     <ClInclude Include="..\..\..\src\client\GUI\graphics.h" />
     <ClInclude Include="..\..\..\src\client\GUI\textrenderer.h" />
     <ClInclude Include="..\..\..\src\client\GUI\window.h" />
+    <ClInclude Include="..\..\..\src\client\networkutil.h" />
     <ClInclude Include="..\..\..\src\client\receiver.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
     <ClInclude Include="..\..\..\src\client\sender.h" />

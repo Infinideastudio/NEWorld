@@ -27,7 +27,7 @@ std::function<void(GLFWwindow*, int button, int action, int)> mouseButtonCallbac
 void glfwSetMouseButtonCallbackHelper(GLFWwindow* win, std::function<void(GLFWwindow*, int button, int action, int)> func)
 {
     mouseButtonCallback = func;
-    glfwSetMouseButtonCallback(win, [](GLFWwindow* win, int button, int action, int val) 
+    glfwSetMouseButtonCallback(win, [](GLFWwindow* win, int button, int action, int val)
     {
         mouseButtonCallback(win, button, action, val);
     });
@@ -53,28 +53,28 @@ bool Window::init()
 
     glfwSetMouseButtonCallbackHelper(m_win, [this](GLFWwindow*, int button, int action, int)
     {
-        MouseButton b;
-        switch (button)
+        MouseButton b = MouseButton::Left;
+        switch (b)
         {
         case GLFW_MOUSE_BUTTON_LEFT:
-            button = MouseButton::Left;
+            b = MouseButton::Left;
             break;
         case GLFW_MOUSE_BUTTON_RIGHT:
-            button = MouseButton::Right;
+            b = MouseButton::Right;
             break;
         case GLFW_MOUSE_BUTTON_MIDDLE:
-            button = MouseButton::Middle;
+            b = MouseButton::Middle;
             break;
         case GLFW_MOUSE_BUTTON_5:
-            button = MouseButton::Preserved1;
+            b = MouseButton::Preserved1;
             break;
         case GLFW_MOUSE_BUTTON_6:
-            button = MouseButton::Preserved2;
+            b = MouseButton::Preserved2;
             break;
         default:
             break;
         }
-        m_pages.top()->content->mouseButtonFunc(b, (ButtonAction)action); //TODO: fixit(b未初始化)
+        m_pages.top()->content->mouseButtonFunc(b, (ButtonAction)action);
         return;
     });
     return true;

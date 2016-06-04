@@ -22,8 +22,6 @@
 #include <network.h>
 #include <string>
 
-void setServerIp(std::string ip);
-
 void receiverThread();
 
 #endif // RECEIVER_H_

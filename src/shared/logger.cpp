@@ -1,6 +1,5 @@
 #include "logger.h"
 #include "Common.h"
-
 void loggerInit()
 {
     logging::formatter formatter =

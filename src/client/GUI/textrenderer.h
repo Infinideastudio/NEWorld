@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTRENDERER_H
+#ifdef TEXTRENDERER_H //disabled
 #define TEXTRENDERER_H
 
 #include "Definitions.h"

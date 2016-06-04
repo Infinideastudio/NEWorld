@@ -18,10 +18,13 @@
 #include <thread>
 #include "receiver.h"
 #include "sender.h"
+#include "networkutil.h"
+
 int main()
 {
+    if (!initNetwork()) exit(-1);
     std::thread(receiverThread).detach();
     std::thread(senderThread).detach();
-    while (1);
+    system("pause");
     return 0;
 }

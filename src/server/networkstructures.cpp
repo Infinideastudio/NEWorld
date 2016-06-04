@@ -17,8 +17,21 @@
 */
 
 #include "networkstructures.h"
+#include <logger.h>
 
 void ChatPacket::process()
 {
     //转发给所有玩家之类的
+}
+
+void LoginPacket::process()
+{
+    if (true)
+    {
+        infostream << "Player " << m_username << " login!";
+    }
+    else
+    {
+        infostream << "Player " << m_username << " failed to login. Wrong password.";
+    }
 }

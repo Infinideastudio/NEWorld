@@ -18,6 +18,27 @@
 
 #include <network.h>
 #include <climits>
+#include <logger.h>
+#include "networkutil.h"
 
+std::string hostIp = "127.0.0.1";
 boost::asio::io_service ioService;
+tcp::socket globalSocket(ioService);
 
+std::mutex networkMutex; //mutex
+
+bool initNetwork()
+{
+    tcp::resolver resolver(ioService);
+    try
+    {
+        //Connect to the server
+        boost::asio::connect(globalSocket, resolver.resolve({ hostIp, std::to_string(Port) }));
+        return true;
+    }
+    catch (std::exception& e)
+    {
+        fatalstream << "Exception: " << e.what();
+        return false;
+    }
+}

@@ -77,6 +77,9 @@
     <ClInclude Include="..\..\..\src\client\GUI\textrenderer.h">
       <Filter>Source\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\client\networkutil.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico">

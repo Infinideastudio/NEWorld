@@ -17,49 +17,45 @@
 */
 
 #include "sender.h"
+#include "networkutil.h"
 #include <logger.h>
 #include <queue>
 #include <mutex>
 //The packets which are waiting to send
 std::queue<Packet> packets;
 
-//mutex
-std::mutex senderMutex;
-
 void senderThread()
 {
-    extern std::string hostIp;
-    tcp::socket s(ioService);
-    tcp::resolver resolver(ioService);
     try
     {
-        //Connect to the server
-        boost::asio::connect(s, resolver.resolve({ hostIp, std::to_string(Port) }));
-
         //Make a loop to send packets
         while (true)
         {
-            senderMutex.lock();
-
-            if (packets.empty()) continue;
+            networkMutex.lock();
+            //TODO: fixit, will not execute.
+            if (packets.empty())
+            {
+                networkMutex.unlock();
+                continue;
+            }
             Packet p = packets.front();
             packets.pop();
 
-            senderMutex.unlock();
+            networkMutex.unlock();
 
-            boost::asio::write(s, boost::asio::buffer(&p.identifier, sizeof(Identifier)));
-            boost::asio::write(s, boost::asio::buffer(&p.length, sizeof(p.length)));
-            boost::asio::write(s, boost::asio::buffer(&p.data, p.length));
+            boost::asio::write(globalSocket, boost::asio::buffer(&p.length, sizeof(p.length)));
+            boost::asio::write(globalSocket, boost::asio::buffer(&p.identifier, sizeof(Identifier)));
+            boost::asio::write(globalSocket, boost::asio::buffer(&p.data, p.length));
         }
     }
     catch (std::exception& e)
     {
-        errorstream << "Exception: " << e.what();
+        fatalstream << "Exception: " << e.what();
     }
 }
 
 void addRequest(Packet p)
 {
-    std::lock_guard<std::mutex> lock(senderMutex);
+    std::lock_guard<std::mutex> lock(networkMutex);
     packets.push(p);
 }

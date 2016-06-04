@@ -20,12 +20,8 @@
 #include <network.h>
 #include <logger.h>
 #include <memory>
-std::string hostIp;
-
-void setServerIp(std::string ip)
-{
-    hostIp = ip;
-}
+#include <mutex>
+#include "networkutil.h"
 
 std::unique_ptr<NetworkStructure> readData(tcp::socket& s, Identifier identifier)
 {
@@ -33,11 +29,15 @@ std::unique_ptr<NetworkStructure> readData(tcp::socket& s, Identifier identifier
     {
     case Chat: //example
         uint32_t length1, length2;
-        std::string username, content;
         boost::asio::read(s, boost::asio::buffer(&length1, sizeof(uint32_t)));
         boost::asio::read(s, boost::asio::buffer(&length2, sizeof(uint32_t)));
-        boost::asio::read(s, boost::asio::buffer(username, length1));
-        boost::asio::read(s, boost::asio::buffer(content, length2));
+        char* unBuffer = new char[length1];
+        char* cnBuffer = new char[length2];
+        boost::asio::read(s, boost::asio::buffer(unBuffer, length1));
+        boost::asio::read(s, boost::asio::buffer(cnBuffer, length2));
+        std::string username = unBuffer, content = cnBuffer;
+        delete[] unBuffer;
+        delete[] cnBuffer;
         return std::make_unique<ChatPacket>(username, content);
     }
     return nullptr;
@@ -45,22 +45,23 @@ std::unique_ptr<NetworkStructure> readData(tcp::socket& s, Identifier identifier
 
 void receiverThread()
 {
-    tcp::socket s(ioService);
-    tcp::resolver resolver(ioService);
     try
     {
-        //connect to the server
-        boost::asio::connect(s, resolver.resolve({ hostIp, std::to_string(Port) }));
         while (true)
         {
-            //Read the identifier
-            Identifier identifier;
-            boost::asio::read(s, boost::asio::buffer(&identifier, sizeof(Identifier)));
-            readData(s, identifier)->process();
+            std::unique_ptr<NetworkStructure> packet;
+            {
+                std::lock_guard<std::mutex> lg(networkMutex);
+                //Read the identifier
+                Identifier identifier;
+                boost::asio::read(globalSocket, boost::asio::buffer(&identifier, sizeof(Identifier)));
+                packet = readData(globalSocket, identifier);
+            }
+            packet->process();
         }
     }
     catch (std::exception& e)
     {
-        errorstream << "Exception: " << e.what();
+        fatalstream << "Exception: " << e.what();
     }
 }

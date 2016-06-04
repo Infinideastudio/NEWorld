@@ -18,14 +18,15 @@
 #ifndef NETWORKSTRUCTURES_H_
 #define NETWORKSTRUCTURES_H_
 #include <string>
-enum Identifier
+#include <cstdint>
+enum Identifier :uint32_t
 {
-    //Client to server
-
-    //Server to client
-
-    //Common
-    Chat
+    //Client to server (0 ~ 2^30-1)
+    Login = 0,
+    //Server to client (2^30 ~ 2*2^30-1)
+    Placeholder = 1 << 30,
+    //Common (2*2^30 ~ 3^30-1)
+    Chat = (1 << 30)*2u
 };
 
 class NetworkStructure
@@ -34,11 +35,25 @@ public:
     virtual void process() = 0;
     virtual ~NetworkStructure() {}
 };
+class LoginPacket : public NetworkStructure
+{
+public:
+    LoginPacket(std::string username, std::string password, uint16_t version) :
+        m_username(username), m_password(password), m_version(version) {}
 
+    virtual void process() override;
+
+private:
+    std::string m_username;
+    std::string m_password;
+    uint16_t m_version;
+
+};
 class ChatPacket : public NetworkStructure
 {
 public:
-    ChatPacket(std::string userSend, std::string content) :m_userSend(userSend), m_content(content) {}
+    ChatPacket(std::string userSend, std::string content) :
+        m_userSend(userSend), m_content(content) {}
 
     virtual void process() override;
 

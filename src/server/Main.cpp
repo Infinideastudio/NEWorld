@@ -23,6 +23,7 @@
 #include <utility>
 #include <queue>
 #include <chrono>
+#include <boost/core/noncopyable.hpp>
 using namespace boost::asio;
 using namespace boost::system;
 using namespace boost::posix_time;
@@ -31,45 +32,62 @@ const int globalUpdateInterval = 10;
 
 void errorHandle(const tcp::socket& m_socket, error_code ec)
 {
-    infostream << m_socket.remote_endpoint().address().to_string() << " disconnected" << ec.value();
+    infostream << m_socket.remote_endpoint().address().to_string() << " disconnected. Code:" << ec.value();
 }
 
-class takeDataHelper
+class takeDataHelper: boost::noncopyable
 {
 public:
-    takeDataHelper(void* buffer, int length) :m_buffer(buffer), m_length(length), m_offset(0) {}
-    template<class T>
-    T take()
+    takeDataHelper(void* buffer, int length, bool autoReleaseArray=false)
+        :m_buffer(buffer), m_length(length), m_offset(0), m_autoReleaseArray(autoReleaseArray) {}
+    ~takeDataHelper()
+    {
+        delete[] m_buffer;
+    }
+    template<class T> T take()
     {
         if (m_offset + sizeof(T) >= m_length) throw;
         T ret = *((T*)((char*)m_buffer + m_offset));
         m_offset += sizeof(T);
         return ret;
     }
-    char* getString(size_t length)
+    std::string getString(size_t length)
     {
         if (m_offset + length >= m_length) throw;
         char* ret = (char*)m_buffer + m_offset;
         m_offset += length;
-        return ret;
+        return std::string(ret);
     }
 
 private :
     void* m_buffer;
     size_t m_length;
     size_t m_offset;
+    bool m_autoReleaseArray;
 };
 
 std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
 {
     takeDataHelper tdh(packet.data, packet.length);
+    packet.identifier = tdh.take<Identifier>();
     switch (packet.identifier)
     {
+    case Login:
+    {
+        std::string username = tdh.getString(64);
+        std::string password = tdh.getString(64);
+        uint16_t version = tdh.take<uint16_t>();
+        return std::make_unique<LoginPacket>(username, password, version);
+    }
+
     case Chat:
-        uint32_t length1 = tdh.take<uint32_t>(), length2 = packet.length - length1;
-        std::string username = tdh.getString(length1), content = tdh.getString(length2);
-        delete[] packet.data;
+    {
+        uint32_t length1 = tdh.take<uint32_t>();
+        uint32_t length2 = packet.length - length1;
+        std::string username = tdh.getString(length1);
+        std::string content = tdh.getString(length2);
         return std::make_unique<ChatPacket>(username, content);
+    }
     }
     return nullptr;
 }
@@ -93,7 +111,7 @@ private:
     {
         auto self(shared_from_this());
         deadline_timer(m_socket.get_io_service(), microseconds(updateInterval)).async_wait(
-            [this, self](error_code ec)
+            [this, self](error_code)
         {
             //Update world here
             doWrite();
@@ -103,20 +121,23 @@ private:
     void doRead()
     {
         auto self(shared_from_this());
+        //先异步读取数据包的长度
         async_read(m_socket,buffer(&m_packetRead, sizeof(Identifier)+sizeof(m_packetRead.length)), //read identifier and length to packet
                    [this, self](error_code ec, std::size_t)
         {
             if (!ec)
             {
+                //根据读到的长度新建缓存
                 m_dataBuffer = new char[m_packetRead.length];
-                auto self(shared_from_this());
-                async_read(m_socket, buffer(&m_dataBuffer, m_packetRead.length), //read data
+                //异步读取数据
+                async_read(m_socket, buffer(&m_dataBuffer, m_packetRead.length),
                            [this, self](error_code ec, std::size_t)
                 {
                     if (!ec)
                     {
-                        //Process here
+                        //处理接收到的数据
                         makeNetworkStructure(m_packetRead)->process();
+                        //继续读取其他数据包
                         doRead();
                     }
                     else
@@ -172,9 +193,9 @@ private:
 class Server
 {
 public:
-    Server(boost::asio::io_service& ioService, short port)
-        : m_acceptor(ioService, tcp::endpoint(tcp::v4(), port)),
-          m_socket(ioService)
+    Server(boost::asio::io_service& ioservice, short port)
+        : m_acceptor(ioservice, tcp::endpoint(tcp::v4(), port)),
+          m_socket(ioservice)
     {
         doAccept();
     }
@@ -196,7 +217,7 @@ private:
     void doGlobalUpdate()
     {
         deadline_timer(m_socket.get_io_service(), microseconds(globalUpdateInterval)).async_wait(
-            [this](error_code ec)
+            [this](error_code)
         {
             //Update world here
             doGlobalUpdate();
@@ -230,7 +251,7 @@ int main(int argc, char* argv[])
     }
     catch (std::exception& e)
     {
-        errorstream << "Exception: " << e.what();
+        fatalstream << "Exception: " << e.what();
     }
     infostream << "Server is stoping...";
     return 0;

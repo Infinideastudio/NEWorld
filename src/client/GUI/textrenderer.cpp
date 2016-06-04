@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#ifdef DISABLED //disabled
 #include "TextRenderer.h"
 #include "Textures.h"
 
@@ -224,3 +224,4 @@ void TextRenderer::clearCache()
         free(it->second);
     wstr_cache.clear();
 }
+#endif
