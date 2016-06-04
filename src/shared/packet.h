@@ -26,7 +26,7 @@ class Packet
 public:
     Identifier identifier;
     uint32_t length;
-    void* data;
+    char* data;
 };
 
 #endif

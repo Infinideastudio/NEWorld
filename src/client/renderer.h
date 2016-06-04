@@ -19,6 +19,7 @@
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
+#include "../shared/vec3.h"
 #include "vertexarray.h"
 
 // Renderer理论上是单例？ --qiaozhanrong
@@ -32,9 +33,9 @@ public:
     // Reset translations/rotations (Restore transform matrixes)
     void restoreScale();
     // Apply translations
-    void translate(int x, int y, int z);
+    void translate(const Vec3<int>& pos);
     // Apply rotations
-    void rotate(double degrees, double x, double y, double z);
+    void rotate(double degrees, const Vec3<double>& pos);
 
 
 };

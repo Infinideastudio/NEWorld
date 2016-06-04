@@ -22,7 +22,8 @@
 
 int main()
 {
-    if (!initNetwork()) exit(-1);
+    if (!initNetwork())
+        return -1;
     std::thread(receiverThread).detach();
     std::thread(senderThread).detach();
     system("pause");

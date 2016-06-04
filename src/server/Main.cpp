@@ -18,49 +18,49 @@
 
 #include <network.h>
 #include <logger.h>
-#include <cstdlib>
-#include <thread>
 #include <utility>
 #include <queue>
-#include <chrono>
 #include <boost/core/noncopyable.hpp>
+#include <boost/date_time.hpp>
+#include <boost/format.hpp>
 using namespace boost::asio;
 using namespace boost::system;
 using namespace boost::posix_time;
-const int updateInterval = 10;
-const int globalUpdateInterval = 10;
+constexpr int updateInterval = 10, globalUpdateInterval = 10;
 
 void errorHandle(const tcp::socket& m_socket, error_code ec)
 {
     infostream << m_socket.remote_endpoint().address().to_string() << " disconnected. Code:" << ec.value();
 }
 
+/// A helper class for taking data out of a byte array
 class takeDataHelper: boost::noncopyable
 {
 public:
-    takeDataHelper(void* buffer, int length, bool autoReleaseArray=false)
+    takeDataHelper(char* buffer, size_t length, bool autoReleaseArray=false)
         :m_buffer(buffer), m_length(length), m_offset(0), m_autoReleaseArray(autoReleaseArray) {}
     ~takeDataHelper()
     {
         delete[] m_buffer;
     }
-    template<class T> T take()
+    template<typename T>
+    T take()
     {
         if (m_offset + sizeof(T) >= m_length) throw;
-        T ret = *((T*)((char*)m_buffer + m_offset));
+        T ret = *((T*)(m_buffer + m_offset));
         m_offset += sizeof(T);
         return ret;
     }
     std::string getString(size_t length)
     {
         if (m_offset + length >= m_length) throw;
-        char* ret = (char*)m_buffer + m_offset;
+        char* ret = m_buffer + m_offset;
         m_offset += length;
         return std::string(ret);
     }
 
 private :
-    void* m_buffer;
+    char* m_buffer;
     size_t m_length;
     size_t m_offset;
     bool m_autoReleaseArray;
@@ -227,16 +227,12 @@ private:
     tcp::acceptor m_acceptor;
     tcp::socket m_socket;
 };
-const std::string getCurrentSystemTime()
+std::string getCurrentSystemTime()
 {
-    auto tt = std::chrono::system_clock::to_time_t
-              (std::chrono::system_clock::now());
-    struct tm* ptm = localtime(&tt);
-    char date[60] = { 0 };
-    sprintf(date, "%d-%02d-%02d %02d:%02d:%02d",
-            (int)ptm->tm_year + 1900, (int)ptm->tm_mon + 1, (int)ptm->tm_mday,
-            (int)ptm->tm_hour, (int)ptm->tm_min, (int)ptm->tm_sec);
-    return std::string(date);
+    ptime ct = second_clock::local_time();
+    auto date = ct.date();
+    auto tim = ct.time_of_day();
+    return (boost::format("%d-%02d-%02d %02d:%02d:%02d") % int(date.year()) % int(date.month()) % int(date.day()) % tim.hours() % tim.minutes() % tim.seconds()).str();
 }
 int main(int argc, char* argv[])
 {

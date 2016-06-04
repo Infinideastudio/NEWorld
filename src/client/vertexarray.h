@@ -21,25 +21,11 @@
 
 #include <cstring>
 #include <boost/core/noncopyable.hpp>
-#include "..\shared\Common.h"
+#include "../shared/Common.h"
 
 class VertexArray
     :boost::noncopyable
 {
-private:
-    // Vertex count
-    int m_vertexes;
-    // Max vertex count
-    const int m_maxVertexes;
-    // Vertex Attribute Count
-    const int m_textureCount, m_colorCount, m_attributeCount, m_coordinateCount;
-    // Vertex attributes count (sum of all)
-    const int m_vertexAttributeCount;
-    // Vertex array
-    float *m_data;
-    // Current vertex attributes
-    float *m_vertexAttributes;
-
 public:
     VertexArray(int maxVertexes, int textureElementCount, int colorElementCount, int attributeElementCount, int coordinateElementCount)
         :m_maxVertexes(maxVertexes), m_vertexes(0),
@@ -96,6 +82,20 @@ public:
     void flush();
     // Render vertex buffer
     static void render();
+
+private:
+    // Vertex count
+    int m_vertexes;
+    // Max vertex count
+    const int m_maxVertexes;
+    // Vertex Attribute Count
+    const int m_textureCount, m_colorCount, m_attributeCount, m_coordinateCount;
+    // Vertex attributes count (sum of all)
+    const int m_vertexAttributeCount;
+    // Vertex array
+    float *m_data;
+    // Current vertex attributes
+    float *m_vertexAttributes;
 
 };
 
