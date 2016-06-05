@@ -16,12 +16,39 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SENDER_H_
-#define SENDER_H_
+#ifndef SESSION_H__
+#define SESSION_H__
+#include <boost/core/noncopyable.hpp>
+#include <queue>
+#include "network.h"
 
-#include <network.h>
+class Session : public std::enable_shared_from_this<Session>
+{
+public:
+    Session(tcp::socket socket)
+        : m_socket(std::move(socket))
+    {
+    }
 
-void senderThread();
-void addRequest(Packet p);
+    void start()
+    {
+        doRead();
+        doUpdate();
+    }
 
-#endif // SENDER_H_
+private:
+    void doUpdate();
+    void doRead();
+    void doWrite();
+    void addRequest(Packet packet)
+    {
+        m_packets.push(packet);
+    }
+
+    tcp::socket m_socket;
+    std::queue<Packet> m_packets; //packets need sent
+    Packet m_packetRead;
+    char* m_dataBuffer;
+};
+
+#endif // SESSION_H__

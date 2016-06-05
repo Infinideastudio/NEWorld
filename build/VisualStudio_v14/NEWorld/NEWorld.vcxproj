@@ -191,10 +191,8 @@
     <ClInclude Include="..\..\..\src\client\GUI\graphics.h" />
     <ClInclude Include="..\..\..\src\client\GUI\textrenderer.h" />
     <ClInclude Include="..\..\..\src\client\GUI\window.h" />
-    <ClInclude Include="..\..\..\src\client\networkutil.h" />
-    <ClInclude Include="..\..\..\src\client\receiver.h" />
+    <ClInclude Include="..\..\..\src\client\network.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
-    <ClInclude Include="..\..\..\src\client\sender.h" />
     <ClInclude Include="..\..\..\src\client\vertexarray.h" />
   </ItemGroup>
   <ItemGroup>
@@ -239,10 +237,8 @@
     <ClCompile Include="..\..\..\src\client\GUI\textrenderer.cpp" />
     <ClCompile Include="..\..\..\src\client\GUI\window.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
+    <ClCompile Include="..\..\..\src\client\network.cpp" />
     <ClCompile Include="..\..\..\src\client\networkstructures.cpp" />
-    <ClCompile Include="..\..\..\src\client\networkutil.cpp" />
-    <ClCompile Include="..\..\..\src\client\receiver.cpp" />
-    <ClCompile Include="..\..\..\src\client\sender.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />
   </ItemGroup>

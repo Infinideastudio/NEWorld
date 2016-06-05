@@ -18,6 +18,11 @@
 
 #include "networkstructures.h"
 #include <logger.h>
+#include <cassert>
+
+#define DEFAULT_IMPLEMENT(classname) void LoginPacket::process() { assert(false); }
+
+//定义了所有数据包的处理方式
 
 void ChatPacket::process()
 {
@@ -35,3 +40,5 @@ void LoginPacket::process()
         infostream << "Player " << m_username << " failed to login. Wrong password.";
     }
 }
+
+//以下是客户端部分，服务端无需实现

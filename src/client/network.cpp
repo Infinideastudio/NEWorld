@@ -16,24 +16,19 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <network.h>
-#include <climits>
+#include <memory>
 #include <logger.h>
-#include "networkutil.h"
+#include "network.h"
 
 std::string hostIp = "127.0.0.1";
-boost::asio::io_service ioService;
-tcp::socket globalSocket(ioService);
 
-std::mutex networkMutex; //mutex
-
-bool initNetwork()
+bool initNetwork(boost::asio::io_service& ioService, tcp::socket& socket, std::string ip)
 {
     tcp::resolver resolver(ioService);
     try
     {
         //Connect to the server
-        boost::asio::connect(globalSocket, resolver.resolve({ hostIp, std::to_string(Port) }));
+        boost::asio::connect(socket, resolver.resolve({ ip, std::to_string(Port) }));
         return true;
     }
     catch (std::exception& e)
@@ -41,4 +36,24 @@ bool initNetwork()
         fatalstream << "Exception: " << e.what();
         return false;
     }
+}
+
+void networkThread()
+{
+    boost::asio::io_service ioService;
+    tcp::socket socket(ioService);
+    if (!initNetwork(ioService,socket, hostIp))
+        exit(-1);
+
+    std::make_shared<Session>(std::move(socket))->start();
+    ioService.run();
+}
+
+void errorHandle(const tcp::socket& m_socket, boost::system::error_code ec)
+{
+    errorstream << "Network error, code:" << ec.value();
+}
+
+void Session::doUpdate()
+{
 }

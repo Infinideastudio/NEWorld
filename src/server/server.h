@@ -1,6 +1,7 @@
 /*
-* NEWorld: A free game with similar rules to Minecraft.
-* Copyright (C) 2016 NEWorld Team
+* This file is part of NGWorld.
+* Then DLaboratory copied this file from NGWorld to NEWorld.
+* (C) Copyright 2016 DLaboratory
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,12 +17,30 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef RECEIVER_H_
-#define RECEIVER_H_
-
+#ifndef SERVER_H__
+#define SERVER_H__
 #include <network.h>
-#include <string>
+#include <logger.h>
+#include <memory>
+#include <session.h>
+constexpr int updateInterval = 10, globalUpdateInterval = 10;
 
-void receiverThread();
+class Server
+{
+public:
+    Server(boost::asio::io_service& ioservice, short port)
+        : m_acceptor(ioservice, boost::asio::ip::tcp::endpoint(tcp::v4(), port)),
+          m_socket(ioservice)
+    {
+        doAccept();
+    }
 
-#endif // RECEIVER_H_
+private:
+    void doAccept();
+    void doGlobalUpdate();
+
+    tcp::acceptor m_acceptor;
+    tcp::socket m_socket;
+};
+
+#endif // SERVER_H__

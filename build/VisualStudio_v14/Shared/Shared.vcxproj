@@ -143,6 +143,8 @@
     <ClInclude Include="..\..\..\src\shared\packet.h" />
     <ClInclude Include="..\..\..\src\shared\plugin.h" />
     <ClInclude Include="..\..\..\src\shared\pluginmanager.h" />
+    <ClInclude Include="..\..\..\src\shared\session.h" />
+    <ClInclude Include="..\..\..\src\shared\takedatahelper.h" />
     <ClInclude Include="..\..\..\src\shared\vec3.h" />
     <ClInclude Include="..\..\..\src\shared\world.h" />
   </ItemGroup>
@@ -152,6 +154,7 @@
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
     <ClCompile Include="..\..\..\src\shared\pluginmanager.cpp" />
+    <ClCompile Include="..\..\..\src\shared\session.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

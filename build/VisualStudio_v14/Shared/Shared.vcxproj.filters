@@ -2,86 +2,100 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="..\..\..\src\shared\AABB.h">
-      <Filter>Common</Filter>
+      <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\vec3.h">
-      <Filter>Common</Filter>
+      <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\blocktype.h">
-      <Filter>World</Filter>
+      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunk.h">
-      <Filter>World</Filter>
+      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\blockdata.h">
-      <Filter>World</Filter>
+      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\world.h">
-      <Filter>World</Filter>
+      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\common.h">
-      <Filter>Common</Filter>
+      <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\object.h">
-      <Filter>Object</Filter>
+      <Filter>Source\Object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\logger.h">
-      <Filter>Common</Filter>
+      <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h">
       <Filter>World</Filter>
     <ClInclude Include="..\..\..\src\shared\network.h">
-      <Filter>Network</Filter>
+      <Filter>Source\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h">
-      <Filter>World</Filter>
+      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\networkstructures.h">
-      <Filter>Network</Filter>
+      <Filter>Source\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\packet.h">
-      <Filter>Network</Filter>
+      <Filter>Source\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\plugin.h">
-      <Filter>Plugin</Filter>
+      <Filter>Source\Plugin</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\pluginmanager.h">
-      <Filter>Plugin</Filter>
+      <Filter>Source\Plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\session.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\takedatahelper.h">
+      <Filter>Source\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Common">
+    <Filter Include="Source">
+      <UniqueIdentifier>{91c7e806-9f34-4685-b11f-8fda5466b258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Common">
       <UniqueIdentifier>{d8ff50ba-254a-4417-a46d-0bfbfa05819f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="World">
-      <UniqueIdentifier>{9d424b71-c4b6-463f-b95b-cffeea273210}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Object">
-      <UniqueIdentifier>{1b541d8d-7466-461f-98b9-194f998a9f7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Network">
+    <Filter Include="Source\Network">
       <UniqueIdentifier>{84937af5-654e-442b-93b7-8c2f8bb5c802}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Plugin">
+    <Filter Include="Source\Object">
+      <UniqueIdentifier>{1b541d8d-7466-461f-98b9-194f998a9f7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Plugin">
       <UniqueIdentifier>{e761470c-5131-4ce2-9fb2-cbdf243d84f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\World">
+      <UniqueIdentifier>{9d424b71-c4b6-463f-b95b-cffeea273210}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\AABB.cpp">
-      <Filter>Common</Filter>
+      <Filter>Source\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
-      <Filter>World</Filter>
+      <Filter>Source\World</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp">
-      <Filter>World</Filter>
+      <Filter>Source\World</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\plugin.cpp">
-      <Filter>Plugin</Filter>
+      <Filter>Source\Plugin</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\pluginmanager.cpp">
-      <Filter>Plugin</Filter>
+      <Filter>Source\Plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\session.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\logger.cpp">
+      <Filter>Source\Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

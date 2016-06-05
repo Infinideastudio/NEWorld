@@ -5,30 +5,42 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Source\Network">
+      <UniqueIdentifier>{775c2681-3f6c-4554-ad5d-f2942029cbb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\World">
+      <UniqueIdentifier>{6bbcbd78-7d22-478b-8559-bec86d9440e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\server\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\server\networkutils.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="..\..\..\src\server\networkstructures.cpp">
+      <Filter>Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\server\worldloader.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="..\..\..\src\server\networkutils.cpp">
+      <Filter>Source\Network</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\server\chunkloader.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\World</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\server\networkstructures.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="..\..\..\src\server\worldloader.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\server.cpp">
+      <Filter>Source\Network</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\server\worldloader.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\server\chunkloader.h">
-      <Filter>Source</Filter>
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\server\worldloader.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\server\server.h">
+      <Filter>Source\Network</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

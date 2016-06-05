@@ -16,16 +16,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <thread>
-#include "receiver.h"
-#include "sender.h"
-#include "networkutil.h"
+#include <logger.h>
+#include "network.h"
 
 int main()
 {
-    if (!initNetwork())
-        return -1;
-    std::thread(receiverThread).detach();
-    std::thread(senderThread).detach();
+    loggerInit();
+    std::thread(networkThread).detach();
     system("pause");
     return 0;
-} //cannot quit normally
+}
