@@ -16,42 +16,30 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PLUGINMANAGER_H_
-#define PLUGINMANAGER_H_
+#ifndef WORLDMANAGER_H_
+#define WORLDMANAGER_H_
 
-#include <string>
-using std::string;
-#include <boost/shared_ptr.hpp>
-#include <boost/dll/import.hpp>
-#include "plugin.h"
-#include "../pluginapi/pluginapi.h"
+#include <vector>
+using std::vector;
 
-// For API declarations
 #include "world.h"
-#include "blockmanager.h"
 
-const string PluginApiDllPath = "PluginAPI";
-
-// Plugin system
-class PluginManager
+// Multi-world
+class WorldManager
 {
 public:
-    PluginManager()
-    {}
-
-    // Initialize PluginAPI DLL
-    void initPluginAPI();
-    // Load plugins
-    void loadPlugins();
+    World* addWorld(const string& name)
+    {
+        World* world = new World(name);
+        worlds.push_back(world);
+        return world;
+    }
 
 private:
-    // Main PluginAPI initialization function
-    boost::shared_ptr<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)> init;
-    // Set current world
-    boost::shared_ptr<void(*)(World*)> setCurrentWorld;
+    vector<World*> worlds;
 
 };
 
-extern PluginManager Plugins;
+extern WorldManager Worlds;
 
-#endif // !PLUGINMANAGER_H_
+#endif

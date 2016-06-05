@@ -16,20 +16,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "pluginmanager.h"
+#include "worldmanager.h"
 
-PluginManager Plugins;
-
-void PluginManager::initPluginAPI()
-{
-    init = boost::dll::import<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)>
-           (PluginApiDllPath, "NW_init", boost::dll::load_mode::append_decorations);
-    setCurrentWorld = boost::dll::import<void(*)(World*)>
-                      (PluginApiDllPath, "NW_setCurrentWorld", boost::dll::load_mode::append_decorations);
-    (*init.get())(World::getBlock, World::setBlock, BlockManager::registerBlock);
-}
-
-void PluginManager::loadPlugins()
-{
-    // TODO: Load plugins
-}
+WorldManager Worlds;

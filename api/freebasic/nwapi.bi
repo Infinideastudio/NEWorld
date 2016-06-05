@@ -45,8 +45,6 @@ type buildChunkFunc as function(byref as const Vec3i) as BlockData ptr
 
 type PluginData
     dim pluginName as zstring ptr = 0
-    dim blocksCount as int32
-    dim blocks as BlockType ptr = 0
     dim buildChunk as buildChunkFunc = 0
 end type
 

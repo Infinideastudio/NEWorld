@@ -16,9 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '/
 
-' NOT FINISHED
-
-#include "../api/freebasic/api.bi"
+#include "../api/freebasic/nwapi.bi"
 
 ' Plugin constants
 const PluginName as string = "infinideas.testplugin"
@@ -36,14 +34,33 @@ function c_str(byref s as const string) as zstring ptr
     return res
 end function
 
+' Add block
+sub addblock(byval index as integer, byref blockname as const string, _
+    byval solid as byte, byval translucent as byte, byval opaque as byte, _
+    byval explodePower as int32, byval hardness as int32)
+    blocks[index].blockname = c_str(blockname)
+    blocks[index].solid = solid
+    blocks[index].translucent = translucent
+    blocks[index].opaque = opaque
+    blocks[index].explodePower = explodePower
+    blocks[index].hardness = hardness
+end sub
+
 ' Chunk generator
 function buildChunk(byref cpos as const Vec3i) as BlockData ptr
     dim res as BlockData ptr = new BlockData[ChunkSize*ChunkSize*ChunkSize]
-    if cpos.y>=0 then
-        dim i as integer
+    dim i as integer
+    if cpos.y<=0 then
+        ' Ground
         for i=0 to ChunkSize*ChunkSize*ChunkSize - 1
-            res[i].id = 0' NOT FINISHED
-            res[i].brightness = 0' NOT FINISHED
+            res[i].id = 1
+            res[i].brightness = 0
+        next
+    else
+        ' Air
+        for i=0 to ChunkSize*ChunkSize*ChunkSize - 1
+            res[i].id = 0
+            res[i].brightness = 15
         next
     end if
     return res
@@ -52,13 +69,11 @@ end function
 ' Main function
 function init() as PluginData ptr
     blocks = new BlockType[3]
-    registerBlock(0, "rock", 1, 0, 1, 0, 10)
-    registerBlock(1, "soil", 1, 0, 1, 0, 5)
-    registerBlock(2, "grass", 1, 0, 1, 0, 5)
+    addBlock(0, "rock", 1, 0, 1, 0, 10)
+    addBlock(1, "soil", 1, 0, 1, 0, 5)
+    addBlock(2, "grass", 1, 0, 1, 0, 5)
     dim testPlugin as PluginData ptr = new PluginData
     testPlugin->pluginName = c_str(PluginName)
-    testPlugin->blocksCount = 3
-    testPlugin->blocks = blocks
     testPlugin->buildChunk = @buildChunk
     return testPlugin
 end function

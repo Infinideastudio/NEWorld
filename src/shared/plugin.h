@@ -20,11 +20,22 @@
 #define PLUGIN_H_
 
 #include <string>
+using std::string;
 #include <boost/shared_ptr.hpp>
 #include <boost/dll/import.hpp>
 
-using std::string;
-class PluginData;
+#include "vec3.h"
+#include "blockdata.h"
+
+typedef BlockData* (*buildChunkFunc)(const Vec3i*);
+
+class PluginData
+{
+public:
+    char* pluginName;
+    buildChunkFunc buildChunk;
+};
+
 // Single plugin
 class Plugin
 {

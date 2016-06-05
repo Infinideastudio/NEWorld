@@ -59,8 +59,6 @@ typedef BlockData* (*buildChunkFunc)(const Vec3i*);
 struct PluginData
 {
     char* pluginName = nullptr;
-    int32 blocksCount;
-    BlockType* blocks = nullptr;
     buildChunkFunc buildChunk = nullptr;
 };
 
