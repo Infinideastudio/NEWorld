@@ -58,6 +58,9 @@
     <ClInclude Include="..\..\..\src\shared\blockmanager.h">
       <Filter>Source\World</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\worldmanager.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -102,6 +105,9 @@
       <Filter>Source\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\blockmanager.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\worldmanager.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
   </ItemGroup>

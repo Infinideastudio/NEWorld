@@ -21,6 +21,7 @@
 
 #include <vector>
 using std::vector;
+
 #include "blocktype.h"
 
 class BlockManager
@@ -35,5 +36,7 @@ public:
     }
 
 };
+
+extern BlockManager Blocks;
 
 #endif // !BLOCKMANAGER_H_

@@ -18,6 +18,8 @@
 
 #include "pluginmanager.h"
 
+PluginManager Plugins;
+
 void PluginManager::initPluginAPI()
 {
     init = boost::dll::import<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)>

@@ -18,4 +18,4 @@
 
 #include "blockmanager.h"
 
-
+BlockManager Blocks;

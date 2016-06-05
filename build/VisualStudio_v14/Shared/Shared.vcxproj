@@ -149,6 +149,7 @@
     <ClInclude Include="..\..\..\src\shared\takedatahelper.h" />
     <ClInclude Include="..\..\..\src\shared\vec3.h" />
     <ClInclude Include="..\..\..\src\shared\world.h" />
+    <ClInclude Include="..\..\..\src\shared\worldmanager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\aabb.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="..\..\..\src\shared\pluginmanager.cpp" />
     <ClCompile Include="..\..\..\src\shared\session.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
+    <ClCompile Include="..\..\..\src\shared\worldmanager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,9 +20,10 @@
 #define WORLD_H_
 
 #include <algorithm>
-#include <string>
-#include <cstring> // malloc, realloc, free
 using std::abs;
+#include <string>
+using std::string;
+#include <cstring> // malloc, realloc, free
 
 #include "common.h"
 #include "chunk.h"
@@ -37,7 +38,7 @@ private:
     // Loaded chunk count
     size_t m_chunkCount;
     // World name
-    std::string m_name;
+    string m_name;
 
     // Expand chunk array
     void expandChunkArray(size_t expandCount);
@@ -66,7 +67,7 @@ private:
     size_t getChunkIndex(const Vec3i& chunkPos) const;
 
 public:
-    World() : m_chunkCount(0), m_chunkArraySize(1024)
+    World(const string& name) :m_name(name), m_chunkCount(0), m_chunkArraySize(1024)
     {
         // 看着new和realloc混用有点别扭。。。 --qiaozhanrong
         //m_chunks = new Chunk*[m_chunkArraySize];
@@ -77,7 +78,7 @@ public:
     World& operator= (const World&) = delete;
 
     // Get world name
-    std::string getWorldName()
+    const string& getWorldName()
     {
         return m_name;
     }

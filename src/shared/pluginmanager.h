@@ -50,4 +50,6 @@ private:
 
 };
 
+extern PluginManager Plugins;
+
 #endif // !PLUGINMANAGER_H_

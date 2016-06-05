@@ -18,23 +18,30 @@
 
 #include "pluginapi.h"
 
+World* world;
+
 extern "C"
 {
 
+    // ### Export variables/procedures to NEWorld main program ###
+
     // Initialize PluginAPI with precedure pointers
-    NWAPIEXPORT void init(NW_getBlockFunc NW_getBlock_, NW_setBlockFunc NW_setBlock_, NW_registerBlockFunc NW_registerBlock_)
+    NWAPIEXPORT void NW_init(NW_getBlockFunc NW_getBlock_, NW_setBlockFunc NW_setBlock_, NW_registerBlockFunc NW_registerBlock_)
     {
         NW_getBlock = NW_getBlock_;
         NW_setBlock = NW_setBlock_;
         NW_registerBlock = NW_registerBlock_;
     }
+    // Set current world
+    NWAPIEXPORT void NW_setCurrentWorld(World* world_)
+    { world = world_; }
 
-    // Export variables/procedures
+    // ### Export variables/procedures to plugins ###
     NWAPIEXPORT PL_BlockData getBlock(const PL_Vec3i* pos)
-    { return NW_getBlock(*pos); }
+    { return (world->*NW_getBlock)(*pos); }
     NWAPIEXPORT void setBlock(const PL_Vec3i* pos, PL_BlockData block)
-    { NW_setBlock(*pos, block); }
+    { (world->*NW_setBlock)(*pos, block); }
     NWAPIEXPORT void registerBlock(const PL_BlockType* block)
-    { NW_registerBlock(convertBlockType(*block)); }
+    { (Blocks.*NW_registerBlock)(convertBlockType(*block)); }
 
 }
