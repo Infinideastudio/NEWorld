@@ -19,21 +19,14 @@
 #define NETWORKSTRUCTURES_H_
 #include <string>
 #include <cstdint>
-enum Identifier :uint32_t
-{
-    //Client to server (0 ~ 2^30-1)
-    Login = 0,
-    //Server to client (2^30 ~ 2*2^30-1)
-    Placeholder = 1 << 30,
-    //Common (2*2^30 ~ 3^30-1)
-    Chat = (1 << 30)*2u
-};
-
+#include "packet.h"
+#include "identifier.h"
 class NetworkStructure
 {
 public:
     virtual void process() = 0;
     virtual ~NetworkStructure() {}
+    virtual Packet makePacket() = 0;
 };
 class LoginPacket : public NetworkStructure
 {
@@ -41,14 +34,19 @@ public:
     LoginPacket(std::string username, std::string password, uint16_t version) :
         m_username(username), m_password(password), m_version(version) {}
 
-    virtual void process() override;
-
-    Packet makePacket()
+    Packet makePacket() override
     {
         Packet p;
         p.identifier = Identifier::Login;
-
+        p.length = 128 + sizeof(uint16_t);
+        p.data = std::unique_ptr<char[]>(new char[p.length]);
+        if (m_username.length() < 64) strcpy(p.data.get(), m_username.c_str());
+        if (m_password.length() < 64) strcpy(p.data.get() + 64, m_password.c_str());
+        memcpy(p.data.get() + 128, &m_version, sizeof(uint16_t));
+        return p;
     }
+
+    virtual void process() override;
 
 private:
     std::string m_username;
@@ -64,6 +62,14 @@ public:
 
     virtual void process() override;
 
+    Packet makePacket() override
+    {
+        Packet p;
+        p.identifier = Identifier::Chat;
+        p.length = 0;
+        //p.data = std::unique_ptr<char[]>(new char[p.length]);
+        return p;
+    }
 private:
     std::string m_userSend;
     std::string m_content;

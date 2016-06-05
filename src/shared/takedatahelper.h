@@ -29,12 +29,12 @@ public:
         :m_buffer(buffer), m_length(length), m_offset(0), m_autoReleaseArray(autoReleaseArray) {}
     ~takeDataHelper()
     {
-        delete[] m_buffer;
+        if(m_autoReleaseArray) delete[] m_buffer;
     }
     template<typename T>
     T take()
     {
-        if (m_offset + sizeof(T) >= m_length) throw;
+        if (m_offset + sizeof(T) > m_length) throw;
         T ret = *((T*)(m_buffer + m_offset));
         m_offset += sizeof(T);
         return ret;

@@ -25,7 +25,7 @@
 std::string hostIp = "127.0.0.1";
 
 std::shared_ptr<Session> session;
-
+const int updateInterval = 10;
 void disconnect()
 {
     //TODO: disconnect
@@ -56,7 +56,7 @@ void networkThread()
 
     session = std::make_shared<Session>(std::move(socket));
     session->start();
-    session->addRequest(LoginPacket::make("test", "123456", NEWORLD_VERSION));
+    session->addRequest(std::move(LoginPacket("test", "123456", NEWORLD_VERSION).makePacket()));
     ioService.run();
 }
 
@@ -67,4 +67,11 @@ void errorHandle(const tcp::socket& m_socket, boost::system::error_code ec)
 
 void Session::doUpdate()
 {
+    auto self(shared_from_this());
+    boost::asio::deadline_timer(m_socket.get_io_service(), boost::posix_time::microseconds(updateInterval)).async_wait(
+        [this, self](boost::system::error_code)
+    {
+        //Update world here
+        doWrite();
+    });
 }

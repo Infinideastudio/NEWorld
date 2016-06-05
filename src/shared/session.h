@@ -36,19 +36,19 @@ public:
         doUpdate();
     }
 
+    void addRequest(Packet packet)
+    {
+        m_packets.push(std::move(packet));
+    }
+
 private:
     void doUpdate();
     void doRead();
     void doWrite();
-    void addRequest(Packet packet)
-    {
-        m_packets.push(packet);
-    }
 
     tcp::socket m_socket;
     std::queue<Packet> m_packets; //packets need sent
     Packet m_packetRead;
-    char* m_dataBuffer;
 };
 
 #endif // _SESSION_H__

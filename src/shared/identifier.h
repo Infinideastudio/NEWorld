@@ -15,20 +15,18 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#ifndef __PACKET_H_
-#define __PACKET_H_
-
-#include <memory>
-#include "networkstructures.h"
-#include "identifier.h"
-
-class Packet
+#ifndef IDENTIFIER_H_
+#define IDENTIFIER_H_
+#include <cinttypes>
+enum Identifier :uint32_t
 {
-public:
-    Identifier identifier;
-    uint32_t length;
-    std::unique_ptr<char[]> data;
+    //Client to server (0 ~ 2^30-1)
+    Login = 0,
+    //Server to client (2^30 ~ 2*2^30-1)
+    Placeholder = 1 << 30,
+    //Common (2*2^30 ~ 3^30-1)
+    Chat = (1 << 30) * 2u
 };
 
-#endif
+
+#endif // IDENTIFIER_H_

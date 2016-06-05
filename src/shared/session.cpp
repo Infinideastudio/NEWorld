@@ -27,8 +27,7 @@ void errorHandle(const tcp::socket& m_socket, error_code ec);
 
 std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
 {
-    takeDataHelper tdh(packet.data, packet.length, true);
-    packet.identifier = tdh.take<Identifier>();
+    takeDataHelper tdh(packet.data.get(), packet.length, false);
     switch (packet.identifier)
     {
     case Login:
@@ -61,9 +60,9 @@ void Session::doRead()
         if (!ec)
         {
             //根据读到的长度新建缓存
-            m_dataBuffer = new char[m_packetRead.length];
+            m_packetRead.data = std::unique_ptr<char[]>(new char[m_packetRead.length]);
             //异步读取数据
-            async_read(m_socket, buffer(&m_dataBuffer, m_packetRead.length),
+            async_read(m_socket, buffer(m_packetRead.data.get(), m_packetRead.length),
                        [this, self](error_code ec, std::size_t)
             {
                 if (!ec)
@@ -94,16 +93,16 @@ void Session::doWrite()
         return;
     }
     Packet& packet = m_packets.front();
-    m_packets.pop();
     auto self(shared_from_this());
     async_write(m_socket, buffer(&packet.identifier, sizeof(Identifier) + sizeof(packet.length)), //Send identifier and length
                 [this, self, &packet](error_code ec, std::size_t)
     {
         if (!ec)
         {
-            async_write(m_socket, buffer(packet.data, packet.length),  //Send data
+            async_write(m_socket, buffer(packet.data.get(), packet.length),  //Send data
                         [this, self](error_code ec, std::size_t)
             {
+                m_packets.pop();
                 if (!ec) doUpdate();
                 else errorHandle(m_socket, ec);
             });

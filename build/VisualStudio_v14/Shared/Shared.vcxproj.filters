@@ -52,6 +52,9 @@
     <ClInclude Include="..\..\..\src\shared\networkshared.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\identifier.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

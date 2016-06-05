@@ -28,6 +28,5 @@ void ChatPacket::process()
     //输出到屏幕上之类的
 }
 
-
 //以下是服务端部分，客户端无需实现
 DEFAULT_IMPLEMENT(LoginPacket)
