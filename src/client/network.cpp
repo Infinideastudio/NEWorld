@@ -17,10 +17,19 @@
 */
 
 #include <memory>
+#include <common.h>
 #include <logger.h>
 #include "network.h"
+#include "session.h"
 
 std::string hostIp = "127.0.0.1";
+
+std::shared_ptr<Session> session;
+
+void disconnect()
+{
+    //TODO: disconnect
+}
 
 bool initNetwork(boost::asio::io_service& ioService, tcp::socket& socket, std::string ip)
 {
@@ -45,7 +54,9 @@ void networkThread()
     if (!initNetwork(ioService,socket, hostIp))
         exit(-1);
 
-    std::make_shared<Session>(std::move(socket))->start();
+    session = std::make_shared<Session>(std::move(socket));
+    session->start();
+    session->addRequest(LoginPacket::make("test", "123456", NEWORLD_VERSION));
     ioService.run();
 }
 

@@ -16,7 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "network.h"
+#include <networkshared.h>
 #include <climits>
 
 boost::asio::io_service ioService;

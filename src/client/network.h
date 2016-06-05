@@ -1,12 +1,12 @@
 #ifndef NETWORK_H__
 #define NETWORK_H__
+#include <networkshared.h>
 #include <string>
 #include <mutex>
-#include "session.h"
-
+class Packet;
 void addRequest(Packet p);
 void networkThread();
-
+void disconnect();
 inline void setServerIp(std::string ip)
 {
     extern std::string hostIp;

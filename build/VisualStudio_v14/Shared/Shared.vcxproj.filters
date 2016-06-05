@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\shared\AABB.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\shared\vec3.h">
       <Filter>Source\Common</Filter>
     </ClInclude>
@@ -29,11 +26,6 @@
       <Filter>Source\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h">
-      <Filter>World</Filter>
-    <ClInclude Include="..\..\..\src\shared\network.h">
-      <Filter>Source\Network</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h">
       <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\networkstructures.h">
@@ -52,6 +44,12 @@
       <Filter>Source\Network</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\takedatahelper.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\aabb.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\networkshared.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
   </ItemGroup>
@@ -76,9 +74,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\shared\AABB.cpp">
-      <Filter>Source\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
@@ -95,6 +90,9 @@
       <Filter>Source\Network</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\logger.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\aabb.cpp">
       <Filter>Source\Common</Filter>
     </ClCompile>
   </ItemGroup>

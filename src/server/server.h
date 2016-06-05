@@ -19,7 +19,7 @@
 
 #ifndef SERVER_H__
 #define SERVER_H__
-#include <network.h>
+#include <networkshared.h>
 #include <logger.h>
 #include <memory>
 #include <session.h>

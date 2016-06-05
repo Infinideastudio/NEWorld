@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NETWORK_H_
-#define NETWORK_H_
+#ifndef NETWORK_SHARED_H_
+#define NETWORK_SHARED_H_
 
 #include <boost/asio.hpp>
 #include "networkstructures.h"
@@ -28,4 +28,4 @@ using boost::asio::ip::tcp;
 constexpr int Port = 8090;
 extern boost::asio::io_service ioService;
 
-#endif // RECEIVER_H_
+#endif // NETWORK_SHARED_H_

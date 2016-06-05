@@ -15,14 +15,17 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#include "network.h"
 #include <thread>
 #include <logger.h>
-#include "network.h"
 
 int main()
 {
     loggerInit();
-    std::thread(networkThread).detach();
+    std::thread serverThread(networkThread);
     system("pause");
+    disconnect();
+    serverThread.join();
     return 0;
 }

@@ -46,6 +46,7 @@
 #endif
 
 #ifdef NEWORLD_USE_WINAPI
+    #define WIN32_LEAN_AND_MEAN
     #include <Windows.h> // Windows API
 #else
 //    #include <pthread.h> // Or <thread> <mutex>
@@ -56,5 +57,7 @@
 #if (-1)>>1 == -1
     #define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
 #endif
+
+#define NEWORLD_VERSION 501
 
 #endif // !COMMON_H_

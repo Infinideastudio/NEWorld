@@ -16,11 +16,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SESSION_H__
-#define SESSION_H__
+#ifndef _SESSION_H__
+#define _SESSION_H__
 #include <boost/core/noncopyable.hpp>
 #include <queue>
-#include "network.h"
+#include "networkshared.h"
 
 class Session : public std::enable_shared_from_this<Session>
 {
@@ -51,4 +51,4 @@ private:
     char* m_dataBuffer;
 };
 
-#endif // SESSION_H__
+#endif // _SESSION_H__

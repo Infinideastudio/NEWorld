@@ -8,6 +8,7 @@
 #include <AL/efx-creative.h>
 
 #ifdef NEWORLD_TARGET_WINDOWS
+#define WIN32_LEAN_AND_MEAN
 #include<Windows.h>
 #include<io.h>
 #include<fcntl.h>

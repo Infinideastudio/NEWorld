@@ -43,6 +43,13 @@ public:
 
     virtual void process() override;
 
+    Packet makePacket()
+    {
+        Packet p;
+        p.identifier = Identifier::Login;
+
+    }
+
 private:
     std::string m_username;
     std::string m_password;
