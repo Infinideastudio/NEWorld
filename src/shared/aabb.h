@@ -38,7 +38,7 @@ public:
 
     /// Is intersect on X axis
     bool intersectX(const AABB &anotherAABB) const;
-    /// Is intersect on Y axis
+    // Is intersect on Y axis
     bool intersectY(const AABB &anotherAABB) const;
     /// Is intersect on Z axis
     bool intersectZ(const AABB &anotherAABB) const;

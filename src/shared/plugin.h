@@ -20,11 +20,11 @@
 #define PLUGIN_H_
 
 #include <string>
-#include <cstring> // memcpy
-using std::string;
 #include <boost/shared_ptr.hpp>
 #include <boost/dll/import.hpp>
 
+using std::string;
+class PluginData;
 // Single plugin
 class Plugin
 {

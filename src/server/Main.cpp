@@ -37,7 +37,7 @@ void errorHandle(const tcp::socket& m_socket, error_code ec)
 class takeDataHelper: boost::noncopyable
 {
 public:
-    takeDataHelper(char* buffer, size_t length, bool autoReleaseArray=false)
+    takeDataHelper(char* buffer, size_t length, bool autoReleaseArray)
         :m_buffer(buffer), m_length(length), m_offset(0), m_autoReleaseArray(autoReleaseArray) {}
     ~takeDataHelper()
     {
@@ -68,7 +68,7 @@ private :
 
 std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
 {
-    takeDataHelper tdh(packet.data, packet.length);
+    takeDataHelper tdh(packet.data, packet.length, true);
     packet.identifier = tdh.take<Identifier>();
     switch (packet.identifier)
     {
