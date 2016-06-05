@@ -154,16 +154,7 @@ public:
         return (x*base + y)*base + z;
     }
 
-    template<typename T, T base, typename = typename std::enable_if<(bool)(sizeof(T) > sizeof(char*))>::type>
-    static Vec3<T> decode(const T& arg)
-    {
-        T tmp = arg;
-        T z = tmp % base;
-        tmp /= base;
-        return Vec3<T>(tmp / base, tmp % base, z);
-    }
-
-    template<typename T, T base, typename = typename std::enable_if<(bool)(sizeof(T) <= sizeof(char*))>::type>
+    template<typename T, T base>
     static Vec3<T> decode(T arg)
     {
         T z = arg % base;
