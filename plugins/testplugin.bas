@@ -21,9 +21,6 @@
 ' Plugin constants
 const PluginName as string = "infinideas.testplugin"
 
-' Plugin data
-dim shared blocks as BlockType ptr
-
 ' NEWorld constants
 const ChunkSize as integer = 32
 
@@ -35,15 +32,19 @@ function c_str(byref s as const string) as zstring ptr
 end function
 
 ' Add block
-sub addblock(byval index as integer, byref blockname as const string, _
+sub addblock(byref blockname as const string, _
     byval solid as byte, byval translucent as byte, byval opaque as byte, _
     byval explodePower as int32, byval hardness as int32)
-    blocks[index].blockname = c_str(blockname)
-    blocks[index].solid = solid
-    blocks[index].translucent = translucent
-    blocks[index].opaque = opaque
-    blocks[index].explodePower = explodePower
-    blocks[index].hardness = hardness
+    dim block as BlockType
+    with block
+        block.blockname = c_str(blockname)
+        block.solid = solid
+        block.translucent = translucent
+        block.opaque = opaque
+        block.explodePower = explodePower
+        block.hardness = hardness
+    end with
+    registerBlock(@block)
 end sub
 
 ' Chunk generator
@@ -68,10 +69,9 @@ end function
 
 ' Main function
 function init() as PluginData ptr
-    blocks = new BlockType[3]
-    addBlock(0, "rock", 1, 0, 1, 0, 10)
-    addBlock(1, "soil", 1, 0, 1, 0, 5)
-    addBlock(2, "grass", 1, 0, 1, 0, 5)
+    addBlock("rock", 1, 0, 1, 0, 10)
+    addBlock("soil", 1, 0, 1, 0, 5)
+    addBlock("grass", 1, 0, 1, 0, 5)
     dim testPlugin as PluginData ptr = new PluginData
     testPlugin->pluginName = c_str(PluginName)
     testPlugin->buildChunk = @buildChunk
