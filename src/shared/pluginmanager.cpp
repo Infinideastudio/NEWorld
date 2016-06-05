@@ -20,7 +20,9 @@
 
 void PluginManager::initPluginAPI()
 {
-    // TODO: Init PluginAPI DLL with procedure pointers
+    init = boost::dll::import<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)>
+           (PluginApiDllPath, "init", boost::dll::load_mode::append_decorations);
+    (*init.get())(World::getBlock, World::setBlock, BlockManager::registerBlock);
 }
 
 void PluginManager::loadPlugins()

@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PLUGINAPI_H_
-#define PLUGINAPI_H_
+#ifndef NWAPI_H_
+#define NWAPI_H_
 
 #if defined _WIN32 || defined __CYGWIN__
     #ifdef _MSC_VER
@@ -71,4 +71,4 @@ extern "C"
     NWAPIENTRY void registerBlock(const BlockType*);
 }
 
-#endif
+#endif // !NWAPI_H_

@@ -19,7 +19,18 @@
 #ifndef PLUGINMANAGER_H_
 #define PLUGINMANAGER_H_
 
+#include <string>
+using std::string;
+#include <boost/shared_ptr.hpp>
+#include <boost/dll/import.hpp>
 #include "plugin.h"
+#include "../pluginapi/pluginapi.h"
+
+// For API declarations
+#include "world.h"
+#include "blockmanager.h"
+
+const string PluginApiDllPath = "PluginAPI";
 
 // Plugin system
 class PluginManager
@@ -32,6 +43,10 @@ public:
     void initPluginAPI();
     // Load plugins
     void loadPlugins();
+
+private:
+    // Main PluginAPI initialization function
+    boost::shared_ptr<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)> init;
 
 };
 

@@ -4,9 +4,6 @@
     <Filter Include="src">
       <UniqueIdentifier>{fca38712-a427-44dd-aa4f-cde11ad4390a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="api">
-      <UniqueIdentifier>{1c3ca5fa-06c4-4e05-ba53-3a088ca47815}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\pluginapi\pluginapi.cpp">
@@ -14,8 +11,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\api\cpp\pluginapi.h">
-      <Filter>api</Filter>
+    <ClInclude Include="..\..\..\src\pluginapi\pluginapi.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

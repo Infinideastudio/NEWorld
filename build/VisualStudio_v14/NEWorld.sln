@@ -21,6 +21,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NEWorld", "NEWorld", "{D127
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PluginAPI", "PluginAPI\PluginAPI.vcxproj", "{F6319E84-33B6-4C97-90EF-F7815B6A3EE1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{4AA3E942-6A8C-4ED2-8251-3DD29EBC1101}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cpp", "cpp", "{418E179D-5EC5-4D95-B335-67F3547D9FCB}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\api\cpp\nwapi.h = ..\..\api\cpp\nwapi.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "freebasic", "freebasic", "{55938B30-42D9-41E0-A32C-6B528BA44076}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\api\freebasic\nwapi.bi = ..\..\api\freebasic\nwapi.bi
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -88,5 +100,8 @@ Global
 		{ABBA7A56-1D26-4C66-AED9-67C8F7CC3AE7} = {D1274A51-DC47-459E-990D-873A9F16E8DF}
 		{286102D2-39F0-4578-8328-FB6B3836393B} = {D1274A51-DC47-459E-990D-873A9F16E8DF}
 		{F6319E84-33B6-4C97-90EF-F7815B6A3EE1} = {F09669B8-1CF8-48C9-9BF3-1F5E8845F14F}
+		{4AA3E942-6A8C-4ED2-8251-3DD29EBC1101} = {F09669B8-1CF8-48C9-9BF3-1F5E8845F14F}
+		{418E179D-5EC5-4D95-B335-67F3547D9FCB} = {4AA3E942-6A8C-4ED2-8251-3DD29EBC1101}
+		{55938B30-42D9-41E0-A32C-6B528BA44076} = {4AA3E942-6A8C-4ED2-8251-3DD29EBC1101}
 	EndGlobalSection
 EndGlobal

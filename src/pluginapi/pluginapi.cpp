@@ -16,66 +16,13 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../shared/common.h"
-#include "../shared/vec3.h"
-#include "../shared/blockdata.h"
-#include "../shared/blocktype.h"
-#include "../shared/blockmanager.h"
-
-// NWAPIEXPORT
-#if defined NEWORLD_TARGET_WINDOWS
-    #ifdef NEWORLD_COMPILER_MSVC
-        #define NWAPIEXPORT __declspec(dllexport)
-    #else
-        #define NWAPIEXPORT __attribute__((dllexport))
-    #endif
-#else
-    #define NWAPIEXPORT __attribute__((visibility("default")))
-#endif
-
-// Prefix NW_ means it is an interface to NEWorld main program
-// Prefix PL_ means it is an interface to plugins
-
-// NEWorld structures
-using NW_Vec3i = Vec3i;
-using NW_BlockData = BlockData;
-using NW_BlockType = BlockType;
-
-// Structures for plugin interface
-// Aliases cannot be used when structure definitions in NEWorld and in Plugin API are different
-using PL_Vec3i = NW_Vec3i;
-using PL_BlockData = NW_BlockData;
-
-struct PL_BlockType
-{
-    char* blockname = nullptr;
-    bool solid;
-    bool translucent;
-    bool opaque;
-    int explodePower;
-    int hardness;
-};
-
-// Conversions between plugin structures and NEWorld structures
-// This is used when structure definitions in NEWorld and in Plugin API are different
-NW_BlockType convertBlockType(const PL_BlockType& src)
-{ return NW_BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness); }
-
-// Pointer to procedure types
-typedef NW_BlockData(*NW_getBlockFunc)(const NW_Vec3i&);
-typedef void(*NW_setBlockFunc)(const NW_Vec3i&, NW_BlockData);
-typedef void(*NW_registerBlockFunc)(const BlockType& block);
-
-// Pointers to NEWorld procedures
-NW_getBlockFunc NW_getBlock;
-NW_setBlockFunc NW_setBlock;
-NW_registerBlockFunc NW_registerBlock;
+#include "pluginapi.h"
 
 extern "C"
 {
 
     // Initialize PluginAPI with precedure pointers
-    NWAPIEXPORT void initPluginAPI(NW_getBlockFunc NW_getBlock_, NW_setBlockFunc NW_setBlock_, NW_registerBlockFunc NW_registerBlock_)
+    NWAPIEXPORT void init(NW_getBlockFunc NW_getBlock_, NW_setBlockFunc NW_setBlock_, NW_registerBlockFunc NW_registerBlock_)
     {
         NW_getBlock = NW_getBlock_;
         NW_setBlock = NW_setBlock_;

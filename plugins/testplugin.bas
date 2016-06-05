@@ -18,7 +18,7 @@
 
 ' NOT FINISHED
 
-#include "../api/freebasic/pluginapi.bi"
+#include "../api/freebasic/api.bi"
 
 ' Plugin constants
 const PluginName as string = "infinideas.testplugin"

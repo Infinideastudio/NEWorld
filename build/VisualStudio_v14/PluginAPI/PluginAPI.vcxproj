@@ -22,7 +22,7 @@
     <ClCompile Include="..\..\..\src\pluginapi\pluginapi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\api\cpp\pluginapi.h" />
+    <ClInclude Include="..\..\..\src\pluginapi\pluginapi.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F6319E84-33B6-4C97-90EF-F7815B6A3EE1}</ProjectGuid>

@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '/
 
-#ifndef PLUGINAPI_BI_
-#define PLUGINAPI_BI_
+#ifndef NWAPI_BI_
+#define NWAPI_BI_
 
 type int32 as long
 type uint32 as unsigned long
@@ -56,4 +56,4 @@ extern "C"
     declare sub registerBlock(byval as const BlockType ptr)
 end extern
 
-#endif
+#endif ' !NWAPI_BI_
