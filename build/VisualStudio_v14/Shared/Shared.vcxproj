@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\shared\aabb.h" />
     <ClInclude Include="..\..\..\src\shared\blockdata.h" />
+    <ClInclude Include="..\..\..\src\shared\blockmanager.h" />
     <ClInclude Include="..\..\..\src\shared\blocktype.h" />
     <ClInclude Include="..\..\..\src\shared\chunk.h" />
     <ClInclude Include="..\..\..\src\shared\chunkpointerarray.h" />
@@ -151,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\aabb.cpp" />
+    <ClCompile Include="..\..\..\src\shared\blockmanager.cpp" />
     <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
