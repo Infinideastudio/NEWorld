@@ -53,6 +53,7 @@ end type
 extern "C"
     declare function getBlock(byval as const Vec3i ptr) as BlockData
     declare sub setBlock(byval as const Vec3i ptr, byval as BlockData)
+    declare sub registerBlock(byval as const BlockType ptr)
 end extern
 
 #endif

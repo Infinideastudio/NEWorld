@@ -68,6 +68,7 @@ extern "C"
 {
     NWAPIENTRY BlockData getBlock(const Vec3i*);
     NWAPIENTRY void setBlock(const Vec3i*, BlockData);
+    NWAPIENTRY void registerBlock(const BlockType*);
 }
 
 #endif

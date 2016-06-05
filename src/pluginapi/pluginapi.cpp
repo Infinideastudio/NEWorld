@@ -20,6 +20,7 @@
 #include "../shared/vec3.h"
 #include "../shared/blockdata.h"
 #include "../shared/blocktype.h"
+#include "../shared/blockmanager.h"
 
 // NWAPIEXPORT
 #if defined NEWORLD_TARGET_WINDOWS
@@ -63,19 +64,22 @@ NW_BlockType convertBlockType(const PL_BlockType& src)
 // Pointer to procedure types
 typedef NW_BlockData(*NW_getBlockFunc)(const NW_Vec3i&);
 typedef void(*NW_setBlockFunc)(const NW_Vec3i&, NW_BlockData);
+typedef void(*NW_registerBlockFunc)(const BlockType& block);
 
 // Pointers to NEWorld procedures
 NW_getBlockFunc NW_getBlock;
 NW_setBlockFunc NW_setBlock;
+NW_registerBlockFunc NW_registerBlock;
 
 extern "C"
 {
 
     // Initialize PluginAPI with precedure pointers
-    NWAPIEXPORT void initPluginAPI(NW_getBlockFunc NW_getBlock_, NW_setBlockFunc NW_setBlock_)
+    NWAPIEXPORT void initPluginAPI(NW_getBlockFunc NW_getBlock_, NW_setBlockFunc NW_setBlock_, NW_registerBlockFunc NW_registerBlock_)
     {
         NW_getBlock = NW_getBlock_;
         NW_setBlock = NW_setBlock_;
+        NW_registerBlock = NW_registerBlock_;
     }
 
     // Export variables/procedures
@@ -83,7 +87,7 @@ extern "C"
     { return NW_getBlock(*pos); }
     NWAPIEXPORT void setBlock(const PL_Vec3i* pos, PL_BlockData block)
     { NW_setBlock(*pos, block); }
-    NWAPIEXPORT void regtisterBlock(const PL_BlockType& block)
-    { /* NOT FINISHED */ }
+    NWAPIEXPORT void registerBlock(const PL_BlockType* block)
+    { NW_registerBlock(convertBlockType(*block)); }
 
 }
