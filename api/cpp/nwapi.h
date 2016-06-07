@@ -29,12 +29,11 @@
     #define NWAPIENTRY __attribute__((visibility("default")))
 #endif
 
-using int32 = int;
-using uint32 = unsigned int;
+#include <stdint.h>
 
 struct Vec3i
 {
-    int32 x, y, z;
+    int32_t x, y, z;
 };
 
 struct BlockType
@@ -43,15 +42,15 @@ struct BlockType
     bool solid;
     bool translucent;
     bool opaque;
-    int32 explodePower;
-    int32 hardness;
+    int32_t explodePower;
+    int32_t hardness;
 };
 
 struct BlockData
 {
-    uint32 id : 12;
-    uint32 brightness : 4;
-    uint32 state : 16;
+    uint32_t id : 12;
+    uint32_t brightness : 4;
+    uint32_t state : 16;
 };
 
 typedef BlockData* (*buildChunkFunc)(const Vec3i*);
