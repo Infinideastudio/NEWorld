@@ -28,15 +28,14 @@ using std::vector;
 class WorldManager
 {
 public:
-    World* addWorld(const string& name)
+    const World& addWorld(const string& name)
     {
-        World* world = new World(name);
-        worlds.push_back(world);
-        return world;
+        worlds.emplace_back(name);
+        return worlds[worlds.size() - 1];
     }
 
 private:
-    vector<World*> worlds;
+    vector<World> worlds;
 
 };
 

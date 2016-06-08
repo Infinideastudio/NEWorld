@@ -73,6 +73,8 @@ public:
         //m_chunks = new Chunk*[m_chunkArraySize];
         m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
     }
+    World(World&& rhs) :m_name(std::move(rhs.m_name)), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks)
+    {}
     ~World();
     World(const World&) = delete;
     World& operator= (const World&) = delete;
