@@ -16,19 +16,19 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _SESSION_H__
-#define _SESSION_H__
+#ifndef SESSION_H_
+#define SESSION_H_
+
 #include <boost/core/noncopyable.hpp>
 #include <queue>
 #include "networkshared.h"
 
-class Session : public std::enable_shared_from_this<Session>
+class Session :public std::enable_shared_from_this<Session>
 {
 public:
     Session(tcp::socket socket)
-        : m_socket(std::move(socket))
-    {
-    }
+        :m_socket(std::move(socket))
+    {}
 
     void start()
     {
@@ -47,8 +47,8 @@ private:
     void doWrite();
 
     tcp::socket m_socket;
-    std::queue<Packet> m_packets; //packets need sent
+    std::queue<Packet> m_packets; // Packets need sent
     Packet m_packetRead;
 };
 
-#endif // _SESSION_H__
+#endif // !SESSION_H_

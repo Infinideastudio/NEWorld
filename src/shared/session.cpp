@@ -37,7 +37,6 @@ std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
         uint16_t version = tdh.take<uint16_t>();
         return std::make_unique<LoginPacket>(username, password, version);
     }
-
     case Chat:
     {
         uint32_t length1 = tdh.take<uint32_t>();
@@ -54,7 +53,7 @@ void Session::doRead()
 {
     auto self(shared_from_this());
     //先异步读取数据包的长度
-    async_read(m_socket, buffer(&m_packetRead, sizeof(Identifier) + sizeof(m_packetRead.length)), //read identifier and length to packet
+    async_read(m_socket, buffer(&m_packetRead, sizeof(Identifier) + sizeof(m_packetRead.length)), // Read identifier and length to packet
                [this, self](error_code ec, std::size_t)
     {
         if (!ec)
@@ -87,19 +86,19 @@ void Session::doRead()
 
 void Session::doWrite()
 {
-    if (m_packets.empty()) //No packet need sent
+    if (m_packets.empty()) // No packet need sent
     {
         doUpdate();
         return;
     }
     Packet& packet = m_packets.front();
     auto self(shared_from_this());
-    async_write(m_socket, buffer(&packet.identifier, sizeof(Identifier) + sizeof(packet.length)), //Send identifier and length
+    async_write(m_socket, buffer(&packet.identifier, sizeof(Identifier) + sizeof(packet.length)), // Send identifier and length
                 [this, self, &packet](error_code ec, std::size_t)
     {
         if (!ec)
         {
-            async_write(m_socket, buffer(packet.data.get(), packet.length),  //Send data
+            async_write(m_socket, buffer(packet.data.get(), packet.length), // Send data
                         [this, self](error_code ec, std::size_t)
             {
                 m_packets.pop();

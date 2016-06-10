@@ -20,4 +20,3 @@
 #include <climits>
 
 boost::asio::io_service ioService;
-

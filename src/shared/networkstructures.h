@@ -15,12 +15,15 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #ifndef NETWORKSTRUCTURES_H_
 #define NETWORKSTRUCTURES_H_
+
 #include <string>
 #include <cstdint>
 #include "packet.h"
 #include "identifier.h"
+
 class NetworkStructure
 {
 public:
@@ -28,11 +31,12 @@ public:
     virtual ~NetworkStructure() {}
     virtual Packet makePacket() = 0;
 };
-class LoginPacket : public NetworkStructure
+
+class LoginPacket :public NetworkStructure
 {
 public:
-    LoginPacket(std::string username, std::string password, uint16_t version) :
-        m_username(username), m_password(password), m_version(version) {}
+    LoginPacket(std::string username, std::string password, uint16_t version)
+        :m_username(username), m_password(password), m_version(version) {}
 
     Packet makePacket() override
     {
@@ -54,11 +58,12 @@ private:
     uint16_t m_version;
 
 };
+
 class ChatPacket : public NetworkStructure
 {
 public:
-    ChatPacket(std::string userSend, std::string content) :
-        m_userSend(userSend), m_content(content) {}
+    ChatPacket(std::string userSend, std::string content)
+        :m_userSend(userSend), m_content(content) {}
 
     virtual void process() override;
 
@@ -67,9 +72,10 @@ public:
         Packet p;
         p.identifier = Identifier::Chat;
         p.length = 0;
-        //p.data = std::unique_ptr<char[]>(new char[p.length]);
+//        p.data = std::unique_ptr<char[]>(new char[p.length]);
         return p;
     }
+
 private:
     std::string m_userSend;
     std::string m_content;

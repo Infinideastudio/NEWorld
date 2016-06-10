@@ -1,7 +1,6 @@
 /*
-* This file is part of NGWorld.
-* Then DLaboratory copied this file from NGWorld to NEWorld.
-* (C) Copyright 2016 DLaboratory
+* NEWorld: A free game with similar rules to Minecraft.
+* Copyright (C) 2016 NEWorld Team
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -17,12 +16,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SERVER_H__
-#define SERVER_H__
+#ifndef SERVER_H_
+#define SERVER_H_
+
+#include <memory>
 #include <networkshared.h>
 #include <logger.h>
-#include <memory>
 #include <session.h>
+
 constexpr int updateInterval = 10, globalUpdateInterval = 10;
 
 class Server

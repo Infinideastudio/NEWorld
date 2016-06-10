@@ -16,9 +16,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "../shared/common.h"
 #include "networkstructures.h"
 #include <logger.h>
-#include <cassert>
 
 #define DEFAULT_IMPLEMENT(classname) void LoginPacket::process() { assert(false); }
 

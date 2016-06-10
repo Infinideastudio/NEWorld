@@ -1,7 +1,6 @@
 /*
-* This file is part of NGWorld.
-* Then DLaboratory copied this file from NGWorld to NEWorld.
-* (C) Copyright 2016 DLaboratory
+* NEWorld: A free game with similar rules to Minecraft.
+* Copyright (C) 2016 NEWorld Team
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by

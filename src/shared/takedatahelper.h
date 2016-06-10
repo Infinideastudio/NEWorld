@@ -16,8 +16,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef TAKEDATAHELPER_h__
-#define TAKEDATAHELPER_h__
+#ifndef TAKEDATAHELPER_H_
+#define TAKEDATAHELPER_H_
+
 #include <boost/core/noncopyable.hpp>
 #include <string>
 
@@ -52,5 +53,7 @@ private:
     size_t m_length;
     size_t m_offset;
     bool m_autoReleaseArray;
+
 };
-#endif // TAKEDATAHELPER_h__
+
+#endif // !TAKEDATAHELPER_H
