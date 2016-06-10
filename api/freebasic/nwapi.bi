@@ -19,6 +19,8 @@
 #ifndef NWAPI_BI_
 #define NWAPI_BI_
 
+#inclib "../PluginAPI"
+
 type int32 as long
 type uint32 as unsigned long
 

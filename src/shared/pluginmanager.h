@@ -47,8 +47,10 @@ public:
 private:
     // Main PluginAPI initialization function
     boost::shared_ptr<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)> init;
-    // Set current world
+    // Set current World
     boost::shared_ptr<void(*)(World*)> setCurrentWorld;
+    // Set current BlockManager
+    boost::shared_ptr<void(*)(BlockManager*)> setCurrentBlockManager;
 
 };
 

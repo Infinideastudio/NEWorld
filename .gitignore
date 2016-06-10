@@ -196,20 +196,12 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
-# NEWorld files
-[Ww]orlds/
-[Ss]creen[Ss]hots/
-/options.ini
-
 # Some binary files
 *.lib
 *.dll
 *.exe
+*.exp
 *.a
-[Ll]ib/
-
-# Third-party include files
-include/
 
 # CScope database
 cscope.*
@@ -218,32 +210,26 @@ cscope.*
 *.VC.VC.opendb
 
 # Unnecessary binary asset
-[Aa]ssets/
+dependencies/
+res/
 
 # Unittest
 *.unittest.cpp
 *.unittest.h
 
 # Binary output
-a.out
+*.out
 
 # Final NEWorld executable
 NEWorld
 !NEWorld/
 
-# NEWorld options.ini
-options.ini
+# NEWorld files
+[Ww]orlds/
+[Ss]creen[Ss]hots/
+[Cc]onfigs/
 
 # Eclipse
 .project
 .cproject
 .settings
-
-# Original source
-# WILL BE REMOVED AFTER REBUILD
-/src/original
-
-/dependencies/
-/Audio/
-/Fonts/
-/Textures/
