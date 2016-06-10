@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PACKET_H_
-#define __PACKET_H_
+#ifndef PACKET_H_
+#define PACKET_H_
 
 #include <memory>
 #include "networkstructures.h"
@@ -31,4 +31,4 @@ public:
     std::unique_ptr<char[]> data;
 };
 
-#endif
+#endif // !PACKET_H_

@@ -17,16 +17,17 @@
 */
 #ifndef IDENTIFIER_H_
 #define IDENTIFIER_H_
+
 #include <cinttypes>
+
 enum Identifier :uint32_t
 {
     //Client to server (0 ~ 2^30-1)
     Login = 0,
     //Server to client (2^30 ~ 2*2^30-1)
-    Placeholder = 1 << 30,
-    //Common (2*2^30 ~ 3^30-1)
-    Chat = (1 << 30) * 2u
+    Placeholder = 1u << 30,
+    //Common (2*2^30 ~ 3*2^30-1)
+    Chat = (1u << 30) * 2
 };
 
-
-#endif // IDENTIFIER_H_
+#endif // !IDENTIFIER_H_

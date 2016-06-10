@@ -23,15 +23,16 @@
 #include <string>
 
 /// A helper class for taking data out of a byte array
-class takeDataHelper : boost::noncopyable
+class TakeDataHelper :boost::noncopyable
 {
 public:
-    takeDataHelper(char* buffer, size_t length, bool autoReleaseArray)
+    TakeDataHelper(char* buffer, size_t length, bool autoReleaseArray)
         :m_buffer(buffer), m_length(length), m_offset(0), m_autoReleaseArray(autoReleaseArray) {}
-    ~takeDataHelper()
+    ~TakeDataHelper()
     {
         if(m_autoReleaseArray) delete[] m_buffer;
     }
+
     template<typename T>
     T take()
     {
@@ -40,12 +41,13 @@ public:
         m_offset += sizeof(T);
         return ret;
     }
+
     std::string getString(size_t length)
     {
         if (m_offset + length >= m_length) throw;
         char* ret = m_buffer + m_offset;
         m_offset += length;
-        return std::string(ret);
+        return std::string(ret, length);
     }
 
 private:
@@ -56,4 +58,4 @@ private:
 
 };
 
-#endif // !TAKEDATAHELPER_H
+#endif // !TAKEDATAHELPER_H_
