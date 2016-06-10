@@ -19,6 +19,7 @@
 #include "pluginapi.h"
 
 World* world;
+BlockManager* blocks;
 
 extern "C"
 {
@@ -32,16 +33,20 @@ extern "C"
         NW_setBlock = NW_setBlock_;
         NW_registerBlock = NW_registerBlock_;
     }
-    // Set current world
+    // Set current World
     NWAPIEXPORT void NW_setCurrentWorld(World* world_)
     { world = world_; }
+    // Set current BlockManager
+    NWAPIEXPORT void NW_setCurrentBlockManager(BlockManager* blocks_)
+    { blocks = blocks_; }
 
     // ### Export variables/procedures to plugins ###
+
     NWAPIEXPORT PL_BlockData getBlock(const PL_Vec3i* pos)
-    { return (world->*NW_getBlock)(*pos); }
+    { return convertBlockData((world->*NW_getBlock)(*pos)); }
     NWAPIEXPORT void setBlock(const PL_Vec3i* pos, PL_BlockData block)
-    { (world->*NW_setBlock)(*pos, block); }
+    { (world->*NW_setBlock)(*pos, convertBlockData(block)); }
     NWAPIEXPORT void registerBlock(const PL_BlockType* block)
-    { (Blocks.*NW_registerBlock)(convertBlockType(*block)); }
+    { (blocks->*NW_registerBlock)(convertBlockType(*block)); }
 
 }

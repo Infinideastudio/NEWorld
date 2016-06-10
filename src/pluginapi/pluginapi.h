@@ -48,7 +48,13 @@ using NW_BlockType = BlockType;
 // Structures for plugin interface
 // Aliases cannot be used when structure definitions in NEWorld and in Plugin API are different
 using PL_Vec3i = NW_Vec3i;
-using PL_BlockData = NW_BlockData;
+
+struct PL_BlockData
+{
+    uint32_t id : 12;
+    uint32_t brightness : 4;
+    uint32_t state : 16;
+};
 
 struct PL_BlockType
 {
@@ -56,12 +62,26 @@ struct PL_BlockType
     bool solid;
     bool translucent;
     bool opaque;
-    int explodePower;
-    int hardness;
+    int32_t explodePower;
+    int32_t hardness;
 };
 
 // Conversions between plugin structures and NEWorld structures
 // This is used when structure definitions in NEWorld and in Plugin API are different
+NW_BlockData convertBlockData(const PL_BlockData& src)
+{
+    return NW_BlockData(src.id, src.brightness, src.state);
+}
+
+PL_BlockData convertBlockData(const NW_BlockData& src)
+{
+    PL_BlockData res;
+    res.id = src.getID();
+    res.brightness = src.getBrightness();
+    res.state = src.getState();
+    return res;
+}
+
 NW_BlockType convertBlockType(const PL_BlockType& src)
 {
     return NW_BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness);
