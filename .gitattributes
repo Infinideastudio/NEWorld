@@ -15,6 +15,3 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
-.\Audio filter=lfs diff=lfs merge=lfs -text
-.\Textures filter=lfs diff=lfs merge=lfs -text
-.\Fonts filter=lfs diff=lfs merge=lfs -text
