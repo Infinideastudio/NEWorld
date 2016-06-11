@@ -24,7 +24,7 @@
 #include "server.h"
 #include <common.h>
 
-constexpr std::string copyright()
+std::string copyright()
 {
     return "\n\
 NEWorld: A free game with similar rules to Minecraft.\n\

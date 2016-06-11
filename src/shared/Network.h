@@ -28,4 +28,4 @@ using boost::asio::ip::tcp;
 constexpr int Port = 8090;
 extern boost::asio::io_service ioService;
 
-#endif // RECEIVER_H_
+#endif // NETWORK_H_

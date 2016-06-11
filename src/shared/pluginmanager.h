@@ -28,8 +28,7 @@ using std::string;
 
 // For API declarations
 #include "world.h"
-#include "blockmanager.h"
-
+class BlockManager;
 const string PluginApiDllPath = "PluginAPI";
 
 // Plugin system

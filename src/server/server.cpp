@@ -56,7 +56,7 @@ void Server::doGlobalUpdate()
         [this](boost::system::error_code)
     {
         // Update world
-        world.update();
+        m_world.update();
         doGlobalUpdate();
     });
 }

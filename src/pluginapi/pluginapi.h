@@ -27,14 +27,14 @@
 #include "../shared/world.h"
 
 // NWAPIEXPORT
-#if defined NEWORLD_TARGET_WINDOWS
-    #ifdef NEWORLD_COMPILER_MSVC
-        #define NWAPIEXPORT __declspec(dllexport)
-    #else
-        #define NWAPIEXPORT __attribute__((dllexport))
-    #endif
+#ifdef NEWORLD_TARGET_WINDOWS
+#ifdef NEWORLD_COMPILER_MSVC
+#define NWAPIEXPORT __declspec(dllexport)
 #else
-    #define NWAPIEXPORT __attribute__((visibility("default")))
+#define NWAPIEXPORT __attribute__((dllexport))
+#endif
+#else
+#define NWAPIEXPORT __attribute__((visibility("default")))
 #endif
 
 // Prefix NW_ means it is an interface to NEWorld main program
@@ -68,24 +68,11 @@ struct PL_BlockType
 
 // Conversions between plugin structures and NEWorld structures
 // This is used when structure definitions in NEWorld and in Plugin API are different
-NW_BlockData convertBlockData(const PL_BlockData& src)
-{
-    return NW_BlockData(src.id, src.brightness, src.state);
-}
+NW_BlockData convertBlockData(const PL_BlockData& src);
 
-PL_BlockData convertBlockData(const NW_BlockData& src)
-{
-    PL_BlockData res;
-    res.id = src.getID();
-    res.brightness = src.getBrightness();
-    res.state = src.getState();
-    return res;
-}
+PL_BlockData convertBlockData(const NW_BlockData& src);
 
-NW_BlockType convertBlockType(const PL_BlockType& src)
-{
-    return NW_BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness);
-}
+NW_BlockType convertBlockType(const PL_BlockType& src);
 
 // Pointer to procedure types
 typedef NW_BlockData(World::*NW_getBlockFunc)(const NW_Vec3i&) const;
@@ -93,8 +80,8 @@ typedef void(World::*NW_setBlockFunc)(const NW_Vec3i&, NW_BlockData);
 typedef void(BlockManager::*NW_registerBlockFunc)(const NW_BlockType& block);
 
 // Pointers to NEWorld procedures
-NW_getBlockFunc NW_getBlock;
-NW_setBlockFunc NW_setBlock;
-NW_registerBlockFunc NW_registerBlock;
+extern NW_getBlockFunc NW_getBlock;
+extern NW_setBlockFunc NW_setBlock;
+extern NW_registerBlockFunc NW_registerBlock;
 
 #endif

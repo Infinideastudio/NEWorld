@@ -50,3 +50,29 @@ extern "C"
     { (blocks->*NW_registerBlock)(convertBlockType(*block)); }
 
 }
+
+// Pointers to NEWorld procedures
+NW_getBlockFunc NW_getBlock;
+NW_setBlockFunc NW_setBlock;
+NW_registerBlockFunc NW_registerBlock;
+
+// Conversions between plugin structures and NEWorld structures
+// This is used when structure definitions in NEWorld and in Plugin API are different
+NW_BlockData convertBlockData(const PL_BlockData & src)
+{
+    return NW_BlockData(src.id, src.brightness, src.state);
+}
+
+PL_BlockData convertBlockData(const NW_BlockData & src)
+{
+    PL_BlockData res;
+    res.id = src.getID();
+    res.brightness = src.getBrightness();
+    res.state = src.getState();
+    return res;
+}
+
+NW_BlockType convertBlockType(const PL_BlockType & src)
+{
+    return NW_BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness);
+}

@@ -24,6 +24,7 @@
 #include <logger.h>
 #include <session.h>
 #include <pluginmanager.h>
+#include <worldmanager.h>
 
 constexpr int updateInterval = 10, globalUpdateInterval = 10;
 
@@ -32,11 +33,11 @@ class Server
 public:
     Server(boost::asio::io_service& ioservice, short port)
         :m_acceptor(ioservice, boost::asio::ip::tcp::endpoint(tcp::v4(), port)), m_socket(ioservice),
-        worlds(m_plugins), world(worlds.addWorld("TestWorld"))
+         m_worlds(m_plugins), m_world(m_worlds.addWorld("TestWorld"))
     {
         // Initialization
-        plugins.initPluginAPI();
-        plugins.loadPlugins();
+        m_plugins.initPluginAPI();
+        m_plugins.loadPlugins();
         // Start server
         doAccept();
     }
@@ -52,9 +53,9 @@ private:
     tcp::acceptor m_acceptor;
     tcp::socket m_socket;
 
-    WorldManager worlds;
-    PluginManager plugins; // Loaded plugins
-    World& world; // Single world, only for debugging
+    WorldManager m_worlds;
+    PluginManager m_plugins; // Loaded plugins
+    World& m_world; // Single world, only for debugging
 
 };
 

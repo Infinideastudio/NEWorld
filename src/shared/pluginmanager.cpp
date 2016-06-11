@@ -17,6 +17,8 @@
 */
 
 #include "pluginmanager.h"
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
 void PluginManager::initPluginAPI()
 {
@@ -32,5 +34,15 @@ void PluginManager::initPluginAPI()
 
 void PluginManager::loadPlugins()
 {
-    // TODO: Load plugins
+    using namespace boost::filesystem;
+    string path = "./plugins/";
+    if (exists(path))
+    {
+        directory_iterator itemBegin(path), itemEnd;
+        for (; itemBegin != itemEnd; itemBegin++)
+            if (is_directory(*itemBegin))
+            {
+                string pluginPath = itemBegin->path().string() + "/" + itemBegin->path().filename().string();
+            }
+    }
 }

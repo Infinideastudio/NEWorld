@@ -20,14 +20,15 @@
 #define WORLD_H_
 
 #include <algorithm>
-using std::abs;
 #include <string>
-using std::string;
 #include <cstring> // malloc, realloc, free
-
 #include "common.h"
 #include "chunk.h"
-#include "pluginmanager.h"
+
+using std::abs;
+using std::string;
+
+class PluginManager;
 
 class World
 {
@@ -76,7 +77,7 @@ public:
         //m_chunks = new Chunk*[m_chunkArraySize];
         m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
     }
-    World(World&& rhs) :m_name(std::move(rhs.m_name)), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks)
+    World(World&& rhs) :m_name(std::move(rhs.m_name)), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks), m_plugins(rhs.m_plugins)
     {}
     ~World();
     World(const World&) = delete;
