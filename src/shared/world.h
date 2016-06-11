@@ -21,8 +21,9 @@
 
 #include <algorithm>
 #include <string>
-#include <cstring> // malloc, realloc, free
-#include "common.h"
+#include <cstdlib> // malloc, realloc, free
+#include <boost/core/noncopyable.hpp>
+#include "precomp.h"
 #include "chunk.h"
 
 using std::abs;
@@ -30,7 +31,7 @@ using std::string;
 
 class PluginManager;
 
-class World
+class World :boost::noncopyable
 {
 private:
     // All chunks (chunk array)
@@ -73,30 +74,51 @@ private:
 public:
     World(const string& name, PluginManager& plugins) :m_name(name), m_plugins(plugins), m_chunkCount(0), m_chunkArraySize(1024)
     {
-        // 看着new和realloc混用有点别扭。。。 --qiaozhanrong
         //m_chunks = new Chunk*[m_chunkArraySize];
         m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
     }
     World(World&& rhs) :m_name(std::move(rhs.m_name)), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks), m_plugins(rhs.m_plugins)
     {}
-    ~World();
-    World(const World&) = delete;
-    World& operator= (const World&) = delete;
+
+    ~World()
+    {
+        if (m_chunks)
+        {
+            // TODO: Save and destroy chunks
+            free(m_chunks);
+        }
+    }
 
     // Get world name
     const string& getWorldName()
     {
         return m_name;
     }
+
     // Get chunk count
     size_t getChunkCount() const
     {
         return m_chunkCount;
     }
+
     // Get chunk pointer by index
-    Chunk* getChunkPtr(size_t index) const;
+    Chunk* getChunkPtr(size_t index) const
+    {
+        assert(index < m_chunkCount);
+        return m_chunks[index];
+    }
+
     // Get chunk pointer by chunk coordinates
-    Chunk* getChunkPtr(const Vec3i& chunkPos) const;
+    Chunk* getChunkPtr(const Vec3i& chunkPos) const
+    {
+        // TODO: Try chunk pointer cache
+        // TODO: Try chunk pointer array
+        Chunk* res = m_chunks[getChunkIndex(chunkPos)];
+        // TODO: Update chunk pointer array
+        // TODO: Update chunk pointer cache
+        return res;
+    }
+
     // Add chunk
     Chunk* addChunk(const Vec3i& chunkPos);
     // Delete chunk
@@ -116,27 +138,48 @@ public:
         return (pos - ChunkSize + 1) / ChunkSize;
     }
 #endif
+
     // Convert world position to chunk coordinate (all axes)
     static Vec3i getChunkPos(const Vec3i& pos)
     {
         return Vec3i(getChunkPos(pos.x), getChunkPos(pos.y), getChunkPos(pos.z));
     }
+
     // Convert world position to block coordinate in chunk (one axis)
     static int getBlockPos(int pos)
     {
         return pos & (ChunkSize - 1);
     }
+
     // Convert world position to block coordinate in chunk (all axes)
     static Vec3i getBlockPos(const Vec3i& pos)
     {
         return Vec3i(getBlockPos(pos.x), getBlockPos(pos.y), getBlockPos(pos.z));
     }
+
     // Get block data
-    BlockData getBlock(const Vec3i& pos) const;
+    BlockData getBlock(const Vec3i& pos) const
+    {
+        Chunk* chunk = getChunkPtr(getChunkPos(pos));
+        assert(chunk != nullptr);
+        return chunk->getBlock(getBlockPos(pos));
+    }
+
     // Get block reference
-    BlockData& getBlock(const Vec3i& pos);
+    BlockData& getBlock(const Vec3i& pos)
+    {
+        Chunk* chunk = getChunkPtr(getChunkPos(pos));
+        assert(chunk != nullptr);
+        return chunk->getBlock(getBlockPos(pos));
+    }
+
     // Set block data
-    void setBlock(const Vec3i& pos, BlockData block);
+    void setBlock(const Vec3i& pos, BlockData block)
+    {
+        Chunk* chunk = getChunkPtr(getChunkPos(pos));
+        assert(chunk != nullptr);
+        chunk->setBlock(getBlockPos(pos), block);
+    }
 
     // Main update
     void update();

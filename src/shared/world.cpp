@@ -54,15 +54,6 @@ size_t World::getChunkIndex(const Vec3i& pos) const
     return middle;
 }
 
-World::~World()
-{
-    if (m_chunks)
-    {
-        // TODO: Save and destroy chunks
-        free(m_chunks);
-    }
-}
-
 Chunk* World::addChunk(const Vec3i& chunkPos)
 {
     int index = getChunkIndex(chunkPos);
@@ -91,47 +82,6 @@ int World::deleteChunk(const Vec3i& chunkPos)
     eraseChunkPtr(index);
     // Update chunk pointer array
     return 0;
-}
-
-Chunk* World::getChunkPtr(size_t index) const
-{
-    if (index >= m_chunkCount)
-    {
-        assert(false);
-        return nullptr;
-    }
-    return m_chunks[index];
-}
-
-Chunk* World::getChunkPtr(const Vec3i& chunkPos) const
-{
-    // TODO: Try chunk pointer cache
-    // TODO: Try chunk pointer array
-    Chunk* res = m_chunks[getChunkIndex(chunkPos)];
-    // TODO: Update chunk pointer array
-    // TODO: Update chunk pointer cache
-    return res;
-}
-
-BlockData World::getBlock(const Vec3i& pos) const
-{
-    Chunk* chunk = getChunkPtr(getChunkPos(pos));
-    assert(chunk != nullptr);
-    return chunk->getBlock(getBlockPos(pos));
-}
-
-BlockData& World::getBlock(const Vec3i& pos)
-{
-    Chunk* chunk = getChunkPtr(getChunkPos(pos));
-    assert(chunk != nullptr);
-    return chunk->getBlock(getBlockPos(pos));
-}
-
-void World::setBlock(const Vec3i& pos, BlockData block)
-{
-    Chunk* chunk = getChunkPtr(getChunkPos(pos));
-    assert(chunk != nullptr);
-    chunk->setBlock(getBlockPos(pos), block);
 }
 
 void World::update()
