@@ -28,13 +28,13 @@
 
 // NWAPIEXPORT
 #ifdef NEWORLD_TARGET_WINDOWS
-#ifdef NEWORLD_COMPILER_MSVC
-#define NWAPIEXPORT __declspec(dllexport)
+    #ifdef NEWORLD_COMPILER_MSVC
+        #define NWAPIEXPORT __declspec(dllexport)
+    #else
+        #define NWAPIEXPORT __attribute__((dllexport))
+    #endif
 #else
-#define NWAPIEXPORT __attribute__((dllexport))
-#endif
-#else
-#define NWAPIEXPORT __attribute__((visibility("default")))
+    #define NWAPIEXPORT __attribute__((visibility("default")))
 #endif
 
 // Prefix NW_ means it is an interface to NEWorld main program
@@ -78,10 +78,5 @@ NW_BlockType convertBlockType(const PL_BlockType& src);
 typedef NW_BlockData(World::*NW_getBlockFunc)(const NW_Vec3i&) const;
 typedef void(World::*NW_setBlockFunc)(const NW_Vec3i&, NW_BlockData);
 typedef void(BlockManager::*NW_registerBlockFunc)(const NW_BlockType& block);
-
-// Pointers to NEWorld procedures
-extern NW_getBlockFunc NW_getBlock;
-extern NW_setBlockFunc NW_setBlock;
-extern NW_registerBlockFunc NW_registerBlock;
 
 #endif

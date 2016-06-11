@@ -21,6 +21,11 @@
 World* world;
 BlockManager* blocks;
 
+// Pointers to NEWorld procedures
+NW_getBlockFunc NW_getBlock;
+NW_setBlockFunc NW_setBlock;
+NW_registerBlockFunc NW_registerBlock;
+
 extern "C"
 {
 
