@@ -56,11 +56,6 @@ extern "C"
 
 }
 
-// Pointers to NEWorld procedures
-NW_getBlockFunc NW_getBlock;
-NW_setBlockFunc NW_setBlock;
-NW_registerBlockFunc NW_registerBlock;
-
 // Conversions between plugin structures and NEWorld structures
 // This is used when structure definitions in NEWorld and in Plugin API are different
 NW_BlockData convertBlockData(const PL_BlockData & src)

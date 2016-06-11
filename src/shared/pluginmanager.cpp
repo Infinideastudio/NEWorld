@@ -22,13 +22,14 @@
 
 void PluginManager::initPluginAPI()
 {
-    init = boost::dll::import<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)>
-           (PluginApiDllPath, "NW_init", boost::dll::load_mode::append_decorations);
+    (*boost::dll::import<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)>
+     (PluginApiDllPath, "NW_init", boost::dll::load_mode::append_decorations).get())
+    (&World::getBlock, &World::setBlock, &BlockManager::registerBlock);
+
     setCurrentWorld = boost::dll::import<void(*)(World*)>
                       (PluginApiDllPath, "NW_setCurrentWorld", boost::dll::load_mode::append_decorations);
     setCurrentBlockManager = boost::dll::import<void(*)(BlockManager*)>
                              (PluginApiDllPath, "NW_setCurrentBlockManager", boost::dll::load_mode::append_decorations);
-    (*init.get())(&World::getBlock, &World::setBlock, &BlockManager::registerBlock);
     (*setCurrentBlockManager.get())(&Blocks);
 }
 

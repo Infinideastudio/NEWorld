@@ -27,8 +27,9 @@ using std::string;
 #include "../pluginapi/pluginapi.h"
 
 // For API declarations
-#include "world.h"
+class World;
 class BlockManager;
+
 const string PluginApiDllPath = "PluginAPI";
 
 // Plugin system
@@ -44,8 +45,6 @@ public:
     void loadPlugins();
 
 private:
-    // Main PluginAPI initialization function
-    boost::shared_ptr<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)> init;
     // Set current World
     boost::shared_ptr<void(*)(World*)> setCurrentWorld;
     // Set current BlockManager
