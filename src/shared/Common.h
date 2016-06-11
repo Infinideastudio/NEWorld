@@ -61,7 +61,7 @@
 #define NEWORLD_VERSION 41u;
 //constexpr unsigned int NEWorldVersion = 41u;
 
-constexpr char* CopyrightString = "\n\
+#define CopyrightString "\n\
 NEWorld: A free game with similar rules to Minecraft.\n\
  Copyright(C) 2016 NEWorld Team\n\
 \n\
