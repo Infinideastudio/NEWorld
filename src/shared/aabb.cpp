@@ -19,6 +19,8 @@
 #include "precomp.h"
 #include "aabb.h"
 
+#include <algorithm>
+
 bool AABB::intersectX(const AABB &box) const
 {
     if ((min.x > box.min.x && min.x < box.max.x) || (max.x > box.min.x && max.x < box.max.x) ||
