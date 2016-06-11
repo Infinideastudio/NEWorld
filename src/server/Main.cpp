@@ -24,7 +24,7 @@
 #include "server.h"
 #include <common.h>
 
-std::string copyright()
+constexpr std::string copyright()
 {
     return "\n\
 NEWorld: A free game with similar rules to Minecraft.\n\
@@ -42,7 +42,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
 \n\
  You should have received a copy of the GNU General Public License\n\
  along with this program.If not, see <http://www.gnu.org/licenses/>. \n";
-
 }
 
 int main(int argc, char* argv[])

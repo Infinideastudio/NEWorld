@@ -23,22 +23,27 @@
 using std::vector;
 
 #include "world.h"
+#include "pluginmanager.h"
 
 // Multi-world
 class WorldManager
 {
 public:
-    const World& addWorld(const string& name)
+    WorldManager(PluginManager& plugins) :m_plugins(plugins)
+    {}
+    ~WorldManager()
+    { m_worlds.clear(); }
+
+    World& addWorld(const string& name)
     {
-        worlds.emplace_back(name);
-        return worlds[worlds.size() - 1];
+        m_worlds.emplace_back(name, m_plugins);
+        return m_worlds[m_worlds.size() - 1];
     }
 
 private:
-    vector<World> worlds;
+    vector<World> m_worlds;
+    PluginManager& m_plugins;
 
 };
-
-extern WorldManager Worlds;
 
 #endif

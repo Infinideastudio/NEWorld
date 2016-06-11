@@ -23,6 +23,7 @@
 #include <networkshared.h>
 #include <logger.h>
 #include <session.h>
+#include <pluginmanager.h>
 
 constexpr int updateInterval = 10, globalUpdateInterval = 10;
 
@@ -30,10 +31,18 @@ class Server
 {
 public:
     Server(boost::asio::io_service& ioservice, short port)
-        : m_acceptor(ioservice, boost::asio::ip::tcp::endpoint(tcp::v4(), port)),
-          m_socket(ioservice)
+        :m_acceptor(ioservice, boost::asio::ip::tcp::endpoint(tcp::v4(), port)), m_socket(ioservice),
+        worlds(m_plugins), world(worlds.addWorld("TestWorld"))
     {
+        // Initialization
+        plugins.initPluginAPI();
+        plugins.loadPlugins();
+        // Start server
         doAccept();
+    }
+    ~Server()
+    {
+        // TODO: Terminate here
     }
 
 private:
@@ -42,6 +51,11 @@ private:
 
     tcp::acceptor m_acceptor;
     tcp::socket m_socket;
+
+    WorldManager worlds;
+    PluginManager plugins; // Loaded plugins
+    World& world; // Single world, only for debugging
+
 };
 
 #endif // SERVER_H__

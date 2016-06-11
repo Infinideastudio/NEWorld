@@ -32,7 +32,7 @@ void Session::doUpdate()
     deadline_timer(m_socket.get_io_service(), boost::posix_time::microseconds(updateInterval)).async_wait(
         [this, self](error_code)
     {
-        //Update world here
+        // TODO: Process client actions here
         doWrite();
     });
 }
@@ -55,7 +55,8 @@ void Server::doGlobalUpdate()
     boost::asio::deadline_timer(m_socket.get_io_service(), boost::posix_time::microseconds(globalUpdateInterval)).async_wait(
         [this](boost::system::error_code)
     {
-        //Update world here
+        // Update world
+        world.update();
         doGlobalUpdate();
     });
 }

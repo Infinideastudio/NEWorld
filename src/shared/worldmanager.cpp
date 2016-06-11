@@ -17,5 +17,3 @@
 */
 
 #include "worldmanager.h"
-
-WorldManager Worlds;

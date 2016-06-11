@@ -27,6 +27,7 @@ using std::string;
 
 #include "common.h"
 #include "chunk.h"
+#include "pluginmanager.h"
 
 class World
 {
@@ -39,6 +40,8 @@ private:
     size_t m_chunkCount;
     // World name
     string m_name;
+    // Loaded plugins
+    PluginManager& m_plugins;
 
     // Expand chunk array
     void expandChunkArray(size_t expandCount);
@@ -67,7 +70,7 @@ private:
     size_t getChunkIndex(const Vec3i& chunkPos) const;
 
 public:
-    World(const string& name) :m_name(name), m_chunkCount(0), m_chunkArraySize(1024)
+    World(const string& name, PluginManager& plugins) :m_name(name), m_plugins(plugins), m_chunkCount(0), m_chunkArraySize(1024)
     {
         // 看着new和realloc混用有点别扭。。。 --qiaozhanrong
         //m_chunks = new Chunk*[m_chunkArraySize];
@@ -133,6 +136,10 @@ public:
     BlockData& getBlock(const Vec3i& pos);
     // Set block data
     void setBlock(const Vec3i& pos, BlockData block);
+
+    // Main update
+    void update();
+
 };
 
 #endif // !WORLD_H_

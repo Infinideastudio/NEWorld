@@ -132,3 +132,8 @@ void World::setBlock(const Vec3i& pos, BlockData block)
     assert(chunk != nullptr);
     chunk->setBlock(getBlockPos(pos), block);
 }
+
+void World::update()
+{
+
+}
