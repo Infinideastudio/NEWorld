@@ -139,6 +139,7 @@
     <ClInclude Include="..\..\..\src\shared\common.h" />
     <ClInclude Include="..\..\..\src\shared\identifier.h" />
     <ClInclude Include="..\..\..\src\shared\logger.h" />
+    <ClInclude Include="..\..\..\src\shared\Network.h" />
     <ClInclude Include="..\..\..\src\shared\networkshared.h" />
     <ClInclude Include="..\..\..\src\shared\networkstructures.h" />
     <ClInclude Include="..\..\..\src\shared\object.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="..\..\..\src\shared\blockmanager.cpp" />
     <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
+    <ClCompile Include="..\..\..\src\shared\Network.cpp" />
     <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
     <ClCompile Include="..\..\..\src\shared\pluginmanager.cpp" />
     <ClCompile Include="..\..\..\src\shared\session.cpp" />

@@ -61,6 +61,9 @@
     <ClInclude Include="..\..\..\src\shared\worldmanager.h">
       <Filter>Source\World</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\Network.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\worldmanager.cpp">
       <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\Network.cpp">
+      <Filter>Source\Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
