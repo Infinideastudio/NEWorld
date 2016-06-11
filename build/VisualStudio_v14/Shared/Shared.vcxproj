@@ -86,6 +86,8 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <DisableSpecificWarnings>4714</DisableSpecificWarnings>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,6 +111,8 @@
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <DisableSpecificWarnings>4714</DisableSpecificWarnings>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -151,6 +155,7 @@
     <ClInclude Include="..\..\..\src\shared\vec3.h" />
     <ClInclude Include="..\..\..\src\shared\world.h" />
     <ClInclude Include="..\..\..\src\shared\worldmanager.h" />
+    <ClInclude Include="..\..\..\src\shared\precomp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\aabb.cpp" />
@@ -162,6 +167,10 @@
     <ClCompile Include="..\..\..\src\shared\session.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
     <ClCompile Include="..\..\..\src\shared\worldmanager.cpp" />
+    <ClCompile Include="..\..\..\src\shared\precomp.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

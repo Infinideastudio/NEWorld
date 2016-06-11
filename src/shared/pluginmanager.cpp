@@ -16,6 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "precomp.h"
 #include "pluginmanager.h"
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>

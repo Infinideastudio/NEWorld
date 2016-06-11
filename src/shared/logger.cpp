@@ -16,8 +16,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "precomp.h"
 #include "logger.h"
-#include "common.h"
+
 void loggerInit()
 {
     logging::formatter formatter =
