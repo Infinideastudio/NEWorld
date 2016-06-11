@@ -25,6 +25,7 @@
 
 | 名称    | 标识符  | 类型       |备注                       |
 |:-------:|:-------:|:----------:|:--------------------------|
-|用户名   |username|字符串(64byte)|玩家的用户名              |
-|密码     |password|字符串(64byte)|该用户名对应的密码        |
+|用户名的长度|lengthUsername |uint32_t      |用户名的长度(包括'\0')              |
+|用户名   |username|字符串|玩家的用户名(长度: lengthUsername)              |
+|密码     |password|字符串|该用户名对应的密码(长度: packetLength-lengthUsername-sizeof(uint16_t)-sizeof(uint32_t))        |
 |版本     |version |uint16_t      |客户端的版本              |

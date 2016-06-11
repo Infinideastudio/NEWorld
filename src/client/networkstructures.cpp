@@ -19,7 +19,7 @@
 #include "networkstructures.h"
 #include <cassert>
 
-#define DEFAULT_IMPLEMENT(classname) void LoginPacket::process() { assert(false); }
+#define DEFAULT_IMPLEMENT(classname) void classname::process() { assert(false); }
 
 //定义了所有数据包的处理方式
 

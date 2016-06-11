@@ -42,11 +42,13 @@ public:
     {
         Packet p;
         p.identifier = Identifier::Login;
-        p.length = 128 + sizeof(uint16_t);
+        p.length = m_username.length() + m_password.length() + sizeof(uint16_t) + sizeof(uint32_t) + 2;
         p.data = std::unique_ptr<char[]>(new char[p.length]);
-        if (m_username.length() < 64) strcpy(p.data.get(), m_username.c_str());
-        if (m_password.length() < 64) strcpy(p.data.get() + 64, m_password.c_str());
-        memcpy(p.data.get() + 128, &m_version, sizeof(uint16_t));
+        uint32_t lenUsername = m_username.length() + 1;
+        memcpy(p.data.get(), &lenUsername, sizeof(uint32_t));
+        strcpy(p.data.get() + sizeof(uint32_t), m_username.c_str());
+        strcpy(p.data.get() + sizeof(uint32_t) + m_username.length() + 1, m_password.c_str());
+        memcpy(p.data.get() + sizeof(uint32_t) + m_username.length() + m_password.length() + 2, &m_version, sizeof(uint16_t));
         return p;
     }
 

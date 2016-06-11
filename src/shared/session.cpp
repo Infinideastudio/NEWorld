@@ -32,8 +32,9 @@ std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
     {
     case Login:
     {
-        std::string username = tdh.getString(64);
-        std::string password = tdh.getString(64);
+        uint32_t lengthUsername = tdh.take<uint32_t>();
+        std::string username = tdh.getString(lengthUsername);
+        std::string password = tdh.getString(packet.length - lengthUsername - sizeof(uint32_t) - sizeof(uint16_t));
         uint16_t version = tdh.take<uint16_t>();
         return std::make_unique<LoginPacket>(username, password, version);
     }
