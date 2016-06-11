@@ -19,16 +19,12 @@
 #ifndef VEC3_H_
 #define VEC3_H_
 
-#include <cmath>
-#include <functional>
 #include <algorithm>
 #include <boost/operators.hpp>
-using std::abs;
-using std::max;
 
 template<typename T>
 class Vec3:
-    boost::totally_ordered<Vec3<T>, boost::additive<Vec3<T> > >
+    boost::totally_ordered<Vec3<T>, boost::additive<Vec3<T>>>
 {
 public:
     T x, y, z;
@@ -58,13 +54,13 @@ public:
     /// Get the Chebyshev Distance between vectors
     T chebyshevDistance(const Vec3& rhs) const
     {
-        return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z));
+        return std::max(std::max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z));
     }
 
     /// Get the Manhattan Distance between vectors
     T manhattanDistance(const Vec3& rhs) const
     {
-        return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z);
+        return std::abs(x - rhs.x) + std::abs(y - rhs.y) + std::abs(z - rhs.z);
     }
 
     bool operator< (const Vec3& rhs) const
@@ -106,31 +102,36 @@ public:
         swap(z, rhs.z);
     }
 
-    void for_each(std::function<void(T)> func) const
+    template<typename... ArgType, typename Func>
+    void for_each(Func func, ArgType&&... args) const
     {
-        func(x);
-        func(y);
-        func(z);
+        func(x, std::forward<ArgType>(args)...);
+        func(y, std::forward<ArgType>(args)...);
+        func(z, std::forward<ArgType>(args)...);
     }
 
-    void for_each(std::function<void(T&)> func)
+    template<typename... ArgType, typename Func>
+    void for_each(Func func, ArgType&&... args)
     {
-        func(x);
-        func(y);
-        func(z);
+        func(x, std::forward<ArgType>(args)...);
+        func(y, std::forward<ArgType>(args)...);
+        func(z, std::forward<ArgType>(args)...);
     }
 
-    Vec3<T> for_each(std::function<T(T)> func) const
-    {
-        return Vec3<T>(func(x), func(y), func(z));
-    }
-
-    Vec3<T> for_each(std::function<T(T&)> func)
+    template<typename Func>
+    Vec3<T> for_each(Func func) const
     {
         return Vec3<T>(func(x), func(y), func(z));
     }
 
-    static void for_range(const T& begin, const T& end, std::function<void(const Vec3<T>&)> func)
+    template<typename Func>
+    Vec3<T> for_each(Func func)
+    {
+        return Vec3<T>(func(x), func(y), func(z));
+    }
+
+    template<typename Func>
+    static void for_range(const T& begin, const T& end, Func func)
     {
         Vec3<T> tmp;
         for (tmp.x = begin; tmp.x != end; tmp.x++)
@@ -139,7 +140,8 @@ public:
                     func(tmp);
     }
 
-    static void for_range(const Vec3<T>& begin, const Vec3<T>& end, std::function<void(const Vec3<T>&)> func)
+    template<typename Func>
+    static void for_range(const Vec3<T>& begin, const Vec3<T>& end, Func func)
     {
         Vec3<T> tmp;
         for (tmp.x = begin.x; tmp.x != end.x; tmp.x++)
