@@ -5,12 +5,12 @@ import os.path
 # check newline at the end of file
 for parent,dirnames,filenames in os.walk(".\\"):  
 	for rawfilename in filenames:
-		sufix = os.path.splitext(rawfilename)[1][1:]
-		if sufix!="cpp" and sufix!="h" and sufix!="hpp": continue
-		filename=os.path.join(parent,rawfilename)
-		file = open(filename, 'r', encoding="utf-8")
-		filecontent=file.read()
-		if filecontent[-1]!="\n":
+		suffix = os.path.splitext(rawfilename)[1][1:]
+		if suffix != "cpp" and suffix != "h" and suffix != "hpp" and suffix != "txt" and suffix != "md": continue
+		filename = os.path.join(parent, rawfilename)
+		file = open(filename, 'r', encoding = "utf-8")
+		filecontent = file.read()
+		if filecontent[-1] != "\n":
 			print("No newline at the end of file: " + filename)
 		file.close()
 
