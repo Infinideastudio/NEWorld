@@ -27,7 +27,7 @@ void errorHandle(const tcp::socket& m_socket, error_code ec);
 
 std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
 {
-    takeDataHelper tdh(packet.data.get(), packet.length, false);
+    TakeDataHelper tdh(packet.data.get(), packet.length, false);
     switch (packet.identifier)
     {
     case Login:

@@ -12,9 +12,6 @@
     <Filter Include="Resources\Shaders">
       <UniqueIdentifier>{78ae7a31-fc47-4fc7-918b-eeebda79d553}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\GUI">
-      <UniqueIdentifier>{3af037d3-556b-496c-8f61-b46246f07a45}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Renderer">
       <UniqueIdentifier>{e5e29554-de32-45ec-93f7-18a3f8986c29}</UniqueIdentifier>
     </Filter>
@@ -38,15 +35,6 @@
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\client\GUI\window.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\GUI\controls.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\GUI\graphics.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\client\Audio\ALDevice.h">
       <Filter>Source\Audio\Engine</Filter>
     </ClInclude>
@@ -64,12 +52,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\Audio\AudioSystem.h">
       <Filter>Source\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\GUI\application.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\client\GUI\textrenderer.h">
-      <Filter>Source\GUI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\network.h">
       <Filter>Source\Network</Filter>
@@ -121,15 +103,6 @@
     <ClCompile Include="..\..\..\src\client\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\client\GUI\controls.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\GUI\window.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\GUI\graphics.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\client\Audio\ALDevice.cpp">
       <Filter>Source\Audio\Engine</Filter>
     </ClCompile>
@@ -150,12 +123,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\networkstructures.cpp">
       <Filter>Source\Network</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\GUI\application.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\client\GUI\textrenderer.cpp">
-      <Filter>Source\GUI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\network.cpp">
       <Filter>Source\Network</Filter>
