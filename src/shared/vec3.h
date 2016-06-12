@@ -21,7 +21,10 @@
 
 #include <algorithm>
 #include <boost/operators.hpp>
-
+#ifdef min
+#undef min
+#undef max
+#endif
 template<typename T>
 class Vec3:
     boost::totally_ordered<Vec3<T>, boost::additive<Vec3<T>>>
