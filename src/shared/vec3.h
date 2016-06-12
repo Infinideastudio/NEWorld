@@ -121,6 +121,7 @@ public:
         func(z, std::forward<ArgType>(args)...);
     }
 
+    //TODO: fix it. And tell if "for_each" will change the value of "this".
     template<typename Func>
     Vec3<T> for_each(Func func) const
     {
