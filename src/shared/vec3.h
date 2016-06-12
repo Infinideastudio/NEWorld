@@ -25,9 +25,10 @@
 #undef min
 #undef max
 #endif
+
 template<typename T>
 class Vec3:
-    boost::totally_ordered<Vec3<T>, boost::additive<Vec3<T>>>
+    boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T>>>
 {
 public:
     T x, y, z;
@@ -35,6 +36,8 @@ public:
     Vec3() :x(), y(), z() {}
 
     Vec3(T x_, T y_, T z_) :x(x_), y(y_), z(z_) {}
+
+    Vec3<T>(T value) :x(value), y(value), z(value) {}
 
     /// Get the square of vector length, notice that the result can overflow. TODO: fixit
     T lengthSqr() const
@@ -98,6 +101,22 @@ public:
         return *this;
     }
 
+    Vec3<T>& operator*= (const T& value)
+    {
+        x *= value;
+        y *= value;
+        z *= value;
+        return *this;
+    }
+
+    Vec3<T>& operator/= (const T& value)
+    {
+        x /= value;
+        y /= value;
+        z /= value;
+        return *this;
+    }
+
     void swap(Vec3& rhs)
     {
         swap(x, rhs.x);
@@ -123,13 +142,13 @@ public:
 
     //TODO: fix it. And tell if "for_each" will change the value of "this".
     template<typename Func>
-    Vec3<T> for_each(Func func) const
+    Vec3<T> transform(Func func) const
     {
         return Vec3<T>(func(x), func(y), func(z));
     }
 
     template<typename Func>
-    Vec3<T> for_each(Func func)
+    Vec3<T> transform(Func func)
     {
         return Vec3<T>(func(x), func(y), func(z));
     }
