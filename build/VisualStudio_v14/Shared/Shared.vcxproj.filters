@@ -92,9 +92,6 @@
     <ClCompile Include="..\..\..\src\shared\world.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\chunkpointerarray.cpp">
-      <Filter>Source\World</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\plugin.cpp">
       <Filter>Source\Plugin</Filter>
     </ClCompile>
