@@ -16,42 +16,53 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PLUGINMANAGER_H_
-#define PLUGINMANAGER_H_
+#ifndef LOGGER2_H_
+#define LOGGER2_H_
 
 #include <string>
+#include <iostream>
+#include <ctime>
 using std::string;
-#include <boost/shared_ptr.hpp>
-#include <boost/dll/shared_library.hpp>
-#include "plugin.h"
-#include "../pluginapi/pluginapi.h"
 
-// For API declarations
-class World;
-class BlockManager;
+// *** TEST LOGGER ***
 
-const string PluginApiDllPath = "PluginAPI";
+class LogEndl
+{};
 
-// Plugin system
-class PluginManager
+class Logger
 {
 public:
-    PluginManager() :pluginAPI(PluginApiDllPath, boost::dll::load_mode::append_decorations)
+    Logger(string level, bool header = true) :m_level(level), m_header(header)
     {}
 
-    // Initialize PluginAPI DLL
-    void initPluginAPI();
-    // Load plugins
-    void loadPlugins();
+    Logger& operator<< (const LogEndl rhs)
+    {
+        std::cout << std::endl;
+        return *this;
+    }
+
+    template <typename T>
+    Logger& operator<< (const T& rhs)
+    {
+        if (m_header)
+        {
+            time_t timer = time(NULL);
+            tm* currtime = localtime(&timer);
+
+            std::cout << "<" << m_level << ">: " << rhs;
+            return m_rlogger;
+        }
+        std::cout << rhs;
+        return *this;
+    }
 
 private:
-    // PluginAPI DLL library
-    boost::dll::shared_library pluginAPI;
-    // Set current World
-    boost::shared_ptr<void(*)(World*)> setCurrentWorld;
-    // Set current BlockManager
-    boost::shared_ptr<void(*)(BlockManager*)> setCurrentBlockManager;
-
+    string m_level;
+    bool m_header;
+    static Logger m_rlogger;
 };
 
-#endif // !PLUGINMANAGER_H_
+extern LogEndl logendl;
+void logger2Init();
+
+#endif // !LOGGER2_H_

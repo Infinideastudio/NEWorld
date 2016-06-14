@@ -22,6 +22,12 @@
 // Compiler flags
 #ifdef _MSC_VER
     #define NEWORLD_COMPILER_MSVC
+#else
+    #define NEWORLD_COMPILER_DISABLE_SECURE
+#endif
+
+#if defined(NEWORLD_COMPILER_MSVC) && defined(NEWORLD_COMPILER_DISABLE_SECURE) && !defined(_CRT_SECURE_NO_WARNINGS)
+    #define _CRT_SECURE_NO_WARNINGS
 #endif
 
 // OS flags
@@ -76,6 +82,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
  GNU General Public License for more details.\n\
 \n\
  You should have received a copy of the GNU General Public License\n\
- along with this program.If not, see <http://www.gnu.org/licenses/>. \n";
+along with this program.If not, see <http://www.gnu.org/licenses/>. \n";
 
 #endif // !COMMON_H_

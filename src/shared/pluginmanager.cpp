@@ -23,9 +23,8 @@
 
 void PluginManager::initPluginAPI()
 {
-    (*boost::dll::import<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)>
-     (PluginApiDllPath, "NW_init", boost::dll::load_mode::append_decorations).get())
-    (&World::getBlock, &World::setBlock, &BlockManager::registerBlock);
+    void*& init = pluginAPI.get<void __cdecl(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)>("NW_init");
+    init(&World::getBlock, &World::setBlock, &BlockManager::registerBlock);
 
     setCurrentWorld = boost::dll::import<void(*)(World*)>
                       (PluginApiDllPath, "NW_setCurrentWorld", boost::dll::load_mode::append_decorations);
@@ -40,11 +39,11 @@ void PluginManager::loadPlugins()
     string path = "./plugins/";
     if (exists(path))
     {
-        directory_iterator itemBegin(path), itemEnd;
-        for (; itemBegin != itemEnd; itemBegin++)
-            if (is_directory(*itemBegin))
+        directory_iterator itemEnd;
+        for (directory_iterator item(path); item != itemEnd; item++)
+            if (is_directory(*item))
             {
-                string pluginPath = itemBegin->path().string() + "/" + itemBegin->path().filename().string();
+                string pluginPath = item->path().string() + "/" + item->path().filename().string();
             }
     }
 }

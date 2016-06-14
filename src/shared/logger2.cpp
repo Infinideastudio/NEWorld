@@ -16,11 +16,12 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#include "logger2.h"
 
-#include "precomp.h"
+Logger Logger::m_rlogger("", false);
+LogEndl logendl;
 
-void loggerInit();
+void logger2Init()
+{
 
-#endif !LOGGER_H_
+}

@@ -16,8 +16,8 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PRECOMP_H
-#define PRECOMP_H
+#ifndef PRECOMP_H_
+#define PRECOMP_H_
 
 #include "common.h"
 
@@ -51,4 +51,4 @@ namespace keywords = boost::log::keywords;
 #define errorstream BOOST_LOG_TRIVIAL(error)     //影响游戏运行的问题
 #define fatalstream BOOST_LOG_TRIVIAL(fatal)     //无法恢复的错误
 
-#endif
+#endif // !PRECOMP_H_
