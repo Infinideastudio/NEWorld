@@ -10,10 +10,10 @@ server_objects = $(patsubst src/server/%.cpp, obj/server/%.o, $(server_sources))
 al_sources = $(wildcard src/client/Audio/*.cpp)
 al_objects = $(patsubst src/client/Audio/%.cpp, obj/al/%.o, $(al_sources))
 
-ifeq ($(DEBUG), 1)
-    CXXFLAGS += -g -O0
-else
+ifeq ($(RELEASE), 1)
     CXXFLAGS += -O2
+else
+    CXXFLAGS += -g -O0
 endif
 
 LDFLAGS = -L ./dependencies/lib
@@ -29,8 +29,8 @@ server: obj/ $(server_objects) $(shared_objects)
 obj/:
 	mkdir -p obj/
 
-GENERAL_FLAG = -I dependencies/include -std=c++14
-C_S_FLAG =  -I src/shared
+GENERAL_FLAG = -I ./dependencies/include -std=c++14
+C_S_FLAG =  -I ./src/shared
 
 obj/shared/%.o: src/shared/%.cpp
 	g++ $(GENERAL_FLAG) $(CXXFLAGS) -c $< -o $@
