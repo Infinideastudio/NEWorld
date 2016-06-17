@@ -21,19 +21,21 @@
 
 #include <algorithm>
 #include <boost/operators.hpp>
+#include <boost/call_traits.hpp>
+#include <boost/concept_check.hpp>
+#include <boost/concept/requires.hpp>
 
 template<typename T>
-class Vec3:
-    boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T>>>
+class Vec3 : boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T>>>
 {
 public:
     T x, y, z;
 
     Vec3() :x(), y(), z() {}
 
-    Vec3(T x_, T y_, T z_) :x(x_), y(y_), z(z_) {}
+    Vec3(typename boost::call_traits<T>::param_type x_, typename boost::call_traits<T>::param_type y_, typename boost::call_traits<T>::param_type z_) :x(x_), y(y_), z(z_) {}
 
-    Vec3<T>(T value) :x(value), y(value), z(value) {}
+    Vec3(typename boost::call_traits<T>::param_type value) :x(value), y(value), z(value) {}
 
     /// Get the square of vector length, notice that the result can overflow. TODO: fixit
     T lengthSqr() const
@@ -65,7 +67,11 @@ public:
         return std::abs(x - rhs.x) + std::abs(y - rhs.y) + std::abs(z - rhs.z);
     }
 
-    bool operator< (const Vec3& rhs) const
+    BOOST_CONCEPT_REQUIRES(
+        ((boost::LessThanComparable<T>)),
+        (bool)
+    )
+    operator< (const Vec3& rhs) const
     {
         if (x != rhs.x)
             return x < rhs.x;
@@ -76,7 +82,11 @@ public:
         return false;
     }
 
-    bool operator== (const Vec3& rhs) const
+    BOOST_CONCEPT_REQUIRES(
+        ((boost::EqualityComparable<T>)),
+        (bool)
+    )
+    operator== (const Vec3& rhs) const
     {
         return x == rhs.x && y == rhs.y && z == rhs.z;
     }
