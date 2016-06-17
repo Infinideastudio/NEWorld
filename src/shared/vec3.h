@@ -21,10 +21,6 @@
 
 #include <algorithm>
 #include <boost/operators.hpp>
-#ifdef min
-#undef min
-#undef max
-#endif
 
 template<typename T>
 class Vec3:

@@ -22,11 +22,6 @@
 #include <algorithm>
 #include "vec3.h"
 
-#ifdef min
-#undef min
-#undef max
-#endif
-
 /// Axis aligned bounding box
 class AABB
 {
