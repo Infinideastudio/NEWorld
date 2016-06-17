@@ -21,38 +21,60 @@
 
 #include <string>
 #include <iostream>
-#include <iomanip>
-#include <ctime>
+#include <sstream>
+#include <fstream>
 using std::string;
 
 // *** TEST LOGGER ***
 
-class Logger
+namespace Logging
 {
-public:
-    Logger(string level)
-    {
-        time_t timer = time(NULL);
-        tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
-        std::cout << std::setfill('0') << std::setw(4) << currtime->tm_year + 1900 << "-" << std::setw(2) << currtime->tm_mon + 1 << "-" << std::setw(2) << currtime->tm_mday
-                  << " " << std::setw(2) << currtime->tm_hour << ":" << std::setw(2) << currtime->tm_min << ":" << std::setw(2) << currtime->tm_sec
-                  << ": <" << level << "> ";
-    }
-    ~Logger()
-    { std::cout << std::endl; }
+    // Level filter not finished
 
-    template <typename T>
-    Logger& operator<< (const T& rhs)
+    /*
+    enum LogCriticalLevel
     {
-        std::cout << rhs;
-        return *this;
-    }
-};
+        trace, debug, info, warning, error, fatal, LogCriticalLevelCount
+    };
 
-#define debugstream2 Logger("debug")     //给开发者看的信息
-#define infostream2 Logger("info")       //给普通用户看的问题
-#define warningstream2 Logger("warning") //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
-#define errorstream2 Logger("error")     //影响游戏运行的问题
-#define fatalstream2 Logger("fatal")     //无法恢复的错误
+    constexpr string LogCriticalLevelString[LogCriticalLevelCount] =
+    {
+        "trace", "debug", "info", "warning", "error", "fatal"
+    };
+    */
+
+    extern bool haveFileSink;
+    extern std::ofstream fsink;
+
+    string getTimeString(char dateSplit, char midSplit, char timeSplit);
+    void initLogger2();
+
+    class Logger
+    {
+    public:
+        Logger(string level)
+        { content << getTimeString('-', ' ', ':') << " <" << level << "> "; }
+        ~Logger()
+        {
+            std::cout << content.str() << std::endl;
+            if (haveFileSink) fsink << content.str() << std::endl;
+        }
+
+        template <typename T>
+        Logger& operator<< (const T& rhs)
+        {
+            content << rhs;
+            return *this;
+        }
+    private:
+        std::stringstream content;
+    };
+}
+
+#define debugstream2 Logging::Logger("debug")     //给开发者看的信息
+#define infostream2 Logging::Logger("info")       //给普通用户看的问题
+#define warningstream2 Logging::Logger("warning") //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
+#define errorstream2 Logging::Logger("error")     //影响游戏运行的问题
+#define fatalstream2 Logging::Logger("fatal")     //无法恢复的错误
 
 #endif // !LOGGER2_H_

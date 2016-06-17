@@ -16,7 +16,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <stdlib.h>
 #include <boost/date_time.hpp>
 #include <boost/format.hpp>
 #include <utility>
@@ -32,9 +31,10 @@ std::string copyright()
 
 int main(int argc, char* argv[])
 {
-//    loggerInit();
+    Logging::initLogger2();
     infostream2 << copyright();
-    infostream2 << "Server is starting... Version: " << NEWORLD_VERSION;
+    infostream2 << "NEWorld v" << NEWORLD_VERSION;
+    infostream2 << "Server starting...";
     infostream2 << "Server started";
     try
     {
@@ -45,7 +45,6 @@ int main(int argc, char* argv[])
     {
         fatalstream2 << "Exception: " << e.what();
     }
-    infostream2 << "Server is stoping...";
-    system("pause >nul");
+    infostream2 << "Server stopping...";
     return 0;
 }

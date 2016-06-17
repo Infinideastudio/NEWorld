@@ -119,5 +119,8 @@
     <ClCompile Include="..\..\..\src\shared\precomp.cpp">
       <Filter>Source\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\logger2.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
