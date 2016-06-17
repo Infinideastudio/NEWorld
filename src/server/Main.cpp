@@ -16,13 +16,11 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <boost/date_time.hpp>
-#include <boost/format.hpp>
 #include <utility>
 #include <string>
 #include "server.h"
 #include <common.h>
-#include <logger2.h>
+#include <logger.h>
 
 std::string copyright()
 {
@@ -31,11 +29,11 @@ std::string copyright()
 
 int main(int argc, char* argv[])
 {
-    Logging::initLogger2();
-    infostream2 << copyright();
-    infostream2 << "NEWorld v" << NEWORLD_VERSION;
-    infostream2 << "Server starting...";
-    infostream2 << "Server started";
+    Logging::init();
+    infostream << copyright();
+    infostream << "NEWorld v" << NEWORLD_VERSION;
+    infostream << "Server starting...";
+    infostream << "Server started";
     try
     {
         Server s(ioService, Port);
@@ -43,8 +41,8 @@ int main(int argc, char* argv[])
     }
     catch (std::exception& e)
     {
-        fatalstream2 << "Exception: " << e.what();
+        fatalstream << "Exception: " << e.what();
     }
-    infostream2 << "Server stopping...";
+    infostream << "Server stopping...";
     return 0;
 }

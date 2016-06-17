@@ -19,8 +19,64 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#include "precomp.h"
+#include <string>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+using std::string;
 
-void loggerInit();
+// *** TEST LOGGER ***
 
-#endif !LOGGER_H_
+namespace Logging
+{
+    // Level filter not finished
+
+    /*
+    enum LogCriticalLevel
+    {
+    trace, debug, info, warning, error, fatal, LogCriticalLevelCount
+    };
+
+    constexpr string LogCriticalLevelString[LogCriticalLevelCount] =
+    {
+    "trace", "debug", "info", "warning", "error", "fatal"
+    };
+    */
+
+    extern bool haveFileSink;
+    extern std::ofstream fsink;
+
+    string getTimeString(char dateSplit, char midSplit, char timeSplit);
+    void init();
+
+    class Logger
+    {
+    public:
+        Logger(string level)
+        {
+            content << getTimeString('-', ' ', ':') << " <" << level << "> ";
+        }
+        ~Logger()
+        {
+            std::cout << content.str() << std::endl;
+            if (haveFileSink) fsink << content.str() << std::endl;
+        }
+
+        template <typename T>
+        Logger& operator<< (const T& rhs)
+        {
+            content << rhs;
+            return *this;
+        }
+    private:
+        std::stringstream content;
+    };
+}
+
+#define debugstream Logging::Logger("debug")     //给开发者看的信息
+#define infostream Logging::Logger("info")       //给普通用户看的问题
+#define warningstream Logging::Logger("warning") //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
+#define errorstream Logging::Logger("error")     //影响游戏运行的问题
+#define fatalstream Logging::Logger("fatal")     //无法恢复的错误
+
+#endif // !LOGGER_H_

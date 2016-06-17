@@ -17,48 +17,43 @@
 */
 
 #include "precomp.h"
+#include <iomanip>
+#include <ctime>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 #include "logger.h"
 
-void loggerInit()
+namespace Logging
 {
-    logging::formatter formatter =
-        (
-            expr::stream
-            << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S:%f")
-            << ": <" << logging::trivial::severity
-            << "> " << expr::smessage
-        );
+    bool haveFileSink;
+    std::ofstream fsink;
 
-    logging::add_common_attributes();
+    string getTimeString(char dateSplit, char midSplit, char timeSplit)
+    {
+        time_t timer = time(NULL);
+        tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
+        std::stringstream ss;
+        ss << std::setfill('0')
+           << std::setw(4) << currtime->tm_year + 1900 << dateSplit << std::setw(2) << currtime->tm_mon + 1 << dateSplit << std::setw(2) << currtime->tm_mday
+           << midSplit << std::setw(2) << currtime->tm_hour << timeSplit << std::setw(2) << currtime->tm_min << timeSplit << std::setw(2) << currtime->tm_sec;
+        return ss.str();
+    }
 
-    auto console_sink = logging::add_console_log();
-    auto file_sink = logging::add_file_log
-                     (
-                         keywords::file_name = "logs/NEWorld_%Y-%m-%d_%N.log",
-                         keywords::rotation_size = 10 * 1024 * 1024,
-                         keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0)
-                     );
-
-    file_sink->locked_backend()->set_file_collector(sinks::file::make_collector
-            (
-                keywords::target = "logs",
-                keywords::max_size = 5 * 1024 * 1024,
-                keywords::min_free_space = 10 * 1024 * 1024
-            ));
-
-    file_sink->locked_backend()->scan_for_files();
-
-    console_sink->set_formatter(formatter);
-    file_sink->set_formatter(formatter);
-    file_sink->locked_backend()->auto_flush(true);
-
-    logging::core::get()->add_global_attribute("Scope", attrs::named_scope());
-    logging::core::get()->add_sink(console_sink);
-    logging::core::get()->add_sink(file_sink);
-#ifndef NEWORLD_DEBUG
-    logging::core::get()->set_filter
-    (
-        logging::trivial::severity >= logging::trivial::info
-    );
-#endif
+    void init()
+    {
+        using namespace boost::filesystem;
+        string path = "./Logs/";
+        if (!exists(path)) create_directory(path);
+        haveFileSink = true;
+        fsink = std::ofstream(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log");
+        // File sequence number not finished
+        /*
+        directory_iterator itemEnd;
+        for (directory_iterator item(path); item != itemEnd; item++)
+        if (is_directory(*item))
+        {
+        string filePath = item->path().string() + "/" + item->path().filename().string();
+        }
+        */
+    }
 }
