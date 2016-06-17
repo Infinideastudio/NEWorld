@@ -67,6 +67,9 @@
     <ClInclude Include="..\..\..\src\shared\precomp.h">
       <Filter>Source\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\logger2.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

@@ -21,48 +21,38 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <ctime>
 using std::string;
 
 // *** TEST LOGGER ***
 
-class LogEndl
-{};
-
 class Logger
 {
 public:
-    Logger(string level, bool header = true) :m_level(level), m_header(header)
-    {}
-
-    Logger& operator<< (const LogEndl rhs)
+    Logger(string level)
     {
-        std::cout << std::endl;
-        return *this;
+        time_t timer = time(NULL);
+        tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
+        std::cout << std::setfill('0') << std::setw(4) << currtime->tm_year + 1900 << "-" << std::setw(2) << currtime->tm_mon + 1 << "-" << std::setw(2) << currtime->tm_mday
+                  << " " << std::setw(2) << currtime->tm_hour << ":" << std::setw(2) << currtime->tm_min << ":" << std::setw(2) << currtime->tm_sec
+                  << ": <" << level << "> ";
     }
+    ~Logger()
+    { std::cout << std::endl; }
 
     template <typename T>
     Logger& operator<< (const T& rhs)
     {
-        if (m_header)
-        {
-            time_t timer = time(NULL);
-            tm* currtime = localtime(&timer);
-
-            std::cout << "<" << m_level << ">: " << rhs;
-            return m_rlogger;
-        }
         std::cout << rhs;
         return *this;
     }
-
-private:
-    string m_level;
-    bool m_header;
-    static Logger m_rlogger;
 };
 
-extern LogEndl logendl;
-void logger2Init();
+#define debugstream2 Logger("debug")     //给开发者看的信息
+#define infostream2 Logger("info")       //给普通用户看的问题
+#define warningstream2 Logger("warning") //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
+#define errorstream2 Logger("error")     //影响游戏运行的问题
+#define fatalstream2 Logger("fatal")     //无法恢复的错误
 
 #endif // !LOGGER2_H_
