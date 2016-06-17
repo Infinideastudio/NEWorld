@@ -39,9 +39,9 @@ struct Vec3i
 struct BlockType
 {
     char* blockname = nullptr;
-    bool solid;
-    bool translucent;
-    bool opaque;
+    int8_t solid;
+    int8_t translucent;
+    int8_t opaque;
     int32_t explodePower;
     int32_t hardness;
 };
@@ -61,11 +61,17 @@ struct PluginData
     buildChunkFunc buildChunk = nullptr;
 };
 
+#ifdef __cplusplus
 extern "C"
 {
-    NWAPIENTRY BlockData getBlock(const Vec3i*);
-    NWAPIENTRY void setBlock(const Vec3i*, BlockData);
-    NWAPIENTRY void registerBlock(const BlockType*);
+#endif
+
+NWAPIENTRY BlockData getBlock(const Vec3i*);
+NWAPIENTRY void setBlock(const Vec3i*, BlockData);
+NWAPIENTRY void registerBlock(const BlockType*);
+
+#ifdef __cplusplus
 }
+#endif
 
 #endif // !NWAPI_H_
