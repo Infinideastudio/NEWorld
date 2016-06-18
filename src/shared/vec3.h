@@ -24,6 +24,7 @@
 #include <boost/call_traits.hpp>
 #include <boost/concept_check.hpp>
 #include <boost/concept/requires.hpp>
+#include <boost/core/swap.hpp>
 
 template<typename T>
 class Vec3 : boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T>>>
@@ -125,9 +126,9 @@ public:
 
     void swap(Vec3& rhs)
     {
-        swap(x, rhs.x);
-        swap(y, rhs.y);
-        swap(z, rhs.z);
+        boost::swap(x, rhs.x);
+        boost::swap(y, rhs.y);
+        boost::swap(z, rhs.z);
     }
 
     template<typename... ArgType, typename Func>
