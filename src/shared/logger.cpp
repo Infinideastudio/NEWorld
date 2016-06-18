@@ -23,37 +23,38 @@
 #include <boost/filesystem/path.hpp>
 #include "logger.h"
 
-namespace Logging
+std::vector<std::ofstream> Logger::fsink;
+int Logger::clogLevel = trace;
+int Logger::cerrLevel = fatal;
+int Logger::fileLevel = trace;
+
+string Logger::getTimeString(char dateSplit, char midSplit, char timeSplit)
 {
-    bool haveFileSink;
-    std::ofstream fsink;
+    time_t timer = time(NULL);
+    tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
+    std::stringstream ss;
+    ss << std::setfill('0')
+       << std::setw(4) << currtime->tm_year + 1900 << dateSplit << std::setw(2) << currtime->tm_mon + 1 << dateSplit << std::setw(2) << currtime->tm_mday
+       << midSplit << std::setw(2) << currtime->tm_hour << timeSplit << std::setw(2) << currtime->tm_min << timeSplit << std::setw(2) << currtime->tm_sec;
+    return ss.str();
+}
 
-    string getTimeString(char dateSplit, char midSplit, char timeSplit)
+void loggerInit()
+{
+    using namespace boost::filesystem;
+    string path = "./Logs/";
+    if (!exists(path)) create_directory(path);
+    Logger::addFileSink(path);
+    Logger::clogLevel = Logger::debug;
+    Logger::cerrLevel = Logger::fatal;
+    Logger::fileLevel = Logger::debug;
+    // File sequence number not finished
+    /*
+    directory_iterator itemEnd;
+    for (directory_iterator item(path); item != itemEnd; item++)
+    if (is_directory(*item))
     {
-        time_t timer = time(NULL);
-        tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
-        std::stringstream ss;
-        ss << std::setfill('0')
-           << std::setw(4) << currtime->tm_year + 1900 << dateSplit << std::setw(2) << currtime->tm_mon + 1 << dateSplit << std::setw(2) << currtime->tm_mday
-           << midSplit << std::setw(2) << currtime->tm_hour << timeSplit << std::setw(2) << currtime->tm_min << timeSplit << std::setw(2) << currtime->tm_sec;
-        return ss.str();
+    string filePath = item->path().string() + "/" + item->path().filename().string();
     }
-
-    void init()
-    {
-        using namespace boost::filesystem;
-        string path = "./Logs/";
-        if (!exists(path)) create_directory(path);
-        haveFileSink = true;
-        fsink = std::ofstream(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log");
-        // File sequence number not finished
-        /*
-        directory_iterator itemEnd;
-        for (directory_iterator item(path); item != itemEnd; item++)
-        if (is_directory(*item))
-        {
-        string filePath = item->path().string() + "/" + item->path().filename().string();
-        }
-        */
-    }
+    */
 }

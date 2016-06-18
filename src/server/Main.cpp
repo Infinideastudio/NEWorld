@@ -29,7 +29,7 @@ std::string copyright()
 
 int main(int argc, char* argv[])
 {
-    Logging::init();
+    loggerInit();
     infostream << copyright();
     infostream << "NEWorld v" << NEWORLD_VERSION;
     infostream << "Server starting...";

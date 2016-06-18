@@ -26,8 +26,12 @@
 #include <boost/concept/requires.hpp>
 #include <boost/core/swap.hpp>
 
+#ifdef max
+    #undef max
+#endif
+
 template<typename T>
-class Vec3 : boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T>>>
+class Vec3 : boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T> > >
 {
 public:
     T x, y, z;

@@ -21,62 +21,62 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #include <sstream>
 #include <fstream>
 using std::string;
 
-// *** TEST LOGGER ***
-
-namespace Logging
+class Logger
 {
-    // Level filter not finished
+public:
+    // Critical levels
+    enum Level
+    { trace, debug, info, warning, error, fatal, null };
+    constexpr static int LevelCount = null;
+    // Level names
+    constexpr static char* LevelString[LevelCount] =
+    { "trace", "debug", "info", "warning", "error", "fatal" };
 
-    /*
-    enum LogCriticalLevel
+    static int clogLevel; // Minimum critical level using std::clog and output to console
+    static int cerrLevel; // Minumum critical level using std::cerr and output to console
+    static int fileLevel; // Minumum critical level output to file
+
+    Logger(int level) :m_level(level)
+    { m_content << getTimeString('-', ' ', ':') << " <" << LevelString[level] << "> "; }
+
+    ~Logger()
     {
-    trace, debug, info, warning, error, fatal, LogCriticalLevelCount
-    };
+        if (m_level >= cerrLevel) std::cerr << m_content.str() << std::endl;
+        else if (m_level >= clogLevel) std::clog << m_content.str() << std::endl;
+        if (m_level >= fileLevel)
+            for (auto &it : fsink) it << m_content.str() << std::endl;
+    }
 
-    constexpr string LogCriticalLevelString[LogCriticalLevelCount] =
+    template <typename T>
+    Logger& operator<< (const T& rhs)
     {
-    "trace", "debug", "info", "warning", "error", "fatal"
-    };
-    */
+        m_content << rhs;
+        return *this;
+    }
 
-    extern bool haveFileSink;
-    extern std::ofstream fsink;
+    // Add a file sink named with current system time
+    static void addFileSink(const string& path)
+    { Logger::fsink.emplace_back(std::ofstream(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log")); }
 
-    string getTimeString(char dateSplit, char midSplit, char timeSplit);
-    void init();
+private:
+    int m_level;
+    std::stringstream m_content;
 
-    class Logger
-    {
-    public:
-        Logger(string level)
-        {
-            content << getTimeString('-', ' ', ':') << " <" << level << "> ";
-        }
-        ~Logger()
-        {
-            std::cout << content.str() << std::endl;
-            if (haveFileSink) fsink << content.str() << std::endl;
-        }
+    static std::vector<std::ofstream> fsink;
+    static string getTimeString(char dateSplit, char midSplit, char timeSplit);
+};
 
-        template <typename T>
-        Logger& operator<< (const T& rhs)
-        {
-            content << rhs;
-            return *this;
-        }
-    private:
-        std::stringstream content;
-    };
-}
+void loggerInit();
 
-#define debugstream Logging::Logger("debug")     //给开发者看的信息
-#define infostream Logging::Logger("info")       //给普通用户看的问题
-#define warningstream Logging::Logger("warning") //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
-#define errorstream Logging::Logger("error")     //影响游戏运行的问题
-#define fatalstream Logging::Logger("fatal")     //无法恢复的错误
+#define debugstream Logger(Logger::debug)     //给开发者看的信息
+#define infostream Logger(Logger::info)       //给普通用户看的问题
+#define warningstream Logger(Logger::warning) //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
+#define errorstream Logger(Logger::error)     //影响游戏运行的问题
+#define fatalstream Logger(Logger::fatal)     //无法恢复的错误
 
 #endif // !LOGGER_H_
