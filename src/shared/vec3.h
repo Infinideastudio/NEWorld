@@ -30,13 +30,15 @@ template<typename T>
 class Vec3 :boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T> > >
 {
 public:
+    typedef typename boost::call_traits<T>::param_type param_type;
+
     T x, y, z;
 
     Vec3() :x(), y(), z() {}
 
-    Vec3(typename boost::call_traits<T>::param_type x_, typename boost::call_traits<T>::param_type y_, typename boost::call_traits<T>::param_type z_) :x(x_), y(y_), z(z_) {}
+    Vec3(param_type x_, param_type y_, param_type z_) :x(x_), y(y_), z(z_) {}
 
-    Vec3(typename boost::call_traits<T>::param_type value) :x(value), y(value), z(value) {}
+    Vec3(param_type value) :x(value), y(value), z(value) {}
 
     /// Get the square of vector length, notice that the result can overflow. TODO: fixit
     T lengthSqr() const
@@ -59,13 +61,13 @@ public:
     /// Get the Chebyshev Distance between vectors
     T chebyshevDistance(const Vec3& rhs) const
     {
-        return std::max(std::max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z));
+        return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z));
     }
 
     /// Get the Manhattan Distance between vectors
     T manhattanDistance(const Vec3& rhs) const
     {
-        return std::abs(x - rhs.x) + std::abs(y - rhs.y) + std::abs(z - rhs.z);
+        return abs(x - rhs.x) + abs(y - rhs.y) +  abs(z - rhs.z);
     }
 
     BOOST_CONCEPT_REQUIRES(
@@ -198,6 +200,17 @@ public:
     operator Vec3<U>() const
     {
         return Vec3<U>(x, y, z);
+    }
+private:
+    // to solve problems about `abs`, we need this.
+    static T abs(param_type arg)
+    {
+        return arg >= 0 ? arg : -arg;
+    }
+
+    static T max(param_type arg1, param_type arg2)
+    {
+        return arg1 > arg2 ? arg1 : arg2;
     }
 };
 
