@@ -56,7 +56,7 @@ void networkThread()
 
     session = std::make_shared<Session>(std::move(socket));
     session->start();
-    session->addRequest(std::move(LoginPacket("test", "123456", NEWORLD_VERSION).makePacket()));
+    session->addRequest(std::move(LoginPacket("test", "123456", NEWorldVersion).makePacket()));
     ioService.run();
 }
 
