@@ -36,9 +36,11 @@ public:
          m_worlds(m_plugins), m_world(m_worlds.addWorld("TestWorld"))
     {
         // Initialization
+        infostream << "Initializing plugins...";
         m_plugins.initPluginAPI();
         m_plugins.loadPlugins();
         // Start server
+        infostream << "Server started!";
         doAccept();
     }
     ~Server()

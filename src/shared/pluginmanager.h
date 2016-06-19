@@ -21,7 +21,6 @@
 
 #include <string>
 using std::string;
-#include <boost/shared_ptr.hpp>
 #include <boost/dll/shared_library.hpp>
 #include "plugin.h"
 #include "../pluginapi/pluginapi.h"

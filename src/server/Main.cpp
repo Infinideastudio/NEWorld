@@ -31,9 +31,8 @@ int main(int argc, char* argv[])
 {
     loggerInit();
     infostream << copyright();
-    infostream << "NEWorld v" << NEWORLD_VERSION;
+    infostream << "NEWorld Server v" << NEWorldVersion;
     infostream << "Server starting...";
-    infostream << "Server started";
     try
     {
         Server s(ioService, Port);

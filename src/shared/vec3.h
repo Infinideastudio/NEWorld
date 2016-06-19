@@ -26,12 +26,8 @@
 #include <boost/concept/requires.hpp>
 #include <boost/core/swap.hpp>
 
-#ifdef max
-    #undef max
-#endif
-
 template<typename T>
-class Vec3 : boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T> > >
+class Vec3 :boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T> > >
 {
 public:
     T x, y, z;
@@ -167,8 +163,7 @@ public:
     template<typename Func>
     static void for_range(const T& begin, const T& end, Func func)
     {
-        Vec3<T> tmp;
-        for (tmp.x = begin; tmp.x != end; tmp.x++)
+        for (Vec3<T> tmp.x = begin; tmp.x != end; tmp.x++)
             for (tmp.y = begin; tmp.y != end; tmp.y++)
                 for (tmp.z = begin; tmp.z != end; tmp.z++)
                     func(tmp);
@@ -177,8 +172,7 @@ public:
     template<typename Func>
     static void for_range(const Vec3<T>& begin, const Vec3<T>& end, Func func)
     {
-        Vec3<T> tmp;
-        for (tmp.x = begin.x; tmp.x != end.x; tmp.x++)
+        for (Vec3<T> tmp.x = begin.x; tmp.x != end.x; tmp.x++)
             for (tmp.y = begin.y; tmp.y != end.y; tmp.y++)
                 for (tmp.z = begin.z; tmp.z != end.z; tmp.z++)
                     func(tmp);
