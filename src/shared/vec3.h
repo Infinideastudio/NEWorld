@@ -163,7 +163,8 @@ public:
     template<typename Func>
     static void for_range(const T& begin, const T& end, Func func)
     {
-        for (Vec3<T> tmp.x = begin; tmp.x != end; tmp.x++)
+        Vec3<T> tmp;
+        for (tmp.x = begin; tmp.x != end; tmp.x++)
             for (tmp.y = begin; tmp.y != end; tmp.y++)
                 for (tmp.z = begin; tmp.z != end; tmp.z++)
                     func(tmp);
@@ -172,7 +173,8 @@ public:
     template<typename Func>
     static void for_range(const Vec3<T>& begin, const Vec3<T>& end, Func func)
     {
-        for (Vec3<T> tmp.x = begin.x; tmp.x != end.x; tmp.x++)
+        Vec3<T> tmp;
+        for (tmp.x = begin.x; tmp.x != end.x; tmp.x++)
             for (tmp.y = begin.y; tmp.y != end.y; tmp.y++)
                 for (tmp.z = begin.z; tmp.z != end.z; tmp.z++)
                     func(tmp);
