@@ -47,7 +47,6 @@
 
 #ifdef NEWORLD_USE_WINAPI
     #define WIN32_LEAN_AND_MEAN
-    #define NOMINMAX
     #include <Windows.h> // Windows API
 #else
     //    #include <pthread.h> // Or <thread> <mutex>
