@@ -73,10 +73,10 @@ private:
 
 void loggerInit();
 
-#define debugstream Logger(Logger::debug)     //¸ø¿ª·¢Õß¿´µÄĞÅÏ¢
-#define infostream Logger(Logger::info)       //¸øÆÕÍ¨ÓÃ»§¿´µÄÎÊÌâ
-#define warningstream Logger(Logger::warning) //¿ÉÄÜÓ°Ïì¹¦ÄÜ¡¢ĞÔÄÜ¡¢ÎÈ¶¨ĞÔµ«ÊÇ²»ÖÁÓÚÁ¢¿Ì±ÀÀ£µÄÎÊÌâ
-#define errorstream Logger(Logger::error)     //Ó°ÏìÓÎÏ·ÔËĞĞµÄÎÊÌâ
-#define fatalstream Logger(Logger::fatal)     //ÎŞ·¨»Ö¸´µÄ´íÎó
+#define debugstream Logger(Logger::debug)     //ç»™å¼€å‘è€…çœ‹çš„ä¿¡æ¯
+#define infostream Logger(Logger::info)       //ç»™æ™®é€šç”¨æˆ·çœ‹çš„é—®é¢˜
+#define warningstream Logger(Logger::warning) //å¯èƒ½å½±å“åŠŸèƒ½ã€æ€§èƒ½ã€ç¨³å®šæ€§ä½†æ˜¯ä¸è‡³äºç«‹åˆ»å´©æºƒçš„é—®é¢˜
+#define errorstream Logger(Logger::error)     //å½±å“æ¸¸æˆè¿è¡Œçš„é—®é¢˜
+#define fatalstream Logger(Logger::fatal)     //æ— æ³•æ¢å¤çš„é”™è¯¯
 
 #endif // !LOGGER_H_
