@@ -20,6 +20,7 @@
 #define VEC3_H_
 
 #include <algorithm>
+#include <cmath>
 #include <boost/operators.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/concept_check.hpp>
@@ -182,18 +183,18 @@ public:
                     func(tmp);
     }
 
-    template<typename T, T base>
-    T encode()
+    template<typename U, U base>
+    U encode()
     {
         return (x*base + y)*base + z;
     }
 
-    template<typename T, T base>
-    static Vec3<T> decode(T arg)
+    template<typename U, U base>
+    static Vec3<U> decode(T arg)
     {
-        T z = arg % base;
+        U z = arg % base;
         arg /= base;
-        return Vec3<T>(arg / base, arg % base, z);
+        return Vec3<U>(arg / base, arg % base, z);
     }
 
     template<typename U, typename = typename std::enable_if<std::is_convertible<T, U>::value>::type>

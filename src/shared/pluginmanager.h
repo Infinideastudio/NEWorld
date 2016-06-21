@@ -20,7 +20,6 @@
 #define PLUGINMANAGER_H_
 
 #include <string>
-using std::string;
 #include <boost/dll/shared_library.hpp>
 #include "plugin.h"
 #include "../pluginapi/pluginapi.h"
@@ -29,7 +28,7 @@ using std::string;
 class World;
 class BlockManager;
 
-const string PluginApiDllPath = "PluginAPI";
+const std::string PluginApiDllPath = "PluginAPI";
 
 // Plugin system
 class PluginManager

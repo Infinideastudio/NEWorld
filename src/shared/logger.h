@@ -34,7 +34,7 @@ public:
     { trace, debug, info, warning, error, fatal, null };
     constexpr static int LevelCount = null;
     // Level names
-    constexpr static char* LevelString[LevelCount] =
+    constexpr static const char* LevelString[LevelCount] =
     { "trace", "debug", "info", "warning", "error", "fatal" };
 
     static int clogLevel; // Minimum critical level using std::clog and output to console
