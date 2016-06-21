@@ -41,8 +41,8 @@ public:
     static int cerrLevel; // Minumum critical level using std::cerr and output to console
     static int fileLevel; // Minumum critical level output to file
 
-    Logger(int level) :m_level(level)
-    { m_content << getTimeString('-', ' ', ':') << " <" << LevelString[level] << "> "; }
+    Logger(int level,const char* fileName, int lineNumber) :m_level(level)
+    { m_content << getTimeString('-', ' ', ':') << " <" << LevelString[level] << "> ("<<fileName<<":"<<lineNumber<<") "; }
 
     ~Logger()
     {
@@ -73,10 +73,10 @@ private:
 
 void loggerInit();
 
-#define debugstream Logger(Logger::debug)     //给开发者看的信息
-#define infostream Logger(Logger::info)       //给普通用户看的问题
-#define warningstream Logger(Logger::warning) //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
-#define errorstream Logger(Logger::error)     //影响游戏运行的问题
-#define fatalstream Logger(Logger::fatal)     //无法恢复的错误
+#define debugstream Logger(Logger::debug,__FUNCTION__,__LINE__)     //给开发者看的信息
+#define infostream Logger(Logger::info,__FUNCTION__,__LINE__)       //给普通用户看的问题
+#define warningstream Logger(Logger::warning,__FUNCTION__,__LINE__) //可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
+#define errorstream Logger(Logger::error,__FUNCTION__,__LINE__)     //影响游戏运行的问题
+#define fatalstream Logger(Logger::fatal,__FUNCTION__,__LINE__)     //无法恢复的错误
 
 #endif // !LOGGER_H_

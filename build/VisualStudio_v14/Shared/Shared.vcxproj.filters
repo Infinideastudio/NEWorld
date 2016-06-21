@@ -67,6 +67,9 @@
     <ClInclude Include="..\..\..\src\shared\precomp.h">
       <Filter>Source\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\command.h">
+      <Filter>Source\Command</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -86,6 +89,9 @@
     </Filter>
     <Filter Include="Source\World">
       <UniqueIdentifier>{9d424b71-c4b6-463f-b95b-cffeea273210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Command">
+      <UniqueIdentifier>{79e01b49-024c-4722-b77e-0e7bc4998597}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -21,17 +21,16 @@
 #include "server.h"
 #include <common.h>
 #include <logger.h>
+#include <thread>
 
-std::string copyright()
+int main(int, char*[])
 {
-    return CopyrightString;
-}
-
-int main(int argc, char* argv[])
-{
+    void inputThreadFunc();
+    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), { 6,6 });
+    std::thread inputThread(inputThreadFunc);
     loggerInit();
-    infostream << copyright();
-    infostream << "NEWorld Server v" << NEWorldVersion;
+    infostream << CopyrightString;
+    infostream << "NEWorld Server v" << NEWorldVersion << ", which was compiled at " << __TIME__ << " " << __DATE__;
     infostream << "Server starting...";
     try
     {
@@ -43,5 +42,6 @@ int main(int argc, char* argv[])
         fatalstream << "Exception: " << e.what();
     }
     infostream << "Server stopping...";
+    inputThread.join();
     return 0;
 }
