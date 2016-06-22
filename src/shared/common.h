@@ -59,7 +59,7 @@
 #endif
 
 constexpr unsigned int NEWorldVersion = 41u;
-constexpr const char * CopyrightString = R"(
+constexpr const char* CopyrightString = R"(
 NEWorld: A free game with similar rules to Minecraft.
 Copyright(C) 2016 NEWorld Team
 

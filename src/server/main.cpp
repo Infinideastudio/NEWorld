@@ -26,10 +26,13 @@
 int main(int, char*[])
 {
     void inputThreadFunc();
+#ifdef NEWORLD_USE_WINAPI
+    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), { 6,6 });
+#endif
     loggerInit();
     std::thread inputThread(inputThreadFunc);
     infostream << CopyrightString;
-    infostream << "NEWorld Server v" << NEWorldVersion << ", which was compiled at " << __TIME__ << " " << __DATE__;
+    infostream << "NEWorld Server v" << NEWorldVersion << ", compiled at " << __TIME__ << " " << __DATE__;
     infostream << "Server starting...";
     try
     {
