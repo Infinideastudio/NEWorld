@@ -20,6 +20,7 @@
 #define NETWORKSTRUCTURES_H_
 
 #include <string>
+#include <cstring>
 #include <cstdint>
 #include "packet.h"
 #include "identifier.h"
