@@ -1,5 +1,7 @@
 # NEWorld
 
+[![AppVeyor](https://img.shields.io/appveyor/ci/ascchrvalstr/NEWorld/renew.svg?label=Windows)](https://ci.appveyor.com/project/ascchrvalstr/NEWorld)
+
 全新的NEWorld!  
 
 NEWorld采用[GPLv3许可证](http://www.gnu.org/licenses/gpl.html)发布并受其保护。  
