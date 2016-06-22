@@ -21,26 +21,39 @@
 #include <chrono>
 #include <command.h>
 #include <algorithm>
+#include <atomic>
+#include "server.h"
+
+bool inputThreadRunning = true;
 
 CommandMap commandMap;
 #define CommandDefine(commandName, commandAuthor, commandHelp) commandMap.insert({commandName, std::pair<CommandInfo,CommandHandleFunction>({commandAuthor, commandHelp},[](Command)->CommandExecuteStat
 #define EndCommandDefine )})
+
 void initCommands()
 {
-    CommandDefine("hi", "Internal", "打招呼")
-    {
-        return{ true, "Hi!" };
-    }
-    EndCommandDefine;
-
     CommandDefine("help", "Internel", "帮助")
     {
-        std::string helpString = "\n可用的指令有:\n";
+        std::string helpString = "\nAvailable commands:\n";
         for (const auto& command : commandMap)
         {
             helpString += command.first + " - " + command.second.first.author + " : " + command.second.first.help + "\n";
         }
         return{ true, helpString };
+    }
+    EndCommandDefine;
+
+    CommandDefine("hello", "Internal", "Say hello")
+    {
+        return{ true, "Hello!" };
+    }
+    EndCommandDefine;
+
+    CommandDefine("stop", "Internal", "Stop the server")
+    {
+        ioService.stop();
+        inputThreadRunning = false;
+        return{ true, "" };
     }
     EndCommandDefine;
 }
@@ -52,19 +65,20 @@ CommandExecuteStat handleCommand(Command cmd)
     if (result != commandMap.end())
         return (*result).second.second(cmd);
     else
-        return{ false,"指令执行失败: 找不到该指令!请输入help查看帮助" };
+        return{ false,"Failed to execute the command: command is not found, type help for available commands." };
 }
 
 void inputThreadFunc()
 {
     initCommands();
-    while (true)
+    while (inputThreadRunning)
     {
         using namespace std::chrono_literals;
         std::string input;
         std::this_thread::sleep_for(100ms);
         std::cout << "> ";
         std::getline(std::cin, input);
-        infostream << handleCommand(Command(input)).info;
+        auto result = handleCommand(Command(input));
+        if (result.info != "") infostream << result.info;
     }
 }

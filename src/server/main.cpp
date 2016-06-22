@@ -26,9 +26,8 @@
 int main(int, char*[])
 {
     void inputThreadFunc();
-    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), { 6,6 });
-    std::thread inputThread(inputThreadFunc);
     loggerInit();
+    std::thread inputThread(inputThreadFunc);
     infostream << CopyrightString;
     infostream << "NEWorld Server v" << NEWorldVersion << ", which was compiled at " << __TIME__ << " " << __DATE__;
     infostream << "Server starting...";
@@ -41,7 +40,7 @@ int main(int, char*[])
     {
         fatalstream << "Exception: " << e.what();
     }
-    infostream << "Server stopping...";
+    infostream << "Server is stopping...";
     inputThread.join();
     return 0;
 }

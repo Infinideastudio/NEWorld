@@ -23,8 +23,10 @@
 #include <functional>
 #include <map>
 
-struct CommandExecuteStat
+class CommandExecuteStat
 {
+public:
+    CommandExecuteStat(bool s, std::string i) :success(s), info(i) {}
     bool success;
     std::string info;
 };
@@ -50,15 +52,17 @@ public:
             return strs;
         };
         args = split(rawString, " ");
-        name = args[0];
-        args.erase(args.begin());
+        name = args.size() != 0 ? args[0] : "";
+        if (args.size() != 0) args.erase(args.begin());
     }
     std::string name;
     std::vector<std::string> args;
 };
 
-struct CommandInfo
+class CommandInfo
 {
+public:
+    CommandInfo(std::string a, std::string h) :author(a), help(h) {}
     std::string author;
     std::string help;
 };

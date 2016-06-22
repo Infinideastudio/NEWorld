@@ -11,7 +11,7 @@
     <Filter Include="Source\World">
       <UniqueIdentifier>{6bbcbd78-7d22-478b-8559-bec86d9440e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Command">
+    <Filter Include="Source\Command">
       <UniqueIdentifier>{f64d43dd-aee3-423a-bc5d-cf31e4345fd9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -35,7 +35,7 @@
       <Filter>Source\Network</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\server\servercommand.cpp">
-      <Filter>Command</Filter>
+      <Filter>Source\Command</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
