@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 #include <functional>
-#include <map>
+#include <unordered_map>
 
 class CommandExecuteStat
 {
@@ -68,6 +68,6 @@ public:
 };
 
 using CommandHandleFunction = std::function<CommandExecuteStat(Command)>;
-using CommandMap = std::map<std::string, std::pair<CommandInfo, CommandHandleFunction>>;
+using CommandMap = std::unordered_map<std::string, std::pair<CommandInfo, CommandHandleFunction>>;
 
 #endif // !COMMAND_H_
