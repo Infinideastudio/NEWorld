@@ -32,7 +32,7 @@ CommandMap commandMap;
 
 void initCommands()
 {
-    CommandDefine("help", "Internel", "帮助")
+    CommandDefine("help", "Internel", "Help")
     {
         std::string helpString = "\nAvailable commands:\n";
         for (const auto& command : commandMap)
@@ -65,7 +65,7 @@ CommandExecuteStat handleCommand(Command cmd)
     if (result != commandMap.end())
         return (*result).second.second(cmd);
     else
-        return{ false,"Failed to execute the command: command is not found, type help for available commands." };
+        return{ false,"Failed to execute the command: The command does not exist, type help for available commands." };
 }
 
 void inputThreadFunc()
