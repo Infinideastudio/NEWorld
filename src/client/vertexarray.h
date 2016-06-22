@@ -21,7 +21,7 @@
 
 #include <cstring>
 #include <boost/core/noncopyable.hpp>
-#include "../shared/Common.h"
+#include "../shared/common.h"
 
 class VertexArray
     :boost::noncopyable
