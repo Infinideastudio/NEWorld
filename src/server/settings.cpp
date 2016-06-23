@@ -15,35 +15,16 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include <utility>
-#include <string>
-#include "server.h"
-#include <common.h>
-#include <logger.h>
-#include <thread>
 #include "settings.h"
-void inputThreadFunc();
+Settings settings("settings.conf");
 
-int main(int, char*[])
+void loadSettings()
 {
-    loadSettings();
-    loggerInit();
-    std::thread inputThread(inputThreadFunc);
-    infostream << CopyrightString;
-    infostream << "NEWorld Server v" << NEWorldVersion << ", compiled at " << __TIME__ << " " << __DATE__;
-    infostream << "Server starting...";
-    try
-    {
-        Server s(ioService, Port);
-        ioService.run();
-    }
-    catch (std::exception& e)
-    {
-        fatalstream << "Exception: " << e.what();
-    }
-    infostream << "Server is stopping...";
-    inputThread.join();
-    saveSettings();
-    return 0;
+    int fog = settings.get<int>("value", 0);
+}
+
+
+void saveSettings()
+{
+    settings.save();
 }
