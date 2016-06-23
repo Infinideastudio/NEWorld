@@ -20,6 +20,7 @@
 #define SERVER_H_
 
 #include <memory>
+#include <vector>
 #include <networkshared.h>
 #include <logger.h>
 #include <session.h>
@@ -48,12 +49,15 @@ public:
         // TODO: Terminate here
     }
 
+    void sendToAllSessions(Packet packet);
+
 private:
     void doAccept();
     void doGlobalUpdate();
 
     tcp::acceptor m_acceptor;
     tcp::socket m_socket;
+    std::vector<std::weak_ptr<Session>> m_sessions;
 
     WorldManager m_worlds;
     PluginManager m_plugins; // Loaded plugins

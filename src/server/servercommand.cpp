@@ -75,7 +75,6 @@ void inputThreadFunc()
     {
         using namespace std::chrono_literals;
         std::string input;
-        std::this_thread::sleep_for(100ms);
         std::cout << "> ";
         std::getline(std::cin, input);
         auto result = handleCommand(Command(input));

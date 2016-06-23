@@ -28,7 +28,7 @@ class Packet
 public:
     Identifier identifier;
     uint32_t length;
-    std::unique_ptr<char[]> data;
+    std::shared_ptr<char> data;
 };
 
 #endif // !PACKET_H_

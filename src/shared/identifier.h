@@ -25,7 +25,7 @@ enum Identifier :uint32_t
     //Client to server (0 ~ 2^30-1)
     Login = 0,
     //Server to client (2^30 ~ 2*2^30-1)
-    Placeholder = 1u << 30,
+    Close = 1u << 30,
     //Common (2*2^30 ~ 3*2^30-1)
     Chat = (1u << 30) * 2
 };

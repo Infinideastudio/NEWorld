@@ -37,6 +37,23 @@ void Session::doUpdate()
     });
 }
 
+void Server::sendToAllSessions(Packet packet)
+{
+    for (auto iter = m_sessions.begin(); iter != m_sessions.end();)
+    {
+        auto session = iter->lock();
+        if (session)
+        {
+            session->addRequest(packet);
+            ++iter;
+        }
+        else
+        {
+            iter = m_sessions.erase(iter);
+        }
+    }
+}
+
 void Server::doAccept()
 {
     m_acceptor.async_accept(m_socket, [this](boost::system::error_code ec)
@@ -44,8 +61,11 @@ void Server::doAccept()
         if (!ec)
         {
             infostream << m_socket.remote_endpoint().address().to_string() << " connects to the server";
-            std::make_shared<Session>(std::move(m_socket))->start();
+            auto session = std::make_shared<Session>(std::move(m_socket));
+            session->start();
+            m_sessions.push_back(session);
         }
+
         doAccept();
     });
 }

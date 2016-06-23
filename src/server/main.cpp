@@ -31,7 +31,7 @@ int main(int, char*[])
     loggerInit();
     std::thread inputThread(inputThreadFunc);
     infostream << CopyrightString;
-    infostream << "NEWorld Server v" << NEWorldVersion << ", compiled at " << __TIME__ << " " << __DATE__;
+    infostream << "NEWorld Server v" << NEWorldVersion << ", which was compiled at " << __TIME__ << " " << __DATE__;
     infostream << "Server starting...";
     try
     {
