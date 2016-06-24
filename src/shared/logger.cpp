@@ -27,7 +27,7 @@ std::vector<std::ofstream> Logger::fsink;
 int Logger::clogLevel = trace;
 int Logger::cerrLevel = fatal;
 int Logger::fileLevel = trace;
-
+int Logger::lineLevel = warning;
 string Logger::getTimeString(char dateSplit, char midSplit, char timeSplit)
 {
     time_t timer = time(NULL);
@@ -45,15 +45,6 @@ void loggerInit()
     string path = "./Logs/";
     if (!exists(path)) create_directory(path);
     Logger::addFileSink(path);
-#ifdef NEWORLD_DEBUG
-    Logger::clogLevel = Logger::debug;
-    Logger::cerrLevel = Logger::fatal;
-    Logger::fileLevel = Logger::debug;
-#else
-    Logger::clogLevel = Logger::info;
-    Logger::cerrLevel = Logger::fatal;
-    Logger::fileLevel = Logger::info;
-#endif
     // File sequence number not finished
     /*
     directory_iterator itemEnd;

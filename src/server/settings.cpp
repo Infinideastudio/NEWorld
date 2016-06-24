@@ -16,11 +16,23 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "settings.h"
+#include <logger.h>
+#include <common.h>
 Settings settings("settings.conf");
 
 void loadSettings()
 {
-    int fog = settings.get<int>("value", 0);
+#ifdef NEWORLD_DEBUG
+    Logger::clogLevel = settings.get<int>("clogLevel", Logger::trace);
+    Logger::cerrLevel = settings.get<int>("cerrLevel", Logger::fatal);
+    Logger::fileLevel = settings.get<int>("fileLevel", Logger::trace);
+    Logger::lineLevel = settings.get<int>("lineLevel", Logger::warning);
+#else
+    Logger::clogLevel = settings.get<int>("clogLevel", Logger::info);
+    Logger::cerrLevel = settings.get<int>("cerrLevel", Logger::fatal);
+    Logger::fileLevel = settings.get<int>("fileLevel", Logger::info);
+    Logger::lineLevel = settings.get<int>("lineLevel", Logger::warning);
+#endif
 }
 
 

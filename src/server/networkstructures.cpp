@@ -33,7 +33,7 @@ void LoginPacket::process()
 {
     if (true)
     {
-        infostream << "Player " << m_username << " login!";
+        infostream << "Player " << m_username << " login!"; //fixit: extra space
     }
     else
     {

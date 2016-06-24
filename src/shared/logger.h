@@ -40,14 +40,13 @@ public:
     static int clogLevel; // Minimum critical level using std::clog and output to console
     static int cerrLevel; // Minumum critical level using std::cerr and output to console
     static int fileLevel; // Minumum critical level output to file
+    static int lineLevel; // Minumum critical level output the line number of the source file
 
-#ifdef NEWORLD_DEBUG
     Logger(int level, const char* fileName, int lineNumber) :m_level(level)
-    { m_content << getTimeString('-', ' ', ':') << " <" << LevelString[level] << "> (" << fileName << ":" << lineNumber << ") "; }
-#else
-    Logger(int level) :m_level(level)
-    { m_content << getTimeString('-', ' ', ':') << " <" << LevelString[level] << "> "; }
-#endif
+    {
+        m_content << getTimeString('-', ' ', ':') << " <" << LevelString[level] << "> ";
+        if (level >= lineLevel)m_content << "(" << fileName << ":" << lineNumber << ") ";
+    }
 
     ~Logger()
     {
@@ -78,19 +77,11 @@ private:
 
 void loggerInit();
 
-#ifdef NEWORLD_DEBUG
 #define debugstream Logger(Logger::debug,__FUNCTION__,__LINE__)     // 给开发者看的信息
 #define infostream Logger(Logger::info,__FUNCTION__,__LINE__)       // 给普通用户看的信息
 #define warningstream Logger(Logger::warning,__FUNCTION__,__LINE__) // 可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
 #define errorstream Logger(Logger::error,__FUNCTION__,__LINE__)     // 游戏崩溃，但可以通过重新加载世界等方式在不重启程序的情况下解决
 #define fatalstream Logger(Logger::fatal,__FUNCTION__,__LINE__)     // 无法恢复的错误，需结束程序
-#else
-// Same as before
-#define debugstream Logger(Logger::debug)
-#define infostream Logger(Logger::info)
-#define warningstream Logger(Logger::warning)
-#define errorstream Logger(Logger::error)
-#define fatalstream Logger(Logger::fatal)
-#endif
+
 
 #endif // !LOGGER_H_
