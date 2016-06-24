@@ -17,7 +17,7 @@
 */
 #ifndef SETTINGSMANAGER_H__
 #define SETTINGSMANAGER_H__
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <fstream>
 #include <boost/spirit/home/support/detail/hold_any.hpp>
@@ -61,7 +61,7 @@ public:
     }
 
 private:
-    using SettingsMap = std::unordered_map<std::string, boost::spirit::hold_any>;
+    using SettingsMap = std::map<std::string, boost::spirit::hold_any>;
     SettingsMap m_settings;
     std::string m_filename;
 
