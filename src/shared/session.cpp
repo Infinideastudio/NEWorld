@@ -47,8 +47,15 @@ std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
         std::string content = tdh.getString(length2);
         return std::make_unique<ChatPacket>(username, content);
     }
+    case Close:
+    {
+
     }
-    return nullptr;
+    default:
+    {
+        return nullptr;
+    }
+    }
 }
 
 void Session::doRead()

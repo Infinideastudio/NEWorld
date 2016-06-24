@@ -84,10 +84,10 @@ public:
     static void render();
 
 private:
-    // Vertex count
-    int m_vertexes;
     // Max vertex count
     const int m_maxVertexes;
+    // Vertex count
+    int m_vertexes;
     // Vertex Attribute Count
     const int m_textureCount, m_colorCount, m_attributeCount, m_coordinateCount;
     // Vertex attributes count (sum of all)

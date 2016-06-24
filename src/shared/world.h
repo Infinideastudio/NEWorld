@@ -34,16 +34,16 @@ class PluginManager;
 class World :boost::noncopyable
 {
 private:
-    // All chunks (chunk array)
-    Chunk** m_chunks;
-    // Size of chunk array
-    size_t m_chunkArraySize;
-    // Loaded chunk count
-    size_t m_chunkCount;
     // World name
     string m_name;
     // Loaded plugins
     PluginManager& m_plugins;
+    // Loaded chunk count
+    size_t m_chunkCount;
+    // Size of chunk array
+    size_t m_chunkArraySize;
+    // All chunks (chunk array)
+    Chunk** m_chunks;
 
     // Expand chunk array
     void expandChunkArray(size_t expandCount);
@@ -77,7 +77,7 @@ public:
         //m_chunks = new Chunk*[m_chunkArraySize];
         m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
     }
-    World(World&& rhs) :m_name(std::move(rhs.m_name)), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks), m_plugins(rhs.m_plugins)
+    World(World&& rhs) :m_name(std::move(rhs.m_name)), m_plugins(rhs.m_plugins), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks)
     {}
 
     ~World()

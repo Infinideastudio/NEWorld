@@ -20,7 +20,7 @@
 #include "utils.h"
 #include "type.h"
 
-Settings::SettingsMap Settings::readFromFile(std::ifstream & file)
+Settings::SettingsMap Settings::readFromFile(std::ifstream && file)
 {
     Settings::SettingsMap map;
     if (file)
@@ -41,7 +41,7 @@ Settings::SettingsMap Settings::readFromFile(std::ifstream & file)
     return map;
 }
 
-void Settings::writeToFile(std::ofstream & file, const Settings::SettingsMap& settings,bool minimal)
+void Settings::writeToFile(std::ofstream && file, const Settings::SettingsMap& settings,bool minimal)
 {
     for (const auto& p : settings)
     {

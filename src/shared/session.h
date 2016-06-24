@@ -36,7 +36,7 @@ public:
         doUpdate();
     }
 
-    void addRequest(Packet& packet)
+    void addRequest(Packet&& packet)
     {
         m_packets.push(packet);
     }

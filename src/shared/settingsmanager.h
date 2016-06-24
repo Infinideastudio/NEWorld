@@ -27,12 +27,12 @@ class Settings
 {
 public:
     //使用文件名初始化Settings，自动从该文件读取配置
-    Settings(std::string filename) :m_settings(readFromFile(std::ifstream(filename))), m_filename(filename) {}
+    Settings(std::string filename) :m_settings(readFromFile(std::move(std::ifstream(filename)))), m_filename(filename) {}
 
     //将配置文件保存到读取的文件
     void save()
     {
-        writeToFile(std::ofstream(m_filename), m_settings, m_minimal);
+        writeToFile(std::move(std::ofstream(m_filename)), m_settings, m_minimal);
     }
 
     //从配置文件中获取配置
@@ -85,10 +85,10 @@ private:
     std::string m_filename;
     bool m_minimal = false;
     //从文件读取配置
-    static SettingsMap readFromFile(std::ifstream& file);
+    static SettingsMap readFromFile(std::ifstream&& file);
 
     //把配置写入到文件
-    static void writeToFile(std::ofstream& file, const SettingsMap& settings, bool minimal);
+    static void writeToFile(std::ofstream&& file, const SettingsMap& settings, bool minimal);
 };
 
 

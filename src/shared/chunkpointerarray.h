@@ -24,7 +24,7 @@
 #include "chunk.h"
 
 class ChunkPointerArray
-	:boost::noncopyable
+    :boost::noncopyable
 {
 private:
     /// Array

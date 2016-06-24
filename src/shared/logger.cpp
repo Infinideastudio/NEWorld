@@ -43,7 +43,9 @@ void loggerInit()
 {
     using namespace boost::filesystem;
     string path = "./Logs/";
+#ifdef _MSC_VER //FIXME: segment fault on linux
     if (!exists(path)) create_directory(path);
+#endif
     Logger::addFileSink(path);
     // File sequence number not finished
     /*

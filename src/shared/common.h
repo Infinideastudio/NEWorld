@@ -21,17 +21,17 @@
 
 // Compiler flags
 #ifdef _MSC_VER
-#define NEWORLD_COMPILER_MSVC
+    #define NEWORLD_COMPILER_MSVC
 #endif
 
 // OS flags
 #if defined _WIN32 || defined __CYGWIN__
-#define NEWORLD_TARGET_WINDOWS
-#define NEWORLD_USE_WINAPI // Windows native API
+    #define NEWORLD_TARGET_WINDOWS
+    #define NEWORLD_USE_WINAPI // Windows native API
 #endif
 
 #ifdef _DEBUG
-#define NEWORLD_DEBUG // Main debug flag
+    #define NEWORLD_DEBUG // Main debug flag
 #endif
 
 // Renderer
@@ -39,24 +39,24 @@
 //#define NEWORLD_USE_DIRECT3D
 
 #ifdef NEWORLD_DEBUG
-//    ...
+    //    ...
 #else
-#ifndef NDEBUG
-#define NDEBUG // NDEBUG flag for cassert
-#endif
+    #ifndef NDEBUG
+        #define NDEBUG // NDEBUG flag for cassert
+    #endif
 #endif
 
 #ifdef NEWORLD_USE_WINAPI
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h> // Windows API
+    #define WIN32_LEAN_AND_MEAN
+    #include <Windows.h> // Windows API
 #else
-//    #include <pthread.h> // Or <thread> <mutex>
+    //    #include <pthread.h> // Or <thread> <mutex>
 #endif
 
 #include <cassert>
 
 #if (-1)>>1 == -1
-#define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
+    #define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
 #endif
 
 constexpr unsigned int NEWorldVersion = 41u;
