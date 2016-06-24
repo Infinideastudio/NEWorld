@@ -7,8 +7,8 @@ client_objects = $(patsubst src/client/%.cpp, obj/client/%.o, $(client_sources))
 server_sources = $(wildcard src/server/*.cpp)
 server_objects = $(patsubst src/server/%.cpp, obj/server/%.o, $(server_sources))
 
-al_sources = $(wildcard src/client/Audio/*.cpp)
-al_objects = $(patsubst src/client/Audio/%.cpp, obj/al/%.o, $(al_sources))
+#al_sources = $(wildcard src/client/Audio/*.cpp)
+#al_objects = $(patsubst src/client/Audio/%.cpp, obj/al/%.o, $(al_sources))
 
 ifeq ($(RELEASE), 1)
     CXXFLAGS += -O2
@@ -29,14 +29,14 @@ server: obj/ $(server_objects) $(shared_objects)
 obj/:
 	mkdir -p obj/
 
-GENERAL_FLAG = -I ./dependencies/include -std=c++14
+GENERAL_FLAG = -I ./dependencies/include -std=c++11
 C_S_FLAG =  -I ./src/shared
 
 obj/shared/%.o: src/shared/%.cpp
 	g++ $(GENERAL_FLAG) $(CXXFLAGS) -c $< -o $@
 
-obj/al/%.o: src/client/Audio/%.cpp
-	g++ $(GENERAL_FLAG) $(CXXFLAGS) -c $< -o $@
+#obj/al/%.o: src/client/Audio/%.cpp
+#	g++ $(GENERAL_FLAG) $(CXXFLAGS) -c $< -o $@
 
 obj/client/%.o: src/client/%.cpp
 	g++ $(C_S_FLAG) $(GENERAL_FLAG) $(CXXFLAGS) -c $< -o $@
