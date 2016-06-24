@@ -22,6 +22,7 @@
 #include <vector>
 #include <functional>
 #include <unordered_map>
+#include "utils.h"
 
 class CommandExecuteStat
 {
@@ -36,21 +37,6 @@ class Command
 public:
     explicit Command(std::string rawString)
     {
-        auto split = [](const std::string& src, std::string separate_character)->std::vector<std::string>
-        {
-            std::vector<std::string> strs;
-            int separate_characterLen = separate_character.size();
-            int last_position = 0, index = -1;
-            while (-1 != (index = src.find(separate_character, last_position)))
-            {
-                strs.push_back(src.substr(last_position, index - last_position));
-                last_position = index + separate_characterLen;
-            }
-            std::string lastString = src.substr(last_position);
-            if (!lastString.empty())
-                strs.push_back(lastString);
-            return strs;
-        };
         args = split(rawString, " ");
         name = args.size() != 0 ? args[0] : "";
         if (args.size() != 0) args.erase(args.begin());

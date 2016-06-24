@@ -28,7 +28,7 @@
 #include <boost/core/swap.hpp>
 
 template<typename T>
-class Vec3 :boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T> > >
+class Vec3 :boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T>>>
 {
 public:
     typedef typename boost::call_traits<T>::param_type param_type;

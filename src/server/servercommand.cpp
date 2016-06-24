@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <atomic>
 #include "server.h"
+#include <utils.h>
 
 bool inputThreadRunning = true;
 
@@ -60,7 +61,7 @@ void initCommands()
 
 CommandExecuteStat handleCommand(Command cmd)
 {
-    std::transform(cmd.name.begin(), cmd.name.end(), cmd.name.begin(), tolower);
+    strtolower(cmd.name);
     auto result = commandMap.find(cmd.name);
     if (result != commandMap.end())
         return (*result).second.second(cmd);

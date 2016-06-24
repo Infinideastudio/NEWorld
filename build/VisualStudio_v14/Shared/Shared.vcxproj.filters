@@ -73,6 +73,9 @@
     <ClInclude Include="..\..\..\src\shared\settingsmanager.h">
       <Filter>Source\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\utils.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -126,6 +129,9 @@
       <Filter>Source\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\settingsmanager.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\utils.cpp">
       <Filter>Source\Common</Filter>
     </ClCompile>
   </ItemGroup>

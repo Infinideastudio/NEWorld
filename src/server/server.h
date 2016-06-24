@@ -57,7 +57,7 @@ private:
 
     tcp::acceptor m_acceptor;
     tcp::socket m_socket;
-    std::vector<std::weak_ptr<Session> > m_sessions;
+    std::vector<std::weak_ptr<Session>> m_sessions;
 
     WorldManager m_worlds;
     PluginManager m_plugins; // Loaded plugins

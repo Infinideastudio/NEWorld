@@ -17,6 +17,7 @@
 */
 #include "precomp.h"
 #include "settingsmanager.h"
+#include "utils.h"
 
 bool isDecimal(std::string str)
 {
@@ -44,7 +45,7 @@ bool isInteger(std::string str)
 bool isBoolean(std::string str)
 {
     if (str.empty()) return false;
-    std::transform(str.begin(), str.end(), str.begin(), tolower);
+    strtolower(str);
     return str == "true" || str == "false";
 }
 
@@ -60,8 +61,40 @@ inline int getInteger(std::string str)
 
 inline bool getBoolean(std::string str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), tolower);
+    strtolower(str);
     return str == "true";
+}
+
+boost::spirit::hold_any string2type(std::string str)
+{
+    boost::spirit::hold_any value;
+    if (isBoolean(str)) value = getBoolean(str);
+    else if (isInteger(str)) value = getInteger(str);
+    else if (isDecimal(str)) value = getDecimal(str);
+    else warningstream << "Failed to read value:" << str << ", which maybe not supported.";
+    return value;
+}
+
+std::string type2string(boost::spirit::hold_any var)
+{
+    if (var.type() == typeid(bool))
+    {
+        return var.cast<bool>() ? "true" : "false";
+    }
+    else if(var.type()==typeid(int))
+    {
+        return std::to_string(var.cast<int>());
+    }
+    else if (var.type() == typeid(double))
+    {
+        return std::to_string(var.cast<double>());
+    }
+    else if (var.type() == typeid(std::string))
+    {
+        return var.cast<std::string>();
+    }
+    else warningstream << "Failed to handle type " << var.type().name() << " which maybe not supported.";
+    return "";
 }
 
 Settings::SettingsMap Settings::readFromFile(std::ifstream & file)
@@ -71,22 +104,27 @@ Settings::SettingsMap Settings::readFromFile(std::ifstream & file)
     {
         while (!file.eof())
         {
-            std::string key, valueStr;
-            file >> key >> valueStr;
-            boost::spirit::hold_any value;
-            if (isBoolean(valueStr)) value = getBoolean(valueStr);
-            else if (isInteger(valueStr)) value = getInteger(valueStr);
-            else if (isDecimal(valueStr)) value = getDecimal(valueStr);
-            map[key] = value;
+            std::string line;
+            std::getline(file, line);
+            auto vk = split(line, "=");
+            if (vk.size() != 2) continue;
+            std::string key = vk[0], value = vk[1];
+            trim(key);
+            strtolower(key);
+            trim(value);
+            map[key] = string2type(value);
         }
     }
     return map;
 }
 
-void Settings::writeToFile(std::ofstream & file, const Settings::SettingsMap& settings)
+void Settings::writeToFile(std::ofstream & file, const Settings::SettingsMap& settings,bool minimal)
 {
     for (const auto& p : settings)
     {
-        file << p.first << " " << p.second << std::endl;
+        if (minimal)
+            file << p.first << "=" << type2string(p.second) << std::endl;
+        else
+            file << p.first << " = " << type2string(p.second) << std::endl;
     }
 }

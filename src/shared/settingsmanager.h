@@ -21,23 +21,25 @@
 #include <string>
 #include <fstream>
 #include <boost/spirit/home/support/detail/hold_any.hpp>
+#include "utils.h"
 
 class Settings
 {
 public:
-    //Ê¹ÓÃÎÄ¼şÃû³õÊ¼»¯Settings£¬×Ô¶¯´Ó¸ÃÎÄ¼ş¶ÁÈ¡ÅäÖÃ
+    //ä½¿ç”¨æ–‡ä»¶ååˆå§‹åŒ–Settingsï¼Œè‡ªåŠ¨ä»è¯¥æ–‡ä»¶è¯»å–é…ç½®
     Settings(std::string filename) :m_settings(readFromFile(std::ifstream(filename))), m_filename(filename) {}
 
-    //½«ÅäÖÃÎÄ¼ş±£´æµ½¶ÁÈ¡µÄÎÄ¼ş
+    //å°†é…ç½®æ–‡ä»¶ä¿å­˜åˆ°è¯»å–çš„æ–‡ä»¶
     void save()
     {
-        writeToFile(std::ofstream(m_filename), m_settings);
+        writeToFile(std::ofstream(m_filename), m_settings, m_minimal);
     }
 
-    //´ÓÅäÖÃÎÄ¼şÖĞ»ñÈ¡ÅäÖÃ
+    //ä»é…ç½®æ–‡ä»¶ä¸­è·å–é…ç½®
     template<class T>
     T get(std::string key, T defaultValue)
     {
+        strtolower(key);
         auto result = m_settings.find(key);
         if (result != m_settings.end())
             return result->second.cast<T>();
@@ -48,7 +50,7 @@ public:
         }
     }
 
-    //ÉèÖÃÄ³Ò»ÏîÅäÖÃ
+    //è®¾ç½®æŸä¸€é¡¹é…ç½®
     template<class T>
     void set(std::string key, const T& value)
     {
@@ -60,16 +62,21 @@ public:
         return m_settings.find(key) != m_settings.end();
     }
 
+    void setMinimal(bool minimal)
+    {
+        m_minimal = minimal;
+    }
+
 private:
     using SettingsMap = std::map<std::string, boost::spirit::hold_any>;
     SettingsMap m_settings;
     std::string m_filename;
-
-    //´ÓÎÄ¼ş¶ÁÈ¡ÅäÖÃ
+    bool m_minimal = false;
+    //ä»æ–‡ä»¶è¯»å–é…ç½®
     static SettingsMap readFromFile(std::ifstream& file);
 
-    //°ÑÅäÖÃĞ´Èëµ½ÎÄ¼ş
-    static void writeToFile(std::ofstream& file, const SettingsMap& settings);
+    //æŠŠé…ç½®å†™å…¥åˆ°æ–‡ä»¶
+    static void writeToFile(std::ofstream& file, const SettingsMap& settings, bool minimal);
 };
 
 

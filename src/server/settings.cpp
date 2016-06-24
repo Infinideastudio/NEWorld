@@ -23,18 +23,20 @@ Settings settings("settings.conf");
 void loadSettings()
 {
 #ifdef NEWORLD_DEBUG
-    Logger::clogLevel = settings.get<int>("clogLevel", Logger::trace);
-    Logger::cerrLevel = settings.get<int>("cerrLevel", Logger::fatal);
-    Logger::fileLevel = settings.get<int>("fileLevel", Logger::trace);
-    Logger::lineLevel = settings.get<int>("lineLevel", Logger::warning);
+    Logger::clogLevel = settings.get<int>("server.logger.clogLevel", Logger::trace);
+    Logger::cerrLevel = settings.get<int>("server.logger.cerrLevel", Logger::fatal);
+    Logger::fileLevel = settings.get<int>("server.logger.fileLevel", Logger::trace);
+    Logger::lineLevel = settings.get<int>("server.logger.lineLevel", Logger::warning);
 #else
-    Logger::clogLevel = settings.get<int>("clogLevel", Logger::info);
-    Logger::cerrLevel = settings.get<int>("cerrLevel", Logger::fatal);
-    Logger::fileLevel = settings.get<int>("fileLevel", Logger::info);
-    Logger::lineLevel = settings.get<int>("lineLevel", Logger::warning);
+    Logger::clogLevel = settings.get<int>("server.logger.clogLevel", Logger::info);
+    Logger::cerrLevel = settings.get<int>("server.logger.cerrLevel", Logger::fatal);
+    Logger::fileLevel = settings.get<int>("server.logger.fileLevel", Logger::info);
+    Logger::lineLevel = settings.get<int>("server.logger.lineLevel", Logger::warning);
 #endif
-}
+    settings.setMinimal(settings.get<bool>("shared.settings.minimal", false));
 
+    saveSettings();
+}
 
 void saveSettings()
 {
