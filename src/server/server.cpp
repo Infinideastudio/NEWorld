@@ -23,7 +23,7 @@ using namespace boost::system;
 
 void errorHandle(const tcp::socket& m_socket, error_code ec)
 {
-    infostream << m_socket.remote_endpoint().address().to_string() << " disconnected, code:" << ec.value();
+    infostream << m_socket.remote_endpoint().address().to_string() << " disconnected, code: " << ec.value();
 }
 
 void Session::doUpdate()
@@ -60,12 +60,11 @@ void Server::doAccept()
     {
         if (!ec)
         {
-            infostream << m_socket.remote_endpoint().address().to_string() << " connects to the server";
+            infostream << m_socket.remote_endpoint().address().to_string() << " connected to the server";
             auto session = std::make_shared<Session>(std::move(m_socket));
             session->start();
             m_sessions.push_back(session);
         }
-
         doAccept();
     });
 }

@@ -34,6 +34,7 @@
 #define NEWORLD_DEBUG // Main debug flag
 #endif
 
+// Renderer
 #define NEWORLD_USE_OPENGL
 //#define NEWORLD_USE_DIRECT3D
 

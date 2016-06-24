@@ -21,7 +21,7 @@ LDFLAGS = -L ./dependencies/lib
 all: client server
 
 client: obj/ $(client_objects) $(shared_objects)
-	g++ -o NEWorld $(LDFLAGS) -logg -lvorbis -lvorbisfile -lfreetype -lglfw3 -lopenal -lgl $(client_objects) $(al_objects) $(shared_objects)
+	g++ -o NEWorld $(LDFLAGS) -logg -lvorbis -lvorbisfile -lfreetype -lglfw3 -lopenal -lopengl32 $(client_objects) $(al_objects) $(shared_objects)
 
 server: obj/ $(server_objects) $(shared_objects)
 	g++ -o NEWorldServer $(server_objects) $(shared_objects)

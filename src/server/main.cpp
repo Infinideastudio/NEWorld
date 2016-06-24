@@ -23,6 +23,7 @@
 #include <logger.h>
 #include <thread>
 #include "settings.h"
+
 void inputThreadFunc();
 
 int main(int, char*[])
