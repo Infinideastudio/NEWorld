@@ -15,22 +15,23 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "settings.h"
-#include <logger.h>
-#include <common.h>
+#ifndef _TYPE_H__
+#define _TYPE_H__
 
-void loadSharedSettings(Settings& settings);
+#include <string>
+#include <boost/spirit/home/support/detail/hold_any.hpp>
 
-Settings settings("server_settings.conf");
+bool isDecimal(std::string str);
+bool isInteger(std::string str);
+bool isBoolean(std::string str);
 
-void loadSettings()
-{
-    loadSharedSettings(settings);
+double getDecimal(std::string str);
+int getInteger(std::string str);
+bool getBoolean(std::string str);
 
-    saveSettings();
-}
+boost::spirit::hold_any string2type(std::string str);
+std::string type2string(boost::spirit::hold_any var);
 
-void saveSettings()
-{
-    settings.save();
-}
+
+
+#endif

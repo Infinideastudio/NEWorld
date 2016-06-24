@@ -50,9 +50,15 @@ public:
         }
     }
 
+    boost::spirit::hold_any get(std::string key)
+    {
+        strtolower(key);
+        auto result = m_settings.find(key);
+        if (result != m_settings.end()) return result->second;
+    }
+
     //设置某一项配置
-    template<class T>
-    void set(std::string key, const T& value)
+    void set(std::string key, const boost::spirit::hold_any value)
     {
         m_settings[key] = value;
     }
@@ -67,8 +73,14 @@ public:
         m_minimal = minimal;
     }
 
-private:
     using SettingsMap = std::map<std::string, boost::spirit::hold_any>;
+
+    const SettingsMap& getMap()
+    {
+        return m_settings;
+    }
+
+private:
     SettingsMap m_settings;
     std::string m_filename;
     bool m_minimal = false;

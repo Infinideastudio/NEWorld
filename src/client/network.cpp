@@ -15,7 +15,6 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #include <memory>
 #include <common.h>
 #include <logger.h>
@@ -23,12 +22,12 @@
 #include "session.h"
 
 std::string hostIp = "127.0.0.1";
-
+boost::asio::io_service ioService;
 std::shared_ptr<Session> session;
 const int updateInterval = 10;
 void disconnect()
 {
-    //TODO: disconnect
+    ioService.stop();
 }
 
 bool initNetwork(boost::asio::io_service& ioService, tcp::socket& socket, std::string ip)
@@ -49,7 +48,6 @@ bool initNetwork(boost::asio::io_service& ioService, tcp::socket& socket, std::s
 
 void networkThread()
 {
-    boost::asio::io_service ioService;
     tcp::socket socket(ioService);
     if (!initNetwork(ioService,socket, hostIp))
         exit(-1);

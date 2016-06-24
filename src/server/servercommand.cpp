@@ -24,11 +24,13 @@
 #include <atomic>
 #include "server.h"
 #include <utils.h>
+#include "settings.h"
+#include <type.h>
 
 bool inputThreadRunning = true;
 
 CommandMap commandMap;
-#define CommandDefine(commandName, commandAuthor, commandHelp) commandMap.insert({commandName, std::pair<CommandInfo,CommandHandleFunction>({commandAuthor, commandHelp},[](Command)->CommandExecuteStat
+#define CommandDefine(commandName, commandAuthor, commandHelp) commandMap.insert({commandName, std::pair<CommandInfo,CommandHandleFunction>({commandAuthor, commandHelp},[](Command cmd)->CommandExecuteStat
 #define EndCommandDefine )})
 
 void initCommands()
@@ -44,17 +46,65 @@ void initCommands()
     }
     EndCommandDefine;
 
-    CommandDefine("hello", "Internal", "Say hello")
+    CommandDefine("test.hello", "Internal", "Say hello")
     {
         return{ true, "Hello!" };
     }
     EndCommandDefine;
 
-    CommandDefine("stop", "Internal", "Stop the server")
+    CommandDefine("server.stop", "Internal", "Stop the server")
     {
         ioService.stop();
         inputThreadRunning = false;
         return{ true, "" };
+    }
+    EndCommandDefine;
+
+    CommandDefine("conf.set", "Internal", "Set one configuration item. Usage: conf.set <confname> <value>")
+    {
+        if (cmd.args.size() == 2)
+        {
+            settings.set(cmd.args[0], string2type(cmd.args[1]));
+            return{ true, "Set" };
+        }
+        else
+        {
+            return{ false, "Usage: conf.set <confname> <value>" };
+        }
+    }
+    EndCommandDefine;
+
+    CommandDefine("conf.get", "Internal", "Get one configuration item. Usage: conf.get <confname>")
+    {
+        if (cmd.args.size() == 1)
+        {
+            if(settings.have(cmd.args[0]))
+                return{ true, cmd.args[0] + " = " + type2string(settings.get(cmd.args[0])) };
+            else
+                return{ false, "The configuration item does not exist." };
+        }
+        else
+        {
+            return{ false, "Usage: conf.get <confname>" };
+        }
+    }
+    EndCommandDefine;
+
+    CommandDefine("conf.show", "Internal", "Show the configuration.")
+    {
+        std::string conf;
+        for (const auto& p : settings.getMap())
+        {
+            conf += '\n' + p.first + " = " + type2string(p.second);
+        }
+        return{ true,conf };
+    }
+    EndCommandDefine;
+
+    CommandDefine("conf.save", "Internal", "Save the configuration.")
+    {
+        settings.save();
+        return{ true,"Done!" };
     }
     EndCommandDefine;
 }
