@@ -55,6 +55,7 @@ public:
         strtolower(key);
         auto result = m_settings.find(key);
         if (result != m_settings.end()) return result->second;
+        return boost::spirit::hold_any();
     }
 
     //设置某一项配置

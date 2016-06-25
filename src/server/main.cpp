@@ -31,7 +31,10 @@ int main(int, char*[])
     loadSettings();
     loggerInit();
     std::thread inputThread(inputThreadFunc);
-    infostream << CopyrightString;
+    infostream << "----------------------------------------\n"
+               << CopyrightString
+               << "\n----------------------------------------";
+
     infostream << "NEWorld Server v" << NEWorldVersion << ", which was compiled at " << __TIME__ << " " << __DATE__;
     infostream << "Server starting...";
     try
