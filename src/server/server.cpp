@@ -37,22 +37,23 @@ void Session::doUpdate()
     });
 }
 
-void Server::sendToAllSessions(Packet packet)
-{
-    for (auto iter = m_sessions.begin(); iter != m_sessions.end();)
-    {
-        auto session = iter->lock();
-        if (session)
-        {
-            session->addRequest(packet);
-            ++iter;
-        }
-        else
-        {
-            iter = m_sessions.erase(iter);
-        }
-    }
-}
+//void Server::sendToAllSessions(Packet packet)
+//{
+//FIXME
+//for (auto iter = m_sessions.begin(); iter != m_sessions.end();)
+//{
+//    auto session = iter->lock();
+//    if (session)
+//    {
+//        session->addRequest(packet);
+//        ++iter;
+//    }
+//    else
+//    {
+//        iter = m_sessions.erase(iter);
+//    }
+//}
+//}
 
 void Server::doAccept()
 {

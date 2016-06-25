@@ -30,7 +30,8 @@ void World::expandChunkArray(size_t c)
         assert(newchunks != NULL);
         if (newchunks == NULL)
         {
-            // TODO: Mark crash signal and exit world
+            fatalstream << "Failed to create chunks, size:" << m_chunkArraySize;
+            // TODO: exit
         }
         else m_chunks = newchunks;
     }
