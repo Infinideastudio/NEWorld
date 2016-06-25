@@ -24,6 +24,7 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <consolecolor.h>
 using std::string;
 
 class Logger
@@ -44,7 +45,10 @@ public:
         // Level names
         constexpr static const char* LevelString[LevelCount] =
         { "trace", "debug", "info", "warning", "error", "fatal" };
-        m_content << getTimeString('-', ' ', ':') << " <" << LevelString[level] << "> ";
+        // Level colors
+        constexpr static const CColor::colorfunc LevelColor[LevelCount] =
+                { CColor::gray, CColor::gray, CColor::white, CColor::yellow, CColor::dred, CColor::red };
+        m_content << CColor::gray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
         if (level >= lineLevel)m_content << "(" << fileName << ":" << lineNumber << ") ";
     }
 

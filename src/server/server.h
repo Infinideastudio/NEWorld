@@ -32,7 +32,7 @@ constexpr int updateInterval = 10, globalUpdateInterval = 10;
 class Server
 {
 public:
-    Server(boost::asio::io_service& ioservice, short port)
+    Server(boost::asio::io_service& ioservice, unsigned short port)
         :m_acceptor(ioservice, boost::asio::ip::tcp::endpoint(tcp::v4(), port)), m_socket(ioservice),
          m_worlds(m_plugins), m_world(m_worlds.addWorld("TestWorld"))
     {
