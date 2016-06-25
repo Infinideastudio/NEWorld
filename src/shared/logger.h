@@ -33,9 +33,6 @@ public:
     enum Level
     { trace, debug, info, warning, error, fatal, null };
     constexpr static int LevelCount = null;
-    // Level names
-    constexpr static const char* LevelString[LevelCount] =
-    { "trace", "debug", "info", "warning", "error", "fatal" };
 
     static int clogLevel; // Minimum critical level using std::clog and output to console
     static int cerrLevel; // Minumum critical level using std::cerr and output to console
@@ -44,6 +41,9 @@ public:
 
     Logger(int level, const char* fileName, int lineNumber) :m_level(level)
     {
+        // Level names
+        constexpr static const char* LevelString[LevelCount] =
+        { "trace", "debug", "info", "warning", "error", "fatal" };
         m_content << getTimeString('-', ' ', ':') << " <" << LevelString[level] << "> ";
         if (level >= lineLevel)m_content << "(" << fileName << ":" << lineNumber << ") ";
     }
