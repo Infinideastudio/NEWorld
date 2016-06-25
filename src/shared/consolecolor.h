@@ -20,80 +20,74 @@
 #define CONSOLECOLOR_H_
 
 #include <iostream>
-namespace CColor{
+#include "common.h"
 
-typedef std::ostream&(*colorfunc)(std::ostream &s);
-
-#ifdef _MSC_VER
-//Microsoft Windows
-#include <windows.h>
-
-inline std::ostream& red(std::ostream &s)
+namespace CColor
 {
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hStdout,
-                            FOREGROUND_RED|FOREGROUND_INTENSITY);
-    return s;
-}
 
-inline std::ostream& dred(std::ostream &s)
-{
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hStdout,
-                            FOREGROUND_RED);
-    return s;
-}
+    typedef std::ostream&(*colorfunc)(std::ostream &s);
 
-inline std::ostream& yellow(std::ostream &s)
-{
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hStdout,
-                            FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_INTENSITY);
-    return s;
-}
-
-inline std::ostream& white(std::ostream &s)
-{
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hStdout,
-                            FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
-    return s;
-}
-
-inline std::ostream& gray(std::ostream &s)
-{
-    HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hStdout,
-                            FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-    return s;
-}
-#else
-//*nix
+#ifdef NEWORLD_TARGET_WINDOWS
+    // Microsoft Windows
 
     inline std::ostream& red(std::ostream &s)
     {
-        return s << "\033[1;31m";
+        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hStdout,
+                                FOREGROUND_RED|FOREGROUND_INTENSITY);
+        return s;
     }
 
     inline std::ostream& dred(std::ostream &s)
     {
-        return s << "\033[21;31m";
+        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hStdout,
+                                FOREGROUND_RED);
+        return s;
     }
 
     inline std::ostream& yellow(std::ostream &s)
     {
-        return s << "\033[1;33m";
+        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hStdout,
+                                FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_INTENSITY);
+        return s;
     }
 
     inline std::ostream& white(std::ostream &s)
     {
-        return s << "\033[1;37m";
+        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hStdout,
+                                FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+        return s;
     }
 
     inline std::ostream& gray(std::ostream &s)
     {
-        return s << "\033[21;37m";
+        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hStdout,
+                                FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+        return s;
     }
+#else
+    // *nix
+
+    inline std::ostream& red(std::ostream &s)
+    { return s << "\033[1;31m"; }
+
+    inline std::ostream& dred(std::ostream &s)
+    { return s << "\033[21;31m"; }
+
+    inline std::ostream& yellow(std::ostream &s)
+    { return s << "\033[1;33m"; }
+
+    inline std::ostream& white(std::ostream &s)
+    { return s << "\033[1;37m"; }
+
+    inline std::ostream& gray(std::ostream &s)
+    { return s << "\033[21;37m"; }
 #endif
-} //namespace CColor
+
+} // namespace CColor
+
 #endif

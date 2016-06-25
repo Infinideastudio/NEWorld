@@ -24,8 +24,8 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
-#include <consolecolor.h>
 using std::string;
+#include "consolecolor.h"
 
 class Logger
 {
@@ -47,7 +47,7 @@ public:
         { "trace", "debug", "info", "warning", "error", "fatal" };
         // Level colors
         constexpr static const CColor::colorfunc LevelColor[LevelCount] =
-                { CColor::gray, CColor::gray, CColor::white, CColor::yellow, CColor::dred, CColor::red };
+        { CColor::gray, CColor::gray, CColor::white, CColor::yellow, CColor::dred, CColor::red };
         m_content << CColor::gray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
         if (level >= lineLevel)m_content << "(" << fileName << ":" << lineNumber << ") ";
     }
@@ -81,11 +81,10 @@ private:
 
 void loggerInit();
 
-#define debugstream Logger(Logger::debug,__FUNCTION__,__LINE__)     // 给开发者看的信息
-#define infostream Logger(Logger::info,__FUNCTION__,__LINE__)       // 给普通用户看的信息
-#define warningstream Logger(Logger::warning,__FUNCTION__,__LINE__) // 可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
-#define errorstream Logger(Logger::error,__FUNCTION__,__LINE__)     // 游戏崩溃，但可以通过重新加载世界等方式在不重启程序的情况下解决
-#define fatalstream Logger(Logger::fatal,__FUNCTION__,__LINE__)     // 无法恢复的错误，需结束程序
-
+#define debugstream Logger(Logger::debug, __FUNCTION__, __LINE__)     // 给开发者看的信息
+#define infostream Logger(Logger::info, __FUNCTION__, __LINE__)       // 给普通用户看的信息
+#define warningstream Logger(Logger::warning, __FUNCTION__, __LINE__) // 可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
+#define errorstream Logger(Logger::error, __FUNCTION__, __LINE__)     // 游戏崩溃，但可以通过重新加载世界等方式在不重启程序的情况下解决
+#define fatalstream Logger(Logger::fatal, __FUNCTION__, __LINE__)     // 无法恢复的错误，需结束程序
 
 #endif // !LOGGER_H_
