@@ -1,4 +1,3 @@
-#include "precomp.h"
 #include "settingsmanager.h"
 #include "logger.h"
 #include "common.h"

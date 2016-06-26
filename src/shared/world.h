@@ -23,7 +23,6 @@
 #include <string>
 #include <cstdlib> // malloc, realloc, free
 #include <boost/core/noncopyable.hpp>
-#include "precomp.h"
 #include "chunk.h"
 
 using std::abs;

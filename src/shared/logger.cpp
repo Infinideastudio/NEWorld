@@ -16,7 +16,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "precomp.h"
 #include <iomanip>
 #include <ctime>
 #include <boost/filesystem/operations.hpp>

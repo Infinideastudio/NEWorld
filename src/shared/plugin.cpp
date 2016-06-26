@@ -16,7 +16,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "precomp.h"
 #include "plugin.h"
 
 int Plugin::loadFrom(const string& filename)

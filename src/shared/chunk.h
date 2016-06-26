@@ -19,7 +19,7 @@
 #ifndef CHUNK_H_
 #define CHUNK_H_
 
-#include "precomp.h"
+#include <cassert>
 #include "vec3.h"
 #include "blockdata.h"
 
