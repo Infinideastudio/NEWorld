@@ -15,8 +15,10 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #ifndef SETTINGSMANAGER_H__
 #define SETTINGSMANAGER_H__
+
 #include <map>
 #include <string>
 #include <fstream>
@@ -27,7 +29,7 @@ class Settings
 {
 public:
     //使用文件名初始化Settings，自动从该文件读取配置
-    Settings(std::string filename) :m_settings(readFromFile(std::move(std::ifstream(filename)))), m_filename(filename) {}
+    Settings(const std::string& filename) :m_settings(readFromFile(std::move(std::ifstream(filename)))), m_filename(filename) {}
 
     //将配置文件保存到读取的文件
     void save()
