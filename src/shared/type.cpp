@@ -21,52 +21,6 @@
 #include "type.h"
 #include "utils.h"
 
-bool isDecimal(std::string str)
-{
-    if (str.empty()) return false;
-    bool ret = true, dot = false;
-    for (char c : str)
-    {
-        if (c == '.' && !dot) dot = true;
-        else if (c<'0' || c>'9') ret = false;
-    }
-    return ret;
-}
-
-bool isInteger(std::string str)
-{
-    if (str.empty()) return false;
-    bool ret = true;
-    for (char c : str)
-    {
-        if (c<'0' || c>'9') ret = false;
-    }
-    return ret;
-}
-
-bool isBoolean(std::string str)
-{
-    if (str.empty()) return false;
-    strtolower(str);
-    return str == "true" || str == "false";
-}
-
-inline double getDecimal(std::string str)
-{
-    return std::stod(str);
-}
-
-inline int getInteger(std::string str)
-{
-    return std::stoi(str);
-}
-
-inline bool getBoolean(std::string str)
-{
-    strtolower(str);
-    return str == "true";
-}
-
 boost::spirit::hold_any string2type(std::string str)
 {
     boost::spirit::hold_any value;

@@ -19,15 +19,54 @@
 #define _TYPE_H__
 
 #include <string>
+#include "utils.h"
 #include <boost/spirit/home/support/detail/hold_any.hpp>
 
-bool isDecimal(std::string str);
-bool isInteger(std::string str);
-bool isBoolean(std::string str);
+inline bool isDecimal(std::string str)
+{
+    if (str.empty()) return false;
+    bool ret = true, dot = false;
+    for (char c : str)
+    {
+        if (c == '.' && !dot) dot = true;
+        else if (c<'0' || c>'9') ret = false;
+    }
+    return ret;
+}
 
-double getDecimal(std::string str);
-int getInteger(std::string str);
-bool getBoolean(std::string str);
+inline bool isInteger(std::string str)
+{
+    if (str.empty()) return false;
+    bool ret = true;
+    for (char c : str)
+    {
+        if (c<'0' || c>'9') ret = false;
+    }
+    return ret;
+}
+
+inline bool isBoolean(std::string str)
+{
+    if (str.empty()) return false;
+    strtolower(str);
+    return str == "true" || str == "false";
+}
+
+inline double getDecimal(std::string str)
+{
+    return std::stod(str);
+}
+
+inline int getInteger(std::string str)
+{
+    return std::stoi(str);
+}
+
+inline bool getBoolean(std::string str)
+{
+    strtolower(str);
+    return str == "true";
+}
 
 boost::spirit::hold_any string2type(std::string str);
 std::string type2string(boost::spirit::hold_any var);
