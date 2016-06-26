@@ -46,10 +46,18 @@ public:
         constexpr static const char* LevelString[LevelCount] =
         { "trace", "debug", "info", "warning", "error", "fatal" };
         // Level colors
-        constexpr static const CColor::colorfunc LevelColor[LevelCount] =
-        { CColor::gray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred };
-        m_content << CColor::gray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
-        if (level >= lineLevel) m_content << CColor::gray << "(" << fileName << ":" << lineNumber << ") ";
+        constexpr CColor::colorfunc LevelColor[] =
+        {
+            color<Color::gray>,
+            color<Color::gray>,
+            color<Color::white>,
+            color<Color::yellow>,
+            color<Color::red>,
+            color<Color::dred>
+        };
+        m_content << color<Color::gray> << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
+        if (level >= lineLevel)
+            m_content << color<Color::gray> << "(" << fileName << ":" << lineNumber << ") ";
     }
 
     ~Logger()

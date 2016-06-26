@@ -27,65 +27,97 @@ namespace CColor
 
     typedef std::ostream&(*colorfunc)(std::ostream &s);
 
+    enum Color
+    {
+        red,
+        dred,
+        yellow,
+        white,
+        gray
+    };
+
 #ifdef NEWORLD_TARGET_WINDOWS
     // Microsoft Windows
 
-    inline std::ostream& red(std::ostream &s)
+    template<Color c>
+    inline std::ostream& color(std::ostream& s)
     {
-        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hStdout,
-                                FOREGROUND_RED|FOREGROUND_INTENSITY);
+        static_assert(false);
+    }
+
+    inline std::ostream& color_(std::ostream& s, WORD attrib)
+    {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), attrib);
         return s;
     }
 
-    inline std::ostream& dred(std::ostream &s)
+    template<>
+    inline std::ostream& color<Color::red>(std::ostream& s)
     {
-        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hStdout,
-                                FOREGROUND_RED);
-        return s;
+        return color_(s, FOREGROUND_RED|FOREGROUND_INTENSITY);
     }
 
-    inline std::ostream& yellow(std::ostream &s)
+    template<>
+    inline std::ostream& color<Color::dred>(std::ostream& s)
     {
-        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hStdout,
-                                FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_INTENSITY);
-        return s;
+        return color_(s, FOREGROUND_RED);
     }
 
-    inline std::ostream& white(std::ostream &s)
+    template<>
+    inline std::ostream& color<Color::yellow>(std::ostream& s)
     {
-        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hStdout,
-                                FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
-        return s;
+        return color_(s, FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_INTENSITY);
     }
 
-    inline std::ostream& gray(std::ostream &s)
+    template<>
+    inline std::ostream& color<Color::white>(std::ostream& s)
     {
-        HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hStdout,
-                                FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
-        return s;
+        return color_(s, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+    }
+
+    template<>
+    inline std::ostream& color<Color::gray>(std::ostream& s)
+    {
+        return color_(s, FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
     }
 #else
     // *nix
 
-    inline std::ostream& red(std::ostream &s)
-    { return s << "\033[1;31m"; }
+    template<Color c>
+    inline std::ostream& color(std::ostream& s)
+    {
+        static_assert(false);
+    }
 
-    inline std::ostream& dred(std::ostream &s)
-    { return s << "\033[21;31m"; }
+    template<>
+    inline std::ostream& color<Color::red>(std::ostream& s)
+    {
+        return s << "\033[1;31m";
+    }
 
-    inline std::ostream& yellow(std::ostream &s)
-    { return s << "\033[1;33m"; }
+    template<>
+    inline std::ostream& color<Color::dred>(std::ostream& s)
+    {
+        return s << "\033[21;31m";
+    }
 
-    inline std::ostream& white(std::ostream &s)
-    { return s << "\033[1;37m"; }
+    template<>
+    inline std::ostream& color<Color::yellow>(std::ostream& s)
+    {
+        return s << "\033[1;33m";
+    }
 
-    inline std::ostream& gray(std::ostream &s)
-    { return s << "\033[21;37m"; }
+    template<>
+    inline std::ostream& color<Color::white>(std::ostream& s)
+    {
+        ; return s << "\033[1;37m";
+    }
+
+    template<>
+    inline std::ostream& color<Color::gray>(std::ostream& s)
+    {
+        return s << "\033[21;37m";
+    }
 #endif
 
 } // namespace CColor
