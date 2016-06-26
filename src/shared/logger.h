@@ -32,8 +32,14 @@ class Logger
 public:
     // Critical levels
     enum Level
-    { trace, debug, info, warning, error, fatal, null };
-    constexpr static int LevelCount = null;
+    {
+        trace,
+        debug,
+        info,
+        warning,
+        error,
+        fatal
+    };
 
     static int clogLevel; // Minimum critical level using std::clog and output to console
     static int cerrLevel; // Minumum critical level using std::cerr and output to console
@@ -42,9 +48,17 @@ public:
 
     Logger(int level, const char* fileName, int lineNumber) :m_level(level)
     {
+        using namespace CColor;
         // Level names
-        constexpr static const char* LevelString[LevelCount] =
-        { "trace", "debug", "info", "warning", "error", "fatal" };
+        constexpr char* LevelString[] =
+        {
+            "trace",
+            "debug",
+            "info",
+            "warning",
+            "error",
+            "fatal"
+        };
         // Level colors
         constexpr CColor::colorfunc LevelColor[] =
         {
@@ -77,7 +91,9 @@ public:
 
     // Add a file sink named with current system time
     static void addFileSink(const string& path)
-    { Logger::fsink.emplace_back(std::ofstream(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log")); }
+    {
+        Logger::fsink.emplace_back(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log");
+    }
 
 private:
     int m_level;
@@ -89,10 +105,15 @@ private:
 
 void loggerInit();
 
-#define debugstream Logger(Logger::debug, __FUNCTION__, __LINE__)     // 给开发者看的信息
-#define infostream Logger(Logger::info, __FUNCTION__, __LINE__)       // 给普通用户看的信息
-#define warningstream Logger(Logger::warning, __FUNCTION__, __LINE__) // 可能影响功能、性能、稳定性但是不至于立刻崩溃的问题
-#define errorstream Logger(Logger::error, __FUNCTION__, __LINE__)     // 游戏崩溃，但可以通过重新加载世界等方式在不重启程序的情况下解决
-#define fatalstream Logger(Logger::fatal, __FUNCTION__, __LINE__)     // 无法恢复的错误，需结束程序
+// information for developers
+#define debugstream Logger(Logger::debug, __FUNCTION__, __LINE__)
+// information for common users
+#define infostream Logger(Logger::info, __FUNCTION__, __LINE__)
+// problems that may affect facility, performance or stability but don't lead the game to crash immediately
+#define warningstream Logger(Logger::warning, __FUNCTION__, __LINE__)
+// the game crashes, but can be resumed by ways such as reloading the world which don't restart the program
+#define errorstream Logger(Logger::error, __FUNCTION__, __LINE__)
+// unrecoverable error and program termination is required
+#define fatalstream Logger(Logger::fatal, __FUNCTION__, __LINE__)
 
 #endif // !LOGGER_H_
