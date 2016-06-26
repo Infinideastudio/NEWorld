@@ -47,9 +47,9 @@ public:
         { "trace", "debug", "info", "warning", "error", "fatal" };
         // Level colors
         constexpr static const CColor::colorfunc LevelColor[LevelCount] =
-        { CColor::gray, CColor::gray, CColor::white, CColor::yellow, CColor::dred, CColor::red };
+        { CColor::gray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred };
         m_content << CColor::gray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
-        if (level >= lineLevel)m_content << "(" << fileName << ":" << lineNumber << ") ";
+        if (level >= lineLevel) m_content << CColor::gray << "(" << fileName << ":" << lineNumber << ") ";
     }
 
     ~Logger()

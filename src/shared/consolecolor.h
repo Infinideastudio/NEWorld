@@ -90,4 +90,4 @@ namespace CColor
 
 } // namespace CColor
 
-#endif
+#endif // !CONSOLECOLOR_H_
