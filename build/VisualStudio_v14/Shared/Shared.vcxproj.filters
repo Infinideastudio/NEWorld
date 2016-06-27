@@ -116,9 +116,6 @@
     <ClCompile Include="..\..\..\src\shared\logger.cpp">
       <Filter>Source\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\shared\aabb.cpp">
-      <Filter>Source\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\blockmanager.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>

@@ -157,7 +157,6 @@
     <ClInclude Include="..\..\..\src\shared\worldmanager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\shared\aabb.cpp" />
     <ClCompile Include="..\..\..\src\shared\blockmanager.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
