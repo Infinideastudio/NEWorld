@@ -173,9 +173,10 @@ void inputThreadFunc()
     {
         using namespace std::chrono_literals;
         std::string input;
-        std::cout << CColor::gray.get() << "> ";
+        std::cout << CColor::gray << "> ";
         std::getline(std::cin, input);
         auto result = handleCommand(Command(input));
-        if (result.info != "") infostream << result.info;
+        if (result.info != "")
+            infostream << result.info;
     }
 }

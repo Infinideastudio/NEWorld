@@ -42,7 +42,8 @@ void loggerInit()
 {
     using namespace boost::filesystem;
     string path = "./Logs/";
-    if (!exists(path)) create_directory(path);
+    if (!exists(path))
+        create_directory(path);
     Logger::addFileSink(path);
     // File sequence number not finished
     /*

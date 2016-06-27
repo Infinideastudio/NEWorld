@@ -32,29 +32,26 @@ class ConsoleColor
 public:
     bool r, g, b, i;
 
-    constexpr ConsoleColor() :r(false), g(false), b(false), i(false)
-    {}
-    constexpr ConsoleColor(bool r_, bool g_, bool b_, bool i_) :r(r_), g(g_), b(b_), i(i_)
-    {}
-
-    string get() const
-    {
-#ifdef NEWORLD_TARGET_WINDOWS
-        // Microsoft Windows
-        WORD col = 0u;
-        if (r) col |= FOREGROUND_RED;
-        if (g) col |= FOREGROUND_GREEN;
-        if (b) col |= FOREGROUND_BLUE;
-        if (i) col |= FOREGROUND_INTENSITY;
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), col);
-        return "";
-#else
-        // *nix
-        // NOT FINISHED
-        return "\033[;m";
-#endif
-    }
+    constexpr ConsoleColor() :r(false), g(false), b(false), i(false) {}
+    constexpr ConsoleColor(bool r_, bool g_, bool b_, bool i_) :r(r_), g(g_), b(b_), i(i_) {}
 };
+
+inline std::ostream& operator<<(std::ostream& orig, ConsoleColor color)
+{
+#ifdef _WIN32
+    WORD col = 0u;
+    if (color.r) col |= FOREGROUND_RED;
+    if (color.g) col |= FOREGROUND_GREEN;
+    if (color.b) col |= FOREGROUND_BLUE;
+    if (color.i) col |= FOREGROUND_INTENSITY;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), col);
+    return orig;
+#else
+    // *nix
+    // NOT FINISHED
+    return orig << "\033[;m";
+#endif
+}
 
 namespace CColor
 {
@@ -82,28 +79,24 @@ namespace CColor
 class LoggerStream
 {
 public:
-    explicit LoggerStream(bool cerr) :m_cerr(cerr)
-    {}
-
-    LoggerStream& operator<< (const ConsoleColor& rhs)
-    {
-        if (m_cerr) std::cerr << rhs.get();
-        else std::clog << rhs.get();
-        return *this;
-    }
+    explicit LoggerStream(bool cerr) :m_cerr(cerr) {}
 
     template <typename T>
     LoggerStream& operator<< (const T& rhs)
     {
-        if (m_cerr) std::cerr << rhs;
-        else std::clog << rhs;
+        if (m_cerr)
+            std::cerr << rhs;
+        else
+            std::clog << rhs;
         m_content << rhs;
         return *this;
     }
 
     // Get content string
-    const string get()
-    { return m_content.str(); }
+    string get()
+    {
+        return m_content.str();
+    }
 
 private:
     bool m_cerr;
@@ -121,13 +114,11 @@ public:
         info,
         warning,
         error,
-        fatal,
-        null
+        fatal
     };
-    constexpr static int LevelCount = null;
 
     // Level names
-    constexpr static const char* LevelString[LevelCount] =
+    constexpr static const char* LevelString[] =
     {
         "trace",
         "debug",
@@ -138,7 +129,7 @@ public:
     };
 
     // Level colors
-    constexpr static const ConsoleColor LevelColor[LevelCount] =
+    constexpr static const ConsoleColor LevelColor[] =
     {
         CColor::dgray,
         CColor::gray,
@@ -162,10 +153,13 @@ public:
 
     ~Logger()
     {
-        if (m_level >= cerrLevel) std::cerr << std::endl;
-        else if (m_level >= clogLevel) std::clog << std::endl;
+        if (m_level >= cerrLevel)
+            std::cerr << std::endl;
+        else if (m_level >= clogLevel)
+            std::clog << std::endl;
         if (m_level >= fileLevel)
-            for (auto &it : fsink) it << m_content.get() << std::endl;
+            for (auto &it : fsink)
+                it << m_content.get() << std::endl;
     }
 
     template <typename T>
