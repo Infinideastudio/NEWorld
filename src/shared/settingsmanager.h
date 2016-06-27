@@ -24,6 +24,7 @@
 #include <fstream>
 #include <boost/spirit/home/support/detail/hold_any.hpp>
 #include "utils.h"
+#include "type.h"
 
 class Settings
 {
@@ -38,8 +39,8 @@ public:
     }
 
     //从配置文件中获取配置
-    template<class T>
-    T get(std::string key, T defaultValue)
+    template<typename T>
+    T get(std::string key, T defaultValue = T())
     {
         strtolower(key);
         auto result = m_settings.find(key);
@@ -91,7 +92,11 @@ private:
     static SettingsMap readFromFile(std::ifstream&& file);
 
     //把配置写入到文件
-    static void writeToFile(std::ofstream&& file, const SettingsMap& settings, bool minimal);
+    static void writeToFile(std::ofstream&& file, const SettingsMap& settings, bool minimal)
+    {
+        for (const auto& p : settings)
+            file << p.first << (minimal ? "=" : " = ") << type2string(p.second) << std::endl;
+    }
 };
 
 

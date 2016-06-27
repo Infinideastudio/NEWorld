@@ -40,14 +40,3 @@ Settings::SettingsMap Settings::readFromFile(std::ifstream && file)
     }
     return map;
 }
-
-void Settings::writeToFile(std::ofstream && file, const Settings::SettingsMap& settings,bool minimal)
-{
-    for (const auto& p : settings)
-    {
-        if (minimal)
-            file << p.first << "=" << type2string(p.second) << std::endl;
-        else
-            file << p.first << " = " << type2string(p.second) << std::endl;
-    }
-}
