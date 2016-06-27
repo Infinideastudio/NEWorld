@@ -30,12 +30,12 @@ int main(int, char*[])
 {
     loadSettings();
     loggerInit();
-    std::thread inputThread(inputThreadFunc);
     infostream << "----------------------------------------\n"
                << CopyrightString
-               << "\n----------------------------------------"
-               << "NEWorld Server v" << NEWorldVersion << ", compiled at " << __TIME__ << " " << __DATE__
-               << "Server starting...";
+               << "\n----------------------------------------";
+    infostream << "NEWorld Server v" << NEWorldVersion << ", compiled at " << __TIME__ << " " << __DATE__;
+    infostream << "Server starting...";
+    std::thread inputThread(inputThreadFunc);
     try
     {
         Server s(ioService, Port);

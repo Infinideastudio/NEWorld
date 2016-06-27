@@ -171,7 +171,6 @@ void inputThreadFunc()
     initCommands();
     while (inputThreadRunning)
     {
-        using namespace std::chrono_literals;
         std::string input;
         std::cout << CColor::gray << "> ";
         std::getline(std::cin, input);

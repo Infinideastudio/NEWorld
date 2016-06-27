@@ -117,28 +117,6 @@ public:
         fatal
     };
 
-    // Level names
-    constexpr static const char* LevelString[] =
-    {
-        "trace",
-        "debug",
-        "info",
-        "warning",
-        "error",
-        "fatal"
-    };
-
-    // Level colors
-    constexpr static const ConsoleColor LevelColor[] =
-    {
-        CColor::dgray,
-        CColor::gray,
-        CColor::white,
-        CColor::yellow,
-        CColor::red,
-        CColor::dred
-    };
-
     static int clogLevel; // Minimum critical level using std::clog and output to console
     static int cerrLevel; // Minumum critical level using std::cerr and output to console
     static int fileLevel; // Minumum critical level output to file
@@ -146,6 +124,28 @@ public:
 
     Logger(int level, const char* fileName, int lineNumber) :m_level(level), m_content(m_level >= cerrLevel)
     {
+        // Level names
+        constexpr static const char* LevelString[] =
+        {
+            "trace",
+            "debug",
+            "info",
+            "warning",
+            "error",
+            "fatal"
+        };
+
+        // Level colors
+        constexpr static const ConsoleColor LevelColor[] =
+        {
+            CColor::dgray,
+            CColor::gray,
+            CColor::white,
+            CColor::yellow,
+            CColor::red,
+            CColor::dred
+        };
+
         m_content << CColor::dgray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
         if (level >= lineLevel) m_content << CColor::dgray << "(" << fileName << ":" << lineNumber << ") ";
         m_content << CColor::gray;
