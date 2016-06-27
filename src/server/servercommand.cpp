@@ -76,12 +76,25 @@ void initCommands()
 
     CommandDefine("test.rainbow", "Internal", "test color.")
     {
-        infostream << CColor::red << "23333 [red]";
-        infostream << CColor::yellow << "23333 [yellow]";
-        infostream << CColor::green << "23333 [green]";
-        infostream << CColor::cyan << "23333 [cyan]";
-        infostream << CColor::blue << "23333 [blue]";
-        infostream << CColor::magenta << "23333 [magenta]";
+        infostream << "Grayscales:";
+        infostream << CColor::black << "2333333333 [0%]";
+        infostream << CColor::dgray << "2333333333 [50%]";
+        infostream << CColor::gray << "2333333333 [75%]";
+        infostream << CColor::white << "2333333333 [100%]";
+        infostream << "Dark colors:";
+        infostream << CColor::dred << "2333333333 [dark red]";
+        infostream << CColor::dyellow << "2333333333 [dark yellow]";
+        infostream << CColor::dgreen << "2333333333 [dark green]";
+        infostream << CColor::dcyan << "2333333333 [dark cyan]";
+        infostream << CColor::dblue << "2333333333 [dark blue]";
+        infostream << CColor::dmagenta << "2333333333 [dark magenta]";
+        infostream << "Bright colors:";
+        infostream << CColor::red << "2333333333 [red]";
+        infostream << CColor::yellow << "2333333333 [yellow]";
+        infostream << CColor::green << "2333333333 [green]";
+        infostream << CColor::cyan << "2333333333 [cyan]";
+        infostream << CColor::blue << "2333333333 [blue]";
+        infostream << CColor::magenta << "2333333333 [magenta]";
         return{ true , "" };
     }
     EndCommandDefine;

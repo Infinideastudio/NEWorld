@@ -58,15 +58,25 @@ public:
 
 namespace CColor
 {
-    constexpr ConsoleColor gray(false, false, false, true);
+    // Grayscales
+    constexpr ConsoleColor black(false, false, false, false);
+    constexpr ConsoleColor dgray(false, false, false, true);
+    constexpr ConsoleColor gray(true, true, true, false);
     constexpr ConsoleColor white(true, true, true, true);
+    // Bright colors
     constexpr ConsoleColor red(true, false, false, true);
     constexpr ConsoleColor green(false, true, false, true);
     constexpr ConsoleColor blue(false, false, true, true);
     constexpr ConsoleColor yellow(true, true, false, true);
     constexpr ConsoleColor cyan(false, true, true, true);
     constexpr ConsoleColor magenta(true, false, true, true);
+    // Dark colors
     constexpr ConsoleColor dred(true, false, false, false);
+    constexpr ConsoleColor dgreen(false, true, false, false);
+    constexpr ConsoleColor dblue(false, false, true, false);
+    constexpr ConsoleColor dyellow(true, true, false, false);
+    constexpr ConsoleColor dcyan(false, true, true, false);
+    constexpr ConsoleColor dmagenta(true, false, true, false);
 }
 
 class LoggerStream
@@ -130,7 +140,7 @@ public:
     // Level colors
     constexpr static const ConsoleColor LevelColor[LevelCount] =
     {
-        CColor::gray,
+        CColor::dgray,
         CColor::gray,
         CColor::white,
         CColor::yellow,
@@ -145,9 +155,9 @@ public:
 
     Logger(int level, const char* fileName, int lineNumber) :m_level(level), m_content(m_level >= cerrLevel)
     {
-        m_content << CColor::gray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
-        if (level >= lineLevel) m_content << CColor::gray << "(" << fileName << ":" << lineNumber << ") ";
-        m_content << CColor::white;
+        m_content << CColor::dgray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
+        if (level >= lineLevel) m_content << CColor::dgray << "(" << fileName << ":" << lineNumber << ") ";
+        m_content << CColor::gray;
     }
 
     ~Logger()
