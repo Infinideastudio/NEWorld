@@ -15,6 +15,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "servercommand.h"
 #include <logger.h>
 #include <thread>
@@ -26,7 +27,6 @@
 #include <utils.h>
 #include "settings.h"
 #include <type.h>
-#include <consolecolor.h>
 
 bool inputThreadRunning = true;
 
@@ -54,18 +54,18 @@ void initCommands()
     EndCommandDefine;
 
     CommandDefine("test.fatal", "Internal", "test fatal log.")
-                                    {
-                                        fatalstream<<"execute test.fatal!";
-                                        return { true , "" };
-                                    }
+    {
+        fatalstream<<"execute test.fatal!";
+        return { true , "" };
+    }
     EndCommandDefine;
 
     CommandDefine("test.warning", "Internal", "do NOT use it :-)")
-                                    {
-                                        warningstream<<"Your computer will explode in three seconds!!!";
-                                        return { true , "" };
-                                    }
-                    EndCommandDefine;
+    {
+        warningstream<<"Your computer will explode in three seconds!!!";
+        return { true , "" };
+    }
+    EndCommandDefine;
 
     CommandDefine("server.stop", "Internal", "Stop the server")
     {
@@ -141,7 +141,7 @@ void inputThreadFunc()
     {
         using namespace std::chrono_literals;
         std::string input;
-        std::cout << CColor::gray << "> ";
+        std::cout << CColor::gray.get() << "> ";
         std::getline(std::cin, input);
         auto result = handleCommand(Command(input));
         if (result.info != "") infostream << result.info;

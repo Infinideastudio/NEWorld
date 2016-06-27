@@ -25,7 +25,76 @@
 #include <sstream>
 #include <fstream>
 using std::string;
-#include "consolecolor.h"
+#include "common.h"
+
+class ConsoleColor
+{
+public:
+    bool r, g, b, i;
+
+    constexpr ConsoleColor() :r(false), g(false), b(false), i(false)
+    {}
+    constexpr ConsoleColor(bool r_, bool g_, bool b_, bool i_) :r(r_), g(g_), b(b_), i(i_)
+    {}
+
+    string get() const
+    {
+#ifdef NEWORLD_TARGET_WINDOWS
+        // Microsoft Windows
+        WORD col = 0u;
+        if (r) col |= FOREGROUND_RED;
+        if (g) col |= FOREGROUND_GREEN;
+        if (b) col |= FOREGROUND_BLUE;
+        if (i) col |= FOREGROUND_INTENSITY;
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), col);
+        return "";
+#else
+        // *nix
+        // NOT FINISHED
+        return "\033[;m";
+#endif
+    }
+};
+
+namespace CColor
+{
+    constexpr ConsoleColor gray(false, false, false, true);
+    constexpr ConsoleColor white(true, true, true, true);
+    constexpr ConsoleColor yellow(true, true, false, true);
+    constexpr ConsoleColor red(true, false, false, true);
+    constexpr ConsoleColor dred(true, false, false, false);
+}
+
+class LoggerStream
+{
+public:
+    explicit LoggerStream(bool cerr) :m_cerr(cerr)
+    {}
+
+    LoggerStream& operator<< (const ConsoleColor& rhs)
+    {
+        if (m_cerr) std::cerr << rhs.get();
+        else std::clog << rhs.get();
+        return *this;
+    }
+
+    template <typename T>
+    LoggerStream& operator<< (const T& rhs)
+    {
+        if (m_cerr) std::cerr << rhs;
+        else std::clog << rhs;
+        m_content << rhs;
+        return *this;
+    }
+
+    // Get content string
+    const string get()
+    { return m_content.str(); }
+
+private:
+    bool m_cerr;
+    std::stringstream m_content;
+};
 
 class Logger
 {
@@ -38,7 +107,31 @@ public:
         info,
         warning,
         error,
-        fatal
+        fatal,
+        null
+    };
+    constexpr static int LevelCount = null;
+
+    // Level names
+    constexpr static const char* LevelString[LevelCount] =
+    {
+        "trace",
+        "debug",
+        "info",
+        "warning",
+        "error",
+        "fatal"
+    };
+
+    // Level colors
+    constexpr static const ConsoleColor LevelColor[LevelCount] =
+    {
+        CColor::gray,
+        CColor::gray,
+        CColor::white,
+        CColor::yellow,
+        CColor::red,
+        CColor::dred
     };
 
     static int clogLevel; // Minimum critical level using std::clog and output to console
@@ -46,40 +139,19 @@ public:
     static int fileLevel; // Minumum critical level output to file
     static int lineLevel; // Minumum critical level output the line number of the source file
 
-    Logger(int level, const char* fileName, int lineNumber) :m_level(level)
+    Logger(int level, const char* fileName, int lineNumber) :m_level(level), m_content(m_level >= cerrLevel)
     {
-        using namespace CColor;
-        // Level names
-        constexpr char* LevelString[] =
-        {
-            "trace",
-            "debug",
-            "info",
-            "warning",
-            "error",
-            "fatal"
-        };
-        // Level colors
-        constexpr CColor::colorfunc LevelColor[] =
-        {
-            color<Color::gray>,
-            color<Color::gray>,
-            color<Color::white>,
-            color<Color::yellow>,
-            color<Color::red>,
-            color<Color::dred>
-        };
-        m_content << color<Color::gray> << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
-        if (level >= lineLevel)
-            m_content << color<Color::gray> << "(" << fileName << ":" << lineNumber << ") ";
+        m_content << CColor::gray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
+        if (level >= lineLevel) m_content << CColor::gray << "(" << fileName << ":" << lineNumber << ") ";
+        m_content << CColor::white;
     }
 
     ~Logger()
     {
-        if (m_level >= cerrLevel) std::cerr << m_content.str() << std::endl;
-        else if (m_level >= clogLevel) std::clog << m_content.str() << std::endl;
+        if (m_level >= cerrLevel) std::cerr << std::endl;
+        else if (m_level >= clogLevel) std::clog << std::endl;
         if (m_level >= fileLevel)
-            for (auto &it : fsink) it << m_content.str() << std::endl;
+            for (auto &it : fsink) it << m_content.get() << std::endl;
     }
 
     template <typename T>
@@ -97,7 +169,7 @@ public:
 
 private:
     int m_level;
-    std::stringstream m_content;
+    LoggerStream m_content;
 
     static std::vector<std::ofstream> fsink;
     static string getTimeString(char dateSplit, char midSplit, char timeSplit);

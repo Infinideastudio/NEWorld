@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
+    <ClInclude Include="..\..\..\src\client\mat4.h" />
     <ClInclude Include="..\..\..\src\client\network.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
     <ClInclude Include="..\..\..\src\client\vertexarray.h" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
+    <ClCompile Include="..\..\..\src\client\mat4.cpp" />
     <ClCompile Include="..\..\..\src\client\network.cpp" />
     <ClCompile Include="..\..\..\src\client\networkstructures.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />

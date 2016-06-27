@@ -32,6 +32,9 @@
     <ClInclude Include="..\..\..\src\client\network.h">
       <Filter>Source\Network</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\client\mat4.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\src\client\Icon.ico">
@@ -84,6 +87,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\network.cpp">
       <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\mat4.cpp">
+      <Filter>Source\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
