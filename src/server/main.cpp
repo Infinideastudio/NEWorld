@@ -33,10 +33,9 @@ int main(int, char*[])
     std::thread inputThread(inputThreadFunc);
     infostream << "----------------------------------------\n"
                << CopyrightString
-               << "\n----------------------------------------";
-
-    infostream << "NEWorld Server v" << NEWorldVersion << ", which was compiled at " << __TIME__ << " " << __DATE__;
-    infostream << "Server starting...";
+               << "\n----------------------------------------"
+               << "NEWorld Server v" << NEWorldVersion << ", compiled at " << __TIME__ << " " << __DATE__
+               << "Server starting...";
     try
     {
         Server s(ioService, Port);
