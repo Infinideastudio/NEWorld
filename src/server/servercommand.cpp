@@ -55,15 +55,34 @@ void initCommands()
 
     CommandDefine("test.fatal", "Internal", "test fatal log.")
     {
-        fatalstream<<"execute test.fatal!";
+        fatalstream << "execute test.fatal!";
         return { true , "" };
+    }
+    EndCommandDefine;
+
+    CommandDefine("test.error", "Internal", "test error log.")
+    {
+        errorstream << "execute test.error!";
+        return{ true , "" };
     }
     EndCommandDefine;
 
     CommandDefine("test.warning", "Internal", "do NOT use it :-)")
     {
-        warningstream<<"Your computer will explode in three seconds!!!";
-        return { true , "" };
+        warningstream << "Your computer will explode in three seconds!!!";
+        return{ true , "" };
+    }
+    EndCommandDefine;
+
+    CommandDefine("test.rainbow", "Internal", "test color.")
+    {
+        infostream << CColor::red << "23333 [red]";
+        infostream << CColor::yellow << "23333 [yellow]";
+        infostream << CColor::green << "23333 [green]";
+        infostream << CColor::cyan << "23333 [cyan]";
+        infostream << CColor::blue << "23333 [blue]";
+        infostream << CColor::magenta << "23333 [magenta]";
+        return{ true , "" };
     }
     EndCommandDefine;
 

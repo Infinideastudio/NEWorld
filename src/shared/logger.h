@@ -60,8 +60,12 @@ namespace CColor
 {
     constexpr ConsoleColor gray(false, false, false, true);
     constexpr ConsoleColor white(true, true, true, true);
-    constexpr ConsoleColor yellow(true, true, false, true);
     constexpr ConsoleColor red(true, false, false, true);
+    constexpr ConsoleColor green(false, true, false, true);
+    constexpr ConsoleColor blue(false, false, true, true);
+    constexpr ConsoleColor yellow(true, true, false, true);
+    constexpr ConsoleColor cyan(false, true, true, true);
+    constexpr ConsoleColor magenta(true, false, true, true);
     constexpr ConsoleColor dred(true, false, false, false);
 }
 
