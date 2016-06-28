@@ -148,7 +148,7 @@ public:
         // Level colors
         typedef boost::mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> LevelColor;
 
-        m_content << CColor::dgray() << '[' << getTimeString('-', ' ', ':') << ']' << boost::mpl::at_c<LevelColor, level>::type() << "[" << LevelString[level] << "] ";
+        m_content << CColor::dgray() << '[' << getTimeString('-', ' ', ':') << ']' << typename boost::mpl::at_c<LevelColor, level>::type() << "[" << LevelString[level] << "] ";
         if (level >= lineLevel) m_content << CColor::dgray() << "(" << fileName << ":" << lineNumber << ") ";
         m_content << CColor::gray();
     }
