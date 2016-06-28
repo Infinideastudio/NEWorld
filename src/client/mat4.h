@@ -44,13 +44,13 @@ public:
     Mat4 operator* (const Mat4& rhs) const;
 
     // Get data by position
-    static int get(int x, int y)
+    int get(int x, int y)
     {
-        return data[y*4 + x];
+        return data[y * 4 + x];
     }
 
     // Set data by position
-    void et(int x, int y, const T& v)
+    void set(int x, int y, const T& v)
     {
         data[y * 4 + x] = v;
     }
