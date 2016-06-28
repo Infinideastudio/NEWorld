@@ -1,6 +1,7 @@
 # NEWorld
 
 [![AppVeyor](https://img.shields.io/appveyor/ci/ascchrvalstr/NEWorld/renew.svg?label=Windows)](https://ci.appveyor.com/project/ascchrvalstr/NEWorld)
+[![Travis](https://img.shields.io/travis/Infinideastudio/NEWorld/renew.svg?label=Linux)](https://travis-ci.org/Infinideastudio/NEWorld)
 
 全新的NEWorld!  
 
