@@ -22,12 +22,14 @@
 #include <boost/filesystem/path.hpp>
 #include "logger.h"
 
-std::vector<std::ofstream> Logger::fsink;
-int Logger::clogLevel = trace;
-int Logger::cerrLevel = fatal;
-int Logger::fileLevel = trace;
-int Logger::lineLevel = warning;
-string Logger::getTimeString(char dateSplit, char midSplit, char timeSplit)
+std::vector<std::ofstream> fsink;
+
+int clogLevel = trace;
+int cerrLevel = fatal;
+int fileLevel = trace;
+int lineLevel = warning;
+
+string getTimeString(char dateSplit, char midSplit, char timeSplit)
 {
     time_t timer = time(NULL);
     tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
@@ -44,7 +46,7 @@ void loggerInit()
     string path = "./Logs/";
     if (!exists(path))
         create_directory(path);
-    Logger::addFileSink(path);
+    addFileSink(path);
     // File sequence number not finished
     /*
     directory_iterator itemEnd;

@@ -25,26 +25,25 @@
 #include <sstream>
 #include <fstream>
 using std::string;
+#include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/bitwise.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/at.hpp>
 #include "common.h"
 
-class ConsoleColor
-{
-public:
-    bool r, g, b, i;
+template<bool r, bool g, bool b, bool i>
+class ConsoleColor {};
 
-    constexpr ConsoleColor() :r(false), g(false), b(false), i(false) {}
-    constexpr ConsoleColor(bool r_, bool g_, bool b_, bool i_) :r(r_), g(g_), b(b_), i(i_) {}
-};
-
-inline std::ostream& operator<<(std::ostream& orig, ConsoleColor color)
+template<bool r, bool g, bool b, bool i>
+inline std::ostream& operator<<(std::ostream& orig, ConsoleColor<r, g, b, i>)
 {
 #ifdef _WIN32
-    WORD col = 0u;
-    if (color.r) col |= FOREGROUND_RED;
-    if (color.g) col |= FOREGROUND_GREEN;
-    if (color.b) col |= FOREGROUND_BLUE;
-    if (color.i) col |= FOREGROUND_INTENSITY;
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), col);
+    using namespace boost::mpl;
+    typedef bitor_<integral_c<WORD, r ? FOREGROUND_RED : 0u>,
+        integral_c<WORD, g ? FOREGROUND_GREEN : 0u>,
+        integral_c<WORD, b ? FOREGROUND_BLUE : 0u>,
+        integral_c<WORD, i ? FOREGROUND_INTENSITY : 0u>> col;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), col::value);
     return orig;
 #else
     // *nix
@@ -56,24 +55,24 @@ inline std::ostream& operator<<(std::ostream& orig, ConsoleColor color)
 namespace CColor
 {
     // Grayscales
-    constexpr ConsoleColor black(false, false, false, false);
-    constexpr ConsoleColor dgray(false, false, false, true);
-    constexpr ConsoleColor gray(true, true, true, false);
-    constexpr ConsoleColor white(true, true, true, true);
+    typedef ConsoleColor<false, false, false, false> black;
+    typedef ConsoleColor<false, false, false, true> dgray;
+    typedef ConsoleColor<true, true, true, false> gray;
+    typedef ConsoleColor<true, true, true, true> white;
     // Bright colors
-    constexpr ConsoleColor red(true, false, false, true);
-    constexpr ConsoleColor green(false, true, false, true);
-    constexpr ConsoleColor blue(false, false, true, true);
-    constexpr ConsoleColor yellow(true, true, false, true);
-    constexpr ConsoleColor cyan(false, true, true, true);
-    constexpr ConsoleColor magenta(true, false, true, true);
+    typedef ConsoleColor<true, false, false, true> red;
+    typedef ConsoleColor<false, true, false, true> green;
+    typedef ConsoleColor<false, false, true, true> blue;
+    typedef ConsoleColor<true, true, false, true> yellow;
+    typedef ConsoleColor<false, true, true, true> cyan;
+    typedef ConsoleColor<true, false, true, true> magenta;
     // Dark colors
-    constexpr ConsoleColor dred(true, false, false, false);
-    constexpr ConsoleColor dgreen(false, true, false, false);
-    constexpr ConsoleColor dblue(false, false, true, false);
-    constexpr ConsoleColor dyellow(true, true, false, false);
-    constexpr ConsoleColor dcyan(false, true, true, false);
-    constexpr ConsoleColor dmagenta(true, false, true, false);
+    typedef ConsoleColor<true, false, false, false> dred;
+    typedef ConsoleColor<false, true, false, false> dgreen;
+    typedef ConsoleColor<false, false, true, false> dblue;
+    typedef ConsoleColor<true, true, false, false> dyellow;
+    typedef ConsoleColor<false, true, true, false> dcyan;
+    typedef ConsoleColor<true, false, true, false> dmagenta;
 }
 
 class LoggerStream
@@ -103,26 +102,38 @@ private:
     std::stringstream m_content;
 };
 
+// Critical levels
+enum Level
+{
+    trace,
+    debug,
+    info,
+    warning,
+    error,
+    fatal
+};
+
+extern int clogLevel; // Minimum critical level using std::clog and output to console
+extern int cerrLevel; // Minumum critical level using std::cerr and output to console
+extern int fileLevel; // Minumum critical level output to file
+extern int lineLevel; // Minumum critical level output the line number of the source file
+
+extern std::vector<std::ofstream> fsink;
+
+string getTimeString(char dateSplit, char midSplit, char timeSplit);
+
+// Add a file sink named with current system time
+inline void addFileSink(const string& path)
+{
+    fsink.emplace_back(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log");
+}
+
+template<int level>
 class Logger
 {
 public:
-    // Critical levels
-    enum Level
-    {
-        trace,
-        debug,
-        info,
-        warning,
-        error,
-        fatal
-    };
 
-    static int clogLevel; // Minimum critical level using std::clog and output to console
-    static int cerrLevel; // Minumum critical level using std::cerr and output to console
-    static int fileLevel; // Minumum critical level output to file
-    static int lineLevel; // Minumum critical level output the line number of the source file
-
-    Logger(int level, const char* fileName, int lineNumber) :m_level(level), m_content(m_level >= cerrLevel)
+    Logger(const char* fileName, int lineNumber) :m_level(level), m_content(m_level >= cerrLevel)
     {
         // Level names
         constexpr static const char* LevelString[] =
@@ -136,19 +147,11 @@ public:
         };
 
         // Level colors
-        constexpr static const ConsoleColor LevelColor[] =
-        {
-            CColor::dgray,
-            CColor::gray,
-            CColor::white,
-            CColor::yellow,
-            CColor::red,
-            CColor::dred
-        };
+        typedef boost::mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> LevelColor;
 
-        m_content << CColor::dgray << '[' << getTimeString('-', ' ', ':') << ']' << LevelColor[level] << "[" << LevelString[level] << "] ";
-        if (level >= lineLevel) m_content << CColor::dgray << "(" << fileName << ":" << lineNumber << ") ";
-        m_content << CColor::gray;
+        m_content << CColor::dgray() << '[' << getTimeString('-', ' ', ':') << ']' << boost::mpl::at_c<LevelColor, level>::type() << "[" << LevelString[level] << "] ";
+        if (level >= lineLevel) m_content << CColor::dgray() << "(" << fileName << ":" << lineNumber << ") ";
+        m_content << CColor::gray();
     }
 
     ~Logger()
@@ -169,31 +172,24 @@ public:
         return *this;
     }
 
-    // Add a file sink named with current system time
-    static void addFileSink(const string& path)
-    {
-        Logger::fsink.emplace_back(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log");
-    }
 
 private:
     int m_level;
     LoggerStream m_content;
 
-    static std::vector<std::ofstream> fsink;
-    static string getTimeString(char dateSplit, char midSplit, char timeSplit);
 };
 
 void loggerInit();
 
 // information for developers
-#define debugstream Logger(Logger::debug, __FUNCTION__, __LINE__)
+#define debugstream Logger<debug>(__FUNCTION__, __LINE__)
 // information for common users
-#define infostream Logger(Logger::info, __FUNCTION__, __LINE__)
+#define infostream Logger<info>(__FUNCTION__, __LINE__)
 // problems that may affect facility, performance or stability but don't lead the game to crash immediately
-#define warningstream Logger(Logger::warning, __FUNCTION__, __LINE__)
+#define warningstream Logger<warning>(__FUNCTION__, __LINE__)
 // the game crashes, but can be resumed by ways such as reloading the world which don't restart the program
-#define errorstream Logger(Logger::error, __FUNCTION__, __LINE__)
+#define errorstream Logger<error>(__FUNCTION__, __LINE__)
 // unrecoverable error and program termination is required
-#define fatalstream Logger(Logger::fatal, __FUNCTION__, __LINE__)
+#define fatalstream Logger<fatal>(__FUNCTION__, __LINE__)
 
 #endif // !LOGGER_H_
