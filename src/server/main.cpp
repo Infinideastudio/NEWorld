@@ -32,7 +32,7 @@ int main(int, char*[])
     infostream << "----------------------------------------\n"
                << CopyrightString
                << "\n----------------------------------------";
-    infostream << "NEWorld Server v" << NEWorldVersion << ", compiled at " << __TIME__ << " " << __DATE__;
+    infostream << "NEWorld Server v" << NEWorldVersion << ", Release Version:" << ReleaseVersion << ", compiled at " << __TIME__ << " " << __DATE__;
     infostream << "Server starting...";
     std::thread inputThread(inputThreadFunc);
     try
