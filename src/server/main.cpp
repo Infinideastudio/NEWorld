@@ -23,8 +23,7 @@
 #include <logger.h>
 #include <thread>
 #include "settings.h"
-
-void inputThreadFunc();
+#include "servercommand.h"
 
 int main(int, char*[])
 {
@@ -43,7 +42,8 @@ int main(int, char*[])
     }
     catch (std::exception& e)
     {
-        fatalstream << "Exception: " << e.what();
+        fatalstream << "Exception: " << e.what() << ".Press Enter to exit.";
+        stopInputThreadRunning();
     }
     infostream << "Server is stopping...";
     inputThread.join();

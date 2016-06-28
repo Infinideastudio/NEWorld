@@ -28,6 +28,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\server\chunkloader.h" />
     <ClInclude Include="..\..\..\src\server\server.h" />
+    <ClInclude Include="..\..\..\src\server\servercommand.h" />
     <ClInclude Include="..\..\..\src\server\settings.h" />
     <ClInclude Include="..\..\..\src\server\worldloader.h" />
   </ItemGroup>

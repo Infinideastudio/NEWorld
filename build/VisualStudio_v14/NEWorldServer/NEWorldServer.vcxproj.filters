@@ -57,5 +57,8 @@
     <ClInclude Include="..\..\..\src\server\settings.h">
       <Filter>Source\Settings</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\server\servercommand.h">
+      <Filter>Source\Command</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

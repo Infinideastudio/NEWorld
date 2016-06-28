@@ -34,6 +34,11 @@ CommandMap commandMap;
 #define CommandDefine(commandName, commandAuthor, commandHelp) commandMap.insert({commandName, std::pair<CommandInfo,CommandHandleFunction>({commandAuthor, commandHelp},[](Command cmd)->CommandExecuteStat
 #define EndCommandDefine )})
 
+void stopInputThreadRunning()
+{
+    inputThreadRunning = false;
+}
+
 void initCommands()
 {
     CommandDefine("help", "Internel", "Help")
@@ -102,7 +107,7 @@ void initCommands()
     CommandDefine("server.stop", "Internal", "Stop the server")
     {
         ioService.stop();
-        inputThreadRunning = false;
+        stopInputThreadRunning();
         return{ true, "" };
     }
     EndCommandDefine;
