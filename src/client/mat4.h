@@ -19,7 +19,7 @@
 #ifndef MAT4_H_
 #define MAT4_H_
 
-#include <cstring> // memset
+#include <cstring> // memset, memcpy
 
 template <typename T>
 class Mat4
@@ -28,16 +28,32 @@ public:
     T data[16];
 
     Mat4()
-    { memset(data, 0, sizeof(data)); }
-    Mat4(const T& x)
     {
         memset(data, 0, sizeof(data));
-        data[0] = data[5] = data[10] = data[15] = x; // Unit matrix
     }
+    Mat4(const Mat4& rhs)
+    {
+        memcpy(data, rhs.data, sizeof(data));
+    }
+    explicit Mat4(const T& x)
+    {
+        memset(data, 0, sizeof(data));
+        data[0] = data[5] = data[10] = data[15] = x; // Identity matrix
+    }
+
+    Mat4 operator* (const Mat4& rhs) const;
 
     // Get data by position
     static int get(int x, int y)
-    { return data[y*4 + x]; }
+    {
+        return data[y*4 + x];
+    }
+
+    // Set data by position
+    void et(int x, int y, const T& v)
+    {
+        data[y * 4 + x] = v;
+    }
 
 };
 

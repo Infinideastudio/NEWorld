@@ -31,18 +31,18 @@ using std::string;
 #include <boost/mpl/at.hpp>
 #include "common.h"
 
-template<bool r, bool g, bool b, bool i>
+template <bool r, bool g, bool b, bool i>
 class ConsoleColor {};
 
-template<bool r, bool g, bool b, bool i>
+template <bool r, bool g, bool b, bool i>
 inline std::ostream& operator<<(std::ostream& orig, ConsoleColor<r, g, b, i>)
 {
 #ifdef _WIN32
     using namespace boost::mpl;
     typedef bitor_<integral_c<WORD, r ? FOREGROUND_RED : 0u>,
-        integral_c<WORD, g ? FOREGROUND_GREEN : 0u>,
-        integral_c<WORD, b ? FOREGROUND_BLUE : 0u>,
-        integral_c<WORD, i ? FOREGROUND_INTENSITY : 0u>> col;
+            integral_c<WORD, g ? FOREGROUND_GREEN : 0u>,
+            integral_c<WORD, b ? FOREGROUND_BLUE : 0u>,
+            integral_c<WORD, i ? FOREGROUND_INTENSITY : 0u>> col;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), col::value);
     return orig;
 #else
@@ -128,11 +128,10 @@ inline void addFileSink(const string& path)
     fsink.emplace_back(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log");
 }
 
-template<int level>
+template <int level>
 class Logger
 {
 public:
-
     Logger(const char* fileName, int lineNumber) :m_level(level), m_content(m_level >= cerrLevel)
     {
         // Level names

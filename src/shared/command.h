@@ -18,6 +18,7 @@
 
 #ifndef COMMAND_H_
 #define COMMAND_H_
+
 #include <string>
 #include <vector>
 #include <functional>

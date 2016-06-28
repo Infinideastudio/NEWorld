@@ -39,7 +39,7 @@ public:
     }
 
     //从配置文件中获取配置
-    template<typename T>
+    template <typename T>
     T get(std::string key, T defaultValue = T())
     {
         strtolower(key);
