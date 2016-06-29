@@ -22,7 +22,6 @@
 #include <string>
 #include <boost/dll/shared_library.hpp>
 #include "plugin.h"
-#include "../pluginapi/pluginapi.h"
 
 // For API declarations
 class World;

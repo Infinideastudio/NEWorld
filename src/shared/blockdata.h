@@ -25,12 +25,9 @@ private:
     union
     {
         unsigned int m_data;
-        struct
-        {
-            unsigned int id : 12; // Block ID
-            unsigned int brightness : 4; // Brightness
-            unsigned int state : 16; // Block state
-        };
+        unsigned int id : 12; // Block ID
+        unsigned int brightness : 4; // Brightness
+        unsigned int state : 16; // Block state
     };
 
 public:

@@ -19,11 +19,6 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-// Compiler flags
-#ifdef _MSC_VER
-    #define NEWORLD_COMPILER_MSVC
-#endif
-
 // OS flags
 #if defined _WIN32 || defined __CYGWIN__
     #define NEWORLD_TARGET_WINDOWS
