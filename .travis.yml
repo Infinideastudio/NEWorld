@@ -16,5 +16,5 @@ matrix:
 
 script: |
   wget -O dependencies.7z https://github.com/Infinideastudio/NEWorld-binaries/raw/master/dependencies.7z &&
-  p7zip -d ./dependencies.7z &&
+  p7zip -d ./dependencies.7z > ./temp.txt &&
   make
