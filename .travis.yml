@@ -1,3 +1,20 @@
 language: cpp
+sudo: required
 
-script: make
+matrix:
+  include:
+    - os: linux
+      env: COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
+      addons:
+        apt:
+          packages:
+            - g++-5
+            - p7zip
+          sources: &sources
+            - llvm-toolchain-precise-3.8
+            - ubuntu-toolchain-r-test
+
+script: |
+  wget -O dependencies.7z https://github.com/Infinideastudio/NEWorld-binaries/raw/master/dependencies.7z &&
+  p7zip -d ./dependencies.7z &&
+  make
