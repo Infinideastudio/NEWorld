@@ -25,6 +25,8 @@
 #include "settings.h"
 #include "servercommand.h"
 
+extern "C" NWAPIEXPORT int main(int, char*[]);
+
 int main(int, char*[])
 {
     loadSettings();

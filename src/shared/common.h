@@ -54,6 +54,17 @@
     #define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
 #endif
 
+// NWAPIEXPORT
+#ifdef NEWORLD_TARGET_WINDOWS
+    #ifdef NEWORLD_COMPILER_MSVC
+        #define NWAPIEXPORT __declspec(dllexport)
+    #else
+        #define NWAPIEXPORT __attribute__((dllexport))
+    #endif
+#else
+    #define NWAPIEXPORT __attribute__((visibility("default")))
+#endif
+
 constexpr unsigned int NEWorldVersion = 41u;
 constexpr unsigned int ReleaseVersion = (NEWorldVersion<<16)+2;
 constexpr const char* CopyrightString = R"(
