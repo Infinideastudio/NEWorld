@@ -18,9 +18,14 @@
 
 #include "plugin.h"
 
+typedef PluginData* NWAPICALL InitFunction();
+
 int Plugin::loadFrom(const string& filename)
 {
-    init = boost::dll::import<PluginData*(*)()>(filename, "init", boost::dll::load_mode::append_decorations);
-    data = (*init.get())();
-    return 0;
+    m_lib.load(filename);
+    if (!m_lib.is_loaded()) return m_status = 1; // Failed: could not load DLL
+    InitFunction* init = m_lib.get<InitFunction>("init");
+    if (init == nullptr) return m_status = 2; // Failed: entry not found
+    m_data = init();
+    return m_status = 0;
 }

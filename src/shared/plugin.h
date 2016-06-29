@@ -21,45 +21,57 @@
 
 #include <string>
 using std::string;
-#include <boost/shared_ptr.hpp>
-#include <boost/dll/import.hpp>
+#include <utility>
+#include <boost/dll/shared_library.hpp>
 
+#include "common.h"
 #include "vec3.h"
 #include "blockdata.h"
 
-typedef BlockData* (*buildChunkFunc)(const Vec3i*);
-
-class PluginData
+struct PluginData
 {
-public:
     char* pluginName;
-    buildChunkFunc buildChunk;
+    char* authorName;
+    char* internalName;
 };
 
 // Single plugin
 class Plugin
 {
 private:
-    // Plugin name
-    string name;
-    // Main plugin function
-    boost::shared_ptr<PluginData*(*)()> init;
+    // Plugin DLL
+    boost::dll::shared_library m_lib;
     // Plugin Data
-    PluginData* data;
+    PluginData* m_data;
+    // Load status
+    int m_status = -1;
 
 public:
-    Plugin()
-    {}
     explicit Plugin(const string& filename)
-    { loadFrom(filename); }
-    Plugin(const Plugin&) = delete;
+    {
+        loadFrom(filename);
+    }
+    Plugin(Plugin&& rhs) :m_lib(std::move(rhs.m_lib)), m_data(rhs.m_data), m_status(rhs.m_status)
+    {
+        rhs.m_data = nullptr;
+        rhs.m_status = -1;
+    }
 
-    // Get plugin name
-    const string& getName() const
-    { return name; }
     // Get plugin data
-    const PluginData* getData() const
-    { return data; }
+    const PluginData& getData() const
+    {
+        return *m_data;
+    }
+    // Get load status
+    int getStatus() const
+    {
+        return m_status;
+    }
+    // Is loaded
+    bool isLoaded() const
+    {
+        return m_status == 0;
+    }
     // Load plugin, return 0 for success
     int loadFrom(const string& filename);
 

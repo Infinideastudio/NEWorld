@@ -20,35 +20,22 @@
 #define PLUGINMANAGER_H_
 
 #include <string>
+using std::string;
+#include <vector>
 #include <boost/dll/shared_library.hpp>
 #include "plugin.h"
-
-// For API declarations
-class World;
-class BlockManager;
-
-const std::string PluginApiDllPath = "PluginAPI";
 
 // Plugin system
 class PluginManager
 {
-public:
-    PluginManager() :pluginAPI(PluginApiDllPath, boost::dll::load_mode::append_decorations)
-    {}
+private:
+    std::vector<Plugin> m_plugins;
 
-    // Initialize PluginAPI DLL
-    void initPluginAPI();
+public:
+    // Load single plugin
+    const Plugin& loadPlugin(const string& filename);
     // Load plugins
     void loadPlugins();
-
-private:
-    // PluginAPI DLL library
-    boost::dll::shared_library pluginAPI;
-    // Set current World
-    boost::shared_ptr<void(*)(World*)> setCurrentWorld;
-    // Set current BlockManager
-    boost::shared_ptr<void(*)(BlockManager*)> setCurrentBlockManager;
-
 };
 
 #endif // !PLUGINMANAGER_H_

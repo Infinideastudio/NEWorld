@@ -21,7 +21,7 @@
 #include <boost/dll/shared_library.hpp>
 #include <common.h> // For NWAPICALL
 
-typedef void NWAPICALL Main(int, char**);
+typedef void NWAPICALL MainFunction(int, char**);
 
 int main(int argc, char** argv)
 {
@@ -36,12 +36,12 @@ int main(int argc, char** argv)
             "NEWorldServer",
             boost::dll::load_mode::append_decorations
         )
-        .get<Main>("main")(argc, argv);
+        .get<MainFunction>("main")(argc, argv);
     else boost::dll::shared_library
         (
             "NEWorld",
             boost::dll::load_mode::append_decorations
         )
-        .get<Main>("main")(argc, argv);
+        .get<MainFunction>("main")(argc, argv);
     return 0;
 }

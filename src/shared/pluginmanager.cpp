@@ -19,18 +19,12 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
 #include "pluginmanager.h"
+#include "logger.h"
 
-void PluginManager::initPluginAPI()
+const Plugin& PluginManager::loadPlugin(const string& filename)
 {
-    /*
-        void*& init = pluginAPI.get<void(*)(NW_getBlockFunc, NW_setBlockFunc, NW_registerBlockFunc)>("NW_init");
-        init(&World::getBlock, &World::setBlock, &BlockManager::registerBlock);
-        setCurrentWorld = boost::dll::import<void(*)(World*)>
-                            (PluginApiDllPath, "NW_setCurrentWorld", boost::dll::load_mode::append_decorations);
-        setCurrentBlockManager = boost::dll::import<void(*)(BlockManager*)>
-                                    (PluginApiDllPath, "NW_setCurrentBlockManager", boost::dll::load_mode::append_decorations);
-        (*setCurrentBlockManager.get())(&Blocks);
-    */
+    m_plugins.emplace_back(Plugin(filename));
+    return m_plugins[m_plugins.size() - 1];
 }
 
 void PluginManager::loadPlugins()
@@ -44,6 +38,7 @@ void PluginManager::loadPlugins()
             if (is_directory(*item))
             {
                 string pluginPath = item->path().string() + "/" + item->path().filename().string();
+                loadPlugin(pluginPath);
             }
     }
 }
