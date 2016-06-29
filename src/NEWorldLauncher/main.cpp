@@ -19,8 +19,9 @@
 #include <iostream>
 #include <string>
 #include <boost/dll/shared_library.hpp>
+#include <common.h> // For NWAPICALL
 
-typedef void __cdecl Main(int, char**);
+typedef void NWAPICALL Main(int, char**);
 
 int main(int argc, char** argv)
 {

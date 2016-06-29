@@ -21,9 +21,9 @@
 #include <thread>
 #include <logger.h>
 
-extern "C" NWAPIEXPORT int __cdecl main(int, char*[]);
+extern "C" NWAPIEXPORT int NWAPICALL main(int, char*[]);
 
-int __cdecl main(int, char*[])
+int NWAPICALL main(int, char*[])
 {
     loggerInit();
     std::thread serverThread(networkThread);

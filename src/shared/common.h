@@ -59,6 +59,9 @@
     #define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
 #endif
 
+// NWAPICALL
+#define NWAPICALL __cdecl
+
 // NWAPIEXPORT
 #ifdef NEWORLD_TARGET_WINDOWS
     #ifdef NEWORLD_COMPILER_MSVC
