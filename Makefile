@@ -29,7 +29,7 @@ server: obj/ $(server_objects) $(shared_objects)
 obj/:
 	mkdir -p obj/
 
-GENERAL_FLAG = -I ./dependencies/include -std=c++11
+GENERAL_FLAG = -I ./dependencies/include -std=c++14
 C_S_FLAG =  -I ./src/shared
 
 obj/shared/%.o: src/shared/%.cpp
