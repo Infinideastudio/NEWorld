@@ -16,11 +16,14 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <common.h>
 #include "network.h"
 #include <thread>
 #include <logger.h>
 
-int main()
+extern "C" NWAPIEXPORT int __cdecl main(int, char*[]);
+
+int __cdecl main(int, char*[])
 {
     loggerInit();
     std::thread serverThread(networkThread);
