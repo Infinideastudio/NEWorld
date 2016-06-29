@@ -2,7 +2,7 @@
 #include <string>
 #include <boost/dll/shared_library.hpp>
 
-typedef void(*Main)(int, char**);
+typedef void __cdecl Main(int, char**);
 
 int main(int argc, char** argv)
 {
