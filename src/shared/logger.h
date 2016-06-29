@@ -29,6 +29,7 @@ using std::string;
 #include <boost/mpl/bitwise.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/at.hpp>
+#include <boost/mpl/string.hpp>
 #include "common.h"
 
 template <bool r, bool g, bool b, bool i>
@@ -132,34 +133,38 @@ template <int level>
 class Logger
 {
 public:
-    Logger(const char* fileName, int lineNumber) :m_level(level), m_content(m_level >= cerrLevel)
+    Logger(const char* fileName, int lineNumber) :m_content(level >= cerrLevel)
     {
+        using namespace boost;
+        using namespace boost::mpl;
         // Level names
-        constexpr static const char* LevelString[] =
-        {
-            "trace",
-            "debug",
-            "info",
-            "warning",
-            "error",
-            "fatal"
-        };
-
+        typedef mpl::vector<mpl::string<'trac', 'e'>, mpl::string<'debu', 'g'>, mpl::string<'info'>, mpl::string<'warn' ,'ing'>, mpl::string<'erro', 'r'>, mpl::string<'fata', 'l'>> LevelString;
         // Level colors
-        typedef boost::mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> LevelColor;
+        typedef mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> LevelColor;
 
-        m_content << CColor::dgray() << '[' << getTimeString('-', ' ', ':') << ']' << typename boost::mpl::at_c<LevelColor, level>::type() << "[" << LevelString[level] << "] ";
+        m_content << CColor::dgray() << '[' << getTimeString('-', ' ', ':') << ']' << typename mpl::at_c<LevelColor, level>::type() <<
+            c_str<
+                push_front
+                <
+                    push_back
+                    <
+                        typename at_c<LevelString, level>::type,
+                        char_<']'>
+                    >::type,
+                    char_<'['>
+                >::type
+            >::value;
         if (level >= lineLevel) m_content << CColor::dgray() << "(" << fileName << ":" << lineNumber << ") ";
         m_content << CColor::gray();
     }
 
     ~Logger()
     {
-        if (m_level >= cerrLevel)
+        if (level >= cerrLevel)
             std::cerr << std::endl;
-        else if (m_level >= clogLevel)
+        else if (level >= clogLevel)
             std::clog << std::endl;
-        if (m_level >= fileLevel)
+        if (level >= fileLevel)
             for (auto &it : fsink)
                 it << m_content.get() << std::endl;
     }
@@ -173,7 +178,6 @@ public:
 
 
 private:
-    int m_level;
     LoggerStream m_content;
 
 };
