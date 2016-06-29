@@ -38,7 +38,6 @@ public:
     {
         // Initialization
         infostream << "Initializing plugins...";
-        m_plugins.initPluginAPI();
         m_plugins.loadPlugins();
         // Start server
         infostream << "Server started!";

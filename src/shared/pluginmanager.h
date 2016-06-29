@@ -33,7 +33,7 @@ private:
 
 public:
     // Load single plugin
-    const Plugin& loadPlugin(const string& filename);
+    void loadPlugin(const string& filename);
     // Load plugins
     void loadPlugins();
 };

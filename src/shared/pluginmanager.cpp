@@ -21,10 +21,17 @@
 #include "pluginmanager.h"
 #include "logger.h"
 
-const Plugin& PluginManager::loadPlugin(const string& filename)
+void PluginManager::loadPlugin(const string& filename)
 {
     m_plugins.emplace_back(Plugin(filename));
-    return m_plugins[m_plugins.size() - 1];
+    const Plugin& plugin = m_plugins[m_plugins.size() - 1];
+    if (!plugin.isLoaded())
+    {
+        m_plugins.pop_back();
+        warningstream << "Failed to load plugin from \"" << filename << "\", skipping";
+        return;
+    }
+    infostream << "Loaded plugin \"" << plugin.getData().pluginName << "\"";
 }
 
 void PluginManager::loadPlugins()
