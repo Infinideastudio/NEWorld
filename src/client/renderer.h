@@ -22,7 +22,7 @@
 #include "../shared/vec3.h"
 #include "vertexarray.h"
 
-// Renderer理论上是单例？ --qiaozhanrong
+// Theoritically Renderer is a singleton.
 class Renderer
 {
 private:
