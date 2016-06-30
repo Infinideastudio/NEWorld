@@ -21,7 +21,7 @@
 
 void loadSharedSettings(Settings& settings);
 
-Settings settings("server_settings.conf");
+Settings settings("Configs/server_settings.conf");
 
 void loadSettings()
 {
