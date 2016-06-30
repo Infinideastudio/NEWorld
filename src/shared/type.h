@@ -52,6 +52,13 @@ inline bool isBoolean(std::string str)
     return str == "true" || str == "false";
 }
 
+inline bool isString(std::string str) //is something like "xxx"
+{
+    if (str.size() < 2) return false;
+    if (str[0] != '"' || str[str.size() - 1] != '"') return false;
+    return true;
+}
+
 inline double getDecimal(std::string str)
 {
     return std::stod(str);
@@ -66,6 +73,11 @@ inline bool getBoolean(std::string str)
 {
     strtolower(str);
     return str == "true";
+}
+
+inline std::string getString(std::string str)
+{
+    return str.substr(1, str.size() - 2);
 }
 
 boost::spirit::hold_any string2type(std::string str);

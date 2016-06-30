@@ -25,7 +25,7 @@ extern "C" NWAPIEXPORT int NWAPICALL main(int, char*[]);
 
 int NWAPICALL main(int, char*[])
 {
-    loggerInit();
+    loggerInit("NEWorld");
     std::thread serverThread(networkThread);
     system("pause");
     disconnect();

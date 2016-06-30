@@ -56,13 +56,13 @@ string getTimeString(char dateSplit, char midSplit, char timeSplit)
         + midSplit + convert<2u>(currtime->tm_hour) + timeSplit + convert<2u>(currtime->tm_min) +timeSplit + convert<2u>(currtime->tm_sec);
 }
 
-void loggerInit()
+void loggerInit(const string& prefix)
 {
     using namespace boost::filesystem;
     string path = "./Logs/";
     if (!exists(path))
         create_directory(path);
-    addFileSink(path);
+    addFileSink(path, prefix);
     // File sequence number not finished
     /*
     directory_iterator itemEnd;

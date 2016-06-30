@@ -27,6 +27,7 @@ boost::spirit::hold_any string2type(std::string str)
     if (isBoolean(str)) value = getBoolean(str);
     else if (isInteger(str)) value = getInteger(str);
     else if (isDecimal(str)) value = getDecimal(str);
+    else if (isString(str)) value = getString(str);
     else warningstream << "Failed to read value:" << str << ", which maybe not supported.";
     return value;
 }

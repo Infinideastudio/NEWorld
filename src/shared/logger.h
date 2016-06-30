@@ -127,9 +127,9 @@ extern std::vector<std::ofstream> fsink;
 string getTimeString(char dateSplit, char midSplit, char timeSplit);
 
 // Add a file sink named with current system time
-inline void addFileSink(const string& path)
+inline void addFileSink(const string& path, const string& prefix)
 {
-    fsink.emplace_back(path + "NEWorld_" + getTimeString('-', '_', '-') + ".log");
+    fsink.emplace_back(path + prefix + "_" + getTimeString('-', '_', '-') + ".log");
 }
 
 template <int level>
@@ -193,7 +193,7 @@ private:
 
 };
 
-void loggerInit();
+void loggerInit(const std::string& prefix);
 
 // information for developers
 #define debugstream Logger<debug>(__FUNCTION__, __LINE__)
