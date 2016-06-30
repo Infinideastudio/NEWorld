@@ -60,7 +60,11 @@
 #endif
 
 // NWAPICALL
-#define NWAPICALL __cdecl
+#ifdef NEWORLD_COMPILER_MSVC
+    #define NWAPICALL __cdecl
+#else
+    #define NWAPICALL __attribute__((__cdecl__))
+#endif
 
 // NWAPIEXPORT
 #ifdef NEWORLD_TARGET_WINDOWS
