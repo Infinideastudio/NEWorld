@@ -79,10 +79,10 @@ void initCommands()
     }
     EndCommandDefine;
 
-    CommandDefine("test.rainbow", "Internal", "test color.")
+    CommandDefine("test.rainbow", "Internal", "test colors.")
     {
         infostream << "Grayscales:";
-        infostream << CColor::black() << "2333333333 [0%]";
+        infostream << CColor::black() << CColor::bwhite() << "2333333333 [0%]" << CColor::bblack();
         infostream << CColor::dgray() << "2333333333 [50%]";
         infostream << CColor::gray() << "2333333333 [75%]";
         infostream << CColor::white() << "2333333333 [100%]";
@@ -100,6 +100,31 @@ void initCommands()
         infostream << CColor::cyan() << "2333333333 [cyan]";
         infostream << CColor::blue() << "2333333333 [blue]";
         infostream << CColor::magenta() << "2333333333 [magenta]";
+        return{ true , "" };
+    }
+    EndCommandDefine;
+
+    CommandDefine("test.background", "Internal", "test background colors.")
+    {
+        infostream << "Grayscales:";
+        infostream << CColor::bblack() << CColor::white() << "2333333333 [0%]";
+        infostream << CColor::bdgray() << CColor::black() << "2333333333 [50%]";
+        infostream << CColor::bgray() << CColor::black() << "2333333333 [75%]";
+        infostream << CColor::bwhite() << CColor::black() << "2333333333 [100%]";
+        infostream << "Dark colors:";
+        infostream << CColor::bdred() << CColor::black() << "2333333333 [dark red]";
+        infostream << CColor::bdyellow() << CColor::black() << "2333333333 [dark yellow]";
+        infostream << CColor::bdgreen() << CColor::black() << "2333333333 [dark green]";
+        infostream << CColor::bdcyan() << CColor::black() << "2333333333 [dark cyan]";
+        infostream << CColor::bdblue() << CColor::black() << "2333333333 [dark blue]";
+        infostream << CColor::bdmagenta() << CColor::black() << "2333333333 [dark magenta]";
+        infostream << "Bright colors:";
+        infostream << CColor::bred() << CColor::black() << "2333333333 [red]";
+        infostream << CColor::byellow() << CColor::black() << "2333333333 [yellow]";
+        infostream << CColor::bgreen() << CColor::black() << "2333333333 [green]";
+        infostream << CColor::bcyan() << CColor::black() << "2333333333 [cyan]";
+        infostream << CColor::bblue() << CColor::black() << "2333333333 [blue]";
+        infostream << CColor::bmagenta() << CColor::black() << "2333333333 [magenta]";
         return{ true , "" };
     }
     EndCommandDefine;
@@ -177,7 +202,7 @@ void inputThreadFunc()
     while (inputThreadRunning)
     {
         std::string input;
-        std::cout << CColor::gray() << "> ";
+        std::cout << CColor::gray() << CColor::bblack() << "$> ";
         std::getline(std::cin, input);
         auto result = handleCommand(Command(input));
         if (result.info != "")

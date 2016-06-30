@@ -31,9 +31,9 @@ int NWAPICALL main(int, char*[])
 {
     loadSettings();
     loggerInit("NEWorld_Server");
-    infostream << "----------------------------------------\n"
+    infostream << "\n----------------------------------------"
                << CopyrightString
-               << "\n----------------------------------------";
+               << "----------------------------------------";
     infostream << "NEWorld Server v" << NEWorldVersion << ", Release Version:" << ReleaseVersion << ", compiled at " << __TIME__ << " " << __DATE__;
     infostream << "Server starting...";
     std::thread inputThread(inputThreadFunc);

@@ -23,6 +23,7 @@
 #include "logger.h"
 
 std::vector<std::ofstream> fsink;
+WORD CColor::fg = 0u, CColor::bg = 0u;
 
 int clogLevel = trace;
 int cerrLevel = fatal;
@@ -53,7 +54,7 @@ string getTimeString(char dateSplit, char midSplit, char timeSplit)
     time_t timer = time(NULL);
     tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
     return convert<4u>(currtime->tm_year + 1900) + dateSplit + convert<2u>(currtime->tm_mon) + dateSplit + convert<2u>(currtime->tm_mday)
-        + midSplit + convert<2u>(currtime->tm_hour) + timeSplit + convert<2u>(currtime->tm_min) +timeSplit + convert<2u>(currtime->tm_sec);
+           + midSplit + convert<2u>(currtime->tm_hour) + timeSplit + convert<2u>(currtime->tm_min) +timeSplit + convert<2u>(currtime->tm_sec);
 }
 
 void loggerInit(const string& prefix)
