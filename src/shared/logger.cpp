@@ -29,6 +29,8 @@ int cerrLevel = fatal;
 int fileLevel = trace;
 int lineLevel = warning;
 
+bool fileOnly = false;
+
 string getTimeString(char dateSplit, char midSplit, char timeSplit)
 {
     time_t timer = time(NULL);

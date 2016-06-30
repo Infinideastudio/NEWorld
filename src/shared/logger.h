@@ -119,6 +119,9 @@ extern int cerrLevel; // Minumum critical level using std::cerr and output to co
 extern int fileLevel; // Minumum critical level output to file
 extern int lineLevel; // Minumum critical level output the line number of the source file
 
+//specifying if the logger only outputs infomation to files
+extern bool fileOnly;
+
 extern std::vector<std::ofstream> fsink;
 
 string getTimeString(char dateSplit, char midSplit, char timeSplit);
@@ -143,12 +146,17 @@ public:
         typedef mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> LevelColor;
 
         m_content << CColor::dgray() << '[' << getTimeString('-', ' ', ':') << ']' << typename mpl::at_c<LevelColor, level>::type() <<
-            c_str<
+            c_str
+            <
                 typename push_front
                 <
                     typename push_back
                     <
-                        typename at_c<LevelString, level>::type,
+                        typename at_c
+                        <
+                            LevelString,
+                            level
+                        >::type,
                         char_<']'>
                     >::type,
                     char_<'['>
@@ -160,10 +168,13 @@ public:
 
     ~Logger()
     {
-        if (level >= cerrLevel)
-            std::cerr << std::endl;
-        else if (level >= clogLevel)
-            std::clog << std::endl;
+        if (!fileOnly)
+        {
+            if (level >= cerrLevel)
+                std::cerr << std::endl;
+            else if (level >= clogLevel)
+                std::clog << std::endl;
+        }
         if (level >= fileLevel)
             for (auto &it : fsink)
                 it << m_content.get() << std::endl;
