@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source\Network">
+      <UniqueIdentifier>{775c2681-3f6c-4554-ad5d-f2942029cbb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\World">
+      <UniqueIdentifier>{6bbcbd78-7d22-478b-8559-bec86d9440e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Command">
+      <UniqueIdentifier>{f64d43dd-aee3-423a-bc5d-cf31e4345fd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Settings">
+      <UniqueIdentifier>{8a3e28c7-9a9b-4199-9c9d-eb68853e075e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\server\networkstructures.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\networkutils.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\chunkloader.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\worldloader.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\server.cpp">
+      <Filter>Source\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\servercommand.cpp">
+      <Filter>Source\Command</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\settings.cpp">
+      <Filter>Source\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\NEWorldServer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\server\chunkloader.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\server\worldloader.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\server\server.h">
+      <Filter>Source\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\server\settings.h">
+      <Filter>Source\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\server\servercommand.h">
+      <Filter>Source\Command</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
