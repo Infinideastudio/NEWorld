@@ -144,9 +144,9 @@ public:
 
         m_content << CColor::dgray() << '[' << getTimeString('-', ' ', ':') << ']' << typename mpl::at_c<LevelColor, level>::type() <<
             c_str<
-                push_front
+                typename push_front
                 <
-                    push_back
+                    typename push_back
                     <
                         typename at_c<LevelString, level>::type,
                         char_<']'>
