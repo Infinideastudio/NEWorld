@@ -31,15 +31,29 @@ int lineLevel = warning;
 
 bool fileOnly = false;
 
+template<size_t length>
+string convert(int arg)
+{
+    char arr[13];
+    int siz = 0u;
+    while (arg)
+    {
+        arr[siz++] = (arg % 10) + '0';
+        arg /= 10;
+    }
+    string ret(length - siz, '0');
+    ret.reserve(length);
+    for (int i = siz - 1; i >= 0; i--)
+        ret += arr[i];
+    return ret;
+}
+
 string getTimeString(char dateSplit, char midSplit, char timeSplit)
 {
     time_t timer = time(NULL);
     tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
-    std::stringstream ss;
-    ss << std::setfill('0')
-       << std::setw(4) << currtime->tm_year + 1900 << dateSplit << std::setw(2) << currtime->tm_mon + 1 << dateSplit << std::setw(2) << currtime->tm_mday
-       << midSplit << std::setw(2) << currtime->tm_hour << timeSplit << std::setw(2) << currtime->tm_min << timeSplit << std::setw(2) << currtime->tm_sec;
-    return ss.str();
+    return convert<4u>(currtime->tm_year + 1900) + dateSplit + convert<2u>(currtime->tm_mon) + dateSplit + convert<2u>(currtime->tm_mday)
+        + midSplit + convert<2u>(currtime->tm_hour) + timeSplit + convert<2u>(currtime->tm_min) +timeSplit + convert<2u>(currtime->tm_sec);
 }
 
 void loggerInit()
