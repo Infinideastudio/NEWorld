@@ -150,6 +150,7 @@
     <ClInclude Include="..\..\..\src\shared\object.h" />
     <ClInclude Include="..\..\..\src\shared\packet.h" />
     <ClInclude Include="..\..\..\src\shared\plugin.h" />
+    <ClInclude Include="..\..\..\src\shared\pluginapi.h" />
     <ClInclude Include="..\..\..\src\shared\pluginmanager.h" />
     <ClInclude Include="..\..\..\src\shared\session.h" />
     <ClInclude Include="..\..\..\src\shared\settingsmanager.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="..\..\..\src\shared\blockmanager.cpp" />
     <ClCompile Include="..\..\..\src\shared\logger.cpp" />
     <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
+    <ClCompile Include="..\..\..\src\shared\pluginapi.cpp" />
     <ClCompile Include="..\..\..\src\shared\pluginmanager.cpp" />
     <ClCompile Include="..\..\..\src\shared\session.cpp" />
     <ClCompile Include="..\..\..\src\shared\settings.cpp" />
