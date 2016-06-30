@@ -37,14 +37,14 @@ void PluginManager::loadPlugin(const string& filename)
 void PluginManager::loadPlugins()
 {
     using namespace boost::filesystem;
-    string path = "./plugins/";
+    string path = "./Plugins/";
     if (exists(path))
     {
         directory_iterator itemEnd;
         for (directory_iterator item(path); item != itemEnd; item++)
-            if (is_directory(*item))
+            if (!is_directory(*item))
             {
-                string pluginPath = item->path().string() + "/" + item->path().filename().string();
+                string pluginPath = item->path().string();
                 loadPlugin(pluginPath);
             }
     }
