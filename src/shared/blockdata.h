@@ -22,19 +22,14 @@
 class BlockData
 {
 private:
-    union
-    {
-        unsigned int m_data;
-        unsigned int id : 12; // Block ID
-        unsigned int brightness : 4; // Brightness
-        unsigned int state : 16; // Block state
-    };
+    unsigned int id : 12; // Block ID
+    unsigned int brightness : 4; // Brightness
+    unsigned int state : 16; // Block state
 
 public:
-    BlockData() :m_data(0) {}
+    BlockData() :id(0), brightness(0),state(0) {}
     BlockData(int id_, int brightness_, int state_) :id(id_), brightness(brightness_), state(state_) {}
-    explicit BlockData(int data_) :m_data(data_) {}
-    BlockData(const BlockData& rhs) :m_data(rhs.m_data) {}
+    BlockData(const BlockData& rhs) :id(rhs.id), brightness(rhs.brightness), state(rhs.state) {}
 
     bool operator== (const BlockData& rhs) const
     {

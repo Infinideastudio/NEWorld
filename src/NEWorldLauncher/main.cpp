@@ -26,8 +26,8 @@ typedef void NWAPICALL MainFunction(int, char**);
 int main(int argc, char** argv)
 {
     std::cout << "Welcome to NEWorld Minimal Launcher!" << std::endl;
-    std::cout << "Enter 'client' if you wanted to run client" << std::endl;
-    std::cout << "Enter 'server' if you wanted to run server" << std::endl;
+    std::cout << "Enter 'client' if you want to run client" << std::endl;
+    std::cout << "Enter 'server' if you want to run server" << std::endl;
     std::string in;
     std::cin >> in;
     if (in == "server")
