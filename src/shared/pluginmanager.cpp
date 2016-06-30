@@ -18,6 +18,8 @@
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+#include "common.h"
+#include "utils.h"
 #include "pluginmanager.h"
 #include "logger.h"
 
@@ -47,6 +49,9 @@ void PluginManager::loadPlugins()
             if (!is_directory(*item))
             {
                 string pluginPath = item->path().string();
+                string suffix = pluginPath.substr(pluginPath.size() - string(DLLSuffix).size());
+                strtolower(suffix);
+                if (suffix != DLLSuffix) continue;
                 loadPlugin(pluginPath);
             }
     }

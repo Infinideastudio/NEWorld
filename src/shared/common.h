@@ -28,6 +28,9 @@
 #if defined _WIN32 || defined __CYGWIN__
     #define NEWORLD_TARGET_WINDOWS
     #define NEWORLD_USE_WINAPI // Windows native API
+#else
+    //#define NEWORLD_TARGET_LINUX
+    //#define NEWORLD_TARGET_MACOSX
 #endif
 
 #ifdef _DEBUG
@@ -95,5 +98,13 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.)";
+
+#if defined(NEWORLD_TARGET_WINDOWS)
+    constexpr const char* DLLSuffix = "dll";
+#elif defined(NEWORLD_TARGET_MACOSX)
+    constexpr const char* DLLSuffix = "dylib";
+#else
+    constexpr const char* DLLSuffix = "so";
+#endif
 
 #endif // !COMMON_H_

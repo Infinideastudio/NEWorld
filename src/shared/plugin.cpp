@@ -22,10 +22,18 @@ typedef PluginData* NWAPICALL InitFunction();
 
 int Plugin::loadFrom(const string& filename)
 {
-    m_lib.load(filename);
-    if (!m_lib.is_loaded()) return m_status = 1; // Failed: could not load DLL
-    InitFunction* init = m_lib.get<InitFunction>("init");
-    if (init == nullptr) return m_status = 2; // Failed: entry not found
-    m_data = init();
+    InitFunction* init = nullptr;
+    try
+    {
+        m_lib.load(filename);
+        init = m_lib.get<InitFunction>("init");
+        m_data = init();
+    }
+    catch (std::exception& e)
+    {
+        if (m_lib.is_loaded()) return m_status = 1; // Failed: could not load
+        if (init == nullptr) return m_status = 2; // Failed: entry not found
+        throw e; // Failed: undefined exception
+    }
     return m_status = 0;
 }

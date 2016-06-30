@@ -19,7 +19,7 @@
 #ifndef NWAPI_BI_
 #define NWAPI_BI_
 
-#inclib "../NEWorldServer"
+#inclib "../Bin/NEWorldServer"
 
 type PluginData
     dim pluginName as zstring ptr = 0

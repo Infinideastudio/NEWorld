@@ -28,6 +28,7 @@ end function
 extern "C"
     ' Main function
     function init cdecl() as PluginData ptr export
+        print "TestPlugin: Loading..."
         dim testPlugin as PluginData ptr = new PluginData
         testPlugin->pluginName = c_str("Test Plugin")
         testPlugin->authorName = c_str("INFINIDEAS")
