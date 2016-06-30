@@ -19,9 +19,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\server\main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\server\networkstructures.cpp">
       <Filter>Source\Network</Filter>
     </ClCompile>
@@ -42,6 +39,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\server\settings.cpp">
       <Filter>Source\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\server\NEWorldServer.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
