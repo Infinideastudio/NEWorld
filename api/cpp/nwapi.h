@@ -29,49 +29,11 @@
     #define NWAPIENTRY __attribute__((visibility("default")))
 #endif
 
-#include <stdint.h>
-
-struct Vec3i
-{
-    int32_t x, y, z;
-};
-
-struct BlockType
-{
-    char* blockname = nullptr;
-    int8_t solid;
-    int8_t translucent;
-    int8_t opaque;
-    int32_t explodePower;
-    int32_t hardness;
-};
-
-struct BlockData
-{
-    uint32_t id : 12;
-    uint32_t brightness : 4;
-    uint32_t state : 16;
-};
-
-typedef BlockData* (*buildChunkFunc)(const Vec3i*);
-
 struct PluginData
 {
     char* pluginName = nullptr;
-    buildChunkFunc buildChunk = nullptr;
+    char* authorName = nullptr;
+    char* internalName = nullptr;
 };
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-NWAPIENTRY BlockData getBlock(const Vec3i*);
-NWAPIENTRY void setBlock(const Vec3i*, BlockData);
-NWAPIENTRY void registerBlock(const BlockType*);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // !NWAPI_H_
