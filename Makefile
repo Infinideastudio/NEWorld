@@ -18,7 +18,7 @@ LDFLAGS = -L ./dependencies/lib
 all: client server
 
 client: obj/ obj/client/ obj/shared/ $(client_objects) $(shared_objects)
-	$(CXX) -o NEWorld $(LDFLAGS) -lfreetype -lglfw3 -lGL $(client_objects) $(al_objects) $(shared_objects)
+	$(CXX) -o NEWorld $(LDFLAGS) -lfreetype -lGL $(client_objects) $(al_objects) $(shared_objects)
 
 server: obj/ obj/server/ obj/shared/ $(server_objects) $(shared_objects)
 	$(CXX) -o NEWorldServer $(server_objects) $(shared_objects)
