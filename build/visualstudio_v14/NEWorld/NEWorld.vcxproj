@@ -135,29 +135,6 @@
     <ClInclude Include="..\..\..\src\client\vertexarray.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\src\client\Icon.ico" />
-    <Image Include="..\..\..\src\neworld.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\..\src\resource.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\Shaders\Depth.fsh" />
-    <None Include="..\..\..\Shaders\Main.fsh" />
-    <None Include="..\..\..\Shaders\Shadow.fsh" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\Shaders\Depth.vsh">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\..\..\Shaders\Main.vsh">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\..\..\Shaders\Shadow.vsh">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.vcxproj">
       <Project>{286102d2-39f0-4578-8328-fb6b3836393b}</Project>
     </ProjectReference>

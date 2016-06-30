@@ -5,13 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Resources\Shaders">
-      <UniqueIdentifier>{78ae7a31-fc47-4fc7-918b-eeebda79d553}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Renderer">
       <UniqueIdentifier>{e5e29554-de32-45ec-93f7-18a3f8986c29}</UniqueIdentifier>
     </Filter>
@@ -35,39 +28,6 @@
     <ClInclude Include="..\..\..\src\client\mat4.h">
       <Filter>Source\Renderer</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\src\client\Icon.ico">
-      <Filter>Resources</Filter>
-    </Image>
-    <Image Include="..\..\..\src\neworld.ico">
-      <Filter>Resources</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\..\src\resource.rc">
-      <Filter>Resources</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\Shaders\Depth.fsh">
-      <Filter>Resources\Shaders</Filter>
-    </None>
-    <None Include="..\..\..\Shaders\Main.fsh">
-      <Filter>Resources\Shaders</Filter>
-    </None>
-    <None Include="..\..\..\Shaders\Shadow.fsh">
-      <Filter>Resources\Shaders</Filter>
-    </None>
-    <None Include="..\..\..\Shaders\Depth.vsh">
-      <Filter>Resources\Shaders</Filter>
-    </None>
-    <None Include="..\..\..\Shaders\Main.vsh">
-      <Filter>Resources\Shaders</Filter>
-    </None>
-    <None Include="..\..\..\Shaders\Shadow.vsh">
-      <Filter>Resources\Shaders</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\renderer.cpp">
