@@ -16,8 +16,6 @@
 [Rr]elease/
 x64/
 x86/
-# [Bb]uild/
-bld/
 [Bb]in/
 [Oo]bj/
 
@@ -59,7 +57,7 @@ dlldata.c
 *.log
 *.vspscc
 *.vssscc
-.builds
+*.builds
 *.pidb
 *.svclog
 *.scc
@@ -213,7 +211,7 @@ cscope.*
 
 # Unnecessary binary asset
 dependencies/
-res/
+Res/
 
 # Unittest
 *.unittest.cpp
@@ -224,7 +222,9 @@ res/
 
 # Final NEWorld executable
 NEWorld
+NEWorldLauncher
 !NEWorld/
+!NEWorldLauncher/
 
 # NEWorld files
 [Ww]orlds/
@@ -232,6 +232,6 @@ NEWorld
 [Cc]onfigs/
 
 # Eclipse
-.project
-.cproject
-.settings
+*.project
+*.cproject
+*.settings
