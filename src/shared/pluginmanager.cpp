@@ -31,7 +31,9 @@ void PluginManager::loadPlugin(const string& filename)
         warningstream << "Failed to load plugin from \"" << filename << "\", skipping";
         return;
     }
-    infostream << "Loaded plugin \"" << plugin.getData().pluginName << "\"";
+    infostream << "Loaded plugin \"" << plugin.getData().pluginName << "\"["
+               << plugin.getData().internalName
+               << "], authored by \"" << plugin.getData().authorName << "\"";
 }
 
 void PluginManager::loadPlugins()
