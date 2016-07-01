@@ -13,7 +13,7 @@ else
     CXXFLAGS += -g -O0
 endif
 
-LDFLAGS = -L ./dependencies/lib
+LDFLAGS = -L ./dependencies/lib -L ./dependencies/lib/boostlib
 
 all: client server
 
