@@ -41,8 +41,9 @@ class ConsoleBackColor {};
 template <bool r, bool g, bool b, bool i>
 inline std::ostream& operator<< (std::ostream& orig, ConsoleForeColor<r, g, b, i>)
 {
-#ifdef NEWORLD_USE_WINAPI
+#ifdef NEWORLD_TARGET_WINDOWS
     // Microsoft Windows
+#ifdef NEWORLD_USE_WINAPI
     using namespace boost::mpl;
     using namespace CColor;
     typedef bitor_<integral_c<WORD, r ? FOREGROUND_RED : 0u>,
@@ -51,6 +52,7 @@ inline std::ostream& operator<< (std::ostream& orig, ConsoleForeColor<r, g, b, i
             integral_c<WORD, i ? FOREGROUND_INTENSITY : 0u>> col;
     fg = col::value;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), bg | fg);
+#endif
     return orig;
 #else
     // *nix
@@ -63,8 +65,9 @@ inline std::ostream& operator<< (std::ostream& orig, ConsoleForeColor<r, g, b, i
 template <bool r, bool g, bool b, bool i>
 inline std::ostream& operator<< (std::ostream& orig, ConsoleBackColor<r, g, b, i>)
 {
-#ifdef NEWORLD_USE_WINAPI
+#ifdef NEWORLD_TARGET_WINDOWS
     // Microsoft Windows
+#ifdef NEWORLD_USE_WINAPI
     using namespace boost::mpl;
     using namespace CColor;
     typedef bitor_<integral_c<WORD, r ? BACKGROUND_RED : 0u>,
@@ -73,6 +76,7 @@ inline std::ostream& operator<< (std::ostream& orig, ConsoleBackColor<r, g, b, i
             integral_c<WORD, i ? BACKGROUND_INTENSITY : 0u>> col;
     bg = col::value;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), bg | fg);
+#endif
     return orig;
 #else
     // *nix
