@@ -76,7 +76,7 @@ inline std::ostream& operator<< (std::ostream& orig, ConsoleColor<r, g, b, i, f>
 
 namespace CColor
 {
-    extern WORD fg, bg;
+    extern unsigned short fg, bg;
     // *** Foreground colors ***
     // Grayscales
     typedef ConsoleColor<false, false, false, false, true> black;

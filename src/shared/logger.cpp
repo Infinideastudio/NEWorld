@@ -23,7 +23,7 @@
 #include "logger.h"
 
 std::vector<std::ofstream> fsink;
-WORD CColor::fg = 0u, CColor::bg = 0u;
+unsigned short CColor::fg = 0u, CColor::bg = 0u;
 
 int clogLevel = trace;
 int cerrLevel = fatal;
