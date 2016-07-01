@@ -38,29 +38,35 @@ class ConsoleColor {};
 template <bool r, bool g, bool b, bool i, bool f>
 inline std::ostream& operator<< (std::ostream& orig, ConsoleColor<r, g, b, i, f>)
 {
+#ifdef NEWORLD_TARGET_WINDOWS
 #ifdef NEWORLD_USE_WINAPI
     using namespace boost::mpl;
     using namespace CColor;
     if (f)
     {
         // Foreground
-        typedef bitor_<integral_c<WORD, r ? FOREGROUND_RED : 0u>,
-                integral_c<WORD, g ? FOREGROUND_GREEN : 0u>,
-                integral_c<WORD, b ? FOREGROUND_BLUE : 0u>,
-                integral_c<WORD, i ? FOREGROUND_INTENSITY : 0u>> col;
+        using col = bitor_<
+                    integral_c<WORD, r ? FOREGROUND_RED : 0u>,
+                    integral_c<WORD, g ? FOREGROUND_GREEN : 0u>,
+                    integral_c<WORD, b ? FOREGROUND_BLUE : 0u>,
+                    integral_c<WORD, i ? FOREGROUND_INTENSITY : 0u>
+                    >;
         fg = col::value;
     }
     else
     {
         // Background
-        typedef bitor_<integral_c<WORD, r ? BACKGROUND_RED : 0u>,
-                integral_c<WORD, g ? BACKGROUND_GREEN : 0u>,
-                integral_c<WORD, b ? BACKGROUND_BLUE : 0u>,
-                integral_c<WORD, i ? BACKGROUND_INTENSITY : 0u>> col;
+        using col= bitor_<
+                   integral_c<WORD, r ? BACKGROUND_RED : 0u>,
+                   integral_c<WORD, g ? BACKGROUND_GREEN : 0u>,
+                   integral_c<WORD, b ? BACKGROUND_BLUE : 0u>,
+                   integral_c<WORD, i ? BACKGROUND_INTENSITY : 0u>
+                   >;
         bg = col::value;
     }
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), bg | fg);
     return orig;
+#endif
 #else
     // *nix
     // NOT FINISHED
@@ -169,7 +175,6 @@ inline void addFileSink(const string& path, const string& prefix)
 {
     fsink.emplace_back(path + prefix + "_" + getTimeString('-', '_', '-') + ".log");
 }
-
 template <int level>
 class Logger
 {
@@ -179,28 +184,16 @@ public:
         using namespace boost;
         using namespace boost::mpl;
         // Level names
-        typedef mpl::vector<mpl::string<'trac', 'e'>, mpl::string<'debu', 'g'>, mpl::string<'info'>, mpl::string<'warn' ,'ing'>, mpl::string<'erro', 'r'>, mpl::string<'fata', 'l'>> LevelString;
+        using LevelString = mpl::vector<mpl::string<'trac', 'e'>, mpl::string<'debu', 'g'>, mpl::string<'info'>, mpl::string<'warn' ,'ing'>, mpl::string<'erro', 'r'>, mpl::string<'fata', 'l'>> ;
         // Level colors
-        typedef mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> LevelColor;
+        using LevelColor = mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> ;
 
-        m_content << CColor::dgray() << CColor::bblack() << '[' << getTimeString('-', ' ', ':') << ']' <<
-                  typename mpl::at_c<LevelColor, level>::type() <<
-                  c_str
-                  <
-                  typename push_front
-                  <
-                  typename push_back
-                  <
-                  typename at_c
-                  <
-                  LevelString,
-                  level
-                  >::type,
-                  char_<']'>
-                  >::type,
-                  char_<'['>
-                  >::type
-                  >::value;
+        using Color = typename mpl::at_c<LevelColor, level>::type;
+        using LevelStr = typename at_c <LevelString, level >::type;
+        using StrRightPart = typename push_back < LevelStr, char_<']'> >::type; // "info]"
+        using StrFinal = typename push_front < StrRightPart, char_<'['> >::type; // "[info]"
+
+        m_content << CColor::dgray() << CColor::bblack() << '[' << getTimeString('-', ' ', ':') << ']' << Color() << c_str<StrFinal>::value;
         if (level >= lineLevel) m_content << CColor::dgray() << "(" << fileName << ":" << lineNumber << ") ";
         m_content << CColor::gray();
     }
