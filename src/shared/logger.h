@@ -32,41 +32,48 @@ using std::string;
 #include <boost/mpl/string.hpp>
 #include "common.h"
 
-template <bool r, bool g, bool b, bool i, bool f>
-class ConsoleColor {};
+template <bool r, bool g, bool b, bool i>
+class ConsoleForeColor {};
+template <bool r, bool g, bool b, bool i>
+class ConsoleBackColor {};
 
-template <bool r, bool g, bool b, bool i, bool f>
-inline std::ostream& operator<< (std::ostream& orig, ConsoleColor<r, g, b, i, f>)
+// Foreground Color
+template <bool r, bool g, bool b, bool i>
+inline std::ostream& operator<< (std::ostream& orig, ConsoleForeColor<r, g, b, i>)
 {
-#ifdef NEWORLD_TARGET_WINDOWS
 #ifdef NEWORLD_USE_WINAPI
+    // Microsoft Windows
     using namespace boost::mpl;
     using namespace CColor;
-    if (f)
-    {
-        // Foreground
-        using col = bitor_<
-                    integral_c<WORD, r ? FOREGROUND_RED : 0u>,
-                    integral_c<WORD, g ? FOREGROUND_GREEN : 0u>,
-                    integral_c<WORD, b ? FOREGROUND_BLUE : 0u>,
-                    integral_c<WORD, i ? FOREGROUND_INTENSITY : 0u>
-                    >;
-        fg = col::value;
-    }
-    else
-    {
-        // Background
-        using col= bitor_<
-                   integral_c<WORD, r ? BACKGROUND_RED : 0u>,
-                   integral_c<WORD, g ? BACKGROUND_GREEN : 0u>,
-                   integral_c<WORD, b ? BACKGROUND_BLUE : 0u>,
-                   integral_c<WORD, i ? BACKGROUND_INTENSITY : 0u>
-                   >;
-        bg = col::value;
-    }
+    typedef bitor_<integral_c<WORD, r ? FOREGROUND_RED : 0u>,
+            integral_c<WORD, g ? FOREGROUND_GREEN : 0u>,
+            integral_c<WORD, b ? FOREGROUND_BLUE : 0u>,
+            integral_c<WORD, i ? FOREGROUND_INTENSITY : 0u>> col;
+    fg = col::value;
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), bg | fg);
     return orig;
+#else
+    // *nix
+    // NOT FINISHED
+    return orig << "\033[;m";
 #endif
+}
+
+// Background Color
+template <bool r, bool g, bool b, bool i>
+inline std::ostream& operator<< (std::ostream& orig, ConsoleBackColor<r, g, b, i>)
+{
+#ifdef NEWORLD_USE_WINAPI
+    // Microsoft Windows
+    using namespace boost::mpl;
+    using namespace CColor;
+    typedef bitor_<integral_c<WORD, r ? BACKGROUND_RED : 0u>,
+            integral_c<WORD, g ? BACKGROUND_GREEN : 0u>,
+            integral_c<WORD, b ? BACKGROUND_BLUE : 0u>,
+            integral_c<WORD, i ? BACKGROUND_INTENSITY : 0u>> col;
+    bg = col::value;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), bg | fg);
+    return orig;
 #else
     // *nix
     // NOT FINISHED
@@ -79,45 +86,45 @@ namespace CColor
     extern unsigned short fg, bg;
     // *** Foreground colors ***
     // Grayscales
-    typedef ConsoleColor<false, false, false, false, true> black;
-    typedef ConsoleColor<false, false, false, true, true> dgray;
-    typedef ConsoleColor<true, true, true, false, true> gray;
-    typedef ConsoleColor<true, true, true, true, true> white;
+    typedef ConsoleForeColor<false, false, false, false> black;
+    typedef ConsoleForeColor<false, false, false, true> dgray;
+    typedef ConsoleForeColor<true, true, true, false> gray;
+    typedef ConsoleForeColor<true, true, true, true> white;
     // Bright colors
-    typedef ConsoleColor<true, false, false, true, true> red;
-    typedef ConsoleColor<false, true, false, true, true> green;
-    typedef ConsoleColor<false, false, true, true, true> blue;
-    typedef ConsoleColor<true, true, false, true, true> yellow;
-    typedef ConsoleColor<false, true, true, true, true> cyan;
-    typedef ConsoleColor<true, false, true, true, true> magenta;
+    typedef ConsoleForeColor<true, false, false, true> red;
+    typedef ConsoleForeColor<false, true, false, true> green;
+    typedef ConsoleForeColor<false, false, true, true> blue;
+    typedef ConsoleForeColor<true, true, false, true> yellow;
+    typedef ConsoleForeColor<false, true, true, true> cyan;
+    typedef ConsoleForeColor<true, false, true, true> magenta;
     // Dark colors
-    typedef ConsoleColor<true, false, false, false, true> dred;
-    typedef ConsoleColor<false, true, false, false, true> dgreen;
-    typedef ConsoleColor<false, false, true, false, true> dblue;
-    typedef ConsoleColor<true, true, false, false, true> dyellow;
-    typedef ConsoleColor<false, true, true, false, true> dcyan;
-    typedef ConsoleColor<true, false, true, false, true> dmagenta;
+    typedef ConsoleForeColor<true, false, false, false> dred;
+    typedef ConsoleForeColor<false, true, false, false> dgreen;
+    typedef ConsoleForeColor<false, false, true, false> dblue;
+    typedef ConsoleForeColor<true, true, false, false> dyellow;
+    typedef ConsoleForeColor<false, true, true, false> dcyan;
+    typedef ConsoleForeColor<true, false, true, false> dmagenta;
 
     // *** Background colors ***
     // Grayscales
-    typedef ConsoleColor<false, false, false, false, false> bblack;
-    typedef ConsoleColor<false, false, false, true, false> bdgray;
-    typedef ConsoleColor<true, true, true, false, false> bgray;
-    typedef ConsoleColor<true, true, true, true, false> bwhite;
+    typedef ConsoleBackColor<false, false, false, false> bblack;
+    typedef ConsoleBackColor<false, false, false, true> bdgray;
+    typedef ConsoleBackColor<true, true, true, false> bgray;
+    typedef ConsoleBackColor<true, true, true, true> bwhite;
     // Bright colors
-    typedef ConsoleColor<true, false, false, true, false> bred;
-    typedef ConsoleColor<false, true, false, true, false> bgreen;
-    typedef ConsoleColor<false, false, true, true, false> bblue;
-    typedef ConsoleColor<true, true, false, true, false> byellow;
-    typedef ConsoleColor<false, true, true, true, false> bcyan;
-    typedef ConsoleColor<true, false, true, true, false> bmagenta;
+    typedef ConsoleBackColor<true, false, false, true> bred;
+    typedef ConsoleBackColor<false, true, false, true> bgreen;
+    typedef ConsoleBackColor<false, false, true, true> bblue;
+    typedef ConsoleBackColor<true, true, false, true> byellow;
+    typedef ConsoleBackColor<false, true, true, true> bcyan;
+    typedef ConsoleBackColor<true, false, true, true> bmagenta;
     // Dark colors
-    typedef ConsoleColor<true, false, false, false, false> bdred;
-    typedef ConsoleColor<false, true, false, false, false> bdgreen;
-    typedef ConsoleColor<false, false, true, false, false> bdblue;
-    typedef ConsoleColor<true, true, false, false, false> bdyellow;
-    typedef ConsoleColor<false, true, true, false, false> bdcyan;
-    typedef ConsoleColor<true, false, true, false, false> bdmagenta;
+    typedef ConsoleBackColor<true, false, false, false> bdred;
+    typedef ConsoleBackColor<false, true, false, false> bdgreen;
+    typedef ConsoleBackColor<false, false, true, false> bdblue;
+    typedef ConsoleBackColor<true, true, false, false> bdyellow;
+    typedef ConsoleBackColor<false, true, true, false> bdcyan;
+    typedef ConsoleBackColor<true, false, true, false> bdmagenta;
 }
 
 class LoggerStream
