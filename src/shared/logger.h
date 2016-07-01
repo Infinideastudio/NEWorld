@@ -171,10 +171,8 @@ extern std::vector<std::ofstream> fsink;
 string getTimeString(char dateSplit, char midSplit, char timeSplit);
 
 // Add a file sink named with current system time
-inline void addFileSink(const string& path, const string& prefix)
-{
-    fsink.emplace_back(path + prefix + "_" + getTimeString('-', '_', '-') + ".log");
-}
+inline void addFileSink(const string& path, const string& prefix);
+
 template <int level>
 class Logger
 {
@@ -184,7 +182,7 @@ public:
         using namespace boost;
         using namespace boost::mpl;
         // Level names
-        using LevelString = mpl::vector<mpl::string<'trac', 'e'>, mpl::string<'debu', 'g'>, mpl::string<'info'>, mpl::string<'warn' ,'ing'>, mpl::string<'erro', 'r'>, mpl::string<'fata', 'l'>> ;
+        using LevelString = mpl::vector<mpl::string<'t','r','a','c','e'>, mpl::string<'d','e','b','u','g'>, mpl::string<'i','n','f','o'>, mpl::string<'w','a','r','n','i','n','g'>, mpl::string<'e','r','r','o','r'>, mpl::string<'f','a','t','a','l'>> ;
         // Level colors
         using LevelColor = mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> ;
 

@@ -33,7 +33,7 @@ int lineLevel = warning;
 bool fileOnly = false;
 
 template<size_t length>
-string convert(int arg)
+static string convert(int arg)
 {
     char arr[13];
     int siz = 0u;
@@ -55,6 +55,11 @@ string getTimeString(char dateSplit, char midSplit, char timeSplit)
     tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
     return convert<4u>(currtime->tm_year + 1900) + dateSplit + convert<2u>(currtime->tm_mon) + dateSplit + convert<2u>(currtime->tm_mday)
            + midSplit + convert<2u>(currtime->tm_hour) + timeSplit + convert<2u>(currtime->tm_min) +timeSplit + convert<2u>(currtime->tm_sec);
+}
+
+inline void addFileSink(const string& path, const string& prefix)
+{
+    fsink.emplace_back(path + prefix + "_" + getTimeString('-', '_', '-') + ".log");
 }
 
 void loggerInit(const string& prefix)
