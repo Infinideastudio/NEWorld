@@ -135,27 +135,54 @@ class LoggerStream
 {
 public:
     explicit LoggerStream(bool cerr) :m_cerr(cerr) {}
+    ~LoggerStream()
+    {
+        if (m_cerr)
+            std::cerr << m_curr.str() << std::endl;
+        else
+            std::clog << m_curr.str() << std::endl;
+    }
+
+    template <bool r, bool g, bool b, bool i>
+    LoggerStream& operator<< (const ConsoleForeColor<r, g, b, i>& rhs)
+    {
+        if (m_cerr)
+            std::cerr << m_curr.str() << rhs;
+        else
+            std::clog << m_curr.str() << rhs;
+        m_content << m_curr.str();
+        m_curr.str("");
+        return *this;
+    }
+
+    template <bool r, bool g, bool b, bool i>
+    LoggerStream& operator<< (const ConsoleBackColor<r, g, b, i>& rhs)
+    {
+        if (m_cerr)
+            std::cerr << m_curr.str() << rhs;
+        else
+            std::clog << m_curr.str() << rhs;
+        m_content << m_curr.str();
+        m_curr.str("");
+        return *this;
+    }
 
     template <typename T>
     LoggerStream& operator<< (const T& rhs)
     {
-        if (m_cerr)
-            std::cerr << rhs;
-        else
-            std::clog << rhs;
-        m_content << rhs;
+        m_curr << rhs;
         return *this;
     }
 
     // Get content string
     string get()
     {
-        return m_content.str();
+        return m_content.str() + m_curr.str();
     }
 
 private:
     bool m_cerr;
-    std::stringstream m_content;
+    std::stringstream m_content, m_curr;
 };
 
 // Critical levels
@@ -193,29 +220,38 @@ public:
         using namespace boost;
         using namespace boost::mpl;
         // Level names
-        using LevelString = mpl::vector<mpl::string<'t','r','a','c','e'>, mpl::string<'d','e','b','u','g'>, mpl::string<'i','n','f','o'>, mpl::string<'w','a','r','n','i','n','g'>, mpl::string<'e','r','r','o','r'>, mpl::string<'f','a','t','a','l'>> ;
+        using LevelString =
+            mpl::vector<
+            mpl::string<'t','r','a','c','e'>,
+            mpl::string<'d','e','b','u','g'>,
+            mpl::string<'i','n','f','o'>,
+            mpl::string<'w','a','r','n','i','n','g'>,
+            mpl::string<'e','r','r','o','r'>,
+            mpl::string<'f','a','t','a','l'>
+            >;
         // Level colors
-        using LevelColor = mpl::vector<CColor::dgray, CColor::gray, CColor::white, CColor::yellow, CColor::red, CColor::dred> ;
-
+        using LevelColor =
+            mpl::vector<
+            CColor::dgray,
+            CColor::gray,
+            CColor::white,
+            CColor::yellow,
+            CColor::red,
+            CColor::dred
+            >;
+        // Construct prefix string at compilation time
         using Color = typename mpl::at_c<LevelColor, level>::type;
-        using LevelStr = typename at_c <LevelString, level >::type;
-        using StrRightPart = typename push_back < LevelStr, char_<']'> >::type; // "info]"
-        using StrFinal = typename push_front < StrRightPart, char_<'['> >::type; // "[info]"
-
-        m_content << CColor::dgray() << CColor::bblack() << '[' << getTimeString('-', ' ', ':') << ']' << Color() << c_str<StrFinal>::value;
-        if (level >= lineLevel) m_content << CColor::dgray() << "(" << fileName << ":" << lineNumber << ") ";
-        m_content << CColor::gray();
+        using Str0 = typename at_c<LevelString, level>::type;      // "info"
+        using Str1 = typename push_front<Str0, char_<'['>>::type;  // "[info"
+        using Str2 = typename push_back<Str1, char_<']'>>::type;   // "[info]"
+        // Output to stringstream
+        m_content << CColor::dgray() << CColor::bblack() << '[' << getTimeString('-', ' ', ':') << ']' << Color() << c_str<Str2>::value;
+        if (level >= lineLevel) m_content << CColor::dgray() << "(" << fileName << ":" << lineNumber << ")";
+        m_content << " " << CColor::gray();
     }
 
     ~Logger()
     {
-        if (!fileOnly)
-        {
-            if (level >= cerrLevel)
-                std::cerr << std::endl;
-            else if (level >= clogLevel)
-                std::clog << std::endl;
-        }
         if (level >= fileLevel)
             for (auto &it : fsink)
                 it << m_content.get() << std::endl;
