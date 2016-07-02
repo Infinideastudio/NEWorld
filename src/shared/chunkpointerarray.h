@@ -54,7 +54,12 @@ public:
     {
         Chunk** arr = new Chunk*[m_size3];
         Vec3i::for_range(0, m_size, [this, arr, delta](const Vec3i& pos)
-        {arr[pos.x*m_size2 + pos.y*m_size + pos.z] = exist(pos + delta) ? m_array[(pos.x + delta.x)*m_size2 + (pos.y + delta.y)*m_size + (pos.z + delta.z)] : nullptr; });
+        {
+            arr[pos.x*m_size2 + pos.y*m_size + pos.z] =
+                exist(pos + delta) ?
+                m_array[(pos.x + delta.x)*m_size2 + (pos.y + delta.y)*m_size + (pos.z + delta.z)] :
+                nullptr;
+        });
         delete[] m_array;
         m_array = arr;
         m_org += delta;

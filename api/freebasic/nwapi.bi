@@ -27,4 +27,6 @@ type PluginData
     dim internalName as zstring ptr = 0
 end type
 
+declare sub test cdecl alias "test" (byval as integer, byval as integer)
+
 #endif ' !NWAPI_BI_

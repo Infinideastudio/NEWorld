@@ -20,50 +20,70 @@
 #define PLUGINAPI_H_
 
 #include "common.h"
+#include "logger.h"
+
+void hello();
+
+extern "C"
+{
+    NWAPIEXPORT int NWAPICALL test(int, int);
+}
+
+/*
+
+#include "common.h"
 #include "vec3.h"
 #include "blockdata.h"
 #include "blocktype.h"
 #include "blockmanager.h"
 #include "world.h"
 
-// Prefix NW_ means it is an interface to NEWorld main program
-// Prefix PL_ means it is an interface to plugins
-
-// NEWorld structures
-using NW_Vec3i = Vec3i;
-using NW_BlockData = BlockData;
-using NW_BlockType = BlockType;
-
-// Structures for plugin interface
-// Aliases cannot be used when structure definitions in NEWorld and in Plugin API are different
-using PL_Vec3i = NW_Vec3i;
-
-struct PL_BlockData
+// Plugin interface
+class PluginAPI
 {
-    uint32_t id : 12;
-    uint32_t brightness : 4;
-    uint32_t state : 16;
+public:
+
+    // Structures for plugin interface
+    // Aliases cannot be used when structure definitions in NEWorld and in Plugin API are different
+    using PiVec3i = Vec3i;
+
+    struct PiBlockData
+    {
+        uint32_t id : 12;
+        uint32_t brightness : 4;
+        uint32_t state : 16;
+    };
+
+    struct PiBlockType
+    {
+        char* blockname = nullptr;
+        bool solid;
+        bool translucent;
+        bool opaque;
+        int32_t explodePower;
+        int32_t hardness;
+    };
+
+    // Conversions between plugin structures and NEWorld structures
+    // This is used when structure definitions in NEWorld and in Plugin API are different
+    static BlockData convertBlockData(const PiBlockData& src);
+    static PiBlockData convertBlockData(const BlockData& src);
+    static BlockType convertBlockType(const PiBlockType& src);
+
+    void setCurrWorld(World& world)
+    {
+        m_world = &world;
+    }
+
+    World& getCurrWorld()
+    {
+        return *m_world;
+    }
+
+private:
+    World* m_world; // Current world
 };
 
-struct PL_BlockType
-{
-    char* blockname = nullptr;
-    bool solid;
-    bool translucent;
-    bool opaque;
-    int32_t explodePower;
-    int32_t hardness;
-};
-
-// Conversions between plugin structures and NEWorld structures
-// This is used when structure definitions in NEWorld and in Plugin API are different
-NW_BlockData convertBlockData(const PL_BlockData& src);
-PL_BlockData convertBlockData(const NW_BlockData& src);
-NW_BlockType convertBlockType(const PL_BlockType& src);
-
-// Pointer to procedure types
-typedef NW_BlockData(World::*NW_getBlockFunc)(const NW_Vec3i&) const;
-typedef void(World::*NW_setBlockFunc)(const NW_Vec3i&, NW_BlockData);
-typedef void(BlockManager::*NW_registerBlockFunc)(const NW_BlockType& block);
+*/
 
 #endif

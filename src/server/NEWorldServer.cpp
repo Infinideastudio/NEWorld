@@ -24,11 +24,13 @@
 #include <thread>
 #include "settings.h"
 #include "servercommand.h"
+#include <pluginapi.h>
 
 extern "C" NWAPIEXPORT int NWAPICALL main(int, char*[]);
 
 int NWAPICALL main(int, char*[])
 {
+    hello(); // Delete this, recompile the solution, compile the plugin, and "undefined reference" will occur
     loadSettings();
     loggerInit("NEWorld_Server");
     infostream << "\n----------------------------------------"

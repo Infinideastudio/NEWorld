@@ -18,51 +18,61 @@
 
 #include "pluginapi.h"
 
+void hello()
+{
+    infostream << "Hello!";
+}
+
+int NWAPICALL test(int x, int y)
+{
+    infostream << "Hello, world! An API is called to calculate the sum of " << x << " and " << y << "!";
+    return x + y;
+}
+
+/*
+
 World* world;
 BlockManager* blocks;
-
-// Pointers to NEWorld procedures
-NW_getBlockFunc NW_getBlock;
-NW_setBlockFunc NW_setBlock;
-NW_registerBlockFunc NW_registerBlock;
 
 extern "C"
 {
 
     // ### Export variables/procedures to plugins ###
 
-    NWAPIEXPORT PL_BlockData getBlock(const PL_Vec3i* pos)
+    NWAPIEXPORT PluginAPI::PiBlockData getBlock(const PluginAPI::PiVec3i* pos)
     {
-        return convertBlockData((world->*NW_getBlock)(*pos));
+        return PluginAPI::convertBlockData((world->getBlock)(*pos));
     }
-    NWAPIEXPORT void setBlock(const PL_Vec3i* pos, PL_BlockData block)
+    NWAPIEXPORT void setBlock(const PluginAPI::PiVec3i* pos, PluginAPI::PiBlockData block)
     {
-        (world->*NW_setBlock)(*pos, convertBlockData(block));
+        (world->setBlock)(*pos, PluginAPI::convertBlockData(block));
     }
-    NWAPIEXPORT void registerBlock(const PL_BlockType* block)
+    NWAPIEXPORT void registerBlock(const PluginAPI::PiBlockType* block)
     {
-        (blocks->*NW_registerBlock)(convertBlockType(*block));
+        (blocks->registerBlock)(PluginAPI::convertBlockType(*block));
     }
 
 }
 
 // Conversions between plugin structures and NEWorld structures
 // This is used when structure definitions in NEWorld and in Plugin API are different
-NW_BlockData convertBlockData(const PL_BlockData & src)
+BlockData PluginAPI::convertBlockData(const PiBlockData& src)
 {
-    return NW_BlockData(src.id, src.brightness, src.state);
+    return BlockData(src.id, src.brightness, src.state);
 }
 
-PL_BlockData convertBlockData(const NW_BlockData & src)
+PluginAPI::PiBlockData PluginAPI::convertBlockData(const BlockData& src)
 {
-    PL_BlockData res;
+    PiBlockData res;
     res.id = src.getID();
     res.brightness = src.getBrightness();
     res.state = src.getState();
     return res;
 }
 
-NW_BlockType convertBlockType(const PL_BlockType & src)
+BlockType PluginAPI::convertBlockType(const PiBlockType& src)
 {
-    return NW_BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness);
+    return BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness);
 }
+
+*/

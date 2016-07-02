@@ -19,10 +19,10 @@
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
-#include "../shared/vec3.h"
+#include <vec3.h>
+#include "mat4.h"
 #include "vertexarray.h"
 
-// Theoritically Renderer is a singleton.
 class Renderer
 {
 private:
@@ -36,7 +36,6 @@ public:
     void translate(const Vec3<int>& pos);
     // Apply rotations
     void rotate(double degrees, const Vec3<double>& pos);
-
 
 };
 
