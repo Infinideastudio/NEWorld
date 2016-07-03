@@ -23,7 +23,6 @@
 #include "logger.h"
 
 std::vector<std::ofstream> fsink;
-unsigned short CColor::fg = 0u, CColor::bg = 0u;
 
 int clogLevel = trace;
 int cerrLevel = fatal;
@@ -31,6 +30,8 @@ int fileLevel = trace;
 int lineLevel = warning;
 
 bool fileOnly = false;
+
+static std::string LevelTags[6];
 
 template<size_t length>
 static string convert(int arg)
@@ -65,10 +66,48 @@ inline void addFileSink(const string& path, const string& prefix)
 void loggerInit(const string& prefix)
 {
     using namespace boost::filesystem;
-    string path = "./Logs/";
+    const char *path = "./Logs/";
     if (!exists(path))
-        create_directory(path);
+    {
+        create_directories(path);
+    }
+
     addFileSink(path, prefix);
+
+    std::stringstream ss;
+
+    int c = -1;
+
+    c++;
+    ss.str("");
+    ss << LColor::lowlight << LColor::white << '[' << "trace" << ']';
+    LevelTags[c] = ss.str();
+
+    c++;
+    ss.str("");
+    ss << LColor::white << '[' << "debug" << ']';
+    LevelTags[c] = ss.str();
+
+    c++;
+    ss.str("");
+    ss << LColor::highlight << LColor::white << '[' << "info" << ']';
+    LevelTags[c] = ss.str();
+
+    c++;
+    ss.str("");
+    ss << LColor::highlight << LColor::yellow << '[' << "warning" << ']';
+    LevelTags[c] = ss.str();
+
+    c++;
+    ss.str("");
+    ss << LColor::highlight << LColor::red << '[' << "error" << ']';
+    LevelTags[c] = ss.str();
+
+    c++;
+    ss.str("");
+    ss << LColor::lowlight << LColor::red << '[' << "fatal" << ']';
+    LevelTags[c] = ss.str();
+
     // File sequence number not finished
     /*
     directory_iterator itemEnd;
@@ -78,4 +117,29 @@ void loggerInit(const string& prefix)
     string filePath = item->path().string() + "/" + item->path().filename().string();
     }
     */
+}
+
+Logger::Logger(const char* fileName, int lineNumber, Level level)
+{
+    m_content << LColor::clear << LColor::lowlight << LColor::white << '[' << getTimeString('-', ' ', ':') << ']' << LevelTags[level];
+    if (level >= lineLevel) m_content << "(" << fileName << ":" << lineNumber << ") ";
+}
+
+Logger::~Logger()
+{
+    m_content << LColor::clear << std::endl;
+    if (!fileOnly)
+    {
+        if (m_level >= cerrLevel)
+            std::cerr << m_content.str();
+        else if (m_level >= clogLevel)
+            std::clog << m_content.str();
+    }
+    if (m_level >= fileLevel)
+    {
+        for (auto &it : fsink)
+        {
+            it << m_content.get();
+        }
+    }
 }
