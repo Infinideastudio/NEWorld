@@ -16,37 +16,16 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef RENDERER_H_
-#define RENDERER_H_
+#ifndef OPENGL_H_
+#define OPENGL_H_
 
-#include "opengl.h"
-#include <vec3.h>
-#include "mat4.h"
-#include "vertexarray.h"
+#include <common.h>
 
-class Renderer
-{
-private:
+#ifdef NEWORLD_COMPILER_MSVC
+#    include <wingdi.h>
+#    include <windef.h>
+#endif
 
-public:
-    // Setup rendering
-    void init();
-    // Reset translations/rotations (Restore transform matrixes)
-    void restoreScale()
-    {
-        glLoadIdentity();
-    }
-    // Apply translations
-    void translate(const Vec3f& delta)
-    {
-        glTranslatef(delta.x, delta.y, delta.z);
-    }
-    // Apply rotations
-    void rotate(double degrees, const Vec3f& scale)
-    {
-        glRotatef(degrees, scale.x, scale.y, scale.z);
-    }
+#include <GL/gl.h>
 
-};
-
-#endif // !RENDERER_H_
+#endif // !OPENGL_H_

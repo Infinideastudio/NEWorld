@@ -16,37 +16,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef RENDERER_H_
-#define RENDERER_H_
-
 #include "opengl.h"
-#include <vec3.h>
-#include "mat4.h"
-#include "vertexarray.h"
 
-class Renderer
-{
-private:
-
-public:
-    // Setup rendering
-    void init();
-    // Reset translations/rotations (Restore transform matrixes)
-    void restoreScale()
-    {
-        glLoadIdentity();
-    }
-    // Apply translations
-    void translate(const Vec3f& delta)
-    {
-        glTranslatef(delta.x, delta.y, delta.z);
-    }
-    // Apply rotations
-    void rotate(double degrees, const Vec3f& scale)
-    {
-        glRotatef(degrees, scale.x, scale.y, scale.z);
-    }
-
-};
-
-#endif // !RENDERER_H_
+// TODO: Place extension definitions here
