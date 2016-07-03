@@ -18,21 +18,20 @@
 
 #include "pluginapi.h"
 
-void hello()
+BlockManager* PiBlocks;
+
+int NWAPICALL registerBlock(const PiBlockType* block)
 {
-    infostream << "Hello!";
+    (PiBlocks->registerBlock)(convertBlockType(*block));
+    return 0;
 }
 
-int NWAPICALL test(int x, int y)
+BlockType convertBlockType(const PiBlockType& src)
 {
-    infostream << "Hello, world! An API is called to calculate the sum of " << x << " and " << y << "!";
-    return x + y;
+    return BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness);
 }
 
 /*
-
-World* world;
-BlockManager* blocks;
 
 extern "C"
 {

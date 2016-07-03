@@ -21,12 +21,23 @@
 
 #inclib "../Bin/NEWorldServer"
 
+type int32_t as long
+
 type PluginData
-    dim pluginName as zstring ptr = 0
-    dim authorName as zstring ptr = 0
-    dim internalName as zstring ptr = 0
+    pluginName as zstring ptr = 0
+    authorName as zstring ptr = 0
+    internalName as zstring ptr = 0
 end type
 
-declare sub test cdecl alias "test" (byval as integer, byval as integer)
+type BlockType
+    blockname as zstring ptr = 0
+    solid as byte
+    translucent as byte
+    opaque as byte
+    explodePower as int32_t
+    hardness as int32_t
+end type
+
+declare function registerBlock cdecl alias "registerBlock" (byval as BlockType ptr) as int32_t
 
 #endif ' !NWAPI_BI_

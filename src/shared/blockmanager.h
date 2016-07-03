@@ -23,6 +23,7 @@
 using std::vector;
 
 #include "blocktype.h"
+#include "logger.h"
 
 class BlockManager
 {
@@ -33,10 +34,14 @@ public:
     void registerBlock(const BlockType& block)
     {
         blocks.push_back(block);
+        debugstream << "Registered block \"" << block.getName() << "\", attributes:\n"
+                    << "Solid: " << block.isSolid() << "\n"
+                    << "Translucent: " << block.isTranslucent() << "\n"
+                    << "Opaque: " << block.isOpaque() << "\n"
+                    << "Explode power: " << block.getExplodePower() << "\n"
+                    << "Hardness: " << block.getHardness() << "\n";
     }
 
 };
-
-extern BlockManager Blocks;
 
 #endif // !BLOCKMANAGER_H_

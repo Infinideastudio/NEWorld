@@ -24,8 +24,10 @@
 #include <networkshared.h>
 #include <logger.h>
 #include <session.h>
-#include <pluginmanager.h>
 #include <worldmanager.h>
+#include <blockmanager.h>
+#include <pluginmanager.h>
+#include <pluginapi.h>
 
 constexpr int updateInterval = 10, globalUpdateInterval = 10;
 
@@ -37,6 +39,7 @@ public:
          m_worlds(m_plugins), m_world(m_worlds.addWorld("TestWorld"))
     {
         // Initialization
+        PiBlocks = &m_blocks;
         infostream << "Initializing plugins...";
         m_plugins.loadPlugins();
         // Start server
@@ -59,6 +62,7 @@ private:
     std::vector<std::weak_ptr<Session>> m_sessions;
 
     WorldManager m_worlds;
+    BlockManager m_blocks;
     PluginManager m_plugins; // Loaded plugins
     World& m_world; // Single world, only for debugging
 

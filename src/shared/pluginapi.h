@@ -21,22 +21,32 @@
 
 #include "common.h"
 #include "logger.h"
-
-void hello();
-
-extern "C"
-{
-    NWAPIEXPORT int NWAPICALL test(int, int);
-}
-
-/*
-
-#include "common.h"
 #include "vec3.h"
 #include "blockdata.h"
 #include "blocktype.h"
 #include "blockmanager.h"
 #include "world.h"
+
+extern BlockManager* PiBlocks;
+
+struct PiBlockType
+{
+    char* blockname = nullptr;
+    bool solid;
+    bool translucent;
+    bool opaque;
+    int32_t explodePower;
+    int32_t hardness;
+};
+
+BlockType convertBlockType(const PiBlockType& src);
+
+extern "C"
+{
+    NWAPIEXPORT int NWAPICALL registerBlock(const PiBlockType*);
+}
+
+/*
 
 // Plugin interface
 class PluginAPI

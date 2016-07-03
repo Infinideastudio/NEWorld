@@ -19,14 +19,22 @@
 #ifndef NWAPI_H_
 #define NWAPI_H_
 
+#include <stdint.h>
+
 #if defined _WIN32 || defined __CYGWIN__
-    #ifdef _MSC_VER
-        #define NWAPIENTRY __declspec(dllimport)
-    #else
-        #define NWAPIENTRY __attribute__((dllimport))
-    #endif
+#    ifdef _MSC_VER
+#        define NWAPIENTRY __declspec(dllimport)
+#    else
+#        define NWAPIENTRY __attribute__((dllimport))
+#    endif
 #else
-    #define NWAPIENTRY __attribute__((visibility("default")))
+#    define NWAPIENTRY __attribute__((visibility("default")))
+#endif
+
+#ifdef _MSC_VER
+#    define NWAPICALL __cdecl
+#else
+#    define NWAPICALL __attribute__((__cdecl__))
 #endif
 
 struct PluginData
@@ -35,5 +43,17 @@ struct PluginData
     char* authorName = nullptr;
     char* internalName = nullptr;
 };
+
+struct BlockType
+{
+    char* blockname = nullptr;
+    bool solid;
+    bool translucent;
+    bool opaque;
+    int32_t explodePower;
+    int32_t hardness;
+};
+
+NWAPIENTRY int32_t NWAPICALL registerBlock(const BlockType*);
 
 #endif // !NWAPI_H_

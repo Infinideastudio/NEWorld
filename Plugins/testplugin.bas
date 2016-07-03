@@ -18,6 +18,9 @@
 
 #include "../api/freebasic/nwapi.bi"
 
+' Plugin data
+dim shared TestPlugin as PluginData ptr
+
 ' Convert const string to zstring ptr
 function c_str(byref s as const string) as zstring ptr
     dim res as zstring ptr = new byte[len(s) + 1]
@@ -28,12 +31,20 @@ end function
 extern "C"
     ' Main function
     function init cdecl() as PluginData ptr export
-        print "TestPlugin: Calling API..."
-        test(233, 666)
-        dim testPlugin as PluginData ptr = new PluginData
-        testPlugin->pluginName = c_str("Test Plugin")
-        testPlugin->authorName = c_str("INFINIDEAS")
-        testPlugin->internalName = c_str("infinideas.testplugin")
-        return testPlugin
+        dim rock as BlockType
+        with rock
+            .blockname = c_str("Rock")
+            .solid = 1
+            .translucent = 0
+            .opaque = 1
+            .explodePower = 0
+            .hardness = 2
+        end with
+        registerBlock(@rock)
+        TestPlugin = new PluginData
+        TestPlugin->pluginName = c_str("Test Plugin")
+        TestPlugin->authorName = c_str("INFINIDEAS")
+        TestPlugin->internalName = c_str("infinideas.testplugin")
+        return TestPlugin
     end function
 end extern
