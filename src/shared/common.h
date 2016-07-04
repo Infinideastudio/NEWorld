@@ -21,63 +21,59 @@
 
 // Compiler flags
 #ifdef _MSC_VER
-#    define NEWORLD_COMPILER_MSVC
+    #define NEWORLD_COMPILER_MSVC
 #endif
 
 // OS flags
 #if defined _WIN32 || defined __CYGWIN__
-#    define NEWORLD_TARGET_WINDOWS
-#    define NEWORLD_USE_WINAPI // Windows native API
+    #define NEWORLD_TARGET_WINDOWS
+    #define NEWORLD_USE_WINAPI // Windows native API
 #else
-//#    define NEWORLD_TARGET_LINUX
-//#    define NEWORLD_TARGET_MACOSX
+    //#    define NEWORLD_TARGET_LINUX
+    //#    define NEWORLD_TARGET_MACOSX
 #endif
 
 #ifdef _DEBUG
-#    define NEWORLD_DEBUG // Main debug flag
+    #define NEWORLD_DEBUG // Main debug flag
 #endif
 
-// Renderer
-#define NEWORLD_USE_OPENGL
-//#define NEWORLD_USE_DIRECT3D
-
 #ifdef NEWORLD_DEBUG
-//    ...
+    //    ...
 #else
-#    ifndef NDEBUG
-#        define NDEBUG // NDEBUG flag for cassert
-#    endif
+    #ifndef NDEBUG
+        #define NDEBUG // NDEBUG flag for cassert
+    #endif
 #endif
 
 #ifdef NEWORLD_USE_WINAPI
-#    define WIN32_LEAN_AND_MEAN
-#    include <Windows.h> // Windows API
+    #define WIN32_LEAN_AND_MEAN
+    #include <Windows.h> // Windows API
 #else
-//#    include <pthread.h> // Or <thread> <mutex>
+    //#    include <pthread.h> // Or <thread> <mutex>
 #endif
 
 #include <cassert>
 
 #if (-1)>>1 == -1
-#    define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
+    #define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
 #endif
 
 // NWAPICALL
 #ifdef NEWORLD_COMPILER_MSVC
-#    define NWAPICALL __cdecl
+    #define NWAPICALL __cdecl
 #else
-#    define NWAPICALL __attribute__((__cdecl__))
+    #define NWAPICALL __attribute__((__cdecl__))
 #endif
 
 // NWAPIEXPORT
 #ifdef NEWORLD_TARGET_WINDOWS
-#    ifdef NEWORLD_COMPILER_MSVC
-#        define NWAPIEXPORT __declspec(dllexport)
-#    else
-#        define NWAPIEXPORT __attribute__((dllexport))
-#    endif
+    #ifdef NEWORLD_COMPILER_MSVC
+        #define NWAPIEXPORT __declspec(dllexport)
+    #else
+        #define NWAPIEXPORT __attribute__((dllexport))
+    #endif
 #else
-#    define NWAPIEXPORT __attribute__((visibility("default")))
+    #define NWAPIEXPORT __attribute__((visibility("default")))
 #endif
 
 constexpr unsigned int NEWorldVersion = 41u;
