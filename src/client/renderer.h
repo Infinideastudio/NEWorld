@@ -42,7 +42,7 @@ public:
         glTranslatef(delta.x, delta.y, delta.z);
     }
     // Apply rotations
-    void rotate(double degrees, const Vec3f& scale)
+    void rotate(float degrees, const Vec3f& scale)
     {
         glRotatef(degrees, scale.x, scale.y, scale.z);
     }

@@ -19,7 +19,6 @@
 #ifndef MAT4_H_
 #define MAT4_H_
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <cstring> // memset, memcpy
 #include <vec3.h>

@@ -44,18 +44,24 @@ inline Mat4<T> Mat4<T>::operator* (const Mat4<T>& rhs) const
 template<typename T>
 static Mat4<T> Mat4<T>::rotation(const T& degrees, const Vec3<T>& scale)
 {
-    Mat4 x(T(1.0)), y(T(1.0)), z(T(1.0));
-    x[5] = cos(degrees*scale.x);
-    x[6] = sin(degrees*scale.x);
-    x[9] = -sin(degrees*scale.x);
-    x[10] = cos(degrees*scale.x);
-    y[0] = cos(degrees*scale.y);
-    y[2] = -sin(degrees*scale.y);
-    y[8] = sin(degrees*scale.y);
-    y[10] = cos(degrees*scale.y);
-    z[0] = cos(degrees*scale.z);
-    z[1] = sin(degrees*scale.z);
-    z[4] = -sin(degrees*scale.z);
-    z[5] = cos(degrees*scale.z);
-    return x*y*z;
+    Mat4 res;
+    T length = sqrt(scale.x * scale.x + scale.y * scale.y + scale.z * scale.z);
+    x /= length;
+    y /= length;
+    z /= length;
+    T alpha = degrees * T(M_PI) / T(180.0);
+    T s = sin(alpha);
+    T c = cos(alpha);
+    T t = 1.0f - c;
+    res[0] = t * scale.x * scale.x + c;
+    res[1] = t * scale.x * scale.y + s * scale.z;
+    res[2] = t * scale.x * scale.z - s * scale.y;
+    res[4] = t * scale.x * scale.y - s * scale.z;
+    res[5] = t * scale.y * scale.y + c;
+    res[6] = t * scale.y * scale.z + s * scale.x;
+    res[8] = t * scale.x * scale.z + s * scale.y;
+    res[9] = t * scale.y * scale.z - s * scale.x;
+    res[10] = t * scale.z * scale.z + c;
+    res[15] = T(1.0);
+    return res;
 }
