@@ -33,78 +33,110 @@ public:
     {
         memset(data, 0, sizeof(data));
     }
+
     Mat4(const Mat4& rhs)
     {
         memcpy(data, rhs.data, sizeof(data));
     }
-    explicit Mat4(const T& x)
+
+    explicit Mat4(T x)
     {
         memset(data, 0, sizeof(data));
         data[0] = data[5] = data[10] = data[15] = x; // Identity matrix
     }
 
-    T& operator[] (int index)
+    T& operator[] (size_t index)
     {
         return data[index];
     }
+
+    T operator[] (size_t index) const
+    {
+        return data[index];
+    }
+
     Mat4 operator* (const Mat4& rhs) const;
+
     Mat4& operator*= (const Mat4& rhs)
     {
         *this = *this * rhs;
-        return this;
+        return *this;
     }
 
     // Get data by position
-    int get(int x, int y)
+    int get(size_t x, size_t y)
     {
         return data[y * 4 + x];
     }
 
     // Set data by position
-    void set(int x, int y, const T& v)
+    void set(size_t x, size_t y, T v)
     {
         data[y * 4 + x] = v;
     }
-
-    // Construct a translation matrix
-    static Mat4 translation(const Vec3<T>& delta)
-    {
-        Mat4 res(T(1.0));
-        res[3] = delta.x;
-        res[7] = delta.y;
-        res[11] = delta.z;
-        return res;
-    }
-
-    // Construct a rotation matrix
-    static Mat4 rotation(const T& degrees, const Vec3<T>& scale);
-    // Construct a perspective projection matrix
-    static Mat4 perspective(const T& fov, const T& aspect, const T& zNear, const T& zFar)
-    {
-        Mat4 res;
-        float viewAngleH = fov * T(M_PI) / T(180.0);
-        float viewAngleV = atan(tan(viewAngleH / T(2.0)) * aspect) * T(2.0);
-        res[0] = T(1.0) / tan(viewAngleV / T(2.0));
-        res[5] = res[0] * aspect;
-        res[10] = -(zFar + zNear) / (zFar - zNear);
-        res[11] = T(-1.0);
-        res[14] = T(-2.0) * zFar * zNear / (zFar - zNear);
-        return res;
-    }
-    // Construct an orthogonal projection matrix
-    static Mat4 ortho(const T& left, const T& right, const T& top, const T& bottom, const T& zNear, const T& zFar)
-    {
-        Mat4 res;
-        res[0] = T(2.0) / (right - left);
-        res[5] = T(2.0) / (bottom - top);
-        res[10] = T(2.0) / (zNear - zFar);
-        res[15] = T(1.0);
-        return res;
-    }
-
 };
 
 using Mat4f = Mat4<float>;
 using Mat4d = Mat4<double>;
+
+// Construct a translation matrix
+template <typename T>
+inline Mat4<T> translation(const Vec3<T>& delta)
+{
+    Mat4<T> res(T(1.0));
+    res[3] = delta.x;
+    res[7] = delta.y;
+    res[11] = delta.z;
+    return res;
+}
+
+// Construct a perspective projection matrix
+template <typename T>
+inline Mat4<T> perspective(T fov, T aspect, T zNear, T zFar)
+{
+    Mat4<T> res;
+    float viewAngleH = fov * T(M_PI) / T(180.0), viewAngleV = atan(tan(viewAngleH / T(2.0)) * aspect) * T(2.0);
+    res[0] = T(1.0) / tan(viewAngleV / T(2.0));
+    res[5] = res[0] * aspect;
+    res[10] = -(zFar + zNear) / (zFar - zNear);
+    res[11] = T(-1.0);
+    res[14] = T(-2.0) * zFar * zNear / (zFar - zNear);
+    return res;
+}
+
+// Construct an orthogonal projection matrix
+template <typename T>
+inline Mat4<T> ortho(T left, T right, T top, T bottom, T zNear, T zFar)
+{
+    Mat4<T> res;
+    res[0] = T(2.0) / (right - left);
+    res[5] = T(2.0) / (bottom - top);
+    res[10] = T(2.0) / (zNear - zFar);
+    res[15] = T(1.0);
+    return res;
+}
+
+// Construct a rotation matrix
+template <typename T>
+inline Mat4<T> rotation(T degrees, const Vec3<T>& scale)
+{
+    Mat4<T> res;
+    T length = sqrt(scale.lengthSqr());
+    x /= length;
+    y /= length;
+    z /= length;
+    T alpha = degrees * T(M_PI) / T(180.0), s = sin(alpha), c = cos(alpha), t = 1.0f - c;
+    res[0] = t * scale.x * scale.x + c;
+    res[1] = t * scale.x * scale.y + s * scale.z;
+    res[2] = t * scale.x * scale.z - s * scale.y;
+    res[4] = t * scale.x * scale.y - s * scale.z;
+    res[5] = t * scale.y * scale.y + c;
+    res[6] = t * scale.y * scale.z + s * scale.x;
+    res[8] = t * scale.x * scale.z + s * scale.y;
+    res[9] = t * scale.y * scale.z - s * scale.x;
+    res[10] = t * scale.z * scale.z + c;
+    res[15] = T(1.0);
+    return res;
+}
 
 #endif // !MAT4_H_

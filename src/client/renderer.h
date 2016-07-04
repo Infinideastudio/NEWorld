@@ -49,12 +49,12 @@ public:
     // Perspective projection
     void setPerspective(float fov, float aspect, float zNear, float zFar)
     {
-        glMultMatrixf(Mat4f::perspective(fov, aspect, zNear, zFar).data);
+        glMultMatrixf(perspective(fov, aspect, zNear, zFar).data);
     }
     // Orthogonal projection
     void setOrtho(float left, float right, float top, float bottom, float zNear, float zFar)
     {
-        glMultMatrixf(Mat4f::ortho(left, right, top, bottom, zNear, zFar).data);
+        glMultMatrixf(ortho(left, right, top, bottom, zNear, zFar).data);
     }
 
 };
