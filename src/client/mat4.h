@@ -45,6 +45,11 @@ public:
         data[0] = data[5] = data[10] = data[15] = x; // Identity matrix
     }
 
+    explicit Mat4(T* src)
+    {
+        memcpy(data, src, sizeof(data));
+    }
+
     T& operator[] (size_t index)
     {
         return data[index];
@@ -64,7 +69,7 @@ public:
     }
 
     // Get data by position
-    int get(size_t x, size_t y)
+    int get(size_t x, size_t y) const
     {
         return data[y * 4 + x];
     }
@@ -75,8 +80,13 @@ public:
         data[y * 4 + x] = v;
     }
 
+    // Transpose matrix
+    void transpose();
+
+    // Get transposed matrix
+    Mat4 getTranspose() const;
+
     // Construct a translation matrix
-    template <typename T>
     static Mat4 translation(const Vec3<T>& delta)
     {
         Mat4 res(T(1.0));
@@ -87,41 +97,12 @@ public:
     }
 
     // Construct a rotation matrix
-    template <typename T>
-    static Mat4 rotation(T degrees, Vec3<T> vec)
-    {
-        Mat4 res;
-        vec.normalize();
-        T alpha = degrees * T(M_PI) / T(180.0), s = sin(alpha), c = cos(alpha), t = 1.0f - c;
-        res[0] = t * vec.x * vec.x + c;
-        res[1] = t * vec.x * vec.y + s * vec.z;
-        res[2] = t * vec.x * vec.z - s * vec.y;
-        res[4] = t * vec.x * vec.y - s * vec.z;
-        res[5] = t * vec.y * vec.y + c;
-        res[6] = t * vec.y * vec.z + s * vec.x;
-        res[8] = t * vec.x * vec.z + s * vec.y;
-        res[9] = t * vec.y * vec.z - s * vec.x;
-        res[10] = t * vec.z * vec.z + c;
-        res[15] = T(1.0);
-        return res;
-    }
+    static Mat4 rotation(T degrees, Vec3<T> vec);
 
     // Construct a perspective projection matrix
-    template <typename T>
-    static Mat4 perspective(T fov, T aspect, T zNear, T zFar)
-    {
-        Mat4 res;
-        float viewAngleH = fov * T(M_PI) / T(180.0), viewAngleV = atan(tan(viewAngleH / T(2.0)) * aspect) * T(2.0);
-        res[0] = T(1.0) / tan(viewAngleV / T(2.0));
-        res[5] = res[0] * aspect;
-        res[10] = -(zFar + zNear) / (zFar - zNear);
-        res[11] = T(-1.0);
-        res[14] = T(-2.0) * zFar * zNear / (zFar - zNear);
-        return res;
-    }
+    static Mat4 perspective(T fov, T aspect, T zNear, T zFar);
 
     // Construct an orthogonal projection matrix
-    template <typename T>
     static Mat4 ortho(T left, T right, T top, T bottom, T zNear, T zFar)
     {
         Mat4 res;
