@@ -23,7 +23,7 @@ std::vector<std::string> split(const std::string& src, std::string separate_char
 {
     std::vector<std::string> strs;
     int separate_characterLen = separate_character.size();
-    int last_position = 0, index = -1;
+    int last_position = 0, index;
     while (-1 != (index = src.find(separate_character, last_position)))
     {
         strs.push_back(src.substr(last_position, index - last_position));

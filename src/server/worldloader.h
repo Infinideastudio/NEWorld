@@ -23,7 +23,6 @@
 using std::pair;
 #include <world.h>
 #include <chunkpointerarray.h>
-#include "chunkloader.h"
 
 constexpr int MaxChunkLoadCount = 64, MaxChunkUnloadCount = 64;
 
@@ -42,7 +41,8 @@ private:
 
 public:
     WorldLoader(World* world, ChunkPointerArray* cpa)
-        :m_world(world), m_cpa(cpa), m_chunkLoadCount(0), m_chunkUnloadCount(0) {}
+        :m_world(world), m_cpa(cpa), m_chunkLoadCount(0), m_chunkUnloadCount(0), m_loadRange(0)
+    {}
 
     /// Set load range
     void setLoadRange(int x)

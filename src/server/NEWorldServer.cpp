@@ -16,8 +16,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <utility>
-#include <string>
 #include "server.h"
 #include <common.h>
 #include <logger.h>

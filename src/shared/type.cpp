@@ -38,19 +38,19 @@ std::string type2string(boost::spirit::hold_any var)
     {
         return var.cast<bool>() ? "true" : "false";
     }
-    else if (var.type() == typeid(int))
+    if (var.type() == typeid(int))
     {
         return std::to_string(var.cast<int>());
     }
-    else if (var.type() == typeid(double))
+    if (var.type() == typeid(double))
     {
         return std::to_string(var.cast<double>());
     }
-    else if (var.type() == typeid(std::string))
+    if (var.type() == typeid(std::string))
     {
         return var.cast<std::string>();
     }
-    else warningstream << "Failed to handle type " << var.type().name() << " which maybe not supported.";
+    warningstream << "Failed to handle type " << var.type().name() << " which maybe not supported.";
     return "";
 }
 

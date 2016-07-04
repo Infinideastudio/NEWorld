@@ -24,11 +24,6 @@
 
 class Object
 {
-private:
-    Vec3d _position, _size, _rotation;
-//    int _health;
-    AABB _hitbox;
-
 public:
     /*
         int getHealth() const
@@ -67,6 +62,10 @@ public:
 
     virtual void update() = 0;
 
+private:
+    Vec3d _position, _size, _rotation;
+    //    int _health;
+    AABB _hitbox;
 };
 
 #endif // OBJECT_H_

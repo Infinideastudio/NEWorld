@@ -28,14 +28,15 @@ using std::string;
 // Plugin system
 class PluginManager
 {
-private:
-    std::vector<Plugin> m_plugins;
-
 public:
     // Load single plugin
     void loadPlugin(const string& filename);
     // Load plugins
     void loadPlugins();
+
+private:
+    std::vector<Plugin> m_plugins;
+
 };
 
 #endif // !PLUGINMANAGER_H_

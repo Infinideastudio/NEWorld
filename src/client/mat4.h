@@ -20,7 +20,6 @@
 #define MAT4_H_
 
 #include <cmath>
-#include <cstring> // memset, memcpy
 #include <vec3.h>
 
 template <typename T>

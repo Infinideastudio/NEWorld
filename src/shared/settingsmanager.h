@@ -33,7 +33,7 @@ public:
     Settings(const std::string& filename) :m_settings(readFromFile(std::move(std::ifstream(filename)))), m_filename(filename) {}
 
     //save the configuration to the file which it is read from
-    void save()
+    void save() const
     {
         writeToFile(std::move(std::ofstream(m_filename)), m_settings, m_minimal);
     }
@@ -77,7 +77,7 @@ public:
 
     using SettingsMap = std::map<std::string, boost::spirit::hold_any>;
 
-    const SettingsMap& getMap()
+    const SettingsMap& getMap() const
     {
         return m_settings;
     }

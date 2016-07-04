@@ -17,15 +17,16 @@
 */
 
 #include "worldloader.h"
+#include "chunkloader.h"
 
 void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
 {
-    Vec3i centerCPos;
+    //Vec3i centerCPos;
     int pl = 0, pu = 0;
     int distsqr, first, middle, last;
 
     // centerPos to chunk coords
-    centerCPos = m_world->getChunkPos(centerPos);
+    //centerCPos = m_world->getChunkPos(centerPos);
 
     for (size_t ci = 0; ci < m_world->getChunkCount(); ci++)
     {

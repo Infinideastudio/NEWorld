@@ -19,17 +19,10 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#include <string>
 #include <iostream>
 #include <vector>
 #include <sstream>
-#include <fstream>
 using std::string;
-#include <boost/mpl/integral_c.hpp>
-#include <boost/mpl/bitwise.hpp>
-#include <boost/mpl/vector.hpp>
-#include <boost/mpl/at.hpp>
-#include <boost/mpl/string.hpp>
 #include "common.h"
 
 #define LC "\033["
