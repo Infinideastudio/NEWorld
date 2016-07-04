@@ -19,7 +19,9 @@
 #ifndef MAT4_H_
 #define MAT4_H_
 
+#include <cmath>
 #include <cstring> // memset, memcpy
+#include <vec3.h>
 
 template <typename T>
 class Mat4
@@ -41,7 +43,16 @@ public:
         data[0] = data[5] = data[10] = data[15] = x; // Identity matrix
     }
 
+    T& operator[] (int index)
+    {
+        return data[index];
+    }
     Mat4 operator* (const Mat4& rhs) const;
+    Mat4& operator*= (const Mat4& rhs)
+    {
+        *this = *this * rhs;
+        return this;
+    }
 
     // Get data by position
     int get(int x, int y)
@@ -54,6 +65,19 @@ public:
     {
         data[y * 4 + x] = v;
     }
+
+    // Construct a translation matrix
+    static Mat4 translation(const Vec3<T>& delta)
+    {
+        Mat4 res(T(1.0));
+        res[3] = delta.x;
+        res[7] = delta.y;
+        res[11] = delta.z;
+        return res;
+    }
+
+    // Construct a rotation matrix
+    static Mat4 rotation(const T& degrees, const Vec3<T>& scale);
 
 };
 
