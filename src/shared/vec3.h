@@ -71,6 +71,15 @@ public:
         return abs(x - rhs.x) + abs(y - rhs.y) +  abs(z - rhs.z);
     }
 
+    /// Normalize vector
+    void normalize()
+    {
+        double l = length();
+        x /= l;
+        y /= l;
+        z /= l;
+    }
+
     BOOST_CONCEPT_REQUIRES(
         ((boost::LessThanComparable<T>)),
         (bool)

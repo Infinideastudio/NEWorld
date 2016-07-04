@@ -74,69 +74,68 @@ public:
     {
         data[y * 4 + x] = v;
     }
+
+    // Construct a translation matrix
+    template <typename T>
+    static Mat4 translation(const Vec3<T>& delta)
+    {
+        Mat4 res(T(1.0));
+        res[3] = delta.x;
+        res[7] = delta.y;
+        res[11] = delta.z;
+        return res;
+    }
+
+    // Construct a rotation matrix
+    template <typename T>
+    static Mat4 rotation(T degrees, Vec3<T> vec)
+    {
+        Mat4 res;
+        vec.normalize();
+        T alpha = degrees * T(M_PI) / T(180.0), s = sin(alpha), c = cos(alpha), t = 1.0f - c;
+        res[0] = t * vec.x * vec.x + c;
+        res[1] = t * vec.x * vec.y + s * vec.z;
+        res[2] = t * vec.x * vec.z - s * vec.y;
+        res[4] = t * vec.x * vec.y - s * vec.z;
+        res[5] = t * vec.y * vec.y + c;
+        res[6] = t * vec.y * vec.z + s * vec.x;
+        res[8] = t * vec.x * vec.z + s * vec.y;
+        res[9] = t * vec.y * vec.z - s * vec.x;
+        res[10] = t * vec.z * vec.z + c;
+        res[15] = T(1.0);
+        return res;
+    }
+
+    // Construct a perspective projection matrix
+    template <typename T>
+    static Mat4 perspective(T fov, T aspect, T zNear, T zFar)
+    {
+        Mat4 res;
+        float viewAngleH = fov * T(M_PI) / T(180.0), viewAngleV = atan(tan(viewAngleH / T(2.0)) * aspect) * T(2.0);
+        res[0] = T(1.0) / tan(viewAngleV / T(2.0));
+        res[5] = res[0] * aspect;
+        res[10] = -(zFar + zNear) / (zFar - zNear);
+        res[11] = T(-1.0);
+        res[14] = T(-2.0) * zFar * zNear / (zFar - zNear);
+        return res;
+    }
+
+    // Construct an orthogonal projection matrix
+    template <typename T>
+    static Mat4 ortho(T left, T right, T top, T bottom, T zNear, T zFar)
+    {
+        Mat4 res;
+        res[0] = T(2.0) / (right - left);
+        res[5] = T(2.0) / (bottom - top);
+        res[10] = T(2.0) / (zNear - zFar);
+        res[15] = T(1.0);
+        return res;
+    }
+
 };
 
 using Mat4f = Mat4<float>;
-using Mat4d = Mat4<double>;
-
-// Construct a translation matrix
-template <typename T>
-inline Mat4<T> translation(const Vec3<T>& delta)
-{
-    Mat4<T> res(T(1.0));
-    res[3] = delta.x;
-    res[7] = delta.y;
-    res[11] = delta.z;
-    return res;
-}
-
-// Construct a perspective projection matrix
-template <typename T>
-inline Mat4<T> perspective(T fov, T aspect, T zNear, T zFar)
-{
-    Mat4<T> res;
-    float viewAngleH = fov * T(M_PI) / T(180.0), viewAngleV = atan(tan(viewAngleH / T(2.0)) * aspect) * T(2.0);
-    res[0] = T(1.0) / tan(viewAngleV / T(2.0));
-    res[5] = res[0] * aspect;
-    res[10] = -(zFar + zNear) / (zFar - zNear);
-    res[11] = T(-1.0);
-    res[14] = T(-2.0) * zFar * zNear / (zFar - zNear);
-    return res;
-}
-
-// Construct an orthogonal projection matrix
-template <typename T>
-inline Mat4<T> ortho(T left, T right, T top, T bottom, T zNear, T zFar)
-{
-    Mat4<T> res;
-    res[0] = T(2.0) / (right - left);
-    res[5] = T(2.0) / (bottom - top);
-    res[10] = T(2.0) / (zNear - zFar);
-    res[15] = T(1.0);
-    return res;
-}
-
-// Construct a rotation matrix
-template <typename T>
-inline Mat4<T> rotation(T degrees, const Vec3<T>& scale)
-{
-    Mat4<T> res;
-    T length = sqrt(scale.lengthSqr());
-    x /= length;
-    y /= length;
-    z /= length;
-    T alpha = degrees * T(M_PI) / T(180.0), s = sin(alpha), c = cos(alpha), t = 1.0f - c;
-    res[0] = t * scale.x * scale.x + c;
-    res[1] = t * scale.x * scale.y + s * scale.z;
-    res[2] = t * scale.x * scale.z - s * scale.y;
-    res[4] = t * scale.x * scale.y - s * scale.z;
-    res[5] = t * scale.y * scale.y + c;
-    res[6] = t * scale.y * scale.z + s * scale.x;
-    res[8] = t * scale.x * scale.z + s * scale.y;
-    res[9] = t * scale.y * scale.z - s * scale.x;
-    res[10] = t * scale.z * scale.z + c;
-    res[15] = T(1.0);
-    return res;
-}
+// Recommended to use Mat4f instead of Mat4d
+// using Mat4d = Mat4<double>;
 
 #endif // !MAT4_H_
