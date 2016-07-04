@@ -19,6 +19,7 @@
 #ifndef MAT4_H_
 #define MAT4_H_
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <cstring> // memset, memcpy
 #include <vec3.h>
@@ -78,6 +79,29 @@ public:
 
     // Construct a rotation matrix
     static Mat4 rotation(const T& degrees, const Vec3<T>& scale);
+    // Construct a perspective projection matrix
+    static Mat4 perspective(const T& fov, const T& aspect, const T& zNear, const T& zFar)
+    {
+        Mat4 res;
+        float viewAngleH = fov * T(M_PI) / T(180.0);
+        float viewAngleV = atan(tan(viewAngleH / T(2.0)) * aspect) * T(2.0);
+        res[0] = T(1.0) / tan(viewAngleV / T(2.0));
+        res[5] = res[0] * aspect;
+        res[10] = -(zFar + zNear) / (zFar - zNear);
+        res[11] = T(-1.0);
+        res[14] = T(-2.0) * zFar * zNear / (zFar - zNear);
+        return res;
+    }
+    // Construct an orthogonal projection matrix
+    static Mat4 ortho(const T& left, const T& right, const T& top, const T& bottom, const T& zNear, const T& zFar)
+    {
+        Mat4 res;
+        res[0] = T(2.0) / (right - left);
+        res[5] = T(2.0) / (bottom - top);
+        res[10] = T(2.0) / (zNear - zFar);
+        res[15] = T(1.0);
+        return res;
+    }
 
 };
 
