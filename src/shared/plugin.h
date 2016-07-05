@@ -55,7 +55,8 @@ public:
 
     ~Plugin()
     {
-        delete m_data; // TODO: Fix it if it has bug.
+        //delete m_data;
+        // TODO: Fix it: Memory Leak
     }
 
     // Get plugin data

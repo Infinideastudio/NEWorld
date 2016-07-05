@@ -119,7 +119,7 @@ void loggerInit(const string& prefix)
     */
 }
 
-Logger::Logger(const char* fileName, int lineNumber, Level level)
+Logger::Logger(const char* fileName, int lineNumber, Level level): m_level(level)
 {
     m_content << LColor::clear << LColor::lowlight << LColor::white << '[' << getTimeString('-', ' ', ':') << ']' << LevelTags[level];
     if (level >= lineLevel) m_content << "(" << fileName << ":" << lineNumber << ") ";
