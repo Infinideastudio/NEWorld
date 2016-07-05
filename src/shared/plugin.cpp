@@ -17,6 +17,7 @@
 */
 
 #include "plugin.h"
+#include "logger.h"
 
 typedef PluginData* NWAPICALL InitFunction();
 
@@ -33,7 +34,7 @@ int Plugin::loadFrom(const string& filename)
     {
         if (m_lib.is_loaded()) return m_status = 1; // Failed: could not load
         if (init == nullptr) return m_status = 2; // Failed: entry not found
-        throw; // Failed: undefined exception
+        warningstream << "Failed: undefined exception.";
     }
     return m_status = 0;
 }

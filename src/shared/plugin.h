@@ -38,14 +38,6 @@ struct PluginData
 // Single plugin
 class Plugin
 {
-private:
-    // Plugin DLL
-    boost::dll::shared_library m_lib;
-    // Plugin Data
-    PluginData* m_data;
-    // Load status
-    int m_status = -1;
-
 public:
     explicit Plugin(const string& filename)
     {
@@ -74,6 +66,14 @@ public:
     }
     // Load plugin, return 0 for success
     int loadFrom(const string& filename);
+
+private:
+    // Plugin DLL
+    boost::dll::shared_library m_lib;
+    // Plugin Data
+    PluginData* m_data;
+    // Load status
+    int m_status = -1;
 
 };
 
