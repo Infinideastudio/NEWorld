@@ -49,6 +49,15 @@ public:
         rhs.m_status = -1;
     }
 
+    Plugin(const Plugin&) = delete;
+
+    Plugin& operator = (const Plugin&) = delete;
+
+    ~Plugin()
+    {
+        delete m_data; // TODO: Fix it if it has bug.
+    }
+
     // Get plugin data
     const PluginData& getData() const
     {

@@ -16,7 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '/
 
-#include "../api/freebasic/nwapi.bi"
+#include "../../../api/freebasic/nwapi.bi"
 
 ' Plugin data
 dim shared TestPlugin as PluginData ptr
@@ -48,6 +48,6 @@ function init cdecl() as PluginData ptr export
     TestPlugin = new PluginData
     TestPlugin->pluginName = c_str("Test Plugin")
     TestPlugin->authorName = c_str("INFINIDEAS")
-    TestPlugin->internalName = c_str("infinideas.testplugin")
+    TestPlugin->internalName = c_str("infinideas.testplugin.freebasic")
     return TestPlugin
 end function

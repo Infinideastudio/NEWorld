@@ -22,19 +22,19 @@
 #include <stdint.h>
 
 #if defined _WIN32 || defined __CYGWIN__
-#    ifdef _MSC_VER
-#        define NWAPIENTRY __declspec(dllimport)
-#    else
-#        define NWAPIENTRY __attribute__((dllimport))
-#    endif
+    #ifdef _MSC_VER
+        #define NWAPIENTRY __declspec(dllimport)
+    #else
+        #define NWAPIENTRY __attribute__((dllimport))
+    #endif
 #else
-#    define NWAPIENTRY __attribute__((visibility("default")))
+    #define NWAPIENTRY __attribute__((visibility("default")))
 #endif
 
 #ifdef _MSC_VER
-#    define NWAPICALL __cdecl
+    #define NWAPICALL __cdecl
 #else
-#    define NWAPICALL __attribute__((__cdecl__))
+    #define NWAPICALL __attribute__((__cdecl__))
 #endif
 
 struct PluginData
