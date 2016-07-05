@@ -136,10 +136,6 @@ Logger::~Logger()
             std::clog << m_content.str();
     }
     if (m_level >= fileLevel)
-    {
         for (auto &it : fsink)
-        {
-            it << m_content.get();
-        }
-    }
+            it << m_content.str();
 }
