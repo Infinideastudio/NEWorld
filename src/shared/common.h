@@ -79,21 +79,10 @@
 constexpr unsigned int NEWorldVersion = 41u;
 constexpr unsigned int ReleaseVersion = (NEWorldVersion << 16) + 2;
 constexpr const char* CopyrightString = R"(
-NEWorld: A free game with similar rules to Minecraft.
-Copyright(C) 2016 NEWorld Team
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+NEWorld  Copyright (C) 2016  NEWorld Team
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it under certain conditions.
+For details see "licenses/license_NEWorld.txt".
 )";
 
 #if defined(NEWORLD_TARGET_WINDOWS)
