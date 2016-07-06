@@ -24,11 +24,14 @@
 #if defined _WIN32 || defined __CYGWIN__
     #ifdef _MSC_VER
         #define NWAPIENTRY __declspec(dllimport)
+        #define NWAPIEXPORT __declspec(dllexport)
     #else
         #define NWAPIENTRY __attribute__((dllimport))
+        #define NWAPIEXPORT __attribute__((dllexport))
     #endif
 #else
     #define NWAPIENTRY __attribute__((visibility("default")))
+    #define NWAPIEXPORT __attribute__((visibility("default")))
 #endif
 
 #ifdef _MSC_VER
@@ -54,6 +57,9 @@ struct BlockType
     int32_t hardness;
 };
 
-NWAPIENTRY int32_t NWAPICALL registerBlock(const BlockType*);
+extern "C"
+{
+    NWAPIENTRY int32_t NWAPICALL registerBlock(BlockType*);
+}
 
 #endif // !NWAPI_H_

@@ -19,7 +19,7 @@
 #ifndef NWAPI_BI_
 #define NWAPI_BI_
 
-#inclib "../Bin/NEWorldServer"
+#inclib "../../../Bin/NEWorldServer"
 
 type int32_t as long
 

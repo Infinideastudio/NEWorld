@@ -48,6 +48,6 @@ function init cdecl() as PluginData ptr export
     TestPlugin = new PluginData
     TestPlugin->pluginName = c_str("Test Plugin")
     TestPlugin->authorName = c_str("INFINIDEAS")
-    TestPlugin->internalName = c_str("infinideas.testplugin.freebasic")
+    TestPlugin->internalName = c_str("infinideas.testplugin_freebasic")
     return TestPlugin
 end function
