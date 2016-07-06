@@ -34,7 +34,7 @@ int Plugin::loadFrom(const string& filename)
     {
         if (m_lib.is_loaded()) return m_status = 1; // Failed: could not load
         if (init == nullptr) return m_status = 2; // Failed: entry not found
-        warningstream << "Failed: undefined exception.";
+        warningstream << "Failed: unexpected exception: " << e.what();
     }
     return m_status = 0;
 }
