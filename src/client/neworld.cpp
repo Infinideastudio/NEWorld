@@ -18,22 +18,19 @@
 
 #include "neworld.h"
 
-extern "C" NWAPIEXPORT int NWAPICALL main(int, char*[]);
-
-// Just a joke :D
-class orld
+void NEWorld::run()
 {
-public:
-    orld()
+    // Initialize here
+    bool exit = false;
+    std::thread serverThread(networkThread);
+
+    // Start to run
+    while (!exit)
     {
-        NEWorld neworld;
-    }
-};
 
-int NWAPICALL main(int, char*[])
-{
-    // NOW THE WORLD CONSTRUCTS!
-    new orld;
-    // NOW EVERYTHING COMES TO THE END...
-    return 0;
+    }
+
+    // Destroy here
+    serverThread.join();
+    disconnect();
 }

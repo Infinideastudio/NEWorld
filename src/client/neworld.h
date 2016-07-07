@@ -16,24 +16,27 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "neworld.h"
+#ifndef NEWORLD_H_
+#define NEWORLD_H_
 
-extern "C" NWAPIEXPORT int NWAPICALL main(int, char*[]);
+#include <common.h>
+#include "network.h"
+#include <thread>
+#include <logger.h>
 
-// Just a joke :D
-class orld
+class NEWorld
 {
 public:
-    orld()
+    NEWorld()
     {
-        NEWorld neworld;
+        loggerInit("NEWorld");
+        run();
     }
+
+private:
+    // Main procedure for client
+    void run();
+
 };
 
-int NWAPICALL main(int, char*[])
-{
-    // NOW THE WORLD CONSTRUCTS!
-    new orld;
-    // NOW EVERYTHING COMES TO THE END...
-    return 0;
-}
+#endif // !NEWORLD_H_
