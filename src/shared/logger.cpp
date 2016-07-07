@@ -174,7 +174,7 @@ Logger::~Logger()
             writeOstream(it,true);
 }
 
-NWAPIEXPORT void NWAPICALL consolePrint(char * str, Level level)
+NWAPIEXPORT void NWAPICALL consolePrint(const char * str, Level level)
 {
     switch (level)
     {

@@ -21,6 +21,7 @@
 
 #include <cmath>
 #include <vec3.h>
+#include <cstring>
 
 template <typename T>
 class Mat4
