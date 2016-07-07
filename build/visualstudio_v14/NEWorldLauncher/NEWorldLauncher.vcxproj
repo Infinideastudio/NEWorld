@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\launcher\NEWorldLauncher.cpp" />
+    <ClCompile Include="..\..\..\src\launcher\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EB85579F-6F16-410D-AD97-9A6F9CE03657}</ProjectGuid>

@@ -40,7 +40,7 @@
     <ClCompile Include="..\..\..\src\server\settings.cpp">
       <Filter>Source\World\Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\server\NEWorldServer.cpp">
+    <ClCompile Include="..\..\..\src\server\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

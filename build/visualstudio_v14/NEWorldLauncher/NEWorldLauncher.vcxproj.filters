@@ -7,7 +7,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\launcher\NEWorldLauncher.cpp">
+    <ClCompile Include="..\..\..\src\launcher\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -27,7 +27,7 @@ int NWAPICALL main(int, char*[])
 {
     loggerInit("NEWorld");
     std::thread serverThread(networkThread);
-    system("pause");
+
     disconnect();
     serverThread.join();
     return 0;
