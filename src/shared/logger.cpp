@@ -179,7 +179,7 @@ NWAPIEXPORT void NWAPICALL consolePrint(char * str, Level level)
     switch (level)
     {
     case trace:
-        Logger<trace>(__FUNCTION__, __LINE__) << str;
+        Logger(__FUNCTION__, __LINE__,trace) << str;
         break;
     case debug:
         debugstream << str;
