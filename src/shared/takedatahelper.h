@@ -18,26 +18,20 @@
 
 #ifndef TAKEDATAHELPER_H_
 #define TAKEDATAHELPER_H_
-
-#include <boost/core/noncopyable.hpp>
-#include <string>
+#include <memory>
 
 /// A helper class for taking data out of a byte array
-class TakeDataHelper :boost::noncopyable
+class TakeDataHelper
 {
 public:
-    TakeDataHelper(char* buffer, size_t length, bool autoReleaseArray)
-        :m_buffer(buffer), m_length(length), m_offset(0), m_autoReleaseArray(autoReleaseArray) {}
-    ~TakeDataHelper()
-    {
-        if(m_autoReleaseArray) delete[] m_buffer;
-    }
+    TakeDataHelper(std::shared_ptr<char> buffer, size_t length)
+        :m_shared_ptr(buffer), m_length(length), m_buffer(buffer.get()), m_offset(0) {}
 
     template<typename T>
     T take()
     {
         if (m_offset + sizeof(T) > m_length) throw;
-        T ret = *((T*)(m_buffer + m_offset));
+        T ret = *reinterpret_cast<T*>(m_buffer + m_offset);
         m_offset += sizeof(T);
         return ret;
     }
@@ -54,7 +48,7 @@ private:
     char* m_buffer;
     size_t m_length;
     size_t m_offset;
-    bool m_autoReleaseArray;
+    std::shared_ptr<char> m_shared_ptr;
 
 };
 

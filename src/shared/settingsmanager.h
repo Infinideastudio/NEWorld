@@ -43,13 +43,12 @@ public:
     {
         strtolower(key);
         auto result = m_settings.find(key);
-        if (result != m_settings.end())
+        if (result != m_settings.end()) //If found
             return result->second.cast<T>();
-        else
-        {
-            m_settings[key] = defaultValue;
-            return defaultValue;
-        }
+
+        //Otherwise, return the default value
+        m_settings[key] = defaultValue;
+        return defaultValue;
     }
 
     boost::spirit::hold_any get(std::string key)

@@ -19,9 +19,9 @@
 #ifndef SESSION_H_
 #define SESSION_H_
 
-#include <boost/core/noncopyable.hpp>
 #include <queue>
 #include "networkshared.h"
+#include "packet.h"
 
 class Session :public std::enable_shared_from_this<Session>
 {

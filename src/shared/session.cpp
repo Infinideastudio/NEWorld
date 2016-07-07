@@ -18,6 +18,8 @@
 
 #include "session.h"
 #include "takedatahelper.h"
+#include "identifier.h"
+#include "networkstructures.h"
 
 using namespace boost::asio;
 using namespace boost::system;
@@ -27,7 +29,7 @@ void errorHandle(const tcp::socket& m_socket, error_code ec);
 
 std::unique_ptr<NetworkStructure> makeNetworkStructure(Packet& packet)
 {
-    TakeDataHelper tdh(packet.data.get(), packet.length, false);
+    TakeDataHelper tdh(packet.data, packet.length);
     switch (packet.identifier)
     {
     case Login:

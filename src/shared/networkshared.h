@@ -20,12 +20,9 @@
 #define NETWORK_SHARED_H_
 
 #include <boost/asio.hpp>
-#include "networkstructures.h"
-#include "packet.h"
 
 using boost::asio::ip::tcp;
 
-constexpr int Port = 8090;
 extern boost::asio::io_service ioService;
 
 #endif // NETWORK_SHARED_H_

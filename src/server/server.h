@@ -31,6 +31,8 @@
 
 constexpr int updateInterval = 10, globalUpdateInterval = 10;
 
+extern unsigned short globalPort;
+
 class Server
 {
 public:
@@ -51,7 +53,7 @@ public:
         // TODO: Terminate here
     }
 
-    void sendToAllSessions(Packet packet);
+    //void sendToAllSessions(Packet packet);
 
 private:
     void doAccept();

@@ -20,19 +20,21 @@
 #include <logger.h>
 #include "network.h"
 #include "session.h"
+#include <networkstructures.h>
 
 std::string hostIp = "127.0.0.1";
 boost::asio::io_service ioService;
 std::shared_ptr<Session> session;
 const int updateInterval = 10;
+const int Port = 8090; //TODO: read it from a address
 void disconnect()
 {
     ioService.stop();
 }
 
-bool initNetwork(boost::asio::io_service& ioService, tcp::socket& socket, std::string ip)
+bool initNetwork(boost::asio::io_service& ioservice, tcp::socket& socket, std::string ip)
 {
-    tcp::resolver resolver(ioService);
+    tcp::resolver resolver(ioservice);
     try
     {
         //Connect to the server
@@ -58,7 +60,7 @@ void networkThread()
     ioService.run();
 }
 
-void errorHandle(const tcp::socket& m_socket, boost::system::error_code ec)
+void errorHandle(const tcp::socket&, boost::system::error_code ec)
 {
     errorstream << "Network error, code:" << ec.value();
 }

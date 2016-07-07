@@ -173,3 +173,29 @@ Logger::~Logger()
         for (auto &it : fsink)
             writeOstream(it,true);
 }
+
+NWAPIEXPORT void NWAPICALL consolePrint(char * str, Level level)
+{
+    switch (level)
+    {
+    case trace:
+        Logger<trace>(__FUNCTION__, __LINE__) << str;
+        break;
+    case debug:
+        debugstream << str;
+        break;
+    case warning:
+        warningstream << str;
+        break;
+    case error:
+        errorstream << str;
+        break;
+    case fatal:
+        fatalstream << str;
+        break;
+    default:
+    case info:
+        infostream << str;
+        break;
+    }
+}

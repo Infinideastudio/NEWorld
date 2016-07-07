@@ -21,12 +21,12 @@
 
 #define DEFAULT_IMPLEMENT(classname) void classname::process() { assert(false); }
 
-//定义了所有数据包的处理方式
+//Define the ways the data packets process.
 
 void ChatPacket::process()
 {
-    //输出到屏幕上之类的
+    //Do something like printing it to the screen.
 }
 
-//以下是服务端部分，客户端无需实现
+//The below is server side, no need for client to implement.
 DEFAULT_IMPLEMENT(LoginPacket)

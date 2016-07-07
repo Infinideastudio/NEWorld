@@ -53,7 +53,7 @@ public:
         return p;
     }
 
-    virtual void process() override;
+    void process() override;
 
 private:
     std::string m_username;
@@ -68,8 +68,6 @@ public:
     ChatPacket(std::string userSend, std::string content)
         :m_userSend(userSend), m_content(content) {}
 
-    virtual void process() override;
-
     Packet makePacket() override
     {
         Packet p;
@@ -78,6 +76,9 @@ public:
 //        p.data = std::unique_ptr<char[]>(new char[p.length]);
         return p;
     }
+
+    void process() override;
+
 
 private:
     std::string m_userSend;

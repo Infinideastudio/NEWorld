@@ -38,7 +38,7 @@ int NWAPICALL main(int, char*[])
     std::thread inputThread(inputThreadFunc);
     try
     {
-        Server s(ioService, Port);
+        Server s(ioService, globalPort);
         ioService.run();
     }
     catch (std::exception& e)

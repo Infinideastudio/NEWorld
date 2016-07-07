@@ -20,7 +20,6 @@
 #define PACKET_H_
 
 #include <memory>
-#include "networkstructures.h"
 #include "identifier.h"
 
 class Packet

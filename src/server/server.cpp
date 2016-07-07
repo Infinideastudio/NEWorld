@@ -21,6 +21,8 @@
 using namespace boost::asio;
 using namespace boost::system;
 
+unsigned short globalPort;
+
 void errorHandle(const tcp::socket& m_socket, error_code ec)
 {
     infostream << m_socket.remote_endpoint().address().to_string() << " disconnected, code: " << ec.value();
@@ -39,7 +41,7 @@ void Session::doUpdate()
 
 //void Server::sendToAllSessions(Packet packet)
 //{
-//FIXME
+//TODO: fix it
 //for (auto iter = m_sessions.begin(); iter != m_sessions.end();)
 //{
 //    auto session = iter->lock();

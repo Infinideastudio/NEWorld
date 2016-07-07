@@ -84,4 +84,9 @@ void loggerInit(const std::string& prefix);
 // unrecoverable error and program termination is required
 #define fatalstream Logger(__FUNCTION__, __LINE__, fatal)
 
+extern "C"
+{
+    NWAPIEXPORT void NWAPICALL consolePrint(char* str, Level level);
+}
+
 #endif // !LOGGER_H_

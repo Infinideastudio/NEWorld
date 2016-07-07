@@ -61,9 +61,6 @@
     <ClInclude Include="..\..\..\src\shared\worldmanager.h">
       <Filter>Source\World</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\network.h">
-      <Filter>Source\Network</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\shared\command.h">
       <Filter>Source\Command</Filter>
     </ClInclude>

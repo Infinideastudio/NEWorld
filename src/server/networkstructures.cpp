@@ -22,18 +22,18 @@
 
 #define DEFAULT_IMPLEMENT(classname) void LoginPacket::process() { assert(false); }
 
-//定义了所有数据包的处理方式
+//Define the ways the data packets process.
 
 void ChatPacket::process()
 {
-    //转发给所有玩家之类的
+    //Do something like sending it to all players.
 }
 
 void LoginPacket::process()
 {
-    if (true)
+    if (true) //TODO: password verifies
     {
-        infostream << "Player " << m_username << " login!"; //fixit: extra space
+        infostream << "Player " << m_username << " login!"; //TODO: Fix it: extra space
     }
     else
     {
@@ -41,4 +41,4 @@ void LoginPacket::process()
     }
 }
 
-//以下是客户端部分，服务端无需实现
+//The below is client side, no need for server to implement.
