@@ -18,6 +18,7 @@
 
 #include "servercommand.h"
 #include <logger.h>
+#include <consolecolor.h>
 #include <thread>
 #include <chrono>
 #include <command.h>
@@ -80,49 +81,24 @@ void initCommands()
     CommandDefine("test.rainbow", "Internal", "test colors.")
     {
         infostream << "Grayscales:";
-        infostream << CColor::black << CColor::bwhite << "2333333333 [0%]" << CColor::bblack;
-        infostream << CColor::dgray << "2333333333 [50%]";
-        infostream << CColor::gray << "2333333333 [75%]";
-        infostream << CColor::white << "2333333333 [100%]";
+        infostream << LColor::black << "2333333333 [0%]";
+        infostream << LColor::lblack << "2333333333 [50%]";
+        infostream << LColor::white << "2333333333 [75%]";
+        infostream << LColor::lwhite << "2333333333 [100%]";
         infostream << "Dark colors:";
-        infostream << CColor::dred << "2333333333 [dark red]";
-        infostream << CColor::dyellow << "2333333333 [dark yellow]";
-        infostream << CColor::dgreen << "2333333333 [dark green]";
-        infostream << CColor::dcyan << "2333333333 [dark cyan]";
-        infostream << CColor::dblue << "2333333333 [dark blue]";
-        infostream << CColor::dmagenta << "2333333333 [dark magenta]";
+        infostream << LColor::red << "2333333333 [dark red]";
+        infostream << LColor::yellow << "2333333333 [dark yellow]";
+        infostream << LColor::green << "2333333333 [dark green]";
+        infostream << LColor::cyan << "2333333333 [dark cyan]";
+        infostream << LColor::blue << "2333333333 [dark blue]";
+        infostream << LColor::magenta << "2333333333 [dark magenta]";
         infostream << "Bright colors:";
-        infostream << CColor::red << "2333333333 [red]";
-        infostream << CColor::yellow << "2333333333 [yellow]";
-        infostream << CColor::green << "2333333333 [green]";
-        infostream << CColor::cyan << "2333333333 [cyan]";
-        infostream << CColor::blue << "2333333333 [blue]";
-        infostream << CColor::magenta << "2333333333 [magenta]";
-        return{ true , "" };
-    }
-    EndCommandDefine;
-
-    CommandDefine("test.background", "Internal", "test background colors.")
-    {
-        infostream << "Grayscales:";
-        infostream << CColor::bblack << CColor::white << "2333333333 [0%]";
-        infostream << CColor::bdgray << CColor::black << "2333333333 [50%]";
-        infostream << CColor::bgray << CColor::black << "2333333333 [75%]";
-        infostream << CColor::bwhite << CColor::black << "2333333333 [100%]";
-        infostream << "Dark colors:";
-        infostream << CColor::bdred << CColor::black << "2333333333 [dark red]";
-        infostream << CColor::bdyellow << CColor::black << "2333333333 [dark yellow]";
-        infostream << CColor::bdgreen << CColor::black << "2333333333 [dark green]";
-        infostream << CColor::bdcyan << CColor::black << "2333333333 [dark cyan]";
-        infostream << CColor::bdblue << CColor::black << "2333333333 [dark blue]";
-        infostream << CColor::bdmagenta << CColor::black << "2333333333 [dark magenta]";
-        infostream << "Bright colors:";
-        infostream << CColor::bred << CColor::black << "2333333333 [red]";
-        infostream << CColor::byellow << CColor::black << "2333333333 [yellow]";
-        infostream << CColor::bgreen << CColor::black << "2333333333 [green]";
-        infostream << CColor::bcyan << CColor::black << "2333333333 [cyan]";
-        infostream << CColor::bblue << CColor::black << "2333333333 [blue]";
-        infostream << CColor::bmagenta << CColor::black << "2333333333 [magenta]";
+        infostream << LColor::lred << "2333333333 [red]";
+        infostream << LColor::lyellow << "2333333333 [yellow]";
+        infostream << LColor::lgreen << "2333333333 [green]";
+        infostream << LColor::lcyan << "2333333333 [cyan]";
+        infostream << LColor::lblue << "2333333333 [blue]";
+        infostream << LColor::lmagenta << "2333333333 [magenta]";
         return{ true , "" };
     }
     EndCommandDefine;
@@ -200,7 +176,7 @@ void inputThreadFunc()
     while (inputThreadRunning)
     {
         std::string input;
-        std::cout << CColor::white << "$> ";
+        std::cout << LColorFunc::white << "$> ";
         std::getline(std::cin, input);
         auto result = handleCommand(Command(input));
         if (result.info != "")
