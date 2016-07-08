@@ -76,6 +76,9 @@
     <ClInclude Include="..\..\..\src\shared\pluginapi.h">
       <Filter>Source\Plugin</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\consolecolor.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

@@ -183,20 +183,20 @@ namespace LColor
 #define cccp constexpr const char*
     cccp black = "&0";
     cccp red = "&1";
-    cccp green = "&2";
-    cccp blue = "&3";
-    cccp yellow = "&4";
-    cccp magenta = "&5";
-    cccp cyan = "&6";
+    cccp yellow = "&2";
+    cccp green = "&3";
+    cccp cyan = "&4";
+    cccp blue = "&5";
+    cccp magenta = "&6";
     cccp white = "&7";
-    cccp lblack = "&h";
-    cccp lred = "&a";
+    cccp lblack = "&8";
+    cccp lred = "&9";
+    cccp lyellow = "&a";
     cccp lgreen = "&b";
-    cccp lblue = "&c";
-    cccp lyellow = "&d";
+    cccp lcyan = "&c";
+    cccp lblue = "&d";
     cccp lmagenta = "&e";
-    cccp lcyan = "&f";
-    cccp lwhite = "&g";
+    cccp lwhite = "&f";
 #undef cccp
 }
 
