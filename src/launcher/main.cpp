@@ -50,7 +50,6 @@ int main(int argc, char** argv)
     }
     catch (std::exception& e)
     {
-        throw e;
         std::cout << e.what() << std::endl;
         system("pause");
     }

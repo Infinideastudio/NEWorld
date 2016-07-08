@@ -23,13 +23,26 @@
 #include "network.h"
 #include <thread>
 #include <logger.h>
+#include "window.h"
+
+class App : public UI::Core::Application
+{
+public:
+    App(int width, int height, const string& title):m_width(width), m_height(height), m_title(title) {}
+    void afterLaunch() override
+    {
+        addWindow(std::static_pointer_cast<UI::Core::Window>(std::make_shared<MainWindow>(m_width, m_height, m_title)));
+    }
+private:
+    int m_width, m_height;
+    string m_title;
+};
 
 class NEWorld
 {
 public:
     NEWorld()
     {
-        loggerInit("NEWorld");
         run();
     }
 

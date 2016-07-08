@@ -22,17 +22,20 @@
 void NEWorld::run()
 {
     // Initialize here
-    bool exit = false;
+    UI::Base::init();
+    UI::Logger::init("./logs");
+    UI::Font::service.addSearchPaths({ "C:/Windows/Fonts" , "." });
+    UI::Globalization::Service::getInstance().attachLangFiles({ "chinese", "english" });
+
+    loggerInit("NEWorld");
     std::thread serverThread(networkThread);
-    Window window(852, 480, "NEWorld");
+    App app(852, 480, "NEWorld");
 
     // Start to run
-    while (!exit)
-    {
-
-    }
+    app.run();
 
     // Destroy here
+    UI::Logger::service.dump();
     serverThread.join();
     disconnect();
 }

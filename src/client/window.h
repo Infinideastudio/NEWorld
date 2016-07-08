@@ -19,33 +19,26 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-#include <GLFW/glfw3.h>
+#include <UILib/UILib.h>
+#undef main
 #include <string>
 using std::string;
-
-class Window
+class MainMenu : public UI::Core::Page
 {
 public:
-    Window(int width, int height, const string& title);
-    ~Window()
-    {
-        glfwDestroyWindow(m_window);
-    }
-
-    void setCurrentDraw()
-    {
-        glfwMakeContextCurrent(m_window);
-    }
-
-    void swapBuffers()
-    {
-        glfwSwapBuffers(m_window);
-    }
-
-private:
-    GLFWwindow* m_window;
-    unsigned int m_windowWidth, m_windowHeight;
-
+    MainMenu();
 };
+
+class MainWindow : public UI::Core::Window
+{
+public:
+    MainWindow(int width, int height, const string& title) : UI::Core::Window(title, width, height, 200, 200)
+    {
+        //Load the main menu.
+        pushPage(std::static_pointer_cast<UI::Core::Page>(std::make_shared<MainMenu>()));
+    }
+};
+
+
 
 #endif
