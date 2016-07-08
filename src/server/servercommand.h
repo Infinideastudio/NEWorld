@@ -15,11 +15,11 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef _SERVERCOMMAND_H__
-#define _SERVERCOMMAND_H__
+#ifndef SERVERCOMMAND_H_
+#define SERVERCOMMAND_H_
 
 void inputThreadFunc();
 
 void stopInputThreadRunning();
 
-#endif //!_SERVERCOMMAND_H__
+#endif //!SERVERCOMMAND_H_

@@ -127,10 +127,10 @@ void Logger::writeOstream(std::ostream &ostream, bool noColor) const
     constexpr static char stylechar = '~';
     static std::map<char,colorfunc> cmap =
     {
-        {'0',black},{'1',red},{'2',green},{'3',blue},
-        {'4',yellow},{'5',magenta},{'6',cyan},{'7',white},
-        {'h',lblack},{'a',lred},{'b',lgreen},{'c',lblue},
-        {'d',lyellow},{'e',lmagenta},{'f',lcyan},{'g',lwhite},
+        {'0',black},{'1',red},{'2',yellow},{'3',green},
+        {'4',cyan},{'5',blue},{'6',magenta},{'7',white},
+        {'8',lblack},{'9',lred},{'a',lyellow},{'b',lgreen},
+        {'c',lcyan},{'d',lblue},{'e',lmagenta},{'f',lwhite},
     };
     std::string str = m_content.str();
     string::size_type pos1 = 0, pos2 = str.find(stylechar);
@@ -147,7 +147,7 @@ void Logger::writeOstream(std::ostream &ostream, bool noColor) const
             char ch = str[pos2+1];
             if (!noColor)
             {
-                colorfunc cf = cmap[ch];
+                colorfunc cf = cmap[(ch>='A'&&ch<='F') ? ch-'A'+'a' : ch];
                 if (cf) ostream << cf;
                 else
                 {
