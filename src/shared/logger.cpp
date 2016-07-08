@@ -19,7 +19,6 @@
 #include "logger.h"
 #include "consolecolor.h"
 #include <fstream>
-#include <iomanip>
 #include <ctime>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
@@ -103,7 +102,7 @@ void loggerInit(const string& prefix)
 
     ss.str("");
     ss << LColor::red << '[' << "fatal" << ']';
-    LevelTags[c++] = ss.str();
+    LevelTags[c] = ss.str();
 
     // File sequence number not finished
     /*
@@ -122,7 +121,7 @@ Logger::Logger(const char* fileName, int lineNumber, Level level): m_level(level
     if (level >= lineLevel) m_content << "(" << fileName << ":" << lineNumber << ") ";
 }
 
-void Logger::writeOstream(std::ostream &ostream,bool noColor)
+void Logger::writeOstream(std::ostream &ostream,bool noColor) const
 {
     using namespace LColorFunc;
     constexpr static char stylechar = '&';

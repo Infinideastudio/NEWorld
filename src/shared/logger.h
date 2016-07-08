@@ -68,7 +68,7 @@ private:
     std::stringstream m_content;
     Level m_level;
 
-    void writeOstream(std::ostream &ostream,bool noColor = false);
+    void writeOstream(std::ostream &ostream,bool noColor = false) const;
 };
 
 void loggerInit(const std::string& prefix);
