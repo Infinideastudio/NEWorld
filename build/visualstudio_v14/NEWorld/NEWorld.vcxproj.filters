@@ -11,6 +11,12 @@
     <Filter Include="Source\Network">
       <UniqueIdentifier>{34fd62fe-88d1-43c6-8653-498c89996b51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Main">
+      <UniqueIdentifier>{7002ce47-c94a-48d0-8ca1-59b34fcf41d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Window">
+      <UniqueIdentifier>{6a35d50b-1155-4a7c-8af2-fce5c29ea559}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\renderer.h">
@@ -30,6 +36,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\opengl.h">
       <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\neworld.h">
+      <Filter>Source\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\window.h">
+      <Filter>Source\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +68,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\main.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\neworld.cpp">
+      <Filter>Source\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\window.cpp">
+      <Filter>Source\Window</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

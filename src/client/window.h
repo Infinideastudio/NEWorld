@@ -16,23 +16,36 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "neworld.h"
-#include "window.h"
+#ifndef WINDOW_H_
+#define WINDOW_H_
 
-void NEWorld::run()
+#include <GLFW/glfw3.h>
+#include <string>
+using std::string;
+
+class Window
 {
-    // Initialize here
-    bool exit = false;
-    std::thread serverThread(networkThread);
-    Window window(852, 480, "NEWorld");
-
-    // Start to run
-    while (!exit)
+public:
+    Window(int width, int height, const string& title);
+    ~Window()
     {
-
+        glfwDestroyWindow(m_window);
     }
 
-    // Destroy here
-    serverThread.join();
-    disconnect();
-}
+    void setCurrentDraw()
+    {
+        glfwMakeContextCurrent(m_window);
+    }
+
+    void swapBuffers()
+    {
+        glfwSwapBuffers(m_window);
+    }
+
+private:
+    GLFWwindow* m_window;
+    unsigned int m_windowWidth, m_windowHeight;
+
+};
+
+#endif

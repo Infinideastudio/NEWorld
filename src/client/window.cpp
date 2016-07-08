@@ -16,23 +16,10 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "neworld.h"
 #include "window.h"
 
-void NEWorld::run()
+Window::Window(int width, int height, const string& title) :m_windowWidth(width), m_windowHeight(height)
 {
-    // Initialize here
-    bool exit = false;
-    std::thread serverThread(networkThread);
-    Window window(852, 480, "NEWorld");
-
-    // Start to run
-    while (!exit)
-    {
-
-    }
-
-    // Destroy here
-    serverThread.join();
-    disconnect();
+    m_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    setCurrentDraw();
 }

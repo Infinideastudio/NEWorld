@@ -31,18 +31,28 @@ int main(int argc, char** argv)
     std::cout << "Enter 'server' to run server" << std::endl;
     std::string in;
     std::cin >> in;
-    if (in == "server")
-        boost::dll::shared_library
-        (
-            Path + "NEWorldServer",
-            boost::dll::load_mode::append_decorations
-        )
-        .get<MainFunction>("main")(argc, argv);
-    else boost::dll::shared_library
-        (
-            Path + "NEWorld",
-            boost::dll::load_mode::append_decorations
-        )
-        .get<MainFunction>("main")(argc, argv);
+    try
+    {
+        if (in == "server")
+            boost::dll::shared_library
+            (
+                Path + "NEWorldServer",
+                boost::dll::load_mode::append_decorations
+            )
+            .get<MainFunction>("main")(argc, argv);
+        else
+            boost::dll::shared_library
+            (
+                Path + "NEWorld",
+                boost::dll::load_mode::append_decorations
+            )
+            .get<MainFunction>("main")(argc, argv);
+    }
+    catch (std::exception& e)
+    {
+        throw e;
+        std::cout << e.what() << std::endl;
+        system("pause");
+    }
     return 0;
 }
