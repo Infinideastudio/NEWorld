@@ -32,12 +32,12 @@ public:
 
 int NWAPICALL main(int, char*[])
 {
-    auto a=
+    auto world=
 
         // NOW THE WORLD CONSTRUCTS!
         new orld;
     // NOW EVERYTHING COMES TO THE END...
 
-    delete a;
+    delete world;
     return 0;
 }
