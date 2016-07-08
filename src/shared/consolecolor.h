@@ -51,7 +51,7 @@ namespace LColorFunc
 
     inline std::ostream& lred(std::ostream &s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_RED);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_RED|FOREGROUND_INTENSITY);
         return s;
     }
 
