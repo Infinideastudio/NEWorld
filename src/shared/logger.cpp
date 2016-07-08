@@ -136,23 +136,26 @@ void Logger::writeOstream(std::ostream &ostream,bool noColor) const
     string::size_type pos1 = 0, pos2 = str.find(stylechar);
     while (true)
     {
-        if(string::npos == pos2)
+        if (string::npos == pos2)
         {
             ostream << str.substr(pos1,str.size());
             return;
         }
         ostream << str.substr(pos1, pos2 - pos1);
-        if(pos2 < str.size())
+        if (pos2 < str.size())
         {
             char ch = str[pos2+1];
-            if(!noColor)
+            if (!noColor)
             {
                 colorfunc cf = cmap[ch];
-                if(cf) ostream << cf;
-                else ostream << '&' << ch;
+                if (cf) ostream << cf;
+                else
+                {
+                    if (ch == stylechar) ostream << stylechar; // Escaped to `stylechar`
+                    else ostream << stylechar << ch; // Wrong color code
+                }
             }
         }
-
         pos1 = pos2 + 2;
         pos2 = str.find(stylechar, pos1);
     }
