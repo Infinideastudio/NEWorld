@@ -30,7 +30,10 @@ int main(int argc, char** argv)
     std::cout << "Enter 'client' to run client" << std::endl;
     std::cout << "Enter 'server' to run server" << std::endl;
     std::string in;
-    std::cin >> in;
+    if (argc != 2)
+        std::cin >> in;
+    else
+        in = argv[1];
     try
     {
         if (in == "server")
