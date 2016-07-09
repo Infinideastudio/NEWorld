@@ -19,7 +19,7 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-#include <UILib/UILib.h>
+#include <UILib.h>
 #undef main
 #include <string>
 using std::string;
@@ -35,7 +35,7 @@ public:
     MainWindow(int width, int height, const string& title) : UI::Core::Window(title, width, height, 200, 200)
     {
         //Load the main menu.
-        pushPage(std::static_pointer_cast<UI::Core::Page>(std::make_shared<MainMenu>()));
+        pushPage(std::make_shared<MainMenu>());
     }
 };
 

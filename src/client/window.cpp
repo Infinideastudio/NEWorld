@@ -20,21 +20,9 @@
 
 MainMenu::MainMenu() : UI::Core::Page()
 {
+    //Add controls here
     using namespace UI::Core;
     using namespace UI::Controls;
     using namespace UI::Globalization;
     content = std::make_shared<Grid>();
-    content->addChild(std::make_shared<Label>("caption", Margin::StretchLeft(0, 0, 0, 20, 300, 40, 0), Str("Input Something:")));
-    UI::Globalization::Service::getInstance().setLang("chinese");
-    std::shared_ptr<Button> exitbutton = std::make_shared<Button>(
-            "testbutton2", Margin::BottomCenter(0.1, 75, 75, 0, 80), Str("Bye", false), []()
-    {
-        application->terminate();
-    });
-    std::shared_ptr<TextBox> testbox = std::make_shared<TextBox>(
-                                           "testbox", UI::Core::Margin::CenterStretch(0, 1, 10, 10, 20, 20), L"", UI::Globalization::Str("", false), []()
-    {
-    });
-    content->addChild(testbox);
-    content->addChild(exitbutton);
 }
