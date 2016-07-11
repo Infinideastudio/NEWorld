@@ -22,35 +22,18 @@
 #include <cstring>
 #include <boost/core/noncopyable.hpp>
 #include "../shared/common.h"
-#include "opengl.h"
-
-class VertexFormat
-{
-public:
-    // Vertex attribute count
-    int textureCount, colorCount, normalCount, coordinateCount;
-    // Vertex attributes count (sum of all)
-    int vertexAttributeCount;
-
-    VertexFormat() :textureCount(0), colorCount(0), normalCount(0), coordinateCount(0), vertexAttributeCount(0)
-    {}
-    VertexFormat(int textureElementCount, int colorElementCount, int normalElementCount, int coordinateElementCount)
-        :textureCount(textureElementCount), colorCount(colorElementCount), normalCount(normalElementCount), coordinateCount(coordinateElementCount),
-         vertexAttributeCount(textureElementCount + colorElementCount + normalElementCount + coordinateElementCount)
-    {
-        assert(normalCount == 0 || normalCount == 3);
-    }
-};
 
 class VertexArray
     :boost::noncopyable
 {
 public:
-    VertexArray(int maxVertexes, const VertexFormat& format)
-        :m_maxVertexes(maxVertexes), m_vertexes(0), m_format(format)
+    VertexArray(int maxVertexes, int textureElementCount, int colorElementCount, int attributeElementCount, int coordinateElementCount)
+        :m_maxVertexes(maxVertexes), m_vertexes(0),
+         m_textureCount(textureElementCount), m_colorCount(colorElementCount), m_attributeCount(attributeElementCount), m_coordinateCount(coordinateElementCount),
+         m_vertexAttributeCount(textureElementCount + colorElementCount + attributeElementCount + coordinateElementCount)
     {
-        m_data = new float[m_maxVertexes*format.vertexAttributeCount];
-        m_vertexAttributes = new float[format.vertexAttributeCount];
+        m_data = new float[m_maxVertexes*m_vertexAttributeCount]();
+        m_vertexAttributes = new float[m_vertexAttributeCount]();
     }
 
     ~VertexArray()
@@ -61,90 +44,59 @@ public:
 
     void clear()
     {
-        memset(m_data, 0, m_maxVertexes*m_format.vertexAttributeCount*sizeof(float));
-        memset(m_vertexAttributes, 0, m_format.vertexAttributeCount*sizeof(float));
+        memset(m_data, 0, m_maxVertexes*m_vertexAttributeCount*sizeof(float));
+        memset(m_vertexAttributes, 0, m_vertexAttributeCount*sizeof(float));
         m_vertexes = 0;
     }
 
     // Set texture coordinates
     void setTexture(int size, const float* texture)
     {
-        assert(size <= m_format.textureCount);
+        assert(size <= m_textureCount);
         memcpy(m_vertexAttributes, texture, size*sizeof(float));
     }
 
     // Set color value
     void setColor(int size, const float* color)
     {
-        assert(size <= m_format.colorCount);
-        memcpy(m_vertexAttributes + m_format.textureCount, color, size*sizeof(float));
+        assert(size <= m_colorCount);
+        memcpy(m_vertexAttributes + m_textureCount, color, size*sizeof(float));
     }
 
-    // Set normal vector
-    void setNormal(int size, const float* attribute)
+    // Set extra vertex attributes value
+    void setAttribute(int size, const float* attribute)
     {
-        assert(size <= m_format.normalCount);
-        memcpy(m_vertexAttributes + m_format.textureCount + m_format.colorCount, attribute, size*sizeof(float));
+        assert(size <= m_attributeCount);
+        memcpy(m_vertexAttributes + m_textureCount + m_colorCount, attribute, size*sizeof(float));
     }
 
     // Add vertex
     void addVertex(const float* coords)
     {
-        memcpy(m_data + m_vertexes, m_vertexAttributes, m_format.vertexAttributeCount*sizeof(float));
-        memcpy(m_data + m_vertexes + m_format.vertexAttributeCount, coords, m_format.coordinateCount*sizeof(float));
+        memcpy(m_data + m_vertexes, m_vertexAttributes, m_vertexAttributeCount*sizeof(float));
+        memcpy(m_data + m_vertexes + m_vertexAttributeCount, coords, m_coordinateCount*sizeof(float));
         m_vertexes++;
     }
 
-    // Get current vertex format
-    const VertexFormat& getFormat() const
-    {
-        return m_format;
-    }
-
-    // Get current vertex data
-    const float* getData() const
-    {
-        return m_data;
-    }
-
-    // Get current vertex count
-    int getVertexCount() const
-    {
-        return m_vertexes;
-    }
+    // Generate vertex buffer for rendering
+    void flush();
+    // Render vertex buffer
+    static void render();
 
 private:
     // Max vertex count
     const int m_maxVertexes;
     // Vertex count
     int m_vertexes;
-    // Vertex array format
-    VertexFormat m_format;
+    // Vertex Attribute Count
+    const int m_textureCount, m_colorCount, m_attributeCount, m_coordinateCount;
+    // Vertex attributes count (sum of all)
+    const int m_vertexAttributeCount;
     // Vertex array
     float *m_data;
     // Current vertex attributes
     float *m_vertexAttributes;
 
-};
-
-class VertexBuffer
-{
-public:
-    // Buffer ID
-    VertexBufferID id;
-    // Vertex count
-    int vertexes;
-    // Buffer format
-    VertexFormat format;
-
-    VertexBuffer()
-    {}
-    VertexBuffer(const VertexFormat& format_, VertexBufferID id_ = 0) :format(format_), id(id_)
-    {}
-    VertexBuffer(const VertexArray& va);
-
-    // Render vertex buffer
-    void render();
 };
 
 #endif // !VERTEXARRAY_H_

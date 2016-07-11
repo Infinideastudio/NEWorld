@@ -47,12 +47,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\src\shared;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
-    <OutDir>$(SolutionDir)..\..\Bin\</OutDir>
+    <OutDir>$(SolutionDir)..\..\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\src\shared;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
-    <OutDir>$(SolutionDir)..\..\Bin\</OutDir>
+    <OutDir>$(SolutionDir)..\..\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

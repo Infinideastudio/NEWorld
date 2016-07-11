@@ -17,10 +17,6 @@
 */
 
 #include "neworld.h"
-<<<<<<< HEAD:src/client/main.cpp
-=======
-#include <logger.h>
->>>>>>> renderer:src/client/main.cpp
 
 extern "C" NWAPIEXPORT int NWAPICALL main(int, char*[]);
 
@@ -36,7 +32,6 @@ public:
 
 int NWAPICALL main(int, char*[])
 {
-<<<<<<< HEAD:src/client/main.cpp
     auto world=
 
         // NOW THE WORLD CONSTRUCTS!
@@ -44,10 +39,5 @@ int NWAPICALL main(int, char*[])
     // NOW EVERYTHING COMES TO THE END...
 
     delete world;
-=======
-    // NOW THE WORLD CONSTRUCTS!
-    new orld;
-    // NOW EVERYTHING COMES TO THE END...
->>>>>>> renderer:src/client/main.cpp
     return 0;
 }

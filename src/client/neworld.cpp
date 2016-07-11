@@ -18,16 +18,10 @@
 
 #include "neworld.h"
 #include "window.h"
-<<<<<<< HEAD
-=======
-#include "renderer.h"
-#include <logger.h>
->>>>>>> renderer
 
 void NEWorld::run()
 {
     // Initialize here
-<<<<<<< HEAD
     UI::Base::init();
     std::string s = "./Logs";
     UI::Logger::init(s.c_str());
@@ -44,81 +38,5 @@ void NEWorld::run()
     // Destroy here
     UI::Logger::service.dump();
     serverThread.join();
-=======
-    loggerInit("NEWorld");
-    infostream << "Initializing...";
-    bool exit = false;
-    //std::thread serverThread(networkThread);
-    Window mainWindow(852, 480, "NEWorld");
-    Renderer::init(852, 480);
-
-    // Start to run
-    infostream << "Game start!";
-    float xrot = 0.0f, yrot = 0.0f;
-    while (!exit)
-    {
-        Renderer::clear();
-        Renderer::restoreProj();
-        Renderer::applyPerspective(60.0f, 852.0f / 480.0f, 0.1f, 100.0f);
-        Renderer::restoreScale();
-        Renderer::translate(Vec3f(0.0f, 0.0f, -3.0f));
-        Renderer::rotate(xrot, Vec3f(1.0f, 0.0f, 0.0f));
-        Renderer::rotate(yrot, Vec3f(0.0f, 1.0f, 0.0f));
-
-        glBegin(GL_QUADS);
-        // Front
-        glColor3f(0.0f, 0.0f, 1.0f);
-        glVertex3f(-0.5f, 0.5f, 0.5f);
-        glVertex3f(-0.5f,-0.5f, 0.5f);
-        glVertex3f( 0.5f,-0.5f, 0.5f);
-        glVertex3f( 0.5f, 0.5f, 0.5f);
-        // Back
-        glColor3f(0.0f, 1.0f, 0.0f);
-        glVertex3f( 0.5f, 0.5f,-0.5f);
-        glVertex3f( 0.5f,-0.5f,-0.5f);
-        glVertex3f(-0.5f,-0.5f,-0.5f);
-        glVertex3f(-0.5f, 0.5f,-0.5f);
-        // Top
-        glColor3f(1.0f, 1.0f, 0.0f);
-        glVertex3f(-0.5f, 0.5f,-0.5f);
-        glVertex3f(-0.5f, 0.5f, 0.5f);
-        glVertex3f( 0.5f, 0.5f, 0.5f);
-        glVertex3f( 0.5f, 0.5f,-0.5f);
-        // Bottom
-        glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex3f(-0.5f,-0.5f, 0.5f);
-        glVertex3f(-0.5f,-0.5f,-0.5f);
-        glVertex3f( 0.5f,-0.5f,-0.5f);
-        glVertex3f( 0.5f,-0.5f, 0.5f);
-        // Right
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3f( 0.5f,-0.5f, 0.5f);
-        glVertex3f( 0.5f,-0.5f,-0.5f);
-        glVertex3f( 0.5f, 0.5f,-0.5f);
-        glVertex3f( 0.5f, 0.5f, 0.5f);
-        // Left
-        glColor3f(1.0f, 0.0f, 1.0f);
-        glVertex3f(-0.5f,-0.5f,-0.5f);
-        glVertex3f(-0.5f,-0.5f, 0.5f);
-        glVertex3f(-0.5f, 0.5f, 0.5f);
-        glVertex3f(-0.5f, 0.5f,-0.5f);
-        glEnd();
-
-        glFlush();
-        glFinish();
-
-        mainWindow.swapBuffers();
-        Window::update();
-        if (mainWindow.isKeyPressed(GLFW_KEY_LEFT)) yrot -= 0.25f;
-        if (mainWindow.isKeyPressed(GLFW_KEY_RIGHT)) yrot += 0.25f;
-        if (mainWindow.isKeyPressed(GLFW_KEY_UP)) xrot -= 0.25f;
-        if (mainWindow.isKeyPressed(GLFW_KEY_DOWN)) xrot += 0.25f;
-        if (mainWindow.closing()) exit = true;
-    }
-
-    // Destroy here
-    infostream << "Terminating...";
-    //serverThread.join();
->>>>>>> renderer
     disconnect();
 }
