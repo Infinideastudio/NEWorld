@@ -1,4 +1,4 @@
-#include <UILIb.h>
+#include <uilib.h>
 #include <iomanip>
 #include <ctime>
 #include <boost/filesystem/operations.hpp>
@@ -19,7 +19,7 @@ namespace UI
 
         void Logger::log(Level level, const std::string& message, const char * fileName, int lineNumber)
         {
-            constexpr char* LevelString[] =
+            constexpr const char* LevelString[] =
             {
                 "trace","debug","info", "warning","error","fatal"
             };

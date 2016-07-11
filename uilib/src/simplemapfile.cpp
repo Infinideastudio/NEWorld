@@ -1,4 +1,4 @@
-#include <UILIb.h>
+#include <uilib.h>
 
 namespace UI
 {
@@ -34,7 +34,7 @@ namespace UI
             file.close();
         }
 
-        //½«ÅäÖÃÎÄ¼ş±£´æµ½¶ÁÈ¡µÄÎÄ¼ş
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½æµ½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ä¼ï¿½
         void SimpleMapFile::save()
         {
             std::ofstream file(m_filename);
@@ -64,7 +64,7 @@ namespace UI
             return boost::spirit::hold_any();
         }
 
-        //ÉèÖÃÄ³Ò»ÏîÅäÖÃ
+        //ï¿½ï¿½ï¿½ï¿½Ä³Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         void SimpleMapFile::set(const std::string& key, const boost::spirit::hold_any value)
         {
             m_settings[key] = value;

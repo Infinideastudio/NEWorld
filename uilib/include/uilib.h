@@ -1,14 +1,26 @@
 #ifndef _UILIB_
 #define _UILIB_
-#ifdef UILIB_EXPORTS
-    #define UILIB_API __declspec(dllexport)
-#else
-    #define UILIB_API __declspec(dllimport)
+
+#if defined _WIN32 || defined __CYGWIN__
+    #define UILIB_WIN32
 #endif
 
-#pragma warning(disable: 4251)
-#pragma warning(disable: 4244)
-#pragma warning(disable: 4996)
+#ifdef _MSC_VER
+    #define UILIB_MSVC
+#endif
+
+#ifdef UILIB_WIN32
+    #ifdef UILIB_MSVC
+        #pragma warning(disable: 4251)
+        #pragma warning(disable: 4244)
+        #pragma warning(disable: 4996)
+        #define UILIB_API __declspec(dllexport)
+    #else
+        #define UILIB_API __attribute__((dllexport))
+    #endif
+#else
+#define UILIB_API __attribute__((visibility("default")))
+#endif
 
 //STL Headers
 #include <map>
@@ -137,7 +149,7 @@ namespace UI
             Image();
             Image(Image& img);
             Image(std::string path);
-            Image Sub(Rect range);
+//            Image Sub(Rect range);
             ~Image();
         private:
             std::shared_ptr<Texture> tex;

@@ -1,4 +1,4 @@
-#include <UILIb.h>
+#include <uilib.h>
 #include <SDL2/SDL_image.h>
 
 namespace UI
@@ -59,10 +59,10 @@ namespace UI
         Image::Image(std::string path)
         {
         }
-        Image Image::Sub(Rect range)
+        /*Image Image::Sub(Rect range)
         {
-            return Image();
-        }
+            return std::move(Image());
+        }*/
         Image::~Image()
         {
         }

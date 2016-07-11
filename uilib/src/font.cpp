@@ -1,4 +1,4 @@
-#include <UILIb.h>
+#include <uilib.h>
 #include <freetype/ftsizes.h>
 #include <boost/filesystem.hpp>
 #include <boost/locale/encoding_utf.hpp>

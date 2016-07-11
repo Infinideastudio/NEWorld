@@ -1,4 +1,4 @@
-#include <UILIb.h>
+#include <uilib.h>
 #include <thread>
 #include <boost/locale/encoding_utf.hpp>
 namespace UI
@@ -255,11 +255,11 @@ namespace UI
 
         void Application::processMessages()
         {
-            SDL_Event event;//事件
+            SDL_Event event;//锟铰硷拷
             std::shared_ptr<Window> curWin;
-            while(SDL_PollEvent(&event)) //从队列里取出事件
+            while(SDL_PollEvent(&event)) //锟接讹拷锟斤拷锟斤拷取锟斤拷锟铰硷拷
             {
-                switch(event.type)  //根据事件类型分门别类去处理
+                switch(event.type)  //锟斤拷锟斤拷锟铰硷拷锟斤拷锟酵凤拷锟脚憋拷锟斤拷去锟斤拷锟斤拷
                 {
                 case SDL_APP_TERMINATING:
                     break;

@@ -41,19 +41,23 @@ int main(int argc, char** argv)
     try
     {
         if (in == "server")
+        {
             boost::dll::shared_library
             (
                 Path + "nwserver",
                 boost::dll::load_mode::append_decorations
             )
             .get<MainFunction>("main")(argc, argv);
+        }
         else
+        {
             boost::dll::shared_library
             (
                 Path + "nwclient",
                 boost::dll::load_mode::append_decorations
             )
             .get<MainFunction>("main")(argc, argv);
+        }
     }
     catch (std::exception& e)
     {
