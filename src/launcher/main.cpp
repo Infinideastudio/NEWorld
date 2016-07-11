@@ -28,12 +28,16 @@ int main(int argc, char** argv)
 {
     std::string in;
     if (argc != 2)
+    {
         std::cout << "Welcome to NEWorld Minimal Launcher!" << std::endl;
         std::cout << "Enter 'client' to run client" << std::endl;
         std::cout << "Enter 'server' to run server" << std::endl;
         std::cin >> in;
+    }
     else
+    {
         in = argv[1];
+    }
     try
     {
         if (in == "server")
