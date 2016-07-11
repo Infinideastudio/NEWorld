@@ -21,7 +21,7 @@
 #include <boost/dll/shared_library.hpp>
 #include <common.h> // For NWAPICALL
 
-const std::string Path = "./";
+const std::string Path = "./Bin/";
 typedef void NWAPICALL MainFunction(int, char**);
 
 int main(int argc, char** argv)
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
         {
             boost::dll::shared_library
             (
-                Path + "nwserver",
+                Path + "NEWorldServer",
                 boost::dll::load_mode::append_decorations
             )
             .get<MainFunction>("main")(argc, argv);
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
         {
             boost::dll::shared_library
             (
-                Path + "nwclient",
+                Path + "NEWorld",
                 boost::dll::load_mode::append_decorations
             )
             .get<MainFunction>("main")(argc, argv);
