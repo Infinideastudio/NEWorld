@@ -124,7 +124,7 @@ Logger::Logger(const char* fileName, int lineNumber, Level level): m_level(level
 void Logger::writeOstream(std::ostream &ostream, bool noColor) const
 {
     using namespace LColorFunc;
-    constexpr static char stylechar = '~';
+    constexpr static char stylechar = '&';
     static std::map<char,colorfunc> cmap =
     {
         {'0',black},{'1',red},{'2',yellow},{'3',green},
