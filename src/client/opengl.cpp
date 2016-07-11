@@ -17,5 +17,22 @@
 */
 
 #include "opengl.h"
+#include <GLFW/glfw3.h>
 
-// TODO: Place extension definitions here
+PFNGLGENBUFFERSARBPROC glGenBuffersARB;
+PFNGLBINDBUFFERARBPROC glBindBufferARB;
+PFNGLBUFFERDATAARBPROC glBufferDataARB;
+PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
+
+inline GLFWglproc getGLProcAddress(const char* name)
+{
+    return glfwGetProcAddress(name);
+}
+
+void glInit()
+{
+    glGenBuffersARB = (PFNGLGENBUFFERSARBPROC)getGLProcAddress("glGenBuffersARB");
+    glBindBufferARB = (PFNGLBINDBUFFERARBPROC)getGLProcAddress("glBindBufferARB");
+    glBufferDataARB = (PFNGLBUFFERDATAARBPROC)getGLProcAddress("glBufferDataARB");
+    glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC)getGLProcAddress("glDeleteBuffersARB");
+}

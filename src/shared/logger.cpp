@@ -117,8 +117,9 @@ void loggerInit(const string& prefix)
 
 Logger::Logger(const char* fileName, int lineNumber, Level level): m_level(level)
 {
-    m_content << LColor::white << '[' << getTimeString('-', ' ', ':') << ']' << LevelTags[level];
+    m_content << LColor::lblack << '[' << getTimeString('-', ' ', ':') << ']' << LevelTags[level];
     if (level >= lineLevel) m_content << "(" << fileName << ":" << lineNumber << ") ";
+    m_content << LColor::white;
 }
 
 void Logger::writeOstream(std::ostream &ostream, bool noColor) const
@@ -181,7 +182,11 @@ NWAPIEXPORT void NWAPICALL consolePrint(const char * str, Level level)
     switch (level)
     {
     case trace:
+<<<<<<< HEAD
         Logger(__FUNCTION__, __LINE__,trace) << str;
+=======
+        Logger(__FUNCTION__, __LINE__, trace) << str;
+>>>>>>> renderer
         break;
     case debug:
         debugstream << str;

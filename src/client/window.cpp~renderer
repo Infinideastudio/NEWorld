@@ -16,21 +16,20 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "chunkrenderer.h"
+#include "window.h"
+#include <logger.h>
 
-VertexArray ChunkRenderer::va(262144, VertexFormat(2, 3, 0, 3));
-bool ChunkRenderer::mergeFace;
+int Window::m_count;
 
-void ChunkRenderer::buildVertexArray()
+Window::Window(int width, int height, const string& title) :m_windowWidth(width), m_windowHeight(height)
 {
-    if (mergeFace)
+    if (!m_count) glfwInit();
+    m_count++;
+    m_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    if (!m_window)
     {
-        // Use struct Primitive
-        // ...
+        fatalstream << "Failed to create GLFW window.";
+        return;
     }
-    else
-    {
-        // Iterate blocks and render
-        // ...
-    }
+    setCurrentDraw();
 }

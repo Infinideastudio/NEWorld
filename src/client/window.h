@@ -19,6 +19,7 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
+<<<<<<< HEAD
 #include <uilib.h>
 #undef main
 #include <string>
@@ -40,5 +41,53 @@ public:
 };
 
 
+=======
+#include <GLFW/glfw3.h>
+#include <string>
+using std::string;
+
+class Window
+{
+public:
+    Window(int width, int height, const string& title);
+    ~Window()
+    {
+        m_count--;
+        if (!m_count) glfwTerminate();
+        glfwDestroyWindow(m_window);
+    }
+
+    void setCurrentDraw()
+    {
+        glfwMakeContextCurrent(m_window);
+    }
+
+    static void update()
+    {
+        glfwPollEvents();
+    }
+
+    void swapBuffers()
+    {
+        glfwSwapBuffers(m_window);
+    }
+
+    bool closing()
+    {
+        return glfwWindowShouldClose(m_window) != 0;
+    }
+
+    bool isKeyPressed(int id)
+    {
+        return glfwGetKey(m_window, id) == GLFW_PRESS;
+    }
+
+private:
+    static int m_count;
+    GLFWwindow* m_window;
+    unsigned int m_windowWidth, m_windowHeight;
+
+};
+>>>>>>> renderer
 
 #endif

@@ -60,9 +60,6 @@
     <ClCompile Include="..\..\..\src\client\network.cpp">
       <Filter>Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\client\mat4.cpp">
-      <Filter>Source\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\client\opengl.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>

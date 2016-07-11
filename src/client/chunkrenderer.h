@@ -28,18 +28,24 @@ class ChunkRenderer
     :boost::noncopyable
 {
 public:
-    ChunkRenderer(World* world, Chunk* chunk) :m_world(world), m_chunk(chunk) {}
+    ChunkRenderer(World* world, Chunk* chunk) :m_world(world), m_chunk(chunk)
+    {}
 
-    // Build VBO(Mesh)
+    // Build VBO
     void buildVertexArray();
     // Draw call
-    void renderVertexArray();
+    void render()
+    {
+        m_buffer.render();
+    }
 
 private:
     // Target world
     World* m_world;
     // Target chunk
     Chunk* m_chunk;
+    // Vertex buffer object
+    VertexBuffer m_buffer;
     // Vertex array
     static VertexArray va;
     // Merge face rendering

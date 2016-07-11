@@ -26,43 +26,24 @@ typedef void NWAPICALL MainFunction(int, char**);
 
 int main(int argc, char** argv)
 {
+    std::cout << "Welcome to NEWorld Minimal Launcher!" << std::endl;
+    std::cout << "Enter 'client' to run client" << std::endl;
+    std::cout << "Enter 'server' to run server" << std::endl;
     std::string in;
-    if (argc != 2)
-    {
-        std::cout << "Welcome to NEWorld Minimal Launcher!" << std::endl;
-        std::cout << "Enter 'client' to run client" << std::endl;
-        std::cout << "Enter 'server' to run server" << std::endl;
-        std::cin >> in;
-    }
+    std::cin >> in;
+    if (in == "server")
+        boost::dll::shared_library
+        (
+            Path + "NEWorldServer",
+            boost::dll::load_mode::append_decorations
+        )
+        .get<MainFunction>("main")(argc, argv);
     else
-    {
-        in = argv[1];
-    }
-    try
-    {
-        if (in == "server")
-        {
-            boost::dll::shared_library
-            (
-                Path + "nwserver",
-                boost::dll::load_mode::append_decorations
-            )
-            .get<MainFunction>("main")(argc, argv);
-        }
-        else
-        {
-            boost::dll::shared_library
-            (
-                Path + "nwclient",
-                boost::dll::load_mode::append_decorations
-            )
-            .get<MainFunction>("main")(argc, argv);
-        }
-    }
-    catch (std::exception& e)
-    {
-        std::cout << e.what() << std::endl;
-        system("pause");
-    }
+        boost::dll::shared_library
+        (
+            Path + "NEWorld",
+            boost::dll::load_mode::append_decorations
+        )
+        .get<MainFunction>("main")(argc, argv);
     return 0;
 }

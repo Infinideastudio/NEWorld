@@ -27,34 +27,70 @@
 class Renderer
 {
 private:
+    static int matrixMode;
+
+    static void setProjMatrix()
+    {
+        if (matrixMode == 1) return;
+        glMatrixMode(GL_PROJECTION);
+        matrixMode = 1;
+    }
+
+    static void setModelMatrix()
+    {
+        if (matrixMode == 0) return;
+        glMatrixMode(GL_MODELVIEW);
+        matrixMode = 0;
+    }
 
 public:
     // Setup rendering
-    void init();
-    // Reset translations/rotations (Restore transform matrixes)
-    void restoreScale()
+    static void init(int width, int height);
+
+    static void setViewport(int x, int y, int width, int height)
     {
+        glViewport(x, y, width, height);
+    }
+    // Reset translations/rotations (Restore transform matrixes)
+    static void restoreScale()
+    {
+        setModelMatrix();
         glLoadIdentity();
     }
     // Apply translations
-    void translate(const Vec3f& delta)
+    static void translate(const Vec3f& delta)
     {
+        setModelMatrix();
         glTranslatef(delta.x, delta.y, delta.z);
     }
     // Apply rotations
-    void rotate(float degrees, const Vec3f& scale)
+    static void rotate(float degrees, const Vec3f& scale)
     {
+        setModelMatrix();
         glRotatef(degrees, scale.x, scale.y, scale.z);
     }
-    // Perspective projection
-    void setPerspective(float fov, float aspect, float zNear, float zFar)
+    // Restore projection matrix
+    static void restoreProj()
     {
+        setProjMatrix();
+        glLoadIdentity();
+    }
+    // Perspective projection
+    static void applyPerspective(float fov, float aspect, float zNear, float zFar)
+    {
+        setProjMatrix();
         glMultMatrixf(Mat4f::perspective(fov, aspect, zNear, zFar).getTranspose().data);
     }
     // Orthogonal projection
-    void setOrtho(float left, float right, float top, float bottom, float zNear, float zFar)
+    static void applyOrtho(float left, float right, float top, float bottom, float zNear, float zFar)
     {
+        setProjMatrix();
         glMultMatrixf(Mat4f::ortho(left, right, top, bottom, zNear, zFar).getTranspose().data);
+    }
+
+    static void clear()
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
 };

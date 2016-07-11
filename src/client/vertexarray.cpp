@@ -18,28 +18,48 @@
 
 #include "vertexarray.h"
 
-void /* Replace "void" with VBO ID type */ VertexArray::flush()
+VertexBuffer::VertexBuffer(const VertexArray& va) :format(va.getFormat())
 {
-    // #ifdef NEWORLD_USE_OPENGL
-    // glGenBuffersARB(...)
-    // #else
-    // #ifdef NEWORLD_USE_DIRECT3D
-    // ...
-    // #else
-    // #error "No graphics API selected!"
-    // #endif
-    // #endif
+    glGenBuffersARB(1, &id);
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
+    glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.getVertexCount() * sizeof(float) *
+                    format.vertexAttributeCount,
+                    va.getData(), GL_STATIC_DRAW_ARB);
 }
 
-void VertexArray::render(void /* Replace "void" with VBO ID type */)
+void VertexBuffer::render()
 {
-    // #ifdef NEWORLD_USE_OPENGL
-    // glBindBufferARB(...)
-    // #else
-    // #ifdef NEWORLD_USE_DIRECT3D
-    // ...
-    // #else
-    // #error "No graphics API selected!"
-    // #endif
-    // #endif
+    glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
+    if (format.textureCount != 0)
+        glTexCoordPointer(
+            format.textureCount, GL_FLOAT,
+            format.vertexAttributeCount * sizeof(float),
+            nullptr
+        );
+    if (format.colorCount != 0)
+        glColorPointer(
+            format.colorCount, GL_FLOAT,
+            format.vertexAttributeCount * sizeof(float),
+            (float*)(format.textureCount * sizeof(float))
+        );
+    if (format.normalCount != 0)
+        glNormalPointer(
+            /*format.normalCount,*/ GL_FLOAT,
+            format.vertexAttributeCount * sizeof(float),
+            (float*)((format.textureCount + format.colorCount) * sizeof(float))
+        );
+    if (format.coordinateCount != 0)
+        glVertexPointer(
+            format.coordinateCount, GL_FLOAT,
+            format.vertexAttributeCount * sizeof(float),
+            (float*)((format.textureCount + format.colorCount + format.normalCount) * sizeof(float))
+        );
+    // 这个框是不是很装逼2333 --qiaozhanrong
+    //====================================================================================================//
+    /**/                                                                                                /**/
+    /**/                                                                                                /**/
+    /**/                              glDrawArrays(GL_QUADS, 0, vertexes);                              /**/
+    /**/                                                                                                /**/
+    /**/                                                                                                /**/
+    //====================================================================================================//
 }

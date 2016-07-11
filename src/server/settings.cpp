@@ -22,7 +22,7 @@
 void loadSharedSettings(Settings& settings);
 
 Settings settings("Configs/server_settings.conf");
-
+    globalPort = static_cast<unsigned short>(settings.get<int>("server.server.port", 8090));
 void loadSettings()
 {
     loadSharedSettings(settings);

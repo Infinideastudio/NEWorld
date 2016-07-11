@@ -16,21 +16,26 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "chunkrenderer.h"
+#ifndef NEWORLD_H_
+#define NEWORLD_H_
 
-VertexArray ChunkRenderer::va(262144, VertexFormat(2, 3, 0, 3));
-bool ChunkRenderer::mergeFace;
+#include <common.h>
+#include "network.h"
+#include <thread>
+#include <logger.h>
 
-void ChunkRenderer::buildVertexArray()
+class NEWorld
 {
-    if (mergeFace)
+public:
+    NEWorld()
     {
-        // Use struct Primitive
-        // ...
+        run();
     }
-    else
-    {
-        // Iterate blocks and render
-        // ...
-    }
-}
+
+private:
+    // Main procedure for client
+    void run();
+
+};
+
+#endif // !NEWORLD_H_
