@@ -235,3 +235,11 @@ NEWorldLauncher
 *.project
 *.cproject
 *.settings
+
+# CLion
+.idea/
+.idea/*
+
+# Generated Makefile
+[M]ake[f]ile
+

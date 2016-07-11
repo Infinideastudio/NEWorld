@@ -7,11 +7,22 @@
 
 NEWorld采用[GPLv3许可证](http://www.gnu.org/licenses/gpl.html)发布并受其保护。  
 
-如果您想加入开发，请在SIGNOFF文件中署名。 
+如果您想加入开发，请在SIGNOFF文件中署名。  
 
 ## 资源文件
 
 * [libraries](http://pan.baidu.com/s/1bIXYPo)
+
+## 编译
+
+1. 安装 CMake 3.1 及以上版本
+2. 进入`./bin/`文件夹
+3. 执行`cmake ..` 生成对应平台的工程文件
+4. 按照各个平台的编译方法编译
+* Linux:执行`make`
+* Windows:在VS控制台下执行`nmake`或者使用VS打开解决方案进行编译
+* Mac OS X:使用Xcode打开工程文件编译
+
 
 ## 更多文档
 
