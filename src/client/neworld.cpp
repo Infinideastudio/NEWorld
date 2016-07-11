@@ -22,11 +22,11 @@
 void NEWorld::run()
 {
     // Initialize here
-    UI::Base::init();
-    std::string s = "./Logs";
-    UI::Logger::init(s.c_str());
-    //UI::Font::service.addSearchPaths({ "C:/Windows/Fonts" , "." });
-    //UI::Globalization::Service::getInstance().attachLangFiles({ "chinese", "english" });
+    UI::Logger::init("./Logs");
+    UI::Font::service.addSearchPaths({ "./Fonts" });
+    UI::Globalization::Service::getInstance().setBasePath("./Langs/");
+    UI::Globalization::Service::getInstance().attachLangFiles({ "chinese", "english" });
+    UI::Globalization::Service::getInstance().setLang("chinese");
 
     loggerInit("NEWorld");
     std::thread serverThread(networkThread);

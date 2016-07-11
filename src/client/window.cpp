@@ -18,11 +18,17 @@
 
 #include "window.h"
 
-MainMenu::MainMenu() : UI::Core::Page()
+GameView::GameView() : UI::Core::Page()
 {
     //Add controls here
-    using namespace UI::Core;
-    using namespace UI::Controls;
-    using namespace UI::Globalization;
-    content = std::make_shared<Grid>();
+    content = std::make_shared<UI::Core::Grid>();
+    auto view = std::make_shared<UI::Controls::GLContext>();
+    view->onRenderF = [this]() {doRender(); };
+    content->addChild(view);
+}
+
+void GameView::doRender()
+{
+    //Do the real render
+
 }

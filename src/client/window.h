@@ -19,14 +19,16 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-#include <uilib.h>
+#include <UILib.h>
 #undef main
 #include <string>
 using std::string;
-class MainMenu : public UI::Core::Page
+class GameView : public UI::Core::Page
 {
 public:
-    MainMenu();
+    GameView();
+
+    void doRender();
 };
 
 class MainWindow : public UI::Core::Window
@@ -35,7 +37,7 @@ public:
     MainWindow(int width, int height, const string& title) : UI::Core::Window(title, width, height, 200, 200)
     {
         //Load the main menu.
-        pushPage(std::make_shared<MainMenu>());
+        pushPage(std::make_shared<GameView>());
     }
 };
 

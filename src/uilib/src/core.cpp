@@ -1,10 +1,46 @@
-#include <uilib.h>
+/*
+UILib - A Open-Source UI-Library
+
+Copyright(C) 2016 Infinideastudio-UITeam
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+and associated documentation files(the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and / or sell copies of the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following conditions :
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
+
+#include <uicore.h>
+#include <uilogger.h>
+#include <uibrushes.h>
+#include <chrono>
 #include <thread>
+#include <GL/glew.h>
 #include <boost/locale/encoding_utf.hpp>
+
+size_t curwindowx, curwindowy;
+using namespace std::chrono_literals;
+
 namespace UI
 {
+    namespace Base
+    {
+        void init();
+    }
+
     namespace Core
     {
+        SDL_Renderer* currenderer;
+        Application* application;
+
         Window::Window(const std::string & name, const int width, const int height, const int _xpos, const int _ypos)
         {
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
@@ -43,8 +79,11 @@ namespace UI
         {
         }
 
+
         void Window::render()
         {
+            curwindowx = _x;
+            curwindowy = _y;
             SDL_GL_MakeCurrent(window, context);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -178,9 +217,6 @@ namespace UI
             return SDL_GetWindowID(window);
         }
 
-        SDL_Renderer* currenderer;
-        Application* application;
-
         void Application::run()
         {
             glewInit();
@@ -202,9 +238,11 @@ namespace UI
                 UIMakeSolidColorBrush(Base::Color(0.6, 0.6, 1.0, 1.0)),
                 UIMakeSolidColorBrush(Base::Color(0.6, 0.6, 0.6, 1.0)),
                 UIMakeSolidColorBrush(Base::Color(1.0, 1.0, 1.0, 1.0)),
-                nullptr
+                Font::service.getRenderer("SourceHanSansCN-Normal", 30, Base::Color(0.0, 0.0, 0.0, 1))
             };
             Theme::SystemTheme = _t;
+
+            UI::Base::init();
 
             try
             {
@@ -212,11 +250,13 @@ namespace UI
             }
             catch(Exceptions)
             {
+                logfatal("SDL_Video_Init Failure.");
             }
 
             this->afterLaunch();
             mainLoop();
             SDL_Quit();
+            this->onTerminate();
         }
 
         MouseButton buttonTrans(Uint8 _button)
@@ -255,11 +295,11 @@ namespace UI
 
         void Application::processMessages()
         {
-            SDL_Event event;//ï¿½Â¼ï¿½
+            SDL_Event event;//ÊÂ¼þ
             std::shared_ptr<Window> curWin;
-            while(SDL_PollEvent(&event)) //ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Â¼ï¿½
+            while(SDL_PollEvent(&event)) //´Ó¶ÓÁÐÀïÈ¡³öÊÂ¼þ
             {
-                switch(event.type)  //ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Í·ï¿½ï¿½Å±ï¿½ï¿½ï¿½È¥ï¿½ï¿½ï¿½ï¿½
+                switch(event.type)  //¸ù¾ÝÊÂ¼þÀàÐÍ·ÖÃÅ±ðÀàÈ¥´¦Àí
                 {
                 case SDL_APP_TERMINATING:
                     break;
@@ -469,6 +509,8 @@ namespace UI
                 processMessages();
 
                 for(auto w : windows) w.second->render();
+
+                std::this_thread::sleep_for(0ms);
             }
         }
 

@@ -1,4 +1,30 @@
-#include <uilib.h>
+/*
+UILib - A Open-Source UI-Library
+
+Copyright(C) 2016 Infinideastudio-UITeam
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+and associated documentation files(the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and / or sell copies of the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following conditions :
+
+The above copyright notice and this permission notice shall be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
+
+#include <uicontrols.h>
+#include <uishapes.h>
+#include <GL/glew.h>
+
+extern size_t curwindowx;
+extern size_t curwindowy;
+
 namespace UI
 {
     namespace Controls
@@ -176,5 +202,82 @@ namespace UI
         {
         }
 
+        GLContext::GLContext(std::string _xName, Margin _Margin) :
+            Control(_xName, _Margin)
+        {
+        }
+
+
+        void GLContext::render()
+        {
+            glViewport(cMargin.absrect.xmin, cMargin.absrect.ymin,
+                cMargin.absrect.xmax - cMargin.absrect.xmin, 
+                cMargin.absrect.ymax - cMargin.absrect.ymin);
+            glPushMatrix();
+            if (onRenderF) onRenderF(); 
+            glPopMatrix();
+            glViewport(0, 0, curwindowx, curwindowy);
+        }
+
+        void GLContext::onResize(size_t x, size_t y)
+        {
+        }
+
+        void GLContext::onParentResize(Grid * parent)
+        {
+        }
+
+        void GLContext::focusFunc(FocusOp Stat)
+        {
+            if (onFocusF) onFocusF(Stat);
+        }
+
+        void GLContext::mouseMove(int x, int y, int dx, int dy)
+        {
+            if (onMouseMoveF) onMouseMoveF(x, y, dx, dy);
+        }
+
+        void GLContext::mouseButtonFunc(MouseButton Button, ButtonAction Action)
+        {
+            if (onMouseButtonF) onMouseButtonF(Button, Action);
+        }
+
+        void GLContext::crusorEnterFunc(CursorOp Stat)
+        {
+            if (onMouseEnterF) onMouseEnterF(Stat);
+        }
+
+        void GLContext::scrollFunc(double dx, double dy)
+        {
+            if (onScrollF) onScrollF(dx, dy);
+        }
+
+        void GLContext::keyFunc(int Key, ButtonAction Action)
+        {
+            if (onKeyPress) onKeyPress(Key, Action);
+        }
+
+        void GLContext::dropFunc(const char * Paths)
+        {
+            if (onFileDropF) onFileDropF(Paths);
+        }
+
+        void GLContext::touchFunc(int x, int y, ButtonAction action)
+        {
+            if (onTouchF) onTouchF(x, y, action);
+        }
+
+        void GLContext::touchmove(int x, int y, int dx, int dy)
+        {
+            if (onTouchMoveF) onTouchMoveF(x, y, dx, dy);
+        }
+
+        ImageBox::ImageBox(std::string _xName, Margin _Margin, const Image & image)
+        {
+        }
+
+        void ImageBox::render()
+        {
+        }
     }
 }
