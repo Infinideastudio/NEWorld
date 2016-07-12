@@ -86,7 +86,7 @@ namespace UI
             curwindowy = _y;
             SDL_GL_MakeCurrent(window, context);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glClearColor(1.0, 1.0, 1.0, 1.0);
+            //glClearColor(1.0, 1.0, 1.0, 1.0);
             glMatrixMode(GL_MODELVIEW);
             glPushMatrix();
             pages.top()->content->render();
@@ -238,7 +238,7 @@ namespace UI
                 UIMakeSolidColorBrush(Base::Color(0.6, 0.6, 1.0, 1.0)),
                 UIMakeSolidColorBrush(Base::Color(0.6, 0.6, 0.6, 1.0)),
                 UIMakeSolidColorBrush(Base::Color(1.0, 1.0, 1.0, 1.0)),
-                Font::service.getRenderer("SourceHanSansCN-Normal", 30, Base::Color(0.0, 0.0, 0.0, 1))
+                nullptr
             };
             Theme::SystemTheme = _t;
 
