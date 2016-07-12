@@ -19,6 +19,7 @@
 #include "settingsmanager.h"
 #include "logger.h"
 #include "common.h"
+
 void loadSharedSettings(Settings& settings)
 {
 #ifdef NEWORLD_DEBUG

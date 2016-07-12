@@ -36,6 +36,7 @@ public:
     {
         return _position;
     }
+
     void setPosition(Vec3d val)
     {
         _position = val;
@@ -45,6 +46,7 @@ public:
     {
         return _rotation;
     }
+
     void setRotation(Vec3d val)
     {
         _rotation = val;

@@ -50,17 +50,17 @@ public:
         memcpy(data, src, sizeof(data));
     }
 
-    T& operator[] (size_t index)
+    T& operator[](size_t index)
     {
         return data[index];
     }
 
-    T operator[] (size_t index) const
+    T operator[](size_t index) const
     {
         return data[index];
     }
 
-    Mat4 operator* (const Mat4& rhs) const
+    Mat4 operator*(const Mat4& rhs) const
     {
         Mat4 res;
         res[0] = data[0] * rhs[0] + data[1] * rhs[4] + data[2] * rhs[8] + data[3] * rhs[12];
@@ -82,7 +82,7 @@ public:
         return res;
     }
 
-    Mat4& operator*= (const Mat4& rhs)
+    Mat4& operator*=(const Mat4& rhs)
     {
         *this = *this * rhs;
         return *this;
@@ -115,10 +115,10 @@ public:
     Mat4 getTranspose() const
     {
         Mat4 res;
-        res[0] = data[0], res[1] = data[4], res[2] = data[8], res[3] = data[12];
-        res[4] = data[1], res[5] = data[5], res[6] = data[9], res[7] = data[13];
-        res[8] = data[2], res[9] = data[6], res[10] = data[10], res[11] = data[14];
-        res[12] = data[3], res[13] = data[7], res[14] = data[11], res[15] = data[15];
+        res[0] = data[0] , res[1] = data[4] , res[2] = data[8] , res[3] = data[12];
+        res[4] = data[1] , res[5] = data[5] , res[6] = data[9] , res[7] = data[13];
+        res[8] = data[2] , res[9] = data[6] , res[10] = data[10] , res[11] = data[14];
+        res[12] = data[3] , res[13] = data[7] , res[14] = data[11] , res[15] = data[15];
         return res;
     }
 
@@ -181,7 +181,6 @@ public:
         res[15] = T(1.0);
         return res;
     }
-
 };
 
 using Mat4f = Mat4<float>;

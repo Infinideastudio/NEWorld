@@ -36,7 +36,6 @@ public:
 
 private:
     std::vector<Plugin> m_plugins;
-
 };
 
 #endif // !PLUGINMANAGER_H_

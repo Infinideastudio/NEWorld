@@ -38,10 +38,10 @@ public:
     ChunkPointerArray(int size)
     {
         m_size = size;
-        m_size2 = size*size;
-        m_size3 = size*size*size;
+        m_size2 = size * size;
+        m_size3 = size * size * size;
         m_array = new Chunk*[m_size3];
-        memset(m_array, 0, m_size3*sizeof(Chunk*));
+        memset(m_array, 0, m_size3 * sizeof(Chunk*));
     }
 
     ~ChunkPointerArray()
@@ -55,39 +55,42 @@ public:
         Chunk** arr = new Chunk*[m_size3];
         Vec3i::for_range(0, m_size, [this, arr, delta](const Vec3i& pos)
         {
-            arr[pos.x*m_size2 + pos.y*m_size + pos.z] =
+            arr[pos.x * m_size2 + pos.y * m_size + pos.z] =
                 exist(pos + delta) ?
-                m_array[(pos.x + delta.x)*m_size2 + (pos.y + delta.y)*m_size + (pos.z + delta.z)] :
+                m_array[(pos.x + delta.x) * m_size2 + (pos.y + delta.y) * m_size + (pos.z + delta.z)] :
                 nullptr;
         });
         delete[] m_array;
         m_array = arr;
         m_org += delta;
     }
+
     /// Move array to pos
     void moveTo(const Vec3i& pos)
     {
         move(pos - m_org);
     }
+
     /// Check if specific element is inside array range
     bool exist(const Vec3i& pos) const
     {
         return pos.x >= 0 && pos.x < m_size && pos.z >= 0 && pos.z < m_size && pos.y >= 0 && pos.y < m_size;
     }
+
     /// Get chunk pointer from array
     Chunk* get(Vec3i pos) const
     {
         pos -= m_org;
-        return exist(pos) ? m_array[pos.x*m_size2 + pos.y*m_size + pos.z] : nullptr;
+        return exist(pos) ? m_array[pos.x * m_size2 + pos.y * m_size + pos.z] : nullptr;
     }
+
     /// Update chunk pointer in array
     void set(Vec3i pos, Chunk* c)
     {
         pos -= m_org;
         if (exist(pos))
-            m_array[pos.x*m_size2 + pos.y*m_size + pos.z] = c;
+            m_array[pos.x * m_size2 + pos.y * m_size + pos.z] = c;
     }
-
 };
 
 #endif

@@ -35,7 +35,7 @@ bool fileOnly = false;
 
 static std::string LevelTags[6];
 
-template<size_t length>
+template <size_t length>
 static string convert(int arg)
 {
     char arr[13];
@@ -57,7 +57,7 @@ string getTimeString(char dateSplit, char midSplit, char timeSplit)
     time_t timer = time(nullptr);
     tm* currtime = localtime(&timer); // DO NOT `delete` THIS POINTER!
     return convert<4u>(currtime->tm_year + 1900) + dateSplit + convert<2u>(currtime->tm_mon) + dateSplit + convert<2u>(currtime->tm_mday)
-           + midSplit + convert<2u>(currtime->tm_hour) + timeSplit + convert<2u>(currtime->tm_min) +timeSplit + convert<2u>(currtime->tm_sec);
+        + midSplit + convert<2u>(currtime->tm_hour) + timeSplit + convert<2u>(currtime->tm_min) + timeSplit + convert<2u>(currtime->tm_sec);
 }
 
 inline void addFileSink(const string& path, const string& prefix)
@@ -68,7 +68,7 @@ inline void addFileSink(const string& path, const string& prefix)
 void loggerInit(const string& prefix)
 {
     using namespace boost::filesystem;
-    const char *path = "./Logs/";
+    const char* path = "./Logs/";
     if (!exists(path))
     {
         create_directories(path);
@@ -121,17 +121,17 @@ Logger::Logger(const char* fileName, int lineNumber, Level level): m_level(level
     if (level >= lineLevel) m_content << "(" << fileName << ":" << lineNumber << ") ";
 }
 
-void Logger::writeOstream(std::ostream &ostream, bool noColor) const
+void Logger::writeOstream(std::ostream& ostream, bool noColor) const
 {
     using namespace LColorFunc;
     constexpr static char stylechar = '&';
-    static std::map<char,colorfunc> cmap =
-    {
-        {'0',black},{'1',red},{'2',yellow},{'3',green},
-        {'4',cyan},{'5',blue},{'6',magenta},{'7',white},
-        {'8',lblack},{'9',lred},{'a',lyellow},{'b',lgreen},
-        {'c',lcyan},{'d',lblue},{'e',lmagenta},{'f',lwhite},
-    };
+    static std::map<char, colorfunc> cmap =
+        {
+            {'0',black},{'1',red},{'2',yellow},{'3',green},
+            {'4',cyan},{'5',blue},{'6',magenta},{'7',white},
+            {'8',lblack},{'9',lred},{'a',lyellow},{'b',lgreen},
+            {'c',lcyan},{'d',lblue},{'e',lmagenta},{'f',lwhite},
+        };
     std::string str = m_content.str();
     string::size_type pos1 = 0, pos2 = str.find(stylechar);
     while (true)
@@ -144,10 +144,10 @@ void Logger::writeOstream(std::ostream &ostream, bool noColor) const
         ostream << str.substr(pos1, pos2 - pos1);
         if (pos2 < str.size())
         {
-            char ch = str[pos2+1];
+            char ch = str[pos2 + 1];
             if (!noColor)
             {
-                colorfunc cf = cmap[(ch>='A'&&ch<='F') ? ch-'A'+'a' : ch];
+                colorfunc cf = cmap[(ch >= 'A' && ch <= 'F') ? ch - 'A' + 'a' : ch];
                 if (cf) ostream << cf;
                 else
                 {
@@ -172,16 +172,16 @@ Logger::~Logger()
             writeOstream(std::cout);
     }
     if (m_level >= fileLevel)
-        for (auto &it : fsink)
-            writeOstream(it,true);
+        for (auto& it : fsink)
+            writeOstream(it, true);
 }
 
-NWAPIEXPORT void NWAPICALL consolePrint(const char * str, Level level)
+NWAPIEXPORT void NWAPICALL consolePrint(const char* str, Level level)
 {
     switch (level)
     {
     case trace:
-        Logger(__FUNCTION__, __LINE__,trace) << str;
+        Logger(__FUNCTION__, __LINE__, trace) << str;
         break;
     case debug:
         debugstream << str;

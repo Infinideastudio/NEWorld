@@ -37,8 +37,8 @@ class Server
 {
 public:
     Server(boost::asio::io_service& ioservice, unsigned short port)
-        :m_acceptor(ioservice, boost::asio::ip::tcp::endpoint(tcp::v4(), port)), m_socket(ioservice),
-         m_worlds(m_plugins), m_world(m_worlds.addWorld("TestWorld"))
+        : m_acceptor(ioservice, boost::asio::ip::tcp::endpoint(tcp::v4(), port)), m_socket(ioservice),
+          m_worlds(m_plugins), m_world(m_worlds.addWorld("TestWorld"))
     {
         // Initialization
         PiBlocks = &m_blocks;
@@ -48,6 +48,7 @@ public:
         infostream << "Server started!";
         doAccept();
     }
+
     ~Server()
     {
         // TODO: Terminate here
@@ -67,7 +68,6 @@ private:
     BlockManager m_blocks;
     PluginManager m_plugins; // Loaded plugins
     World& m_world; // Single world, only for debugging
-
 };
 
 #endif // SERVER_H__

@@ -25,8 +25,14 @@ GameView::GameView() : UI::Core::Page()
     //Add controls here
     content = std::make_shared<UI::Core::Grid>();
     auto view = std::make_shared<UI::Controls::GLContext>("", UI::Core::Margin());
-    view->onRenderF = [this]() {doRender(); };
-    view->onKeyPress = [this](int key, UI::Core::ButtonAction action) {onKeyPress(key, action); };
+    view->onRenderF = [this]()
+    {
+        doRender();
+    };
+    view->onKeyPress = [this](int key, UI::Core::ButtonAction action)
+    {
+        onKeyPress(key, action);
+    };
 
     Renderer::init(852, 480);
 }

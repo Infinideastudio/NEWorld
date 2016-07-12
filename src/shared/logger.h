@@ -58,7 +58,7 @@ public:
     ~Logger();
 
     template <typename T>
-    Logger& operator<< (const T& rhs)
+    Logger& operator<<(const T& rhs)
     {
         m_content << rhs;
         return *this;
@@ -68,7 +68,7 @@ private:
     std::stringstream m_content;
     Level m_level;
 
-    void writeOstream(std::ostream &ostream, bool noColor = false) const;
+    void writeOstream(std::ostream& ostream, bool noColor = false) const;
 };
 
 void loggerInit(const std::string& prefix);

@@ -29,7 +29,7 @@ inline bool isDecimal(std::string str)
     for (char c : str)
     {
         if (c == '.' && !dot) dot = true;
-        else if (c<'0' || c>'9') ret = false;
+        else if (c < '0' || c > '9') ret = false;
     }
     return ret;
 }
@@ -40,7 +40,7 @@ inline bool isInteger(std::string str)
     bool ret = true;
     for (char c : str)
     {
-        if (c<'0' || c>'9') ret = false;
+        if (c < '0' || c > '9') ret = false;
     }
     return ret;
 }
@@ -82,7 +82,6 @@ inline std::string getString(std::string str)
 
 boost::spirit::hold_any string2type(std::string str);
 std::string type2string(boost::spirit::hold_any var);
-
 
 
 #endif

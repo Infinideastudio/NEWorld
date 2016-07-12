@@ -46,12 +46,14 @@ private:
 
     // Expand chunk array
     void expandChunkArray(size_t expandCount);
+
     // Reduce chunk array
     void reduceChunkArray(size_t reduceCount)
     {
         assert(m_chunkCount >= reduceCount);
         m_chunkCount -= reduceCount;
     }
+
     // New pointer at m_chunks[index]
     void newChunkPtr(size_t index)
     {
@@ -60,6 +62,7 @@ private:
             m_chunks[i] = m_chunks[i - 1];
         m_chunks[index] = nullptr;
     }
+
     // Erase pointer at m_chunks[index]
     void eraseChunkPtr(size_t index)
     {
@@ -67,17 +70,20 @@ private:
             m_chunks[i] = m_chunks[i + 1];
         reduceChunkArray(1);
     }
+
     // Search chunk index, or the index the chunk should insert into
     size_t getChunkIndex(const Vec3i& chunkPos) const;
 
 public:
-    World(const string& name, PluginManager& plugins) :m_name(name), m_plugins(plugins), m_chunkCount(0), m_chunkArraySize(1024)
+    World(const string& name, PluginManager& plugins) : m_name(name), m_plugins(plugins), m_chunkCount(0), m_chunkArraySize(1024)
     {
         //m_chunks = new Chunk*[m_chunkArraySize];
         m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
     }
-    World(World&& rhs) :m_name(std::move(rhs.m_name)), m_plugins(rhs.m_plugins), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks)
-    {}
+
+    World(World&& rhs) : m_name(std::move(rhs.m_name)), m_plugins(rhs.m_plugins), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks)
+    {
+    }
 
     ~World()
     {
@@ -182,7 +188,6 @@ public:
 
     // Main update
     void update();
-
 };
 
 #endif // !WORLD_H_

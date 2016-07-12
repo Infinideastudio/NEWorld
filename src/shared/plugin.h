@@ -43,7 +43,8 @@ public:
     {
         loadFrom(filename);
     }
-    Plugin(Plugin&& rhs) :m_lib(std::move(rhs.m_lib)), m_data(rhs.m_data), m_status(rhs.m_status)
+
+    Plugin(Plugin&& rhs) : m_lib(std::move(rhs.m_lib)), m_data(rhs.m_data), m_status(rhs.m_status)
     {
         rhs.m_data = nullptr;
         rhs.m_status = -1;
@@ -51,7 +52,7 @@ public:
 
     Plugin(const Plugin&) = delete;
 
-    Plugin& operator = (const Plugin&) = delete;
+    Plugin& operator =(const Plugin&) = delete;
 
     ~Plugin()
     {
@@ -64,16 +65,19 @@ public:
     {
         return *m_data;
     }
+
     // Get load status
     int getStatus() const
     {
         return m_status;
     }
+
     // Is loaded
     bool isLoaded() const
     {
         return m_status == 0;
     }
+
     // Load plugin, return 0 for success
     int loadFrom(const string& filename);
 
@@ -84,7 +88,6 @@ private:
     PluginData* m_data;
     // Load status
     int m_status = -1;
-
 };
 
 #endif // !PLUGIN_H_

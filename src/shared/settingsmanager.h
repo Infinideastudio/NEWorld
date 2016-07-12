@@ -30,7 +30,9 @@ class Settings
 {
 public:
     //use the file name to initialize Settings and read the configuration from the file automaticly
-    Settings(const std::string& filename) :m_settings(readFromFile(std::move(std::ifstream(filename)))), m_filename(filename) {}
+    Settings(const std::string& filename) : m_settings(readFromFile(std::move(std::ifstream(filename)))), m_filename(filename)
+    {
+    }
 
     //save the configuration to the file which it is read from
     void save() const

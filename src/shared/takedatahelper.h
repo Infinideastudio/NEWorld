@@ -25,9 +25,11 @@ class TakeDataHelper
 {
 public:
     TakeDataHelper(std::shared_ptr<char> buffer, size_t length)
-        :m_shared_ptr(buffer), m_length(length), m_buffer(buffer.get()), m_offset(0) {}
+        : m_shared_ptr(buffer), m_length(length), m_buffer(buffer.get()), m_offset(0)
+    {
+    }
 
-    template<typename T>
+    template <typename T>
     T take()
     {
         if (m_offset + sizeof(T) > m_length) throw;
@@ -49,7 +51,6 @@ private:
     size_t m_length;
     size_t m_offset;
     std::shared_ptr<char> m_shared_ptr;
-
 };
 
 #endif // !TAKEDATAHELPER_H_

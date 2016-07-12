@@ -32,11 +32,13 @@ public:
     // Vertex attributes count (sum of all)
     int vertexAttributeCount;
 
-    VertexFormat() :textureCount(0), colorCount(0), normalCount(0), coordinateCount(0), vertexAttributeCount(0)
-    {}
+    VertexFormat() : textureCount(0), colorCount(0), normalCount(0), coordinateCount(0), vertexAttributeCount(0)
+    {
+    }
+
     VertexFormat(int textureElementCount, int colorElementCount, int normalElementCount, int coordinateElementCount)
-        :textureCount(textureElementCount), colorCount(colorElementCount), normalCount(normalElementCount), coordinateCount(coordinateElementCount),
-         vertexAttributeCount(textureElementCount + colorElementCount + normalElementCount + coordinateElementCount)
+        : textureCount(textureElementCount), colorCount(colorElementCount), normalCount(normalElementCount), coordinateCount(coordinateElementCount),
+          vertexAttributeCount(textureElementCount + colorElementCount + normalElementCount + coordinateElementCount)
     {
         assert(normalCount == 0 || normalCount == 3);
     }
@@ -47,9 +49,9 @@ class VertexArray
 {
 public:
     VertexArray(int maxVertexes, const VertexFormat& format)
-        :m_maxVertexes(maxVertexes), m_vertexes(0), m_format(format)
+        : m_maxVertexes(maxVertexes), m_vertexes(0), m_format(format)
     {
-        m_data = new float[m_maxVertexes*format.vertexAttributeCount];
+        m_data = new float[m_maxVertexes * format.vertexAttributeCount];
         m_vertexAttributes = new float[format.vertexAttributeCount];
     }
 
@@ -61,8 +63,8 @@ public:
 
     void clear()
     {
-        memset(m_data, 0, m_maxVertexes*m_format.vertexAttributeCount*sizeof(float));
-        memset(m_vertexAttributes, 0, m_format.vertexAttributeCount*sizeof(float));
+        memset(m_data, 0, m_maxVertexes * m_format.vertexAttributeCount * sizeof(float));
+        memset(m_vertexAttributes, 0, m_format.vertexAttributeCount * sizeof(float));
         m_vertexes = 0;
     }
 
@@ -70,28 +72,28 @@ public:
     void setTexture(int size, const float* texture)
     {
         assert(size <= m_format.textureCount);
-        memcpy(m_vertexAttributes, texture, size*sizeof(float));
+        memcpy(m_vertexAttributes, texture, size * sizeof(float));
     }
 
     // Set color value
     void setColor(int size, const float* color)
     {
         assert(size <= m_format.colorCount);
-        memcpy(m_vertexAttributes + m_format.textureCount, color, size*sizeof(float));
+        memcpy(m_vertexAttributes + m_format.textureCount, color, size * sizeof(float));
     }
 
     // Set normal vector
     void setNormal(int size, const float* attribute)
     {
         assert(size <= m_format.normalCount);
-        memcpy(m_vertexAttributes + m_format.textureCount + m_format.colorCount, attribute, size*sizeof(float));
+        memcpy(m_vertexAttributes + m_format.textureCount + m_format.colorCount, attribute, size * sizeof(float));
     }
 
     // Add vertex
     void addVertex(const float* coords)
     {
-        memcpy(m_data + m_vertexes, m_vertexAttributes, m_format.vertexAttributeCount*sizeof(float));
-        memcpy(m_data + m_vertexes + m_format.vertexAttributeCount, coords, m_format.coordinateCount*sizeof(float));
+        memcpy(m_data + m_vertexes, m_vertexAttributes, m_format.vertexAttributeCount * sizeof(float));
+        memcpy(m_data + m_vertexes + m_format.vertexAttributeCount, coords, m_format.coordinateCount * sizeof(float));
         m_vertexes++;
     }
 
@@ -121,10 +123,9 @@ private:
     // Vertex array format
     VertexFormat m_format;
     // Vertex array
-    float *m_data;
+    float* m_data;
     // Current vertex attributes
-    float *m_vertexAttributes;
-
+    float* m_vertexAttributes;
 };
 
 class VertexBuffer
@@ -138,9 +139,13 @@ public:
     VertexFormat format;
 
     VertexBuffer()
-    {}
-    VertexBuffer(const VertexFormat& format_, VertexBufferID id_ = 0) :format(format_), id(id_)
-    {}
+    {
+    }
+
+    VertexBuffer(const VertexFormat& format_, VertexBufferID id_ = 0) : format(format_), id(id_)
+    {
+    }
+
     VertexBuffer(const VertexArray& va);
 
     // Render vertex buffer

@@ -26,7 +26,7 @@
 #include <boost/concept/requires.hpp>
 #include <boost/core/swap.hpp>
 
-template<typename T>
+template <typename T>
 class Vec3 :boost::totally_ordered<Vec3<T>, boost::arithmetic<Vec3<T>>>
 {
 public:
@@ -34,16 +34,22 @@ public:
 
     T x, y, z;
 
-    Vec3() :x(), y(), z() {}
+    Vec3() : x(), y(), z()
+    {
+    }
 
-    Vec3(param_type x_, param_type y_, param_type z_) :x(x_), y(y_), z(z_) {}
+    Vec3(param_type x_, param_type y_, param_type z_) : x(x_), y(y_), z(z_)
+    {
+    }
 
-    Vec3(param_type value) :x(value), y(value), z(value) {}
+    Vec3(param_type value) : x(value), y(value), z(value)
+    {
+    }
 
     /// Get the square of vector length, notice that the result can overflow. TODO: fixit
     T lengthSqr() const
     {
-        return x*x + y*y + z*z;
+        return x * x + y * y + z * z;
     }
 
     /// Get vector length
@@ -67,7 +73,7 @@ public:
     /// Get the Manhattan Distance between vectors
     T manhattanDistance(const Vec3& rhs) const
     {
-        return abs(x - rhs.x) + abs(y - rhs.y) +  abs(z - rhs.z);
+        return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z);
     }
 
     /// Normalize vector
@@ -83,7 +89,7 @@ public:
         ((boost::LessThanComparable<T>)),
         (bool)
     )
-    operator< (const Vec3& rhs) const
+    operator<(const Vec3& rhs) const
     {
         if (x != rhs.x)
             return x < rhs.x;
@@ -98,12 +104,12 @@ public:
         ((boost::EqualityComparable<T>)),
         (bool)
     )
-    operator== (const Vec3& rhs) const
+    operator==(const Vec3& rhs) const
     {
         return x == rhs.x && y == rhs.y && z == rhs.z;
     }
 
-    Vec3& operator+= (const Vec3& rhs)
+    Vec3& operator+=(const Vec3& rhs)
     {
         x += rhs.x;
         y += rhs.y;
@@ -111,7 +117,7 @@ public:
         return *this;
     }
 
-    Vec3& operator-= (const Vec3& rhs)
+    Vec3& operator-=(const Vec3& rhs)
     {
         x -= rhs.x;
         y -= rhs.y;
@@ -119,7 +125,7 @@ public:
         return *this;
     }
 
-    Vec3<T>& operator*= (const T& value)
+    Vec3<T>& operator*=(const T& value)
     {
         x *= value;
         y *= value;
@@ -127,7 +133,7 @@ public:
         return *this;
     }
 
-    Vec3<T>& operator/= (const T& value)
+    Vec3<T>& operator/=(const T& value)
     {
         x /= value;
         y /= value;
@@ -142,7 +148,7 @@ public:
         boost::swap(z, rhs.z);
     }
 
-    template<typename... ArgType, typename Func>
+    template <typename... ArgType, typename Func>
     void for_each(Func func, ArgType&&... args) const
     {
         func(x, std::forward<ArgType>(args)...);
@@ -150,7 +156,7 @@ public:
         func(z, std::forward<ArgType>(args)...);
     }
 
-    template<typename... ArgType, typename Func>
+    template <typename... ArgType, typename Func>
     void for_each(Func func, ArgType&&... args)
     {
         func(x, std::forward<ArgType>(args)...);
@@ -159,19 +165,19 @@ public:
     }
 
     //TODO: fix it. And tell if "for_each" will change the value of "this".
-    template<typename Func>
+    template <typename Func>
     Vec3<T> transform(Func func) const
     {
         return Vec3<T>(func(x), func(y), func(z));
     }
 
-    template<typename Func>
+    template <typename Func>
     Vec3<T> transform(Func func)
     {
         return Vec3<T>(func(x), func(y), func(z));
     }
 
-    template<typename Func>
+    template <typename Func>
     static void for_range(const T& begin, const T& end, Func func)
     {
         Vec3<T> tmp;
@@ -181,7 +187,7 @@ public:
                     func(tmp);
     }
 
-    template<typename Func>
+    template <typename Func>
     static void for_range(const Vec3<T>& begin, const Vec3<T>& end, Func func)
     {
         Vec3<T> tmp;
@@ -191,13 +197,13 @@ public:
                     func(tmp);
     }
 
-    template<typename U, U base>
+    template <typename U, U base>
     U encode()
     {
-        return (x*base + y)*base + z;
+        return (x * base + y) * base + z;
     }
 
-    template<typename U, U base>
+    template <typename U, U base>
     static Vec3<U> decode(T arg)
     {
         U z = arg % base;
@@ -205,11 +211,12 @@ public:
         return Vec3<U>(arg / base, arg % base, z);
     }
 
-    template<typename U, typename = typename std::enable_if<std::is_convertible<T, U>::value>::type>
+    template <typename U, typename = typename std::enable_if<std::is_convertible<T, U>::value>::type>
     operator Vec3<U>() const
     {
         return Vec3<U>(x, y, z);
     }
+
 private:
     // to solve problems about `abs`, we need this.
     static T abs(param_type arg)

@@ -27,8 +27,9 @@ class Session :public std::enable_shared_from_this<Session>
 {
 public:
     Session(tcp::socket socket)
-        :m_socket(std::move(socket))
-    {}
+        : m_socket(std::move(socket))
+    {
+    }
 
     void start()
     {

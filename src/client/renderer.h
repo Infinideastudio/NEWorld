@@ -34,36 +34,42 @@ public:
     {
         glViewport(x, y, width, height);
     }
+
     // Reset translations/rotations (Restore transform matrixes)
     static void restoreScale()
     {
         setModelMatrix();
         glLoadIdentity();
     }
+
     // Apply translations
     static void translate(const Vec3f& delta)
     {
         setModelMatrix();
         glTranslatef(delta.x, delta.y, delta.z);
     }
+
     // Apply rotations
     static void rotate(float degrees, const Vec3f& scale)
     {
         setModelMatrix();
         glRotatef(degrees, scale.x, scale.y, scale.z);
     }
+
     // Restore projection matrix
     static void restoreProj()
     {
         setProjMatrix();
         glLoadIdentity();
     }
+
     // Perspective projection
     static void applyPerspective(float fov, float aspect, float zNear, float zFar)
     {
         setProjMatrix();
         glMultMatrixf(Mat4f::perspective(fov, aspect, zNear, zFar).getTranspose().data);
     }
+
     // Orthogonal projection
     static void applyOrtho(float left, float right, float top, float bottom, float zNear, float zFar)
     {
@@ -87,7 +93,6 @@ private:
         glMatrixMode(GL_MODELVIEW);
         matrixMode = 0;
     }
-
 };
 
 #endif // !RENDERER_H_

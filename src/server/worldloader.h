@@ -41,17 +41,20 @@ private:
 
 public:
     WorldLoader(World* world, ChunkPointerArray* cpa)
-        :m_world(world), m_cpa(cpa), m_chunkLoadCount(0), m_chunkUnloadCount(0), m_loadRange(0)
-    {}
+        : m_world(world), m_cpa(cpa), m_chunkLoadCount(0), m_chunkUnloadCount(0), m_loadRange(0)
+    {
+    }
 
     /// Set load range
     void setLoadRange(int x)
-    { m_loadRange = x; }
+    {
+        m_loadRange = x;
+    }
+
     /// Find the nearest chunks in load range to load, fartherest chunks out of load range to unload
     void sortChunkLoadUnloadList(const Vec3i& centerPos);
     /// Load & unload chunks
     void loadUnloadChunks();
-
 };
 
 #endif // !WORLDLOADER_H_

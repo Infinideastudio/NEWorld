@@ -24,106 +24,105 @@
 
 namespace LColorFunc
 {
-
-    typedef std::ostream&(*colorfunc)(std::ostream &s);
+    typedef std::ostream&(*colorfunc)(std::ostream& s);
 
 #ifdef NEWORLD_TARGET_WINDOWS
     // Microsoft Windows
     static HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    inline std::ostream& black(std::ostream &s)
+    inline std::ostream& black(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,0);
+        SetConsoleTextAttribute(hStdout, 0);
         return s;
     }
 
-    inline std::ostream& lblack(std::ostream &s)
+    inline std::ostream& lblack(std::ostream& s)
     {
         SetConsoleTextAttribute(hStdout,FOREGROUND_INTENSITY);
         return s;
     }
 
-    inline std::ostream& red(std::ostream &s)
+    inline std::ostream& red(std::ostream& s)
     {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED);
         return s;
     }
 
-    inline std::ostream& lred(std::ostream &s)
+    inline std::ostream& lred(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_RED|FOREGROUND_INTENSITY);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_INTENSITY);
         return s;
     }
 
-    inline std::ostream& green(std::ostream &s)
+    inline std::ostream& green(std::ostream& s)
     {
         SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN);
         return s;
     }
 
-    inline std::ostream& lgreen(std::ostream &s)
+    inline std::ostream& lgreen(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         return s;
     }
 
-    inline std::ostream& blue(std::ostream &s)
+    inline std::ostream& blue(std::ostream& s)
     {
         SetConsoleTextAttribute(hStdout,FOREGROUND_BLUE);
         return s;
     }
 
-    inline std::ostream& lblue(std::ostream &s)
+    inline std::ostream& lblue(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         return s;
     }
 
-    inline std::ostream& yellow(std::ostream &s)
+    inline std::ostream& yellow(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_RED|FOREGROUND_GREEN);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_GREEN);
         return s;
     }
 
-    inline std::ostream& lyellow(std::ostream &s)
+    inline std::ostream& lyellow(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_INTENSITY);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         return s;
     }
 
-    inline std::ostream& magenta(std::ostream &s)
+    inline std::ostream& magenta(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_RED|FOREGROUND_BLUE);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_BLUE);
         return s;
     }
 
-    inline std::ostream& lmagenta(std::ostream &s)
+    inline std::ostream& lmagenta(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         return s;
     }
 
-    inline std::ostream& cyan(std::ostream &s)
+    inline std::ostream& cyan(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN|FOREGROUND_BLUE);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN | FOREGROUND_BLUE);
         return s;
     }
 
-    inline std::ostream& lcyan(std::ostream &s)
+    inline std::ostream& lcyan(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         return s;
     }
 
-    inline std::ostream& white(std::ostream &s)
+    inline std::ostream& white(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
         return s;
     }
 
-    inline std::ostream& lwhite(std::ostream &s)
+    inline std::ostream& lwhite(std::ostream& s)
     {
-        SetConsoleTextAttribute(hStdout,FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY);
+        SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         return s;
     }
 #else

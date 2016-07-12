@@ -34,8 +34,8 @@ void PluginManager::loadPlugin(const string& filename)
         return;
     }
     infostream << "Loaded plugin \"" << plugin.getData().pluginName << "\"["
-               << plugin.getData().internalName
-               << "], authored by \"" << plugin.getData().authorName << "\"";
+        << plugin.getData().internalName
+        << "], authored by \"" << plugin.getData().authorName << "\"";
 }
 
 void PluginManager::loadPlugins()

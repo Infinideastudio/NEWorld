@@ -7,6 +7,7 @@ class Packet;
 void addRequest(Packet p);
 void networkThread();
 void disconnect();
+
 inline void setServerIp(std::string ip)
 {
     extern std::string hostIp;

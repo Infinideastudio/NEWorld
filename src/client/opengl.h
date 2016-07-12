@@ -22,8 +22,8 @@
 #include <common.h>
 
 #ifdef NEWORLD_COMPILER_MSVC
-    #include <wingdi.h>
-    #include <windef.h>
+#include <wingdi.h>
+#include <windef.h>
 #endif
 
 #include <GL/gl.h>

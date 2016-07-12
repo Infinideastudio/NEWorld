@@ -87,5 +87,4 @@ int World::deleteChunk(const Vec3i& chunkPos)
 
 void World::update()
 {
-
 }

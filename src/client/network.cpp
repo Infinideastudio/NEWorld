@@ -38,7 +38,7 @@ bool initNetwork(boost::asio::io_service& ioservice, tcp::socket& socket, std::s
     try
     {
         //Connect to the server
-        boost::asio::connect(socket, resolver.resolve({ ip, std::to_string(Port) }));
+        boost::asio::connect(socket, resolver.resolve({ip, std::to_string(Port)}));
         return true;
     }
     catch (std::exception& e)
@@ -51,7 +51,7 @@ bool initNetwork(boost::asio::io_service& ioservice, tcp::socket& socket, std::s
 void networkThread()
 {
     tcp::socket socket(ioService);
-    if (!initNetwork(ioService,socket, hostIp))
+    if (!initNetwork(ioService, socket, hostIp))
         exit(-1);
 
     session = std::make_shared<Session>(std::move(socket));
@@ -70,8 +70,8 @@ void Session::doUpdate()
     auto self(shared_from_this());
     boost::asio::deadline_timer(m_socket.get_io_service(), boost::posix_time::microseconds(updateInterval)).async_wait(
         [this, self](boost::system::error_code)
-    {
-        //Update world here
-        doWrite();
-    });
+        {
+            //Update world here
+            doWrite();
+        });
 }

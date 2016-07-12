@@ -20,7 +20,7 @@
 #include "utils.h"
 #include "type.h"
 
-Settings::SettingsMap Settings::readFromFile(std::ifstream && file)
+Settings::SettingsMap Settings::readFromFile(std::ifstream&& file)
 {
     Settings::SettingsMap map;
     if (file)

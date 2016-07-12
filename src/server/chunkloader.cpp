@@ -27,6 +27,6 @@ void ChunkLoader::build() const
             for (int y = 0; y < ChunkSize; y++)
             {
                 // TODO: Set block to BlockData(0, DaylightBrightness, 0)
-                m_chunk->getBlock(Vec3i(x, y, z)) =  BlockData(0, 0, 0); // NOT FINISHED
+                m_chunk->getBlock(Vec3i(x, y, z)) = BlockData(0, 0, 0); // NOT FINISHED
             }
 }

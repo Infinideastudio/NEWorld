@@ -29,10 +29,14 @@ using std::vector;
 class WorldManager
 {
 public:
-    WorldManager(PluginManager& plugins) :m_plugins(plugins)
-    {}
+    WorldManager(PluginManager& plugins) : m_plugins(plugins)
+    {
+    }
+
     ~WorldManager()
-    { m_worlds.clear(); }
+    {
+        m_worlds.clear();
+    }
 
     World& addWorld(const string& name)
     {
@@ -43,7 +47,6 @@ public:
 private:
     vector<World> m_worlds;
     PluginManager& m_plugins;
-
 };
 
 #endif

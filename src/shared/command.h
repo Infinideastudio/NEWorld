@@ -28,7 +28,10 @@
 class CommandExecuteStat
 {
 public:
-    CommandExecuteStat(bool s, std::string i) :success(s), info(i) {}
+    CommandExecuteStat(bool s, std::string i) : success(s), info(i)
+    {
+    }
+
     bool success;
     std::string info;
 };
@@ -42,6 +45,7 @@ public:
         name = args.size() != 0 ? args[0] : "";
         if (args.size() != 0) args.erase(args.begin());
     }
+
     std::string name;
     std::vector<std::string> args;
 };
@@ -49,7 +53,10 @@ public:
 class CommandInfo
 {
 public:
-    CommandInfo(std::string a, std::string h) :author(a), help(h) {}
+    CommandInfo(std::string a, std::string h) : author(a), help(h)
+    {
+    }
+
     std::string author;
     std::string help;
 };

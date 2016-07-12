@@ -28,7 +28,9 @@ constexpr int ChunkSizeLog2 = 5, ChunkSize = 1 << ChunkSizeLog2; // 2 ^ ChunkSiz
 class Chunk
 {
 public:
-    explicit Chunk(const Vec3i& chunkPos) :m_pos(chunkPos) {}
+    explicit Chunk(const Vec3i& chunkPos) : m_pos(chunkPos)
+    {
+    }
 
     /// Get chunk position
     const Vec3i& getPos() const
@@ -40,27 +42,26 @@ public:
     BlockData getBlock(const Vec3i& pos) const
     {
         assert(pos.x >= 0 && pos.x < ChunkSize && pos.y >= 0 && pos.y < ChunkSize && pos.z >= 0 && pos.z < ChunkSize);
-        return m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z];
+        return m_blocks[pos.x * ChunkSize * ChunkSize + pos.y * ChunkSize + pos.z];
     }
 
     /// Get block reference in this chunk
     BlockData& getBlock(const Vec3i& pos)
     {
         assert(pos.x >= 0 && pos.x < ChunkSize && pos.y >= 0 && pos.y < ChunkSize && pos.z >= 0 && pos.z < ChunkSize);
-        return m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z];
+        return m_blocks[pos.x * ChunkSize * ChunkSize + pos.y * ChunkSize + pos.z];
     }
 
     /// Set block data in this chunk
     void setBlock(const Vec3i& pos, BlockData block)
     {
         assert(pos.x >= 0 && pos.x < ChunkSize && pos.y >= 0 && pos.y < ChunkSize && pos.z >= 0 && pos.z < ChunkSize);
-        m_blocks[pos.x*ChunkSize*ChunkSize + pos.y*ChunkSize + pos.z] = block;
+        m_blocks[pos.x * ChunkSize * ChunkSize + pos.y * ChunkSize + pos.z] = block;
     }
 
 private:
     Vec3i m_pos;
-    BlockData m_blocks[ChunkSize*ChunkSize*ChunkSize];
-
+    BlockData m_blocks[ChunkSize * ChunkSize * ChunkSize];
 };
 
 #endif // !CHUNK_H_

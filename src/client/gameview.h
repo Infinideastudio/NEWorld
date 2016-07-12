@@ -23,6 +23,7 @@
 #undef main
 #include <string>
 using std::string;
+
 class GameView : public UI::Core::Page
 {
 public:
@@ -45,7 +46,6 @@ public:
         pushPage(std::make_shared<GameView>());
     }
 };
-
 
 
 #endif

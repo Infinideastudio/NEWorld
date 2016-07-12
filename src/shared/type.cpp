@@ -53,5 +53,3 @@ std::string type2string(boost::spirit::hold_any var)
     warningstream << "Failed to handle type " << var.type().name() << " which maybe not supported.";
     return "";
 }
-
-

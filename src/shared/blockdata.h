@@ -27,11 +27,19 @@ private:
     unsigned int state : 16; // Block state
 
 public:
-    BlockData() :id(0), brightness(0),state(0) {}
-    BlockData(int id_, int brightness_, int state_) :id(id_), brightness(brightness_), state(state_) {}
-    BlockData(const BlockData& rhs) :id(rhs.id), brightness(rhs.brightness), state(rhs.state) {}
+    BlockData() : id(0), brightness(0), state(0)
+    {
+    }
 
-    bool operator== (const BlockData& rhs) const
+    BlockData(int id_, int brightness_, int state_) : id(id_), brightness(brightness_), state(state_)
+    {
+    }
+
+    BlockData(const BlockData& rhs) : id(rhs.id), brightness(rhs.brightness), state(rhs.state)
+    {
+    }
+
+    bool operator==(const BlockData& rhs) const
     {
         return id == rhs.id;
     }
@@ -40,27 +48,31 @@ public:
     {
         return id;
     }
+
     int getBrightness() const
     {
         return brightness;
     }
+
     int getState() const
     {
         return state;
     }
+
     void setID(int id_)
     {
         id = id_;
     }
+
     void setBrightness(int brightness_)
     {
         brightness = brightness_;
     }
+
     void setState(int state_)
     {
         state = state_;
     }
-
 };
 
 #endif // !BLOCKDATA_H_
