@@ -17,5 +17,23 @@
 */
 
 #include "opengl.h"
+#include <SDL2/SDL.h>
 
-// TODO: Place extension definitions here
+PFNGLGENBUFFERSARBPROC glGenBuffersARB;
+PFNGLBINDBUFFERARBPROC glBindBufferARB;
+PFNGLBUFFERDATAARBPROC glBufferDataARB;
+PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
+
+void* getGLProcAddress(const char* name)
+{
+    return SDL_GL_GetProcAddress(name);
+}
+void glInit()
+{
+#define GetGLExt(name,funcname) name=static_cast<funcname>(getGLProcAddress(#name))
+    GetGLExt(glGenBuffersARB, PFNGLGENBUFFERSARBPROC);
+    GetGLExt(glBindBufferARB, PFNGLBINDBUFFERARBPROC);
+    GetGLExt(glBufferDataARB, PFNGLBUFFERDATAARBPROC);
+    GetGLExt(glDeleteBuffersARB, PFNGLDELETEBUFFERSARBPROC);
+#undef GetGLExt
+}

@@ -17,6 +17,7 @@
 */
 
 #include "neworld.h"
+#include <logger.h>
 
 extern "C" NWAPIEXPORT int NWAPICALL main(int, char*[]);
 
@@ -32,12 +33,8 @@ public:
 
 int NWAPICALL main(int, char*[])
 {
-    auto world=
-
-        // NOW THE WORLD CONSTRUCTS!
-        new orld;
+    // NOW THE WORLD CONSTRUCTS!
+    new orld;
     // NOW EVERYTHING COMES TO THE END...
-
-    delete world;
     return 0;
 }

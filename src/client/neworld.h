@@ -23,7 +23,7 @@
 #include "network.h"
 #include <thread>
 #include <logger.h>
-#include "window.h"
+#include "gameview.h"
 
 class App : public UI::Core::Application
 {

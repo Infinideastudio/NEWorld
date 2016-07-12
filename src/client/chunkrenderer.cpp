@@ -18,7 +18,7 @@
 
 #include "chunkrenderer.h"
 
-VertexArray ChunkRenderer::va(262144, 2, 3, 1, 3);
+VertexArray ChunkRenderer::va(262144, VertexFormat(2, 3, 0, 3));
 bool ChunkRenderer::mergeFace;
 
 void ChunkRenderer::buildVertexArray()
@@ -33,13 +33,4 @@ void ChunkRenderer::buildVertexArray()
         // Iterate blocks and render
         // ...
     }
-}
-
-void ChunkRenderer::renderVertexArray()
-{
-    // glBindBufferARB(...)
-    // glTexturePointerARB(...)
-    // ...
-    // glVertexPointerARB(...)
-    // glDrawArrays(...)
 }

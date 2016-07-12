@@ -27,5 +27,15 @@
 #endif
 
 #include <GL/gl.h>
+#include <GL/glext.h>
+
+using VertexBufferID = GLuint;
+
+extern PFNGLGENBUFFERSARBPROC glGenBuffersARB;
+extern PFNGLBINDBUFFERARBPROC glBindBufferARB;
+extern PFNGLBUFFERDATAARBPROC glBufferDataARB;
+extern PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
+
+void glInit();
 
 #endif // !OPENGL_H_

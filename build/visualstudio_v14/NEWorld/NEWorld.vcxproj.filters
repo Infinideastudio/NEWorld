@@ -14,7 +14,7 @@
     <Filter Include="Source\Main">
       <UniqueIdentifier>{7002ce47-c94a-48d0-8ca1-59b34fcf41d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Window">
+    <Filter Include="Source\Scene">
       <UniqueIdentifier>{6a35d50b-1155-4a7c-8af2-fce5c29ea559}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -40,8 +40,8 @@
     <ClInclude Include="..\..\..\src\client\neworld.h">
       <Filter>Source\Main</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\client\window.h">
-      <Filter>Source\Window</Filter>
+    <ClInclude Include="..\..\..\src\client\gameview.h">
+      <Filter>Source\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -60,9 +60,6 @@
     <ClCompile Include="..\..\..\src\client\network.cpp">
       <Filter>Source\Network</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\client\mat4.cpp">
-      <Filter>Source\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\client\opengl.cpp">
       <Filter>Source\Renderer</Filter>
     </ClCompile>
@@ -72,8 +69,8 @@
     <ClCompile Include="..\..\..\src\client\neworld.cpp">
       <Filter>Source\Main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\client\window.cpp">
-      <Filter>Source\Window</Filter>
+    <ClCompile Include="..\..\..\src\client\gameview.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
