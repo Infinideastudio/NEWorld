@@ -37,7 +37,7 @@ GameView::GameView() : UI::Core::Page()
     {
         onKeyPress(key, action);
     };
-
+    content->addChild(view);
     Renderer::init(852, 480);
 }
 
@@ -96,10 +96,20 @@ void GameView::doRender()
 
 void GameView::onKeyPress(int key, UI::Core::ButtonAction action)
 {
-    debugstream << key << "," << action;
     //use SDLK_XXX;
-    //if (mainWindow.isKeyPressed(GLFW_KEY_LEFT)) yrot -= 0.25f;
-    //if (mainWindow.isKeyPressed(GLFW_KEY_RIGHT)) yrot += 0.25f;
-    //if (mainWindow.isKeyPressed(GLFW_KEY_UP)) xrot -= 0.25f;
-    //if (mainWindow.isKeyPressed(GLFW_KEY_DOWN)) xrot += 0.25f;
+    switch(key)
+    {
+    case SDLK_LEFT:
+        yrot -= 0.25f;
+        break;
+    case SDLK_RIGHT:
+        yrot += 0.25f;
+        break;
+    case SDLK_UP:
+        xrot -= 0.25f;
+        break;
+    case SDLK_DOWN:
+        xrot += 0.25f;
+        break;
+    }
 }
