@@ -101,7 +101,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\..\src\uilib\include;$(ProjectDir)..\..\..\src\maximilian\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\src\uilib\include;$(ProjectDir)..\..\..\src\maximilian\include;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)..\..\..\dependencies\lib\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\UILib\</IntDir>
     <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib;$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
@@ -115,7 +115,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\..\src\uilib\include;$(ProjectDir)..\..\..\src\maximilian\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\src\uilib\include;$(ProjectDir)..\..\..\src\maximilian\include;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)..\..\..\dependencies\lib\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\UILib\</IntDir>
     <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib;$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
@@ -131,7 +131,7 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_WINDOWS;_USRDLL;UILIB_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
@@ -140,7 +140,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>freetype.lib;opengl32.lib;glew32.lib;Maximilian.lib;SDL2.lib;SDL2_image.lib;DSound.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectDir)..\..\..\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ImportLibrary>$(ProjectDir)..\..\..\dependencies\lib\UILib.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -161,7 +161,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -176,7 +176,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>freetype.lib;opengl32.lib;glew32.lib;Maximilian.lib;SDL2.lib;SDL2_image.lib;DSound.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(ProjectDir)..\..\..\$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ImportLibrary>$(ProjectDir)..\..\..\dependencies\lib\UILib.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>

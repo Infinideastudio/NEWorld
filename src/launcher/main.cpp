@@ -21,7 +21,7 @@
 #include <boost/dll/shared_library.hpp>
 #include <common.h> // For NWAPICALL
 
-const std::string Path = "./Bin/";
+const std::string Path = "./";
 typedef void NWAPICALL MainFunction(int, char**);
 
 int main(int argc, char** argv)
