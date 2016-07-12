@@ -68,7 +68,7 @@ namespace UI
             glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
             this->resize(width, height);
             SDL_GL_SetSwapInterval(2);
-			SDL_StopTextInput();
+            SDL_StopTextInput();
         }
 
         void Window::close()
