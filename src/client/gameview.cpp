@@ -19,12 +19,16 @@
 #include "gameview.h"
 #include "renderer.h"
 #include <logger.h>
-
+auto StretchStretch(double LeftPct, double RightPct, double TopPct, double BottomPct, double LeftDis, double RightDis, double TopDis, double BottomDis)
+{
+    return UI::Core::Margin(UI::Base::Rect(LeftPct, RightPct, TopPct, BottomPct), UI::Base::Rect(LeftDis, RightDis, TopDis, BottomDis), UI::Core::HorizontalAlignment::Stretch, UI::Core::VerticalAlignment::Stretch);
+}
 GameView::GameView() : UI::Core::Page()
 {
     //Add controls here
     content = std::make_shared<UI::Core::Grid>();
-    auto view = std::make_shared<UI::Controls::GLContext>("", UI::Core::Margin());
+    auto view = std::make_shared<UI::Controls::GLContext>("",
+                StretchStretch(0.0, 1.0, 0.0, 1.0, 0, 0, 0, 0));
     view->onRenderF = [this]()
     {
         doRender();
@@ -93,6 +97,7 @@ void GameView::doRender()
 void GameView::onKeyPress(int key, UI::Core::ButtonAction action)
 {
     debugstream << key << "," << action;
+    //use SDLK_XXX;
     //if (mainWindow.isKeyPressed(GLFW_KEY_LEFT)) yrot -= 0.25f;
     //if (mainWindow.isKeyPressed(GLFW_KEY_RIGHT)) yrot += 0.25f;
     //if (mainWindow.isKeyPressed(GLFW_KEY_UP)) xrot -= 0.25f;
