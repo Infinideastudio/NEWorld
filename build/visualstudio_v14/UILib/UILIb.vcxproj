@@ -102,7 +102,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\src\uilib\include;$(ProjectDir)..\..\..\src\maximilian\include;$(IncludePath)</IncludePath>
-    <OutDir>$(ProjectDir)..\..\..\dependencies\lib\</OutDir>
+    <OutDir>$(SolutionDir)..\..\Bin\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\UILib\</IntDir>
     <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib;$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -116,7 +116,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\src\uilib\include;$(ProjectDir)..\..\..\src\maximilian\include;$(IncludePath)</IncludePath>
-    <OutDir>$(ProjectDir)..\..\..\dependencies\lib\</OutDir>
+    <OutDir>$(SolutionDir)..\..\Bin\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\UILib\</IntDir>
     <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib;$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
