@@ -45,6 +45,7 @@ GameView::GameView() : UI::Core::Page()
 
 void GameView::doRender()
 {
+    Renderer::clear();
     Renderer::restoreProj();
     Renderer::applyPerspective(60.0f, 852.0f / 480.0f, 0.1f, 100.0f);
     Renderer::restoreScale();

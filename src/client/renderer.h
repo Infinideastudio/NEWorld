@@ -77,6 +77,11 @@ public:
         glMultMatrixf(Mat4f::ortho(left, right, top, bottom, zNear, zFar).getTranspose().data);
     }
 
+    static void clear()
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
 private:
     static int matrixMode;
 

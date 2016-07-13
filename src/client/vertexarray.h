@@ -21,7 +21,8 @@
 
 #include <cstring>
 #include <boost/core/noncopyable.hpp>
-#include "../shared/common.h"
+#include <initializer_list>
+#include <common.h>
 #include "opengl.h"
 
 class VertexFormat
@@ -75,6 +76,11 @@ public:
         memcpy(m_vertexAttributes, texture, size * sizeof(float));
     }
 
+    void setTexture(std::initializer_list<float> texture)
+    {
+        setTexture(texture.size(), texture.begin());
+    }
+
     // Set color value
     void setColor(int size, const float* color)
     {
@@ -82,11 +88,21 @@ public:
         memcpy(m_vertexAttributes + m_format.textureCount, color, size * sizeof(float));
     }
 
+    void setColor(std::initializer_list<float> color)
+    {
+        setColor(color.size(), color.begin());
+    }
+
     // Set normal vector
-    void setNormal(int size, const float* attribute)
+    void setNormal(int size, const float* normal)
     {
         assert(size <= m_format.normalCount);
-        memcpy(m_vertexAttributes + m_format.textureCount + m_format.colorCount, attribute, size * sizeof(float));
+        memcpy(m_vertexAttributes + m_format.textureCount + m_format.colorCount, normal, size * sizeof(float));
+    }
+
+    void setNormal(std::initializer_list<float> normal)
+    {
+        setNormal(normal.size(), normal.begin());
     }
 
     // Add vertex
@@ -95,6 +111,11 @@ public:
         memcpy(m_data + m_vertexes, m_vertexAttributes, m_format.vertexAttributeCount * sizeof(float));
         memcpy(m_data + m_vertexes + m_format.vertexAttributeCount, coords, m_format.coordinateCount * sizeof(float));
         m_vertexes++;
+    }
+
+    void addVertex(std::initializer_list<float> coords)
+    {
+        addVertex(coords.begin());
     }
 
     // Get current vertex format
