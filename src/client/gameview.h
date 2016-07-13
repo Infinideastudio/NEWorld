@@ -23,6 +23,7 @@
 #undef main
 #include <string>
 using std::string;
+#include "renderer.h"
 
 class GameView : public UI::Core::Page
 {
@@ -34,6 +35,8 @@ public:
 
 private:
     float xrot = 0.0f, yrot = 0.0f;
+    VertexBuffer cube;
+
 };
 
 class MainWindow : public UI::Core::Window

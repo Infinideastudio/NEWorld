@@ -38,9 +38,48 @@ GameView::GameView() : UI::Core::Page()
     {
         onKeyDown(scancode);
     };
-
     content->addChild(view);
+
     Renderer::init(852, 480);
+
+    VertexArray cubeArray(256, VertexFormat(0, 3, 0, 3));
+    // Front
+    cubeArray.setColor({0.0f, 0.0f, 1.0f});
+    cubeArray.addVertex({-0.5f, 0.5f, 0.5f});
+    cubeArray.addVertex({-0.5f,-0.5f, 0.5f});
+    cubeArray.addVertex({ 0.5f,-0.5f, 0.5f});
+    cubeArray.addVertex({ 0.5f, 0.5f, 0.5f});
+    // Back
+    cubeArray.setColor({0.0f, 1.0f, 0.0f});
+    cubeArray.addVertex({ 0.5f, 0.5f,-0.5f});
+    cubeArray.addVertex({ 0.5f,-0.5f,-0.5f});
+    cubeArray.addVertex({-0.5f,-0.5f,-0.5f});
+    cubeArray.addVertex({-0.5f, 0.5f,-0.5f});
+    // Top
+    cubeArray.setColor({1.0f, 1.0f, 0.0f});
+    cubeArray.addVertex({-0.5f, 0.5f,-0.5f});
+    cubeArray.addVertex({-0.5f, 0.5f, 0.5f});
+    cubeArray.addVertex({ 0.5f, 0.5f, 0.5f});
+    cubeArray.addVertex({ 0.5f, 0.5f,-0.5f});
+    // Bottom
+    cubeArray.setColor({1.0f, 1.0f, 1.0f});
+    cubeArray.addVertex({-0.5f,-0.5f, 0.5f});
+    cubeArray.addVertex({-0.5f,-0.5f,-0.5f});
+    cubeArray.addVertex({ 0.5f,-0.5f,-0.5f});
+    cubeArray.addVertex({ 0.5f,-0.5f, 0.5f});
+    // Right
+    cubeArray.setColor({1.0f, 0.0f, 0.0f});
+    cubeArray.addVertex({ 0.5f,-0.5f, 0.5f});
+    cubeArray.addVertex({ 0.5f,-0.5f,-0.5f});
+    cubeArray.addVertex({ 0.5f, 0.5f,-0.5f});
+    cubeArray.addVertex({ 0.5f, 0.5f, 0.5f});
+    // Left
+    cubeArray.setColor({1.0f, 0.0f, 1.0f});
+    cubeArray.addVertex({-0.5f,-0.5f,-0.5f});
+    cubeArray.addVertex({-0.5f,-0.5f, 0.5f});
+    cubeArray.addVertex({-0.5f, 0.5f, 0.5f});
+    cubeArray.addVertex({-0.5f, 0.5f,-0.5f});
+    cube = VertexBuffer(cubeArray);
 }
 
 void GameView::doRender()
@@ -53,44 +92,7 @@ void GameView::doRender()
     Renderer::rotate(xrot, Vec3f(1.0f, 0.0f, 0.0f));
     Renderer::rotate(yrot, Vec3f(0.0f, 1.0f, 0.0f));
 
-    glBegin(GL_QUADS);
-    // Front
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    // Back
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(0.5f, 0.5f, -0.5f);
-    glVertex3f(0.5f, -0.5f, -0.5f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glVertex3f(-0.5f, 0.5f, -0.5f);
-    // Top
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glVertex3f(-0.5f, 0.5f, -0.5f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    glVertex3f(0.5f, 0.5f, -0.5f);
-    // Bottom
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glVertex3f(0.5f, -0.5f, -0.5f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-    // Right
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-    glVertex3f(0.5f, -0.5f, -0.5f);
-    glVertex3f(0.5f, 0.5f, -0.5f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    // Left
-    glColor3f(1.0f, 0.0f, 1.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glVertex3f(-0.5f, 0.5f, -0.5f);
-    glEnd();
+    cube.render();
 
     glFlush();
     glFinish();
@@ -98,8 +100,8 @@ void GameView::doRender()
 
 void GameView::onKeyDown(int scancode)
 {
-    if (scancode == SDL_SCANCODE_LEFT) xrot -= 0.25f;
-    else if (scancode == SDL_SCANCODE_RIGHT) xrot += 0.25f;
-    else if (scancode == SDL_SCANCODE_UP) yrot -= 0.25f;
-    else if (scancode == SDL_SCANCODE_DOWN) yrot += 0.25f;
+    if (scancode == SDL_SCANCODE_LEFT) yrot -= 0.25f;
+    else if (scancode == SDL_SCANCODE_RIGHT) yrot += 0.25f;
+    else if (scancode == SDL_SCANCODE_UP) xrot -= 0.25f;
+    else if (scancode == SDL_SCANCODE_DOWN) xrot += 0.25f;
 }

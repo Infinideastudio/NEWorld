@@ -108,8 +108,9 @@ public:
     // Add vertex
     void addVertex(const float* coords)
     {
-        memcpy(m_data + m_vertexes, m_vertexAttributes, m_format.vertexAttributeCount * sizeof(float));
-        memcpy(m_data + m_vertexes + m_format.vertexAttributeCount, coords, m_format.coordinateCount * sizeof(float));
+        int cnt = (m_format.textureCount + m_format.colorCount + m_format.normalCount);
+        memcpy(m_data + m_vertexes * m_format.vertexAttributeCount, m_vertexAttributes, cnt * sizeof(float));
+        memcpy(m_data + m_vertexes * m_format.vertexAttributeCount + cnt, coords, m_format.coordinateCount * sizeof(float));
         m_vertexes++;
     }
 

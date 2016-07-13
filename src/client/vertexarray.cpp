@@ -18,7 +18,7 @@
 
 #include "vertexarray.h"
 
-VertexBuffer::VertexBuffer(const VertexArray& va) :format(va.getFormat())
+VertexBuffer::VertexBuffer(const VertexArray& va) :format(va.getFormat()), vertexes(va.getVertexCount())
 {
     glGenBuffersARB(1, &id);
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
@@ -54,6 +54,7 @@ void VertexBuffer::render()
             format.vertexAttributeCount * sizeof(float),
             (float*)((format.textureCount + format.colorCount + format.normalCount) * sizeof(float))
         );
+
     // 这个框是不是很装逼2333 --qiaozhanrong
     //====================================================================================================//
     /**/                                                                                                /**/
