@@ -28,7 +28,7 @@ class Renderer
 {
 public:
     // Setup rendering
-    static void init(int width, int height);
+    static void init();
 
     static void setViewport(int x, int y, int width, int height)
     {

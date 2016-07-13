@@ -135,6 +135,7 @@ namespace UI
 
             NotifyFunc onRenderF;
             onFocus onFocusF;
+            onViewResize onViewResizeF;
             onMouseMove onMouseMoveF;
             onMouseButton onMouseButtonF;
             onMouseEnter onMouseEnterF;

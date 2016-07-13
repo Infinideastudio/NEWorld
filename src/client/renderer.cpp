@@ -20,10 +20,9 @@
 
 int Renderer::matrixMode = 0;
 
-void Renderer::init(int width, int height)
+void Renderer::init()
 {
     glInit();
-    setViewport(0, 0, width, height);
     restoreProj();
     restoreScale();
     glShadeModel(GL_SMOOTH);

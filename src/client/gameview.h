@@ -32,8 +32,10 @@ public:
 
     void doRender();
     void onKeyDown(int scancode);
+    void onResize(int w, int h);
 
 private:
+    int windowWidth = 852, windowHeight = 480;
     float xrot = 0.0f, yrot = 0.0f;
     VertexBuffer cube;
 
@@ -44,7 +46,9 @@ class MainWindow : public UI::Core::Window
 public:
     MainWindow(int width, int height, const string& title) : UI::Core::Window(title, width, height, 200, 200)
     {
-        //Load the main menu.
+        // Enable v-sync
+        setSwapInterval(1);
+        // Load the main menu
         pushPage(std::make_shared<GameView>());
     }
 };

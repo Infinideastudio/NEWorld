@@ -190,6 +190,7 @@ namespace UI
         //CallBack Functions
         using NotifyFunc = std::function<void()>;
         using onFocus = std::function<void(FocusOp)>;
+        using onViewResize = std::function<void(int, int)>;
         using onMouseMove = std::function<void(int, int, int, int)>;
         using onMouseButton = std::function<void(MouseButton, ButtonAction)>;
         using onMouseEnter = std::function<void(CursorOp)>;

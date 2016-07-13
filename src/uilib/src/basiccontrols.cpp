@@ -220,9 +220,10 @@ namespace UI
 
         void GLContext::onResize(size_t x, size_t y)
         {
+            if (onViewResizeF) onViewResizeF(x, y);
         }
 
-        void GLContext::onParentResize(Grid * parent)
+        void GLContext::onParentResize(Grid* parent)
         {
         }
 
