@@ -25,11 +25,12 @@ void Renderer::init()
     glInit();
     restoreProj();
     restoreScale();
-    glShadeModel(GL_SMOOTH);
-//    glDisable(GL_DITHER);
+    glShadeModel(GL_FLAT);
+    glDisable(GL_DITHER);
     glClearColor(0.6f, 0.9f, 1.0f, 1.0f);
     glClearDepth(1.0f);
-//    glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 //    glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
 //    glEnable(GL_ALPHA_TEST);

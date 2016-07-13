@@ -82,6 +82,16 @@ public:
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
+    static void flushCommands()
+    {
+        glFlush();
+    }
+
+    static void waitForComplete()
+    {
+        glFinish();
+    }
+
 private:
     static int matrixMode;
 

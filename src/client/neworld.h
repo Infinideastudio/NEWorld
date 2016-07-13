@@ -25,10 +25,10 @@
 #include <logger.h>
 #include "gameview.h"
 
-class App : public UI::Core::Application
+class MainApplication :public UI::Core::Application
 {
 public:
-    App(int width, int height, const string& title): m_width(width), m_height(height), m_title(title)
+    MainApplication(int width, int height, const string& title): m_width(width), m_height(height), m_title(title)
     {
     }
 

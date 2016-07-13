@@ -47,60 +47,70 @@ GameView::GameView() : UI::Core::Page()
     Renderer::init();
     Renderer::setViewport(0, 0, windowWidth, windowHeight);
 
-    VertexArray cubeArray(256, VertexFormat(0, 3, 0, 3));
-    // Front
-    cubeArray.setColor({0.0f, 0.0f, 1.0f});
-    cubeArray.addVertex({-0.5f, 0.5f, 0.5f});
-    cubeArray.addVertex({-0.5f,-0.5f, 0.5f});
-    cubeArray.addVertex({ 0.5f,-0.5f, 0.5f});
-    cubeArray.addVertex({ 0.5f, 0.5f, 0.5f});
-    // Back
-    cubeArray.setColor({0.0f, 1.0f, 0.0f});
-    cubeArray.addVertex({ 0.5f, 0.5f,-0.5f});
-    cubeArray.addVertex({ 0.5f,-0.5f,-0.5f});
-    cubeArray.addVertex({-0.5f,-0.5f,-0.5f});
-    cubeArray.addVertex({-0.5f, 0.5f,-0.5f});
-    // Top
-    cubeArray.setColor({1.0f, 1.0f, 0.0f});
-    cubeArray.addVertex({-0.5f, 0.5f,-0.5f});
-    cubeArray.addVertex({-0.5f, 0.5f, 0.5f});
-    cubeArray.addVertex({ 0.5f, 0.5f, 0.5f});
-    cubeArray.addVertex({ 0.5f, 0.5f,-0.5f});
-    // Bottom
-    cubeArray.setColor({1.0f, 1.0f, 1.0f});
-    cubeArray.addVertex({-0.5f,-0.5f, 0.5f});
-    cubeArray.addVertex({-0.5f,-0.5f,-0.5f});
-    cubeArray.addVertex({ 0.5f,-0.5f,-0.5f});
-    cubeArray.addVertex({ 0.5f,-0.5f, 0.5f});
-    // Right
-    cubeArray.setColor({1.0f, 0.0f, 0.0f});
-    cubeArray.addVertex({ 0.5f,-0.5f, 0.5f});
-    cubeArray.addVertex({ 0.5f,-0.5f,-0.5f});
-    cubeArray.addVertex({ 0.5f, 0.5f,-0.5f});
-    cubeArray.addVertex({ 0.5f, 0.5f, 0.5f});
-    // Left
-    cubeArray.setColor({1.0f, 0.0f, 1.0f});
-    cubeArray.addVertex({-0.5f,-0.5f,-0.5f});
-    cubeArray.addVertex({-0.5f,-0.5f, 0.5f});
-    cubeArray.addVertex({-0.5f, 0.5f, 0.5f});
-    cubeArray.addVertex({-0.5f, 0.5f,-0.5f});
+    VertexArray cubeArray(24000000, VertexFormat(0, 3, 0, 3));
+
+    for (int x = -50; x < 50; x++)
+    {
+        for (int y = -50; y < 50; y++)
+        {
+            for (int z = -50; z < 50; z++)
+            {
+                // Front
+                cubeArray.setColor({ 0.7f, 0.7f, 0.7f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                // Back
+                cubeArray.setColor({ 0.7f, 0.7f, 0.7f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                // Top
+                cubeArray.setColor({ 1.0f, 1.0f, 1.0f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                // Bottom
+                cubeArray.setColor({ 1.0f, 1.0f, 1.0f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                // Right
+                cubeArray.setColor({ 0.5f, 0.5f, 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                // Left
+                cubeArray.setColor({ 0.5f, 0.5f, 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+            }
+        }
+        if ((x + 51) % 25 == 0) infostream << "Building vertax array: " << x + 51 << "%";
+    }
+
+    infostream << "Generating VBO...";
     cube = VertexBuffer(cubeArray);
+    infostream << "Complete!";
 }
 
 void GameView::doRender()
 {
     Renderer::clear();
     Renderer::restoreProj();
-    Renderer::applyPerspective(60.0f, (float)windowWidth / windowHeight, 0.1f, 100.0f);
+    Renderer::applyPerspective(60.0f, (float)windowWidth / windowHeight, 1.0f, 500.0f);
     Renderer::restoreScale();
-    Renderer::translate(Vec3f(0.0f, 0.0f, -3.0f));
+    Renderer::translate(Vec3f(0.0f, 0.0f, -200.0f));
     Renderer::rotate(xrot, Vec3f(1.0f, 0.0f, 0.0f));
     Renderer::rotate(yrot, Vec3f(0.0f, 1.0f, 0.0f));
-
     cube.render();
-
-    glFlush();
-    glFinish();
 }
 
 void GameView::onKeyDown(int scancode)

@@ -41,7 +41,10 @@ public:
         : textureCount(textureElementCount), colorCount(colorElementCount), normalCount(normalElementCount), coordinateCount(coordinateElementCount),
           vertexAttributeCount(textureElementCount + colorElementCount + normalElementCount + coordinateElementCount)
     {
+        assert(textureCount <= 3);
+        assert(colorCount <= 4);
         assert(normalCount == 0 || normalCount == 3);
+        assert(coordinateCount <= 4 && coordinateCount >= 1);
     }
 };
 

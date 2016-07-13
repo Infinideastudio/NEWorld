@@ -24,14 +24,14 @@ PFNGLBINDBUFFERARBPROC glBindBufferARB;
 PFNGLBUFFERDATAARBPROC glBufferDataARB;
 PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
 
-void* getGLProcAddress(const char* name)
+void* glGetProcAddress(const char* name)
 {
     return SDL_GL_GetProcAddress(name);
 }
 
 void glInit()
 {
-#define EXT(name, funcname) name = static_cast<funcname>(getGLProcAddress(#name))
+#define EXT(name, funcname) name = static_cast<funcname>(glGetProcAddress(#name))
     EXT(glGenBuffersARB, PFNGLGENBUFFERSARBPROC);
     EXT(glBindBufferARB, PFNGLBINDBUFFERARBPROC);
     EXT(glBufferDataARB, PFNGLBUFFERDATAARBPROC);
