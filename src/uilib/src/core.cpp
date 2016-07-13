@@ -43,8 +43,8 @@ namespace UI
 
         Window::Window(const std::string & name, const int width, const int height, const int _xpos, const int _ypos)
         {
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+            //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
+            //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 4);
             SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
             SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
@@ -55,19 +55,23 @@ namespace UI
 
                 if(window == nullptr) throw Exceptions::WindowCreationFailure;
             }
-            catch(Exceptions)
+            catch (Exceptions)
             {
-                logerror("SDL_Window Creation Failure of name = " + name);
+                logerror("SDL_Window Creation Failed. Name: " + name);
             }
 
             context = SDL_GL_CreateContext(window);
             currenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+            // These are not needed in core... --qiaozhanrong
+            /*
             glShadeModel(GL_SMOOTH);
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-            this->resize(width, height);
-            SDL_GL_SetSwapInterval(2);
+            */
+            resize(width, height);
+            setCurrentDraw();
+            setSwapInterval(0);
             SDL_StopTextInput();
         }
 
@@ -76,22 +80,36 @@ namespace UI
             SDL_DestroyWindow(window);
         }
 
-        void Window::onResize(size_t x, size_t y)
+        void Window::setCurrentDraw()
         {
+            SDL_GL_MakeCurrent(window, context);
         }
 
+        void Window::setSwapInterval(int i)
+        {
+            SDL_GL_SetSwapInterval(i);
+        }
+
+        void Window::onResize(size_t x, size_t y)
+        {
+
+        }
 
         void Window::render()
         {
             curwindowx = _x;
             curwindowy = _y;
-            SDL_GL_MakeCurrent(window, context);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            // `MakeCurrent` is a VERY SLOW operation. Never use it frequently.
+            // Clearing and matrix transforming will be done in render()
+            // --qiaozhanrong
+
+            //SDL_GL_MakeCurrent(window, context);
+            //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //glClearColor(1.0, 1.0, 1.0, 1.0);
-            glMatrixMode(GL_MODELVIEW);
-            glPushMatrix();
+            //glMatrixMode(GL_MODELVIEW);
+            //glPushMatrix();
             pages.top()->content->render();
-            glPopMatrix();
+            //glPopMatrix();
             SDL_GL_SwapWindow(window);
         }
 
@@ -123,6 +141,11 @@ namespace UI
         void Window::keyFunc(int Key, ButtonAction Action)
         {
             pages.top()->content->keyFunc(Key, Action);
+        }
+
+        void Window::keyDownFunc(int scancode)
+        {
+            pages.top()->content->keyDownFunc(scancode);
         }
 
         void Window::charInputFunc(std::wstring Char)
@@ -171,6 +194,9 @@ namespace UI
         {
             _x = x;
             _y = y;
+            // Do these in onResize()... --qiaozhanrong
+
+            /*
             glViewport(0, 0, (GLint)x, (GLint)y);
             //Choose the Matrix mode
             glMatrixMode(GL_PROJECTION);
@@ -183,6 +209,7 @@ namespace UI
             glDisable(GL_DEPTH_TEST);
             glEnable(GL_TEXTURE_2D);
             glLoadIdentity();
+            */
 
             if(pages.size() > 0)
             {
@@ -205,7 +232,7 @@ namespace UI
         {
             this->onClose();
             SDL_HideWindow(window);
-            application->processMessages();
+            application->update();
             SDL_DestroyWindow(window);
         }
 
@@ -294,13 +321,13 @@ namespace UI
             return button;
         }
 
-        void Application::processMessages()
+        void Application::update()
         {
             SDL_Event event;//事件
             std::shared_ptr<Window> curWin;
-            while(SDL_PollEvent(&event)) //从队列里取出事件
+            while (SDL_PollEvent(&event)) //从队列里取出事件
             {
-                switch(event.type)  //根据事件类型分门别类去处理
+                switch (event.type)  //根据事件类型分门别类去处理
                 {
                 case SDL_APP_TERMINATING:
                     break;
@@ -317,7 +344,7 @@ namespace UI
                     break;
 
                 case SDL_WINDOWEVENT:
-                    switch(event.window.event)
+                    switch (event.window.event)
                     {
                     case SDL_WINDOWEVENT_RESIZED:
                     case SDL_WINDOWEVENT_SIZE_CHANGED:
@@ -330,7 +357,7 @@ namespace UI
                         if (!winExist(event.window.windowID)) break;
                         windows[event.window.windowID]->close();
 
-                        if(windows[event.window.windowID] == mainWin)
+                        if (windows[event.window.windowID] == mainWin)
                         {
                             event.type = SDL_QUIT;
                             SDL_PushEvent(&event);
@@ -381,12 +408,12 @@ namespace UI
                     break;
 
                 case SDL_KEYDOWN:
-                    if(focused != nullptr) focused->keyFunc(event.key.keysym.sym, ButtonAction::Press);
+                    if (focused != nullptr) focused->keyFunc(event.key.keysym.sym, ButtonAction::Press);
 
                     break;
 
                 case SDL_KEYUP:
-                    if(focused != nullptr) focused->keyFunc(event.key.keysym.sym, ButtonAction::Release);
+                    if (focused != nullptr) focused->keyFunc(event.key.keysym.sym, ButtonAction::Release);
 
                     break;
 
@@ -461,6 +488,12 @@ namespace UI
                     break;
                 }
             }
+
+            const uint8_t* state = SDL_GetKeyboardState(NULL);
+            for (int i = 0; i <= 282; i++)
+                if (state[i])
+                    for (auto w : windows) w.second->keyDownFunc(i);
+
         }
 
         void Application::addWindow(std::shared_ptr<Window> win)
@@ -507,11 +540,10 @@ namespace UI
 
             while(!sigExit)
             {
-                processMessages();
-
+                update();
                 for(auto w : windows) w.second->render();
 
-                std::this_thread::sleep_for(0ms);
+                //std::this_thread::sleep_for(0ms);
             }
         }
 
@@ -575,6 +607,10 @@ namespace UI
         }
 
         void Control::keyFunc(int Key, ButtonAction Action)
+        {
+        }
+
+        void Control::keyDownFunc(int scancode)
         {
         }
 
@@ -724,22 +760,27 @@ namespace UI
 
         void Grid::scrollFunc(double dx, double dy)
         {
-            if(mold.size() > 0) mold.back()->scrollFunc(dx, dy);
+            if (mold.size() > 0) mold.back()->scrollFunc(dx, dy);
         }
 
         void Grid::keyFunc(int Key, ButtonAction Action)
         {
-            if(focused) focused->keyFunc(Key, Action);
+            if (focused) focused->keyFunc(Key, Action);
+        }
+
+        void Grid::keyDownFunc(int scancode)
+        {
+            if (focused) focused->keyDownFunc(scancode);
         }
 
         void Grid::charInputFunc(std::wstring Char)
         {
-            if(focused) focused->charInputFunc(Char);
+            if (focused) focused->charInputFunc(Char);
         }
 
         void Grid::dropFunc(const char* Paths)
         {
-            if(mold.size() > 0) mold.back()->dropFunc(Paths);
+            if (mold.size() > 0) mold.back()->dropFunc(Paths);
         }
 
         void Grid::touchFunc(int x, int y, ButtonAction action)

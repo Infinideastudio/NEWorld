@@ -139,7 +139,8 @@ namespace UI
             onMouseButton onMouseButtonF;
             onMouseEnter onMouseEnterF;
             onScroll onScrollF;
-            onKeyPress onKeyPress;
+            onKeyPress onKeyPressF;
+            onKeyDown onKeyDownF;
             onFileDrop onFileDropF;
             onTouch onTouchF;
             onTouchMove onTouchMoveF;
@@ -153,6 +154,7 @@ namespace UI
             void crusorEnterFunc(CursorOp Stat);
             void scrollFunc(double dx, double dy);
             void keyFunc(int Key, ButtonAction Action);
+            void keyDownFunc(int scancode);
             void dropFunc(const char* Paths);
             void touchFunc(int x, int y, ButtonAction action);
             void touchmove(int x, int y, int dx, int dy);

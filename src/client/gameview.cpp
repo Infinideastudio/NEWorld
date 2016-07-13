@@ -19,13 +19,14 @@
 #include "gameview.h"
 #include "renderer.h"
 #include <logger.h>
+
 auto StretchStretch(double LeftPct, double RightPct, double TopPct, double BottomPct, double LeftDis, double RightDis, double TopDis, double BottomDis)
 {
     return UI::Core::Margin(UI::Base::Rect(LeftPct, RightPct, TopPct, BottomPct), UI::Base::Rect(LeftDis, RightDis, TopDis, BottomDis), UI::Core::HorizontalAlignment::Stretch, UI::Core::VerticalAlignment::Stretch);
 }
+
 GameView::GameView() : UI::Core::Page()
 {
-    //Add controls here
     content = std::make_shared<UI::Core::Grid>();
     auto view = std::make_shared<UI::Controls::GLContext>("",
                 StretchStretch(0.0, 1.0, 0.0, 1.0, 0, 0, 0, 0));
@@ -33,17 +34,17 @@ GameView::GameView() : UI::Core::Page()
     {
         doRender();
     };
-    view->onKeyPress = [this](int key, UI::Core::ButtonAction action)
+    view->onKeyDownF = [this](int scancode)
     {
-        onKeyPress(key, action);
+        onKeyDown(scancode);
     };
+
     content->addChild(view);
     Renderer::init(852, 480);
 }
 
 void GameView::doRender()
 {
-    //Do the real render
     Renderer::restoreProj();
     Renderer::applyPerspective(60.0f, 852.0f / 480.0f, 0.1f, 100.0f);
     Renderer::restoreScale();
@@ -94,22 +95,10 @@ void GameView::doRender()
     glFinish();
 }
 
-void GameView::onKeyPress(int key, UI::Core::ButtonAction action)
+void GameView::onKeyDown(int scancode)
 {
-    //use SDLK_XXX;
-    switch(key)
-    {
-    case SDLK_LEFT:
-        yrot -= 0.25f;
-        break;
-    case SDLK_RIGHT:
-        yrot += 0.25f;
-        break;
-    case SDLK_UP:
-        xrot -= 0.25f;
-        break;
-    case SDLK_DOWN:
-        xrot += 0.25f;
-        break;
-    }
+    if (scancode == SDL_SCANCODE_LEFT) xrot -= 0.25f;
+    else if (scancode == SDL_SCANCODE_RIGHT) xrot += 0.25f;
+    else if (scancode == SDL_SCANCODE_UP) yrot -= 0.25f;
+    else if (scancode == SDL_SCANCODE_DOWN) yrot += 0.25f;
 }

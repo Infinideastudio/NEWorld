@@ -178,6 +178,7 @@ namespace UI
             virtual void crusorEnterFunc(CursorOp Stat);
             virtual void scrollFunc(double dx, double dy);
             virtual void keyFunc(int Key, ButtonAction Action);
+            virtual void keyDownFunc(int scancode);
             virtual void charInputFunc(std::wstring Char);
             virtual void dropFunc(const char* Paths);
             virtual void touchFunc(int x, int y, ButtonAction action);
@@ -194,6 +195,7 @@ namespace UI
         using onMouseEnter = std::function<void(CursorOp)>;
         using onScroll = std::function<void(double, double)>;
         using onKeyPress = std::function<void(int, ButtonAction)>;
+        using onKeyDown = std::function<void(int)>;
         using onCharInput = std::function<void(wchar_t)>;
         using onFileDrop = std::function<void(const char*)>;
         using onTouch = std::function<void(int, int, ButtonAction)>;
@@ -223,6 +225,7 @@ namespace UI
             void crusorEnterFunc(CursorOp Stat);
             void scrollFunc(double dx, double dy);
             void keyFunc(int Key, ButtonAction Action);
+            void keyDownFunc(int scancode);
             void charInputFunc(std::wstring Char);
             void dropFunc(const char* Paths);
             void touchFunc(int x, int y, ButtonAction action);
@@ -249,6 +252,9 @@ namespace UI
 
             void close();
             void resize(size_t x, size_t y);
+            void setCurrentDraw();
+            void setSwapInterval(int i);
+
             virtual void onShow();
             virtual void onHide();
             virtual void onClose();
@@ -262,6 +268,7 @@ namespace UI
             void crusorEnterFunc(CursorOp Stat);
             void scrollFunc(double dx, double dy);
             void keyFunc(int Key, ButtonAction Action);
+            void keyDownFunc(int scancode);
             void charInputFunc(std::wstring Char);
             void dropFunc(const char* Paths);
             void touchFunc(int x, int y, ButtonAction action);
@@ -287,7 +294,7 @@ namespace UI
             virtual ~Application() = default;
 
             void run();
-            void processMessages();
+            void update();
             void addWindow(std::shared_ptr<Window> win);
             void setMainWindow(std::shared_ptr<Window> win);
             void terminate();

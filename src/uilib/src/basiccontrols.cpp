@@ -34,7 +34,7 @@ namespace UI
         {
             Rectangle::draw(cMargin.absrect, backgroundBrush, borderBrush);
             Font->renderStr((cMargin.absrect.xmin + cMargin.absrect.xmax - Font->getStrWidth((std::string)caption)) / 2,
-                (cMargin.absrect.ymin + cMargin.absrect.ymax - Font->fos.height * 1.25 )/ 2, cMargin.absrect, (std::string)caption);
+                            (cMargin.absrect.ymin + cMargin.absrect.ymax - Font->fos.height * 1.25 )/ 2, cMargin.absrect, (std::string)caption);
         }
 
         Label::Label(std::string _xName, Margin _Margin, Str _caption) :
@@ -55,7 +55,7 @@ namespace UI
             else
                 Rectangle::draw(cMargin.absrect, backgroundBrush, borderBrush);
             Font->renderStr((cMargin.absrect.xmin + cMargin.absrect.xmax - Font->getStrWidth((std::string)caption)) / 2,
-                (cMargin.absrect.ymin + cMargin.absrect.ymax - Font->fos.height * 1.25) / 2, cMargin.absrect, (std::string)caption);
+                            (cMargin.absrect.ymin + cMargin.absrect.ymax - Font->fos.height * 1.25) / 2, cMargin.absrect, (std::string)caption);
         }
 
         void Button::mouseButtonFunc(MouseButton Button, ButtonAction Action)
@@ -63,18 +63,18 @@ namespace UI
             if (Action == ButtonAction::Release) onClick();
         }
 
-		Button::Button(std::string _xName, Margin _Margin, Str _caption, NotifyFunc _onClick) :
-			Control(_xName, _Margin), caption(_caption), onClick(_onClick),
-			backgroundOnPressBrush(Theme::SystemTheme.ControlOnPressBrush),
-			backgroundHighlightBrush(Theme::SystemTheme.ControlHeightLightBrush),
-			backgroundBrush(Theme::SystemTheme.ControlDarkBrush),
-			borderOnPressBrush(Theme::SystemTheme.ActiveBorderBrush),
-			borderHighlightBrush(Theme::SystemTheme.ActiveBorderBrush),
-			borderBrush(Theme::SystemTheme.InactiveBorderBrush),
-			Font(Theme::SystemTheme.DefaultFont)
-		{
-			gridPosX = gridPosY = 0;
-		}
+        Button::Button(std::string _xName, Margin _Margin, Str _caption, NotifyFunc _onClick) :
+            Control(_xName, _Margin), caption(_caption), onClick(_onClick),
+            backgroundOnPressBrush(Theme::SystemTheme.ControlOnPressBrush),
+            backgroundHighlightBrush(Theme::SystemTheme.ControlHeightLightBrush),
+            backgroundBrush(Theme::SystemTheme.ControlDarkBrush),
+            borderOnPressBrush(Theme::SystemTheme.ActiveBorderBrush),
+            borderHighlightBrush(Theme::SystemTheme.ActiveBorderBrush),
+            borderBrush(Theme::SystemTheme.InactiveBorderBrush),
+            Font(Theme::SystemTheme.DefaultFont)
+        {
+            gridPosX = gridPosY = 0;
+        }
 
         void TextBox::render()
         {
@@ -207,14 +207,13 @@ namespace UI
         {
         }
 
-
         void GLContext::render()
         {
             glViewport(cMargin.absrect.xmin, cMargin.absrect.ymin,
-                cMargin.absrect.xmax - cMargin.absrect.xmin, 
-                cMargin.absrect.ymax - cMargin.absrect.ymin);
+                       cMargin.absrect.xmax - cMargin.absrect.xmin,
+                       cMargin.absrect.ymax - cMargin.absrect.ymin);
             glPushMatrix();
-            if (onRenderF) onRenderF(); 
+            if (onRenderF) onRenderF();
             glPopMatrix();
             glViewport(0, 0, curwindowx, curwindowy);
         }
@@ -254,7 +253,12 @@ namespace UI
 
         void GLContext::keyFunc(int Key, ButtonAction Action)
         {
-            if (onKeyPress) onKeyPress(Key, Action);
+            if (onKeyPressF) onKeyPressF(Key, Action);
+        }
+
+        void GLContext::keyDownFunc(int scancode)
+        {
+            if (onKeyDownF) onKeyDownF(scancode);
         }
 
         void GLContext::dropFunc(const char * Paths)

@@ -31,10 +31,10 @@ void* getGLProcAddress(const char* name)
 
 void glInit()
 {
-#define GetGLExt(name,funcname) name=static_cast<funcname>(getGLProcAddress(#name))
-    GetGLExt(glGenBuffersARB, PFNGLGENBUFFERSARBPROC);
-    GetGLExt(glBindBufferARB, PFNGLBINDBUFFERARBPROC);
-    GetGLExt(glBufferDataARB, PFNGLBUFFERDATAARBPROC);
-    GetGLExt(glDeleteBuffersARB, PFNGLDELETEBUFFERSARBPROC);
-#undef GetGLExt
+#define EXT(name, funcname) name = static_cast<funcname>(getGLProcAddress(#name))
+    EXT(glGenBuffersARB, PFNGLGENBUFFERSARBPROC);
+    EXT(glBindBufferARB, PFNGLBINDBUFFERARBPROC);
+    EXT(glBufferDataARB, PFNGLBUFFERDATAARBPROC);
+    EXT(glDeleteBuffersARB, PFNGLDELETEBUFFERSARBPROC);
+#undef EXT
 }

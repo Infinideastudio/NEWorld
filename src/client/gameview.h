@@ -30,8 +30,7 @@ public:
     GameView();
 
     void doRender();
-
-    void onKeyPress(int key, UI::Core::ButtonAction action);
+    void onKeyDown(int scancode);
 
 private:
     float xrot = 0.0f, yrot = 0.0f;
