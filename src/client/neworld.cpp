@@ -19,6 +19,7 @@
 #include "neworld.h"
 #include "gameview.h"
 #include "renderer.h"
+#include "texture.h"
 
 void NEWorld::run()
 {
@@ -26,6 +27,7 @@ void NEWorld::run()
     loggerInit("NEWorld");
     infostream << "Initializing...";
 
+    Texture::init();
     UI::Logger::init("./Logs");
     UI::Font::service.addSearchPaths({"./Fonts"});
     UI::Globalization::Service::getInstance().setBasePath("./Langs/");
@@ -42,6 +44,7 @@ void NEWorld::run()
     // Destroy here
     infostream << "Terminating...";
     UI::Logger::service.dump();
+    Texture::uninit();
     //serverThread.join();
     disconnect();
 }

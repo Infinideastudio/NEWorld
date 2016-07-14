@@ -43,6 +43,9 @@
     <ClInclude Include="..\..\..\src\client\gameview.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\client\texture.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\renderer.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\gameview.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\texture.cpp">
+      <Filter>Source\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -22,8 +22,8 @@
 #include <common.h>
 
 #ifdef NEWORLD_COMPILER_MSVC
-#include <wingdi.h>
-#include <windef.h>
+    #include <wingdi.h>
+    #include <windef.h>
 #endif
 
 #include <GL/gl.h>
@@ -35,7 +35,7 @@ extern PFNGLGENBUFFERSARBPROC glGenBuffersARB;
 extern PFNGLBINDBUFFERARBPROC glBindBufferARB;
 extern PFNGLBUFFERDATAARBPROC glBufferDataARB;
 extern PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
-
+extern PFNGLTEXIMAGE3DPROC glTexImage3D;
 void glInit();
 
 #endif // !OPENGL_H_

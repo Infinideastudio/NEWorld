@@ -19,6 +19,7 @@
 #include "gameview.h"
 #include "renderer.h"
 #include <logger.h>
+#include "texture.h"
 
 auto StretchStretch(double LeftPct, double RightPct, double TopPct, double BottomPct, double LeftDis, double RightDis, double TopDis, double BottomDis)
 {
@@ -47,13 +48,13 @@ GameView::GameView() : UI::Core::Page()
     Renderer::init();
     Renderer::setViewport(0, 0, windowWidth, windowHeight);
 
-    VertexArray cubeArray(24000000, VertexFormat(0, 3, 0, 3));
+    VertexArray cubeArray(10000000, VertexFormat(0, 3, 0, 3));
 
-    for (int x = -50; x < 50; x++)
+    for (int x = -25; x < 25; x++)
     {
-        for (int y = -50; y < 50; y++)
+        for (int y = -25; y < 25; y++)
         {
-            for (int z = -50; z < 50; z++)
+            for (int z = -25; z < 25; z++)
             {
                 // Front
                 cubeArray.setColor({ 0.7f, 0.7f, 0.7f });
@@ -99,13 +100,17 @@ GameView::GameView() : UI::Core::Page()
     infostream << "Generating VBO...";
     cube = VertexBuffer(cubeArray);
     infostream << "Complete!";
+
+    //Example for Texture
+    Texture text= Texture::loadTexture("./Res/test.bmp");
+    glBindTexture(GL_TEXTURE_2D,text.getTextureID());
 }
 
 void GameView::doRender()
 {
     Renderer::clear();
     Renderer::restoreProj();
-    Renderer::applyPerspective(60.0f, (float)windowWidth / windowHeight, 1.0f, 500.0f);
+    Renderer::applyPerspective(60.0f, static_cast<float>(windowWidth) / windowHeight, 1.0f, 500.0f);
     Renderer::restoreScale();
     Renderer::translate(Vec3f(0.0f, 0.0f, -200.0f));
     Renderer::rotate(xrot, Vec3f(1.0f, 0.0f, 0.0f));
