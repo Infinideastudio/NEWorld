@@ -21,14 +21,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #ifndef UIPLATFORM_H_
 #define UIPLATFORM_H_
 
-#pragma warning(disable: 4251)
-#pragma warning(disable: 4244)
-#pragma warning(disable: 4996)
-
-#ifdef UILIB_EXPORTS
-#define UILIB_API __declspec(dllexport)
+#if defined _WIN32 || defined __CYGWIN__
+    #ifdef _MSC_VER
+        #pragma warning(disable: 4251)
+        #pragma warning(disable: 4244)
+        #pragma warning(disable: 4996)
+        #ifdef UILIB_EXPORTS
+            #define UILIB_API __declspec(dllexport)
+        #else
+            #define UILIB_API __declspec(dllimport)
+        #endif
+    #else
+        #ifdef UILIB_EXPORTS
+            #define UILIB_API __attribute__((dllexport))
+        #else
+            #define UILIB_API __attribute__((dllimport))
+        #endif
+    #endif
 #else
-#define UILIB_API __declspec(dllimport)
+    #define UILIB_API __attribute__((visibility("default")))
 #endif
 
 #endif
