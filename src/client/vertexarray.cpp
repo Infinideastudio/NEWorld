@@ -18,7 +18,7 @@
 
 #include "vertexarray.h"
 
-VertexBuffer::VertexBuffer(const VertexArray& va) :format(va.getFormat()), vertexes(va.getVertexCount())
+VertexBuffer::VertexBuffer(const VertexArray & va) :format(va.getFormat()), vertexes(va.getVertexCount())
 {
     glGenBuffersARB(1, &id);
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
@@ -27,7 +27,7 @@ VertexBuffer::VertexBuffer(const VertexArray& va) :format(va.getFormat()), verte
                     va.getData(), GL_STATIC_DRAW_ARB);
 }
 
-void VertexBuffer::render()
+void VertexBuffer::render() const
 {
     glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
     if (format.textureCount != 0)
@@ -40,19 +40,19 @@ void VertexBuffer::render()
         glColorPointer(
             format.colorCount, GL_FLOAT,
             format.vertexAttributeCount * sizeof(float),
-            (float*)(format.textureCount * sizeof(float))
+            reinterpret_cast<float*>(format.textureCount * sizeof(float))
         );
     if (format.normalCount != 0)
         glNormalPointer(
             /*format.normalCount,*/ GL_FLOAT,
             format.vertexAttributeCount * sizeof(float),
-            (float*)((format.textureCount + format.colorCount) * sizeof(float))
+            reinterpret_cast<float*>((format.textureCount + format.colorCount) * sizeof(float))
         );
     if (format.coordinateCount != 0)
         glVertexPointer(
             format.coordinateCount, GL_FLOAT,
             format.vertexAttributeCount * sizeof(float),
-            (float*)((format.textureCount + format.colorCount + format.normalCount) * sizeof(float))
+            reinterpret_cast<float*>((format.textureCount + format.colorCount + format.normalCount) * sizeof(float))
         );
 
     // 这个框是不是很装逼2333 --qiaozhanrong

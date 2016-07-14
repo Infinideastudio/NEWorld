@@ -24,6 +24,7 @@
 #include <initializer_list>
 #include <common.h>
 #include "opengl.h"
+#include <logger.h>
 
 class VertexFormat
 {
@@ -53,10 +54,15 @@ class VertexArray
 {
 public:
     VertexArray(int maxVertexes, const VertexFormat& format)
-        : m_maxVertexes(maxVertexes), m_vertexes(0), m_format(format)
+try :
+        m_maxVertexes(maxVertexes), m_vertexes(0), m_format(format),
+                      m_data(new float[m_maxVertexes * format.vertexAttributeCount]),
+                      m_vertexAttributes(new float[format.vertexAttributeCount])
     {
-        m_data = new float[m_maxVertexes * format.vertexAttributeCount];
-        m_vertexAttributes = new float[format.vertexAttributeCount];
+    }
+    catch (std::bad_alloc)
+    {
+        warningstream << "Failed to create Vertex Array: Out of memory";
     }
 
     ~VertexArray()
@@ -156,13 +162,6 @@ private:
 class VertexBuffer
 {
 public:
-    // Buffer ID
-    VertexBufferID id;
-    // Vertex count
-    int vertexes;
-    // Buffer format
-    VertexFormat format;
-
     VertexBuffer()
     {
     }
@@ -171,10 +170,18 @@ public:
     {
     }
 
-    VertexBuffer(const VertexArray& va);
+    explicit VertexBuffer(const VertexArray& va);
 
     // Render vertex buffer
-    void render();
-};
+    void render() const;
 
+private:
+    // Buffer ID
+    VertexBufferID id;
+    // Vertex count
+    int vertexes;
+    // Buffer format
+    VertexFormat format;
+
+};
 #endif // !VERTEXARRAY_H_
