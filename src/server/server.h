@@ -46,6 +46,7 @@ public:
         m_plugins.loadPlugins();
         // Start server
         infostream << "Server started!";
+        doGlobalUpdate();
         doAccept();
     }
 

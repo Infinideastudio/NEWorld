@@ -67,11 +67,12 @@ void errorHandle(const tcp::socket&, boost::system::error_code ec)
 
 void Session::doUpdate()
 {
+    return;
     auto self(shared_from_this());
     boost::asio::deadline_timer(m_socket.get_io_service(), boost::posix_time::microseconds(updateInterval)).async_wait(
         [this, self](boost::system::error_code)
-        {
-            //Update world here
-            doWrite();
-        });
+    {
+        //Update world here
+        doWrite();
+    });
 }

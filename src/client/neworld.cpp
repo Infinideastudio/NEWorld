@@ -34,17 +34,17 @@ void NEWorld::run()
     UI::Globalization::Service::getInstance().attachLangFiles({"chinese", "english"});
     UI::Globalization::Service::getInstance().setLang("chinese");
 
-    //std::thread serverThread(networkThread);
-    MainApplication mainApplication(852, 480, "NEWorld");
+    std::thread serverThread(networkThread);
+    //MainApplication mainApplication(852, 480, "NEWorld");
 
     // Start to run
     infostream << "Game start!";
-    mainApplication.run();
+    //mainApplication.run();
 
     // Destroy here
     infostream << "Terminating...";
     UI::Logger::service.dump();
     Texture::uninit();
-    //serverThread.join();
+    serverThread.join();
     disconnect();
 }

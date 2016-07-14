@@ -30,6 +30,7 @@ void errorHandle(const tcp::socket& m_socket, error_code ec)
 
 void Session::doUpdate()
 {
+    return;
     auto self(shared_from_this());
     deadline_timer(m_socket.get_io_service(), boost::posix_time::microseconds(updateInterval)).async_wait(
         [this, self](error_code)
@@ -74,6 +75,7 @@ void Server::doAccept()
 
 void Server::doGlobalUpdate()
 {
+    return;
     boost::asio::deadline_timer(m_socket.get_io_service(), boost::posix_time::microseconds(globalUpdateInterval)).async_wait(
         [this](boost::system::error_code)
     {
