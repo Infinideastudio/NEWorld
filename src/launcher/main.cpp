@@ -33,6 +33,7 @@ int main(int argc, char** argv)
         std::cout << "Enter 'client' to run client" << std::endl;
         std::cout << "Enter 'server' to run server" << std::endl;
         std::cin >> in;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
     else
     {

@@ -19,7 +19,6 @@
 #include "servercommand.h"
 #include <logger.h>
 #include <consolecolor.h>
-#include <thread>
 #include <chrono>
 #include <command.h>
 #include "server.h"
