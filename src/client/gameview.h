@@ -36,7 +36,7 @@ public:
 
 private:
     int windowWidth = 852, windowHeight = 480;
-    float xrot = 0.0f, yrot = 0.0f;
+    float xrot = 0.0f, yrot = 0.0f, xrotspeed = 0.0f, yrotspeed = 0.0f, ztrans = -100.0f, ztransspeed = 0.0f;
     VertexBuffer cube;
 
 };

@@ -23,9 +23,10 @@
 
 void Texture::init()
 {
-    if (!IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG))
+    // We don't need JPEG...
+    if (!IMG_Init(/*IMG_INIT_JPG | */IMG_INIT_PNG))
     {
-        errorstream << "Failed to init required jpg and png support! " << IMG_GetError();
+        errorstream << "Failed to initialize PNG support! " << IMG_GetError();
     }
 }
 
@@ -103,10 +104,20 @@ Texture::RawTexture::RawTexture(const std::string & filename)
     auto image = IMG_Load(filename.c_str());
     if (!image) warningstream << "Failed to load texture " << filename << ": " << IMG_GetError();
     surface = image;
+    // if (image->format == )
+    for(int i=0; i<surface->h; i++)
+    {
+        for(int j=0; j<surface->w; j++)
+        {
+            unsigned char* p = static_cast<unsigned char*>(surface->pixels) + (i*surface->w + j) * 3;
+            unsigned char t = *p;
+            *p = *(p + 2);
+            *(p + 2) = t;
+        }
+    }
 }
 
 Texture::RawTexture::~RawTexture()
 {
     SDL_FreeSurface(surface);
 }
-

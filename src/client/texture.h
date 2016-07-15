@@ -40,7 +40,7 @@ public:
 
 private:
 
-    explicit Texture(TextureID id):m_id(id) {}
+    explicit Texture(TextureID id) :m_id(id) {}
 
     TextureID m_id;
 

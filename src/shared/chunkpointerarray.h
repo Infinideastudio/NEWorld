@@ -35,7 +35,7 @@ private:
     Vec3i m_org;
 
 public:
-    ChunkPointerArray(int size)
+    explicit ChunkPointerArray(int size) :m_org(-size / 2, -size / 2, -size / 2)
     {
         m_size = size;
         m_size2 = size * size;
@@ -85,7 +85,7 @@ public:
     }
 
     /// Update chunk pointer in array
-    void set(Vec3i pos, Chunk* c)
+    void set(Vec3i pos, Chunk* c) const
     {
         pos -= m_org;
         if (exist(pos))

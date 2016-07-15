@@ -26,7 +26,7 @@ auto StretchStretch(double LeftPct, double RightPct, double TopPct, double Botto
     return UI::Core::Margin(UI::Base::Rect(LeftPct, RightPct, TopPct, BottomPct), UI::Base::Rect(LeftDis, RightDis, TopDis, BottomDis), UI::Core::HorizontalAlignment::Stretch, UI::Core::VerticalAlignment::Stretch);
 }
 
-GameView::GameView() : UI::Core::Page()
+GameView::GameView() :UI::Core::Page()
 {
     content = std::make_shared<UI::Core::Grid>();
     auto view = std::make_shared<UI::Controls::GLContext>("",
@@ -47,8 +47,16 @@ GameView::GameView() : UI::Core::Page()
 
     Renderer::init();
     Renderer::setViewport(0, 0, windowWidth, windowHeight);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
 
-    VertexArray cubeArray(10000000, VertexFormat(0, 3, 0, 3));
+    // Example for Texture
+    Texture text = Texture::loadTexture("./../Res/test.bmp");
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, text.getTextureID());
+
+    VertexArray cubeArray(10000000, VertexFormat(2, 3, 0, 3));
 
     for (int x = -25; x < 25; x++)
     {
@@ -58,40 +66,64 @@ GameView::GameView() : UI::Core::Page()
             {
                 // Front
                 cubeArray.setColor({ 0.7f, 0.7f, 0.7f });
+                cubeArray.setTexture({ 0.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 0.0f, 1.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 1.0f, 1.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 1.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
                 // Back
                 cubeArray.setColor({ 0.7f, 0.7f, 0.7f });
+                cubeArray.setTexture({ 0.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 0.0f, 1.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 1.0f, 1.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 1.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
                 // Top
                 cubeArray.setColor({ 1.0f, 1.0f, 1.0f });
+                cubeArray.setTexture({ 0.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 0.0f, 1.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 1.0f, 1.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 1.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
                 // Bottom
                 cubeArray.setColor({ 1.0f, 1.0f, 1.0f });
+                cubeArray.setTexture({ 0.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 0.0f, 1.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 1.0f, 1.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 1.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
                 // Right
                 cubeArray.setColor({ 0.5f, 0.5f, 0.5f });
-                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
-                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
-                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 0.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 0.0f, 1.0f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 1.0f, 1.0f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 1.0f, 0.0f });
+                cubeArray.addVertex({ x*2.0f + 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
                 // Left
                 cubeArray.setColor({ 0.5f, 0.5f, 0.5f });
-                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
-                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
-                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 0.0f, 0.0f });
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 0.0f, 1.0f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f - 0.5f });
+                cubeArray.setTexture({ 1.0f, 1.0f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f - 0.5f, z*2.0f + 0.5f });
+                cubeArray.setTexture({ 1.0f, 0.0f });
+                cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
             }
         }
         if ((x + 51) % 25 == 0) infostream << "Building vertax array: " << x + 51 << "%";
@@ -100,30 +132,34 @@ GameView::GameView() : UI::Core::Page()
     infostream << "Generating VBO...";
     cube = VertexBuffer(cubeArray);
     infostream << "Complete!";
-
-    //Example for Texture
-    Texture text= Texture::loadTexture("./Res/test.bmp");
-    glBindTexture(GL_TEXTURE_2D,text.getTextureID());
 }
 
 void GameView::doRender()
 {
     Renderer::clear();
     Renderer::restoreProj();
-    Renderer::applyPerspective(60.0f, static_cast<float>(windowWidth) / windowHeight, 1.0f, 500.0f);
+    Renderer::applyPerspective(60.0f, static_cast<float>(windowWidth) / windowHeight, 1.0f, 1000.0f);
     Renderer::restoreScale();
-    Renderer::translate(Vec3f(0.0f, 0.0f, -200.0f));
+    Renderer::translate(Vec3f(0.0f, 0.0f, ztrans));
     Renderer::rotate(xrot, Vec3f(1.0f, 0.0f, 0.0f));
     Renderer::rotate(yrot, Vec3f(0.0f, 1.0f, 0.0f));
     cube.render();
+    xrot += xrotspeed;
+    yrot += yrotspeed;
+    ztrans += ztransspeed;
+    xrotspeed *= 0.9f;
+    yrotspeed *= 0.9f;
+    ztransspeed *= 0.9f;
 }
 
 void GameView::onKeyDown(int scancode)
 {
-    if (scancode == SDL_SCANCODE_LEFT) yrot -= 0.25f;
-    else if (scancode == SDL_SCANCODE_RIGHT) yrot += 0.25f;
-    else if (scancode == SDL_SCANCODE_UP) xrot -= 0.25f;
-    else if (scancode == SDL_SCANCODE_DOWN) xrot += 0.25f;
+    if (scancode == SDL_SCANCODE_LEFT) yrotspeed -= 0.1f;
+    else if (scancode == SDL_SCANCODE_RIGHT) yrotspeed += 0.1f;
+    else if (scancode == SDL_SCANCODE_UP) xrotspeed -= 0.1f;
+    else if (scancode == SDL_SCANCODE_DOWN) xrotspeed += 0.1f;
+    else if (scancode == SDL_SCANCODE_W) ztransspeed += 0.1f;
+    else if (scancode == SDL_SCANCODE_S) ztransspeed -= 0.1f;
 }
 
 void GameView::onResize(int w, int h)

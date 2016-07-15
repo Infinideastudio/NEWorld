@@ -28,6 +28,10 @@ void NEWorld::run()
     infostream << "Initializing...";
 
     Texture::init();
+    m_plugins.loadPlugins();
+    m_worldLoader.setLoadRange(4);
+    //m_worldLoader.sortChunkLoadUnloadList(Vec3i(0, 0, 0));
+
     UI::Logger::init("./Logs");
     UI::Font::service.addSearchPaths({"./Fonts"});
     UI::Globalization::Service::getInstance().setBasePath("./Langs/");

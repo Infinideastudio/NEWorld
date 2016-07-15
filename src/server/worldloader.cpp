@@ -28,14 +28,14 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
     // centerPos to chunk coords
     //centerCPos = m_world->getChunkPos(centerPos);
 
-    for (size_t ci = 0; ci < m_world->getChunkCount(); ci++)
+    for (size_t ci = 0; ci < m_world.getChunkCount(); ci++)
     {
-        Vec3i curPos = m_world->getChunkPtr(ci)->getPos();
+        Vec3i curPos = m_world.getChunkPtr(ci)->getPos();
         // Get chunk center pos
         curPos.for_each([](int& x)
-            {
-                x = x * ChunkSize + ChunkSize / 2 - 1;
-            });
+        {
+            x = x * ChunkSize + ChunkSize / 2 - 1;
+        });
 
         // Out of load range, pending to unload
         if (centerPos.chebyshevDistance(curPos) > m_loadRange)
@@ -63,7 +63,7 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
                 m_chunkUnloadList[j] = m_chunkUnloadList[j - 1];
 
             // Insert into list
-            m_chunkUnloadList[first].first = m_world->getChunkPtr(ci);
+            m_chunkUnloadList[first].first = m_world.getChunkPtr(ci);
             m_chunkUnloadList[first].second = distsqr;
 
             // Add counter
@@ -75,15 +75,15 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
     for (int x = centerPos.x - m_loadRange; x <= centerPos.x + m_loadRange; x++)
         for (int y = centerPos.y - m_loadRange; y <= centerPos.y + m_loadRange; y++)
             for (int z = centerPos.z - m_loadRange; z <= centerPos.z + m_loadRange; z++)
-            // In load range, pending to load
-                if (m_cpa->get(Vec3i(x, y, z)) == nullptr)
+                // In load range, pending to load
+                if (m_cpa.get(Vec3i(x, y, z)) == nullptr)
                 {
                     Vec3i curPos(x, y, z);
                     // Get chunk center pos
                     curPos.for_each([](int& x)
-                        {
-                            x = x * ChunkSize + ChunkSize / 2 - 1;
-                        });
+                    {
+                        x = x * ChunkSize + ChunkSize / 2 - 1;
+                    });
 
                     // Distance from centerPos
                     distsqr = (curPos - centerPos).lengthSqr();
@@ -117,16 +117,16 @@ void WorldLoader::sortChunkLoadUnloadList(const Vec3i& centerPos)
     m_chunkLoadCount = pu;
 }
 
-void WorldLoader::loadUnloadChunks()
+void WorldLoader::loadUnloadChunks() const
 {
     for (int i = 0; i < m_chunkLoadCount; i++)
     {
         // TODO: Try to read in file
-        ChunkLoader(m_world->addChunk(m_chunkLoadList[i].first)).build();
+        ChunkLoader(m_world.addChunk(m_chunkLoadList[i].first)).build();
     }
     for (int i = 0; i < m_chunkUnloadCount; i++)
     {
         // TODO: Save chunk
-        m_world->deleteChunk(m_chunkUnloadList[i].first->getPos());
+        m_world.deleteChunk(m_chunkUnloadList[i].first->getPos());
     }
 }

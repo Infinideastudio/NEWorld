@@ -30,9 +30,10 @@ class WorldLoader
 {
 private:
     /// World
-    World* m_world;
+    World& m_world;
     /// ChunkPointerArray used to detect unloaded chunks in load range
-    ChunkPointerArray* m_cpa;
+    ChunkPointerArray& m_cpa;
+
     int m_chunkLoadCount, m_chunkUnloadCount, m_loadRange;
     /// Chunk load list [position, distance]
     pair<Vec3i, int> m_chunkLoadList[MaxChunkLoadCount];
@@ -40,7 +41,7 @@ private:
     pair<Chunk*, int> m_chunkUnloadList[MaxChunkUnloadCount];
 
 public:
-    WorldLoader(World* world, ChunkPointerArray* cpa)
+    WorldLoader(World& world, ChunkPointerArray& cpa)
         : m_world(world), m_cpa(cpa), m_chunkLoadCount(0), m_chunkUnloadCount(0), m_loadRange(0)
     {
     }
@@ -54,7 +55,7 @@ public:
     /// Find the nearest chunks in load range to load, fartherest chunks out of load range to unload
     void sortChunkLoadUnloadList(const Vec3i& centerPos);
     /// Load & unload chunks
-    void loadUnloadChunks();
+    void loadUnloadChunks() const;
 };
 
 #endif // !WORLDLOADER_H_

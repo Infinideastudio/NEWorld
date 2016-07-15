@@ -24,6 +24,10 @@
 #include <thread>
 #include <logger.h>
 #include "gameview.h"
+#include <pluginmanager.h>
+#include <world.h>
+#include <worldmanager.h>
+#include "../server/worldloader.h"
 
 class MainApplication :public UI::Core::Application
 {
@@ -45,12 +49,25 @@ private:
 class NEWorld
 {
 public:
-    NEWorld()
+    NEWorld() :m_world("", m_plugins), m_cpa(8), m_worldLoader(m_world, m_cpa)
     {
         run();
     }
 
 private:
+    // Loaded plugins
+    PluginManager m_plugins;
+    /*
+    // Loaded worlds
+    WorldManager m_worlds;
+    */
+    // Current world
+    World m_world;
+    // CPA
+    ChunkPointerArray m_cpa;
+    // Loading test
+    WorldLoader m_worldLoader;
+
     // Main procedure for client
     void run();
 };
