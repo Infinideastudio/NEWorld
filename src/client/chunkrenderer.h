@@ -36,7 +36,7 @@ public:
     void buildVertexArray();
 
     // Draw call
-    void render()
+    void render() const
     {
         m_buffer.render();
     }
