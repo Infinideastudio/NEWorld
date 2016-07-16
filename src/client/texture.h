@@ -37,7 +37,9 @@ public:
 
     static void uninit();
 
-    static Texture loadTexture(std::string filename);
+    static Texture loadTextureRGB(std::string filename);
+
+    static Texture loadTextureRGBA(std::string filename);
 
     static Texture loadBlock3DTexture(std::string filename);
 

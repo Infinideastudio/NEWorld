@@ -30,7 +30,7 @@ constexpr int align(int x, int al)
 
 void Texture::init()
 {
-    // We don't need JPEG...
+    // We don't need JPEG... --qiaozhanrong
     if (!IMG_Init(/*IMG_INIT_JPG | */IMG_INIT_PNG))
     {
         errorstream << "Failed to initialize PNG support! " << IMG_GetError();
@@ -42,7 +42,7 @@ void Texture::uninit()
     IMG_Quit();
 }
 
-Texture Texture::loadTexture(std::string filename)
+Texture Texture::loadTextureRGB(std::string filename)
 {
     RawTexture image(filename);
     auto surf = image.getSurface();
@@ -52,6 +52,19 @@ Texture Texture::loadTexture(std::string filename)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
     build2DMipmaps(GL_RGB, surf->w, surf->h, static_cast<int>(log2(surf->w)), static_cast<const ubyte*>(surf->pixels));
+    return Texture(ret);
+}
+
+Texture Texture::loadTextureRGBA(std::string filename)
+{
+    RawTexture image(filename);
+    auto surf = image.getSurface();
+    TextureID ret;
+    glGenTextures(1, &ret);
+    glBindTexture(GL_TEXTURE_2D, ret);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+    build2DMipmaps(GL_RGBA, surf->w, surf->h, static_cast<int>(log2(surf->w)), static_cast<const ubyte*>(surf->pixels));
     return Texture(ret);
 }
 
@@ -113,17 +126,18 @@ Texture::RawTexture::RawTexture(const std::string& filename)
     surface = image;
     // TODO: check if format = B8G8R8
     // if (image->format == )
+    /*
     for(int i=0; i<surface->h; i++)
     {
         for(int j=0; j<surface->w; j++)
         {
-            unsigned char* p = static_cast<unsigned char*>(surface->pixels) + (i*surface->w + j) * 3;
+            unsigned char* p = static_cast<unsigned char*>(surface->pixels) + (i*surface->w + j) * 4;
             unsigned char t = *p;
             *p = *(p + 2);
             *(p + 2) = t;
         }
     }
-    // TODO: add support for B8G8R8A8 format
+    */
 }
 
 Texture::RawTexture::~RawTexture()

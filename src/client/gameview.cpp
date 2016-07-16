@@ -49,7 +49,7 @@ GameView::GameView() :UI::Core::Page()
     Renderer::setViewport(0, 0, windowWidth, windowHeight);
 
     // Example for Texture
-    Texture text = Texture::loadTexture("./Res/test.bmp");
+    Texture text = Texture::loadTextureRGBA("./../Res/test.png");
     text.bind(Texture::Texture2D);
 
     VertexArray cubeArray(10000000, VertexFormat(2, 3, 0, 3));
@@ -141,12 +141,8 @@ void GameView::doRender()
     Renderer::rotate(trans.y, Vec3f(0.0f, 1.0f, 0.0f));
     cube.render();
 
-    trans.x += transSpeed.x;
-    trans.y += transSpeed.y;
-    trans.z += transSpeed.z;
-    transSpeed.x *= 0.9f;
-    transSpeed.y *= 0.9f;
-    transSpeed.z *= 0.9f;
+    trans += transSpeed;
+    transSpeed *= 0.9f;
 }
 
 void GameView::onKeyDown(int scancode)

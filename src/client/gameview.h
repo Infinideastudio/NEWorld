@@ -34,7 +34,7 @@ public:
 
 private:
     int windowWidth = 852, windowHeight = 480;
-    Vec3f trans{ 0, -100.0f, 0 };
+    Vec3f trans{ 0.0f, 0.0f, -100.0f };
     Vec3f transSpeed;
     VertexBuffer cube;
 
