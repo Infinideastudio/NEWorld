@@ -25,7 +25,7 @@ class TakeDataHelper
 {
 public:
     TakeDataHelper(std::shared_ptr<char> buffer, size_t length)
-        : m_shared_ptr(buffer), m_length(length), m_buffer(buffer.get()), m_offset(0)
+        : m_buffer(buffer.get()), m_length(length), m_offset(0), m_shared_ptr(buffer)
     {
     }
 

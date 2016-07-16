@@ -26,9 +26,9 @@ void World::expandChunkArray(size_t c)
     if (m_chunkCount > m_chunkArraySize)
     {
         m_chunkArraySize *= 2;
-        auto newchunks = (Chunk**)realloc(m_chunks, m_chunkArraySize * sizeof(Chunk*));
-        assert(newchunks != NULL);
-        if (newchunks == NULL)
+        auto newchunks = static_cast<Chunk**>(realloc(m_chunks, m_chunkArraySize * sizeof(Chunk*)));
+        assert(newchunks != nullptr);
+        if (newchunks == nullptr)
         {
             fatalstream << "Failed to create chunks, size:" << m_chunkArraySize;
             // TODO: exit

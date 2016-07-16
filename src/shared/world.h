@@ -78,7 +78,7 @@ public:
     World(const string& name, PluginManager& plugins) : m_name(name), m_plugins(plugins), m_chunkCount(0), m_chunkArraySize(1024)
     {
         //m_chunks = new Chunk*[m_chunkArraySize];
-        m_chunks = (Chunk**)malloc(m_chunkArraySize * sizeof(Chunk*));
+        m_chunks = static_cast<Chunk**>(malloc(m_chunkArraySize * sizeof(Chunk*)));
     }
 
     World(World&& rhs) : m_name(std::move(rhs.m_name)), m_plugins(rhs.m_plugins), m_chunkCount(rhs.m_chunkCount), m_chunkArraySize(rhs.m_chunkArraySize), m_chunks(rhs.m_chunks)
@@ -95,7 +95,7 @@ public:
     }
 
     // Get world name
-    const string& getWorldName()
+    const string& getWorldName() const
     {
         return m_name;
     }

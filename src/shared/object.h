@@ -25,6 +25,10 @@
 class Object
 {
 public:
+    virtual ~Object()
+    {
+    }
+
     /*
         int getHealth() const
         { return _health; }
