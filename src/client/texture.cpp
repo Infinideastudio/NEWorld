@@ -20,6 +20,13 @@
 #include <SDL2/SDL_image.h>
 #include <logger.h>
 #include <memory>
+#include <sstream>
+#include <iomanip>
+
+constexpr int align(int x, int al)
+{
+    return(x%al == 0 ? x : (x/al + 1) * al);
+}
 
 void Texture::init()
 {
@@ -70,7 +77,7 @@ Texture Texture::loadBlock3DTexture(std::string filename)
 
 void Texture::build2DMipmaps(GLenum format, int w, int h, int level, const ubyte* src)
 {
-    size_t sum = 0, scale = 1, cc = 0;
+    size_t sum, scale = 1, cc = 0;
     if (format == GL_RGBA) cc = 4;
     else if (format == GL_RGB) cc = 3;
     std::unique_ptr<ubyte[]> cur(new ubyte[w*h*cc]);
@@ -83,7 +90,7 @@ void Texture::build2DMipmaps(GLenum format, int w, int h, int level, const ubyte
     glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, src);
     for (int i = 1; i <= level; i++)
     {
-        scale <<= 1;
+        scale *= 2;
         size_t cur_w = w / scale, cur_h = h / scale;
         for (size_t y = 0; y < cur_h; y++)
             for (size_t x = 0; x < cur_w; x++)
@@ -92,18 +99,19 @@ void Texture::build2DMipmaps(GLenum format, int w, int h, int level, const ubyte
                     sum = 0;
                     for (size_t yy = 0; yy < scale; yy++)
                         for (size_t xx = 0; xx < scale; xx++)
-                            sum += src[((y * scale + yy) * w + x * scale + xx) * cc + col];
-                    cur[(y * cur_w + x) * cc + col] = static_cast<ubyte>(sum / (scale*scale));
+                            sum += src[(y * scale + yy) * align(w*cc, 4) + (x * scale + xx) * cc + col];
+                    cur[y * align(cur_w*cc, 4) + x * cc + col] = static_cast<ubyte>(sum / (scale*scale));
                 }
         glTexImage2D(GL_TEXTURE_2D, i, format, cur_w, cur_h, 0, format, GL_UNSIGNED_BYTE, cur.get());
     }
 }
 
-Texture::RawTexture::RawTexture(const std::string & filename)
+Texture::RawTexture::RawTexture(const std::string& filename)
 {
     auto image = IMG_Load(filename.c_str());
     if (!image) warningstream << "Failed to load texture " << filename << ": " << IMG_GetError();
     surface = image;
+    // TODO: check if format = B8G8R8
     // if (image->format == )
     for(int i=0; i<surface->h; i++)
     {
@@ -115,6 +123,7 @@ Texture::RawTexture::RawTexture(const std::string & filename)
             *(p + 2) = t;
         }
     }
+    // TODO: add support for B8G8R8A8 format
 }
 
 Texture::RawTexture::~RawTexture()

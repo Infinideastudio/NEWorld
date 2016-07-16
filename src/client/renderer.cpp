@@ -25,7 +25,7 @@ void Renderer::init()
     glInit();
     restoreProj();
     restoreScale();
-    glShadeModel(GL_FLAT);
+    glShadeModel(GL_SMOOTH);
     glDisable(GL_DITHER);
     glClearColor(0.6f, 0.9f, 1.0f, 1.0f);
     glClearDepth(1.0f);

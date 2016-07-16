@@ -144,6 +144,7 @@ void GameView::doRender()
     Renderer::rotate(xrot, Vec3f(1.0f, 0.0f, 0.0f));
     Renderer::rotate(yrot, Vec3f(0.0f, 1.0f, 0.0f));
     cube.render();
+
     xrot += xrotspeed;
     yrot += yrotspeed;
     ztrans += ztransspeed;
