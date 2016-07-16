@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
-set_property(GLOBAL PROPERTY CXX_STANDARD 11)
-
+#set_property(GLOBAL PROPERTY CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
 #set(LINK_BOOST 1)
 
 if(LINK_BOOST)
