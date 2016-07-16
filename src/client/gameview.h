@@ -20,9 +20,7 @@
 #define WINDOW_H_
 
 #include <UILib.h>
-#undef main
-#include <string>
-using std::string;
+#include "vec3.h"
 #include "renderer.h"
 
 class GameView :public UI::Core::Page
@@ -36,7 +34,8 @@ public:
 
 private:
     int windowWidth = 852, windowHeight = 480;
-    float xrot = 0.0f, yrot = 0.0f, xrotspeed = 0.0f, yrotspeed = 0.0f, ztrans = -100.0f, ztransspeed = 0.0f;
+    Vec3f trans{ 0, -100.0f, 0 };
+    Vec3f transSpeed;
     VertexBuffer cube;
 
 };

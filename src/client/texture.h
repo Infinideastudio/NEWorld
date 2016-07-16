@@ -28,6 +28,11 @@ class SDL_Surface;
 class Texture
 {
 public:
+    enum
+    {
+        Texture2D = GL_TEXTURE_2D, Texture3D = GL_TEXTURE_3D
+    };
+
     static void init();
 
     static void uninit();
@@ -37,6 +42,8 @@ public:
     static Texture loadBlock3DTexture(std::string filename);
 
     TextureID getTextureID() const { return m_id; }
+
+    void bind(GLenum target) const { glBindTexture(target, m_id); }
 
 private:
 

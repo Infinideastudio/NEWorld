@@ -30,10 +30,10 @@
 #include "../server/worldloader.h"
 #include <blockmanager.h>
 
-class MainApplication :public UI::Core::Application
+class Application :public UI::Core::Application
 {
 public:
-    MainApplication(int width, int height, const string& title): m_width(width), m_height(height), m_title(title)
+    Application(int width, int height, const string& title): m_width(width), m_height(height), m_title(title)
     {
     }
 

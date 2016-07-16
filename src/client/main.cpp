@@ -18,7 +18,7 @@
 
 #include "neworld.h"
 #include <logger.h>
-
+#undef main
 extern "C" NWAPIEXPORT int NWAPICALL main(int, char*[]);
 
 // Just a joke :D

@@ -47,14 +47,10 @@ GameView::GameView() :UI::Core::Page()
 
     Renderer::init();
     Renderer::setViewport(0, 0, windowWidth, windowHeight);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glEnableClientState(GL_VERTEX_ARRAY);
 
     // Example for Texture
-    Texture text = Texture::loadTexture("./../Res/test.bmp");
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, text.getTextureID());
+    Texture text = Texture::loadTexture("./Res/test.bmp");
+    text.bind(Texture::Texture2D);
 
     VertexArray cubeArray(10000000, VertexFormat(2, 3, 0, 3));
 
@@ -140,27 +136,27 @@ void GameView::doRender()
     Renderer::restoreProj();
     Renderer::applyPerspective(60.0f, static_cast<float>(windowWidth) / windowHeight, 1.0f, 1000.0f);
     Renderer::restoreScale();
-    Renderer::translate(Vec3f(0.0f, 0.0f, ztrans));
-    Renderer::rotate(xrot, Vec3f(1.0f, 0.0f, 0.0f));
-    Renderer::rotate(yrot, Vec3f(0.0f, 1.0f, 0.0f));
+    Renderer::translate(Vec3f(0.0f, 0.0f, trans.z));
+    Renderer::rotate(trans.x, Vec3f(1.0f, 0.0f, 0.0f));
+    Renderer::rotate(trans.y, Vec3f(0.0f, 1.0f, 0.0f));
     cube.render();
 
-    xrot += xrotspeed;
-    yrot += yrotspeed;
-    ztrans += ztransspeed;
-    xrotspeed *= 0.9f;
-    yrotspeed *= 0.9f;
-    ztransspeed *= 0.9f;
+    trans.x += transSpeed.x;
+    trans.y += transSpeed.y;
+    trans.z += transSpeed.z;
+    transSpeed.x *= 0.9f;
+    transSpeed.y *= 0.9f;
+    transSpeed.z *= 0.9f;
 }
 
 void GameView::onKeyDown(int scancode)
 {
-    if (scancode == SDL_SCANCODE_LEFT) yrotspeed -= 0.1f;
-    else if (scancode == SDL_SCANCODE_RIGHT) yrotspeed += 0.1f;
-    else if (scancode == SDL_SCANCODE_UP) xrotspeed -= 0.1f;
-    else if (scancode == SDL_SCANCODE_DOWN) xrotspeed += 0.1f;
-    else if (scancode == SDL_SCANCODE_W) ztransspeed += 0.1f;
-    else if (scancode == SDL_SCANCODE_S) ztransspeed -= 0.1f;
+    if (scancode == SDL_SCANCODE_LEFT) transSpeed.y -= 0.1f;
+    else if (scancode == SDL_SCANCODE_RIGHT) transSpeed.y += 0.1f;
+    else if (scancode == SDL_SCANCODE_UP) transSpeed.x -= 0.1f;
+    else if (scancode == SDL_SCANCODE_DOWN) transSpeed.x += 0.1f;
+    else if (scancode == SDL_SCANCODE_W) transSpeed.z += 0.1f;
+    else if (scancode == SDL_SCANCODE_S) transSpeed.z -= 0.1f;
 }
 
 void GameView::onResize(int w, int h)

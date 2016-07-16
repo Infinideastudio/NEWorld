@@ -97,16 +97,16 @@ private:
 
     static void setProjMatrix()
     {
-        if (matrixMode == 1) return;
+        if (matrixMode == GL_PROJECTION) return;
         glMatrixMode(GL_PROJECTION);
-        matrixMode = 1;
+        matrixMode = GL_PROJECTION;
     }
 
     static void setModelMatrix()
     {
-        if (matrixMode == 0) return;
+        if (matrixMode == GL_MODELVIEW) return;
         glMatrixMode(GL_MODELVIEW);
-        matrixMode = 0;
+        matrixMode = GL_MODELVIEW;
     }
 };
 

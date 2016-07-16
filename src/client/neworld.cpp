@@ -41,7 +41,7 @@ void NEWorld::run()
     UI::Globalization::Service::getInstance().setLang("chinese");
 
     //std::thread serverThread(networkThread);
-    MainApplication application(852, 480, "NEWorld");
+    Application application(852, 480, "NEWorld");
 
     // Start to run
     infostream << "Game start!";

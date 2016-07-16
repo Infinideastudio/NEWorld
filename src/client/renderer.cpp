@@ -31,7 +31,7 @@ void Renderer::init()
     glClearDepth(1.0f);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-//    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
 //    glEnable(GL_ALPHA_TEST);
 //    glEnable(GL_BLEND);
@@ -42,4 +42,8 @@ void Renderer::init()
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
     glHint(GL_FOG_HINT, GL_FASTEST);
     glHint(GL_LINE_SMOOTH_HINT, GL_FASTEST);
+
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
 }
