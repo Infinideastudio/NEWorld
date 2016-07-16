@@ -211,7 +211,6 @@ cscope.*
 
 # Unnecessary binary asset
 dependencies/
-Res/
 
 # Unittest
 *.unittest.cpp
@@ -241,5 +240,7 @@ NEWorldLauncher
 .idea/*
 
 # Generated Makefile
-[M]ake[f]ile
+[Mm]ake[Ff]ile
 
+# Windows thumbnail cache
+[Tt]humbs.db
