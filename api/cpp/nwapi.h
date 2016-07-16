@@ -40,14 +40,14 @@
     #define NWAPICALL __attribute__((__cdecl__))
 #endif
 
-struct PluginData
+struct NWplugindata
 {
     char* pluginName = nullptr;
     char* authorName = nullptr;
     char* internalName = nullptr;
 };
 
-struct BlockType
+struct NWblocktype
 {
     char* blockname = nullptr;
     bool solid;
@@ -59,7 +59,7 @@ struct BlockType
 
 extern "C"
 {
-    NWAPIENTRY int32_t NWAPICALL registerBlock(BlockType*);
+    NWAPIENTRY int32_t NWAPICALL nwRegisterBlock(NWblocktype*);
 }
 
 #endif // !NWAPI_H_

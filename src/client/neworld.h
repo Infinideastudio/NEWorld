@@ -28,6 +28,7 @@
 #include <world.h>
 #include <worldmanager.h>
 #include "../server/worldloader.h"
+#include <blockmanager.h>
 
 class MainApplication :public UI::Core::Application
 {
@@ -55,6 +56,8 @@ public:
     }
 
 private:
+    // Blocks
+    BlockManager m_blocks;
     // Loaded plugins
     PluginManager m_plugins;
     /*

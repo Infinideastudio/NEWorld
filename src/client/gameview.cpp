@@ -126,7 +126,7 @@ GameView::GameView() :UI::Core::Page()
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
             }
         }
-        if ((x + 51) % 25 == 0) infostream << "Building vertax array: " << x + 51 << "%";
+        if ((x + 26)*2 % 25 == 0) infostream << "Building vertax array: " << (x + 26)*2 << "%";
     }
 
     infostream << "Generating VBO...";

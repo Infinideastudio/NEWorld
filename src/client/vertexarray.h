@@ -162,11 +162,12 @@ private:
 class VertexBuffer
 {
 public:
-    VertexBuffer()
+    VertexBuffer(): id(0), vertexes(0)
     {
     }
 
-    VertexBuffer(const VertexFormat& format_, VertexBufferID id_ = 0) : format(format_), id(id_)
+    VertexBuffer(VertexBufferID id_, int vertexes_, const VertexFormat& format_):
+        id(id_), vertexes(vertexes_), format(format_)
     {
     }
 

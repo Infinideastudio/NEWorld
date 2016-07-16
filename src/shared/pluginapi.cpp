@@ -20,13 +20,13 @@
 
 BlockManager* PiBlocks;
 
-int NWAPICALL registerBlock(const PiBlockType* block)
+int NWAPICALL nwRegisterBlock(const NWblocktype* block)
 {
     (PiBlocks->registerBlock)(convertBlockType(*block));
     return 0;
 }
 
-BlockType convertBlockType(const PiBlockType& src)
+BlockType convertBlockType(const NWblocktype& src)
 {
     return BlockType(src.blockname, src.solid, src.translucent, src.opaque, src.explodePower, src.hardness);
 }

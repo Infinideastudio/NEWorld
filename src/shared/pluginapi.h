@@ -29,7 +29,7 @@
 
 extern BlockManager* PiBlocks;
 
-struct PiBlockType
+struct NWblocktype
 {
     char* blockname = nullptr;
     bool solid;
@@ -39,11 +39,11 @@ struct PiBlockType
     int32_t hardness;
 };
 
-BlockType convertBlockType(const PiBlockType& src);
+BlockType convertBlockType(const NWblocktype& src);
 
 extern "C"
 {
-    NWAPIEXPORT int NWAPICALL registerBlock(const PiBlockType*);
+    NWAPIEXPORT int NWAPICALL nwRegisterBlock(const NWblocktype*);
 }
 
 /*

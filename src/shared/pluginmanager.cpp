@@ -34,18 +34,18 @@ void PluginManager::loadPlugin(const string& filename)
         return;
     }
     infostream << "Loaded plugin \"" << plugin.getData().pluginName << "\"["
-        << plugin.getData().internalName
-        << "], authored by \"" << plugin.getData().authorName << "\"";
+               << plugin.getData().internalName
+               << "], authored by \"" << plugin.getData().authorName << "\"";
 }
 
 void PluginManager::loadPlugins()
 {
     using namespace boost::filesystem;
-    string path = "./Plugins/";
+    string path = "./../Plugins/";
     if (exists(path))
     {
         directory_iterator itemEnd;
-        for (directory_iterator item(path); item != itemEnd; item++)
+        for (directory_iterator item(path); item != itemEnd; ++item)
             if (!is_directory(*item))
             {
                 string pluginPath = item->path().string();

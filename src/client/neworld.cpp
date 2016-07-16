@@ -20,6 +20,7 @@
 #include "gameview.h"
 #include "renderer.h"
 #include "texture.h"
+#include <pluginapi.h>
 
 void NEWorld::run()
 {
@@ -28,6 +29,7 @@ void NEWorld::run()
     infostream << "Initializing...";
 
     Texture::init();
+    PiBlocks = &m_blocks;
     m_plugins.loadPlugins();
     m_worldLoader.setLoadRange(4);
     //m_worldLoader.sortChunkLoadUnloadList(Vec3i(0, 0, 0));
@@ -39,11 +41,11 @@ void NEWorld::run()
     UI::Globalization::Service::getInstance().setLang("chinese");
 
     //std::thread serverThread(networkThread);
-    MainApplication mainApplication(852, 480, "NEWorld");
+    MainApplication application(852, 480, "NEWorld");
 
     // Start to run
     infostream << "Game start!";
-    mainApplication.run();
+    application.run();
 
     // Destroy here
     infostream << "Terminating...";

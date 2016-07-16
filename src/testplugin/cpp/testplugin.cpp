@@ -18,26 +18,26 @@
 
 #include "../../../api/cpp/nwapi.h"
 
-PluginData* TestPlugin;
+NWplugindata* TestPlugin;
 
 // Export functions
 extern "C"
 {
-    NWAPIEXPORT PluginData* NWAPICALL init();
+    NWAPIEXPORT NWplugindata* NWAPICALL init();
 }
 
 // Main function
-PluginData* NWAPICALL init()
+NWplugindata* NWAPICALL init()
 {
-    BlockType rock;
+    NWblocktype rock;
     rock.blockname = "Rock";
     rock.solid = 1;
     rock.translucent = 0;
     rock.opaque = 1;
     rock.explodePower = 0;
     rock.hardness = 2;
-    registerBlock(&rock);
-    TestPlugin = new PluginData();
+    nwRegisterBlock(&rock);
+    TestPlugin = new NWplugindata();
     TestPlugin->pluginName = "Test Plugin";
     TestPlugin->authorName = "INFINIDEAS";
     TestPlugin->internalName = "infinideas.testplugin_cpp";

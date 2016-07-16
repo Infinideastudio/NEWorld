@@ -19,11 +19,11 @@
 #include "../../../api/freebasic/nwapi.bi"
 
 ' Plugin data
-dim shared TestPlugin as PluginData ptr
+dim shared TestPlugin as NWplugindata ptr
 
 ' Export functions
 extern "C"
-    declare function init cdecl() as PluginData ptr
+    declare function init cdecl() as NWplugindata ptr
 end extern
 
 ' Convert const string to zstring ptr
@@ -34,8 +34,8 @@ function c_str(byref s as const string) as zstring ptr
 end function
 
 ' Main function
-function init cdecl() as PluginData ptr export
-    dim rock as BlockType
+function init cdecl() as NWplugindata ptr export
+    dim rock as NWblocktype
     with rock
         .blockname = c_str("Rock")
         .solid = 1
@@ -44,8 +44,8 @@ function init cdecl() as PluginData ptr export
         .explodePower = 0
         .hardness = 2
     end with
-    registerBlock(@rock)
-    TestPlugin = new PluginData
+    nwRegisterBlock(@rock)
+    TestPlugin = new NWplugindata
     TestPlugin->pluginName = c_str("Test Plugin")
     TestPlugin->authorName = c_str("INFINIDEAS")
     TestPlugin->internalName = c_str("infinideas.testplugin_freebasic")

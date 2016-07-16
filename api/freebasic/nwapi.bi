@@ -23,13 +23,13 @@
 
 type int32_t as long
 
-type PluginData
+type NWplugindata
     pluginName as zstring ptr = 0
     authorName as zstring ptr = 0
     internalName as zstring ptr = 0
 end type
 
-type BlockType
+type NWblocktype
     blockname as zstring ptr = 0
     solid as byte
     translucent as byte
@@ -38,6 +38,6 @@ type BlockType
     hardness as int32_t
 end type
 
-declare function registerBlock cdecl alias "registerBlock" (byval as BlockType ptr) as int32_t
+declare function nwRegisterBlock cdecl alias "nwRegisterBlock" (byval as NWblocktype ptr) as int32_t
 
 #endif ' !NWAPI_BI_
