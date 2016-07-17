@@ -72,7 +72,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)..\..\..\src\uilib\include;$(ProjectDir)..\..\..\dependencies\include;$(ProjectDir)..\..\..\src\shared;$(ProjectDir)..\..\..\src\client;$(ProjectDir)..\..\..\src\server;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(ProjectDir)..\..\..\dependencies\lib;$(SolutionDir)..\..\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)..\..\..\dependencies\lib\boostlib;$(ProjectDir)..\..\..\dependencies\lib;$(SolutionDir)..\..\;$(SolutionDir)..\..\Bin\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -97,7 +97,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>gtestd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Shared.lib;gtestd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\dependencies\lib\boostlib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
