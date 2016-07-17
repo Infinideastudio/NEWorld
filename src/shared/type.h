@@ -25,11 +25,14 @@
 inline bool isDecimal(std::string str)
 {
     if (str.empty()) return false;
-    bool ret = true, dot = false;
+    bool ret = true, dot = false, pos = true, beg = true;
     for (char c : str)
     {
         if (c == '.' && !dot) dot = true;
-        else if (c < '0' || c > '9') ret = false;
+        else if (c == '-'&& beg) pos = false;
+        else if ((c < '0' || c > '9') && (!beg&&c != '+'&&c != '-')) ret = false;
+        if (beg) beg = false;
+        if (!ret) break;
     }
     return ret;
 }
@@ -37,19 +40,24 @@ inline bool isDecimal(std::string str)
 inline bool isInteger(std::string str)
 {
     if (str.empty()) return false;
-    bool ret = true;
+    bool ret = true, beg = true, pos = true;
     for (char c : str)
     {
-        if (c < '0' || c > '9') ret = false;
+        if (c == '-'&& beg) pos = false;
+        else if ((c < '0' || c > '9')&&(!beg&&c!='+'&&c!='-')) ret = false;
+        if (beg) beg = false;
     }
     return ret;
 }
 
 inline bool isBoolean(std::string str)
 {
+    int getInteger(std::string str);
     if (str.empty()) return false;
     strtolower(str);
-    return str == "true" || str == "false";
+    int num = -1;
+    if (isInteger(str)) num = getInteger(str);
+    return str == "true" || str == "false" || num == 0 || num == 1;
 }
 
 inline bool isString(std::string str) //is something like "xxx"
@@ -72,7 +80,7 @@ inline int getInteger(std::string str)
 inline bool getBoolean(std::string str)
 {
     strtolower(str);
-    return str == "true";
+    return str == "true" || (isInteger(str) && getInteger(str) == 1);
 }
 
 inline std::string getString(std::string str)
