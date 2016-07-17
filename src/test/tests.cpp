@@ -18,10 +18,16 @@
 
 #include <gtest/gtest.h>
 
-TEST(FooTest, HandleNoneZeroInput)
+#include <vec3.h>
+TEST(Vec2, Basic)
 {
-    EXPECT_EQ(2, 2);
-    EXPECT_EQ(3, 3);
+    Vec3<int> v(1, 2, 3);
+    EXPECT_EQ(v.x + v.y*v.z, 7);
+}
+TEST(Vec2, Length)
+{
+    Vec3<int> v(3, 6, 6);
+    EXPECT_EQ(v.length(), 9);
 }
 
 int main(int argc, char* argv[])

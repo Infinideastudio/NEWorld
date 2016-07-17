@@ -19,15 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\src\maximilian\src\maximilian.cpp" />
-    <ClCompile Include="..\..\..\..\src\maximilian\src\RtAudio.cpp" />
-    <ClCompile Include="..\..\..\..\src\maximilian\src\stb_vorbis.c" />
+    <ClInclude Include="..\..\..\src\maximilian\include\maximilian.h" />
+    <ClInclude Include="..\..\..\src\maximilian\include\RtAudio.h" />
+    <ClInclude Include="..\..\..\src\maximilian\include\RtError.h" />
+    <ClInclude Include="..\..\..\src\maximilian\include\stb_vorbis.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\src\maximilian\include\maximilian.h" />
-    <ClInclude Include="..\..\..\..\src\maximilian\include\RtAudio.h" />
-    <ClInclude Include="..\..\..\..\src\maximilian\include\RtError.h" />
-    <ClInclude Include="..\..\..\..\src\maximilian\include\stb_vorbis.h" />
+    <ClCompile Include="..\..\..\src\maximilian\src\maximilian.cpp" />
+    <ClCompile Include="..\..\..\src\maximilian\src\RtAudio.cpp" />
+    <ClCompile Include="..\..\..\src\maximilian\src\stb_vorbis.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3C7CDF06-65EE-4258-A1F6-424020B7F67C}</ProjectGuid>
@@ -83,7 +83,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(ProjectDir)..\..\..\..\dependencies\lib\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\Maximillian\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\..\src\maximilian\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\src\maximilian\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)..\..\..\..\dependencies\lib\</OutDir>
