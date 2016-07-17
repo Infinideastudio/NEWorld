@@ -187,7 +187,7 @@ namespace UI
             file.close();
         }
 
-        //½«ÅäÖÃÎÄ¼ş±£´æµ½¶ÁÈ¡µÄÎÄ¼ş
+        //å°†é…ç½®æ–‡ä»¶ä¿å­˜åˆ°è¯»å–çš„æ–‡ä»¶
         void SimpleMapFile::save()
         {
             std::ofstream file(m_filename);
@@ -210,7 +210,7 @@ namespace UI
             file.close();
         }
 
-        //ÉèÖÃÄ³Ò»ÏîÅäÖÃ
+        //è®¾ç½®æŸä¸€é¡¹é…ç½®
         void SimpleMapFile::set(const std::string& key, const boost::spirit::hold_any value)
         {
             m_settings[key] = value;

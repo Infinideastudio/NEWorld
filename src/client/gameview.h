@@ -19,7 +19,7 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 
-#include <UILib.h>
+#include <uilib.h>
 #include "vec3.h"
 #include "renderer.h"
 

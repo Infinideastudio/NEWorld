@@ -323,11 +323,11 @@ namespace UI
 
         void Application::update()
         {
-            SDL_Event event;//ÊÂ¼ş
+            SDL_Event event;//äº‹ä»¶
             std::shared_ptr<Window> curWin;
-            while (SDL_PollEvent(&event)) //´Ó¶ÓÁĞÀïÈ¡³öÊÂ¼ş
+            while (SDL_PollEvent(&event)) //ä»é˜Ÿåˆ—é‡Œå–å‡ºäº‹ä»¶
             {
-                switch (event.type)  //¸ù¾İÊÂ¼şÀàĞÍ·ÖÃÅ±ğÀàÈ¥´¦Àí
+                switch (event.type)  //æ ¹æ®äº‹ä»¶ç±»å‹åˆ†é—¨åˆ«ç±»å»å¤„ç†
                 {
                 case SDL_APP_TERMINATING:
                     break;

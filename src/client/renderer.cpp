@@ -22,7 +22,7 @@ int Renderer::matrixMode = 0;
 
 void Renderer::init()
 {
-    glInit();
+    glewInit();
     restoreProj();
     restoreScale();
     glShadeModel(GL_SMOOTH);

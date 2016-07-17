@@ -27,7 +27,8 @@ typedef void NWAPICALL MainFunction(int, char**);
 int main(int argc, char** argv)
 {
     std::string in;
-    if (argc != 2)
+    std::string file;
+    if (argc == 1)
     {
         std::cout << "Welcome to NEWorld Minimal Launcher!" << std::endl;
         std::cout << "Enter 'client' to run client" << std::endl;
@@ -37,24 +38,43 @@ int main(int argc, char** argv)
     }
     else
     {
-        in = argv[1];
+        bool filespec = false;
+        for(int i = 1;i < argc;i++)
+        {
+            char *str = argv[i];
+            if(filespec)
+            {
+                file = str;
+                filespec = false;
+            }
+            else if(!strcmp(str,"-f"))
+            {
+                filespec = true;
+            }
+            else
+            {
+                in = str;
+            }
+        }
     }
     try
     {
         if (in == "server")
         {
+            if(file.size() == 0) file = "NEWorldServer";
             boost::dll::shared_library
             (
-                Path + "NEWorldServer",
+                Path + file,
                 boost::dll::load_mode::append_decorations
             )
             .get<MainFunction>("main")(argc, argv);
         }
         else
         {
+            if(file.size() == 0) file = "NEWorld";
             boost::dll::shared_library
             (
-                Path + "NEWorld",
+                Path + file,
                 boost::dll::load_mode::append_decorations
             )
             .get<MainFunction>("main")(argc, argv);
@@ -63,7 +83,9 @@ int main(int argc, char** argv)
     catch (std::exception& e)
     {
         std::cout << e.what() << std::endl;
+#ifdef NEWORLD_TARGET_WINDOWS
         system("pause");
+#endif
     }
     return 0;
 }

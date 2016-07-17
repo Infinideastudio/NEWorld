@@ -86,7 +86,7 @@ namespace UI
         {
         }
 
-        Image::Image(Image & img)
+        Image::Image(const Image & img)
         {
         }
 

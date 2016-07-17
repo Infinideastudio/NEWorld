@@ -56,7 +56,7 @@ namespace UI
         {
         public:
             Image();
-            Image(Image& img);
+            Image(const Image& img);
             Image(std::string path);
             Image Sub(Rect range);
             ~Image();

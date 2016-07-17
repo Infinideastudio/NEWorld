@@ -18,6 +18,7 @@ NONINFRINGEMENT.IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
 DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 
+#include <limits.h>
 #include <uiaudio.h>
 #include <uilogger.h>
 #include "uidataint.h"
@@ -275,7 +276,7 @@ namespace UI
             freq(1.0), gain(1.0), realFreq(1.0), sampleValue(0.0)
         {
         }
-        Source::Source(Source & source_) :
+        Source::Source(const Source & source_) :
             sample(source_.sample), isPlay(false), loop(false), refcount(0), samplePos(0.0),
             effects(source_.effects), effectsExs(source_.effectsExs), freq(1.0), realFreq(1.0), sampleValue(0.0)
         {

@@ -20,22 +20,14 @@
 #define OPENGL_H_
 
 #include <common.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
+using VertexBufferID = GLuint;
 
 #ifdef NEWORLD_COMPILER_MSVC
     #include <wingdi.h>
     #include <windef.h>
 #endif
-
-#include <GL/gl.h>
-#include <GL/glext.h>
-
-using VertexBufferID = GLuint;
-
-extern PFNGLGENBUFFERSARBPROC glGenBuffersARB;
-extern PFNGLBINDBUFFERARBPROC glBindBufferARB;
-extern PFNGLBUFFERDATAARBPROC glBufferDataARB;
-extern PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB;
-extern PFNGLTEXIMAGE3DPROC glTexImage3D;
-void glInit();
 
 #endif // !OPENGL_H_

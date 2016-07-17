@@ -26,15 +26,15 @@ namespace UI
     namespace Globalization
     {
 
-        inline Str::Str(const std::string& str, bool globalizationNeed)
+        Str::Str(const std::string& str, bool globalizationNeed)
             : ds(str), gs(globalizationNeed? Service::getInstance().getStr(ds):ds) {}
 
-        inline Str::operator std::string() const
+        Str::operator std::string() const
         {
             return gs;
         }
 
-        inline void Str::flush()
+        void Str::flush()
         {
             gs = Service::getInstance().getStr(ds);
         }
@@ -47,7 +47,7 @@ namespace UI
             }
         }
 
-        inline const std::string Service::getCurLang() const
+        const std::string Service::getCurLang() const
         {
             return curLang;
         }
@@ -72,16 +72,16 @@ namespace UI
             return curLangData->get<std::string>(key);
         }
 
-        inline void Service::setBasePath(std::string _basePath)
+        void Service::setBasePath(std::string _basePath)
         {
             basePath = _basePath;
         }
 
-        inline std::string Service::getBasePath()
+        std::string Service::getBasePath()
         {
             return basePath;
         }
-        inline void Service::setSuffix(std::string _suffix) { suffix = _suffix; }
-        inline std::string Service::getSuffix() { return suffix; }
+        void Service::setSuffix(std::string _suffix) { suffix = _suffix; }
+        std::string Service::getSuffix() { return suffix; }
     }
 }
