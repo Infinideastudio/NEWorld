@@ -27,7 +27,7 @@ script:
   - p7zip -d ./dependencies.7z >> 1.txt
   - p7zip -d ./boost.7z >> 2.txt
   - ls
-  - cd ./boost
+  - cd ./boost_1_16_0
   - sudo ./bootstrap.sh
   - sudo ./b2 install
   - pwd
