@@ -7,17 +7,20 @@ matrix:
       env: COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
       addons:
         apt:
+          sources:
+            - george-edison55-precise-backports
+            - kalakris-cmake
+            - llvm-toolchain-precise-3.8
+            - ubuntu-toolchain-r-test
           packages:
             - g++-5
             - p7zip
-          sources: &sources
-            - llvm-toolchain-precise-3.8
-            - ubuntu-toolchain-r-test
+            - cmake
+            - cmake-data
 
 script:
   - wget -O dependencies.7z https://github.com/Infinideastudio/NEWorld-binaries/raw/master/dependencies.7z
   - p7zip -d ./dependencies.7z > ./temp.txt
-  - mkdir ./bin/
-  - cd ./bin/
+  - mkdir ./bin/ && cd ./bin/
   - cmake ..
   - make
