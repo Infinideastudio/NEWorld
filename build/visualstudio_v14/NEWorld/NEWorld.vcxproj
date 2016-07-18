@@ -77,7 +77,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;freetype2.lib;UILib.lib;SDL2.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;opengl32.lib;freetype2.lib;UILib.lib;SDL2.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>false</Profile>
       <SubSystem>NotSet</SubSystem>
       <EntryPointSymbol>
@@ -153,7 +153,6 @@
     <ClCompile Include="..\..\..\src\client\network.cpp" />
     <ClCompile Include="..\..\..\src\client\networkstructures.cpp" />
     <ClCompile Include="..\..\..\src\client\neworld.cpp" />
-    <ClCompile Include="..\..\..\src\client\opengl.cpp" />
     <ClCompile Include="..\..\..\src\client\texture.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />

@@ -23,7 +23,7 @@
 
 using TextureID = GLuint;
 using ubyte = unsigned char;
-class SDL_Surface;
+struct SDL_Surface;
 
 class Texture
 {
