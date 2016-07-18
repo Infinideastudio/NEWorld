@@ -18,6 +18,10 @@ if(MS_VC)
     add_definitions(-DNOMINMAX)
 endif(MS_VC)
 
+if(EXTRA_INCDIR)
+    include_directories(${EXTRA_INCDIR})
+endif()
+
 # ---
 project(maximilian)
 aux_source_directory(./src/maximilian/src SRC_MAXIMILIAN)
