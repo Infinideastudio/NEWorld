@@ -20,6 +20,7 @@
 #include "logger.h"
 
 typedef PluginData* NWAPICALL InitFunction();
+typedef void NWAPICALL UnloadFunction();
 
 int Plugin::loadFrom(const string& filename)
 {
@@ -32,9 +33,32 @@ int Plugin::loadFrom(const string& filename)
     }
     catch (std::exception& e)
     {
-        if (m_lib.is_loaded()) return m_status = 1; // Failed: could not load
+        if (!m_lib.is_loaded()) return m_status = 1; // Failed: could not load
         if (init == nullptr) return m_status = 2; // Failed: entry not found
-        warningstream << "Failed: unexpected exception: " << e.what();
+        warningstream << "Failed: unhandled exception: " << e.what();
     }
     return m_status = 0;
+}
+
+void Plugin::unload()
+{
+    if (m_status != 0) return;
+    m_status = -1;
+    UnloadFunction* unload = nullptr;
+    try
+    {
+        unload = m_lib.get<UnloadFunction>("unload");
+        unload();
+        m_lib.unload();
+    }
+    catch (std::exception& e)
+    {
+        if (unload == nullptr)
+        {
+            // Warning: entry not found
+            warningstream << "Subroutine unload() not found in plugin " << m_data->internalName << ", skipped unloading but may cause memory leak";
+            return;
+        }
+        warningstream << "Failed: unhandled exception: " << e.what();
+    }
 }

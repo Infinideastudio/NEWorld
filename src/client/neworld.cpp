@@ -18,7 +18,6 @@
 
 #include "neworld.h"
 #include "gameview.h"
-#include "renderer.h"
 #include "texture.h"
 #include <pluginapi.h>
 
@@ -51,6 +50,7 @@ void NEWorld::run()
     infostream << "Terminating...";
     UI::Logger::service.dump();
     Texture::uninit();
+    m_plugins.unloadPlugins();
     //serverThread.join();
     disconnect();
 }

@@ -59,7 +59,7 @@ struct NWblocktype
 
 extern "C"
 {
-    NWAPIENTRY int32_t NWAPICALL nwRegisterBlock(NWblocktype*);
+    NWAPIENTRY int32_t NWAPICALL nwRegisterBlock(const NWblocktype*);
 }
 
 #endif // !NWAPI_H_

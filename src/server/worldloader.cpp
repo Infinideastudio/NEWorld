@@ -122,7 +122,7 @@ void WorldLoader::loadUnloadChunks() const
     for (int i = 0; i < m_chunkLoadCount; i++)
     {
         // TODO: Try to read in file
-        ChunkLoader(m_world.addChunk(m_chunkLoadList[i].first)).build();
+        ChunkLoader(m_world.addChunk(m_chunkLoadList[i].first)).build(m_world.getDaylightBrightness());
     }
     for (int i = 0; i < m_chunkUnloadCount; i++)
     {

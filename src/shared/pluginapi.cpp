@@ -22,7 +22,7 @@ BlockManager* PiBlocks;
 
 int NWAPICALL nwRegisterBlock(const NWblocktype* block)
 {
-    (PiBlocks->registerBlock)(convertBlockType(*block));
+    PiBlocks->registerBlock(convertBlockType(*block));
     return 0;
 }
 

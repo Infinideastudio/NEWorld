@@ -19,7 +19,11 @@
 #ifndef NWAPI_BI_
 #define NWAPI_BI_
 
-#inclib "../../../Bin/NEWorldServer"
+#ifdef NEWORLD_PLUGIN_SERVER_SIDE
+    #inclib "../../../Bin/NEWorldServer"
+#else
+    #inclib "../../../Bin/NEWorld"
+#endif
 
 type int32_t as long
 
@@ -38,6 +42,6 @@ type NWblocktype
     hardness as int32_t
 end type
 
-declare function nwRegisterBlock cdecl alias "nwRegisterBlock" (byval as NWblocktype ptr) as int32_t
+declare function nwRegisterBlock cdecl alias "nwRegisterBlock" (byval as const NWblocktype ptr) as int32_t
 
 #endif ' !NWAPI_BI_

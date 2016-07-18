@@ -17,16 +17,14 @@
 */
 
 #include "chunkloader.h"
+#include "pluginmanager.h"
 
-void ChunkLoader::build() const
+void ChunkLoader::build(int DaylightBrightness) const
 {
     // TODO: Try to use terrain generators written in plugins
     // This is the default terrain generator. Use this when no generators were loaded from plugins.
     for (int x = 0; x < ChunkSize; x++)
         for (int z = 0; z < ChunkSize; z++)
             for (int y = 0; y < ChunkSize; y++)
-            {
-                // TODO: Set block to BlockData(0, DaylightBrightness, 0)
-                m_chunk->getBlock(Vec3i(x, y, z)) = BlockData(0, 0, 0); // NOT FINISHED
-            }
+                m_chunk->getBlock(Vec3i(x, y, z)) = BlockData(0, DaylightBrightness, 0);
 }

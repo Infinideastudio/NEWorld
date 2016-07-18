@@ -44,6 +44,8 @@ private:
     // All chunks (chunk array)
     Chunk** m_chunks;
 
+    int m_daylightBrightness;
+
     // Expand chunk array
     void expandChunkArray(size_t expandCount);
 
@@ -184,6 +186,11 @@ public:
         Chunk* chunk = getChunkPtr(getChunkPos(pos));
         assert(chunk != nullptr);
         chunk->setBlock(getBlockPos(pos), block);
+    }
+
+    int getDaylightBrightness() const
+    {
+        return m_daylightBrightness;
     }
 
     // Main update

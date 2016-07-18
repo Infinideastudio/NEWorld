@@ -39,7 +39,7 @@ struct PluginData
 class Plugin
 {
 public:
-    explicit Plugin(const string& filename)
+    explicit Plugin(const string& filename) : m_status(-1)
     {
         loadFrom(filename);
     }
@@ -56,8 +56,7 @@ public:
 
     ~Plugin()
     {
-        //delete m_data;
-        // TODO: Fix it: Memory Leak
+        unload();
     }
 
     // Get plugin data
@@ -80,12 +79,14 @@ public:
 
     // Load plugin, return 0 for success
     int loadFrom(const string& filename);
+    // Unload plugin
+    void unload();
 
 private:
     // Plugin DLL
     boost::dll::shared_library m_lib;
     // Plugin Data
-    PluginData* m_data;
+    const PluginData* m_data;
     // Load status
     int m_status = -1;
 };

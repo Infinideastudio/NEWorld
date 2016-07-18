@@ -56,3 +56,8 @@ void PluginManager::loadPlugins()
             }
     }
 }
+
+void PluginManager::unloadPlugins()
+{
+    m_plugins.clear();
+}

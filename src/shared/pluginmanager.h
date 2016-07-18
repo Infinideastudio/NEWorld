@@ -29,10 +29,17 @@ using std::string;
 class PluginManager
 {
 public:
+    ~PluginManager()
+    {
+        unloadPlugins();
+    }
+
     // Load single plugin
     void loadPlugin(const string& filename);
     // Load plugins
     void loadPlugins();
+    // Unload plugins
+    void unloadPlugins();
 
 private:
     std::vector<Plugin> m_plugins;

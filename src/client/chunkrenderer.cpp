@@ -23,14 +23,22 @@ bool ChunkRenderer::mergeFace;
 
 void ChunkRenderer::buildVertexArray()
 {
+    va.clear();
     if (mergeFace)
     {
-        // Use struct Primitive
-        // ...
+        // TODO: merge face rendering
     }
     else
     {
-        // Iterate blocks and render
-        // ...
+        Vec3i::for_range(0, ChunkSize,[&](const Vec3i& pos)
+        {
+            Vec3i worldpos = m_chunk.getPos() + pos;
+            if (pos.x == 0 || pos.x == ChunkSize - 1||
+                    pos.x == 0 || pos.x == ChunkSize - 1||
+                    pos.x == 0 || pos.x == ChunkSize - 1)
+            {
+
+            }
+        });
     }
 }

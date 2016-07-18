@@ -18,12 +18,13 @@
 
 #include "../../../api/cpp/nwapi.h"
 
-NWplugindata* TestPlugin;
+NWplugindata* TestPlugin = nullptr;
 
 // Export functions
 extern "C"
 {
     NWAPIEXPORT NWplugindata* NWAPICALL init();
+    NWAPIEXPORT void NWAPICALL unload();
 }
 
 // Main function
@@ -42,4 +43,9 @@ NWplugindata* NWAPICALL init()
     TestPlugin->authorName = "INFINIDEAS";
     TestPlugin->internalName = "infinideas.testplugin_cpp";
     return TestPlugin;
+}
+
+void NWAPICALL unload()
+{
+    if (TestPlugin != nullptr) delete TestPlugin;
 }

@@ -28,7 +28,7 @@ class ChunkRenderer
     :boost::noncopyable
 {
 public:
-    ChunkRenderer(World* world, Chunk* chunk) : m_world(world), m_chunk(chunk)
+    ChunkRenderer(World& world, Chunk& chunk) : m_world(world), m_chunk(chunk)
     {
     }
 
@@ -43,9 +43,9 @@ public:
 
 private:
     // Target world
-    World* m_world;
+    World& m_world;
     // Target chunk
-    Chunk* m_chunk;
+    Chunk& m_chunk;
     // Vertex buffer object
     VertexBuffer m_buffer;
     // Vertex array

@@ -52,7 +52,7 @@ GameView::GameView() :UI::Core::Page()
     Texture text = Texture::loadTextureRGBA("./../Res/test.png");
     text.bind(Texture::Texture2D);
 
-    VertexArray cubeArray(10000000, VertexFormat(2, 3, 0, 3));
+    VertexArray cubeArray(3000000, VertexFormat(2, 3, 0, 3));
 
     for (int x = -25; x < 25; x++)
     {
@@ -122,7 +122,7 @@ GameView::GameView() :UI::Core::Page()
                 cubeArray.addVertex({ x*2.0f - 0.5f, y*2.0f + 0.5f, z*2.0f + 0.5f });
             }
         }
-        if ((x + 26)*2 % 25 == 0) infostream << "Building vertax array: " << (x + 26)*2 << "%";
+        if ((x + 26)*2 % 20 == 0) infostream << "Building vertax array: " << (x + 26)*2 << "%";
     }
 
     infostream << "Generating VBO...";
@@ -134,7 +134,7 @@ void GameView::doRender()
 {
     Renderer::clear();
     Renderer::restoreProj();
-    Renderer::applyPerspective(60.0f, static_cast<float>(windowWidth) / windowHeight, 1.0f, 1000.0f);
+    Renderer::applyPerspective(60.0f, float(windowWidth) / windowHeight, 1.0f, 1000.0f);
     Renderer::restoreScale();
     Renderer::translate(Vec3f(0.0f, 0.0f, trans.z));
     Renderer::rotate(trans.x, Vec3f(1.0f, 0.0f, 0.0f));

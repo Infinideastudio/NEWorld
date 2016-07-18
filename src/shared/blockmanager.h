@@ -34,7 +34,7 @@ public:
     void registerBlock(const BlockType& block)
     {
         blocks.push_back(block);
-        debugstream << "Registered block \"" << block.getName() << "\", attributes:\n"
+        debugstream << "Registered block \"" << block.getName() << "\" with ID = " << blocks.size() - 1 << ", attributes:\n"
                     << "Solid: " << block.isSolid() << "\n"
                     << "Translucent: " << block.isTranslucent() << "\n"
                     << "Opaque: " << block.isOpaque() << "\n"
