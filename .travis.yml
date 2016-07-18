@@ -17,6 +17,9 @@ matrix:
             - p7zip
             - cmake
             - cmake-data
+            - libasound2-dev
+            - alsa-base
+            - alsa-utils
 
 script:
   - wget -O dependencies.7z https://github.com/Infinideastudio/NEWorld-binaries/raw/master/dependencies.7z
