@@ -23,7 +23,13 @@ matrix:
 
 script:
   - wget -O dependencies.7z https://github.com/Infinideastudio/NEWorld-binaries/raw/master/dependencies.7z
+  - wget -O boost.7z http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.61.0%2F&ts=1468849401&use_mirror=jaist
   - p7zip -d ./dependencies.7z > ./temp.txt
+  - p7zip -d ./boost.7z > ./temp.txt
+  - cd ./boost
+  - sudo ./bootstrap.sh
+  - sudo ./b2 install
+  - ls
   - mkdir ./bin/ && cd ./bin/
   - cmake .. -DEXTRA_INCDIR=./dependencies/include
   - make
