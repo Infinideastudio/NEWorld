@@ -4,7 +4,6 @@ cache:
   bundler: true
   directories:
     - boost_1_61_0
-    - /usr/local
     - dependencies
 matrix:
   include:
@@ -26,24 +25,11 @@ matrix:
             - alsa-base
             - alsa-utils
 install:
-  - ls
-  - ls ./boost_1_61_0
-  - ls /usr/local/include
-  - ls /usr/local/lib
-#  - wget -O dependencies.7z https://github.com/Infinideastudio/NEWorld-binaries/raw/master/dependencies.7z
-#  - wget -O boost.7z http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
-#  - p7zip -d ./dependencies.7z >> 1.txt
-#  - p7zip -d ./boost.7z >> 2.txt
   - cd ./boost_1_61_0
   - sudo ./bootstrap.sh >> 3.txt
   - sudo ./b2 install
-  - ls
   - cd ..
-  - ls /usr/local/include
-  - ls /usr/local/lib
 script:
-  - ls
-  - ls ./boost_1_61_0
   - mkdir ./bin/ && cd ./bin/
   - cmake .. -DEXTRA_INCDIR=./dependencies/include
   - make
