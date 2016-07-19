@@ -25,7 +25,7 @@ matrix:
             - alsa-utils
 install:
   - ls
-  - if [ ! -d "./boost_1_61_0/boost"]; then
+  - ls ./boost_1_61_0
   - wget -O dependencies.7z https://github.com/Infinideastudio/NEWorld-binaries/raw/master/dependencies.7z
   - wget -O boost.7z http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
   - p7zip -d ./dependencies.7z >> 1.txt
@@ -34,7 +34,6 @@ install:
   - sudo ./bootstrap.sh >> 3.txt
   - sudo ./b2 install
   - ls
-  - fi
   - cd ..
 script:
   - mkdir ./bin/ && cd ./bin/
