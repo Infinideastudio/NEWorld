@@ -1,6 +1,10 @@
 language: generic
 sudo: required
-
+cache:
+  bundler: true
+  directories:
+    - boost_1_61_0
+    - dependencies
 matrix:
   include:
     - os: linux
@@ -20,10 +24,12 @@ matrix:
             - libasound2-dev
             - alsa-base
             - alsa-utils
-
+install:
+  - cd ./boost_1_61_0
+  - sudo ./bootstrap.sh --with-libraries=date_time,filesystem,system
+  - sudo ./b2 install
+  - cd ..
 script:
-  - wget -O dependencies.7z https://github.com/Infinideastudio/NEWorld-binaries/raw/master/dependencies.7z
-  - p7zip -d ./dependencies.7z > ./temp.txt
   - mkdir ./bin/ && cd ./bin/
   - cmake .. -DEXTRA_INCDIR=./dependencies/include
   - make

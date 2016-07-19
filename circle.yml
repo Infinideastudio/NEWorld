@@ -1,0 +1,7 @@
+dependencies:
+  post:
+    - ls
+test:
+  override:
+    - cmake .
+    - make
