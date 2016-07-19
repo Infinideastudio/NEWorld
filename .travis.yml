@@ -25,6 +25,8 @@ matrix:
             - libasound2-dev
             - alsa-base
             - alsa-utils
+            - libsdl2-2.0
+            - libsdl2-dev
 install:
   - ls
   - ls ./boost_1_61_0
