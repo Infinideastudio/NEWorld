@@ -25,10 +25,6 @@ matrix:
             - libasound2-dev
             - alsa-base
             - alsa-utils
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libsdl2-2.0-0
-  - sudo apt-get install -y libsdl2-dev
 install:
   - ls
   - ls ./boost_1_61_0
