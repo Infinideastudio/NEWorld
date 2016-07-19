@@ -1,0 +1,10 @@
+general:
+  build_dir: bin
+dependencies:
+  post:
+    - ls
+test:
+  override:
+    - pwd
+    - cmake .
+    - make
