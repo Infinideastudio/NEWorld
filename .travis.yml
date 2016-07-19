@@ -39,7 +39,7 @@ install:
 #  - sudo ./b2 install
 #  - ls
 #  - cd ..
-   - rm -rf ./dependencies/include/boost/
+  - rm -rf ./dependencies/include/boost/
 script:
   - ls
   - ls ./boost_1_61_0
