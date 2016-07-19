@@ -4,6 +4,7 @@ dependencies:
 test:
   override:
     - pwd
-    - mkdir bin && cd bin
+    - mkdir ./bin && cd ./bin
+    - pwd
     - cmake ..
     - make
