@@ -3,8 +3,5 @@ dependencies:
     - ls
 test:
   override:
-    - pwd
-    - mkdir ./bin && cd ./bin
-    - pwd
-    - cmake ..
+    - cmake .
     - make
