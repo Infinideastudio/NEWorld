@@ -53,31 +53,31 @@ public:
     }
 
     /// Get the square of vector length.
-    T lengthSqr() const
+    auto lengthSqr() const
     {
         return x * x + y * y + z * z;
     }
 
     /// Get vector length
-    double length() const
+    auto length() const
     {
         return sqrt(double(lengthSqr()));
     }
 
     /// Get the Euclidean Distance between vectors
-    double euclideanDistance(const Vec3& rhs) const
+    auto euclideanDistance(const Vec3& rhs) const
     {
         return (*this - rhs).length();
     }
 
     /// Get the Chebyshev Distance between vectors
-    T chebyshevDistance(const Vec3& rhs) const
+    auto chebyshevDistance(const Vec3& rhs) const
     {
         return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z));
     }
 
     /// Get the Manhattan Distance between vectors
-    T manhattanDistance(const Vec3& rhs) const
+    auto manhattanDistance(const Vec3& rhs) const
     {
         return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z);
     }
@@ -85,7 +85,7 @@ public:
     /// Normalize vector
     void normalize()
     {
-        double l = length();
+        auto l = length();
         x /= l;
         y /= l;
         z /= l;
@@ -182,7 +182,7 @@ public:
 
     //TODO: fix it. And tell if "for_each" will change the value of "this".
     template <typename Func>
-    Vec3<T> transform(Func func) const
+    auto transform(Func func) const
     {
         return Vec3<T>(func(x), func(y), func(z));
     }
@@ -220,7 +220,7 @@ public:
     }
 
     template <typename U, U base>
-    static Vec3<U> decode(T arg)
+    static auto decode(T arg)
     {
         U z = arg % base;
         arg /= base;
