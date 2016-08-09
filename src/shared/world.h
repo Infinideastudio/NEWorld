@@ -82,8 +82,8 @@ private:
     size_t getChunkIndex(const Vec3i& chunkPos) const;
 
 public:
-    World(const string& name, PluginManager& plugins, BlockManager& blocks)
-        : m_name(name), m_plugins(plugins), m_blocks(blocks), m_chunkCount(0), m_chunkArraySize(1024), m_daylightBrightness(15)
+    World(string name, PluginManager& plugins, BlockManager& blocks)
+        : m_name(std::move(name)), m_plugins(plugins), m_blocks(blocks), m_chunkCount(0), m_chunkArraySize(1024), m_daylightBrightness(15)
     {
         //m_chunks = new Chunk*[m_chunkArraySize];
         m_chunks = reinterpret_cast<Chunk**>(malloc(m_chunkArraySize * sizeof(Chunk*)));
