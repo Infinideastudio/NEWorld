@@ -1,9 +1,8 @@
 test:
-  override:
+  pre:
     - pwd
     - ls
     - mkdir bin
     - ls
-    - cd ./bin/
-    - cmake ..
-    - make
+    - cd ./bin/ & cmake ..
+    - cd ./bin/ & make
