@@ -1,6 +1,6 @@
 dependencies:
   cache_directories:
-    - "/usr/local/include/"
+    - "/usr/local/include"
     - "boost_1_61_0/bin_v2"
   post:
     - sudo apt-get install p7zip p7zip-full p7zip-rar
