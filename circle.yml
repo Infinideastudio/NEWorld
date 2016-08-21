@@ -2,6 +2,6 @@ test:
   override:
     - pwd
     - ls
-    - cd ./bin/
+    - mkdir ./bin/ & cd ./bin/
     - cmake ..
     - make
