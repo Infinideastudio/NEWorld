@@ -3,10 +3,8 @@ dependencies:
     - sudo apt-get install p7zip p7zip-full p7zip-rar
     - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
     - 7z x ./boost_1_61_0.7z
-    - cd ./boost_1_61_0
-    - ls ./boost_1_61_0
-    - ls
-    - pwd
+    - ./boost_1_61_0/bootstrap.sh --with-libraries=date_time,filesystem,system
+    - ./boost_1_61_0/b2 install
 test:
   override:
     - chmod +x ./compile.sh
