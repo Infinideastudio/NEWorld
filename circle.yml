@@ -5,7 +5,7 @@ dependencies:
   post:
     - sudo apt-get install p7zip p7zip-full p7zip-rar
     - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
-    - 7z x ./boost_1_61_0.7z
+    - 7za X ./boost_1_61_0.7z
     - sudo ./bootstrap.sh --with-libraries=date_time,filesystem,system:
         pwd:
           boost_1_61_0
