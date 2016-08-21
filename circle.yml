@@ -5,10 +5,10 @@ dependencies:
     - 7z x ./boost_1_61_0.7z
     - ./bootstrap.sh --with-libraries=date_time,filesystem,system
         pwd:
-          boost_1_61_0
+          ./boost_1_61_0
     - ./b2 install
         pwd:
-          boost_1_61_0
+          ./boost_1_61_0
 test:
   override:
     - chmod +x ./compile.sh
