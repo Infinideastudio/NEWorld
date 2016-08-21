@@ -1,0 +1,13 @@
+version: '{build}'
+branches:
+  only:
+  - renew
+clone_folder: C:\NEWorld
+before_build:
+- ps: >-
+    (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe','C:\NEWorld\dependencies.exe')
+
+    C:\NEWorld\dependencies.exe > C:\NEWorld\temp.txt
+build:
+  project: build/VisualStudio_v14/NEWorld.sln
+  verbosity: minimal
