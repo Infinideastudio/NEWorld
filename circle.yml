@@ -1,3 +1,4 @@
 test:
   override:
+    - chmod +x ./compile.sh
     - ./compile.sh
