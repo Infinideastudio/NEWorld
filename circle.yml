@@ -1,0 +1,5 @@
+test:
+  override:
+    - cd ./bin/
+    - cmake ..
+    - make
