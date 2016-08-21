@@ -3,8 +3,6 @@ sudo: required
 cache:
   bundler: true
   directories:
-    - boost_1_61_0
-    - dependencies
 matrix:
   include:
     - os: linux
@@ -25,13 +23,13 @@ matrix:
             - alsa-base
             - alsa-utils
 install:
+  - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
+  - 7z x ./boost_1_61_0.7z
   - cd ./boost_1_61_0
-  - ls
-  - chmod +x ./bootstrap.sh
   - ./bootstrap.sh --with-libraries=date_time,filesystem,system
   - sudo ./b2 install
   - cd ..
 script:
   - mkdir ./bin/ && cd ./bin/
-  - cmake .. -DEXTRA_INCDIR=./dependencies/include
+  - cmake ..
   - make
