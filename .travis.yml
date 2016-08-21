@@ -25,8 +25,10 @@ matrix:
             - alsa-base
             - alsa-utils
 install:
-  - cd ./boost_1_61_0/boost_1_61_0
-  - sudo ./bootstrap.sh --with-libraries=date_time,filesystem,system
+  - cd ./boost_1_61_0
+  - ls
+  - chmod +x ./bootstrap.sh
+  - ./bootstrap.sh --with-libraries=date_time,filesystem,system
   - sudo ./b2 install
   - cd ..
 script:
