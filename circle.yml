@@ -3,4 +3,5 @@ dependencies:
     - touch test.txt
 test:
   override:
-    - chmod +x ./compile.sh & ./compile.sh
+    - chmod +x ./compile.sh
+    - ./compile.sh
