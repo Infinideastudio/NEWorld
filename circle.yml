@@ -1,6 +1,9 @@
 dependencies:
   post:
-    - touch test.txt
+    - 7z
+    - sudo apt-get install p7zip p7zip-full p7zip-rar
+    - 7z
+    - wget
 test:
   override:
     - chmod +x ./compile.sh
