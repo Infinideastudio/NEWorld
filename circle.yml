@@ -1,4 +1,7 @@
 dependencies:
+  cache_directories:
+    - "/usr/local/include/"
+    - "boost_1_61_0/bin_v2"
   post:
     - sudo apt-get install p7zip p7zip-full p7zip-rar
     - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
@@ -11,5 +14,10 @@ dependencies:
           boost_1_61_0
 test:
   override:
-    - chmod +x ./compile.sh
-    - ./compile.sh
+    - mkdir bin
+    - cmake ..:
+        pwd:
+          bin
+    - make:
+        pwd:
+          bin
