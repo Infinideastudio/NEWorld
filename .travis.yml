@@ -24,7 +24,7 @@ matrix:
             - alsa-utils
 install:
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
-  - 7z x ./boost_1_61_0.7z
+  - 7za X ./boost_1_61_0.7z
   - cd ./boost_1_61_0
   - ./bootstrap.sh --with-libraries=date_time,filesystem,system
   - sudo ./b2 install
