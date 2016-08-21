@@ -1,5 +1,7 @@
 test:
   override:
+    - pwd
+    - ls
     - cd ./bin/
     - cmake ..
     - make
