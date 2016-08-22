@@ -7,7 +7,7 @@ cache:
 matrix:
   include:
     - os: linux
-      env: COMPILER_NAME=gcc CXX=g++-6 CC=gcc-6
+      env: COMPILER_NAME=gcc
       addons:
         apt:
           sources:
