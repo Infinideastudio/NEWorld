@@ -3,6 +3,7 @@ sudo: required
 cache:
   bundler: true
   directories:
+    - boost_1_61_0
 matrix:
   include:
     - os: linux
@@ -31,5 +32,5 @@ install:
   - cd ..
 script:
   - mkdir ./bin/ && cd ./bin/
-  - cmake ..
+  - cmake .. -DLINK_BOOST=ON
   - make
