@@ -10,7 +10,7 @@ clone_folder: C:\NEWorld
 clone_depth: 1
 install:
 # Install Boost libraries
-  - if not exist "boost\" mkdir boost
+  - if not exist "C:\NEWorld\boost\" mkdir boost
   - cd boost\
   - appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 > nul
   - appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
