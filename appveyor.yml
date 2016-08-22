@@ -17,6 +17,7 @@ before_build:
   #- appveyor-retry nuget install boost_chrono-vc140 -Version 1.61.0 > nul
   - appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 > nul
   # - appveyor-retry nuget install boost_thread-vc140 -Version 1.61.0 > nul\
+  - appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 > nul
   - cd ..
 # Install other dependencies
   - ps: (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe','C:\NEWorld\dependencies.exe')
@@ -28,10 +29,11 @@ before_build:
   - mkdir boostlib
   - cd boostlib
   - dir C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-64\lib\
-  - mklink libboost_filesystem-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-64\lib\boost_filesystem-vc140-mt-gd-1_61.lib
-  - mklink libboost_system-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-64\lib\boost_system-vc140-mt-gd-1_61.lib
-  #- mklink libboost_chrono-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_chrono-vc140.1.61.0.0\lib\native\address-model-64\lib\boost_chrono-vc140-mt-gd-1_61.lib
-  - mklink libboost_date_time-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_date_time-vc140.1.61.0.0\lib\native\address-model-64\lib\boost_date_time-vc140-mt-gd-1_61.lib
+  - mklink libboost_filesystem-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-64\lib\libboost_filesystem-vc140-mt-gd-1_61.lib
+  - mklink libboost_system-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-64\lib\libboost_system-vc140-mt-gd-1_61.lib
+  #- mklink libboost_chrono-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_chrono-vc140.1.61.0.0\lib\native\address-model-64\lib\libboost_chrono-vc140-mt-gd-1_61.lib
+  - mklink libboost_date_time-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_date_time-vc140.1.61.0.0\lib\native\address-model-64\lib\libboost_date_time-vc140-mt-gd-1_61.lib
+  - mklink libboost_regex-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_regex-vc140.1.61.0.0\lib\native\address-model-64\lib\libboost_regex-vc140-mt-gd-1_61.lib
   - dir
   - cd ..\..\..\
 build:
