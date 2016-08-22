@@ -25,9 +25,8 @@ matrix:
             - freeglut3-dev
 before_install:
   - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
-  - sudo apt-get -qq update
+  - sudo apt-get -ｙq update
   - sudo apt-get install -y libsdl2-dev libsdl2-image-dev
-  - sudo apt-get update -y
 install:
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
   - p7zip -d ./boost_1_61_0.7z > 7zlog.txt
@@ -36,7 +35,7 @@ install:
   - sudo ./b2 install
   - cd ..
   - mkdir ./bin/ && cd ./bin/
-  - cmake .. -DLINK_BOOST=ON
+  - cmake .. -DLINK_BOOST=ON -DCMAKE_CXX_COMPILER=g++-6
   - make
 script:
   - echo None.
