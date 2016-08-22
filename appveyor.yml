@@ -23,14 +23,15 @@ install:
   #- if exist "C:\NEWorld\init_flag\" copy C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_filesystem-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
   #- if exist "C:\NEWorld\init_flag\" copy C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_system-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
   #- if exist "C:\NEWorld\init_flag\" copy C:\NEWorld\boost\boost_date_time-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_date_time-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
- # - if exist "C:\NEWorld\init_flag\" copy C:\NEWorld\boost\boost_regex-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_regex-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
+  #- if exist "C:\NEWorld\init_flag\" copy C:\NEWorld\boost\boost_regex-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_regex-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
 build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
 on_success:
 # Create an archive
-  - del .\bin\*.iobj
-  - del .\bin\*.pdb
-  - del .\bin\*.ilk
-  - 7z a "c:\NEWorld.zip" .\bin\ .\bin\ .\plugins\ .\res .\licenses
-  - appveyor PushArtifact c:\NEWorld.zip
+  - dir
+  #- del .\Bin\*.iobj
+  #- del .\Bin\*.pdb
+  #- del .\Bin\*.ilk
+  #- 7z a "c:\NEWorld.zip" .\bin\ .\bin\ .\plugins\ .\res .\licenses
+  #- appveyor PushArtifact c:\NEWorld.zip
