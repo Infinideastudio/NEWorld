@@ -25,7 +25,9 @@ matrix:
             - freeglut3-dev
 before_install:
   - sudo add-apt-repository zoogie/sdl2-snapshots
-  - sudo apt install libsdl2-dev libsdl2-image-dev
+  - sudo apt-get -qq update
+  - sudo apt-get install -y libsdl2-dev libsdl2-image-dev
+  apt-get update
 install:
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
   - p7zip -d ./boost_1_61_0.7z > 7zlog.txt
