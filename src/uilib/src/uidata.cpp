@@ -60,7 +60,7 @@ namespace UI
             if (!lastString.empty())
                 strs.push_back(lastString);
             return strs;
-        };
+        }
 
         void trim(std::string& s)
         {
@@ -93,8 +93,8 @@ namespace UI
             return "";
         }
 
-        SimpleMapFile::SimpleMapFile(const std::string& filename)
-            :m_settings(), m_filename(filename)
+        SimpleMapFile::SimpleMapFile(std::string filename)
+            :m_settings(), m_filename(std::move(filename))
         {
             std::ifstream file(m_filename);
             try

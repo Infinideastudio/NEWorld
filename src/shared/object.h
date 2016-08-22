@@ -35,9 +35,7 @@ public:
     {
     }
 
-    virtual ~Object()
-    {
-    }
+    virtual ~Object() = default;
 
     const Vec3d& getPosition() const
     {
