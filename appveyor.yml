@@ -12,7 +12,8 @@ before_build:
   - appveyor-retry nuget install boost_chrono-vc140 -Version 1.61.0
   - appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0
   - appveyor-retry nuget install boost_thread-vc140 -Version 1.61.0
-  - appveyor DownloadFile DownloadFile('https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe','C:\NEWorld\dependencies.exe')
+# Install other dependencies
+  - appveyor DownloadFile 'https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe'
   - C:\NEWorld\dependencies.exe > nul
   #- appveyor DownloadFile .DownloadFile('http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z','C:\NEWorld\boost.7z')
   #- 7z x boost.7z
