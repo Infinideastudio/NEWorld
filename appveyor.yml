@@ -1,5 +1,7 @@
 version: '{build}'
-
+cache:
+  - boost\boost.1.61.0.0\lib\native\include\boost
+  - dependencies
 clone_folder: C:\NEWorld
 clone_depth: 1
 install:
