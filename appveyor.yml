@@ -3,8 +3,12 @@ branches:
   only:
   - renew
   - ci
+cache:
+  - boost
+  - dependencies
 clone_folder: C:\NEWorld
 before_build:
+  - dir
 # Install Boost libraries
   - mkdir boost
   - cd boost\
@@ -15,6 +19,7 @@ before_build:
   - appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0
   - appveyor-retry nuget install boost_thread-vc140 -Version 1.61.0
   - dir
+  - cd ..
 # Install other dependencies
   - ps: (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe','C:\NEWorld\dependencies.exe')
   - C:\NEWorld\dependencies.exe > nul
