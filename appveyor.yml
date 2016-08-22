@@ -31,5 +31,6 @@ on_success:
 # Create an archive
   - 7z a "c:\NEWorld.zip" .\res .\licenses
   - cd .\build\visualstudio_v14\bin\Win32\Debug
-  - 7z a "c:\NEWorld.zip" *.exe *.dll \Plugins\*.dll
+  - dir
+  - 7z a "c:\NEWorld.zip" *.exe *.dll .\Plugins\*.dll
   - appveyor PushArtifact c:\NEWorld.zip
