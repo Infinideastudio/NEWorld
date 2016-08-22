@@ -15,8 +15,8 @@ install:
   - if exist "C:\NEWorld\init_flag\" appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 > nul
   - if exist "C:\NEWorld\init_flag\" cd ..
 # Install other dependencies
-  - if exist "C:\NEWorld\dependencies\" appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
-  - if exist "C:\NEWorld\dependencies\" C:\NEWorld\dependencies.exe > nul
+  - if not exist "C:\NEWorld\dependencies\" appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
+  - if not exist "C:\NEWorld\dependencies\" C:\NEWorld\dependencies.exe > nul
 # Link
   - if exist "C:\NEWorld\init_flag\" mklink /D dependencies\include\boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
   - if exist "C:\NEWorld\init_flag\" mkdir dependencies\lib\boostlib
