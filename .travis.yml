@@ -1,5 +1,9 @@
-language: generic
+language: cpp
 sudo: required
+dist: xenial
+compiler:
+  - clang
+  - gcc
 cache:
   directories:
     - boost_1_61_0/
@@ -26,11 +30,9 @@ matrix:
             - freeglut3-dev
             - libglew-dev
             - libfreetype6-dev
-before_install:
-  - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
-  - sudo apt-get -yq update
+            - libsdl2-dev
+            - libsdl2-image-dev
 install:
-  - sudo apt-get install -y libsdl2-dev libsdl2-image-dev
   - sudo ln -s /usr/bin/g++-6 /usr/bin/g++ -f
   - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
 
@@ -47,10 +49,10 @@ install:
     fi
 
   - pwd
-  - ls
+  - mkdir ./bin/
 script:
-  - cd ./NEWorld
-  - mkdir ./bin/ && cd ./bin/
+  - cd ./bin/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/
   - make
+  - cd ..
 
