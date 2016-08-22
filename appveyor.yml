@@ -29,5 +29,8 @@ build:
   verbosity: minimal
 on_success:
 # Create an archive
-  - 7z a "c:\NEWorld.zip" .\bin\*.exe .\bin\*.dll .\plugins\*.dll .\res .\licenses
+  - del .\bin\*.iobj
+  - del .\bin\*.pdb
+  - del .\bin\*.ilk
+  - 7z a "c:\NEWorld.zip" .\bin\ .\bin\ .\plugins\ .\res .\licenses
   - appveyor PushArtifact c:\NEWorld.zip
