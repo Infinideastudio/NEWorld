@@ -5,15 +5,14 @@ branches:
   - ci
 clone_folder: C:\NEWorld
 before_build:
-- ps: >-
-    7z
-    (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe','C:\NEWorld\dependencies.exe')
-    C:\NEWorld\dependencies.exe > C:\NEWorld\temp.txt
-    (new-object net.webclient).DownloadFile('http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z','C:\NEWorld\boost.7z')
-    7z x boost.7z
-    dir
-    dir boost\
-    dir boost_1_61_0\
+- ps:
+    - (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe','C:\NEWorld\dependencies.exe')
+    - C:\NEWorld\dependencies.exe > C:\NEWorld\temp.txt
+    - (new-object net.webclient).DownloadFile('http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z','C:\NEWorld\boost.7z')
+    - 7z x boost.7z
+    - dir
+    - dir boost\
+    - dir boost_1_61_0\
 build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
