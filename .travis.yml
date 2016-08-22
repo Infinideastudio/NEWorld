@@ -3,7 +3,7 @@ sudo: required
 cache:
   bundler: true
   directories:
-    - boost_1_61_0.7z
+    - /home/travis/bin
 matrix:
   include:
     - os: linux
