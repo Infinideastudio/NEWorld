@@ -29,8 +29,7 @@ build:
   verbosity: minimal
 on_success:
 # Create an archive
-  - 7z a "c:\NEWorld.zip" .\res .\licenses
+  - 7z a "c:\NEWorld_Core.zip" .\res .\licenses
   - cd .\build\visualstudio_v14\bin\Win32\Debug
-  - dir
-  - 7z a "c:\NEWorld.zip" *.exe *.dll .\Plugins\*.dll
-  - appveyor PushArtifact c:\NEWorld.zip
+  - 7z a "c:\NEWorld_Core.zip" *.exe *.dll .\Plugins\*.dll
+  - appveyor PushArtifact c:\NEWorld_Core.zip
