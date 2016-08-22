@@ -25,9 +25,11 @@ matrix:
             - libglu1-mesa-dev
             - freeglut3-dev
             - libglew-dev
+            - libfreetype6-dev
 before_install:
   - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
   - sudo apt-get -yq update
+install:
   - sudo apt-get install -y libsdl2-dev libsdl2-image-dev
   - sudo ln -s /usr/bin/g++-6 /usr/bin/g++ -f
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
@@ -36,10 +38,7 @@ before_install:
   - ./bootstrap.sh --with-libraries=date_time,filesystem,system
   - sudo ./b2 install
   - cd ..
-install:
+script:
   - mkdir ./bin/ && cd ./bin/
   - cmake .. -DLINK_BOOST=ON
   - make
-script:
-  - echo None.
-
