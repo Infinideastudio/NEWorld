@@ -1,4 +1,4 @@
-language: generic
+language: cpp
 sudo: required
 cache:
   bundler: true
@@ -15,6 +15,7 @@ matrix:
             - kalakris-cmake
             - llvm-toolchain-precise-3.8
             - ubuntu-toolchain-r-test
+            - zoogie/sdl2-snapshots
           packages:
             - g++-5
             - p7zip
@@ -22,6 +23,8 @@ matrix:
             - libgl1-mesa-dev
             - libglu1-mesa-dev
             - freeglut3-dev
+            - libsdl2-dev
+            - libsdl2-image-dev
 install:
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
   - p7zip -d ./boost_1_61_0.7z > 7zlog.txt
