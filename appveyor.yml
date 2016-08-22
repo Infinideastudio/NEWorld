@@ -1,8 +1,4 @@
 version: '{build}'
-branches:
-  only:
-  - renew
-  - ci
 cache:
   - boost
   - dependencies
@@ -33,5 +29,5 @@ build:
   verbosity: minimal
 on_success:
 # Create an archive
-  - 7z a "c:\NEWorld.zip" .\
+  - 7z a "c:\NEWorld.zip" .\Bin\*.exe .\Bin\*.dll .\Plugins\*.dll .\Res .\licenses
   - appveyor PushArtifact c:\NEWorld.zip
