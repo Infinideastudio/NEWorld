@@ -10,8 +10,8 @@ clone_folder: C:\NEWorld
 clone_depth: 1
 before_build:
   - dir C:\
-  - dir C:\Program Files (x86)\
-  - dir C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC
+  - dir "C:\Program Files (x86)\"
+  - dir "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC"
 # Install Boost libraries
   - mkdir boost
   - cd boost\
