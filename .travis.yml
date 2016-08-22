@@ -24,7 +24,7 @@ matrix:
             - libglu1-mesa-dev
             - freeglut3-dev
 before_install:
-  - sudo add-apt-repository zoogie/sdl2-snapshots
+  - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
   - sudo apt-get -qq update
   - sudo apt-get install -y libsdl2-dev libsdl2-image-dev
   apt-get update
