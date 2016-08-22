@@ -7,17 +7,20 @@ cache:
   - boost
   - dependencies
 clone_folder: C:\NEWorld
+clone_depth: 1
 before_build:
-  - dir
+  - dir C:\
+  - dir C:\Program Files (x86)\
+  - dir C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC
 # Install Boost libraries
   - mkdir boost
   - cd boost\
-  - appveyor-retry nuget install boost_atomic-vc140 -Version 1.61.0
-  - appveyor-retry nuget install boost_system-vc140 -Version 1.61.0
-  - appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0
-  - appveyor-retry nuget install boost_chrono-vc140 -Version 1.61.0
-  - appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0
-  - appveyor-retry nuget install boost_thread-vc140 -Version 1.61.0
+  - appveyor-retry nuget install boost_atomic-vc140 -Version 1.61.0 > nul
+  - appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 > nul
+  - appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
+  - appveyor-retry nuget install boost_chrono-vc140 -Version 1.61.0 > nul
+  - appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 > nul
+  - appveyor-retry nuget install boost_thread-vc140 -Version 1.61.0 > nul
   - dir
   - cd ..
 # Install other dependencies
