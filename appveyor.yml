@@ -10,7 +10,8 @@ clone_folder: C:\NEWorld
 clone_depth: 1
 before_build:
 # Install Boost libraries
-  - ps: mkdir boost & cd boost\
+  - mkdir boost
+  - cd boost\
   - appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 > nul
   - appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
   - appveyor-retry nuget install boost_chrono-vc140 -Version 1.61.0 > nul
@@ -25,7 +26,8 @@ before_build:
   - cd dependencies\include
   - mklink /D boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
   - cd ..\lib
-  - ps: mkdir boostlib & cd boostlib
+  - mkdir boostlib
+  - cd boostlib
   - mklink boost_filesystem-vc140-mt-1_61.lib C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-64\lib\boost_filesystem-vc140-mt-1_61.lib
   - mklink boost_system-vc140-mt-1_61.lib C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-64\lib\boost_system-vc140-mt-1_61.lib
   - mklink boost_chrono-vc140-mt-1_61.lib C:\NEWorld\boost\boost_chrono-vc140.1.61.0.0\lib\native\address-model-64\lib\boost_chrono-vc140-mt-1_61.lib
