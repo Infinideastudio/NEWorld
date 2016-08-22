@@ -14,26 +14,23 @@ install:
   - cd boost\
   - appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 > nul
   - appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
-  #- appveyor-retry nuget install boost_chrono-vc140 -Version 1.61.0 > nul
   - appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 > nul
-  # - appveyor-retry nuget install boost_thread-vc140 -Version 1.61.0 > nul
   - appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 > nul
   - cd ..
 # Install other dependencies
-  - ps: (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe','C:\NEWorld\dependencies.exe')
+  - appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
   - C:\NEWorld\dependencies.exe > nul
 # Link
-  - cd dependencies\include
-  - mklink /D boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
-  - cd ..\lib
-  - mkdir boostlib
-  - cd boostlib
-  - mklink libboost_filesystem-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_filesystem-vc140-mt-gd-1_61.lib
-  - mklink libboost_system-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_system-vc140-mt-gd-1_61.lib
-  #- mklink libboost_chrono-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_chrono-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_chrono-vc140-mt-gd-1_61.lib
-  - mklink libboost_date_time-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_date_time-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_date_time-vc140-mt-gd-1_61.lib
-  - mklink libboost_regex-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_regex-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_regex-vc140-mt-gd-1_61.lib
-  - cd ..\..\..\
+  - mklink /D dependencies\include\boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
+  - mkdir dependencies\lib\boostlib
+  - mklink dependencies\lib\boostlib\libboost_filesystem-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_filesystem-vc140-mt-gd-1_61.lib
+  - mklink dependencies\lib\boostlib\libboost_system-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_system-vc140-mt-gd-1_61.lib
+  - mklink dependencies\lib\boostlib\libboost_date_time-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_date_time-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_date_time-vc140-mt-gd-1_61.lib
+  - mklink dependencies\lib\boostlib\libboost_regex-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_regex-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_regex-vc140-mt-gd-1_61.lib
 build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
+on_success:
+  # Create an archive
+  - 7z a "c:\NEWorld.zip" .\
+  - appveyor PushArtifact c:\NEWorld.zip
