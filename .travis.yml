@@ -35,7 +35,8 @@ install:
   - ./bootstrap.sh --with-libraries=date_time,filesystem,system
   - sudo ./b2 install
   - cd ..
-script:
   - mkdir ./bin/ && cd ./bin/
   - cmake .. -DLINK_BOOST=ON
   - make
+script:
+
