@@ -7,7 +7,7 @@ cache:
 matrix:
   include:
     - os: linux
-      env: COMPILER_NAME=gcc
+      env: COMPILER_NAME=gcc CXX_COMPILER=g++-6.1
       addons:
         apt:
           sources:
@@ -16,7 +16,7 @@ matrix:
             - llvm-toolchain-precise-3.8
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-6
+            - g++-6.1
             - p7zip
             - cmake
             - cmake-data
