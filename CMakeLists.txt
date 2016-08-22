@@ -11,13 +11,13 @@ if(LINK_BOOST STREQUAL "ON")
     link_libraries(boost_system boost_filesystem boost_date_time)
 endif()
 
-if(DEFINED EXTRA_INCDIR)
-    include_directories(${EXTRA_INCDIR})
-endif
+if(EXTRA_INCDIR)
+    include_directories("${EXTRA_INCDIR}")
+endif()
 
-if(DEFINED EXTRA_LIBDIR)
-    link_directories(${EXTRA_LIBDIR})
-endif
+if(EXTRA_LIBDIR)
+    link_directories("${EXTRA_LIBDIR}")
+endif()
 
 if(UNIX)
     link_libraries(dl)
