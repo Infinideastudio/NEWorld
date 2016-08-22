@@ -20,6 +20,7 @@ matrix:
             - g++-5
             - p7zip
             - cmake
+            - cmake-data
             - libgl1-mesa-dev
             - libglu1-mesa-dev
             - freeglut3-dev
