@@ -11,7 +11,6 @@ cache:
 matrix:
   include:
     - os: linux
-      env: COMPILER_NAME=gcc
       addons:
         apt:
           sources:
@@ -20,8 +19,8 @@ matrix:
             - llvm-toolchain-precise-3.8
             - ubuntu-toolchain-r-test
           packages:
-            - g++-6
             - gcc-6
+            - clang-3.8
             - p7zip
             - cmake
             - cmake-data
@@ -48,8 +47,11 @@ install:
     cd ..
     fi
 
-  - pwd
-  - mkdir ./bin/
+  - |
+    if [ ! -d ./bin/ ];
+    then
+    mkdir ./bin
+    fi
 script:
   - cd ./bin/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/
