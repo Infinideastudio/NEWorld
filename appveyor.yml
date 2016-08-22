@@ -5,24 +5,19 @@ branches:
   - ci
 clone_folder: C:\NEWorld
 before_build:
-  - dir c:\Libraries
 # Install Boost libraries
+  - mkdir boost
+  - cd boost\
   - appveyor-retry nuget install boost_atomic-vc140 -Version 1.61.0
   - appveyor-retry nuget install boost_system-vc140 -Version 1.61.0
   - appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0
   - appveyor-retry nuget install boost_chrono-vc140 -Version 1.61.0
   - appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0
   - appveyor-retry nuget install boost_thread-vc140 -Version 1.61.0
+  - dir
 # Install other dependencies
   - ps: (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe','C:\NEWorld\dependencies.exe')
   - C:\NEWorld\dependencies.exe > nul
-  #- appveyor DownloadFile .DownloadFile('http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z','C:\NEWorld\boost.7z')
-  #- 7z x boost.7z
-  #- dir boost_1_61_0\
-  - dir boost.1.61.0.0\
-  - dir boost.1.61.0.0\lib\
-  - dir boost.1.61.0.0\lib\native\
-  - dir boost.1.61.0.0\lib\native\include
 build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
