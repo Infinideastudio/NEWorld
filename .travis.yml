@@ -27,7 +27,7 @@ before_install:
   - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
   - sudo apt-get -qq update
   - sudo apt-get install -y libsdl2-dev libsdl2-image-dev
-  apt-get update
+  - sudo apt-get update -y
 install:
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
   - p7zip -d ./boost_1_61_0.7z > 7zlog.txt
