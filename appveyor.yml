@@ -2,6 +2,7 @@ version: '{build}'
 branches:
   only:
   - renew
+  - ci
 clone_folder: C:\NEWorld
 before_build:
 - ps: >-
