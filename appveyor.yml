@@ -10,16 +10,17 @@ clone_folder: C:\NEWorld
 clone_depth: 1
 install:
 # Install Boost libraries
-  - if not exist "C:\NEWorld\boost\" mkdir boost
-  - cd boost\
-  - appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 > nul
-  - appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
-  - appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 > nul
-  - appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 > nul
-  - cd ..
+  - if not exist "boost\" mkdir init_flag
+  - if exist "C:\NEWorld\init_flag\" mkdir boost
+  - if exist "C:\NEWorld\init_flag\" cd boost\
+  - if exist "C:\NEWorld\init_flag\" appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 > nul
+  - if exist "C:\NEWorld\init_flag\" appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
+  - if exist "C:\NEWorld\init_flag\" appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 > nul
+  - if exist "C:\NEWorld\init_flag\" appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 > nul
+  - if exist "C:\NEWorld\init_flag\" cd ..
 # Install other dependencies
-  - appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
-  - C:\NEWorld\dependencies.exe > nul
+  - if exist "C:\NEWorld\init_flag\" appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
+  - if exist "C:\NEWorld\init_flag\" C:\NEWorld\dependencies.exe > nul
 # Link
   - mklink /D dependencies\include\boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
   - mkdir dependencies\lib\boostlib
