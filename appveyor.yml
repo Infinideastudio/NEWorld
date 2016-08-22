@@ -32,6 +32,6 @@ build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
 on_success:
-  # Create an archive
+# Create an archive
   - 7z a "c:\NEWorld.zip" .\
   - appveyor PushArtifact c:\NEWorld.zip
