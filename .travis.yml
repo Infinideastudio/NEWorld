@@ -19,10 +19,11 @@ matrix:
             - g++-5
             - p7zip
             - cmake
-            - cmake-data
-            - libasound2-dev
-            - alsa-base
-            - alsa-utils
+            - libgl1-mesa-dev
+            - libglu1-mesa-dev
+            - libglut-dev
+            - libsdl2-dev
+            - libsdl2-image-dev
 install:
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
   - p7zip -d ./boost_1_61_0.7z > 7zlog.txt
