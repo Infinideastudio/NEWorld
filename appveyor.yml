@@ -22,12 +22,12 @@ install:
   - if exist "C:\NEWorld\init_flag\" appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
   - if exist "C:\NEWorld\init_flag\" C:\NEWorld\dependencies.exe > nul
 # Link
-  - mklink /D dependencies\include\boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
-  - mkdir dependencies\lib\boostlib
-  - mklink dependencies\lib\boostlib\libboost_filesystem-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_filesystem-vc140-mt-gd-1_61.lib
-  - mklink dependencies\lib\boostlib\libboost_system-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_system-vc140-mt-gd-1_61.lib
-  - mklink dependencies\lib\boostlib\libboost_date_time-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_date_time-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_date_time-vc140-mt-gd-1_61.lib
-  - mklink dependencies\lib\boostlib\libboost_regex-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_regex-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_regex-vc140-mt-gd-1_61.lib
+  - if exist "C:\NEWorld\init_flag\" mklink /D dependencies\include\boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
+  - if exist "C:\NEWorld\init_flag\" mkdir dependencies\lib\boostlib
+  - if exist "C:\NEWorld\init_flag\" mklink dependencies\lib\boostlib\libboost_filesystem-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_filesystem-vc140-mt-gd-1_61.lib
+  - if exist "C:\NEWorld\init_flag\" mklink dependencies\lib\boostlib\libboost_system-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_system-vc140-mt-gd-1_61.lib
+  - if exist "C:\NEWorld\init_flag\" if exist "C:\NEWorld\init_flag\" mklink dependencies\lib\boostlib\libboost_date_time-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_date_time-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_date_time-vc140-mt-gd-1_61.lib
+  - if exist "C:\NEWorld\init_flag\" mklink dependencies\lib\boostlib\libboost_regex-vc140-mt-gd-1_61.lib C:\NEWorld\boost\boost_regex-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_regex-vc140-mt-gd-1_61.lib
 build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
