@@ -7,7 +7,7 @@ cache:
 matrix:
   include:
     - os: linux
-      env: COMPILER_NAME=gcc CXX_COMPILER=g++-6.1
+      env: COMPILER_NAME=gcc
       addons:
         apt:
           sources:
@@ -16,7 +16,8 @@ matrix:
             - llvm-toolchain-precise-3.8
             - ubuntu-toolchain-r-test
           packages:
-            - g++-6.1
+            - g++-6
+            - gcc-6
             - p7zip
             - cmake
             - cmake-data
@@ -27,6 +28,9 @@ before_install:
   - sudo add-apt-repository ppa:zoogie/sdl2-snapshots -y
   - sudo apt-get -yq update
   - sudo apt-get install -y libsdl2-dev libsdl2-image-dev
+  - sudo rm -f /usr/bin/g++
+  - sudo ln -s /usr/bin/g++-6 /usr/bin/g++
+  - which g++
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
   - p7zip -d ./boost_1_61_0.7z > 7zlog.txt
   - cd ./boost_1_61_0
