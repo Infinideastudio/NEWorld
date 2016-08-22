@@ -26,6 +26,7 @@ before_build:
 # Link
   - cd dependencies\include
   - mklink /D boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
+  - cd ..\..\
 build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
