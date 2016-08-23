@@ -8,6 +8,11 @@ compiler:
 
 os:
   - linux
+# - osx
+
+dist: 
+  - xenal # Ubuntu 16.04 LTS (Xenal)
+  - trusty # Ubuntu 14.04 LTS (Trusty)
 
 cache:
   bundler: true
