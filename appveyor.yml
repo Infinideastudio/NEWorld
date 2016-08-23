@@ -6,7 +6,7 @@ clone_folder: C:\NEWorld
 clone_depth: 1
 install:
   - ps: >-
-      if(Test-Path "boost\"){
+      if(!Test-Path "boost\"){
         mkdir boost
         cd boost\
         appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 >$null
