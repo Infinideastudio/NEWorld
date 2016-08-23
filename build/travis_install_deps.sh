@@ -1,5 +1,6 @@
+#!/bin/sh
 # Install deps
-sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test ppa:andykimpe/cmake3
 sudo apt-get -qq -y update
 sudo apt-get install -y \
 p7zip \
