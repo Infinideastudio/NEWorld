@@ -6,7 +6,7 @@ clone_folder: C:\NEWorld
 clone_depth: 1
 install:
 # Install Boost libraries
-  - if 1 eq 1(
+  - if 1 eq  1(
   - echo "success"
   - )
   - exit
