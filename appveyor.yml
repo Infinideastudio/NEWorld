@@ -6,7 +6,7 @@ clone_folder: C:\NEWorld
 clone_depth: 1
 install:
   # Install dependencies
-  - if not exist "boost\" .\appveyor_install.bat
+  - if not exist "boost\" .\build\appveyor_install.bat
 build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
