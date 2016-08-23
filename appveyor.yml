@@ -7,9 +7,9 @@ clone_depth: 1
 install:
 # Install Boost libraries
   - ps: >-
-    if(Test-Path "boost\"){
-      echo "Cache found."
-    }
+      if(Test-Path "boost\"){
+        echo "Cache found."
+      }
   - exit
   - if not exist "boost\" mkdir init_flag
   - if exist "C:\NEWorld\init_flag\" mkdir boost
