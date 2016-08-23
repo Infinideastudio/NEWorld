@@ -1,34 +1,17 @@
 version: '{build}'
 cache:
-  - boost\boost.1.61.0.0\lib\native\include\boost -> appveyor.yml
-  - dependencies -> appveyor.yml
+  - boost\boost.1.61.0.0\lib\native\include\boost
+  - dependencies
 clone_folder: C:\NEWorld
 clone_depth: 1
 install:
-  - ps: >-
-      if(!(Test-Path "boost\")){
-        mkdir boost
-        cd boost\
-        appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 >$null
-        appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 >$null
-        appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 >$null
-        appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 >$null
-        cd ..
-        appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
-        C:\NEWorld\dependencies.exe > nul
-        mklink /D dependencies\include\boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
-        mkdir dependencies\lib\boostlib
-        copy C:\NEWorld\boost\boost_filesystem-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_filesystem-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
-        copy C:\NEWorld\boost\boost_system-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_system-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
-        copy C:\NEWorld\boost\boost_date_time-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_date_time-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
-        copy C:\NEWorld\boost\boost_regex-vc140.1.61.0.0\lib\native\address-model-32\lib\libboost_regex-vc140-mt-gd-1_61.lib dependencies\lib\boostlib
-      }
-
+  # Install dependencies
+  - if not exist "boost\" .\appveyor_install.bat
 build:
   project: build/VisualStudio_v14/NEWorld.sln
   verbosity: minimal
 on_success:
-# Create an archive
+  # Create an archive
   - 7z a "c:\NEWorld_Core.zip" .\res .\licenses > nul
   - cd .\build\visualstudio_v14\bin\Win32\Debug
   - 7z a "c:\NEWorld_Core.zip" *.exe *.dll .\Plugins\*.dll > nul
