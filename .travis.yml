@@ -2,58 +2,59 @@ language: cpp
 
 matrix:
   include:
-    os: linux
-      sudo: required
-      dist: xenial
-        apt:
-          sources:
-              george-edison55-precise-backports
-              kalakris-cmake
-              llvm-toolchain-precise-3.8
-              ubuntu-toolchain-r-test
-          packages:
-              p7zip
-              cmake
-              cmake-data
-              libgl1-mesa-dev
-              libglu1-mesa-dev
-              freeglut3-dev
-              libglew-dev
-              libfreetype6-dev
-              libsdl2-dev
-              libsdl2-image-dev
-        compiler:clang
-          cache:
+  - os: linux
+    - sudo: required
+    - dist: xenial
+      - apt:
+        - sources:
+            - george-edison55-precise-backports
+            - kalakris-cmake
+            - llvm-toolchain-precise-3.8
+            - ubuntu-toolchain-r-test
+        - packages:
+            - p7zip
+            - cmake
+            - cmake-data
+            - libgl1-mesa-dev
+            - libglu1-mesa-dev
+            - freeglut3-dev
+            - libglew-dev
+            - libfreetype6-dev
+            - libsdl2-dev
+            - libsdl2-image-dev
+      - compiler:clang
+        - cache:
             directories:
-              boost_1_61_0/
-              bin/CMakeFiles/
-          apt:
+            - boost_1_61_0/
+            - bin/CMakeFiles/
+        - apt:
             packages:
-              clang-3.8
-      install:
-        sudo ln -s /usr/bin/clang++-3.8 /usr/bin/clang++ -f
-        sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
-        sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
-        |
-        if [ ! -e ./boost_1_61_0/cached_mark ];
-        then
-        wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
-        p7zip -d ./boost_1_61_0.7z > 7zlog.txt
-        cd ./boost_1_61_0
-        touch cached_mark
-        ./bootstrap.sh --with-libraries=date_time,filesystem,system
-        ./b2
-        cd ..
-        fi
+            - clang-3.8
+        - before_install:
+          - sudo ln -s /usr/bin/clang++-3.8 /usr/bin/clang++ -f
+          - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
+          - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
+    - install:
+      - |
+      - if [ ! -e ./boost_1_61_0/cached_mark ];
+      - then
+      - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
+      - p7zip -d ./boost_1_61_0.7z > 7zlog.txt
+      - cd ./boost_1_61_0
+      - touch cached_mark
+      - ./bootstrap.sh --with-libraries=date_time,filesystem,system
+      - ./b2
+      - cd ..
+      - fi
     
-        |
-        if [ ! -d ./bin/ ];
-        then
-        mkdir ./bin
-        fi
+      - |
+      - if [ ! -d ./bin/ ];
+      - then
+      - mkdir ./bin
+      - fi
     
-        cd ./bin/
-        cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/
-      script:
-        make
+      - cd ./bin/
+      - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/
+    - script:
+      - make
 
