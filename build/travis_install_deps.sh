@@ -1,7 +1,7 @@
 #!/bin/sh
 # Install deps
-sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test ppa:andykimpe/cmake3
-sudo apt-get -qq -y update
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test ppa:george-edison55/precise-backports -y
+sudo apt-get update -y -qq
 sudo apt-get install -y \
 p7zip \
 cmake \
