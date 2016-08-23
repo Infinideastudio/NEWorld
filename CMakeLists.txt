@@ -12,7 +12,7 @@ if(LINK_BOOST STREQUAL "ON")
 endif()
 
 if(EXTRA_INCDIR)
-    include_directories("${EXTRA_INCDIR}")
+    include_directories(BEFORE "${EXTRA_INCDIR}")
 endif()
 
 if(EXTRA_LIBDIR)
