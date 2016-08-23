@@ -1,6 +1,6 @@
 language: generic
 sudo: required
-dist: xenial
+dist: trusty
 cache:
   directories:
     - boost_1_61_0/stage
