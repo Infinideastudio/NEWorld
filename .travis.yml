@@ -2,10 +2,19 @@ language: cpp
 
 sudo: required
 
+compiler:
+  - gcc
+  - clang
+
+os:
+  - linux
+
 cache:
   bundler: true
   directories:
-    - boost_1_61_0/
+    - boost_1_61_0/stage
+    - boost_1_61_0/boost
+    - boost_1_61_0/cached_mark
 
 addons:
 - apt:
@@ -28,14 +37,6 @@ addons:
       - libfreetype6-dev
       - libsdl2-dev
       - libsdl2-image-dev
-
-matrix:
-  exclude:
-  - compiler:
-      - gcc
-      - clang
-  - os:
-      - linux
 
 # Installing scripts
 before_install:
