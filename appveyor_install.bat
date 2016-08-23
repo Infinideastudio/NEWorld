@@ -1,3 +1,4 @@
+echo "Installing dependiencies..."
 :: Install Boost libraries
 mkdir boost
 cd boost\
