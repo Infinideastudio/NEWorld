@@ -1,7 +1,7 @@
 version: '{build}'
 cache:
-  - boost\boost.1.61.0.0\lib\native\include\boost
-  - dependencies
+  - boost\boost.1.61.0.0\lib\native\include\boost -> appveyor.yml
+  - dependencies -> appveyor.yml
 clone_folder: C:\NEWorld
 clone_depth: 1
 install:
