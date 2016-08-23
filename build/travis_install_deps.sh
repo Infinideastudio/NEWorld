@@ -1,6 +1,7 @@
 #!/bin/sh
 # Install deps
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test ppa:george-edison55/precise-backports -y
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+sudo add-apt-repository ppa:george-edison55/precise-backports
 sudo apt-get update -y -qq
 sudo apt-get install -y \
 p7zip \
