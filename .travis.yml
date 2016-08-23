@@ -1,27 +1,55 @@
 language: generic
-
 sudo: required
-
+dist: xenial
 cache:
   directories:
     - boost_1_61_0/stage
     - boost_1_61_0/boost
-    - boost_1_61_0/cached_mark
-
-dist: xenal
-
-os: linux
-
-env:
-  matrix:
-    - CXX="g++-6" CC="gcc-6"
-    - CXX="clang-3.8" CC="clang-3.8"
-      
-# Installing scripts
-before_install:
-    - sh ./build/travis_install_deps.sh
+    - bin/CMakeFiles/
+matrix:
+  include:
+    - os: linux
+      env: COMPILER_NAME=gcc
+      addons:
+        apt:
+          sources:
+            - george-edison55-precise-backports
+            - kalakris-cmake
+            - llvm-toolchain-precise-3.8
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+            - gcc-6
+            - p7zip
+            - cmake
+            - cmake-data
+            - libgl1-mesa-dev
+            - libglu1-mesa-dev
+            - freeglut3-dev
+            - libglew-dev
+            - libfreetype6-dev
+            - libsdl2-dev
+            - libsdl2-image-dev
 install:
-    - mkdir ./bin/ && cd ./bin/
-    - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/
+  - sudo ln -s /usr/bin/g++-6 /usr/bin/g++ -f
+  - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
+
+  - |
+    if [ ! -e ./boost_1_61_0/cached_mark ];
+    then
+    wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
+    p7zip -d ./boost_1_61_0.7z > 7zlog.txt
+    cd ./boost_1_61_0
+    touch cached_mark
+    ./bootstrap.sh --with-libraries=date_time,filesystem,system
+    ./b2
+    cd ..
+    fi
+
+  - pwd
+  - mkdir ./bin/
 script:
-    - make
+  - cd ./bin/
+  - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/ -Wno-dev
+  - make
+  - cd ..
