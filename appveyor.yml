@@ -7,7 +7,7 @@ clone_depth: 1
 install:
 # Install Boost libraries
   - ps: >-
-    if(Test-Path){
+    if(Test-Path "boost\"){
       echo "Cache found."
     }
   - exit
