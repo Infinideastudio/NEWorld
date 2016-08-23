@@ -6,6 +6,10 @@ clone_folder: C:\NEWorld
 clone_depth: 1
 install:
 # Install Boost libraries
+  - if 1 eq 1(
+  - echo "success"
+  - )
+  - exit
   - if not exist "boost\" mkdir init_flag
   - if exist "C:\NEWorld\init_flag\" mkdir boost
   - if exist "C:\NEWorld\init_flag\" cd boost\
