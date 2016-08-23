@@ -9,10 +9,10 @@ install:
       if(Test-Path "boost\"){
         mkdir boost
         cd boost\
-        appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 > nul
-        appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
-        appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 > nul
-        appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 > nul
+        appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 >$null
+        appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 >$null
+        appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 >$null
+        appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 >$null
         cd ..
         appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
         C:\NEWorld\dependencies.exe > nul
