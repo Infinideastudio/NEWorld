@@ -5,11 +5,11 @@ mkdir boost
 echo 0
 cd boost\
 echo 1
-appveyor-retry nuget install boost_system-vc140 -Version 1.61.0 > nul
-appveyor-retry nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
+nuget install boost_system-vc140 -Version 1.61.0 > nul
+nuget install boost_filesystem-vc140 -Version 1.61.0 > nul
 echo 1.5
-appveyor-retry nuget install boost_date_time-vc140 -Version 1.61.0 > nul
-appveyor-retry nuget install boost_regex-vc140 -Version 1.61.0 > nul
+nuget install boost_date_time-vc140 -Version 1.61.0 > nul
+nuget install boost_regex-vc140 -Version 1.61.0 > nul
 echo 2
 cd ..
 :: Install other dependencies
