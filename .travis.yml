@@ -35,7 +35,7 @@ install:
   - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
 
   - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
-  - rm -rf ./boost_1_61_0.7z
+  - rm -rf ./boost_1_61_0/
   - p7zip -d ./boost_1_61_0.7z
   - cd ./boost_1_61_0
   - touch cached_mark
