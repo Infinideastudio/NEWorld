@@ -43,7 +43,6 @@ install:
     ./bootstrap.sh --with-libraries=date_time,filesystem,system
     ./b2
     cd ..
-    fi
   
   - ls ~
   #- pwd
