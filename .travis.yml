@@ -2,7 +2,6 @@ language: generic
 sudo: required
 dist: trusty
 cache:
-  apt: true
   directories:
     - boost_1_61_0/stage
     - boost_1_61_0/boost
@@ -62,5 +61,5 @@ script:
   - ls ../boost_1_61_0/boost/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/ -Wno-dev
   #- cat ./Makefile
-  - make
+  - make VERBOSE=1
   - cd ..
