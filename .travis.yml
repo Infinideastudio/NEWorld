@@ -32,10 +32,10 @@ matrix:
             - libsdl2-image-dev
 install:
   - sudo ln -s /usr/bin/g++-6 /usr/bin/g++ -f
-  - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
-
+  - sudo cp -r /usr/include/freetype2/* /usr/include/
+  - sudo cp -r /usr/include/freetype2 /usr/include/freetype
   - |
-    if [ ! -e ./boost_1_61_0/cached_mark ];
+    if [ ! -d ./boost_1_61_0/boost ];
     then
     wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
     p7zip -d ./boost_1_61_0.7z > 7zlog.txt
@@ -45,10 +45,8 @@ install:
     ./b2
     cd ..
     fi
-
-  - pwd
 script:
   - cd ./bin/
-  - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/ -Wno-dev
+  - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=./boost_1_61_0/ -Wno-dev
   - make
   - cd ..
