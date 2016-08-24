@@ -34,17 +34,14 @@ install:
   - sudo ln -s /usr/bin/g++-6 /usr/bin/g++ -f
   - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
 
-  - |
-
-    wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
-    p7zip -d ./boost_1_61_0.7z > 7zlog.txt
-    cd ./boost_1_61_0
-    touch cached_mark
-    ./bootstrap.sh --with-libraries=date_time,filesystem,system
-    ./b2
-    cd ..
+  - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
+  - p7zip -d ./boost_1_61_0.7z
+  - cd ./boost_1_61_0
+  - touch cached_mark
+  - ./bootstrap.sh --with-libraries=date_time,filesystem,system
+  - ./b2
+  - cd ..
   
-  - ls ~
   #- pwd
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/stage/lib
