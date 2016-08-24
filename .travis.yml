@@ -35,7 +35,7 @@ install:
   - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
 
   - |
-    if [ ! -e ./boost_1_61_0/cached_mark ];
+    if [ ! -d ./boost_1_61_0/boost ];
     then
     wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
     p7zip -d ./boost_1_61_0.7z > 7zlog.txt
@@ -47,6 +47,8 @@ install:
     fi
 
   - pwd
+  - ls
+  #- sudo ln -s /usr/
 script:
   - cd ./bin/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/ -Wno-dev
