@@ -45,15 +45,16 @@ install:
     ./b2
     cd ..
     fi
-
+  
+  - ls ~
   #- pwd
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/stage/lib
-  - sudo ln -s /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost /usr/include
+  #- sudo ln -s /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost /usr/include
   #- ls /usr/include
-  - sudo ln -s /usr/
-  - ls /usr/include/freetype2
-  - ls /usr/include/freetype2/freetype
+  #- sudo ln -s /usr/
+  #- ls /usr/include/freetype2
+  #- ls /usr/include/freetype2/freetype
 script:
   - cd ./bin/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/ -Wno-dev
