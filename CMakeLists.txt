@@ -13,9 +13,8 @@ endif()
 
 if(EXTRA_INCDIR)
     include_directories(BEFORE ${EXTRA_INCDIR})
-    MESSAGE(STATUS "DEBUG INCLUDE " ${EXTRA_INCDIR})
 endif()
-include_directories(/home/travis/build/Infinideastudio/NEWorld/boost_1_61_0)
+
 if(EXTRA_LIBDIR)
     link_directories(${EXTRA_LIBDIR})
 endif()
