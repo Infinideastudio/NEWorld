@@ -47,7 +47,7 @@ install:
     fi
 
   #- pwd
-  #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost
+  - ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/stage/lib
   #- sudo ln -s /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost /usr/include
   #- ls /usr/include
@@ -55,6 +55,6 @@ install:
 script:
   - cd ./bin/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/boost/ -Wno-dev
-  - cat ./Makefile
+  #- cat ./Makefile
   - make
   - cd ..
