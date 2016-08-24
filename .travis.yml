@@ -58,6 +58,8 @@ install:
   #- ls /usr/include/freetype2/freetype
 script:
   - cd ./bin/
+  - ls ../boost_1_61_0/
+  - ls ../boost_1_61_0/boost/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=../boost_1_61_0/ -Wno-dev
   #- cat ./Makefile
   - make
