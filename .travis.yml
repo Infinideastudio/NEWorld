@@ -33,8 +33,7 @@ matrix:
 install:
   - sudo ln -s /usr/bin/g++-6 /usr/bin/g++ -f
   - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
-
-
+  - ls /usr/include/freetype
   - |
     if [ ! -d ./boost_1_61_0/boost ];
     then
@@ -47,7 +46,6 @@ install:
     cd ..
     fi
   - ls ./boost_1_61_0/boost/
-  - ls
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/stage/lib
   #- sudo ln -s /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost /usr/include
@@ -63,5 +61,5 @@ script:
   - ls ../boost_1_61_0/stage/lib/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=./boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=./boost_1_61_0/ -Wno-dev
   #- cat ./Makefile
-  - make VERBOSE=1
+  - make #VERBOSE=1
   - cd ..
