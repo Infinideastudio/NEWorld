@@ -34,16 +34,20 @@ install:
   - sudo ln -s /usr/bin/g++-6 /usr/bin/g++ -f
   - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
 
-  - wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
-  - rm -rf ./boost_1_61_0/
-  - p7zip -d ./boost_1_61_0.7z > 1.tmp
-  - cd ./boost_1_61_0
-  - touch cached_mark
-  - ./bootstrap.sh --with-libraries=date_time,filesystem,system
-  - ./b2
-  - cd ..
-  
-  #- pwd
+
+  - |
+    if [ ! -d ./boost_1_61_0/boost ];
+    then
+    wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.7z
+    p7zip -d ./boost_1_61_0.7z > 7zlog.txt
+    cd ./boost_1_61_0
+    touch cached_mark
+    ./bootstrap.sh --with-libraries=date_time,filesystem,system
+    ./b2
+    cd ..
+    fi
+  - ls ./boost_1_61_0/boost/
+  - ls
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost
   #- ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/stage/lib
   #- sudo ln -s /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost /usr/include
@@ -52,9 +56,11 @@ install:
   #- ls /usr/include/freetype2
   #- ls /usr/include/freetype2/freetype
 script:
+  - pwd
   - cd ./bin/
   - ls ../boost_1_61_0/
   - ls ../boost_1_61_0/boost/
+  - ls ../boost_1_61_0/stage/lib/
   - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=./boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=./boost_1_61_0/ -Wno-dev
   #- cat ./Makefile
   - make VERBOSE=1
