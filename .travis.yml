@@ -47,7 +47,10 @@ install:
     fi
 
   - pwd
-  - ls
+  - ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost
+  - ls /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/stage
+  - sudo ln -s /home/travis/build/Infinideastudio/NEWorld/boost_1_61_0/boost /usr/include
+  - ls /usr/include
   #- sudo ln -s /usr/
 script:
   - cd ./bin/
