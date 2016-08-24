@@ -59,7 +59,7 @@ script:
   - ls ../boost_1_61_0/
   - ls ../boost_1_61_0/boost/
   - ls ../boost_1_61_0/stage/lib/
-  - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=./boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=./boost_1_61_0/ -Wno-dev
+  - cmake .. -DLINK_BOOST=ON -DEXTRA_LIBDIR=../boost_1_61_0/stage/lib/ -DEXTRA_INCDIR=./boost_1_61_0/ -Wno-dev
   #- cat ./Makefile
-  - make #VERBOSE=1
+  - make VERBOSE=1
   - cd ..
