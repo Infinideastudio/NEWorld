@@ -2,6 +2,7 @@ language: generic
 sudo: required
 dist: trusty
 cache:
+  apt: true
   directories:
     - boost_1_61_0/stage
     - boost_1_61_0/boost
