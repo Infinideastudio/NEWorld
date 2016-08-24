@@ -33,7 +33,7 @@ matrix:
 install:
   - sudo ln -s /usr/bin/g++-6 /usr/bin/g++ -f
   - sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype -f
-  - sudo mv -r /usr/include/freetype2/* /usr/include/
+  - sudo mv /usr/include/freetype2/* /usr/include/
   - |
     if [ ! -d ./boost_1_61_0/boost ];
     then
