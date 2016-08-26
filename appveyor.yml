@@ -4,7 +4,7 @@ cache:
   - dependencies
 platform:
   - x86
-  - Any CPU
+  - x64
 configuration:
   - Debug
   - Release
