@@ -10,8 +10,11 @@ nuget install boost_regex-vc140 -Version 1.61.0 > nul
 cd ..
 :: Install other dependencies
 echo Installing other dependencies...
+mkdir dependencies\
+cd dependencies\
 appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
 C:\NEWorld\dependencies.exe > nul
+cd ..
 :: Link
 echo Creating links...
 mklink /D dependencies\include\boost C:\NEWorld\boost\boost.1.61.0.0\lib\native\include\boost
