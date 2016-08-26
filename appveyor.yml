@@ -6,10 +6,7 @@ platform:
   - x86
   - x64
 configuration:
-  - Debug
   - Release
-matrix:
-  fast_finish: true
 clone_folder: C:\NEWorld
 clone_depth: 1
 install:
