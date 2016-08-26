@@ -13,7 +13,7 @@ echo Installing other dependencies...
 mkdir dependencies\
 cd dependencies\
 appveyor DownloadFile https://raw.githubusercontent.com/Infinideastudio/NEWorld-binaries/master/dependencies.exe
-C:\NEWorld\dependencies.exe > nul
+dependencies.exe > nul
 cd ..
 :: Link
 echo Creating links...
