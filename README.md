@@ -1,5 +1,7 @@
 # NEWorld
 
+[![Join the chat at https://gitter.im/Infinideastudio/NEWorld](https://badges.gitter.im/Infinideastudio/NEWorld.svg)](https://gitter.im/Infinideastudio/NEWorld?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![AppVeyor](https://img.shields.io/appveyor/ci/abc612008/NEWorld/renew.svg?label=Windows)](https://ci.appveyor.com/project/abc612008/NEWorld)
 [![Travis](https://img.shields.io/travis/Infinideastudio/NEWorld/renew.svg?label=Linux)](https://travis-ci.org/Infinideastudio/NEWorld)
 
