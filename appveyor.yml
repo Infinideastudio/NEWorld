@@ -2,10 +2,18 @@ version: '{build}'
 cache:
   - boost\boost.1.61.0.0\lib\native\include\boost
   - dependencies
+platform:
+  - x86
+  - Any CPU
+configuration:
+  - Debug
+  - Release
 clone_folder: C:\NEWorld
 clone_depth: 1
 install:
   # Install dependencies
+  - rd/s/q boost\
+  - rd/s/q dependencies\
   - if not exist "boost\" .\build\appveyor_install.bat
 build:
   project: build/VisualStudio_v14/NEWorld.sln
