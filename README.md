@@ -15,13 +15,12 @@ NEWorld is a 3D sandbox game licensed under [LGPL v3](http://www.gnu.org/license
 
 If you want to help us develop this game, please sign your name in the SIGNOFF file (You may use PR to do so). You are also welcomed to open a PR to us directly.
 
-## 编译 Compile
-
+## 编译 Compilation
 见[编译指南](doc/installation.md). 或者您可以直接从Appveyor上下载Windows上最新版本的NEWorld.
 
 See [Compilation Guide](doc/installation.md), or you may download the latest Windows binary of NEWorld in Appveyor.
 
-## 更多文档 More Documents
+## 更多文档 More Documentation
 
 * 若在运行NEWorld时遇到了问题，请阅读 [用户指南](doc/usermanual.md)
 
