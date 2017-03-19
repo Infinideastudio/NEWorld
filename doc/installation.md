@@ -47,10 +47,8 @@ VS配置方法(64位)：
 
 ### Linux
 
-Compile NEWorld in Linux
-
-1. You need have the dependences installed.
-   dependences: git,gcc/clang,cmake(3.1+),boost(1.61.0+),libgl,glew,sdl2,sdl_image,alsa,raknet,flatbuffers,gtest(optional)
+1. You need have the dependences installed./您需要安装依赖。
+   dependences/依赖: git,gcc/clang,cmake(3.1+),boost(1.61.0+),libgl,glew,sdl2,sdl_image,alsa,raknet,flatbuffers,gtest(optional)
 2. git clone https://github.com/Infinideastudio/NEWorld.git
 3. mkdir /build/cmake/
 4. cd /build/cmake/
