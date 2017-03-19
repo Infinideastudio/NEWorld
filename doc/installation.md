@@ -46,9 +46,10 @@ VS配置方法(64位)：
 您也可以使用CMake来编译NEWorld，但是我们推荐您安装[Visual Studio 2015](https://go.microsoft.com/fwlink/?LinkId=691978&clcid=0x407) (您也可以通过其它渠道获取VS2015)
 
 ### Linux
+To compile NEWorld on Linux
 
-1. You need have the dependences installed./您需要安装依赖。
-   dependences/依赖: git,gcc/clang,cmake(3.1+),boost(1.61.0+),libgl,glew,sdl2,sdl_image,alsa,raknet,flatbuffers,gtest(optional)
+1. You need to have the dependencies installed./您需要安装依赖。
+   dependencies/依赖: git,gcc/clang,cmake(3.1+),boost(1.61.0+),libgl,glew,sdl2,sdl_image,alsa,raknet,flatbuffers,gtest(optional)
 2. git clone https://github.com/Infinideastudio/NEWorld.git
 3. mkdir /build/cmake/
 4. cd /build/cmake/
