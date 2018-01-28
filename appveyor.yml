@@ -1,14 +1,13 @@
 version: '{build}'
 cache: c:\tools\vcpkg\installed\
 platform:
-  - x86
+  - Win32
   - x64
 configuration:
   - Debug
   - Release
 clone_folder: C:\NEWorld
 clone_depth: 1
-
 install:
   - vcpkg install bzip2 freetype glew glfw3 libpng zlib
 build:
