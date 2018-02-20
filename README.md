@@ -1,4 +1,5 @@
 # NEWorld
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a5a75bf5df934f6695e8e2bfa8993f79)](https://app.codacy.com/app/harrynull/NEWorld?utm_source=github.com&utm_medium=referral&utm_content=Infinideastudio/NEWorld&utm_campaign=badger)
 [![AppVeyor](https://img.shields.io/appveyor/ci/Infinideastudio/NEWorld/renew.svg?label=Windows)](https://ci.appveyor.com/project/Infinideastudio/NEWorld)
 [![Travis](https://img.shields.io/travis/Infinideastudio/NEWorld/renew.svg?label=Linux)](https://travis-ci.org/Infinideastudio/NEWorld)
 [![Join the chat at https://gitter.im/Infinideastudio/NEWorld](https://badges.gitter.im/Infinideastudio/NEWorld.svg)](https://gitter.im/Infinideastudio/NEWorld?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
