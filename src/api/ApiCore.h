@@ -34,21 +34,6 @@ extern "C" {
         int32_t x, y, z;
     };
 
-    enum NWplugintype {
-        nwPluginTypeNone = 0,
-        nwPluginTypeCore = 1 << 1,
-        nwPluginTypeGUI = 1 << 2,
-        nwPluginTypeCLI = 1 << 3,
-        nwPluginTypeCoreGUI = nwPluginTypeCore | nwPluginTypeGUI
-    };
-
-    struct NWplugindata {
-        const char* pluginName;
-        const char* authorName;
-        const char* internalName;
-        int32_t pluginType;
-    };
-
     struct NWblockdata {
         uint32_t id : 12;
         uint32_t brightness : 4;

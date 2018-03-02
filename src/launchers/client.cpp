@@ -18,24 +18,12 @@
 // 
 
 #include <string>
-#include "Common/Dylib.h"
-#include "Common/Logger.h"
+#include "Common/EventBus.h"
 #include "Common/Json/JsonHelper.h"
 
-typedef void NWAPICALL MainFunction(int, char**);
-
-#if defined(NEWORLD_TARGET_WINDOWS)
-constexpr const char* GUIDllName = "GUI.dll";
-#elif defined(NEWORLD_TARGET_MACOSX)
-    constexpr const char* GUIDllName = "libGUI.dylib";
-#elif defined(NEWORLD_TARGET_LINUX)
-    constexpr const char* GUIDllName = "libGUI.so";
-#endif
+int guiMain(int argc, char** argv);
 
 int main(int argc, char** argv) {
     getSettings();
-    Logger::addFileSink("./log/", "launcher");
-    const std::string file = argc == 1 ? GUIDllName : argv[1];
-    debugstream << "Load:" << file;
-    Library(file).get<MainFunction>("cmain")(argc, argv);
+    return CALL_AUTO(guiMain, argc, argv);
 }

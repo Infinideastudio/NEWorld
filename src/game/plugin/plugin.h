@@ -20,47 +20,27 @@
 #pragma once 
 
 #include <string>
-#include <utility>
 #include "Common/Utility.h"
 #include "Common/Dylib.h"
-#include <api/ApiCore.h>
+#include <vector>
 
 // Single plugin
 class Plugin : public NonCopyable {
 public:
-    explicit Plugin(const std::string& filename) : mStatus(-1) { loadFrom(filename); }
+    explicit Plugin(const std::string& filename) { loadFrom(filename); }
 
-    Plugin(Plugin&& rhs) noexcept : mLib(std::move(rhs.mLib)), mData(rhs.mData), mStatus(rhs.mStatus) {
-        rhs.mData = nullptr;
-        rhs.mStatus = -1;
-    }
+    Plugin(Plugin&&) = default;
+    
+    Plugin& operator = (Plugin&&) = default;
 
     ~Plugin() { unload(); }
 
-    int init(NWplugintype type);
-
-    // Get plugin data
-    const NWplugindata& getData() const { return *mData; }
-
-    // Get load status
-    int getStatus() const { return mStatus; }
-
-    // Is loaded
-    bool isLoaded() const { return mStatus == 0; }
-
     // Load plugin, return 0 for success
-    int loadFrom(const std::string& filename);
+    void loadFrom(const std::string& filename);
     // Unload plugin
     void unload();
-
-    bool isCompatible(NWplugintype type) const { return ((mData->pluginType & type) > 0); }
-
 private:
-    // Plugin DLL
     Library mLib;
-    // Plugin Data
-    const NWplugindata* mData;
-    // Load status
-    int mStatus = -1;
-    NWplugintype mLoadStat = nwPluginTypeNone;
+    PluginInfo mInfo;
 };
+

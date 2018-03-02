@@ -20,28 +20,7 @@
 #include "plugin.h"
 #include "Common/Logger.h"
 
-typedef NWplugindata* NWAPICALL GetInfoFunction();
-typedef void NWAPICALL InitFunction(NWplugintype);
-typedef void NWAPICALL UnloadFunction();
-
-int Plugin::init(NWplugintype type) {
-    InitFunction* init = nullptr;
-    if (mLib.isLoaded()) {
-        try {
-            init = mLib.get<InitFunction>("init");
-            auto mode = static_cast<NWplugintype>(type & (~mLoadStat));
-            if (init) init(mode);
-            else { warningstream << "Lack of init func!"; }
-        }
-        catch (std::exception& e) { warningstream << "Failed: unhandled exception: " << e.what(); }
-    }
-    else
-        return mStatus = 1; // Failed: could not load
-    mLoadStat = static_cast<NWplugintype>(mLoadStat | type);
-    return mStatus = 0;
-}
-
-int Plugin::loadFrom(const std::string& filename) {
+void Plugin::loadFrom(const std::string& filename) {
     GetInfoFunction* getinfo = nullptr;
     mLib.load(filename);
     if (mLib.isLoaded()) {

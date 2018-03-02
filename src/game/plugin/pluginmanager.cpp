@@ -22,15 +22,104 @@
 #include "Common/Filesystem.h"
 #include "Common/Logger.h"
 
-PluginManager::PluginManager() {
+struct Version
+{
+    int vMajor, vMinor, vRevision, vBuild;
+};
+
+struct DependencyInfo
+{
+    std::string uri;
+    Version vRequired;
+    bool isOptional;
+};
+
+using DependencyList = std::vector<DependencyInfo>;
+
+struct PluginInfo
+{
+    std::string name, author, uri;
+    Version thisVersion, conflictVersion;
+    DependencyList dependencies;
+};
+
+
+class PluginLoader
+{
+public:
+    PluginLoader()
+    {
+    }
+
+    void walk()
+    {
+        infostream << "Start Walking Module Dir...";
+        const filesystem::path path = "./Modules/";
+        if (filesystem::exists(path))
+        {
+            for (auto&& file : filesystem::directory_iterator(path))
+            {
+                auto suffix = file.path().extension().string();
+                strToLower(suffix);
+                if (suffix == ".nwModule")
+                {
+                    try
+                    {
+                        LoadingInfo info;
+                        info.lib.load(file.path().string());
+                        auto infoFunc = info.lib.get<const char*()>("nwModuleGetInfo");
+                        if (infoFunc)
+                            info.info = extractInfo(infoFunc());
+                        else
+                            throw std::runtime_error("Module lacks required function: const char* nwModuleGetInfo()");
+
+                    }
+                    catch(std::exception&)
+                    {
+                        warningstream << 
+                    }   
+                }
+            };
+        }
+        infostream << mMap.size() << " Modules(s) Founded";
+    }
+
+    PluginInfo extractInfo(const char* json)
+    {
+        
+    }
+
+private:
+    enum class Status
+    {
+        Pending,
+        Success,
+        Fail
+    };
+
+    struct LoadingInfo
+    {
+        PluginInfo info;
+        Library lib;
+        Status stat;
+    };
+
+    std::unordered_map<std::string, LoadingInfo> mMap;
+};
+
+PluginManager::PluginManager()
+{
     infostream << "Start to load plugins...";
     size_t counter = 0;
-    const filesystem::path path = "./plugins/";
-    if (filesystem::exists(path)) {
-        for (auto&& file : filesystem::directory_iterator(path)) {
+    const filesystem::path path = "./Modules/";
+    if (filesystem::exists(path))
+    {
+        for (auto&& file : filesystem::directory_iterator(path))
+        {
             auto suffix = file.path().extension().string();
             strToLower(suffix);
-            if (suffix == LibSuffix) {
+            if (suffix == LibSuffix)
+            {
                 debugstream << "Loading:" << file.path().string();
                 if (loadPlugin(file.path().string()))
                     counter++;
@@ -42,24 +131,19 @@ PluginManager::PluginManager() {
 
 PluginManager::~PluginManager() { mPlugins.clear(); }
 
-void PluginManager::initializePlugins(NWplugintype flag) {
-    for (auto&& plugin : mPlugins)
-        plugin.init(flag);
-}
+bool PluginManager::loadPlugin(const std::string& filename)
+{
+    auto& plugin = mPlugins.emplace_back(filename);
 
-bool PluginManager::loadPlugin(const std::string& filename) {
-    mPlugins.emplace_back(filename);
-    Plugin& plugin = mPlugins[mPlugins.size() - 1];
-
-    if (!plugin.isLoaded()) {
+    if (!plugin.isLoaded())
+    {
         mPlugins.pop_back();
         warningstream << "Failed to load plugin from \"" << filename << "\", skipping";
         return false;
     }
-    else {
-        infostream << "Loaded plugin \"" << plugin.getData().pluginName << "\"["
-            << plugin.getData().internalName
-            << "], authored by \"" << plugin.getData().authorName << "\"";
-        return true;
-    }
+    infostream << "Loaded plugin \"" << plugin.getData().pluginName << "\"["
+        << plugin.getData().internalName
+        << "], authored by \"" << plugin.getData().authorName << "\"";
+    plugin.init(nwPluginTypeCore);
+    return true;
 }

@@ -74,9 +74,9 @@ void registerRPCFunctions() {
 Server::Server(uint16_t port) {
     using namespace std::chrono;
     auto startTime = steady_clock::now();
-
+/*
     infostream << "Initializing nwcore plugins...";
-    context.plugins.initializePlugins(nwPluginTypeCore);
+    context.plugins.initializePlugins(nwPluginTypeCore);*/
 
     infostream << "Initializing server RPC at port " << port << "...";
     context.rpc.enableServer(port);

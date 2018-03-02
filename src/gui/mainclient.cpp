@@ -21,10 +21,11 @@
 #include <argagg.hpp>
 #include "game/context/nwcontext.hpp"
 #include <iostream>
+#include "Common/EventBus.h"
 
-extern "C" NWAPIEXPORT int NWAPICALL cmain(int, char**);
-
-int NWAPICALL cmain(int argc, char** argv) {
+namespace
+{    
+int guiMain(int argc, char** argv) {
     argagg::parser argparser{ {
         { "help",{ "-h", "--help" },
         "shows this help message", 0 },
@@ -47,3 +48,35 @@ int NWAPICALL cmain(int argc, char** argv) {
     NEWorld neworld;
     return 0;
 }
+
+}
+
+extern "C" {
+
+    NWAPIEXPORT NWplugindata* NWAPICALL getInfo() {
+        auto plugin = new NWplugindata();
+        plugin->pluginName = "NEWorld";
+        plugin->authorName = "INFINIDEAS";
+        plugin->internalName = "infinideas.neworld.gui";
+        plugin->pluginType = nwPluginTypeGUI;
+        return plugin;
+    }
+
+    // Main function
+    NWAPIEXPORT void NWAPICALL init(NWplugintype type) {
+        REGISTER_AUTO(guiMain);
+    }
+
+    // Unload function
+    NWAPIEXPORT void NWAPICALL unload() { }
+}
+
+constexpr const char* info = R"(
+{
+    "name" = "GUI",
+    "author" = "INFINIDEAS",
+    "uri" = "infinideas.neworld.gui",
+    "version" = "0.0.0.1",
+    "conflicts" = "0.0.0.0"
+}
+)";

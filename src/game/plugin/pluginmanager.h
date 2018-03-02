@@ -30,8 +30,6 @@ public:
     PluginManager();
     ~PluginManager();
 
-    void initializePlugins(NWplugintype flag);
-
     size_t getCount() const noexcept { return mPlugins.size(); }
 
 private:

@@ -112,7 +112,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\release\plugins\</OutDir>
+    <OutDir>$(SolutionDir)..\..\release\Modules\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -120,7 +120,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\release\plugins\</OutDir>
+    <OutDir>$(SolutionDir)..\..\release\Modules\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -128,7 +128,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\release\plugins\</OutDir>
+    <OutDir>$(SolutionDir)..\..\release\Modules\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -136,7 +136,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profiling|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\release\plugins\</OutDir>
+    <OutDir>$(SolutionDir)..\..\release\Modules\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -144,7 +144,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\release\plugins\</OutDir>
+    <OutDir>$(SolutionDir)..\..\release\Modules\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -152,7 +152,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profiling|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\release\plugins\</OutDir>
+    <OutDir>$(SolutionDir)..\..\release\Modules\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
