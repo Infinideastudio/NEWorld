@@ -46,9 +46,65 @@ struct PluginInfo
 
 class PluginLoader
 {
+    enum class Status
+    {
+        Pending,
+        Success,
+        Fail
+    };
+
+    struct LoadingInfo
+    {
+        PluginInfo info;
+        Library lib;
+        Status stat;
+    };
+
 public:
     PluginLoader()
     {
+    }
+
+    void loadPlugin(const std::string uri) { loadPlugin(mMap[uri]); }
+
+    void loadPlugin(LoadingInfo& inf) noexcept
+    {
+        if (inf.stat != Status::Pending) return;
+        try {
+            for (auto& x : inf.info.dependencies)
+            {
+                loadPlugin(x.uri);
+                try { 
+                    verify(x);
+                }
+                catch(std::exception& e)
+                {
+                    warningstream << "Module Denpendency " << x.uri << " Of: " << inf.info.uri << 
+                        " Failed For: " << e.what();
+                    throw;
+                }
+            }
+            const auto init = inf.lib.get<void()>("nwModuleInitialize");
+            if (init)
+                init();
+            else
+                infostream << "Module: " << inf.info.uri << "Has no init function, skipping initialization!";
+        }
+        catch(std::exception& e)
+        {
+            warningstream << "Module: " << inf.info.uri << " Failed For" << e.what(); 
+            inf.stat = Status::Fail;
+        }
+        catch(...)
+        {
+            warningstream << "Module: " << inf.info.uri << " Failed For Unknown Reason";
+            inf.stat = Status::Fail;
+        }
+    }
+
+    void verify(DependencyInfo& inf)
+    {
+        
     }
 
     void walk()
@@ -67,16 +123,16 @@ public:
                     {
                         LoadingInfo info;
                         info.lib.load(file.path().string());
-                        auto infoFunc = info.lib.get<const char*()>("nwModuleGetInfo");
+                        const auto infoFunc = info.lib.get<const char*()>("nwModuleGetInfo");
                         if (infoFunc)
                             info.info = extractInfo(infoFunc());
                         else
                             throw std::runtime_error("Module lacks required function: const char* nwModuleGetInfo()");
-
+                        mMap.emplace(info.info.uri, std::move(info));
                     }
-                    catch(std::exception&)
+                    catch(std::exception& e)
                     {
-                        warningstream << 
+                        warningstream << e.what();
                     }   
                 }
             };
@@ -90,20 +146,6 @@ public:
     }
 
 private:
-    enum class Status
-    {
-        Pending,
-        Success,
-        Fail
-    };
-
-    struct LoadingInfo
-    {
-        PluginInfo info;
-        Library lib;
-        Status stat;
-    };
-
     std::unordered_map<std::string, LoadingInfo> mMap;
 };
 
@@ -130,20 +172,3 @@ PluginManager::PluginManager()
 }
 
 PluginManager::~PluginManager() { mPlugins.clear(); }
-
-bool PluginManager::loadPlugin(const std::string& filename)
-{
-    auto& plugin = mPlugins.emplace_back(filename);
-
-    if (!plugin.isLoaded())
-    {
-        mPlugins.pop_back();
-        warningstream << "Failed to load plugin from \"" << filename << "\", skipping";
-        return false;
-    }
-    infostream << "Loaded plugin \"" << plugin.getData().pluginName << "\"["
-        << plugin.getData().internalName
-        << "], authored by \"" << plugin.getData().authorName << "\"";
-    plugin.init(nwPluginTypeCore);
-    return true;
-}
