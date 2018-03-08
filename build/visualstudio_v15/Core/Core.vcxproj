@@ -37,7 +37,6 @@
     <ClCompile Include="..\..\..\src\Common\EventBus.cpp" />
     <ClCompile Include="..\..\..\src\Common\StringUtils.cpp" />
     <ClCompile Include="..\..\..\src\game\context\nwcontext.cpp" />
-    <ClCompile Include="..\..\..\src\game\plugin\plugin.cpp" />
     <ClCompile Include="..\..\..\src\game\plugin\pluginmanager.cpp" />
     <ClCompile Include="..\..\..\src\server\nwserverapi.cpp" />
     <ClCompile Include="..\..\..\src\server\server.cpp" />
@@ -68,7 +67,6 @@
     <ClInclude Include="..\..\..\src\Common\RPC\RPC.h" />
     <ClInclude Include="..\..\..\src\Common\StringUtils.h" />
     <ClInclude Include="..\..\..\src\game\context\nwcontext.hpp" />
-    <ClInclude Include="..\..\..\src\game\plugin\plugin.h" />
     <ClInclude Include="..\..\..\src\game\plugin\pluginmanager.h" />
     <ClInclude Include="..\..\..\src\server\server.h" />
     <ClInclude Include="..\..\..\src\sync_service\chunkservice.hpp" />

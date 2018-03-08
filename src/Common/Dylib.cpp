@@ -19,6 +19,7 @@
 
 #include "Dylib.h"
 #include <cassert>
+#include <sstream>
 
 #ifdef NEWORLD_TARGET_WINDOWS
 
@@ -32,8 +33,11 @@ namespace {
     Library::HandleType loadLibrary(const std::string& filename, bool& success) {
         const auto handle = LoadLibraryA(filename.c_str());
         success = handle != nullptr;
-        /*if (!success)
-            warningstream << "Failed to load " << filename << ". Error code:" << GetLastError();*/
+        if (!success) {
+            std::stringstream ss;
+            ss << "Failed to load " << filename << ". Error code:" << GetLastError();
+            throw std::runtime_error(ss.str());
+        }
         return handle;
     }
 

@@ -61,9 +61,6 @@
     <ClCompile Include="..\..\..\src\sync_service\world\nwchunk.cpp">
       <Filter>Source\Sync Service\world</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\game\plugin\plugin.cpp">
-      <Filter>Source\Game\plugin</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\client\player.cpp">
       <Filter>Source\Client</Filter>
     </ClCompile>
@@ -128,9 +125,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\sync_service\world\object.h">
       <Filter>Source\Sync Service\world</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\game\plugin\plugin.h">
-      <Filter>Source\Game\plugin</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\player.h">
       <Filter>Source\Client</Filter>

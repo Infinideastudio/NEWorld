@@ -52,31 +52,23 @@ int guiMain(int argc, char** argv) {
 }
 
 extern "C" {
-
-    NWAPIEXPORT NWplugindata* NWAPICALL getInfo() {
-        auto plugin = new NWplugindata();
-        plugin->pluginName = "NEWorld";
-        plugin->authorName = "INFINIDEAS";
-        plugin->internalName = "infinideas.neworld.gui";
-        plugin->pluginType = nwPluginTypeGUI;
-        return plugin;
+    NWAPIEXPORT const char* NWAPICALL nwModuleGetInfo() {
+        return  R"(
+{
+    "name" : "GUI",
+    "author" : "INFINIDEAS",
+    "uri" : "infinideas.neworld.gui",
+    "version" : [0, 0, 1, 0],
+    "conflicts" : [0, 0, 0 ,0]
+}
+)";
     }
 
     // Main function
-    NWAPIEXPORT void NWAPICALL init(NWplugintype type) {
+    NWAPIEXPORT void NWAPICALL nwModuleInitialize() {
         REGISTER_AUTO(guiMain);
     }
 
     // Unload function
-    NWAPIEXPORT void NWAPICALL unload() { }
+    NWAPIEXPORT void NWAPICALL nwModuleFinalize() { }
 }
-
-constexpr const char* info = R"(
-{
-    "name" = "GUI",
-    "author" = "INFINIDEAS",
-    "uri" = "infinideas.neworld.gui",
-    "version" = "0.0.0.1",
-    "conflicts" = "0.0.0.0"
-}
-)";

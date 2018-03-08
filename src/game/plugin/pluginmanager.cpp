@@ -21,14 +21,33 @@
 #include "Common/StringUtils.h"
 #include "Common/Filesystem.h"
 #include "Common/Logger.h"
+#include "Common/Json/JsonHelper.h"
 
-struct Version
-{
+struct Version {
     int vMajor, vMinor, vRevision, vBuild;
 };
 
-struct DependencyInfo
-{
+constexpr bool operator >= (const Version& l, const Version& r) noexcept {
+    if (l.vMajor < r.vMajor) return false;
+    if (l.vMajor == r.vMajor && l.vMinor < r.vMinor) return false;
+    if (l.vMinor == r.vMinor && l.vRevision < r.vRevision) return false;
+    if (l.vRevision == r.vRevision && l.vBuild < r.vBuild) return false;
+    return false;
+}
+
+constexpr bool operator <= (const Version& l, const Version& r) noexcept {
+    if (l.vMajor > r.vMajor) return false;
+    if (l.vMajor == r.vMajor && l.vMinor > r.vMinor) return false;
+    if (l.vMinor == r.vMinor && l.vRevision > r.vRevision) return false;
+    if (l.vRevision == r.vRevision && l.vBuild > r.vBuild) return false;
+    return false;
+}
+
+constexpr bool operator == (const Version& l, const Version& r) noexcept {
+    return (l.vMajor == r.vMajor) && (l.vMajor == r.vMajor) && (l.vMinor == r.vMinor) && (l.vRevision == r.vRevision);
+}
+
+struct DependencyInfo {
     std::string uri;
     Version vRequired;
     bool isOptional;
@@ -36,139 +55,154 @@ struct DependencyInfo
 
 using DependencyList = std::vector<DependencyInfo>;
 
-struct PluginInfo
-{
+struct PluginInfo {
     std::string name, author, uri;
     Version thisVersion, conflictVersion;
     DependencyList dependencies;
 };
 
+class DefaultPluginObject : public PluginObject {
+public:
+    DefaultPluginObject(Library& lib) : mLib(lib) {
+        const auto init = lib.get<void NWAPICALL()>("nwModuleInitialize");
+        if (init)
+            init();
+        else
+            infostream << "Module Has no init function, skipping initialization!";
+    }
+    
+    ~DefaultPluginObject() {
+        const auto finalize = mLib.get<void NWAPICALL()>("nwModuleFinalize");
+        if (finalize)
+            finalize();
+        else
+            infostream << "Module Has no unload function, skipping finalization!";
+    }
+private:
+    Library& mLib;
+};
 
-class PluginLoader
-{
-    enum class Status
-    {
+class PluginLoader {
+    enum class Status {
         Pending,
         Success,
         Fail
     };
 
-    struct LoadingInfo
-    {
+    struct LoadingInfo {
         PluginInfo info;
         Library lib;
         Status stat;
     };
 
 public:
-    PluginLoader()
-    {
+    PluginLoader() {
+        walk();
+        for (auto&& x : mMap) loadPlugin(x.second);
     }
 
     void loadPlugin(const std::string uri) { loadPlugin(mMap[uri]); }
 
-    void loadPlugin(LoadingInfo& inf) noexcept
-    {
+    void loadPlugin(LoadingInfo& inf) noexcept {
         if (inf.stat != Status::Pending) return;
         try {
-            for (auto& x : inf.info.dependencies)
-            {
+            infostream << "Loading Module:" << inf.info.uri;
+            for (auto& x : inf.info.dependencies) {
                 loadPlugin(x.uri);
-                try { 
+                try {
                     verify(x);
                 }
-                catch(std::exception& e)
-                {
-                    warningstream << "Module Denpendency " << x.uri << " Of: " << inf.info.uri << 
+                catch (std::exception& e) {
+                    warningstream << "Module Denpendency " << x.uri << " Of: " << inf.info.uri <<
                         " Failed For: " << e.what();
-                    throw;
+                    if (x.isOptional)
+                        warningstream << "Dependency Skipped For It Is Optional";
+                    else
+                        throw;
                 }
             }
-            const auto init = inf.lib.get<void()>("nwModuleInitialize");
-            if (init)
-                init();
-            else
-                infostream << "Module: " << inf.info.uri << "Has no init function, skipping initialization!";
+            auto object = std::make_unique<DefaultPluginObject>(inf.lib);
+            // No Error, Load Success
+            inf.stat = Status::Success;
+            mResult[inf.info.uri].lib = std::move(inf.lib);
+            mResult[inf.info.uri].object = std::move(object);
         }
-        catch(std::exception& e)
-        {
-            warningstream << "Module: " << inf.info.uri << " Failed For" << e.what(); 
+        catch (std::exception& e) {
+            warningstream << "Module: " << inf.info.uri << " Failed For" << e.what();
             inf.stat = Status::Fail;
         }
-        catch(...)
-        {
+        catch (...) {
             warningstream << "Module: " << inf.info.uri << " Failed For Unknown Reason";
             inf.stat = Status::Fail;
         }
     }
 
-    void verify(DependencyInfo& inf)
-    {
-        
+    void verify(DependencyInfo& inf) {
+        auto& depStat = mMap[inf.uri];
+        if (depStat.stat != Status::Success) throw std::runtime_error("Dependency Load Failure");
+        if (!(depStat.info.thisVersion >= inf.vRequired && depStat.info.conflictVersion <= inf.vRequired))
+            throw std::runtime_error("Dependency Version Mismatch");
     }
 
-    void walk()
-    {
+    void walk() {
         infostream << "Start Walking Module Dir...";
         const filesystem::path path = "./Modules/";
-        if (filesystem::exists(path))
-        {
-            for (auto&& file : filesystem::directory_iterator(path))
-            {
-                auto suffix = file.path().extension().string();
-                strToLower(suffix);
-                if (suffix == ".nwModule")
-                {
-                    try
-                    {
+        if (filesystem::exists(path)) {
+            for (auto&& file : filesystem::directory_iterator(path)) {
+                if (file.path().extension().string() == ".nwModule") {
+                    try {
                         LoadingInfo info;
                         info.lib.load(file.path().string());
-                        const auto infoFunc = info.lib.get<const char*()>("nwModuleGetInfo");
+                        const auto infoFunc = info.lib.get<const char* NWAPICALL()>("nwModuleGetInfo");
                         if (infoFunc)
                             info.info = extractInfo(infoFunc());
                         else
-                            throw std::runtime_error("Module lacks required function: const char* nwModuleGetInfo()");
+                            throw std::runtime_error("Module:" + file.path().filename().string() + "lacks required function: const char* nwModuleGetInfo()");
                         mMap.emplace(info.info.uri, std::move(info));
                     }
-                    catch(std::exception& e)
-                    {
+                    catch (std::exception& e) {
                         warningstream << e.what();
-                    }   
+                    }
                 }
             };
         }
         infostream << mMap.size() << " Modules(s) Founded";
     }
 
-    PluginInfo extractInfo(const char* json)
-    {
-        
+    PluginInfo extractInfo(const char* json) {
+        PluginInfo ret;
+        Json js(json);
+        ret.author = getJsonValue<std::string>(js["author"]);
+        ret.name = getJsonValue<std::string>(js["name"]);
+        ret.uri = getJsonValue<std::string>(js["uri"]);
+        auto curVer = getJsonValue<std::vector<int>>(js["version"]);
+        ret.thisVersion = { curVer[0], curVer[1] ,curVer.size() >= 3 ? curVer[2] : 0, curVer.size() >= 4 ? curVer[3] : 0 };
+        auto confVer = getJsonValue<std::vector<int>>(js["conflictVersion"]);
+        ret.conflictVersion = { curVer.size() >= 1 ? curVer[0] : 0, curVer.size() >= 2 ? curVer[1] : 0,
+            curVer.size() >= 3 ? curVer[2] : 0, curVer.size() >= 4 ? curVer[3] : 0 };
+        if (auto& deps = js["dependencies"]; !deps.is_null()) {
+            for (auto&& x : deps) {
+                DependencyInfo info;
+                info.uri = getJsonValue<std::string>(x["uri"]);
+                auto reqVer = getJsonValue<std::vector<int>>(x["conflictVersion"]);
+                info.vRequired = { curVer.size() >= 1 ? curVer[0] : 0, curVer.size() >= 2 ? curVer[1] : 0,
+                    curVer.size() >= 3 ? curVer[2] : 0, curVer.size() >= 4 ? curVer[3] : 0 };
+                info.isOptional = getJsonValue<bool>(x["isOptonal"], false);
+                ret.dependencies.push_back(std::move(info));
+            }
+        }
+        return ret;
     }
 
+    auto&& result()&& { return std::move(mResult); }
 private:
     std::unordered_map<std::string, LoadingInfo> mMap;
+    std::map<std::string, PluginPair> mResult;
 };
 
-PluginManager::PluginManager()
-{
+PluginManager::PluginManager() {
     infostream << "Start to load plugins...";
-    size_t counter = 0;
-    const filesystem::path path = "./Modules/";
-    if (filesystem::exists(path))
-    {
-        for (auto&& file : filesystem::directory_iterator(path))
-        {
-            auto suffix = file.path().extension().string();
-            strToLower(suffix);
-            if (suffix == LibSuffix)
-            {
-                debugstream << "Loading:" << file.path().string();
-                if (loadPlugin(file.path().string()))
-                    counter++;
-            }
-        };
-    }
-    infostream << counter << " plugin(s) loaded";
+    mPlugins = std::move(PluginLoader()).result();
 }
 
-PluginManager::~PluginManager() { mPlugins.clear(); }
+PluginManager::~PluginManager() = default;

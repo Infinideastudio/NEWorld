@@ -17,26 +17,32 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef PLUGINMANAGER_H_
-#define PLUGINMANAGER_H_
+#pragma once
 
+#include "Common/Config.h"
+#include "Common/Utility.h"
+#include "Common/Dylib.h"
 #include <string>
-#include <vector>
-#include "plugin.h"
+#include <memory>
+#include <map>
+
+class PluginObject {
+public:
+    virtual ~PluginObject() {}
+};
+
+struct PluginPair {
+    Library lib;
+    std::unique_ptr<PluginObject> object;
+    ~PluginPair() { object.release(); lib.unload(); }
+};
 
 // Plugin system
 class NWCOREAPI PluginManager : public NonCopyable {
 public:
     PluginManager();
     ~PluginManager();
-
     size_t getCount() const noexcept { return mPlugins.size(); }
-
 private:
-    // Load single plugin
-    bool loadPlugin(const std::string& filename);
-
-    std::vector<Plugin> mPlugins;
+    std::map<std::string, PluginPair> mPlugins;
 };
-
-#endif // !PLUGINMANAGER_H_

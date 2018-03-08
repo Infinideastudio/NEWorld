@@ -188,7 +188,6 @@ GameScene::GameScene(const std::string& name, const Window& window):
 
     // Initialize plugins
     infostream << "Initializing GUI plugins...";
-    context.plugins.initializePlugins(nwPluginTypeCoreGUI);
 
     // Initialize update events
     mCurrentWorld->registerChunkTasks(chunkService, mPlayer);
