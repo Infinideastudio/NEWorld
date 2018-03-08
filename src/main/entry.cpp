@@ -44,9 +44,8 @@ extern "C" {
     "author" : "INFINIDEAS",
     "uri" : "infinideas.neworld.main",
     "version" : [0, 0, 1, 0],
-    "conflicts" : [0, 0, 0 ,0],
     "dependencies" : [
-        { "uri" : "infinideas.neworld.gui" }
+        { "uri" : "infinideas.neworld.gui", "required" : [0, 0, 1, 0] }
     ]
 }
 )";

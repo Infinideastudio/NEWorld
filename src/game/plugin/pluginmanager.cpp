@@ -32,7 +32,7 @@ constexpr bool operator >= (const Version& l, const Version& r) noexcept {
     if (l.vMajor == r.vMajor && l.vMinor < r.vMinor) return false;
     if (l.vMinor == r.vMinor && l.vRevision < r.vRevision) return false;
     if (l.vRevision == r.vRevision && l.vBuild < r.vBuild) return false;
-    return false;
+    return true;
 }
 
 constexpr bool operator <= (const Version& l, const Version& r) noexcept {
@@ -40,11 +40,19 @@ constexpr bool operator <= (const Version& l, const Version& r) noexcept {
     if (l.vMajor == r.vMajor && l.vMinor > r.vMinor) return false;
     if (l.vMinor == r.vMinor && l.vRevision > r.vRevision) return false;
     if (l.vRevision == r.vRevision && l.vBuild > r.vBuild) return false;
-    return false;
+    return true;
 }
 
 constexpr bool operator == (const Version& l, const Version& r) noexcept {
     return (l.vMajor == r.vMajor) && (l.vMajor == r.vMajor) && (l.vMinor == r.vMinor) && (l.vRevision == r.vRevision);
+}
+
+constexpr bool operator < (const Version& l, const Version& r) noexcept {
+    return !(l >= r);
+}
+
+constexpr bool operator > (const Version& l, const Version& r) noexcept {
+    return !(l <= r);
 }
 
 struct DependencyInfo {
@@ -98,7 +106,8 @@ class PluginLoader {
 public:
     PluginLoader() {
         walk();
-        for (auto&& x : mMap) loadPlugin(x.second);
+        for (auto&& x : mMap)
+            loadPlugin(x.second);
     }
 
     void loadPlugin(const std::string uri) { loadPlugin(mMap[uri]); }
@@ -106,7 +115,7 @@ public:
     void loadPlugin(LoadingInfo& inf) noexcept {
         if (inf.stat != Status::Pending) return;
         try {
-            infostream << "Loading Module:" << inf.info.uri;
+            infostream << "Loading Module: " << inf.info.uri;
             for (auto& x : inf.info.dependencies) {
                 loadPlugin(x.uri);
                 try {
@@ -128,7 +137,7 @@ public:
             mResult[inf.info.uri].object = std::move(object);
         }
         catch (std::exception& e) {
-            warningstream << "Module: " << inf.info.uri << " Failed For" << e.what();
+            warningstream << "Module: " << inf.info.uri << " Failed For: " << e.what();
             inf.stat = Status::Fail;
         }
         catch (...) {
@@ -140,8 +149,9 @@ public:
     void verify(DependencyInfo& inf) {
         auto& depStat = mMap[inf.uri];
         if (depStat.stat != Status::Success) throw std::runtime_error("Dependency Load Failure");
-        if (!(depStat.info.thisVersion >= inf.vRequired && depStat.info.conflictVersion <= inf.vRequired))
-            throw std::runtime_error("Dependency Version Mismatch");
+        if (inf.vRequired > depStat.info.thisVersion) throw std::runtime_error("Dependency Version Mismatch : Version Unsupported");
+        if (inf.vRequired < depStat.info.conflictVersion)
+            warningstream << "Dependency Version Mismatch : Confilict. Module May Behave Strangely. Use with care";
     }
 
     void walk() {
@@ -157,7 +167,8 @@ public:
                         if (infoFunc)
                             info.info = extractInfo(infoFunc());
                         else
-                            throw std::runtime_error("Module:" + file.path().filename().string() + "lacks required function: const char* nwModuleGetInfo()");
+                            throw std::runtime_error("Module:" + file.path().filename().string() + " lacks required function: const char* nwModuleGetInfo()");
+                        info.stat = Status::Pending;
                         mMap.emplace(info.info.uri, std::move(info));
                     }
                     catch (std::exception& e) {
@@ -169,25 +180,26 @@ public:
         infostream << mMap.size() << " Modules(s) Founded";
     }
 
+    Version extractVersion(Json& json) {
+        auto ver = getJsonValue<std::vector<int>>(json);
+        return { ver.size() >= 1 ? ver[0] : 0, ver.size() >= 2 ? ver[1] : 0,
+            ver.size() >= 3 ? ver[2] : 0, ver.size() >= 4 ? ver[3] : 0 };
+    }
+
     PluginInfo extractInfo(const char* json) {
         PluginInfo ret;
-        Json js(json);
+        auto js = Json::parse(json);
         ret.author = getJsonValue<std::string>(js["author"]);
         ret.name = getJsonValue<std::string>(js["name"]);
         ret.uri = getJsonValue<std::string>(js["uri"]);
-        auto curVer = getJsonValue<std::vector<int>>(js["version"]);
-        ret.thisVersion = { curVer[0], curVer[1] ,curVer.size() >= 3 ? curVer[2] : 0, curVer.size() >= 4 ? curVer[3] : 0 };
-        auto confVer = getJsonValue<std::vector<int>>(js["conflictVersion"]);
-        ret.conflictVersion = { curVer.size() >= 1 ? curVer[0] : 0, curVer.size() >= 2 ? curVer[1] : 0,
-            curVer.size() >= 3 ? curVer[2] : 0, curVer.size() >= 4 ? curVer[3] : 0 };
+        ret.thisVersion = extractVersion(js["version"]);
+        ret.conflictVersion = extractVersion(js["conflictVersion"]);
         if (auto& deps = js["dependencies"]; !deps.is_null()) {
             for (auto&& x : deps) {
                 DependencyInfo info;
                 info.uri = getJsonValue<std::string>(x["uri"]);
-                auto reqVer = getJsonValue<std::vector<int>>(x["conflictVersion"]);
-                info.vRequired = { curVer.size() >= 1 ? curVer[0] : 0, curVer.size() >= 2 ? curVer[1] : 0,
-                    curVer.size() >= 3 ? curVer[2] : 0, curVer.size() >= 4 ? curVer[3] : 0 };
-                info.isOptional = getJsonValue<bool>(x["isOptonal"], false);
+                info.vRequired = extractVersion(x["required"]);
+                info.isOptional = getJsonValue<bool>(x["optional"], false);
                 ret.dependencies.push_back(std::move(info));
             }
         }

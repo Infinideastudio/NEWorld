@@ -23,33 +23,34 @@
 #include <iostream>
 #include "Common/EventBus.h"
 
-namespace
-{    
-int guiMain(int argc, char** argv) {
-    argagg::parser argparser{ {
-        { "help",{ "-h", "--help" },
-        "shows this help message", 0 },
+namespace {
+    int guiMain(int argc, char** argv) {
+        argagg::parser argparser{ {
+            { "help",{ "-h", "--help" },
+            "shows this help message", 0 },
         { "multiplayer-client",{ "-c", "--client" },
         "Start the game as a client of multiplayer session", 0 }
-        } };
-    try {
-        context.args = argparser.parse(argc, argv);
-    }
-    catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-        return -1;
-    }
-    if (context.args["help"]) {
-        argagg::fmt_ostream fmt(std::cerr);
-        fmt << "Usage:" << std::endl
-            << argparser;
+            } };
+        try {
+            context.args = argparser.parse(argc, argv);
+        }
+        catch (const std::exception& e) {
+            std::cerr << e.what() << std::endl;
+            return -1;
+        }
+        if (context.args["help"]) {
+            argagg::fmt_ostream fmt(std::cerr);
+            fmt << "Usage:" << std::endl
+                << argparser;
+            return 0;
+        }
+        NEWorld neworld;
         return 0;
     }
-    NEWorld neworld;
-    return 0;
-}
 
 }
+
+void registerGUIAPI();
 
 extern "C" {
     NWAPIEXPORT const char* NWAPICALL nwModuleGetInfo() {
@@ -58,17 +59,17 @@ extern "C" {
     "name" : "GUI",
     "author" : "INFINIDEAS",
     "uri" : "infinideas.neworld.gui",
-    "version" : [0, 0, 1, 0],
-    "conflicts" : [0, 0, 0 ,0]
+    "version" : [0, 0, 1, 0]
 }
 )";
     }
 
     // Main function
     NWAPIEXPORT void NWAPICALL nwModuleInitialize() {
+        registerGUIAPI();
         REGISTER_AUTO(guiMain);
     }
 
     // Unload function
-    NWAPIEXPORT void NWAPICALL nwModuleFinalize() { }
+    NWAPIEXPORT void NWAPICALL nwModuleFinalize() {}
 }
