@@ -31,6 +31,7 @@
     <ClCompile Include="..\..\..\src\Common\Console.cpp" />
     <ClCompile Include="..\..\..\src\Common\Debug.cpp" />
     <ClCompile Include="..\..\..\src\Common\Dylib.cpp" />
+    <ClCompile Include="..\..\..\src\Common\Filesystem.cpp" />
     <ClCompile Include="..\..\..\src\Common\Json\JsonHelper.cpp" />
     <ClCompile Include="..\..\..\src\Common\Logger.cpp" />
     <ClCompile Include="..\..\..\src\Common\EventBus.cpp" />

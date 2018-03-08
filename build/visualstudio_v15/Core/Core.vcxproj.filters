@@ -97,6 +97,9 @@
     <ClCompile Include="..\..\..\src\Common\EventBus.cpp">
       <Filter>Source\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\Common\Filesystem.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\game\context\nwcontext.hpp">
