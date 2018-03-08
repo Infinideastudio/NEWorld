@@ -19,18 +19,19 @@
 
 #pragma once
 
+#include <boost/predef.h>
+
 // Compiler flags
-#ifdef _MSVC_LANG
+#ifdef BOOST_COMP_MSVC
 #define NEWORLD_COMPILER_MSVC
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)
 #endif
 
 // OS flags
-#if defined _WIN32
+#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
 #define NEWORLD_TARGET_WINDOWS
-#define NEWORLD_USE_WINAPI // Windows native API
-#elif defined __MACOSX__ || (defined __APPLE__ && defined __GNUC__)
+#elif (BOOST_OS_MACOS || BOOST_OS_IOS)
     #define NEWORLD_TARGET_MACOSX
     #define NEWORLD_TARGET_POSIX
 #else
