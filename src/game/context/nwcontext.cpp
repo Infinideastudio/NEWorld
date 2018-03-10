@@ -1,5 +1,5 @@
 // 
-// nwcore: nwcontext.cpp
+// Core: nwcontext.cpp
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 

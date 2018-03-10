@@ -70,7 +70,7 @@ public:
         if (state[SDL_SCANCODE_D])
             mPlayer.accelerate(Vec3d(speed, 0.0, 0.0));
         if (state[SDL_SCANCODE_E])
-            mPlayer.accelerate(Vec3d(0.0, 0.0, -speed*10));
+            mPlayer.accelerate(Vec3d(0.0, 0.0, -speed * 10));
         if (state[SDL_SCANCODE_SPACE])
             mPlayer.accelerate(Vec3d(0.0, 2 * speed, 0.0));
 #ifdef NEWORLD_TARGET_MACOSX
@@ -102,9 +102,7 @@ public:
                         break;
                     }
                 }
-                catch (std::out_of_range&) {
-                    break;
-                }
+                catch (std::out_of_range&) { break; }
             }
         }
 
@@ -129,14 +127,11 @@ private:
     size_t& mUpdateCounter;
 };
 
-static bool isClient() {
-    return context.args["multiplayer-client"];
-}
+static bool isClient() { return context.args["multiplayer-client"]; }
 
-size_t GameScene::requestWorld()
-{
+size_t GameScene::requestWorld() {
     // TODO: change this
-    
+
     if (isClient()) {
         auto& client = context.rpc.getClient();
         debugstream << "Connecting the server for world information...";
@@ -147,12 +142,12 @@ size_t GameScene::requestWorld()
         }
         debugstream << "Worlds ids fetched from the server: " << worldIds;
         auto worldInfo = client.call("getWorldInfo", worldIds[0])
-                        .as<std::unordered_map<std::string, std::string>>();
+                               .as<std::unordered_map<std::string, std::string>>();
         debugstream << "World info fetched from the server: "
-                       "name: " << worldInfo["name"];
+            "name: " << worldInfo["name"];
         chunkService.getWorlds().addWorld(worldInfo["name"]);
     }
-    
+
     // It's a simple wait-until-we-have-a-world procedure now.
     // But it should be changed into get player information
     // and get the world id from it.
@@ -184,7 +179,8 @@ GameScene::GameScene(const std::string& name, const Window& window):
         getJsonValue<unsigned short>(getSettings()["server"]["port"], 31111));
 
     mCurrentWorld = chunkService.getWorlds().getWorld(requestWorld());
-    mWorldRenderer = std::make_unique<WorldRenderer>(*mCurrentWorld, getJsonValue<size_t>(getSettings()["gui"]["render_distance"], 3));
+    mWorldRenderer = std::make_unique<WorldRenderer>(*mCurrentWorld,
+                                                     getJsonValue<size_t>(getSettings()["gui"]["render_distance"], 3));
 
     // Initialize plugins
     infostream << "Initializing GUI plugins...";
@@ -208,44 +204,41 @@ GameScene::GameScene(const std::string& name, const Window& window):
         "Debug", nk_rect(20, 20, 300, 300),
         NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_SCALABLE |
         NK_WINDOW_CLOSABLE | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE, [this](nk_context* ctx) {
+            if (mRateCounterScheduler.isDue()) {
+                // Update FPS & UPS
+                mFpsLatest = mFpsCounter;
+                mUpsLatest = mUpsCounter;
+                mFpsCounter = 0;
+                mUpsCounter = 0;
+                mRateCounterScheduler.increaseTimer();
+            }
 
-        if (mRateCounterScheduler.isDue()) {
-            // Update FPS & UPS
-            mFpsLatest = mFpsCounter;
-            mUpsLatest = mUpsCounter;
-            mFpsCounter = 0;
-            mUpsCounter = 0;
-            mRateCounterScheduler.increaseTimer();
-        }
-        
-        nk_layout_row_dynamic(ctx, 15, 1);
-        nk_labelf(ctx, NK_TEXT_LEFT, "NEWorld %s (v%u)", NEWorldVersionName, NEWorldVersion);
-        nk_labelf(ctx, NK_TEXT_LEFT, "FPS %zu, UPS %zu", mFpsLatest, mUpsLatest);
-        nk_labelf(ctx, NK_TEXT_LEFT, "Position: x %.1f y %.1f z %.1f",
-            mPlayer.getPosition().x, mPlayer.getPosition().y, mPlayer.getPosition().z);
-        nk_labelf(ctx, NK_TEXT_LEFT, "GUI Widgets: %zu", mGUIWidgets.getSize());
-        nk_labelf(ctx, NK_TEXT_LEFT, "Chunks Loaded: %zu", mCurrentWorld->getChunkCount());
-        auto& dispatcher = chunkService.getTaskDispatcher();
-        /*nk_labelf(ctx, NK_TEXT_LEFT, "Tasks: Next read %zu write %zu render %zu",
-            dispatcher.getNextReadOnlyTaskCount(), dispatcher.getNextReadWriteTaskCount(),
-            dispatcher.getNextRenderTaskCount());*/
-        nk_labelf(ctx, NK_TEXT_LEFT, "Update threads workload:");
-        for(size_t i = 0; i<dispatcher.getTimeUsed().size();++i) {
-            auto time = std::max(dispatcher.getTimeUsed()[i], 0ll);
-            nk_labelf(ctx, NK_TEXT_LEFT, "Thread %zu: %lld ms (%.1f)%", i, time, time / 33.3333);
-        }
-        nk_labelf(ctx, NK_TEXT_LEFT, "Regular Tasks: read %zu write %zu",
-            dispatcher.getRegularReadOnlyTaskCount(),
-            dispatcher.getRegularReadWriteTaskCount());
-    }));
+            nk_layout_row_dynamic(ctx, 15, 1);
+            nk_labelf(ctx, NK_TEXT_LEFT, "NEWorld %s (v%u)", NEWorldVersionName, NEWorldVersion);
+            nk_labelf(ctx, NK_TEXT_LEFT, "FPS %zu, UPS %zu", mFpsLatest, mUpsLatest);
+            nk_labelf(ctx, NK_TEXT_LEFT, "Position: x %.1f y %.1f z %.1f",
+                      mPlayer.getPosition().x, mPlayer.getPosition().y, mPlayer.getPosition().z);
+            nk_labelf(ctx, NK_TEXT_LEFT, "GUI Widgets: %zu", mGUIWidgets.getSize());
+            nk_labelf(ctx, NK_TEXT_LEFT, "Chunks Loaded: %zu", mCurrentWorld->getChunkCount());
+            auto& dispatcher = chunkService.getTaskDispatcher();
+            /*nk_labelf(ctx, NK_TEXT_LEFT, "Tasks: Next read %zu write %zu render %zu",
+                dispatcher.getNextReadOnlyTaskCount(), dispatcher.getNextReadWriteTaskCount(),
+                dispatcher.getNextRenderTaskCount());*/
+            nk_labelf(ctx, NK_TEXT_LEFT, "Update threads workload:");
+            for (size_t i = 0; i < dispatcher.getTimeUsed().size(); ++i) {
+                auto time = std::max(dispatcher.getTimeUsed()[i], 0ll);
+                nk_labelf(ctx, NK_TEXT_LEFT, "Thread %zu: %lld ms (%.1f)%", i, time, time / 33.3333);
+            }
+            nk_labelf(ctx, NK_TEXT_LEFT, "Regular Tasks: read %zu write %zu",
+                      dispatcher.getRegularReadOnlyTaskCount(),
+                      dispatcher.getRegularReadWriteTaskCount());
+        }));
 
     chunkService.getTaskDispatcher().start();
     infostream << "Game initialized!";
 }
 
-GameScene::~GameScene() {
-    chunkService.getTaskDispatcher().stop();
-}
+GameScene::~GameScene() { chunkService.getTaskDispatcher().stop(); }
 
 void GameScene::render() {
     chunkService.getTaskDispatcher().processRenderTasks();

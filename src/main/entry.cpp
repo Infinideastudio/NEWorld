@@ -38,7 +38,8 @@ int32_t registerBlock(const char* name, bool solid, bool translucent, bool opaqu
 extern "C" {
 
     NWAPIEXPORT const char* NWAPICALL nwModuleGetInfo() {
-        return  R"(
+        return
+            R"(
 {
     "name" : "Main",
     "author" : "INFINIDEAS",
@@ -68,11 +69,11 @@ extern "C" {
             CALL_AUTO(nwRegisterTexture, "./res/blocks/sand.png"),
             CALL_AUTO(nwRegisterTexture, "./res/blocks/water.png")
         };
-        NWblocktexture grass{ id[1], id[1], id[0], id[2], id[1], id[1] };
-        NWblocktexture rock{ id[3], id[3], id[3], id[3], id[3], id[3] };
-        NWblocktexture dirt{ id[2], id[2], id[2], id[2], id[2], id[2] };
-        NWblocktexture sand{ id[4], id[4], id[4], id[4], id[4], id[4] };
-        NWblocktexture water{ id[5], id[5], id[5], id[5], id[5], id[5] };
+        NWblocktexture grass{id[1], id[1], id[0], id[2], id[1], id[1]};
+        NWblocktexture rock{id[3], id[3], id[3], id[3], id[3], id[3]};
+        NWblocktexture dirt{id[2], id[2], id[2], id[2], id[2], id[2]};
+        NWblocktexture sand{id[4], id[4], id[4], id[4], id[4], id[4]};
+        NWblocktexture water{id[5], id[5], id[5], id[5], id[5], id[5]};
         CALL_AUTO(nwUseDefaultBlockRenderFunc, GrassID, &grass);
         CALL_AUTO(nwUseDefaultBlockRenderFunc, RockID, &rock);
         CALL_AUTO(nwUseDefaultBlockRenderFunc, DirtID, &dirt);

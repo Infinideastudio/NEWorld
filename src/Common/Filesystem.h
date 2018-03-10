@@ -1,5 +1,5 @@
 // 
-// nwcore: Filesystem.h
+// Core: Filesystem.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -37,4 +37,4 @@ namespace filesystem = boost::filesystem;
 #endif
 #endif
 
-NWCOREAPI filesystem::path executable_path(const char* argv0);
+NWCOREAPI filesystem::path executablePath(const char* argv0);

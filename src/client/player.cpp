@@ -1,5 +1,5 @@
 // 
-// nwcore: player.cpp
+// Core: player.cpp
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -71,7 +71,7 @@ void Player::rotationMove() {
         mRotationSpeed.x = -90.0 - mRotation.x;
     mRotation += mRotationSpeed;
     mRotationDelta = mRotationSpeed;
-    if(rotationInteria) mRotationSpeed *= 0.6;
+    if (rotationInteria) mRotationSpeed *= 0.6;
     else mRotationSpeed = 0;
 }
 

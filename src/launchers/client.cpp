@@ -21,11 +21,11 @@
 #include "Common/EventBus.h"
 #include "Common/Json/JsonHelper.h"
 #include "Common/Filesystem.h"
-#include "game/plugin/pluginmanager.h"
+#include "game/plugin/Modules.h"
 
 int guiMain(int argc, char** argv);
 
 int main(int argc, char** argv) {
-	loadModules();
+    loadModules();
     return CALL_AUTO(guiMain, argc, argv);
 }

@@ -1,5 +1,5 @@
 // 
-// nwcore: Matrix.h
+// Core: Matrix.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -52,10 +52,12 @@ public:
 
     Mat4() { memset(data, 0, sizeof(data)); }
     Mat4(const Mat4& rhs) { memcpy(data, rhs.data, sizeof(data)); }
+
     explicit Mat4(T x) {
         memset(data, 0, sizeof(data));
         data[0] = data[5] = data[10] = data[15] = x; // Identity matrix
     }
+
     explicit Mat4(T* src) { memcpy(data, src, sizeof(data)); }
 
 #ifndef NEXWORLD_DEBUG
@@ -93,12 +95,18 @@ public:
         res.data[7] = data[4] * rhs.data[3] + data[5] * rhs.data[7] + data[6] * rhs.data[11] + data[7] * rhs.data[15];
         res.data[8] = data[8] * rhs.data[0] + data[9] * rhs.data[4] + data[10] * rhs.data[8] + data[11] * rhs.data[12];
         res.data[9] = data[8] * rhs.data[1] + data[9] * rhs.data[5] + data[10] * rhs.data[9] + data[11] * rhs.data[13];
-        res.data[10] = data[8] * rhs.data[2] + data[9] * rhs.data[6] + data[10] * rhs.data[10] + data[11] * rhs.data[14];
-        res.data[11] = data[8] * rhs.data[3] + data[9] * rhs.data[7] + data[10] * rhs.data[11] + data[11] * rhs.data[15];
-        res.data[12] = data[12] * rhs.data[0] + data[13] * rhs.data[4] + data[14] * rhs.data[8] + data[15] * rhs.data[12];
-        res.data[13] = data[12] * rhs.data[1] + data[13] * rhs.data[5] + data[14] * rhs.data[9] + data[15] * rhs.data[13];
-        res.data[14] = data[12] * rhs.data[2] + data[13] * rhs.data[6] + data[14] * rhs.data[10] + data[15] * rhs.data[14];
-        res.data[15] = data[12] * rhs.data[3] + data[13] * rhs.data[7] + data[14] * rhs.data[11] + data[15] * rhs.data[15];
+        res.data[10] = data[8] * rhs.data[2] + data[9] * rhs.data[6] + data[10] * rhs.data[10] + data[11] * rhs.data[14
+        ];
+        res.data[11] = data[8] * rhs.data[3] + data[9] * rhs.data[7] + data[10] * rhs.data[11] + data[11] * rhs.data[15
+        ];
+        res.data[12] = data[12] * rhs.data[0] + data[13] * rhs.data[4] + data[14] * rhs.data[8] + data[15] * rhs.data[12
+        ];
+        res.data[13] = data[12] * rhs.data[1] + data[13] * rhs.data[5] + data[14] * rhs.data[9] + data[15] * rhs.data[13
+        ];
+        res.data[14] = data[12] * rhs.data[2] + data[13] * rhs.data[6] + data[14] * rhs.data[10] + data[15] * rhs.data[
+            14];
+        res.data[15] = data[12] * rhs.data[3] + data[13] * rhs.data[7] + data[14] * rhs.data[11] + data[15] * rhs.data[
+            15];
         return res;
     }
 
@@ -159,9 +167,7 @@ public:
         Mat4 res(T(1));
         for (int i = 0; i < 4; i++) {
             int p = i;
-            for (int j = i + 1; j < 4; j++) {
-                if (abs(data[j * 4 + i]) > abs(data[p * 4 + i])) p = j;
-            }
+            for (int j = i + 1; j < 4; j++) { if (abs(data[j * 4 + i]) > abs(data[p * 4 + i])) p = j; }
             res.swapRows(i, p);
             swapRows(i, p);
             res.multRow(i, T(1) / data[i * 4 + i]);
@@ -240,8 +246,8 @@ public:
     // Multiply with Vec4(vec, w)
     std::pair<Vec3<T>, T> transform(const Vec3<T>& vec, T w) const {
         Vec3<T> res(data[0] * vec.x + data[1] * vec.y + data[2] * vec.z + data[3] * w,
-            data[4] * vec.x + data[5] * vec.y + data[6] * vec.z + data[7] * w,
-            data[8] * vec.x + data[9] * vec.y + data[10] * vec.z + data[11] * w);
+                    data[4] * vec.x + data[5] * vec.y + data[6] * vec.z + data[7] * w,
+                    data[8] * vec.x + data[9] * vec.y + data[10] * vec.z + data[11] * w);
         T rw = data[12] * vec.x + data[13] * vec.y + data[14] * vec.z + data[15] * w;
         return std::make_pair(res, rw);
     }

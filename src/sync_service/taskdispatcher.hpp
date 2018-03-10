@@ -1,5 +1,5 @@
 // 
-// nwcore: taskdispatcher.hpp
+// Core: taskdispatcher.hpp
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -70,12 +70,9 @@ public:
      */
     TaskDispatcher(size_t threadNumber, ChunkService& chunkService)
         : mThreadNumber(threadNumber), mChunkService(chunkService),
-          mTimeUsed(threadNumber, 0){
-    }
-    
-    ~TaskDispatcher() {
-        if (!mShouldExit) stop();
-    }
+          mTimeUsed(threadNumber, 0) { }
+
+    ~TaskDispatcher() { if (!mShouldExit) stop(); }
 
     void start() {
         mShouldExit = false;
@@ -109,12 +106,10 @@ public:
         std::lock_guard<std::mutex> lock(mMutex);
         mRegularReadWriteTasks.emplace_back(std::move(task));
     }
-    size_t getRegularReadOnlyTaskCount() const noexcept {
-        return mRegularReadOnlyTasks.size();
-    }
-    size_t getRegularReadWriteTaskCount() const noexcept {
-        return mRegularReadWriteTasks.size();
-    }
+
+    size_t getRegularReadOnlyTaskCount() const noexcept { return mRegularReadOnlyTasks.size(); }
+    size_t getRegularReadWriteTaskCount() const noexcept { return mRegularReadWriteTasks.size(); }
+
     /**
      * \brief Process render tasks.
      *        This function should be called from the main thread.
@@ -128,7 +123,7 @@ public:
     }
 
     const std::vector<int64_t>& getTimeUsed() const noexcept { return mTimeUsed; }
-    
+
     void stop() {
         mShouldExit = true;
         for (auto& thread : mThreads) thread.join();
@@ -146,7 +141,7 @@ private:
     std::vector<std::unique_ptr<RenderTask>> mRenderTasks, mNextRenderTasks;
     std::vector<std::thread> mThreads;
     size_t mThreadNumber;
-    std::atomic<size_t> mRoundNumber{ 0 };
+    std::atomic<size_t> mRoundNumber{0};
     std::atomic<size_t> mNumberOfUnfinishedThreads;
     std::atomic<bool> mShouldExit{false};
 

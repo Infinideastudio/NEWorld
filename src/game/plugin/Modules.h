@@ -1,5 +1,5 @@
 // 
-// nwcore: pluginmanager.h
+// Core: Modules.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -20,15 +20,13 @@
 #pragma once
 
 #include "Common/Config.h"
-#include "Common/Utility.h"
-#include "Common/Dylib.h"
 #include <string>
-#include <memory>
-#include <map>
 
 class PluginObject {
 public:
-    virtual ~PluginObject() {}
+    virtual ~PluginObject() = default;
 };
 
 NWCOREAPI void loadModules();
+NWCOREAPI bool isModuleLoaded(const std::string& uri);
+NWCOREAPI int getModuleCount() noexcept;

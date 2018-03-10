@@ -1,5 +1,5 @@
 // 
-// nwcore: Config.h
+// Core: Config.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -26,6 +26,7 @@
 #ifdef BOOST_COMP_MSVC
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)
+#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 #ifdef _DEBUG

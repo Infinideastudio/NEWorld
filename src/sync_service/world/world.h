@@ -1,5 +1,5 @@
 // 
-// nwcore: world.h
+// Core: world.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -30,7 +30,7 @@
 
 class Player;
 class ChunkService;
-class PluginManager;
+class ModuleManager;
 
 class NWCOREAPI World final : public NonCopyable {
 public:
@@ -70,6 +70,7 @@ public:
     BlockData getBlock(const Vec3i& pos) const { return mChunks.getBlock(pos); }
     void setBlock(const Vec3i& pos, BlockData block) { mChunks.setBlock(pos, block); }
     auto insertChunk(const Vec3i& pos, ChunkManager::data_t&& ptr) { return mChunks.insert(pos, std::move(ptr)); }
+
     auto insertChunkAndUpdate(const Vec3i& pos, ChunkManager::data_t&& ptr) {
         const auto chunkPosition = ptr->getPosition();
         const auto ret = insertChunk(pos, std::move(ptr));
@@ -83,6 +84,7 @@ public:
             doIfChunkLoaded(chunkPosition + p, [](Chunk& chk) { chk.setUpdated(true); });
         return ret;
     }
+
     auto resetChunk(const Vec3i& pos, Chunk* ptr) { return mChunks.reset(pos, ptr); }
 
     template <typename... ArgType, typename Func>

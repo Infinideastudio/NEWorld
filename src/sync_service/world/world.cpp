@@ -1,5 +1,5 @@
 // 
-// nwcore: world.cpp
+// Core: world.cpp
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -117,14 +117,13 @@ public:
     * \param chunkPosition the position of the chunk
     */
     UnloadChunkTask(const World& world, Vec3i chunkPosition)
-        : mWorld(world), mChunkPosition(chunkPosition) {
-
-    }
+        : mWorld(world), mChunkPosition(chunkPosition) { }
 
     void task(ChunkService& cs) override {
         //TODO: for multiplayer situation, it should decrease ref counter instead of deleting
         cs.getWorlds().getWorld(mWorld.getWorldID())->deleteChunk(mChunkPosition);
     }
+
 private:
     const World& mWorld;
     Vec3i mChunkPosition;
@@ -176,8 +175,8 @@ public:
 
     void task(const ChunkService& cs) override {
         auto data = context.rpc.getClient()
-                                .call("getChunk", mWorld.getWorldID(), mChunkPosition)
-                                .as<std::vector<uint32_t>>();
+                           .call("getChunk", mWorld.getWorldID(), mChunkPosition)
+                           .as<std::vector<uint32_t>>();
         ChunkManager::data_t chunk(new Chunk(mChunkPosition, mWorld, data));
         // Add addToWorldTask
         chunkService.getTaskDispatcher().addReadWriteTask(
@@ -219,7 +218,6 @@ public:
             chunkService.getTaskDispatcher().addReadWriteTask(
                 std::make_unique<UnloadChunkTask>(mWorld, unloadChunk.second->getPosition())
             );
-
         }
     }
 
@@ -236,4 +234,3 @@ void World::registerChunkTasks(ChunkService& chunkService, Player& player) {
         std::make_unique<LoadUnloadDetectorTask>(*this, player)
     );
 }
-

@@ -1,5 +1,5 @@
 // 
-// nwcore: Logger.h
+// Core: Logger.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -54,6 +54,7 @@ public:
             mContent << item << " ";
         return *this;
     }
+
     static void addFileSink(const std::string& path, const std::string& prefix);
 private:
     Level mLevel;

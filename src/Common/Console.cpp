@@ -1,5 +1,5 @@
 // 
-// nwcore: nwconsole.cpp
+// Core: Console.cpp
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -18,109 +18,91 @@
 // 
 
 #include "Console.h"
-#include <boost/predef/platform.h>
 
 #if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
 
 #include "Internals/Windows.hpp"
 
-namespace LColorFunc
-{
+namespace LColorFunc {
     // Microsoft Windows
     static HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    std::ostream& black(std::ostream& s) noexcept
-    {
+    std::ostream& black(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout, 0);
         return s;
     }
 
-    std::ostream& lblack(std::ostream& s) noexcept
-    {
+    std::ostream& lblack(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_INTENSITY);
         return s;
     }
 
-    std::ostream& red(std::ostream& s) noexcept
-    {
+    std::ostream& red(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED);
         return s;
     }
 
-    std::ostream& lred(std::ostream& s) noexcept
-    {
+    std::ostream& lred(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_INTENSITY);
         return s;
     }
 
-    std::ostream& green(std::ostream& s) noexcept
-    {
+    std::ostream& green(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN);
         return s;
     }
 
-    std::ostream& lgreen(std::ostream& s) noexcept
-    {
+    std::ostream& lgreen(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         return s;
     }
 
-    std::ostream& blue(std::ostream& s) noexcept
-    {
+    std::ostream& blue(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_BLUE);
         return s;
     }
 
-    std::ostream& lblue(std::ostream& s) noexcept
-    {
+    std::ostream& lblue(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         return s;
     }
 
-    std::ostream& yellow(std::ostream& s) noexcept
-    {
+    std::ostream& yellow(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_GREEN);
         return s;
     }
 
-    std::ostream& lyellow(std::ostream& s) noexcept
-    {
+    std::ostream& lyellow(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
         return s;
     }
 
-    std::ostream& magenta(std::ostream& s) noexcept
-    {
+    std::ostream& magenta(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_BLUE);
         return s;
     }
 
-    std::ostream& lmagenta(std::ostream& s) noexcept
-    {
+    std::ostream& lmagenta(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         return s;
     }
 
-    std::ostream& cyan(std::ostream& s) noexcept
-    {
+    std::ostream& cyan(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN | FOREGROUND_BLUE);
         return s;
     }
 
-    std::ostream& lcyan(std::ostream& s) noexcept
-    {
+    std::ostream& lcyan(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         return s;
     }
 
-    std::ostream& white(std::ostream& s) noexcept
-    {
+    std::ostream& white(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
         return s;
     }
 
-    std::ostream& lwhite(std::ostream& s) noexcept
-    {
+    std::ostream& lwhite(std::ostream& s) noexcept {
         SetConsoleTextAttribute(hStdout,FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
         return s;
     }

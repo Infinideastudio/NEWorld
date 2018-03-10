@@ -1,5 +1,5 @@
 // 
-// nwcore: server.h
+// Core: server.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -21,7 +21,7 @@
 
 #include "Common/RateController.h"
 #include "sync_service/world/world.h"
-#include "game/plugin/pluginmanager.h"
+#include "game/plugin/Modules.h"
 
 constexpr int UpdateInterval = 1000 / 60, GlobalUpdateInterval = 1000 / 60; // unit: ms
 

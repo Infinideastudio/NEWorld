@@ -1,5 +1,5 @@
 // 
-// nwcore: common.h
+// Core: EventBus.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -43,15 +43,18 @@ public:
      *        // since the identifier we used ("add") is same as the function name
      *        \endcode
      */
-    template<typename T>
+    template <typename T>
     void registerFunc(const std::string& funcName, T func) {
         auto& list = getSubscribers<T>(funcName);
         list.emplace_back(reinterpret_cast<FunctionPointer>(func));
         if (list.size() == 1)
-            debugstream << "Function " << funcName << " with type " << typeid(T).name() << " (hash: " << typeid(T).hash_code() << ") registered.";
+            debugstream << "Function " << funcName << " with type " << typeid(T).name() << " (hash: " << typeid(T).
+                hash_code() <<
+                ") registered.";
         else
             warningstream << "Multiple(" << list.size() << ") functions with name"
-            << funcName << " and type " << typeid(T).name() << " (hash: " << typeid(T).hash_code() << ") registered.";
+                << funcName << " and type " << typeid(T).name() << " (hash: " << typeid(T).hash_code() <<
+                ") registered.";
     }
 
     /**
@@ -64,10 +67,12 @@ public:
     * \note See also registerFunc for the usage
     * \sa registerFunc
     */
-    template<typename T>
+    template <typename T>
     void subscribe(const std::string& funcName, T func) {
         getSubscribers<T>(funcName).emplace_back(reinterpret_cast<FunctionPointer>(func));
-        debugstream << "Subscribed to " << funcName << " with " << typeid(T).name() << " (hash: " << typeid(T).hash_code() << ")";
+        debugstream << "Subscribed to " << funcName << " with " << typeid(T).name() << " (hash: " << typeid(T).
+            hash_code() <<
+            ")";
     }
 
     /**
@@ -86,14 +91,15 @@ public:
     *        CALL_AUTO(add, 1, 2);
     *       \endcode
     */
-    template<typename T, typename... Args>
+    template <typename T, typename... Args>
     auto call(const std::string& funcName, Args&&... args) {
         auto& list = getSubscribers<T>(funcName);
-        if (list.size() == 0){
+        if (list.size() == 0) {
             warningstream << "Failed to call function " << funcName
-            << " with type " << typeid(T).name() << " (hash: " << typeid(T).hash_code() << "): "
-            << (list.empty() ? "No such function registered" :
-                "Multiple(" + std::to_string(list.size()) + ") functions registered.");
+                << " with type " << typeid(T).name() << " (hash: " << typeid(T).hash_code() << "): "
+                << (list.empty()
+                        ? "No such function registered"
+                        : "Multiple(" + std::to_string(list.size()) + ") functions registered.");
             throw std::runtime_error(funcName + " with type " + typeid(T).name()
                 + " (hash: " + std::to_string(typeid(T).hash_code()) + ") does not exist");
         }
@@ -116,19 +122,21 @@ public:
     *        PUBLISH_AUTO(onServerStarted, true);
     *       \endcode
     */
-    template<typename T, typename... Args>
+    template <typename T, typename... Args>
     void publish(const std::string& funcName, Args&&... args) {
         auto& subscribers = getSubscribers<T>(funcName);
-        for(auto& subscriber: subscribers)
+        for (auto& subscriber : subscribers)
             reinterpret_cast<T>(subscriber)(std::forward<Args>(args)...);
     }
 
 private:
     using FunctionPointer = std::add_pointer_t<void()>;
-    template<typename T>
+
+    template <typename T>
     std::vector<FunctionPointer>& getSubscribers(const std::string& funcName) noexcept {
         return mSubscribers[std::to_string(typeid(T).hash_code()) + "!" + funcName];
     }
+
     std::unordered_map<std::string, std::vector<FunctionPointer>> mSubscribers;
 };
 

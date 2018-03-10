@@ -1,5 +1,5 @@
 // 
-// nwcore: taskdispatcher.cpp
+// Core: taskdispatcher.cpp
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -23,7 +23,7 @@
 
 void TaskDispatcher::worker(size_t threadID) {
     debugstream << "Worker thread " << threadID << " initialized.";
-    RateController meter{ 30 };
+    RateController meter{30};
     while (!mShouldExit) {
         // A tick starts
         const size_t currentRoundNumber = mRoundNumber;
@@ -36,10 +36,9 @@ void TaskDispatcher::worker(size_t threadID) {
         mTimeUsed[threadID] = meter.getDeltaTimeMs();
 
         // The last finished thread is responsible to do writing jobs
-        if (mNumberOfUnfinishedThreads.fetch_sub(1) == 1) { // All other threads have finished?
-            for (const auto& task : mReadWriteTasks) {
-                task->task(mChunkService);
-            }
+        if (mNumberOfUnfinishedThreads.fetch_sub(1) == 1) {
+            // All other threads have finished?
+            for (const auto& task : mReadWriteTasks) { task->task(mChunkService); }
 
             // ...and finish up!
             mReadOnlyTasks.clear();

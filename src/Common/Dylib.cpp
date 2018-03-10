@@ -1,5 +1,5 @@
 // 
-// NWShared: Dylib.cpp
+// Core: Dylib.cpp
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -20,7 +20,6 @@
 #include "Dylib.h"
 #include <cassert>
 #include <sstream>
-#include <boost/predef/platform.h>
 
 #if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
 
@@ -53,8 +52,8 @@ Library::FcnProcAddr Library::getFuncImpl(HandleType handle, const std::string& 
 namespace {
     Library::HandleType loadLibrary(const std::string& filename, bool& success) {
         const auto handle = dlopen(filename.c_str(), RTLD_NOW);
-		if (handle == nullptr)
-			throw std::runtime_error(dlerror());
+        if (handle == nullptr)
+            throw std::runtime_error(dlerror());
         success = handle != nullptr;
         return handle;
     }

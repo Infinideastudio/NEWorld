@@ -1,5 +1,5 @@
 // 
-// nwcore: Console.h
+// Core: Console.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -22,8 +22,7 @@
 #include <ostream>
 #include "Config.h"
 
-namespace LColorFunc
-{
+namespace LColorFunc {
     using ColorFunc = std::ostream&(*)(std::ostream& s) noexcept;
 
     NWCOREAPI std::ostream& black(std::ostream& s) noexcept;
@@ -59,8 +58,7 @@ namespace LColorFunc
     NWCOREAPI std::ostream& lwhite(std::ostream& s) noexcept;
 }
 
-namespace LColor
-{
+namespace LColor {
     constexpr const char* black = "&0";
     constexpr const char* red = "&1";
     constexpr const char* yellow = "&2";

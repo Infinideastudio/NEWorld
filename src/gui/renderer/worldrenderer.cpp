@@ -35,9 +35,7 @@ size_t WorldRenderer::render(const Vec3i& position) const {
     }
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    for (auto& c : chunkPending) {
-        c.second->renderTrans(c.first);
-    }
+    for (auto& c : chunkPending) { c.second->renderTrans(c.first); }
     glDisable(GL_BLEND);
     return chunkPending.size();
 }

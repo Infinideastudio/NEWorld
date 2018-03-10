@@ -1,5 +1,5 @@
 // 
-// nwcore: nwchunk.h
+// Core: nwchunk.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -126,8 +126,7 @@ struct NWCOREAPI ChunkOnReleaseBehavior {
         DeReference
     } status;
 
-    void operator()(Chunk* target) const
-    {
+    void operator()(Chunk* target) const {
         switch (status) {
         case Behavior::Release:
             delete target;

@@ -35,12 +35,8 @@ public:
             return; // chunk is unloaded
         }
         auto it = mChunkRenderers.find(mPosition);
-        if (it != mChunkRenderers.end()) {
-            it->second = ChunkRenderer(mChunkRenderData);
-        }
-        else {
-            mChunkRenderers.insert({ mPosition, ChunkRenderer(mChunkRenderData) });
-        }
+        if (it != mChunkRenderers.end()) { it->second = ChunkRenderer(mChunkRenderData); }
+        else { mChunkRenderers.insert({mPosition, ChunkRenderer(mChunkRenderData)}); }
     }
 
 private:

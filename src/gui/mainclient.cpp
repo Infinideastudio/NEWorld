@@ -24,17 +24,22 @@
 #include "Common/EventBus.h"
 
 namespace {
-	NEWorld* instance;
+    NEWorld* instance;
+
     int guiMain(int argc, char** argv) {
-        argagg::parser argparser{ {
-            { "help",{ "-h", "--help" },
-            "shows this help message", 0 },
-        { "multiplayer-client",{ "-c", "--client" },
-        "Start the game as a client of multiplayer session", 0 }
-            } };
-        try {
-            context.args = argparser.parse(argc, argv);
-        }
+        argagg::parser argparser{
+            {
+                {
+                    "help", {"-h", "--help"},
+                    "shows this help message", 0
+                },
+                {
+                    "multiplayer-client", {"-c", "--client"},
+                    "Start the game as a client of multiplayer session", 0
+                }
+            }
+        };
+        try { context.args = argparser.parse(argc, argv); }
         catch (const std::exception& e) {
             std::cerr << e.what() << std::endl;
             return -1;
@@ -45,7 +50,7 @@ namespace {
                 << argparser;
             return 0;
         }
-		instance->run();
+        instance->run();
         return 0;
     }
 
@@ -53,7 +58,8 @@ namespace {
 
 extern "C" {
     NWAPIEXPORT const char* NWAPICALL nwModuleGetInfo() {
-        return  R"(
+        return
+            R"(
 {
     "name" : "GUI",
     "author" : "INFINIDEAS",
@@ -66,8 +72,8 @@ extern "C" {
 
     // Main function
     NWAPIEXPORT PluginObject* NWAPICALL nwModuleGetObject() {
-		instance = new NEWorld();
+        instance = new NEWorld();
         REGISTER_AUTO(guiMain);
-		return instance;
+        return instance;
     }
 }

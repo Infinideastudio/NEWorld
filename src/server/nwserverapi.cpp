@@ -1,5 +1,5 @@
 // 
-// nwcore: nwserverapi.cpp
+// Core: nwserverapi.cpp
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -16,6 +16,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
+
 #include "game/context/nwcontext.hpp"
 #include "sync_service/world/nwblock.h"
 #include "api/ApiCore.h"

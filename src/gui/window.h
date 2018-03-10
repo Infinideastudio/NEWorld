@@ -65,6 +65,7 @@ public:
         res.y -= mPrevMouse.y;
         return res;
     }
+
     static void lockCursor() { SDL_SetRelativeMouseMode(SDL_TRUE); }
     static void unlockCursor() { SDL_SetRelativeMouseMode(SDL_FALSE); }
 

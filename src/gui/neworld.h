@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include "game/plugin/pluginmanager.h"
+#include "game/plugin/Modules.h"
 
 class NEWorld : public PluginObject {
 public:
-	NEWorld();
-	~NEWorld();
-	void run();
+    NEWorld();
+    ~NEWorld();
+    void run();
 };

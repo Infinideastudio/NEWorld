@@ -1,5 +1,5 @@
 // 
-// nwcore: RPC.h
+// Core: RPC.h
 // NEWorld: A Free Game with Similar Rules to Minecraft.
 // Copyright (C) 2015-2018 NEWorld Team
 // 
@@ -16,6 +16,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
+
+#pragma once
 
 #include <rpc/client.h>
 #include <rpc/server.h>
