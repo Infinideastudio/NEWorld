@@ -224,7 +224,6 @@ GameScene::GameScene(const std::string& name, const Window& window):
         nk_labelf(ctx, NK_TEXT_LEFT, "Position: x %.1f y %.1f z %.1f",
             mPlayer.getPosition().x, mPlayer.getPosition().y, mPlayer.getPosition().z);
         nk_labelf(ctx, NK_TEXT_LEFT, "GUI Widgets: %zu", mGUIWidgets.getSize());
-        nk_labelf(ctx, NK_TEXT_LEFT, "GUI Plugins Loaded: %zu", context.plugins.getCount());
         nk_labelf(ctx, NK_TEXT_LEFT, "Chunks Loaded: %zu", mCurrentWorld->getChunkCount());
         auto& dispatcher = chunkService.getTaskDispatcher();
         /*nk_labelf(ctx, NK_TEXT_LEFT, "Tasks: Next read %zu write %zu render %zu",

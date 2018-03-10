@@ -31,18 +31,4 @@ public:
     virtual ~PluginObject() {}
 };
 
-struct PluginPair {
-    Library lib;
-    std::unique_ptr<PluginObject> object;
-    ~PluginPair() { object.release(); lib.unload(); }
-};
-
-// Plugin system
-class NWCOREAPI PluginManager : public NonCopyable {
-public:
-    PluginManager();
-    ~PluginManager();
-    size_t getCount() const noexcept { return mPlugins.size(); }
-private:
-    std::map<std::string, PluginPair> mPlugins;
-};
+NWCOREAPI void loadModules();

@@ -71,12 +71,13 @@ Window::Window(const std::string& title, int width, int height)
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    glewExperimental = 1;
 
     mWindow = SDL_CreateWindow(mTitle.c_str(), 100, 100, mWidth, mHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     if (mWindow == nullptr)
         fatalstream << "Failed to create SDL window!" << SDL_GetError();
     Assert(mWindow != nullptr);
+	glewInit();
+	glewExperimental = 1;
 
     mContext = SDL_GL_CreateContext(mWindow);
     if (mContext == nullptr)

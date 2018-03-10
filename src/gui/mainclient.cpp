@@ -24,6 +24,7 @@
 #include "Common/EventBus.h"
 
 namespace {
+	NEWorld* instance;
     int guiMain(int argc, char** argv) {
         argagg::parser argparser{ {
             { "help",{ "-h", "--help" },
@@ -44,13 +45,11 @@ namespace {
                 << argparser;
             return 0;
         }
-        NEWorld neworld;
+		instance->run();
         return 0;
     }
 
 }
-
-void registerGUIAPI();
 
 extern "C" {
     NWAPIEXPORT const char* NWAPICALL nwModuleGetInfo() {
@@ -59,17 +58,16 @@ extern "C" {
     "name" : "GUI",
     "author" : "INFINIDEAS",
     "uri" : "infinideas.neworld.gui",
-    "version" : [0, 0, 1, 0]
+    "version" : [0, 0, 1, 0],
+    "type" : "CPP"
 }
 )";
     }
 
     // Main function
-    NWAPIEXPORT void NWAPICALL nwModuleInitialize() {
-        registerGUIAPI();
+    NWAPIEXPORT PluginObject* NWAPICALL nwModuleGetObject() {
+		instance = new NEWorld();
         REGISTER_AUTO(guiMain);
+		return instance;
     }
-
-    // Unload function
-    NWAPIEXPORT void NWAPICALL nwModuleFinalize() {}
 }

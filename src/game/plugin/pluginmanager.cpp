@@ -22,13 +22,30 @@
 #include "Common/Filesystem.h"
 #include "Common/Logger.h"
 #include "Common/Json/JsonHelper.h"
-
-#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
-#include "Common/Internals/Windows.hpp"
-#else
 #include <stdlib.h>
-#endif
 
+struct PluginPair {
+	PluginPair(PluginPair&&) = default;
+	PluginPair& operator = (PluginPair&&) = default;
+	~PluginPair() { object.release(); lib.unload(); }
+	Library lib;
+	std::unique_ptr<PluginObject> object;
+};
+
+struct Modules {
+	std::vector<PluginPair> modules;
+	std::map<std::string, int> map;
+};
+
+// Plugin system
+class PluginManager : public NonCopyable {
+public:
+	PluginManager();
+	~PluginManager();
+	size_t getCount() const noexcept { return mModules.map.size(); }
+private:
+	Modules mModules;
+};
 
 struct Version {
     int vMajor, vMinor, vRevision, vBuild;
@@ -70,10 +87,15 @@ struct DependencyInfo {
 
 using DependencyList = std::vector<DependencyInfo>;
 
+enum class ModuleType {
+	C, CPP
+};
+
 struct PluginInfo {
     std::string name, author, uri;
     Version thisVersion, conflictVersion;
     DependencyList dependencies;
+	ModuleType type;
 };
 
 class DefaultPluginObject : public PluginObject {
@@ -120,14 +142,10 @@ public:
 #endif
 		std::string env = std::getenv("PATH");
 		env += pathSep + filesystem::absolute("./Modules/").string() + pathSep;
-#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
 		env = "PATH=" + env;
 		char* nenv = new char[env.size() + 1];
 		std::strcpy(nenv, env.c_str());
 		putenv(nenv);
-#else
-		setenv("PATH", env.c_str(), 1);
-#endif
         walk();
         for (auto&& x : mMap)
             loadPlugin(x.second);
@@ -153,11 +171,28 @@ public:
                         throw;
                 }
             }
-            auto object = std::make_unique<DefaultPluginObject>(inf.lib);
+			std::unique_ptr<PluginObject> object;
+			switch (inf.info.type) {
+		    case ModuleType::C:
+				object = std::make_unique<DefaultPluginObject>(inf.lib);
+				break;
+			case ModuleType::CPP:
+			{
+				const auto getObject = inf.lib.get<PluginObject* NWAPICALL()>("nwModuleGetObject");
+				if (getObject)
+					object.reset(getObject());
+				else
+					throw std::runtime_error("Module Has no nwModuleGetObject function, skipping finalization!");
+			}
+				break;
+			default:
+				break;
+			}
             // No Error, Load Success
             inf.stat = Status::Success;
-            mResult[inf.info.uri].lib = std::move(inf.lib);
-            mResult[inf.info.uri].object = std::move(object);
+			mResult.map[inf.info.uri] = mResult.modules.size();
+			PluginPair pair{ std::move(inf.lib), std::move(object) };
+			mResult.modules.push_back(std::move(pair));
         }
         catch (std::exception& e) {
             warningstream << "Module: " << inf.info.uri << " Failed For: " << e.what();
@@ -226,18 +261,29 @@ public:
                 ret.dependencies.push_back(std::move(info));
             }
         }
+		auto type = getJsonValue<std::string>(js["type"], "C");
+		if (type == "C") ret.type = ModuleType::C;
+		if (type == "CPP") ret.type = ModuleType::CPP;
         return ret;
     }
 
     auto&& result()&& { return std::move(mResult); }
 private:
     std::unordered_map<std::string, LoadingInfo> mMap;
-    std::map<std::string, PluginPair> mResult;
+	Modules mResult;
 };
 
 PluginManager::PluginManager() {
     infostream << "Start to load plugins...";
-    mPlugins = std::move(PluginLoader()).result();
+    mModules = std::move(PluginLoader()).result();
 }
 
-PluginManager::~PluginManager() = default;
+PluginManager::~PluginManager() {
+	while (!mModules.modules.empty()) {
+		mModules.modules.pop_back();
+	}
+}
+
+NWCOREAPI void loadModules() {
+	static PluginManager mgr;
+}

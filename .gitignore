@@ -258,3 +258,4 @@ res/fonts/
 # Mac OS X
 .DS_Store
 *.dylib
+*.nwModule

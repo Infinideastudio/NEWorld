@@ -25,7 +25,6 @@
 
 struct GameContext {
     BlockManager blocks;
-    PluginManager plugins;
     RPC rpc;
     argagg::parser_results args;
 };

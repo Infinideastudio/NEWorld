@@ -17,13 +17,13 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef NEWORLD_H_
-#define NEWORLD_H_
+#pragma once
 
-class NEWorld {
+#include "game/plugin/pluginmanager.h"
+
+class NEWorld : public PluginObject {
 public:
-    NEWorld();
+	NEWorld();
+	~NEWorld();
+	void run();
 };
-
-
-#endif // !NEWORLD_H_
