@@ -78,6 +78,12 @@
     <ClInclude Include="..\..\..\src\sync_service\world\playerobject.h" />
     <ClInclude Include="..\..\..\src\sync_service\world\world.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\Common\Internals\Windows.hpp">
+      <SubType>
+      </SubType>
+    </None>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F282B14E-B2E5-4C63-840C-CC653C6F5FA3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

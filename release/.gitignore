@@ -8,5 +8,6 @@ imgui.ini
 settings*
 NEWorld
 NEWorld_Shell
+*¡£nwModule
 *.so
 nwcore

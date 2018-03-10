@@ -54,7 +54,7 @@ static std::string convert(int arg) {
 static std::string getTimeString(char dateSplit, char midSplit, char timeSplit) {
     time_t timer = time(nullptr);
     tm currtime;
-    #ifdef NEWORLD_COMPILER_MSVC
+    #ifdef BOOST_COMP_MSVC
         localtime_s(&currtime, &timer); // MSVC
     #else
         localtime_r(&timer, &currtime); // POSIX

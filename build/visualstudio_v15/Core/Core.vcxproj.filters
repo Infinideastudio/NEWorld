@@ -41,6 +41,9 @@
     <Filter Include="Source\Common\RPC">
       <UniqueIdentifier>{a5f5f4f7-8160-4db1-9f2e-4eaf912a1cd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Common\Internals">
+      <UniqueIdentifier>{fc21259e-374d-4f38-9339-e0e38d08255c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\game\context\nwcontext.cpp">
@@ -189,5 +192,10 @@
     <ClInclude Include="..\..\..\src\api\ApiCore.h">
       <Filter>Source</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\Common\Internals\Windows.hpp">
+      <Filter>Source\Common\Internals</Filter>
+    </None>
   </ItemGroup>
 </Project>

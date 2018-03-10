@@ -19,36 +19,21 @@
 
 #pragma once
 
-#include <boost/predef.h>
+#include <boost/predef/compiler.h>
+#include <boost/predef/platform.h>
 
 // Compiler flags
 #ifdef BOOST_COMP_MSVC
-#define NEWORLD_COMPILER_MSVC
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)
-#endif
-
-// OS flags
-#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
-#define NEWORLD_TARGET_WINDOWS
-#elif (BOOST_OS_MACOS || BOOST_OS_IOS)
-    #define NEWORLD_TARGET_MACOSX
-    #define NEWORLD_TARGET_POSIX
-#else
-    #define NEWORLD_TARGET_LINUX
-    #define NEWORLD_TARGET_POSIX
 #endif
 
 #ifdef _DEBUG
 #define NEWORLD_DEBUG // Main debug flag
 #endif
 
-#if (-1)>>1 == -1
-#define NEWORLD_COMPILER_RSHIFT_ARITH // Arithmetic shift right
-#endif
-
 // NWAPICALL
-#ifdef NEWORLD_COMPILER_MSVC
+#ifdef BOOST_COMP_MSVC
 #define NWAPICALL __cdecl
 #elif defined(__i386__) || defined(__i386)
     #define NWAPICALL __attribute__((__cdecl__))
@@ -58,8 +43,8 @@
 #endif
 
 // NWAPIEXPORT
-#ifdef NEWORLD_TARGET_WINDOWS
-#ifdef NEWORLD_COMPILER_MSVC
+#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
+#ifdef  BOOST_COMP_MSVC
 #define NWAPIENTRY __declspec(dllimport)
 #define NWAPIEXPORT __declspec(dllexport)
 #else
@@ -80,12 +65,6 @@ This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it under certain conditions.
 For details see "LICENSE".
 )";
-
-#if defined(NEWORLD_TARGET_WINDOWS)
-constexpr const char* LibSuffix = ".dll";
-#else
-    constexpr const char* LibSuffix = ".so";
-#endif
 
 #ifdef NWCOREEXPORTS
 #define NWCOREAPI NWAPIEXPORT

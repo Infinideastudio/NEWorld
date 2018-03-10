@@ -23,6 +23,13 @@
 #include "Common/Logger.h"
 #include "Common/Json/JsonHelper.h"
 
+#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
+#include "Common/Internals/Windows.hpp"
+#else
+#include <stdlib.h>
+#endif
+
+
 struct Version {
     int vMajor, vMinor, vRevision, vBuild;
 };
@@ -105,6 +112,22 @@ class PluginLoader {
 
 public:
     PluginLoader() {
+		constexpr const char* pathSep =
+#if (BOOST_OS_WINDOWS)
+			";";
+#else
+			":";
+#endif
+		std::string env = std::getenv("PATH");
+		env += pathSep + filesystem::absolute("./Modules/").string() + pathSep;
+#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
+		env = "PATH=" + env;
+		char* nenv = new char[env.size() + 1];
+		std::strcpy(nenv, env.c_str());
+		putenv(nenv);
+#else
+		setenv("PATH", env.c_str(), 1);
+#endif
         walk();
         for (auto&& x : mMap)
             loadPlugin(x.second);

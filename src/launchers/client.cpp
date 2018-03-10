@@ -20,6 +20,7 @@
 #include <string>
 #include "Common/EventBus.h"
 #include "Common/Json/JsonHelper.h"
+#include "Common/Filesystem.h"
 
 int guiMain(int argc, char** argv);
 

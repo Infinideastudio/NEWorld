@@ -20,14 +20,11 @@
 #include "Dylib.h"
 #include <cassert>
 #include <sstream>
+#include <boost/predef/platform.h>
 
-#ifdef NEWORLD_TARGET_WINDOWS
+#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
 
-#define NOSERVICE
-#define NOMCX
-#define NOIME
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include "Internals/Windows.hpp"
 
 namespace {
     Library::HandleType loadLibrary(const std::string& filename, bool& success) {
@@ -55,9 +52,9 @@ Library::FcnProcAddr Library::getFuncImpl(HandleType handle, const std::string& 
 
 namespace {
     Library::HandleType loadLibrary(const std::string& filename, bool& success) {
-        const auto handle = dlopen(filename.c_str(), RTLD_LAZY);
-        /*if (handle == nullptr)
-            fatalstream << dlerror();*/
+        const auto handle = dlopen(filename.c_str(), RTLD_NOW);
+		if (handle == nullptr)
+			throw std::runtime_error(dlerror());
         success = handle != nullptr;
         return handle;
     }

@@ -18,11 +18,11 @@
 // 
 
 #include "Console.h"
+#include <boost/predef/platform.h>
 
-#ifdef NEWORLD_TARGET_WINDOWS
+#if (BOOST_OS_CYGWIN || BOOST_OS_WINDOWS)
 
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h> // Windows API
+#include "Internals/Windows.hpp"
 
 namespace LColorFunc
 {
