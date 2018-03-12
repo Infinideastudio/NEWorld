@@ -22,9 +22,9 @@
 #include "Common/Config.h"
 #include <string>
 
-class PluginObject {
+class ModuleObject {
 public:
-    virtual ~PluginObject() = default;
+    virtual ~ModuleObject() = default;
 };
 
 NWCOREAPI void loadModules();

@@ -35,9 +35,9 @@
     <ClCompile Include="..\..\..\src\Common\Json\JsonHelper.cpp" />
     <ClCompile Include="..\..\..\src\Common\Logger.cpp" />
     <ClCompile Include="..\..\..\src\Common\EventBus.cpp" />
+    <ClCompile Include="..\..\..\src\Common\Modules.cpp" />
     <ClCompile Include="..\..\..\src\Common\StringUtils.cpp" />
     <ClCompile Include="..\..\..\src\game\context\nwcontext.cpp" />
-    <ClCompile Include="..\..\..\src\game\plugin\Modules.cpp" />
     <ClCompile Include="..\..\..\src\server\nwserverapi.cpp" />
     <ClCompile Include="..\..\..\src\server\server.cpp" />
     <ClCompile Include="..\..\..\src\sync_service\chunkservice.cpp" />
@@ -58,6 +58,7 @@
     <ClInclude Include="..\..\..\src\Common\Logger.h" />
     <ClInclude Include="..\..\..\src\Common\Math\Matrix.h" />
     <ClInclude Include="..\..\..\src\Common\Math\Vector.h" />
+    <ClInclude Include="..\..\..\src\Common\Modules.h" />
     <ClInclude Include="..\..\..\src\Common\Utility.h" />
     <ClInclude Include="..\..\..\src\Common\EventBus.h" />
     <ClInclude Include="..\..\..\src\Common\Config.h" />
@@ -67,7 +68,6 @@
     <ClInclude Include="..\..\..\src\Common\RPC\RPC.h" />
     <ClInclude Include="..\..\..\src\Common\StringUtils.h" />
     <ClInclude Include="..\..\..\src\game\context\nwcontext.hpp" />
-    <ClInclude Include="..\..\..\src\game\plugin\Modules.h" />
     <ClInclude Include="..\..\..\src\server\server.h" />
     <ClInclude Include="..\..\..\src\sync_service\chunkservice.hpp" />
     <ClInclude Include="..\..\..\src\sync_service\taskdispatcher.hpp" />

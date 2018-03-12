@@ -55,7 +55,7 @@ constexpr bool operator >(const Version& l, const Version& r) noexcept { return 
 
 class Module {
 public:
-    Module(Library lib, std::unique_ptr<PluginObject> obj) :
+    Module(Library lib, std::unique_ptr<ModuleObject> obj) :
         mLib(std::move(lib)), mObject(std::move(obj)){}
     Module(Module&&) = default;
     Module& operator =(Module&&) = default;
@@ -67,7 +67,7 @@ public:
     }
 private:
     Library mLib;
-    std::unique_ptr<PluginObject> mObject;
+    std::unique_ptr<ModuleObject> mObject;
 };
 
 struct Modules {
@@ -82,6 +82,7 @@ public:
     ModuleManager& operator =(ModuleManager&&) = delete;
     ModuleManager(const ModuleManager&) = delete;
     ModuleManager& operator =(const ModuleManager&) = delete;
+    void load();
     size_t getCount() const noexcept { return mModules.nameMap.size(); }
     bool isLoaded(const std::string& uri) const { return mModules.nameMap.find(uri) != mModules.nameMap.end(); }
     static auto& getInstance() {
@@ -95,7 +96,7 @@ private:
     Modules mModules;
 };
 
-void loadModules() { ModuleManager::getInstance(); }
+void loadModules() { ModuleManager::getInstance().load(); }
 
 bool isModuleLoaded(const std::string& uri) { return ModuleManager::getInstance().isLoaded(uri); }
 
@@ -187,8 +188,8 @@ void ModuleManager::ModuleLoader::loadPlugin(LoadingInfo& inf) noexcept {
                     throw;
             }
         }
-        std::unique_ptr<PluginObject> object;
-        if (const auto getObject = inf.lib.get<PluginObject*()>("nwModuleGetObject"); getObject)
+        std::unique_ptr<ModuleObject> object;
+        if (const auto getObject = inf.lib.get<ModuleObject*()>("nwModuleGetObject"); getObject)
             object.reset(getObject());
         else
             throw std::runtime_error("Module has no nwModuleGetObject function, skipping finalization!");
@@ -271,9 +272,11 @@ ModuleManager::ModuleLoader::ModuleInfo ModuleManager::ModuleLoader::extractInfo
     return ret;
 }
 
-ModuleManager::ModuleManager() {
+ModuleManager::ModuleManager() = default;
+
+void ModuleManager::load(){
     infostream << "Start to load plugins...";
-    mModules = std::move(ModuleLoader()).result();
+    mModules = std::move(ModuleLoader()).result();  
 }
 
 ModuleManager::~ModuleManager() {

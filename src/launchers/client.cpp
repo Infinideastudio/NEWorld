@@ -21,7 +21,7 @@
 #include "Common/EventBus.h"
 #include "Common/Json/JsonHelper.h"
 #include "Common/Filesystem.h"
-#include "game/plugin/Modules.h"
+#include "Common/Modules.h"
 
 int guiMain(int argc, char** argv);
 

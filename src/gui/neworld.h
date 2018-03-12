@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include "game/plugin/Modules.h"
+#include "Common/Modules.h"
 
-class NEWorld : public PluginObject {
+class NEWorld : public ModuleObject {
 public:
     NEWorld();
     ~NEWorld();

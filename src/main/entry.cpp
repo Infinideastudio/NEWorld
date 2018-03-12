@@ -20,6 +20,7 @@
 #include "worldgen.h"
 #include "api/nwapigui.hpp"
 #include "Common/EventBus.h"
+#include "Common/Modules.h"
 
 int32_t GrassID = 0, RockID, DirtID, SandID, WaterID;
 
@@ -35,6 +36,44 @@ int32_t registerBlock(const char* name, bool solid, bool translucent, bool opaqu
     return nwRegisterBlock(&block);
 }
 
+class MainModule : public ModuleObject {
+public:
+    MainModule() {
+        nwRegisterChunkGenerator(generator);
+        GrassID = registerBlock("Grass", true, false, true, 0, 2);
+        RockID = registerBlock("Rock", true, false, true, 0, 2);
+        DirtID = registerBlock("Dirt", true, false, true, 0, 2);
+        SandID = registerBlock("Sand", true, false, true, 0, 2);
+        WaterID = registerBlock("Water", false, true, false, 0, 2);
+        try {
+            rendererInit();
+        }
+        catch(...){}
+    }
+
+    void rendererInit() {
+        NWtextureid id[] =
+        {
+            CALL_AUTO(nwRegisterTexture, "./res/blocks/grass_top.png"),
+            CALL_AUTO(nwRegisterTexture, "./res/blocks/grass_round.png"),
+            CALL_AUTO(nwRegisterTexture, "./res/blocks/dirt.png"),
+            CALL_AUTO(nwRegisterTexture, "./res/blocks/rock.png"),
+            CALL_AUTO(nwRegisterTexture, "./res/blocks/sand.png"),
+            CALL_AUTO(nwRegisterTexture, "./res/blocks/water.png")
+        };
+        NWblocktexture grass{ id[1], id[1], id[0], id[2], id[1], id[1] };
+        NWblocktexture rock{ id[3], id[3], id[3], id[3], id[3], id[3] };
+        NWblocktexture dirt{ id[2], id[2], id[2], id[2], id[2], id[2] };
+        NWblocktexture sand{ id[4], id[4], id[4], id[4], id[4], id[4] };
+        NWblocktexture water{ id[5], id[5], id[5], id[5], id[5], id[5] };
+        CALL_AUTO(nwUseDefaultBlockRenderFunc, GrassID, &grass);
+        CALL_AUTO(nwUseDefaultBlockRenderFunc, RockID, &rock);
+        CALL_AUTO(nwUseDefaultBlockRenderFunc, DirtID, &dirt);
+        CALL_AUTO(nwUseDefaultBlockRenderFunc, SandID, &sand);
+        CALL_AUTO(nwUseDefaultBlockRenderFunc, WaterID, &water);
+    }
+};
+
 extern "C" {
 
     NWAPIEXPORT const char* NWAPICALL nwModuleGetInfo() {
@@ -46,41 +85,15 @@ extern "C" {
     "uri" : "infinideas.neworld.main",
     "version" : [0, 0, 1, 0],
     "dependencies" : [
-        { "uri" : "infinideas.neworld.gui", "required" : [0, 0, 1, 0] }
+        { "uri" : "infinideas.neworld.gui", "required" : [0, 0, 1, 0], "optional" : true }
     ]
 }
 )";
     }
 
     // Main function
-    NWAPIEXPORT void NWAPICALL nwModuleInitialize() {
-        nwRegisterChunkGenerator(generator);
-        GrassID = registerBlock("Grass", true, false, true, 0, 2);
-        RockID = registerBlock("Rock", true, false, true, 0, 2);
-        DirtID = registerBlock("Dirt", true, false, true, 0, 2);
-        SandID = registerBlock("Sand", true, false, true, 0, 2);
-        WaterID = registerBlock("Water", false, true, false, 0, 2);
-        NWtextureid id[] =
-        {
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/grass_top.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/grass_round.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/dirt.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/rock.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/sand.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/water.png")
-        };
-        NWblocktexture grass{id[1], id[1], id[0], id[2], id[1], id[1]};
-        NWblocktexture rock{id[3], id[3], id[3], id[3], id[3], id[3]};
-        NWblocktexture dirt{id[2], id[2], id[2], id[2], id[2], id[2]};
-        NWblocktexture sand{id[4], id[4], id[4], id[4], id[4], id[4]};
-        NWblocktexture water{id[5], id[5], id[5], id[5], id[5], id[5]};
-        CALL_AUTO(nwUseDefaultBlockRenderFunc, GrassID, &grass);
-        CALL_AUTO(nwUseDefaultBlockRenderFunc, RockID, &rock);
-        CALL_AUTO(nwUseDefaultBlockRenderFunc, DirtID, &dirt);
-        CALL_AUTO(nwUseDefaultBlockRenderFunc, SandID, &sand);
-        CALL_AUTO(nwUseDefaultBlockRenderFunc, WaterID, &water);
+    NWAPIEXPORT ModuleObject* NWAPICALL nwModuleGetObject() {
+        return new MainModule();
     }
 
-    // Unload function
-    NWAPIEXPORT void NWAPICALL nwModuleFinalize() { }
 }

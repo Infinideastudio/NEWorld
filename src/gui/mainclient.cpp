@@ -71,7 +71,7 @@ extern "C" {
     }
 
     // Main function
-    NWAPIEXPORT PluginObject* NWAPICALL nwModuleGetObject() {
+    NWAPIEXPORT ModuleObject* NWAPICALL nwModuleGetObject() {
         instance = new NEWorld();
         REGISTER_AUTO(guiMain);
         return instance;

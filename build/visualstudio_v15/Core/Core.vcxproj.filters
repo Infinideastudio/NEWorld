@@ -23,9 +23,6 @@
     <Filter Include="Source\Client">
       <UniqueIdentifier>{0b4c2b5f-a491-4fe7-8d4e-a5626f165bcd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Game\plugin">
-      <UniqueIdentifier>{865196c1-df40-4f7a-a4fc-7c8c6abcf8a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Common">
       <UniqueIdentifier>{349061fe-9dc1-4643-9984-8734621a544f}</UniqueIdentifier>
     </Filter>
@@ -97,8 +94,8 @@
     <ClCompile Include="..\..\..\src\Common\Filesystem.cpp">
       <Filter>Source\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\game\plugin\Modules.cpp">
-      <Filter>Source\Game\plugin</Filter>
+    <ClCompile Include="..\..\..\src\Common\Modules.cpp">
+      <Filter>Source\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,8 +186,8 @@
     <ClInclude Include="..\..\..\src\api\ApiCore.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\game\plugin\Modules.h">
-      <Filter>Source\Game\plugin</Filter>
+    <ClInclude Include="..\..\..\src\Common\Modules.h">
+      <Filter>Source\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
