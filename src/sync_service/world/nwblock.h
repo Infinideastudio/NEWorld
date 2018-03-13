@@ -60,35 +60,35 @@ private:
 
 class BlockType {
 private:
-    std::string name;
-    bool solid;
-    bool translucent;
-    bool opaque;
-    int explodePower;
-    int hardness;
+    std::string mName;
+    bool mSolid;
+    bool mTranslucent;
+    bool mOpaque;
+    int mExplodePower;
+    int mHardness;
 
 public:
     BlockType(const char* name_, bool solid_, bool translucent_, bool opaque_, int explodePower_, int hardness_) :
-        name(name_), solid(solid_), translucent(translucent_), opaque(opaque_), explodePower(explodePower_),
-        hardness(hardness_) { }
+        mName(name_), mSolid(solid_), mTranslucent(translucent_), mOpaque(opaque_), mExplodePower(explodePower_),
+        mHardness(hardness_) { }
 
     // Internal block name
-    const std::string& getName() const { return name; }
+    const std::string& getName() const { return mName; }
 
     // Is solid block
-    bool isSolid() const { return solid; }
+    bool isSolid() const { return mSolid; }
 
     // Transparency determines how it will rendered
-    bool isTranslucent() const { return translucent; }
+    bool isTranslucent() const { return mTranslucent; }
 
     // Opaque means it blocks light
-    bool isOpaque() const { return opaque; }
+    bool isOpaque() const { return mOpaque; }
 
     // Explode power, if it isn't a explosive set this to 0
-    int getExplodePower() const { return explodePower; }
+    int getExplodePower() const { return mExplodePower; }
 
     // Hardness
-    int getHardness() const { return hardness; }
+    int getHardness() const { return mHardness; }
 };
 
 class NWCOREAPI BlockManager {

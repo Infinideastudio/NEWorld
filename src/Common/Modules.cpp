@@ -23,6 +23,7 @@
 #include "Common/Filesystem.h"
 #include "Common/Json/JsonHelper.h"
 #include <cstdlib>
+#include <set>
 
 struct Version {
     constexpr Version(int a, int b, int c, int d) : vMajor(a), vMinor(b), vRevision(c), vBuild(d) {}
@@ -72,7 +73,7 @@ private:
 
 struct Modules {
     std::vector<Module> modules;
-    std::map<std::string, int> nameMap;
+    std::set<std::string> nameMap;
 };
 
 // Plugin system
@@ -195,7 +196,7 @@ void ModuleManager::ModuleLoader::loadPlugin(LoadingInfo& inf) noexcept {
             throw std::runtime_error("Module has no nwModuleGetObject function, skipping finalization!");
         // No Error, Load Success
         inf.stat = Status::Success;
-        mResult.nameMap[inf.info.uri] = mResult.modules.size();
+        mResult.nameMap.insert(inf.info.uri);
         mResult.modules.emplace_back(std::move(inf.lib), std::move(object));
     }
     catch (std::exception& e) {
