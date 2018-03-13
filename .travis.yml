@@ -3,7 +3,7 @@ sudo: required
 dist: trusty
 cache:
   directories:
-    - bin/CMakeFiles/
+    - CMakeFiles/
 matrix:
   include:
     - os: linux
@@ -39,6 +39,5 @@ install:
     sudo make install 
     cd ..
 script:
-  - cd ./release/
   - cmake .
   - make -j8
