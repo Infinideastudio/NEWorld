@@ -25,13 +25,10 @@ matrix:
             - libglu1-mesa-dev
             - freeglut3-dev
             - libglew-dev
-            - libfreetype6-dev
             - libsdl2-dev
             - libsdl2-image-dev
 install:
   - sudo ln -s /usr/bin/g++-7 /usr/bin/g++ -f
-  - sudo cp -r /usr/include/freetype2/* /usr/include/
-  - sudo cp -r /usr/include/freetype2 /usr/include/freetype
   - |
     git clone https://github.com/rpclib/rpclib.git
     cd ./rpclib

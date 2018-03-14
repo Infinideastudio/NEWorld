@@ -20,6 +20,7 @@
 #pragma once
 
 #include "Vector.h"
+#include "Common/Debug.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653589793

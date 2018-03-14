@@ -18,6 +18,7 @@
 // 
 
 #include <string>
+#include <cstring>
 #include "Filesystem.h"
 #include "StringUtils.h"
 

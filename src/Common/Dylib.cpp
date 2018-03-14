@@ -40,7 +40,7 @@ namespace {
     void freeLibrary(Library::HandleType handle) { FreeLibrary(reinterpret_cast<HMODULE>(handle)); }
 }
 
-Library::FcnProcAddr Library::getFuncImpl(HandleType handle, const std::string& name) {
+Library::FcnProcAddr Library::getFuncImpl(Library::HandleType handle, const std::string& name) {
     assert(handle != nullptr);
     return reinterpret_cast<FcnProcAddr>(GetProcAddress(reinterpret_cast<HMODULE>(handle), name.c_str()));
 }
@@ -58,12 +58,12 @@ namespace {
         return handle;
     }
 
-    void freeLibrary(HandleType handle) {
+    void freeLibrary(Library::HandleType handle) {
         dlclose(handle);
     }
 }
 
-Library::FcnProcAddr Library::getFuncImpl(HandleType handle, const std::string& name) {
+Library::FcnProcAddr Library::getFuncImpl(Library::HandleType handle, const std::string& name) {
     assert(handle != nullptr);
     return reinterpret_cast<FcnProcAddr>(dlsym(handle, name.c_str()));
 }

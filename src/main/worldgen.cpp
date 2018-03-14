@@ -17,6 +17,7 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
+#include <cmath>
 #include <iostream>
 #include "worldgen.h"
 

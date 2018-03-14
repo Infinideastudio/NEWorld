@@ -161,7 +161,7 @@ ModuleManager::ModuleLoader::ModuleLoader() {
     env = "PATH=" + env + pathSep + filesystem::absolute("./Modules/").string() + pathSep;
     auto const nenv = new char[env.size() + 1];
     std::strcpy(nenv, env.c_str());
-#ifdef BOOST_COMP_MSVC
+#if BOOST_COMP_MSVC
     _putenv(nenv);
 #else
     putenv(nenv);

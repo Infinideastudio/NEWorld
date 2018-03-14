@@ -259,3 +259,4 @@ res/fonts/
 .DS_Store
 *.dylib
 *.nwModule
+/cmakeBuild

@@ -36,7 +36,7 @@ public:
         }
         auto it = mChunkRenderers.find(mPosition);
         if (it != mChunkRenderers.end()) { it->second = ChunkRenderer(mChunkRenderData); }
-        else { mChunkRenderers.insert({mPosition, ChunkRenderer(mChunkRenderData)}); }
+        else { mChunkRenderers.insert(std::pair<Vec3i, ChunkRenderer>(mPosition, ChunkRenderer(mChunkRenderData))); }
     }
 
 private:
