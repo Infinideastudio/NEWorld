@@ -20,7 +20,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Product)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Product)
 
 # For the whole project
-include_directories(${SOURCE_DIR} "${PROJECT_DIR}/Externals")
+include_directories(${SOURCE_DIR} "${PROJECT_DIR}/3rdParty")
 find_package(Threads REQUIRED)
 
 # Target: Core
