@@ -22,6 +22,7 @@
 #include "gamescene.h"
 #include "window.h"
 #include "renderer/blockrenderer.h"
+#include "sync_service/taskdispatcher.hpp"
 #include "Common/Json/JsonHelper.h"
 #include "Common/Logger.h"
 #include "Common/Modules.h"
@@ -223,6 +224,7 @@ GameScene::GameScene(const std::string& name, const Window& window):
             nk_labelf(ctx, NK_TEXT_LEFT, "Chunks Loaded: %zu", mCurrentWorld->getChunkCount());
             nk_labelf(ctx, NK_TEXT_LEFT, "Modules Loaded: %zu", getModuleCount());
             nk_labelf(ctx, NK_TEXT_LEFT, "Update threads workload:");
+            auto& dispatcher = chunkService.getTaskDispatcher();
             for (size_t i = 0; i < dispatcher.getTimeUsed().size(); ++i) {
                 auto time = std::max(static_cast<long long>(dispatcher.getTimeUsed()[i]), 0ll);
                 nk_labelf(ctx, NK_TEXT_LEFT, "Thread %zu: %lld ms (%.1f)%", i, time, time / 33.3333);
