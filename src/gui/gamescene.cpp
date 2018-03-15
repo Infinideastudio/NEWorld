@@ -24,6 +24,7 @@
 #include "renderer/blockrenderer.h"
 #include "Common/Json/JsonHelper.h"
 #include "Common/Logger.h"
+#include "Common/Modules.h"
 
 class PutBlockTask : public ReadWriteTask {
 public:
@@ -220,10 +221,7 @@ GameScene::GameScene(const std::string& name, const Window& window):
                       mPlayer.getPosition().x, mPlayer.getPosition().y, mPlayer.getPosition().z);
             nk_labelf(ctx, NK_TEXT_LEFT, "GUI Widgets: %zu", mGUIWidgets.getSize());
             nk_labelf(ctx, NK_TEXT_LEFT, "Chunks Loaded: %zu", mCurrentWorld->getChunkCount());
-            auto& dispatcher = chunkService.getTaskDispatcher();
-            /*nk_labelf(ctx, NK_TEXT_LEFT, "Tasks: Next read %zu write %zu render %zu",
-                dispatcher.getNextReadOnlyTaskCount(), dispatcher.getNextReadWriteTaskCount(),
-                dispatcher.getNextRenderTaskCount());*/
+            nk_labelf(ctx, NK_TEXT_LEFT, "Modules Loaded: %zu", getModuleCount());
             nk_labelf(ctx, NK_TEXT_LEFT, "Update threads workload:");
             for (size_t i = 0; i < dispatcher.getTimeUsed().size(); ++i) {
                 auto time = std::max(static_cast<long long>(dispatcher.getTimeUsed()[i]), 0ll);

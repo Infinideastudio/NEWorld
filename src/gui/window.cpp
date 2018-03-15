@@ -76,8 +76,8 @@ Window::Window(const std::string& title, int width, int height)
     if (mWindow == nullptr)
         fatalstream << "Failed to create SDL window!" << SDL_GetError();
     Assert(mWindow != nullptr);
-    glewInit();
     glewExperimental = 1;
+    glewInit();
 
     mContext = SDL_GL_CreateContext(mWindow);
     if (mContext == nullptr)
