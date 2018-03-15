@@ -2,4 +2,4 @@ component_depth: 2
 languages:
 - cpp
 exclude:
-- /3rdParty/*
+- 3rdParty
