@@ -1,7 +1,5 @@
 component_depth: 2
 languages:
 - cpp
-- name: cpp
-  production:
-    include:
-      - /src/.*
+exclude:
+- \/3rdParty\/.*
