@@ -12,7 +12,7 @@ clone_depth: 1
 install:
   - if %PLATFORM% equ x86 (vcpkg.exe install sdl2 sdl2-image glew rpclib freetype) else (vcpkg.exe install sdl2:x64-windows sdl2-image:x64-windows glew:x64-windows rpclib:x64-windows freetype:x64-windows) > nul
 build:
-  project: build/VisualStudio_v15/NEWorld.sln
+  project: Build/VisualStudio_v15/NEWorld.sln
   verbosity: minimal
 on_success:
   # Create an archive

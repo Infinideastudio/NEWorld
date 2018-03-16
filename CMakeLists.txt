@@ -3,14 +3,13 @@ cmake_minimum_required(VERSION 3.9)
 set(CMAKE_MACOSX_RPATH ON)
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_DIR ${CMAKE_SOURCE_DIR})
-set(SOURCE_DIR "${PROJECT_DIR}/src")
+set(SOURCE_DIR "${PROJECT_DIR}/Core")
 
 if(UNIX)
-    link_libraries(dl)
-    link_libraries(stdc++fs) 
+    link_libraries(dl stdc++fs)
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_DIR}/Build/CMake")
 
 project(NEWorld)
 
@@ -24,15 +23,12 @@ include_directories(${SOURCE_DIR} "${PROJECT_DIR}/3rdParty")
 find_package(Threads REQUIRED)
 
 # Target: Core
-file(GLOB_RECURSE SRC_CORE ${SOURCE_DIR}/client/*.cpp
-                             ${SOURCE_DIR}/Common/*.cpp
-                             ${SOURCE_DIR}/game/*.cpp
-                             ${SOURCE_DIR}/server/*.cpp
-                             ${SOURCE_DIR}/sync_service/*.cpp)
+file(GLOB_RECURSE SRC_CORE ${SOURCE_DIR}/client/*.*
+                             ${SOURCE_DIR}/Common/*.*
+                             ${SOURCE_DIR}/Game/*.*)
 
 add_library(Core SHARED ${SRC_CORE})
 target_compile_definitions(Core
-    PRIVATE -DSDL_MAIN_HANDLED
     PRIVATE -DNWCOREEXPORTS
     PRIVATE -DNWCompartmentLoggerPrefix="Core")
 
@@ -43,21 +39,10 @@ target_link_libraries(Core Threads::Threads ${RPCLIB_LIBS})
 target_compile_definitions(Core PUBLIC ${RPCLIB_COMPILE_DEFINITIONS})
 
 # Target: CLI
-file(GLOB_RECURSE SRC_CLI ${SOURCE_DIR}/cli/*.cpp)
+file(GLOB_RECURSE SRC_CLI Modules/CLI/*.*)
 add_library(CLI SHARED ${SRC_CLI})
 target_link_libraries(CLI Core)
 target_compile_definitions(CLI PRIVATE -DNWCompartmentLoggerPrefix="CLI")
 
-# Target: NEWorld
-project(NEWorld)
-add_executable(NEWorld ${SOURCE_DIR}/launchers/client.cpp)
-target_link_libraries(NEWorld GUI Core)
-target_compile_definitions(NEWorld PRIVATE -DNWCompartmentLoggerPrefix="NEWorld")
-
-# Target: NEWorldShell
-project(NEWorldShell)
-add_executable(NEWorldShell ${SOURCE_DIR}/launchers/shell.cpp)
-target_link_libraries(NEWorldShell CLI Core)
-target_compile_definitions(NEWorldShell PRIVATE -DNWCompartmentLoggerPrefix="NEWorldShell")
-
-add_subdirectory(src/Modules Modules)
+add_subdirectory(Shells)
+add_subdirectory(Modules)
