@@ -19,7 +19,7 @@
 
 #include <memory>
 #include "renderer/blockrenderer.h"
-#include <api/nwapigui.hpp>
+#include <Game/Api/nwapigui.hpp>
 #include <Common/EventBus.h>
 #include "Common/Logger.h"
 

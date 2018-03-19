@@ -12,12 +12,17 @@ target_compile_definitions(Main PRIVATE -DNWCompartmentLoggerPrefix="Main")
 # Target: GUI
 file(GLOB_RECURSE SRC_GUI GUI/*.*)
 add_library(GUI SHARED ${SRC_GUI})
-target_compile_definitions(GUI PRIVATE -DNWCompartmentLoggerPrefix="GUI")
+target_compile_definitions(GUI
+        PRIVATE -DNWAPIEXPORTS
+        PRIVATE -DNWCompartmentLoggerPrefix="GUI")
 
 # Link libraries for GUI
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
-target_include_directories(GUI PUBLIC ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+target_include_directories(GUI PUBLIC
+        ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS}
+        ${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
 target_link_libraries(GUI Core Threads::Threads
-    ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${GLEW_LIBRARY} ${OPENGL_LIBRARIES})
+        ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARIES} ${GLEW_LIBRARY} ${OPENGL_LIBRARIES})

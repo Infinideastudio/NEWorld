@@ -17,9 +17,11 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
+#include <Game/SyncService/taskdispatcher.hpp>
+#include <Game/SyncService/chunkservice.hpp>
+#include <Game/Client/player.h>
 #include "world.h"
-#include "gui/gamescene.h"
-#include "Common/Json/JsonHelper.h"
+#include "Common/JsonHelper.h"
 #include "Common/OrderedList.h"
 
 constexpr int MaxChunkLoadCount = 64, MaxChunkUnloadCount = 64;

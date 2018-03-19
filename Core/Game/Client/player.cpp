@@ -19,7 +19,7 @@
 
 #include "player.h"
 #include "Common/Math/Matrix.h"
-#include "Common/Json/JsonHelper.h"
+#include "Common/JsonHelper.h"
 
 class PlayerUpdateTask : public ReadOnlyTask {
 public:

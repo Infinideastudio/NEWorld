@@ -1,1 +1,0 @@
-copy ..\dependencies\dll_x64\* ..\release

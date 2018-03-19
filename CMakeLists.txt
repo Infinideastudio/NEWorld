@@ -23,13 +23,12 @@ include_directories(${SOURCE_DIR} "${PROJECT_DIR}/3rdParty")
 find_package(Threads REQUIRED)
 
 # Target: Core
-file(GLOB_RECURSE SRC_CORE ${SOURCE_DIR}/client/*.*
-                             ${SOURCE_DIR}/Common/*.*
-                             ${SOURCE_DIR}/Game/*.*)
+file(GLOB_RECURSE SRC_CORE ${SOURCE_DIR}/*.*)
 
 add_library(Core SHARED ${SRC_CORE})
 target_compile_definitions(Core
     PRIVATE -DNWCOREEXPORTS
+    PRIVATE -DNWAPIEXPORTS
     PRIVATE -DNWCompartmentLoggerPrefix="Core")
 
 # Link libraries for Core
@@ -37,12 +36,6 @@ find_package(rpclib REQUIRED)
 target_include_directories(Core PUBLIC ${RPCLIB_INCLUDE_DIR})
 target_link_libraries(Core Threads::Threads ${RPCLIB_LIBS})
 target_compile_definitions(Core PUBLIC ${RPCLIB_COMPILE_DEFINITIONS})
-
-# Target: CLI
-file(GLOB_RECURSE SRC_CLI Modules/CLI/*.*)
-add_library(CLI SHARED ${SRC_CLI})
-target_link_libraries(CLI Core)
-target_compile_definitions(CLI PRIVATE -DNWCompartmentLoggerPrefix="CLI")
 
 add_subdirectory(Shells)
 add_subdirectory(Modules)

@@ -18,7 +18,7 @@
 // 
 
 #include "cli.hpp"
-#include "Common/Json/JsonHelper.h"
+#include "Common/JsonHelper.h"
 #include "Game/Context/nwcontext.hpp"
 #include "Game/SyncService/chunkservice.hpp"
 

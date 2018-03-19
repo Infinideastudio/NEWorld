@@ -21,7 +21,7 @@
 #include "gamescene.h"
 #include "renderer/renderer.h"
 #include "renderer/texture.h"
-#include "Common/Json/JsonHelper.h"
+#include "Common/JsonHelper.h"
 #include "Game/Context/nwcontext.hpp"
 #include "Common/Logger.h"
 

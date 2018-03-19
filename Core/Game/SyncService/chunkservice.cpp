@@ -18,7 +18,7 @@
 // 
 
 #include "chunkservice.hpp"
-#include "Common/Json/JsonHelper.h"
+#include "Common/JsonHelper.h"
 
 // TODO: set this according to the mode.
 NWCOREAPI ChunkService chunkService(true);

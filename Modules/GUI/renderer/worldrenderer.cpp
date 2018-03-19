@@ -18,7 +18,7 @@
 // 
 
 #include "worldrenderer.h"
-#include "client/player.h"
+#include "Game/Client/player.h"
 #include "../renderdetector.hpp"
 #include <GL/glew.h>
 

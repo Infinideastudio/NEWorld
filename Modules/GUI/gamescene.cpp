@@ -23,7 +23,7 @@
 #include "window.h"
 #include "renderer/blockrenderer.h"
 #include "Game/SyncService/taskdispatcher.hpp"
-#include "Common/Json/JsonHelper.h"
+#include "Common/JsonHelper.h"
 #include "Common/Logger.h"
 #include "Common/Modules.h"
 

@@ -17,9 +17,9 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#include "Game/context/nwcontext.hpp"
+#include "Game/Context/nwcontext.hpp"
 #include "Game/SyncService/world/nwblock.h"
-#include "api/ApiCore.h"
+#include "Game/Api/ApiCore.h"
 #include "Game/SyncService/world/nwchunk.h"
 
 namespace PluginAPI {

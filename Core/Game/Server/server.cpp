@@ -18,7 +18,7 @@
 // 
 
 #include "server.h"
-#include "Game/context/nwcontext.hpp"
+#include "Game/Context/nwcontext.hpp"
 #include "Game/SyncService/chunkservice.hpp"
 #include "rpc/this_handler.h"
 

@@ -18,7 +18,7 @@
 // 
 
 #include "worldgen.h"
-#include "api/nwapigui.hpp"
+#include "Game/Api/nwapigui.hpp"
 #include "Common/EventBus.h"
 #include "Common/Modules.h"
 

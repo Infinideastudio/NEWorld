@@ -20,12 +20,12 @@
 #pragma once
 
 #include "Common/RateController.h"
-#include "client/player.h"
+#include "Game/Client/player.h"
 #include "widgetmanager.h"
 #include "window.h"
 #include "renderer/texture.h"
 #include "renderer/worldrenderer.h"
-#include "server/server.h"
+#include "Game/Server/server.h"
 
 class GameScene {
 public:

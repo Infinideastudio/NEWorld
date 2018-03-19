@@ -18,8 +18,8 @@
 // 
 
 #include "cli.hpp"
-#include "Common/Json/JsonHelper.h"
-#include "server/server.h"
+#include "Common/JsonHelper.h"
+#include "Game/Server/server.h"
 
 int NWAPIEXPORT main(int argc, char* argv[]) {
     ServerCommandLine cli;
