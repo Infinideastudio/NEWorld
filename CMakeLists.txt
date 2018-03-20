@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 set(CMAKE_MACOSX_RPATH ON)
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_DIR ${CMAKE_SOURCE_DIR})
-set(SOURCE_DIR "${PROJECT_DIR}/Core")
+set(SOURCE_DIR "${PROJECT_DIR}/Core/Source")
 
 if(UNIX)
     link_libraries(dl stdc++fs)
