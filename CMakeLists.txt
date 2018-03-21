@@ -37,5 +37,6 @@ target_include_directories(Core PUBLIC ${RPCLIB_INCLUDE_DIR})
 target_link_libraries(Core Threads::Threads ${RPCLIB_LIBS})
 target_compile_definitions(Core PUBLIC ${RPCLIB_COMPILE_DEFINITIONS})
 
+add_subdirectory(Tools)
 add_subdirectory(Shells)
 add_subdirectory(Modules)
