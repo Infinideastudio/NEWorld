@@ -37,4 +37,9 @@ namespace filesystem = boost::filesystem;
 #endif
 #endif
 
-NWCOREAPI filesystem::path executablePath(const char* argv0);
+NWCOREAPI void fsInit(const char* argv0);
+NWCOREAPI filesystem::path executablePath();
+NWCOREAPI filesystem::path assetDir(const char* moduleName);
+NWCOREAPI filesystem::path assetDir(const std::string& moduleName);
+NWCOREAPI filesystem::path dataDir(const char* moduleName);
+NWCOREAPI filesystem::path dataDir(const std::string& moduleName);

@@ -17,8 +17,7 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef PLAYER_H_
-#define PLAYER_H_
+#pragma once
 
 #include <Game/SyncService/world/playerobject.h>
 #include <Game/SyncService/chunkservice.hpp>
@@ -53,5 +52,3 @@ private:
     void move(const World& world);
     void rotationMove();
 };
-
-#endif // !PLAYER_H_

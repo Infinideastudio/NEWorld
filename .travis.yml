@@ -23,12 +23,10 @@ matrix:
             - cmake-data
             - libgl1-mesa-dev
             - libglu1-mesa-dev
-            - freeglut3-dev
             - libglew-dev
             - libsdl2-dev
             - libsdl2-image-dev
 install:
-  - sudo ln -s /usr/bin/g++-7 /usr/bin/g++ -f
   - |
     git clone https://github.com/rpclib/rpclib.git
     cd ./rpclib
@@ -36,5 +34,7 @@ install:
     sudo make install 
     cd ..
 script:
-  - cmake .
+  - mkdir cmakeBuild && cd cmakeBuild
+  - export CXX=g++-7 CC=gcc-7
+  - cmake ..
   - make -j8

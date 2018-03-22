@@ -17,10 +17,10 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef NWAPIGUI_H_
-#define NWAPIGUI_H_
+#pragma once
 
 #include "ApiCore.h"
+#include "Common/Filesystem.h"
 
 extern "C" {
 
@@ -33,9 +33,7 @@ extern "C" {
         NWtextureid right, left, top, bottom, front, back;
     };
 
-    NWAPI NWtextureid NWAPICALL nwRegisterTexture(const char* filename);
+    NWAPI NWtextureid NWAPICALL nwRegisterTexture(const filesystem::path& pth);
     NWAPI void NWAPICALL nwSetBlockRenderFunc(size_t id, NWblockrenderfunc func);
     NWAPI void NWAPICALL nwUseDefaultBlockRenderFunc(size_t id, void* data);
 }
-
-#endif // !NWAPIGUI_H_

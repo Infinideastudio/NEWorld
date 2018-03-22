@@ -83,18 +83,24 @@ namespace {
         return makeWithString(argv0);
     }
 
-    struct ExecPathHelper {
-        static filesystem::path executablePathWorker();
-
-        auto get(const char* argv0) {
+    class ExecPathHelper {
+    public:
+        static auto& getInstance() { static ExecPathHelper ins; return ins; }
+        operator filesystem::path() {
+            if(mPath.empty())
+                init(nullptr);
+            return mPath;
+        }
+        void init(const char* argv0) { mPath = get(argv0).remove_filename(); }
+    private:
+        filesystem::path get(const char* argv0) {
             auto ret = executablePathWorker();
             if (ret.empty())
                 ret = executablePathFallback(argv0);
-            return ret.make_preferred();
+            return filesystem::absolute(ret.make_preferred());
         }
-
-        ExecPathHelper(const char* argv0) : pth(get(argv0)) {}
-        filesystem::path pth;
+        filesystem::path mPath;
+        static filesystem::path executablePathWorker();
     };
 }
 
@@ -241,7 +247,14 @@ filesystem::path ExecPathHelper::executablePathWorker() { return ""; }
 
 #endif
 
-filesystem::path executablePath(const char* argv0) {
-    static ExecPathHelper pth(argv0);
-    return pth.pth;
-}
+filesystem::path executablePath() { return ExecPathHelper::getInstance(); }
+
+void fsInit(const char *argv0) { ExecPathHelper::getInstance().init(argv0); }
+
+filesystem::path assetDir(const char *moduleName) { return executablePath() / "Assets" / moduleName; }
+
+filesystem::path assetDir(const std::string &moduleName) { return assetDir(moduleName.c_str()); }
+
+filesystem::path dataDir(const char* moduleName) { return executablePath() / "Data" / moduleName; }
+
+filesystem::path dataDir(const std::string& moduleName) { return dataDir(moduleName.c_str()); }

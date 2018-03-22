@@ -17,8 +17,7 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef WORLDGEN_H_
-#define WORLDGEN_H_
+#pragma once
 
 #include "Game/Api/ApiCore.h"
 
@@ -45,5 +44,3 @@ namespace WorldGen {
 
 // Chunk generator
 void NWAPICALL generator(const NWvec3i* pos, NWblockdata* blocks, int daylightBrightness);
-
-#endif

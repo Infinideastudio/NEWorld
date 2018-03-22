@@ -17,8 +17,8 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef WIDGET_H
-#define WIDGET_H
+#pragma once
+
 #include <functional>
 #include "nuklear_helper.h"
 #include <string>
@@ -67,5 +67,3 @@ private:
     RenderCallback mRenderFunc;
     UpdateCallback mUpdateFunc;
 };
-
-#endif

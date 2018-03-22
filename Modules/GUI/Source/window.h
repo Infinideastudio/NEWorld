@@ -17,8 +17,7 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef WINDOW_H_
-#define WINDOW_H_
+#pragma once
 
 #include <string>
 #include <SDL2/SDL.h>
@@ -82,5 +81,3 @@ private:
     SDL_GLContext mContext;
     nk_context* mNuklearContext;
 };
-
-#endif

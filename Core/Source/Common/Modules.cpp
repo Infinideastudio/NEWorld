@@ -134,6 +134,8 @@ class ModuleManager::ModuleLoader final {
         Status stat = Status::Pending;
     };
 
+    static auto getModuleDir() { return executablePath() / "Modules"; }
+
 public:
     ModuleLoader();
     auto&& result() && { return std::move(mResult); }
@@ -158,7 +160,7 @@ ModuleManager::ModuleLoader::ModuleLoader() {
         ":";
 #endif
     std::string env = std::getenv("PATH");
-    env = "PATH=" + env + pathSep + filesystem::absolute("./Modules/").string() + pathSep;
+    env = "PATH=" + env + pathSep + filesystem::absolute(getModuleDir()).string() + pathSep;
     auto const nenv = new char[env.size() + 1];
     std::strcpy(nenv, env.c_str());
 #if BOOST_COMP_MSVC
@@ -221,7 +223,7 @@ void ModuleManager::ModuleLoader::verify(const DependencyInfo& inf) {
 
 void ModuleManager::ModuleLoader::walk() {
     infostream << "Start Walking Module Dir...";
-    const filesystem::path path = "./Modules/";
+    const auto path = getModuleDir();
     if (filesystem::exists(path)) {
         for (auto&& file : filesystem::directory_iterator(path)) {
             if (file.path().extension().string() == ".nwModule") {

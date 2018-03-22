@@ -17,8 +17,7 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef PLAYEROBJECT_H_
-#define PLAYEROBJECT_H_
+#pragma once
 
 #include "object.h"
 
@@ -53,5 +52,3 @@ private:
         mHitbox = AABB(-mHitboxSize / 2, mHitboxSize / 2);
     }
 };
-
-#endif

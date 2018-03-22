@@ -16,8 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef NWAPI_INTERNAL_HPP_
-#define NWAPI_INTERNAL_HPP_
+#pragma once
 
 #include <stdint.h>
 #include <stddef.h>
@@ -49,4 +48,3 @@
 #define NWAPI NWAPIENTRY
 #endif
 
-#endif // !NWAPI_INTERNAL_HPP_

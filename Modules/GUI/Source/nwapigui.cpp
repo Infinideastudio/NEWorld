@@ -22,6 +22,7 @@
 #include <Game/Api/nwapigui.hpp>
 #include <Common/EventBus.h>
 #include "Common/Logger.h"
+#include "Common/Filesystem.h"
 
 extern "C" {
     NWAPI void NWAPICALL nwSetBlockRenderFunc(size_t, NWblockrenderfunc) { }
@@ -32,8 +33,8 @@ extern "C" {
         BlockRendererManager::setBlockRenderer(id, std::make_shared<DefaultBlockRenderer>(array));
     }
 
-    NWAPI NWtextureid NWAPICALL nwRegisterTexture(const char* filename) {
-        return BlockTextureBuilder::addTexture(filename);
+    NWAPI NWtextureid NWAPICALL nwRegisterTexture(const filesystem::path& pth) {
+        return BlockTextureBuilder::addTexture(pth.string().c_str());
     }
 }
 

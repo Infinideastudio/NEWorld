@@ -17,8 +17,8 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef TEXTURES_H
-#define TEXTURES_H
+#pragma once
+
 #include <string>
 #include "opengl.h"
 
@@ -68,5 +68,3 @@ private:
 
     static void build2DMipmaps(GLenum format, int w, int h, int level, const ubyte* src);
 };
-
-#endif

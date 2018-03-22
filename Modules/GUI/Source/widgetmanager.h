@@ -17,8 +17,8 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#ifndef WIDGET_MANAGER_H
-#define WIDGET_MANAGER_H
+#pragma once
+
 #include <unordered_map>
 #include "widget.h"
 #include <memory>
@@ -66,5 +66,3 @@ private:
     WidgetType mWidgets;
     nk_context* mNkContext;
 };
-
-#endif

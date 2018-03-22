@@ -52,14 +52,15 @@ public:
     }
 
     void rendererInit() {
+        auto path = (assetDir("infinideas.main") / "blocks");
         NWtextureid id[] =
         {
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/grass_top.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/grass_round.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/dirt.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/rock.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/sand.png"),
-            CALL_AUTO(nwRegisterTexture, "./res/blocks/water.png")
+            CALL_AUTO(nwRegisterTexture, path / "/grass_top.png"),
+            CALL_AUTO(nwRegisterTexture, path / "/grass_round.png"),
+            CALL_AUTO(nwRegisterTexture, path / "/dirt.png"),
+            CALL_AUTO(nwRegisterTexture, path / "/rock.png"),
+            CALL_AUTO(nwRegisterTexture, path / "sand.png"),
+            CALL_AUTO(nwRegisterTexture, path / "water.png")
         };
         NWblocktexture grass{ id[1], id[1], id[0], id[2], id[1], id[1] };
         NWblocktexture rock{ id[3], id[3], id[3], id[3], id[3], id[3] };
