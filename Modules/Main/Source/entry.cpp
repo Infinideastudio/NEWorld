@@ -84,10 +84,7 @@ extern "C" {
     "name" : "Main",
     "author" : "INFINIDEAS",
     "uri" : "infinideas.neworld.Main",
-    "version" : [0, 0, 1, 0],
-    "dependencies" : [
-        { "uri" : "infinideas.neworld.gui", "required" : [0, 0, 1, 0], "optional" : true }
-    ]
+    "version" : [0, 0, 1, 0]
 }
 )";
     }

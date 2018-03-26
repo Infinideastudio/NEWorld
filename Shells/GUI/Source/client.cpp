@@ -17,15 +17,38 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#include <string>
-#include "Common/EventBus.h"
-#include "Common/JsonHelper.h"
-#include "Common/Filesystem.h"
-#include "Common/Modules.h"
+#include "neworld.h"
+#include <argagg.hpp>
+#include "Game/Context/nwcontext.hpp"
+#include <iostream>
 
-int guiMain(int argc, char** argv);
 
 int main(int argc, char** argv) {
+    NEWorld instance{};
     loadModules();
-    return CALL_AUTO(guiMain, argc, argv);
+    argagg::parser argparser{
+        {
+            {
+                "help", {"-h", "--help"},
+                "shows this help message", 0
+            },
+            {
+                "multiplayer-client", {"-c", "--client"},
+                "Start the game as a client of multiplayer session", 0
+            }
+        }
+    };
+    try { context.args = argparser.parse(argc, argv); }
+    catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return -1;
+    }
+    if (context.args["help"]) {
+        argagg::fmt_ostream fmt(std::cerr);
+        fmt << "Usage:" << std::endl
+            << argparser;
+        return 0;
+    }
+    instance.run();
+    return 0;
 }

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.9)
 
 # Target: Main
 add_custom_target(MainCopyAsset ALL CopyAssets
-        ${CMAKE_BINARY_DIR}/Product
+        ${CMAKE_BINARY_DIR}/Product/$<CONFIG>
         ${CMAKE_CURRENT_SOURCE_DIR}
         infinideas.main
         )
