@@ -12,13 +12,19 @@ clone_depth: 1
 install:
   - if %PLATFORM% equ x86 (vcpkg.exe install sdl2 sdl2-image glew rpclib freetype) else (vcpkg.exe install sdl2:x64-windows sdl2-image:x64-windows glew:x64-windows rpclib:x64-windows freetype:x64-windows) > nul
 build:
-  project: Build/VisualStudio_v15/NEWorld.sln
-  verbosity: minimal
+  - mkdir projectBuild
+  - cd projectBuild
+  - if %CONFIGURATION% equ Debug and %PLATFORM% equ x86 (cmake ../ -G "Visual Studio 15 2017" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE="C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake" )
+  - if %CONFIGURATION% equ Release and %PLATFORM% equ x86 (cmake ../ -G "Visual Studio 15 2017" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake" )
+  - if %CONFIGURATION% equ Debug and %PLATFORM% equ x64 (cmake ../ -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE="C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake" )
+  - if %CONFIGURATION% equ Release and %PLATFORM% equ x64 (cmake ../ -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake" )
+  - cd ..
 on_success:
   # Create an archive
   - 7z a c:\NEWorld.zip .\licenses > nul
-  - cd .\release
-  - 7z a c:\NEWorld.zip . > nul
+  - cd .\projectBuild
+  - 7z a c:\NEWorld.zip .\Product-%CONFIGURATION% > nul
+  - 7z a c:\NEWorld.zip .\SDK > nul
   - if %PLATFORM% equ x64 rename c:\NEWorld.zip NEWorld_x64.zip
   - if %PLATFORM% equ x64 (appveyor PushArtifact c:\NEWorld_x64.zip) else (appveyor PushArtifact c:\NEWorld.zip)
   

@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.9)
 
 # Target: NEWorld
 add_custom_target(NEWorldCopyAsset ALL CopyAssets
-        ${CMAKE_BINARY_DIR}/Product/$<CONFIG>
+        ${NEWORLD_PRODUCT_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}
-        infinideas.NEWorld
+        infinideas.gui
         )
 file(GLOB_RECURSE SRC_NEWorld Source/*.*)
 add_executable(NEWorld ${SRC_NEWorld})
