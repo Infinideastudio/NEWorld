@@ -18,7 +18,7 @@
 //
 
 #include <iostream>
-#include <NRT/Cfx/Include/Cfx/Application.h>
+#include <Cfx/Application.h>
 
 #include "Application.h"
 #include "Logger.h"

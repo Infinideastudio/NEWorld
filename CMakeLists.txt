@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 set(CMAKE_MACOSX_RPATH ON)
 set(CMAKE_CXX_STANDARD 17)
 set(PROJECT_DIR ${CMAKE_SOURCE_DIR})
-set(SOURCE_DIR "${PROJECT_DIR}/Core/Source")
+set(SOURCE_DIR "${PROJECT_DIR}/Core")
 
 if(UNIX AND NOT APPLE)
     link_libraries(dl stdc++fs)
@@ -31,7 +31,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${NEWORLD_PRODUCT_DIR})
 include(3rdParty/NRT/Build/Configure.cmake)
 
 # For the whole project
-include_directories(${SOURCE_DIR} "${PROJECT_DIR}/3rdParty")
+include_directories(${SOURCE_DIR} "${PROJECT_DIR}/3rdParty/Headers")
 find_package(Threads REQUIRED)
 
 # Runtime
