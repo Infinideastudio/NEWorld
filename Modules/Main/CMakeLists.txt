@@ -8,6 +8,7 @@ add_custom_target(MainCopyAsset ALL CopyAssets
         )
 file(GLOB SRC_MAIN Source/*.*)
 add_library(Main SHARED ${SRC_MAIN})
+target_enable_ipo(Main)
 target_link_libraries(Main Core)
 target_compile_definitions(Main PRIVATE -DNWCompartmentLoggerPrefix="Main")
 add_dependencies(Main MainCopyAsset)

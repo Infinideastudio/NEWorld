@@ -59,86 +59,72 @@ static void defaultBlockRendererImplementation(VertexArray& target, const Chunk*
     };
 
     // Right
-    if (adjacentTest(curr, neighbors[0]))
+    if (adjacentTest(curr, neighbors[0])) {
+        const float light = neighbors[0].getBrightness() / 16.0f * 0.5f;
         target.addPrimitive(4,
                             {
-                                coord[0].d[0], coord[0].d[1], 0.5f, pos.x + 1.0f, pos.y + 1.0f,
-                                pos.z + 1.0f,
-                                coord[0].d[0], coord[0].d[3], 0.5f, pos.x + 1.0f, pos.y + 0.0f,
-                                pos.z + 1.0f,
-                                coord[0].d[2], coord[0].d[3], 0.5f, pos.x + 1.0f, pos.y + 0.0f,
-                                pos.z + 0.0f,
-                                coord[0].d[2], coord[0].d[1], 0.5f, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f
+                                coord[0].d[0], coord[0].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f,
+                                coord[0].d[0], coord[0].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 1.0f,
+                                coord[0].d[2], coord[0].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 0.0f,
+                                coord[0].d[2], coord[0].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f
                             });
 
+    }
     // Left
-    if (adjacentTest(curr, neighbors[1]))
+    if (adjacentTest(curr, neighbors[1])) {
+        const float light = neighbors[1].getBrightness() / 16.0f * 0.5f;
         target.addPrimitive(4,
                             {
-                                coord[1].d[0], coord[1].d[1], 0.5f, pos.x + 0.0f, pos.y + 1.0f,
-                                pos.z + 0.0f,
-                                coord[1].d[0], coord[1].d[3], 0.5f, pos.x + 0.0f, pos.y + 0.0f,
-                                pos.z + 0.0f,
-                                coord[1].d[2], coord[1].d[3], 0.5f, pos.x + 0.0f, pos.y + 0.0f,
-                                pos.z + 1.0f,
-                                coord[1].d[2], coord[1].d[1], 0.5f, pos.x + 0.0f, pos.y + 1.0f, pos.z + 1.0f
+                                coord[1].d[0], coord[1].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 0.0f,
+                                coord[1].d[0], coord[1].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 0.0f,
+                                coord[1].d[2], coord[1].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 1.0f,
+                                coord[1].d[2], coord[1].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 1.0f
                             });
-
+    }
     // Top
-    if (adjacentTest(curr, neighbors[2]))
+    if (adjacentTest(curr, neighbors[2])) {
+        const float light = neighbors[2].getBrightness() / 16.0f;
         target.addPrimitive(4,
                             {
-                                /*0.0f, 0.0f, 1.0f, pos.x + 0.0f, pos.y + 1.0f, pos.z + 0.0f,
-                                0.0f, 1.0f, 1.0f, pos.x + 0.0f, pos.y + 1.0f, pos.z + 1.0f,
-                                1.0f, 1.0f, 1.0f, pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f,
-                                1.0f, 0.0f, 1.0f, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f,*/
-                                coord[2].d[0], coord[2].d[1], 1.0f, pos.x + 0.0f, pos.y + 1.0f,
-                                pos.z + 0.0f,
-                                coord[2].d[0], coord[2].d[3], 1.0f, pos.x + 0.0f, pos.y + 1.0f,
-                                pos.z + 1.0f,
-                                coord[2].d[2], coord[2].d[3], 1.0f, pos.x + 1.0f, pos.y + 1.0f,
-                                pos.z + 1.0f,
-                                coord[2].d[2], coord[2].d[1], 1.0f, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f
+                                coord[2].d[0], coord[2].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 0.0f,
+                                coord[2].d[0], coord[2].d[3], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 1.0f,
+                                coord[2].d[2], coord[2].d[3], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f,
+                                coord[2].d[2], coord[2].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f
                             });
-
+    }
     // Bottom
-    if (adjacentTest(curr, neighbors[3]))
+    if (adjacentTest(curr, neighbors[3])) {
+        const float light = neighbors[3].getBrightness() / 16.0f;
         target.addPrimitive(4,
                             {
-                                coord[3].d[0], coord[3].d[1], 1.0f, pos.x + 0.0f, pos.y + 0.0f,
-                                pos.z + 1.0f,
-                                coord[3].d[0], coord[3].d[3], 1.0f, pos.x + 0.0f, pos.y + 0.0f,
-                                pos.z + 0.0f,
-                                coord[3].d[2], coord[3].d[3], 1.0f, pos.x + 1.0f, pos.y + 0.0f,
-                                pos.z + 0.0f,
-                                coord[3].d[2], coord[3].d[1], 1.0f, pos.x + 1.0f, pos.y + 0.0f, pos.z + 1.0f
+                                coord[3].d[0], coord[3].d[1], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 1.0f,
+                                coord[3].d[0], coord[3].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 0.0f,
+                                coord[3].d[2], coord[3].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 0.0f,
+                                coord[3].d[2], coord[3].d[1], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 1.0f
                             });
-
+    }
     // Front
-    if (adjacentTest(curr, neighbors[4]))
+    if (adjacentTest(curr, neighbors[4])) {
+        const float light = neighbors[4].getBrightness() / 16.0f * 0.7f;
         target.addPrimitive(4,
                             {
-                                coord[4].d[0], coord[4].d[1], 0.7f, pos.x + 0.0f, pos.y + 1.0f,
-                                pos.z + 1.0f,
-                                coord[4].d[0], coord[4].d[3], 0.7f, pos.x + 0.0f, pos.y + 0.0f,
-                                pos.z + 1.0f,
-                                coord[4].d[2], coord[4].d[3], 0.7f, pos.x + 1.0f, pos.y + 0.0f,
-                                pos.z + 1.0f,
-                                coord[4].d[2], coord[4].d[1], 0.7f, pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f
+                                coord[4].d[0], coord[4].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 1.0f,
+                                coord[4].d[0], coord[4].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 1.0f,
+                                coord[4].d[2], coord[4].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 1.0f,
+                                coord[4].d[2], coord[4].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f
                             });
-
+    }
     // Back
-    if (adjacentTest(curr, neighbors[5]))
+    if (adjacentTest(curr, neighbors[5])) {
+        const float light = neighbors[5].getBrightness() / 16.0f * 0.7f;
         target.addPrimitive(4,
                             {
-                                coord[5].d[0], coord[5].d[1], 0.7f, pos.x + 1.0f, pos.y + 1.0f,
-                                pos.z + 0.0f,
-                                coord[5].d[0], coord[5].d[3], 0.7f, pos.x + 1.0f, pos.y + 0.0f,
-                                pos.z + 0.0f,
-                                coord[5].d[2], coord[5].d[3], 0.7f, pos.x + 0.0f, pos.y + 0.0f,
-                                pos.z + 0.0f,
-                                coord[5].d[2], coord[5].d[1], 0.7f, pos.x + 0.0f, pos.y + 1.0f, pos.z + 0.0f
+                                coord[5].d[0], coord[5].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f,
+                                coord[5].d[0], coord[5].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 0.0f,
+                                coord[5].d[2], coord[5].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 0.0f,
+                                coord[5].d[2], coord[5].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 0.0f
                             });
+    }
 }
 
 void BlockRendererManager::render(VertexArray& target, size_t id, const Chunk* chunk, const Vec3i& pos) {

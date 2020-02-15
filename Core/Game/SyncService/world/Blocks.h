@@ -59,7 +59,7 @@ private:
         } data;
 
         uint32_t allData;
-    } mBlockDataUnion;
+    } mBlockDataUnion{};
 };
 
 class BlockType {

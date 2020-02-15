@@ -89,7 +89,7 @@ void RenderDetectorTask::task(const ChunkService& cs) {
                         std::make_unique<ChunkRenderDataGenerateTask>(mWorldRenderer, mCurrentWorldId,
                                 chunk->getPosition())
                 );
-                if (counter++ == mMaxChunkLoadPerTick) break;
+                //wwwwif (counter++ == mMaxChunkLoadPerTick) break;
             }
         }
         else {

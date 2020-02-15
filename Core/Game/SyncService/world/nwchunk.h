@@ -33,7 +33,14 @@
 #include "Common/Utility.h"
 
 class Chunk;
-using ChunkGenerator = std::add_pointer_t<void(const Vec3i*, Chunk*, int)>;
+
+struct ChunkGenerateArgs {
+    const Vec3i* Pos;
+    Chunk* const Chunk;
+    const int SkyLight;
+};
+
+using ChunkGenerator = std::add_pointer_t<void(const ChunkGenerateArgs*)>;
 
 class NWCOREAPI Chunk final : public NonCopyable {
 public:
@@ -114,10 +121,12 @@ public:
     const World* getWorld() const noexcept { return mWorld; }
     bool isMonotonic() const noexcept { return mBlocks == nullptr; }
     BlockData getMonotonicBlock() const noexcept { return mMonotonicBlock; }
-    void allocateBlocks() { /*Assert(isMonotonic());*/
+    void allocateBlocks(bool fill = true) { /*Assert(isMonotonic());*/
         if (!isMonotonic()) return;
         mBlocks = std::make_unique<Blocks>();
-        // TODO: fill the blocks with the monotonic block.
+        if (fill) {
+            std::fill(mBlocks->begin(), mBlocks->end(), mMonotonicBlock);
+        }
     }
     void setMonotonic(BlockData block) noexcept { Assert(isMonotonic()); mMonotonicBlock = block; }
 

@@ -35,7 +35,7 @@ int32_t registerBlock(const char* name, bool solid, bool translucent, bool opaqu
 class MainModule : public ModuleObject {
 public:
     MainModule() {
-        nwRegisterChunkGenerator(generator);
+        WorldGen::selfRegister();
         GrassID = registerBlock("Grass", true, false, true, 2);
         RockID = registerBlock("Rock", true, false, true, 2);
         DirtID = registerBlock("Dirt", true, false, true, 2);
@@ -47,7 +47,7 @@ public:
         catch(...){}
     }
 
-    void rendererInit() {
+    static void rendererInit() {
         auto path = (assetDir("infinideas.main") / "blocks");
         NWtextureid id[] =
         {

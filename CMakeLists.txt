@@ -37,16 +37,17 @@ find_package(Threads REQUIRED)
 # Runtime
 add_subdirectory(3rdParty/NRT NRT)
 
-# Target: CFX
+# Target: Core
 file(GLOB_RECURSE SRC_CORE ${SOURCE_DIR}/*.*)
 
 add_library(Core SHARED ${SRC_CORE})
+target_enable_ipo(Core)
 target_compile_definitions(Core
     PRIVATE -DNWCOREEXPORTS
     PRIVATE -DNWAPIEXPORTS
     PRIVATE -DNWCompartmentLoggerPrefix="Core")
 
-# Link libraries for CFX
+# Link libraries for Core
 find_package(rpclib CONFIG REQUIRED)
 find_package(SQLite3 REQUIRED) # use the cmake built-in search
 target_link_libraries(Core Threads::Threads rpclib::rpc NRT.CFX SQLite::SQLite3)

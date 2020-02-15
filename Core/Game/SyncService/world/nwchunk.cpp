@@ -23,7 +23,7 @@
 #include "nwchunk.h"
 #include "world.h"
 
-void NWAPICALL DefaultChunkGen(const Vec3i*, Chunk* chunk, int32_t daylightBrightness) {
+void NWAPICALL DefaultChunkGen(const ChunkGenerateArgs*) {
     // This is the default terrain generator. Use this when no generators were loaded from plugins.
     
     //for (int x = 0; x < Chunk::Size() * Chunk::Size() * Chunk::Size(); ++x)
@@ -68,7 +68,8 @@ Chunk::ChunkDataStorageType Chunk::getChunkForExport() const noexcept {
 }
 
 void Chunk::build(int daylightBrightness) {
-    ChunkGen(&getPosition(), this, daylightBrightness);
+    ChunkGenerateArgs args { &getPosition(), this, daylightBrightness };
+    ChunkGen(&args);
     setUpdated(true);
 }
 
