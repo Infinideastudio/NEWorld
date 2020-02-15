@@ -94,20 +94,28 @@ namespace {
         }
 
         static void reset() noexcept {
-            mCounter = mDone = 0;
+            mCounter = 0;
+            std::lock_guard lk {mLock};
+            mDone = 0;
             mTotalCount = gReadOnlyTasks.size();
         }
 
         static void completeTasks(int count) noexcept {
-            if (mDone.fetch_add(count) + count == mTotalCount) {
-                ReadOnlyTaskFinal();
-            }
+            if (completes(count)) { ReadOnlyTaskFinal(); }
         }
 
-        static void addTasks(int count) noexcept { mTotalCount.fetch_add(count); }
+        static void addTasks(int count) noexcept {
+            std::lock_guard lk {mLock};
+            mTotalCount = mTotalCount + count;
+        }
 
         static int countCurrentRead() noexcept { return mTotalCount.load(); }
     private:
+        static bool completes(const int count) noexcept {
+            std::lock_guard lk {mLock};
+            return (mDone = mDone + count) == mTotalCount;
+        }
+
         void initTick() noexcept {
             mMeter.sync();
             gThreadMode = DispatchMode::Read;
@@ -129,9 +137,12 @@ namespace {
                 else return localCount;
             }
         }
+
         RateController mMeter{30};
 
-        inline static std::atomic_int mCounter{}, mDone{}, mTotalCount{};
+        inline static Lock<SpinLock> mLock {};
+
+        inline static std::atomic_int mCounter{}, mDone{}, mTotalCount {};
     } gReadPoolTask;
 
     class MainTimer : public CycleTask {
@@ -192,7 +203,7 @@ void TaskDispatch::boot() noexcept {
     gMainTimer.Enable();
 }
 
-void TaskDispatch::addNow(std::unique_ptr<ReadOnlyTask> task) noexcept {
+void TaskDispatch:: addNow(std::unique_ptr<ReadOnlyTask> task) noexcept {
     if (gThreadMode==DispatchMode::Read) {
         ThreadPool::Enqueue(ExecuteSingleTask::create(std::move(task)));
     }
