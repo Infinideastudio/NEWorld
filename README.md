@@ -39,10 +39,10 @@ See [Compilation Guide](doc/installation.md), or you may download the latest Win
 
 ![Screenshot1](Docs/screenshot.png)
 
-![Screenshot Far](Docs/far.png)
+![Screenshot Far](https://distribute.newinfinideas.org/pictures/far.png)
 22 区块视距 （704 方块半径）
 
-22 chunks render distance (704 blocks) with 66000+ chunks loaded
+22 chunks render distance (704 blocks) with 91000+ chunks loaded
 
 ![Screenshot Old](Docs/old.png)
 带光影和水反的[旧 NEWorld](https://github.com/Infinideastudio/NEWorldOld/tree/0.5.0) (重构后的版本暂时没有光影)
