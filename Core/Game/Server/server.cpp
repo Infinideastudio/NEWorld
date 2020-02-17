@@ -20,6 +20,7 @@
 #include "server.h"
 #include <Common/RPC/RPC.h>
 #include <Common/Logger.h>
+#include <Game/SyncService/taskdispatcher.hpp>
 #include "Game/SyncService/chunkservice.hpp"
 #include "rpc/this_handler.h"
 

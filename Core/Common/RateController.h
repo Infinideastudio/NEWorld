@@ -43,7 +43,7 @@ public:
      * \brief Get elapsed time from the start of the tick, in milliseconds
      * \return Elapsed time from the start of the tick, in milliseconds
      */
-    auto getDeltaTimeMs() const noexcept {
+    [[nodiscard]] auto getDeltaTimeMs() const noexcept {
         return std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - mLast).count();
     }
 
@@ -51,7 +51,7 @@ public:
      * \brief Check if the deadline of the current tick has pased
      * \return true if the deadline is passed, false otherwise
      */
-    bool isDue() const noexcept { return mRate ? Clock::now() >= mDue : true; }
+    [[nodiscard]] bool isDue() const noexcept { return mRate ? Clock::now() >= mDue : true; }
 
     /**
      * \brief Increase the internal timer by one tick. Sets the current due time as the starting time of the next tick
@@ -77,4 +77,16 @@ public:
 private:
     int mRate;
     Clock::time_point mDue, mLast;
+};
+
+class Timer {
+    using Clock = std::chrono::high_resolution_clock;
+public:
+    Timer() noexcept : mLast(Clock::now()) {}
+
+    [[nodiscard]] auto getDeltaTimeMs() const noexcept {
+        return std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - mLast).count();
+    }
+private:
+    Clock::time_point mLast;
 };

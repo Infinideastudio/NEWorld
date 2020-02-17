@@ -19,8 +19,9 @@
 
 #include <atomic>
 #include <chrono>
-#include <Common/RPC/RPC.h>
 #include <mutex>
+#include <Common/RPC/RPC.h>
+#include <Game/SyncService/taskdispatcher.hpp>
 #include "gamescene.h"
 #include "Common/JsonHelper.h"
 #include "neworld.h"

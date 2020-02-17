@@ -24,6 +24,7 @@
 #include "Common/RateController.h"
 #include <Cfx/Threading/SpinLock.h>
 #include <Cfx/Threading/Micro/Timer.h>
+#include <Cfx/Threading/Micro/Promise.h>
 #include <Cfx/Threading/Micro/ThreadPool.h>
 #include <Cfx/Utilities/TempAlloc.h>
 
@@ -36,126 +37,186 @@ namespace {
     std::atomic_bool gEnter{false};
     thread_local DispatchMode gThreadMode{DispatchMode::None};
 
-    std::vector<std::unique_ptr<ReadOnlyTask>> gReadOnlyTasks, gNextReadOnlyTasks, gRegularReadOnlyTasks;
-    std::vector<std::unique_ptr<ReadWriteTask>> gReadWriteTasks, gNextReadWriteTasks, gRegularReadWriteTasks;
+    using ReadTaskHandle = std::unique_ptr<ReadOnlyTask>;
+    using ReadWriteTaskHandle = std::unique_ptr<ReadWriteTask>;
+
+    std::vector<ReadTaskHandle> gReadOnlyTasks, gNextReadOnlyTasks, gRegularReadOnlyTasks;
+    std::vector<ReadWriteTaskHandle> gReadWriteTasks, gNextReadWriteTasks, gRegularReadWriteTasks;
     std::vector<std::unique_ptr<RenderTask>> gRenderTasks, gNextRenderTasks;
     std::vector<int64_t> gTimeUsed;
     int64_t gTimeUsedRWTasks;
 
-    SpinLock gReadLock{}, gWriteLock{}, gRenderLock{};
+    Lock<SpinLock> gReadLock{}, gWriteLock{}, gRenderLock{};
 
     void ExecuteWriteTasks() noexcept {
         gThreadMode = DispatchMode::ReadWrite;
         for (const auto& task : gReadWriteTasks) { task->task(*gService); }
         gThreadMode = DispatchMode::None;
+        gReadWriteTasks.clear();
     }
 
+    template <class T, class = std::enable_if_t<std::is_convertible_v<T*, InterOp::BasicTask*>>>
+    void Cancel(
+            std::vector<std::unique_ptr<T>> in,
+            std::vector<std::unique_ptr<InterOp::BasicTask>>& remaining
+    ) noexcept {
+        std::vector<std::unique_ptr<T>> handles = std::move(in);
+        for (auto& x : handles) {
+            if (x->canCancel()) {
+                x->onCancel();
+            }
+            else {
+                remaining.push_back(std::move(x));
+            }
+        }
+    }
+
+    struct Finalizer { Promise<void> Complete; };
+
+    std::atomic<Finalizer*> gFinalizer {nullptr};
+
     void PrepareNextReadOnly() {
-        gReadOnlyTasks.clear();
-        gReadLock.Enter();
+        std::lock_guard lk{gReadLock};
         for (auto& task : gRegularReadOnlyTasks)
             gNextReadOnlyTasks.emplace_back(task->clone());
         std::swap(gReadOnlyTasks, gNextReadOnlyTasks);
-        gReadLock.Leave();
     }
 
     void PrepareNextReadWrite() {
-        gReadWriteTasks.clear();
-        gWriteLock.Enter();
+        std::lock_guard lk{gWriteLock};
         for (auto& task : gRegularReadWriteTasks)
             gNextReadWriteTasks.emplace_back(task->clone());
         std::swap(gReadWriteTasks, gNextReadWriteTasks);
-        gWriteLock.Leave();
     }
 
-    template <class T>
-    [[nodiscard]] auto CountElapsedMs(const T& start) {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now()-start).count();
+    void TaskFinalize(Finalizer* finalizer) noexcept {
+        std::vector<std::unique_ptr<InterOp::BasicTask>> buffer {};
+        {
+            std::lock_guard lk{gReadLock};
+            Cancel(std::move(gNextReadOnlyTasks), buffer);
+            Cancel(std::move(gRegularReadOnlyTasks), buffer);
+        }
+        {
+            std::lock_guard lk{gWriteLock};
+            Cancel(std::move(gNextReadWriteTasks), buffer);
+            Cancel(std::move(gRegularReadWriteTasks), buffer);
+        }
+        while (!buffer.empty()) {
+            Cancel(std::move(buffer), buffer);
+        }
+        finalizer->Complete.SetValueUnsafe();
+        Temp::Delete(finalizer);
     }
 
     void ReadOnlyTaskFinal() noexcept {
-        const auto start = std::chrono::steady_clock::now();
+        Timer timer{};
         ExecuteWriteTasks();
-        PrepareNextReadOnly();
-        PrepareNextReadWrite();
+        if (auto x = gFinalizer.exchange(nullptr); !x) {
+            PrepareNextReadOnly();
+            PrepareNextReadWrite();
+        }
+        else {
+            TaskFinalize(x);
+        }
         gEnter.store(false);
-        gTimeUsedRWTasks = CountElapsedMs(start);
+        gTimeUsedRWTasks = timer.getDeltaTimeMs();
     }
 
-    // This task is scheduled by NRT Thread Pool directly and is responsible
-    // for processing NEWorld tasks pool.
-    class ExecutePoolTask : public AInstancedExecTask {
+    class ReadCompletionControl {
     public:
-        void Exec(uint32_t instanceId) noexcept override {
-            initTick();
-            const auto completedTasksNum = drainReads();
-            finishTick(instanceId);
-            completeTasks(completedTasksNum);
-        }
-
-        static void reset() noexcept {
-            mCounter = 0;
-            std::lock_guard lk {mLock};
-            mDone = 0;
-            mTotalCount = gReadOnlyTasks.size();
-        }
-
-        static void completeTasks(int count) noexcept {
-            if (completes(count)) { ReadOnlyTaskFinal(); }
+        static void complete(int count) noexcept {
+            if (check(count)) { ReadOnlyTaskFinal(); }
         }
 
         static void addTasks(int count) noexcept {
-            std::lock_guard lk {mLock};
-            mTotalCount = mTotalCount + count;
+            std::lock_guard lk{mLock};
+            mTotalCount.store(mTotalCount.load()+count); // explicit non-rmw, only to prevent tearing
         }
 
-        static int countCurrentRead() noexcept { return mTotalCount.load(); }
+        static void frameReset(int count) noexcept {
+            std::lock_guard lk{mLock};
+            mTotalCount = count;
+            mDone = 0;
+        }
+
+        static int countTasks() noexcept {
+            return mTotalCount.load(std::memory_order::memory_order_relaxed); // only a snapshot
+        }
     private:
-        static bool completes(const int count) noexcept {
-            std::lock_guard lk {mLock};
-            return (mDone = mDone + count) == mTotalCount;
+        static bool check(const int count) noexcept {
+            std::lock_guard lk{mLock};
+            return (mDone = mDone+count)==mTotalCount; // same as above
         }
 
-        void initTick() noexcept {
-            mMeter.sync();
+        inline static Lock<SpinLock> mLock{};
+
+        inline static std::atomic_int mDone{}, mTotalCount{};
+    };
+
+    // This task is scheduled by NRT Thread Pool directly and is responsible
+    // for processing NEWorld tasks pool.
+    class ReadOnlyExecutor : public AInstancedExecTask {
+    public:
+        explicit ReadOnlyExecutor(std::vector<ReadTaskHandle>&& handles) noexcept
+                :mHandles(std::move(handles)) { }
+
+        void Exec(const uint32_t instance) noexcept override {
+            Timer timer{};
             gThreadMode = DispatchMode::Read;
-        }
-
-        void finishTick(uint32_t instanceId) noexcept {
+            mCompleteCount.fetch_add(Drain());
             gThreadMode = DispatchMode::None;
-            gTimeUsed[instanceId] = mMeter.getDeltaTimeMs();
+            gTimeUsed[instance] = timer.getDeltaTimeMs();
         }
 
-        [[nodiscard]] static int drainReads() noexcept {
+        void OnComplete() noexcept override {
+            ReadCompletionControl::complete(mHandles.size());
+            mExit.SetValueUnsafe();
+            Temp::Delete(this);
+        }
+
+        static Future<void> CreateSubmit(std::vector<ReadTaskHandle>&& handles) {
+            const auto w = Temp::New<ReadOnlyExecutor>(std::move(handles));
+            auto fut = w->mExit.GetFuture();
+            ThreadPool::Spawn(w);
+            return fut;
+        }
+    private:
+        [[nodiscard]] int Drain() noexcept {
             int localCount = 0;
             for (;;) {
-                const auto i = mCounter.fetch_add(1);
-                if (i<gReadOnlyTasks.size()) {
-                    gReadOnlyTasks[i]->task(*gService);
+                const auto i = mHead.fetch_add(1);
+                if (i<mHandles.size()) {
+                    mHandles[i]->task(*gService);
                     ++localCount;
                 }
                 else return localCount;
             }
         }
+        std::vector<ReadTaskHandle> mHandles;
+        std::atomic_int mCompleteCount{0}, mHead{0};
+        Promise<void> mExit{};
+    };
 
-        RateController mMeter{30};
-
-        inline static Lock<SpinLock> mLock {};
-
-        inline static std::atomic_int mCounter{}, mDone{}, mTotalCount {};
-    } gReadPoolTask;
-
-    class MainTimer : public CycleTask {
+    class FrameControl : public CycleTask {
     public:
-        MainTimer() noexcept
+        FrameControl() noexcept
                 :CycleTask(std::chrono::milliseconds(33)) { }
 
         void OnTimer() noexcept override {
             auto val = gEnter.exchange(true);
             if (!val) {
-                ExecutePoolTask::reset();
-                ThreadPool::Spawn(&gReadPoolTask);
+                auto vec = queueSwap();
+                ReadCompletionControl::frameReset(vec.size());
+                ReadOnlyExecutor::CreateSubmit(std::move(vec));
             }
+            else {
+                debugstream << "Internal Server Tick Lag";
+            }
+        }
+    private:
+        static std::vector<ReadTaskHandle> queueSwap() noexcept {
+            std::lock_guard lk{gReadLock};
+            return std::move(gReadOnlyTasks);
         }
     } gMainTimer;
 
@@ -163,37 +224,41 @@ namespace {
     // for processing a single NEWorld Task.
     class ExecuteSingleTask : public IExecTask {
     public:
-        explicit ExecuteSingleTask(std::unique_ptr<ReadOnlyTask> task) noexcept
+        explicit ExecuteSingleTask(ReadTaskHandle task) noexcept
                 :mTask(std::move(task)) { }
+
         void Exec() noexcept override {
             gThreadMode = DispatchMode::Read;
             mTask->task(*gService);
             gThreadMode = DispatchMode::None;
             mTask.reset();
-            ExecutePoolTask::completeTasks(1);
+            ReadCompletionControl::complete(1);
             Temp::Delete(this);
         }
 
-        [[nodiscard]] static IExecTask* create(std::unique_ptr<ReadOnlyTask> task) noexcept {
-            ExecutePoolTask::addTasks(1);
+        [[nodiscard]] static IExecTask* create(ReadTaskHandle task) noexcept {
+            ReadCompletionControl::addTasks(1);
             return Temp::New<ExecuteSingleTask>(std::move(task));
         }
     private:
-        std::unique_ptr<ReadOnlyTask> mTask;
+        ReadTaskHandle mTask;
     };
 
-    struct Service final: NEWorld::Object {
+    struct Service final : NEWorld::Object {
         Service() noexcept {
             gTimeUsed.resize(ThreadPool::CountThreads());
             gService = std::addressof(hChunkService.Get<ChunkService>());
             gEnter.store(false);
         }
         ~Service() noexcept override {
-            gMainTimer.Disable();
+            auto fin = Temp::New<Finalizer>();
+            auto fut = fin->Complete.GetFuture();
+            gFinalizer = fin;
+            fut.Then([](auto&&) noexcept { gMainTimer.Disable(); }).Wait();
         }
         NEWorld::ServiceHandle Pool{"org.newinfinideas.nrt.cfx.thread_pool"};
         NEWorld::ServiceHandle Timer{"org.newinfinideas.nrt.cfx.timer"};
-        NEWorld::ServiceHandle hChunkService {"org.newinfinideas.neworld.chunk_service" };
+        NEWorld::ServiceHandle hChunkService{"org.newinfinideas.neworld.chunk_service"};
     };
 
     NW_MAKE_SERVICE(Service, "org.newinfinideas.neworld.dispatch", 0.0, _)
@@ -203,7 +268,7 @@ void TaskDispatch::boot() noexcept {
     gMainTimer.Enable();
 }
 
-void TaskDispatch:: addNow(std::unique_ptr<ReadOnlyTask> task) noexcept {
+void TaskDispatch::addNow(ReadTaskHandle task) noexcept {
     if (gThreadMode==DispatchMode::Read) {
         ThreadPool::Enqueue(ExecuteSingleTask::create(std::move(task)));
     }
@@ -212,13 +277,12 @@ void TaskDispatch:: addNow(std::unique_ptr<ReadOnlyTask> task) noexcept {
     }
 }
 
-void TaskDispatch::addNext(std::unique_ptr<ReadOnlyTask> task) noexcept {
-    gReadLock.Enter();
+void TaskDispatch::addNext(ReadTaskHandle task) noexcept {
+    std::lock_guard lk{gReadLock};
     gNextReadOnlyTasks.emplace_back(std::move(task));
-    gReadLock.Leave();
 }
 
-void TaskDispatch::addNow(std::unique_ptr<ReadWriteTask> task) noexcept {
+void TaskDispatch::addNow(ReadWriteTaskHandle task) noexcept {
     if (gThreadMode==DispatchMode::ReadWrite) {
         task->task(*gService);
     }
@@ -227,10 +291,9 @@ void TaskDispatch::addNow(std::unique_ptr<ReadWriteTask> task) noexcept {
     }
 }
 
-void TaskDispatch::addNext(std::unique_ptr<ReadWriteTask> task) noexcept {
-    gWriteLock.Enter();
+void TaskDispatch::addNext(ReadWriteTaskHandle task) noexcept {
+    std::lock_guard lk{gWriteLock};
     gNextReadWriteTasks.emplace_back(std::move(task));
-    gWriteLock.Leave();
 }
 
 void TaskDispatch::addNow(std::unique_ptr<RenderTask> task) noexcept {
@@ -243,29 +306,27 @@ void TaskDispatch::addNow(std::unique_ptr<RenderTask> task) noexcept {
 }
 
 void TaskDispatch::addNext(std::unique_ptr<RenderTask> task) noexcept {
-    gRenderLock.Enter();
+    std::lock_guard lk{gRenderLock};
     gNextRenderTasks.emplace_back(std::move(task));
-    gRenderLock.Leave();
 }
 
 void TaskDispatch::handleRenderTasks() noexcept {
     for (auto& task : gRenderTasks) task->task(*gService);
     gRenderTasks.clear();
-    gRenderLock.Enter();
-    std::swap(gRenderTasks, gNextRenderTasks);
-    gRenderLock.Leave();
+    {
+        std::lock_guard lk{gRenderLock};
+        std::swap(gRenderTasks, gNextRenderTasks);
+    }
 }
 
-void TaskDispatch::addRegular(std::unique_ptr<ReadOnlyTask> task) noexcept {
-    gReadLock.Enter();
+void TaskDispatch::addRegular(ReadTaskHandle task) noexcept {
+    std::lock_guard lk{gReadLock};
     gRegularReadOnlyTasks.emplace_back(std::move(task));
-    gReadLock.Leave();
 }
 
-void TaskDispatch::addRegular(std::unique_ptr<ReadWriteTask> task) noexcept {
-    gWriteLock.Enter();
+void TaskDispatch::addRegular(ReadWriteTaskHandle task) noexcept {
+    std::lock_guard lk{gWriteLock};
     gRegularReadWriteTasks.emplace_back(std::move(task));
-    gWriteLock.Leave();
 }
 
 int TaskDispatch::countWorkers() noexcept {
@@ -273,7 +334,7 @@ int TaskDispatch::countWorkers() noexcept {
 }
 
 int64_t TaskDispatch::getReadTimeUsed(size_t i) noexcept {
-    return gTimeUsed.size() > i ? gTimeUsed[i] : 0;
+    return gTimeUsed.size()>i ? gTimeUsed[i] : 0;
 }
 
 int64_t TaskDispatch::getRWTimeUsed() noexcept {
@@ -289,9 +350,15 @@ int TaskDispatch::getRegularReadWriteTaskCount() noexcept {
 }
 
 int TaskDispatch::getReadTaskCount() noexcept {
-    return ExecutePoolTask::countCurrentRead();
+    return ReadCompletionControl::countTasks();
 }
 
 int TaskDispatch::getReadWriteTaskCount() noexcept {
     return gReadWriteTasks.size();
 }
+
+bool InterOp::BasicTask::canCancel() const noexcept { return true; }
+
+void InterOp::BasicTask::onCancel() noexcept { }
+
+void InterOp::TaskNotCloneable() { throw std::runtime_error("Function not implemented"); }

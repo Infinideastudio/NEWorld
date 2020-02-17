@@ -29,7 +29,7 @@ public:
     BlockData() : mBlockDataUnion{{0}} {}
 
     BlockData(uint32_t id, uint32_t brightness, uint32_t state)
-            : mBlockDataUnion{id, brightness, state} {}
+            : mBlockDataUnion{id, brightness, 0, state} {}
 
     BlockData(uint32_t allData) { mBlockDataUnion.allData = allData; }
 
@@ -40,26 +40,45 @@ public:
 
     uint32_t getID() const noexcept { return mBlockDataUnion.data.id; }
 
-    uint32_t getBrightness() const noexcept { return mBlockDataUnion.data.brightness; }
+    uint32_t getBrightness() const noexcept { return mBlockDataUnion.data.sky; }
 
     uint32_t getState() const noexcept { return mBlockDataUnion.data.state; }
 
     void setID(uint32_t id) noexcept { mBlockDataUnion.data.id = id; }
 
-    void setBrightness(uint32_t brightness) noexcept { mBlockDataUnion.data.brightness = brightness; }
+    void setBrightness(uint32_t brightness) noexcept { mBlockDataUnion.data.sky = brightness; }
 
     void setState(uint32_t state) { mBlockDataUnion.data.state = state; }
-
 private:
     union BlockDataUnion {
         struct BlockDataUnionStruct {
-            uint32_t id : 12; // Block ID
-            uint32_t brightness : 4; // Brightness
-            uint32_t state : 16; // Block state
+            uint32_t id : 16; // Block ID
+            uint32_t sky : 4; // Brightness
+            uint32_t block : 4; // Brightness
+            uint32_t state : 8; // Block state
         } data;
 
         uint32_t allData;
     } mBlockDataUnion{};
+};
+
+struct BlockActionArgs {
+
+};
+
+enum BlockActions {
+    // Block Modification
+    BLOCK_PRE_PLACE, BLOCK_POST_PLACE,
+    BLOCK_PRE_PICK, BLOCK_POST_PICK,
+    BLOCK_PRE_DESTROY, BLOCK_POST_DESTROY,
+    // Block Motion
+    BLOCK_PRE_DISPLACE, BLOCK_POST_DISPLACE,
+    // Block Passive Update
+    BLOCK_ON_SKYLIGHT_CHANGE, BLOCK_ON_BLOCK_LIGHT_CHANGE, BLOCK_ON_NEIGHBOR_UPDATED,
+    // Block Active Update
+    BLOCK_ON_RANDOM_TICK, BLOCK_ON_UPDATE_TICK,
+    // Entity Interaction
+    BLOCK_ON_ENTITY_MOTION_COLLIDE, BLOCK_ON_ENTITY_EXERT_FORCE_ON, BLOCK_ON_ENTITY_SQUISH
 };
 
 class BlockType {

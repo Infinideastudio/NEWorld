@@ -20,6 +20,7 @@
 #include "player.h"
 #include "Common/Math/Matrix.h"
 #include "Common/JsonHelper.h"
+#include <Game/SyncService/taskdispatcher.hpp>
 
 class PlayerUpdateTask : public ReadOnlyTask {
 public:

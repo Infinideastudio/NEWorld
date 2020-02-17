@@ -25,6 +25,15 @@
 
 class ChunkService;
 
+namespace InterOp {
+    struct NWCOREAPI BasicTask {
+        virtual ~BasicTask() noexcept = default;
+        virtual void onCancel() noexcept;
+        [[nodiscard]] virtual bool canCancel() const noexcept;
+    };
+
+    [[noreturn]] NWCOREAPI void TaskNotCloneable();
+}
 // TODO: we can add a `finished` flag in DEBUG mode
 //       to verify that all tasks are indeed processed.
 /**
@@ -34,10 +43,9 @@ class ChunkService;
  *        thread safety when you write something other than
  *        chunks.
  */
-struct NWCOREAPI ReadOnlyTask {
-    virtual ~ReadOnlyTask() = default;
+struct NWCOREAPI ReadOnlyTask: InterOp::BasicTask {
     virtual void task(const ChunkService&) = 0;
-    virtual std::unique_ptr<ReadOnlyTask> clone() { throw std::runtime_error("Function not implemented"); }
+    virtual std::unique_ptr<ReadOnlyTask> clone() { InterOp::TaskNotCloneable(); }
 };
 
 /**
@@ -45,20 +53,18 @@ struct NWCOREAPI ReadOnlyTask {
  *        Thus, it is safe to do write opeartions inside
  *        without the need to worry thread safety.
  */
-struct NWCOREAPI ReadWriteTask {
-    virtual ~ReadWriteTask() = default;
+struct NWCOREAPI ReadWriteTask: InterOp::BasicTask {
     virtual void task(ChunkService&) = 0;
-    virtual std::unique_ptr<ReadWriteTask> clone() { throw std::runtime_error("Function not implemented"); }
+    virtual std::unique_ptr<ReadWriteTask> clone() { InterOp::TaskNotCloneable(); }
 };
 
 /**
  * \brief This type of tasks will be executed in main thread.
  *        Thus, it is safe to call OpenGL function inside.
  */
-struct NWCOREAPI RenderTask {
-    virtual ~RenderTask() = default;
+struct NWCOREAPI RenderTask: InterOp::BasicTask {
     virtual void task(const ChunkService&) = 0;
-    virtual std::unique_ptr<RenderTask> clone() { throw std::runtime_error("Function not implemented"); }
+    virtual std::unique_ptr<RenderTask> clone() { InterOp::TaskNotCloneable();  }
 };
 
 struct TaskDispatch {
