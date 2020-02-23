@@ -1,30 +1,90 @@
-# NEWorld Client/Server传输协议
-***
-## 基本传输方式
-|  名称  |     类型     | 备注                                       |
+# NEWorld Client/Server Network Protocol
+
+## Basic structure
+The basic structure used by all valid NEWorld packets.
+
+|  Name  |     Type     | Description                                       |
 | :--: | :--------: | :--------------------------------------- |
-|  长度  |  uint32_t  | 数据部分长度                                   |
-|  标识  | Identifier | 用来标记数据包的类型,具体类型见[数据包类型](#user-content-数据包类型) |
-|  数据  |    raw     | 数据部分，根据数据包类型解析                           |
-***
-##数据包类型
+|  Length  |  uint32  | The length of the payload                                   |
+|  Identifier  | Identifier | Identifier showing the type of the packet. See [payload types](#type-of-payload) | 
+|  Payload  | raw | Payload contained by the packet. Varies by the packet type. | 
 
-### 登陆包(Login)
-####包介绍
+## Type of Payload
 
-| 条目   | 内容          |
-| ---- | ----------- |
-| 名称   | 登陆包         |
-| 标识符  | Login       |
-| 类名   | LoginPacket |
-| 方向   | C->S        |
-| 作者   | Null        |
+## Serverbound packets
+
+### Login (0x01)
+
+This verifies that the client is compatible with the server and authenticates the credentials.
+
+|  Name     |   Type      | Description |
+|   :--:    | :------:    | :--------   |
+|  username |   string    | Username    |
+|  password |   string    | Password    |
+|  version  | uint16    | Version     |
+
+### GetAvailableWorldId (0x02)
+
+This requests all available world IDs. Return packet: [GetAvailableWorldIdResult](#GetAvailableWorldIdResult-(0x03)). This packet has no payload.
+
+### GetWorldInfo (0x04)
+
+This requests basic world information related to a world. Return packet: [GetWorldInfoResult](#GetWorldInfo-(0x05)).
+
+|  Name     |   Type      | Description |
+|   :--:    | :------:    | :--------   |
+|  id      |   uint32    | the world id   |
+
+### GetChunk (0x06)
+
+This requests a specific chunk. Return packet: [GetChunk](#GetChunkResult-(0x07)).
+
+|  Name    |   Type      | Description |
+|   :--:   | :------:    | :--------   |
+|  id      |   uint32    | the world id   |
+|  x       |   int32     | chunk x position  |
+|  y       |   int32     | chunk y position  |
+|  z       |   int32     | chunk z position  |
+
+### PickBlock (0x08)
+
+This requests a specific block to be removed. Return packet: [GeneralOperationResult](#GeneralOperationResult-(0x09)).
+
+|  Name    |   Type      | Description |
+|   :--:   | :------:    | :--------   |
+|  id      |   uint32    | the world id   |
+|  x       |   int32     | block x position  |
+|  y       |   int32     | block y position  |
+|  z       |   int32     | block z position  |
+
+## Clientbound packets
+
+### GetAvailableWorldIdResult (0x03)
+
+|  Name     |   Type      | Description |
+|   :--:    | :------:    | :--------   |
+|  ids      |   array<uint32>    | all available world ids    |
+
+### GetWorldInfo (0x05)
+
+This packet has a map structure.
+
+|  Key     |   Type      |   Value     |   Type      |Description |
+|   :--:    | :------:    | :------:   | :------:   | :--------   |
+|  name     |  string  |  name |  string   | The name of the world.    |
 
 
-####包数据定义
+### GetChunkResult (0x07)
 
-|  名称  |   标识符    |    类型    | 备注        |
-| :--: | :------: | :------: | :-------- |
-| 用户名  | username |   字符串    | 玩家的用户名    |
-|  密码  | password |   字符串    | 该用户名对应的密码 |
-|  版本  | version  | uint16_t | 客户端的版本    |
+|  Name     |   Type      | Description |
+|   :--:    | :------:    | :--------   |
+|  chunk_data   |   bin   | chunk data    |
+
+
+### GeneralOperationResult (0x09)
+
+|  Name     |   Type      | Description |
+|   :--:    | :------:    | :--------   |
+|  success   |   bool   | whether the operation is successful   |
+|  reason   |   string   | (only when `success == false`) the reason for failure   |
+
