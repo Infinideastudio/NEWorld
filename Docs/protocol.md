@@ -25,11 +25,11 @@ This verifies that the client is compatible with the server and authenticates th
 
 ### GetAvailableWorldId (0x02)
 
-This requests all available world IDs. Return packet: [GetAvailableWorldIdResult](#GetAvailableWorldIdResult-(0x03)). This packet has no payload.
+This requests all available world IDs. Return packet: [GetAvailableWorldIdResult](#GetAvailableWorldIdResult-0x03). This packet has no payload.
 
 ### GetWorldInfo (0x04)
 
-This requests basic world information related to a world. Return packet: [GetWorldInfoResult](#GetWorldInfo-(0x05)).
+This requests basic world information related to a world. Return packet: [GetWorldInfoResult](#GetWorldInfo-0x05).
 
 |  Name     |   Type      | Description |
 |   :--:    | :------:    | :--------   |
@@ -37,7 +37,7 @@ This requests basic world information related to a world. Return packet: [GetWor
 
 ### GetChunk (0x06)
 
-This requests a specific chunk. Return packet: [GetChunk](#GetChunkResult-(0x07)).
+This requests a specific chunk. Return packet: [GetChunk](#GetChunkResult-0x07).
 
 |  Name    |   Type      | Description |
 |   :--:   | :------:    | :--------   |
@@ -48,7 +48,7 @@ This requests a specific chunk. Return packet: [GetChunk](#GetChunkResult-(0x07)
 
 ### PickBlock (0x08)
 
-This requests a specific block to be removed. Return packet: [GeneralOperationResult](#GeneralOperationResult-(0x09)).
+This requests a specific block to be removed. Return packet: [GeneralOperationResult](#GeneralOperationResult-0x09).
 
 |  Name    |   Type      | Description |
 |   :--:   | :------:    | :--------   |
