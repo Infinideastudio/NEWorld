@@ -49,8 +49,14 @@ target_compile_definitions(Core
 
 # Link libraries for Core
 find_package(rpclib CONFIG REQUIRED)
-find_package(SQLite3 REQUIRED) # use the cmake built-in search
-target_link_libraries(Core Threads::Threads rpclib::rpc NRT.CFX SQLite::SQLite3)
+if(VCPKG_USED)
+    find_package(sqlite3 CONFIG REQUIRED)
+	target_link_libraries(Core sqlite3)
+else()
+	find_package(SQLite3 REQUIRED) # use the cmake built-in search
+	target_link_libraries(Core SQLite::SQLite3)
+endif()
+target_link_libraries(Core Threads::Threads rpclib::rpc NRT.CFX)
 
 add_subdirectory(Tools)
 add_subdirectory(Shells)
