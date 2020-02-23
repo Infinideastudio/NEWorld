@@ -54,14 +54,14 @@ public:
     int getDaylightBrightness() const noexcept { return mDaylightBrightness; }
 
     ////////////////////////////////////////
-    // Chunk Management
+    // chunk Management
     ////////////////////////////////////////
     using ChunkIterator = ChunkManager::iterator;
     using ChunkReference = ChunkManager::reference;
     // Raw Access
     ChunkManager& getChunks() noexcept { return mChunks; }
     const ChunkManager& getChunks() const noexcept { return mChunks; }
-    // Alias declearations for Chunk management
+    // Alias declearations for chunk management
     size_t getChunkCount() const { return mChunks.size(); }
     ChunkReference getChunk(const Vec3i& ChunkPos) { return mChunks[ChunkPos]; }
     bool isChunkLoaded(const Vec3i& ChunkPos) const noexcept { return mChunks.isLoaded(ChunkPos); }
@@ -100,7 +100,7 @@ public:
         mChunks.doIfLoaded(ChunkPos, func, std::forward<ArgType>(args)...);
     };
 
-    // Add Chunk
+    // Add chunk
     Chunk* addChunk(const Vec3i& chunkPos,
                     ChunkOnReleaseBehavior::Behavior behv = ChunkOnReleaseBehavior::Behavior::Release) {
         return insertChunk(
@@ -138,7 +138,7 @@ protected:
     static size_t IDCount;
     // Loaded blocks
     const Blocks& mBlocks;
-    // All Chunks (Chunk array)
+    // All Chunks (chunk array)
     ChunkManager mChunks;
     int mDaylightBrightness;
     WorldStorage mWorldStorage;

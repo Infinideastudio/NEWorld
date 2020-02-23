@@ -32,7 +32,7 @@ void WorldStorage::saveChunk(Vec3i chunkPos, const Chunk::ChunkDataStorageType& 
         // TODO: Remove the old chunk. Should not happen now since the size is fixed.
     }
 
-    // Chunk was not previously stored or we need to reallocate.
+    // chunk was not previously stored or we need to reallocate.
     ChunkInfo info;
     info.capacity = allocateSize;
     info.size = chunkSize;

@@ -75,7 +75,7 @@ void RenderDetectorTask::task(const ChunkService& cs) {
     int counter = 0;
     // TODO: improve performance by adding multiple instances of this and set a step when itering the chunks.
     // Render build list
-    //PODOrderedList<int, Chunk*, MaxChunkRenderCount> chunkRenderList;
+    //PODOrderedList<int, chunk*, MaxChunkRenderCount> chunkRenderList;
     Vec3i chunkpos = World::getChunkPos(mPlayer.getPosition());
     auto world = cs.getWorlds().getWorld(mCurrentWorldId);
     for (const auto& c : world->getChunks()) {

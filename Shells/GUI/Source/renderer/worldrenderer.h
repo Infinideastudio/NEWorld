@@ -47,6 +47,6 @@ private:
     const World& mWorld;
     // Ranges
     int mRenderDist = 0;
-    // Chunk Renderers
+    // chunk Renderers
     std::unordered_map<Vec3i, ChunkRenderer> mChunkRenderers;
 };

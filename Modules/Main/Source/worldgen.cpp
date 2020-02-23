@@ -68,9 +68,9 @@ namespace {
         return int(perlinNoise2D(x/WorldGen::NoiseScaleX, y/WorldGen::NoiseScaleZ)) / 2 - 64;
     }
 
-    constexpr const auto ChunkSize = Chunk::Size();
-    constexpr const auto SandHeight = 2;
-    constexpr const auto WaterLevel = 0;
+    constexpr auto ChunkSize = Chunk::Size();
+    constexpr auto SandHeight = 2;
+    constexpr auto WaterLevel = 0;
 
     using HeightMap = int[ChunkSize][ChunkSize];
 
@@ -91,22 +91,22 @@ namespace {
     bool checkMonotonicFill(const ChunkGenerateArgs& args, const std::pair<int, int>& summary) noexcept {
         const auto& [high, low] = summary;
         if (low - 3 >= ChunkSize) {
-            args.Chunk->setMonotonic({ static_cast<uint32_t>(RockID), 0,0 });
+            args.chunk->setMonotonic({ static_cast<uint32_t>(RockID), 0,0 });
             return true;
         }
-        if (high < 0 && args.Pos->y * ChunkSize > 0) {
-            args.Chunk->setMonotonic({ 0, static_cast<uint32_t>(args.SkyLight),0 });
+        if (high < 0 && args.pos->y * ChunkSize > 0) {
+            args.chunk->setMonotonic({ 0, static_cast<uint32_t>(args.skyLight),0 });
             return true;
         }
         return false;
     }
 
     void genChunkDetails(const ChunkGenerateArgs* args, HeightMap& heightMap) noexcept {
-        auto& blocks = *args->Chunk->getBlocks();
+        auto& blocks = *args->chunk->getBlocks();
         for (int x = 0; x < ChunkSize; x++)
             for (int z = 0; z < ChunkSize; z++) {
                 const auto absHeight = heightMap[x][z];
-                const auto height = absHeight - args->Pos->y * ChunkSize;
+                const auto height = absHeight - args->pos->y * ChunkSize;
                 const bool underWater = absHeight <= WaterLevel;
                 for (int y = 0; y < ChunkSize; y++) {
                     auto& block = blocks[x * ChunkSize * ChunkSize + y * ChunkSize + z];
@@ -117,12 +117,12 @@ namespace {
                         else { block.setID(RockID); }
                         block.setBrightness(0);
                     }
-                    else if (const auto by = args->Pos->y * ChunkSize + y; by <= 0) {
+                    else if (const auto by = args->pos->y * ChunkSize + y; by <= 0) {
                         block.setID(WaterID);
-                        block.setBrightness(std::max(args->SkyLight + (by / 2), 0));
+                        block.setBrightness(std::max(args->skyLight + (by / 2), 0));
                     } else {
                         block.setID(0);
-                        block.setBrightness(args->SkyLight);
+                        block.setBrightness(args->skyLight);
                     }
                     block.setState(0);
                 }
@@ -131,8 +131,8 @@ namespace {
 
     void generator(const ChunkGenerateArgs* args) {
         HeightMap heightMap {};
-        if (!checkMonotonicFill(*args, getHeightMap(*args->Pos, heightMap))) {
-            args->Chunk->allocateBlocks(false);
+        if (!checkMonotonicFill(*args, getHeightMap(*args->pos, heightMap))) {
+            args->chunk->allocateBlocks(false);
             genChunkDetails(args, heightMap);
         }
     }

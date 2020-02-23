@@ -35,16 +35,16 @@
 class Chunk;
 
 struct ChunkGenerateArgs {
-    const Vec3i* Pos;
-    Chunk* const Chunk;
-    const int SkyLight;
+    const Vec3i* pos;
+    Chunk* const chunk;
+    const int skyLight;
 };
 
 using ChunkGenerator = std::add_pointer_t<void(const ChunkGenerateArgs*)>;
 
 class NWCOREAPI Chunk final : public NonCopyable {
 public:
-    // Chunk size
+    // chunk size
     static bool ChunkGeneratorLoaded;
     static ChunkGenerator ChunkGen;
     static constexpr int BlocksSize = 32 * 32 * 32;

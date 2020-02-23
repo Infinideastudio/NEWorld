@@ -57,8 +57,8 @@ static constexpr Vec3i middleOffset() noexcept {
 * \param world the world to load or unload chunks
 * \param centerPos the center position
 * \param loadRange chunk load range
-* \param loadList (Output) Chunk load list [position, distance]
-* \param unloadList (Output) Chunk unload list [pointer, distance]
+* \param loadList (Output) chunk load list [position, distance]
+* \param unloadList (Output) chunk unload list [pointer, distance]
 */
 static void generateLoadUnloadList(
     const World& world, const Vec3i& centerPos, int loadRange,
