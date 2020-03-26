@@ -32,17 +32,17 @@ public:
 
     void setSpeed(const Vec3d& speed) { mSpeed = speed; }
 
-    double getMovingSpeed() const noexcept { return mPlayerMovingSpeed * FlyingSpeedBooster; }
+    [[nodiscard]] double getMovingSpeed() const noexcept { return mPlayerMovingSpeed * FlyingSpeedBooster; }
 
-    Vec3d getPositionDelta() const { return mPositionDelta; }
+    [[nodiscard]] Vec3d getPositionDelta() const { return mPositionDelta; }
 
-    Vec3d getRotationDelta() const { return mRotationDelta; }
+    [[nodiscard]] Vec3d getRotationDelta() const { return mRotationDelta; }
 
     void render() override;
 
-    bool isFlying() const noexcept { return mFlying; }
+    [[nodiscard]] bool isFlying() const noexcept { return mFlying; }
     void setFlying(bool fly) noexcept { mFlying = fly; }
-    bool onGround() const noexcept { return mOnGround; }
+    [[nodiscard]] bool onGround() const noexcept { return mOnGround; }
 
     void jump() noexcept {
         if (!onGround()) return;

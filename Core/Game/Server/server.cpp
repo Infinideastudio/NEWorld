@@ -21,6 +21,7 @@
 #include <Common/RPC/RPC.h>
 #include <Common/Logger.h>
 #include <Game/SyncService/taskdispatcher.hpp>
+#include <memory>
 #include "Game/SyncService/chunkservice.hpp"
 #include "rpc/this_handler.h"
 
@@ -35,8 +36,7 @@ std::vector<uint32_t> serverGetChunk(size_t worldID, Vec3i position) {
     try { chunkPtr = &world->getChunk(position); }
     catch (std::out_of_range&) {
         // TODO: FIXME: data race here. Use task dispatcher?
-        auto chunk = ChunkManager::data_t(new Chunk(position, *world),
-                                          ChunkOnReleaseBehavior::Behavior::Release);
+        auto chunk = std::make_unique<Chunk>(position, *world);
         chunkPtr = world->insertChunkAndUpdate(position, std::move(chunk))->second.get();
     }
     return chunkPtr->getChunkForExport();

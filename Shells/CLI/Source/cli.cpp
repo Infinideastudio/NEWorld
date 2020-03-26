@@ -24,7 +24,7 @@
 
 void ServerCommandLine::initBuiltinCommands() noexcept {
     mCommands.registerCommand("help", {"internal", "Help"},
-                              [this](Command cmd)-> CommandExecuteStat {
+                              [this](const Command& cmd)-> CommandExecuteStat {
                                   std::string helpString = "\nAvailable commands:\n";
                                   for (const auto& command : mCommands.getCommandMap()) {
                                       helpString += command.first + " - " + command.second.first.author
@@ -34,7 +34,7 @@ void ServerCommandLine::initBuiltinCommands() noexcept {
                               });
 
     mCommands.registerCommand("server.stop", {"internal", "Stop the server."},
-                              [this](Command cmd)-> CommandExecuteStat {
+                              [this](const Command& cmd)-> CommandExecuteStat {
                                   debugstream << "The server is stopping...";
                                   RPC::getServer().stop();
                                   infostream << "Server RPC stopped.";
@@ -49,7 +49,7 @@ void ServerCommandLine::initBuiltinCommands() noexcept {
                                       auto keys = split(cmd.args[0], '.');
                                       Json now = getSettings();
                                       bool exist = true;
-                                      for (auto key : keys) {
+                                      for (const auto& key : keys) {
                                           auto iter = now.find(key);
                                           if (iter == now.end()) {
                                               exist = false;
@@ -67,25 +67,25 @@ void ServerCommandLine::initBuiltinCommands() noexcept {
                               });
 
     mCommands.registerCommand("conf.show", {"internal", "Show the configuration."},
-                              [this](Command cmd)-> CommandExecuteStat {
+                              [this](const Command& cmd)-> CommandExecuteStat {
         return {true, getSettings().dump(4)};
     });
 
     mCommands.registerCommand("conf.save", {"internal", "Save the configuration."},
-                              [this](Command cmd)-> CommandExecuteStat {
+                              [this](const Command& cmd)-> CommandExecuteStat {
                                   writeJsonToFile(SettingsFilename, getSettings());
                                   return {true, "Done!"};
                               });
 
     mCommands.registerCommand("server.ups", {"internal", "Show the ups."},
-                              [this](Command cmd)-> CommandExecuteStat {
+                              [this](const Command& cmd)-> CommandExecuteStat {
                                   // TODO: Add UPS counter for server
                                   return {true, "[Server UPS counter not finished yet!]"};
                               });
 
     mCommands.registerCommand("chunks.count",
                               {"internal", "Show how many chunks are loaded"},
-                              [this](Command cmd)-> CommandExecuteStat {
+                              [this](const Command& cmd)-> CommandExecuteStat {
                                   std::string ret = "Chunks loaded: ";
                                   size_t sum = 0;
                                   auto& chunkService = hChunkService.Get<ChunkService>();

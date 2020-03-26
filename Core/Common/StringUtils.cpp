@@ -36,8 +36,8 @@ void trim(std::string& s) {
     if (s.empty())
         return;
 
-    s.erase(0, s.find_first_not_of(" "));
-    s.erase(s.find_last_not_of(" ") + 1);
+    s.erase(0, s.find_first_not_of(' '));
+    s.erase(s.find_last_not_of(' ') + 1);
 }
 
 void strToLower(std::string& s) { transform(s.begin(), s.end(), s.begin(), tolower); }

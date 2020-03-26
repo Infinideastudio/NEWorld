@@ -49,7 +49,7 @@ public:
 
     explicit operator bool() const noexcept { return isLoaded(); }
 
-    bool isLoaded() const noexcept { return mLoaded; }
+    [[nodiscard]] bool isLoaded() const noexcept { return mLoaded; }
 
     void load(const std::string& filename);
 

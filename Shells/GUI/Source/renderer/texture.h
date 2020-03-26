@@ -41,13 +41,13 @@ public:
 
     static void free();
 
-    static Texture loadTextureRGB(std::string filename);
+    static Texture loadTextureRGB(const std::string& filename);
 
-    static Texture loadTextureRGBA(std::string filename);
+    static Texture loadTextureRGBA(const std::string& filename);
 
-    static Texture loadBlock3DTexture(std::string filename);
+    static Texture loadBlock3DTexture(const std::string& filename);
 
-    TextureID getTextureID() const { return mId; }
+    [[nodiscard]] TextureID getTextureID() const { return mId; }
 
     void bind(GLenum target) const { glBindTexture(target, mId); }
 
@@ -61,7 +61,7 @@ private:
         ~RawTexture();
         explicit RawTexture(const std::string& filename);
         RawTexture(const RawTexture&);
-        SDL_Surface* getSurface() const { return surface; }
+        [[nodiscard]] SDL_Surface* getSurface() const { return surface; }
     private:
         SDL_Surface* surface;
     };

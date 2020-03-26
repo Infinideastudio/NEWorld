@@ -96,28 +96,6 @@ public:
     // Build chunk
     void build(int daylightBrightness);
 
-    // Reference Counting
-    void markRequest() noexcept {
-        std::unique_lock<std::mutex> lock(mMutex);
-        mLastRequestTime = std::chrono::steady_clock::now();
-    }
-
-    void increaseRef() noexcept {
-        std::unique_lock<std::mutex> lock(mMutex);
-        ++mReferenceCount;
-    }
-
-    void decreaseRef() noexcept {
-        std::unique_lock<std::mutex> lock(mMutex);
-        --mReferenceCount;
-    }
-
-    bool checkReleaseable() noexcept {
-        std::unique_lock<std::mutex> lock(mMutex);
-        using namespace std::chrono;
-        return (((steady_clock::now() - mLastRequestTime) > 10s) && mReferenceCount <= 0);
-    }
-
     const World* getWorld() const noexcept { return mWorld; }
     bool isMonotonic() const noexcept { return mBlocks == nullptr; }
     BlockData getMonotonicBlock() const noexcept { return mMonotonicBlock; }
@@ -131,7 +109,6 @@ public:
     void setMonotonic(BlockData block) noexcept { Assert(isMonotonic()); mMonotonicBlock = block; }
 
 private:
-    std::mutex mMutex;
     Vec3i mPosition;
     
     std::unique_ptr<Blocks> mBlocks;
@@ -142,9 +119,6 @@ private:
     bool mModified = false;
     bool mLoading = false;
     const class World* mWorld;
-    // For Garbage Collection
-    int mReferenceCount{0};
-    std::chrono::steady_clock::time_point mLastRequestTime;
 };
 
 
@@ -154,30 +128,9 @@ struct ChunkHasher {
     }
 };
 
-struct NWCOREAPI ChunkOnReleaseBehavior {
-    enum class Behavior : size_t {
-        Release,
-        DeReference
-    } status;
-
-    void operator()(Chunk* target) const {
-        switch (status) {
-        case Behavior::Release:
-            delete target;
-            break;
-        case Behavior::DeReference:
-            target->decreaseRef();
-            break;
-        }
-    }
-
-    constexpr ChunkOnReleaseBehavior() : status(Behavior::Release) {};
-    constexpr ChunkOnReleaseBehavior(Behavior b) : status(b) {}
-};
-
 class ChunkManager : public NonCopyable {
 public:
-    using data_t = std::unique_ptr<Chunk, ChunkOnReleaseBehavior>;
+    using data_t = std::unique_ptr<Chunk>;
     using array_t = std::unordered_map<Vec3i, data_t, ChunkHasher>;
     using iterator = array_t::iterator;
     using const_iterator = array_t::const_iterator;
@@ -188,14 +141,14 @@ public:
     ChunkManager(ChunkManager&& rhs) noexcept : mChunks(std::move(rhs.mChunks)) {}
     ~ChunkManager() = default;
     // Access and modifiers
-    size_t size() const noexcept { return mChunks.size(); }
+    [[nodiscard]] size_t size() const noexcept { return mChunks.size(); }
     iterator begin() noexcept { return mChunks.begin(); }
     iterator end() noexcept { return mChunks.end(); }
-    const_iterator begin() const noexcept { return mChunks.cbegin(); }
-    const_iterator end() const noexcept { return mChunks.cend(); }
+    [[nodiscard]] const_iterator begin() const noexcept { return mChunks.cbegin(); }
+    [[nodiscard]] const_iterator end() const noexcept { return mChunks.cend(); }
 
     reference at(const Vec3i& chunkPos) { return *(mChunks.at(chunkPos)); }
-    const_reference at(const Vec3i& chunkPos) const { return *(mChunks.at(chunkPos)); }
+    [[nodiscard]] const_reference at(const Vec3i& chunkPos) const { return *(mChunks.at(chunkPos)); }
 
     reference operator[](const Vec3i& chunkPos) { return at(chunkPos); }
     const_reference operator[](const Vec3i& chunkPos) const { return at(chunkPos); }
@@ -222,7 +175,7 @@ public:
             func(*(iter->second), std::forward<ArgType>(args)...);
     };
 
-    bool isLoaded(const Vec3i& chunkPos) const noexcept { return mChunks.find(chunkPos) != mChunks.end(); }
+    [[nodiscard]] bool isLoaded(const Vec3i& chunkPos) const noexcept { return mChunks.find(chunkPos) != mChunks.end(); }
 
     // Convert world position to chunk coordinate (one axis)
     static int getAxisPos(int pos) noexcept {
@@ -243,7 +196,7 @@ public:
     }
 
     // Get block data
-    BlockData getBlock(const Vec3i& pos) const { return at(getPos(pos)).getBlock(getBlockPos(pos)); }
+    [[nodiscard]] BlockData getBlock(const Vec3i& pos) const { return at(getPos(pos)).getBlock(getBlockPos(pos)); }
 
     // Set block data
     void setBlock(const Vec3i& pos, BlockData block) { at(getPos(pos)).setBlock(getBlockPos(pos), block); }

@@ -30,30 +30,30 @@ public:
     Object(size_t worldID, const Vec3d& position, const Vec3d& rotation, const Vec3d& scale, const AABB& hitbox)
         : mWorldID(worldID), mPosition(position), mRotation(rotation), mScale(scale), mHitbox(hitbox) { }
 
-    virtual ~Object() { }
+    virtual ~Object() = default;
 
-    const Vec3d& getPosition() const { return mPosition; }
+    [[nodiscard]] const Vec3d& getPosition() const { return mPosition; }
 
     void setPosition(const Vec3d& val) {
         mHitbox.move(val - mPosition);
         mPosition = val;
     }
 
-    const Vec3d& getRotation() const { return mRotation; }
+    [[nodiscard]] const Vec3d& getRotation() const { return mRotation; }
 
     void setRotation(const Vec3d& val) { mRotation = val; }
 
-    const Vec3d& getScale() const { return mScale; }
+    [[nodiscard]] const Vec3d& getScale() const { return mScale; }
 
     void setScale(const Vec3d& val) { mScale = val; }
 
-    const AABB& getHitbox() const { return mHitbox; }
+    [[nodiscard]] const AABB& getHitbox() const { return mHitbox; }
 
     void setHitbox(const AABB& aabb) { mHitbox = aabb; }
 
     void moveHitbox(const Vec3d& delta) { mHitbox.move(delta); }
 
-    size_t getWorldID() const noexcept { return mWorldID; }
+    [[nodiscard]] size_t getWorldID() const noexcept { return mWorldID; }
 
     virtual void render() = 0;
     virtual void update(const World& world) = 0;

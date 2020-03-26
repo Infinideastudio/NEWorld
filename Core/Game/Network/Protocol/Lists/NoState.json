@@ -1,0 +1,6 @@
+{
+  "Space": "Game::Network::Protocol::NoStatePackets",
+  "In": [
+    "0$HandShake%%V$ProtocolVersion%%s$ServerAddress%%US$ServerPort%%V$NextState%"
+  ]
+}

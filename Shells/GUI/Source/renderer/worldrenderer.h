@@ -36,7 +36,7 @@ public:
     }
 
     // Render all chunks
-    size_t render(const Vec3i& position) const;
+    [[nodiscard]] size_t render(const Vec3i& position) const;
 
     void registerTask(Player& player) noexcept;
 

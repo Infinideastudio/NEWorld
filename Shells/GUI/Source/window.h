@@ -41,11 +41,11 @@ public:
 
     void swapBuffers() const { SDL_GL_SwapWindow(mWindow); }
 
-    KeyState getKeyBoardState(size_t key) const noexcept;
+    [[nodiscard]] KeyState getKeyBoardState(size_t key) const noexcept;
 
-    int getWidth() const noexcept { return mWidth; }
+    [[nodiscard]] int getWidth() const noexcept { return mWidth; }
 
-    int getHeight() const noexcept { return mHeight; }
+    [[nodiscard]] int getHeight() const noexcept { return mHeight; }
 
     void pollEvents();
 
@@ -54,21 +54,21 @@ public:
         return win;
     }
 
-    bool shouldQuit() const noexcept { return mShouldQuit; }
+    [[nodiscard]] bool shouldQuit() const noexcept { return mShouldQuit; }
 
-    nk_context* getNkContext() const noexcept { return mNuklearContext; }
+    [[nodiscard]] nk_context* getNkContext() const noexcept { return mNuklearContext; }
 
     /**
      * \brief Get the mouse state
      * \return The state of the mouse
      */
-    MouseState getMouseMotion() const noexcept {
+    [[nodiscard]] MouseState getMouseMotion() const noexcept {
         return mMouse;
     }
 
     void lockCursor() { SDL_SetRelativeMouseMode(SDL_TRUE); mCursorLocked = true; }
     void unlockCursor() { SDL_SetRelativeMouseMode(SDL_FALSE); mCursorLocked = false; }
-    bool isCursorLocked() const noexcept { return mCursorLocked; }
+    [[nodiscard]] bool isCursorLocked() const noexcept { return mCursorLocked; }
 
     void getDrawableSize(int& x, int& y) const noexcept {
         SDL_GL_GetDrawableSize(mWindow, &x, &y);
@@ -81,7 +81,7 @@ private:
     bool mShouldQuit = false;
     bool mCursorLocked = false;
 
-    Window(const std::string& title, int width, int height);
+    Window(std::string  title, int width, int height);
     ~Window();
 
     SDL_GLContext mContext;

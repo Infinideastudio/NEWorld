@@ -17,6 +17,7 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
+#include <memory>
 #include <Game/SyncService/taskdispatcher.hpp>
 #include <Game/SyncService/chunkservice.hpp>
 #include <Game/Client/player.h>
@@ -90,7 +91,7 @@ public:
      * \param worldID the target world's id
      * \param chunk the target chunk
      */
-    AddToWorldTask(size_t worldID, std::unique_ptr<Chunk, ChunkOnReleaseBehavior> chunk)
+    AddToWorldTask(size_t worldID, std::unique_ptr<Chunk> chunk)
         : mWorldId(worldID), mChunk(std::move(chunk)) { }
 
     void task(ChunkService& cs) override {
@@ -100,7 +101,7 @@ public:
 
 private:
     size_t mWorldId;
-    std::unique_ptr<Chunk, ChunkOnReleaseBehavior> mChunk;
+    std::unique_ptr<Chunk> mChunk;
 };
 
 class LoadFinishedTask : public ReadWriteTask {
@@ -205,12 +206,10 @@ public:
         }
         else {
             // Not found: build it!
-            chunk = ChunkManager::data_t(new Chunk(mChunkPosition, mWorld),
-                                         ChunkOnReleaseBehavior::Behavior::Release);
+            chunk = std::make_unique<Chunk>(mChunkPosition, mWorld);
         }
         // Add addToWorldTask
-        TaskDispatch::addNext(
-                std::make_unique<AddToWorldTask>(mWorld.getWorldID(), std::move(chunk))
+        TaskDispatch::addNext(std::make_unique<AddToWorldTask>(mWorld.getWorldID(), std::move(chunk))
         );
     }
 

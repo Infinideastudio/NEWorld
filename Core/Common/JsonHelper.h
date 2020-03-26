@@ -28,7 +28,7 @@ const std::string SettingsFilename = "./settings";
 
 NWCOREAPI Json readJsonFromFile(const std::string& filename);
 
-NWCOREAPI void writeJsonToFile(std::string filename, Json& json);
+NWCOREAPI void writeJsonToFile(const std::string& filename, Json& json);
 
 NWCOREAPI Json& getSettings();
 

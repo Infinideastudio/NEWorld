@@ -144,15 +144,15 @@ void BlockRendererManager::flushTextures() {
 }
 
 void DefaultBlockRenderer::flushTexture() {
-    for (auto i = 0; i < 6; ++i)
-        BlockTextureBuilder::getTexturePos(tex[i].d, tex[i].pos);
+    for (auto & i : tex)
+        BlockTextureBuilder::getTexturePos(i.d, i.pos);
 }
 
 void DefaultBlockRenderer::render(VertexArray& target, const Chunk* chunk, const Vec3i& pos) {
     defaultBlockRendererImplementation(target, chunk, tex, pos);
 }
 
-DefaultBlockRenderer::DefaultBlockRenderer(size_t data[]) {
+DefaultBlockRenderer::DefaultBlockRenderer(const size_t data[]) {
     for (auto i = 0; i < 6; ++i)
         tex[i].pos = data[i];
 }

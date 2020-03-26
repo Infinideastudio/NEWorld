@@ -265,7 +265,7 @@ void GameScene::render() {
     TaskDispatch::handleRenderTasks();
 
     // Camera control by mouse
-    static const double mouseSensitivity =
+    static const auto mouseSensitivity =
             getJsonValue<double>(getSettings()["gui"]["mouse_sensitivity"], 0.3);
     MouseState mouse = Window::getInstance().getMouseMotion();
     if (mouse.relative) // only rotate the camera when the cursor is locked.

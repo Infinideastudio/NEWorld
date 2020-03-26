@@ -47,7 +47,7 @@ public:
     T lengthSqr() const noexcept { return x * x + y * y; }
 
     // Get vector length
-    double length() const noexcept { return sqrt(double(lengthSqr())); }
+    [[nodiscard]] double length() const noexcept { return sqrt(double(lengthSqr())); }
 
     // Get the Euclidean Distance between vectors
     double euclideanDistance(const Vec2& rhs) const noexcept { return (*this - rhs).length(); }
@@ -105,25 +105,25 @@ public:
 
     bool operator!=(const Vec2& rhs) const noexcept { return !(rhs == *this); }
 
-    const Vec2<T> operator+(const Vec2<T>& rhs) const noexcept {
+    Vec2<T> operator+(const Vec2<T>& rhs) const noexcept {
         Vec2<T> tmp(*this);
         tmp += rhs;
         return tmp;
     };
 
-    const Vec2<T> operator-(const Vec2<T>& rhs) const noexcept {
+    Vec2<T> operator-(const Vec2<T>& rhs) const noexcept {
         Vec2<T> tmp(*this);
         tmp -= rhs;
         return tmp;
     };
 
-    const Vec2<T> operator*(const Vec2<T>& rhs) const noexcept {
+    Vec2<T> operator*(const Vec2<T>& rhs) const noexcept {
         Vec2<T> tmp(*this);
         tmp *= rhs;
         return tmp;
     };
 
-    const Vec2<T> operator/(const Vec2<T>& rhs) const noexcept {
+    Vec2<T> operator/(const Vec2<T>& rhs) const noexcept {
         Vec2<T> tmp(*this);
         tmp /= rhs;
         return tmp;
@@ -160,21 +160,21 @@ public:
     constexpr Vec3(const Vec3<U>& rhs) : x(T(rhs.x)), y(T(rhs.y)), z(T(rhs.z)) { }
 
     // Get the square of vector length
-    T lengthSqr() const noexcept { return x * x + y * y + z * z; }
+    [[nodiscard]] T lengthSqr() const noexcept { return x * x + y * y + z * z; }
 
     // Get vector length
-    double length() const noexcept { return sqrt(double(lengthSqr())); }
+    [[nodiscard]] double length() const noexcept { return sqrt(double(lengthSqr())); }
 
     // Get the Euclidean Distance between vectors
-    double euclideanDistance(const Vec3& rhs) const noexcept { return (*this - rhs).length(); }
+    [[nodiscard]] double euclideanDistance(const Vec3& rhs) const noexcept { return (*this - rhs).length(); }
 
     // Get the Chebyshev Distance between vectors
-    T chebyshevDistance(const Vec3& rhs) const noexcept {
+    [[nodiscard]] T chebyshevDistance(const Vec3& rhs) const noexcept {
         return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z));
     }
 
     // Get the Manhattan Distance between vectors
-    T manhattanDistance(const Vec3& rhs) const noexcept { return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z); }
+    [[nodiscard]] T manhattanDistance(const Vec3& rhs) const noexcept { return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z); }
 
     // Normalize vector
     Vec3 normalize() { return (*this) / length(); }
@@ -225,25 +225,25 @@ public:
 
     bool operator!=(const Vec3& rhs) const noexcept { return !(rhs == *this); }
 
-    const Vec3<T> operator+(const Vec3<T>& rhs) const noexcept {
+    Vec3<T> operator+(const Vec3<T>& rhs) const noexcept {
         Vec3<T> tmp(*this);
         tmp += rhs;
         return tmp;
     };
 
-    const Vec3<T> operator-(const Vec3<T>& rhs) const noexcept {
+    Vec3<T> operator-(const Vec3<T>& rhs) const noexcept {
         Vec3<T> tmp(*this);
         tmp -= rhs;
         return tmp;
     };
 
-    const Vec3<T> operator*(const Vec3<T>& rhs) const noexcept {
+    Vec3<T> operator*(const Vec3<T>& rhs) const noexcept {
         Vec3<T> tmp(*this);
         tmp *= rhs;
         return tmp;
     };
 
-    const Vec3<T> operator/(const Vec3<T>& rhs) const noexcept {
+    Vec3<T> operator/(const Vec3<T>& rhs) const noexcept {
         Vec3<T> tmp(*this);
         tmp /= rhs;
         return tmp;

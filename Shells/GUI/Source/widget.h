@@ -22,6 +22,8 @@
 #include <functional>
 #include "nuklear_helper.h"
 #include <string>
+#include <utility>
+#include <utility>
 
 // widget base class
 class Widget {
@@ -29,7 +31,7 @@ public:
     Widget(std::string name, struct nk_rect size, int flags)
         : mName(std::move(name)), mSize(size), mFlags(flags) {}
 
-    virtual ~Widget() {}
+    virtual ~Widget() = default;
 
     void _render(nk_context* ctx) {
         if (nk_begin(ctx, mName.c_str(), mSize, mFlags))
@@ -39,7 +41,7 @@ public:
     virtual void update() = 0;
 
     void setOpen(bool open) { mOpen = open; }
-    std::string getName() const { return mName; }
+    [[nodiscard]] std::string getName() const { return mName; }
 protected:
     virtual void render(nk_context* ctx) = 0;
 
@@ -58,7 +60,7 @@ public:
 
     WidgetCallback(std::string name, struct nk_rect size, int flags,
                    RenderCallback renderFunc, UpdateCallback updateFunc = nullptr) :
-        Widget(name, size, flags), mRenderFunc(renderFunc), mUpdateFunc(updateFunc) {}
+        Widget(std::move(name), size, flags), mRenderFunc(std::move(std::move(renderFunc))), mUpdateFunc(std::move(std::move(updateFunc))) {}
 
     void render(nk_context* ctx) override { mRenderFunc(ctx); }
     void update() override { if (mUpdateFunc) mUpdateFunc(); }

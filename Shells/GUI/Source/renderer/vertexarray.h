@@ -103,15 +103,15 @@ public:
     }
 
     // Get current vertex format
-    const VertexFormat& getFormat() const { return mFormat; }
+    [[nodiscard]] const VertexFormat& getFormat() const { return mFormat; }
 
     // Get current vertex data
-    const float* getData() const {
+    [[nodiscard]] const float* getData() const {
         return mData;
     }
 
     // Get current vertex count
-    size_t getVertexCount() const { return mVertexes; }
+    [[nodiscard]] size_t getVertexCount() const { return mVertexes; }
 
 private:
     // Max vertex count
@@ -164,7 +164,7 @@ public:
         }
     }
 
-    bool isEmpty() const noexcept { return (vertexes == 0); }
+    [[nodiscard]] bool isEmpty() const noexcept { return (vertexes == 0); }
 
 private:
     // Buffer ID

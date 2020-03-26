@@ -26,11 +26,13 @@
 #include <unordered_map>
 #include <thread>
 #include <functional>
+#include <utility>
+#include <utility>
 #include "Common/Console.h"
 
 class CommandExecuteStat {
 public:
-    CommandExecuteStat(bool s, std::string i) : success(s), info(i) { }
+    CommandExecuteStat(bool s, std::string i) : success(s), info(std::move(std::move(i))) { }
 
     bool success;
     std::string info;
@@ -38,10 +40,10 @@ public:
 
 class Command {
 public:
-    explicit Command(std::string rawString) {
+    explicit Command(const std::string& rawString) {
         args = split(rawString, ' ');
-        name = args.size() != 0 ? args[0] : "";
-        if (args.size() != 0) args.erase(args.begin());
+        name = !args.empty() ? args[0] : "";
+        if (!args.empty()) args.erase(args.begin());
     }
 
     std::string name;
@@ -50,7 +52,7 @@ public:
 
 class CommandInfo {
 public:
-    CommandInfo(std::string a, std::string h) : author(a), help(h) { }
+    CommandInfo(std::string a, std::string h) : author(std::move(std::move(a))), help(std::move(std::move(h))) { }
 
     std::string author;
     std::string help;
@@ -97,7 +99,7 @@ public:
 
     void setRunningStatus(bool s) { mThreadRunning = s; }
 
-    void registerCommand(std::string name, CommandInfo info, CommandHandleFunction func) {
+    void registerCommand(const std::string& name, const CommandInfo& info, const CommandHandleFunction& func) {
         mCommandMap.insert({name, {info, func}});
     }
 

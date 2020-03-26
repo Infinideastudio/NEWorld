@@ -1,0 +1,14 @@
+{
+  "Space": "Game::Network::Protocol::LoginPackets",
+  "In": [
+    "0$LoginStart%%s$Name%",
+    "1$EncryptionResponse%%[B$Secret%%[B$Token%",
+    "2$Plugin%%V$MessageID%%T$Successful%%{B$Data%"
+  ],
+  "Out": [
+    "1$EncryptionRequest%%S$ID%%[B$PublicKey%%[B$VToken%",
+    "2$LoginSuccess%%X$UUID%%s$Username%",
+    "3$SetCompression%%V$Threshold%",
+    "4$RequestPlugin%%V$MessageID%%s$Channel%%{B$Data%"
+  ]
+}

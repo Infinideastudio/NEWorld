@@ -18,6 +18,8 @@
 // 
 
 #include "window.h"
+
+#include <utility>
 #include "Common/Debug.h"
 #include "renderer/renderer.h"
 #include "Common/JsonHelper.h"
@@ -83,8 +85,8 @@ void PrintOglVersion() {
     infostream << "OpenGL Version:" << major << '.' << minor << ", vendor: " << vendor << ", renderer: " << renderer;
 }
 
-Window::Window(const std::string& title, int width, int height)
-        :mTitle(title), mWidth(width), mHeight(height) {
+Window::Window(std::string  title, int width, int height)
+        :mTitle(std::move(title)), mWidth(width), mHeight(height) {
     SDL_Init(SDL_INIT_VIDEO);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);

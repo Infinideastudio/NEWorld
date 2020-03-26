@@ -36,13 +36,13 @@ public:
     bool operator==(const BlockData& rhs) { return rhs.getData() == getData(); }
     bool operator!=(const BlockData& rhs) { return !(*this == rhs); }
 
-    uint32_t getData() const noexcept { return mBlockDataUnion.allData; }
+    [[nodiscard]] uint32_t getData() const noexcept { return mBlockDataUnion.allData; }
 
-    uint32_t getID() const noexcept { return mBlockDataUnion.data.id; }
+    [[nodiscard]] uint32_t getID() const noexcept { return mBlockDataUnion.data.id; }
 
-    uint32_t getBrightness() const noexcept { return mBlockDataUnion.data.sky; }
+    [[nodiscard]] uint32_t getBrightness() const noexcept { return mBlockDataUnion.data.sky; }
 
-    uint32_t getState() const noexcept { return mBlockDataUnion.data.state; }
+    [[nodiscard]] uint32_t getState() const noexcept { return mBlockDataUnion.data.state; }
 
     void setID(uint32_t id) noexcept { mBlockDataUnion.data.id = id; }
 
@@ -86,15 +86,15 @@ public:
     BlockType(const char *name, bool solid, bool translucent, bool opaque, int hardness) :
             mName(name), mSolid(solid), mTranslucent(translucent), mOpaque(opaque), mHardness(hardness) {}
 
-    const std::string &getName() const noexcept { return mName; }
+    [[nodiscard]] const std::string &getName() const noexcept { return mName; }
 
-    bool isSolid() const noexcept { return mSolid; }
+    [[nodiscard]] bool isSolid() const noexcept { return mSolid; }
 
-    bool isTranslucent() const noexcept { return mTranslucent; }
+    [[nodiscard]] bool isTranslucent() const noexcept { return mTranslucent; }
 
-    bool isOpaque() const noexcept { return mOpaque; }
+    [[nodiscard]] bool isOpaque() const noexcept { return mOpaque; }
 
-    int getHardness() const noexcept { return mHardness; }
+    [[nodiscard]] int getHardness() const noexcept { return mHardness; }
 private:
     std::string mName;
     bool mSolid, mTranslucent, mOpaque;

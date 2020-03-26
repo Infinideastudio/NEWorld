@@ -20,6 +20,7 @@
 #pragma once
 
 #include <array>
+#include <memory>
 #include <string>
 #include <memory>
 #include <vector>
@@ -49,9 +50,9 @@ public:
     ////////////////////////////////////////
     // World Properties
     ////////////////////////////////////////
-    const std::string& getWorldName() const noexcept { return mName; }
-    size_t getWorldID() const noexcept { return mID; }
-    int getDaylightBrightness() const noexcept { return mDaylightBrightness; }
+    [[nodiscard]] const std::string& getWorldName() const noexcept { return mName; }
+    [[nodiscard]] size_t getWorldID() const noexcept { return mID; }
+    [[nodiscard]] int getDaylightBrightness() const noexcept { return mDaylightBrightness; }
 
     ////////////////////////////////////////
     // chunk Management
@@ -60,11 +61,11 @@ public:
     using ChunkReference = ChunkManager::reference;
     // Raw Access
     ChunkManager& getChunks() noexcept { return mChunks; }
-    const ChunkManager& getChunks() const noexcept { return mChunks; }
-    // Alias declearations for chunk management
-    size_t getChunkCount() const { return mChunks.size(); }
+    [[nodiscard]] const ChunkManager& getChunks() const noexcept { return mChunks; }
+    // Alias declearations for Chunk management
+    [[nodiscard]] size_t getChunkCount() const { return mChunks.size(); }
     ChunkReference getChunk(const Vec3i& ChunkPos) { return mChunks[ChunkPos]; }
-    bool isChunkLoaded(const Vec3i& ChunkPos) const noexcept { return mChunks.isLoaded(ChunkPos); }
+    [[nodiscard]] bool isChunkLoaded(const Vec3i& ChunkPos) const noexcept { return mChunks.isLoaded(ChunkPos); }
     void deleteChunk(const Vec3i& ChunkPos) {
         // TODO: check if the chunk needs to be saved.
         if (!isChunkLoaded(ChunkPos)) return;
@@ -75,7 +76,7 @@ public:
     static Vec3i getChunkPos(const Vec3i& pos) { return ChunkManager::getPos(pos); }
     static int getBlockAxisPos(int pos) { return ChunkManager::getBlockAxisPos(pos); }
     static Vec3i getBlockPos(const Vec3i& pos) { return ChunkManager::getBlockPos(pos); }
-    BlockData getBlock(const Vec3i& pos) const { return mChunks.getBlock(pos); }
+    [[nodiscard]] BlockData getBlock(const Vec3i& pos) const { return mChunks.getBlock(pos); }
     void setBlock(const Vec3i& pos, BlockData block) { mChunks.setBlock(pos, block); }
     auto insertChunk(const Vec3i& pos, ChunkManager::data_t&& ptr) { return mChunks.insert(pos, std::move(ptr)); }
 
@@ -100,36 +101,15 @@ public:
         mChunks.doIfLoaded(ChunkPos, func, std::forward<ArgType>(args)...);
     };
 
-    // Add chunk
-    Chunk* addChunk(const Vec3i& chunkPos,
-                    ChunkOnReleaseBehavior::Behavior behv = ChunkOnReleaseBehavior::Behavior::Release) {
-        return insertChunk(
-                   chunkPos, ChunkManager::data_t(new Chunk(chunkPos, *this), ChunkOnReleaseBehavior(behv)))
-               ->second.get();
+    // Add Chunk
+    Chunk* addChunk(const Vec3i& chunkPos) {
+        return insertChunk(chunkPos, std::make_unique<Chunk>(chunkPos, *this))->second.get();
     }
 
-
-    ////////////////////////////////////////
-    // BlockType Management
-    ////////////////////////////////////////
-    const Blocks& getBlockTypes() const { return mBlocks; }
-    const BlockType& getType(int id) const { return mBlocks[id]; }
-
-    std::vector<AABB> getHitboxes(const AABB& range) const;
+    [[nodiscard]] std::vector<AABB> getHitboxes(const AABB& range) const;
 
     // Tasks
     void registerChunkTasks(Player& player);
-private:
-    /**
-     * \brief Find chunks that needs to be loaded or unloaded
-     * \param playerPosition the position of the player, which will be used
-     *                       as the center position.
-     * \note Read-only and does not involve OpenGL operation.
-     *       *this will be used as the target world.
-     * TODO: change to adapt multiplayer mode
-     */
-    void loadUnloadDetector(const Vec3i& playerPosition) const;
-
 protected:
     // World name
     std::string mName;
@@ -163,7 +143,7 @@ public:
     [[nodiscard]] auto begin() const { return mWorlds.cbegin(); }
     [[nodiscard]] auto end() const { return mWorlds.cend(); }
 
-    size_t size() const noexcept { return mWorlds.size(); }
+    [[nodiscard]] size_t size() const noexcept { return mWorlds.size(); }
 
     World* getWorld(const std::string& name) {
         for (auto&& world : *this)
@@ -177,13 +157,13 @@ public:
         return nullptr;
     }
 
-    const World* getWorld(const std::string& name) const {
+    [[nodiscard]] const World* getWorld(const std::string& name) const {
         for (auto&& world : *this)
             if (world->getWorldName() == name) return world.get();
         return nullptr;
     }
 
-    const World* getWorld(size_t id) const {
+    [[nodiscard]] const World* getWorld(size_t id) const {
         for (auto&& world : *this)
             if (world->getWorldID() == id) return world.get();
         return nullptr;

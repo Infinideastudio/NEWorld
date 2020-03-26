@@ -32,7 +32,7 @@ void Texture::init() {
 
 void Texture::free() { IMG_Quit(); }
 
-Texture Texture::loadTextureRGB(std::string filename) {
+Texture Texture::loadTextureRGB(const std::string& filename) {
     RawTexture image(filename);
     auto surf = SDL_ConvertSurfaceFormat(image.getSurface(), SDL_PIXELFORMAT_BGR888, 0);
     TextureID ret;
@@ -44,7 +44,7 @@ Texture Texture::loadTextureRGB(std::string filename) {
     return Texture(ret);
 }
 
-Texture Texture::loadTextureRGBA(std::string filename) {
+Texture Texture::loadTextureRGBA(const std::string& filename) {
     RawTexture image(filename);
     auto surf = SDL_ConvertSurfaceFormat(image.getSurface(), SDL_PIXELFORMAT_ABGR8888, 0);
     TextureID ret;
@@ -56,7 +56,7 @@ Texture Texture::loadTextureRGBA(std::string filename) {
     return Texture(ret);
 }
 
-Texture Texture::loadBlock3DTexture(std::string filename) {
+Texture Texture::loadBlock3DTexture(const std::string& filename) {
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_TEXTURE_3D);
     TextureID ret;

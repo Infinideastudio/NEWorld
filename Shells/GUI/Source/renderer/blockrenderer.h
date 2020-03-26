@@ -41,7 +41,7 @@ public:
 
 class DefaultBlockRenderer : public BlockRenderer {
 public:
-    DefaultBlockRenderer(size_t data[]);
+    DefaultBlockRenderer(const size_t data[]);
     void flushTexture() override;
     void render(VertexArray& target, const class Chunk* chunk, const Vec3i& pos) override;
 private:

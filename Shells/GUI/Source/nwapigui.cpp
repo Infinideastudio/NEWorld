@@ -25,7 +25,7 @@
 void nwSetBlockRenderFunc(size_t, NWblockrenderfunc) { }
 
 void nwUseDefaultBlockRenderFunc(size_t id, void* data) {
-    NWblocktexture* ptr = reinterpret_cast<NWblocktexture*>(data);
+    auto* ptr = reinterpret_cast<NWblocktexture*>(data);
     size_t array[] = {ptr->right, ptr->left, ptr->top, ptr->bottom, ptr->front, ptr->back};
     BlockRendererManager::setBlockRenderer(id, std::make_shared<DefaultBlockRenderer>(array));
 }

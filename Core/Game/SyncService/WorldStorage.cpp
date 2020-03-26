@@ -59,7 +59,7 @@ int WorldStorage::printSQLOutput(void* arg, int cnt, char** vals, char** col) {
 }
 
 int WorldStorage::chunkInfoCallback(void* arg, int cnt, char** vals, char** col) {
-    std::optional<ChunkInfo>* info = static_cast<std::optional<ChunkInfo>*>(arg);
+    auto* info = static_cast<std::optional<ChunkInfo>*>(arg);
     if (cnt == 0) *info = {};
     else *info = ChunkInfo{};
 

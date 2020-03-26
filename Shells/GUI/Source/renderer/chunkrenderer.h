@@ -51,8 +51,8 @@ public:
                 }
     }
 
-    const VertexArray& getVAOpacity() const noexcept { return mVAOpacity; }
-    const VertexArray& getVATranslucent() const noexcept { return mVATranslucent; }
+    [[nodiscard]] const VertexArray& getVAOpacity() const noexcept { return mVAOpacity; }
+    [[nodiscard]] const VertexArray& getVATranslucent() const noexcept { return mVATranslucent; }
 private:
     VertexArray mVAOpacity{262144, VertexFormat(2, 1, 0, 3)};
     VertexArray mVATranslucent{262144, VertexFormat(2, 1, 0, 3)};

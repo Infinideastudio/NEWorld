@@ -26,7 +26,7 @@
 class UIShell : public Application {
 public:
     UIShell();
-    ~UIShell();
+    ~UIShell() override;
     void run() override;
     argagg::parser_results args;
 };

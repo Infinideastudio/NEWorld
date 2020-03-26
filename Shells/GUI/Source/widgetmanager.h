@@ -42,25 +42,25 @@ public:
             widget.second->update();
     }
 
-    void addWidget(std::shared_ptr<Widget> widget) { mWidgets[widget->getName()] = widget; }
+    void addWidget(const std::shared_ptr<Widget>& widget) { mWidgets[widget->getName()] = widget; }
 
-    std::shared_ptr<Widget> getWidget(std::string name) {
+    std::shared_ptr<Widget> getWidget(const std::string& name) {
         auto iter = mWidgets.find(name);
         if (iter == mWidgets.end()) return nullptr;
         return iter->second;
     }
 
-    std::shared_ptr<const Widget> getWidget(std::string name) const {
+    [[nodiscard]] std::shared_ptr<const Widget> getWidget(const std::string& name) const {
         auto iter = mWidgets.find(name);
         if (iter == mWidgets.end()) return nullptr;
         return iter->second;
     }
 
-    size_t getSize() const { return mWidgets.size(); }
+    [[nodiscard]] size_t getSize() const { return mWidgets.size(); }
     WidgetType::iterator begin() { return mWidgets.begin(); }
     WidgetType::iterator end() { return mWidgets.end(); }
-    WidgetType::const_iterator begin() const { return mWidgets.begin(); }
-    WidgetType::const_iterator end() const { return mWidgets.end(); }
+    [[nodiscard]] WidgetType::const_iterator begin() const { return mWidgets.begin(); }
+    [[nodiscard]] WidgetType::const_iterator end() const { return mWidgets.end(); }
 
 private:
     WidgetType mWidgets;

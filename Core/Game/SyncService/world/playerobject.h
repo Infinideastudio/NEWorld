@@ -30,17 +30,17 @@ public:
     PlayerObject(const Object& obj)
         : Object(obj), mHeight(1.6), mWidth(0.6), mSpeed(0.2) { refreshHitbox(); }
 
-    ~PlayerObject() { }
+    ~PlayerObject() override = default;
 
     void rotate(const Vec3d& rotation) { mRotation += rotation; }
 
     void setDirection(const Vec3d& direction) { mRotation = direction; }
 
-    Vec3d getDirection() const { return mRotation; }
+    [[nodiscard]] Vec3d getDirection() const { return mRotation; }
 
     void setSpeed(double speed) { mSpeed = speed; }
 
-    double getSpeed() const { return mSpeed; }
+    [[nodiscard]] double getSpeed() const { return mSpeed; }
 
 private:
     Vec3d mDirection; // Body direction, head direction is `mRotation` in class Object
