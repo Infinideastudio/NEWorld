@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.9)
 
+add_custom_target(
+    Core.CodeGen ALL
+    InboundGen ${CMAKE_CURRENT_SOURCE_DIR}/Game/Network/Protocol/Lists ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 file(GLOB_RECURSE SRC_COMMON ${CMAKE_CURRENT_SOURCE_DIR}/Common/*.*)
 file(GLOB_RECURSE SRC_GAME ${CMAKE_CURRENT_SOURCE_DIR}/Game/*.*)
 set(SRC_CORE ${SRC_COMMON} ${SRC_GAME})

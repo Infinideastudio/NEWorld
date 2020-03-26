@@ -57,8 +57,7 @@ int InitBuiltin() {
 }
 
 static std::vector<std::string> Imports = { // NOLINT
-        "IO/Server/Protocol/Base.h",
-        "IO/Server/PacketReader.h"
+        "Game/Network/Protocol/Base.h"
 };
 
 static std::string ToPath(const std::string& mangled) {

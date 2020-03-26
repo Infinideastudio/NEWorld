@@ -7,9 +7,9 @@
 #include <nlohmann/json.hpp>
 #include "Parse.h"
 
-class DeserializerGen {
+class PacketProcessGen {
 public:
-    explicit DeserializerGen(const std::string& ns): mNs(ns) {
+    explicit PacketProcessGen(const std::string& ns):mNs(ns) {
         Indent() << "namespace " << ns << " {" << std::endl;
         for (auto x : ns) {
             if (x!=':') mPBase.push_back(x);
@@ -31,23 +31,8 @@ public:
             Indent() << x.T->GetName() << ' ' << x.Name << " {};" << std::endl;
         }
         if (!sig.Arguments.empty()) mOut << std::endl;
-        Indent() << "bool Deserialize(PacketReader& reader) noexcept {" << std::endl;
-        ++mIndent;
-        for (auto&& x : Optimize(GenInstructions(sig))) {
-            if (x.isArgument) {
-                const auto& arg = *x.isArgument;
-                Indent() << arg.T->GetDeserializerCall(arg.Name) << std::endl;
-            }
-            else {
-                if (x.isSizeCheck == -1)
-                    Indent() << "if (!reader.Good()) return false;" << std::endl;
-                else
-                    Indent() << "if (reader.Remains() < " << x.isSizeCheck << ") return false;" << std::endl;
-            }
-        }
-        Indent() << "return true;" << std::endl;
-        --mIndent;
-        Indent() << '}' << std::endl << std::endl;
+        PrintDeserializer(sig);
+        PrintSerializer(sig);
         Indent() << "void Process(States::StateBase& state);" << std::endl;
         --mIndent;
         Indent() << "};" << std::endl << std::endl;
@@ -63,11 +48,55 @@ private:
     struct Instruction {
         int isSizeCheck = 0;
         const Argument* isArgument = nullptr;
+        bool isLast = false;
     };
 
     std::ostream& Indent() {
         for (int i = 0; i<mIndent; ++i) mOut << "    ";
         return mOut;
+    }
+
+    void PrintDeserializer(const Signature& sig) {
+        Indent() << "bool Deserialize(PacketReader& reader) noexcept {" << std::endl;
+        ++mIndent;
+        bool lastWritten = false;
+        for (auto&& x : Optimize(GenInstructions(sig))) {
+            if (x.isArgument) {
+                const auto& arg = *x.isArgument;
+                Indent() << arg.T->GetDeserializerCall(arg.Name) << std::endl;
+            }
+            else {
+                if (x.isSizeCheck == -1)
+                    if (!x.isLast)
+                        Indent() << "if (!reader.Good()) return false;" << std::endl;
+                    else {
+                        lastWritten = true;
+                        Indent() << "return reader.Good();" << std::endl;
+                    }
+                else
+                    Indent() << "if (reader.Remains() < " << x.isSizeCheck << ") return false;" << std::endl;
+            }
+        }
+        if (!lastWritten) Indent() << "return true;" << std::endl;
+        --mIndent;
+        Indent() << '}' << std::endl << std::endl;
+    }
+
+    void PrintSerializer(const Signature& sig) {
+        Indent() << "[[nodiscard]] Packet Deserialize() const noexcept {" << std::endl;
+        ++mIndent;
+        Indent() << "int size = 0;" << std::endl;
+        for (auto& x: sig.Arguments) {
+            Indent() << "size += " << x.T->GetSizeCall(x.Name) << ';' << std::endl;
+        }
+        Indent() << "Packet packet { size };" << std::endl;
+        Indent() << "PacketWriter writer { packet };" << std::endl;
+        for (auto& x: sig.Arguments) {
+            Indent() << x.T->GetSerializerCall(x.Name) << std::endl;
+        }
+        Indent() << "return packet;" << std::endl;
+        --mIndent;
+        Indent() << '}' << std::endl << std::endl;
     }
 
     static std::vector<Instruction> GenInstructions(const Signature& sig) {
@@ -107,6 +136,7 @@ private:
             }
         }
         if (!hold.empty()) for (auto& x : hold) ret.push_back(x);
+        if (!ret.empty()) ret.back().isLast = true;
         return ret;
     }
 
@@ -162,7 +192,7 @@ nlohmann::json LoadTree(const std::string& list) {
 }
 
 void ParseGen(const nlohmann::json& tree, const std::string& base) {
-    DeserializerGen gen {tree["Space"]};
+    PacketProcessGen gen {tree["Space"]};
     for (auto&& sig : tree["In"]) gen.Print(Parser(std::string(sig)).Get());
     gen.Complete(base);
 }

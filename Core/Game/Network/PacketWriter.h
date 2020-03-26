@@ -8,7 +8,10 @@
 namespace Game::Network {
     class PacketWriter {
     public:
+        explicit PacketWriter(Packet& packet) noexcept
+                :mHead(packet.Data()), mPacket(packet) { }
         void UByte(const uint8_t v) noexcept { *mHead++ = v; }
+        void Bool(const bool v) noexcept { UByte(v); }
         void UShort(const uint16_t v) noexcept { (UByte(v >> 8u), UByte(v)); }
         void UInt(const uint32_t v) noexcept { (UShort(v >> 16u), UShort(v)); }
         void ULong(const uint64_t v) noexcept { (UInt(v >> 32u), UInt(v)); }
@@ -28,124 +31,189 @@ namespace Game::Network {
         }
         void VarInt(const int v) noexcept { VarInt::WriteAdv(mHead, v); }
 
-        template<class A>
+        template <class A>
         void String(const std::basic_string<char, std::char_traits<char>, A>& string) noexcept {
             VarInt(string.size());
             for (const auto x: string) Byte(x);
         }
 
-        template<template<class> class C>
-        void ByteArray(const C<int8_t>& array) noexcept {
+        template <class C>
+        void ByteArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) Byte(x);
         }
-        template<template<class> class C>
-        void UByteArray(const C<uint8_t>& array) noexcept {
+        template <class C>
+        void UByteArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) UByte(x);
         }
 
-        template<template<class> class C>
-        void ShortArray(const C<int16_t>& array) noexcept {
+        template <class C>
+        void ShortArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) Short(x);
         }
-        template<template<class> class C>
-        void UShortArray(const C<uint16_t>& array) noexcept {
+        template <class C>
+        void UShortArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) UShort(x);
         }
 
-        template<template<class> class C>
-        void IntArray(const C<int32_t>& array) noexcept {
+        template <class C>
+        void IntArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) Int(x);
         }
-        template<template<class> class C>
-        void UIntArray(const C<uint32_t>& array) noexcept {
+        template <class C>
+        void UIntArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) UInt(x);
         }
 
-        template<template<class> class C>
-        void LongArray(const C<int64_t>& array) noexcept {
+        template <class C>
+        void LongArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) Long(x);
         }
-        template<template<class> class C>
-        void ULongArray(const C<uint64_t>& array) noexcept {
+        template <class C>
+        void ULongArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) ULong(x);
         }
 
-        template<template<class> class C>
-        void FloatArray(const C<float>& array) noexcept {
+        template <class C>
+        void FloatArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) Float(x);
         }
-        template<template<class> class C>
-        void DoubleArray(const C<double>& array) noexcept {
+        template <class C>
+        void DoubleArray(const C& array) noexcept {
             VarInt(array.size());
             for (const auto x : array) Double(x);
         }
 
-        template<template<class> class C>
-        void ByteUnboundedArray(const C<int8_t>& array) noexcept {
+        template <class C>
+        void ByteUnboundedArray(const C& array) noexcept {
             for (const auto x : array) Byte(x);
         }
-        template<template<class> class C>
-        void UByteUnboundedArray(const C<uint8_t>& array) noexcept {
+        template <class C>
+        void UByteUnboundedArray(const C& array) noexcept {
             for (const auto x : array) UByte(x);
         }
 
-        template<template<class> class C>
-        void ShortUnboundedArray(const C<int16_t>& array) noexcept {
+        template <class C>
+        void ShortUnboundedArray(const C& array) noexcept {
             for (const auto x : array) Short(x);
         }
-        template<template<class> class C>
-        void UShortUnboundedArray(const C<uint16_t>& array) noexcept {
+        template <class C>
+        void UShortUnboundedArray(const C& array) noexcept {
             for (const auto x : array) UShort(x);
         }
 
-        template<template<class> class C>
-        void IntUnboundedArray(const C<int32_t>& array) noexcept {
+        template <class C>
+        void IntUnboundedArray(const C& array) noexcept {
             for (const auto x : array) Int(x);
         }
-        template<template<class> class C>
-        void UIntUnboundedArray(const C<uint32_t>& array) noexcept {
+        template <class C>
+        void UIntUnboundedArray(const C& array) noexcept {
             for (const auto x : array) UInt(x);
         }
 
-        template<template<class> class C>
-        void LongUnboundedArray(const C<int64_t>& array) noexcept {
+        template <class C>
+        void LongUnboundedArray(const C& array) noexcept {
             for (const auto x : array) Long(x);
         }
-        template<template<class> class C>
-        void ULongUnboundedArray(const C<uint64_t>& array) noexcept {
+        template <class C>
+        void ULongUnboundedArray(const C& array) noexcept {
             for (const auto x : array) ULong(x);
         }
 
-        template<template<class> class C>
-        void FloatUnboundedArray(const C<float>& array) noexcept {
+        template <class C>
+        void FloatUnboundedArray(const C& array) noexcept {
             for (const auto x : array) Float(x);
         }
-        template<template<class> class C>
-        void DoubleUnboundedArray(const C<double>& array) noexcept {
+        template <class C>
+        void DoubleUnboundedArray(const C& array) noexcept {
             for (const auto x : array) Double(x);
         }
 
-        template<class T, template<class> class C>
-        void Array(const C<T>& array) noexcept {
+        template <class T, template <class> class C>
+        void Array(const C& array) noexcept {
             VarInt(array.size());
             for (const auto& x : array) x.Serialize(*this);
         }
 
-        template<class T, template<class> class C>
-        void UnboundedArray(const C<T>& array) noexcept {
+        template <class T, template <class> class C>
+        void UnboundedArray(const C& array) noexcept {
             for (const auto& x : array) x.Serialize(*this);
         }
+
+        static int VarIntSize(const int v) noexcept { return VarInt::GetSize(v); }
+
+        template <class A>
+        static int StringSize(const std::basic_string<char, std::char_traits<char>, A>& string) noexcept {
+            return VarIntSize(string.size())+string.size();
+        }
+
+        template <class C>
+        static int ByteArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size(); }
+        template <class C>
+        static int UByteArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size(); }
+
+        template <class C>
+        static int ShortArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size()*2; }
+        template <class C>
+        static int UShortArraySize(const C& array) noexcept {
+            return VarIntSize(array.size())+array.size()*2;
+        }
+
+        template <class C>
+        static int IntArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size()*4; }
+        template <class C>
+        static int UIntArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size()*4; }
+
+        template <class C>
+        static int LongArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size()*8; }
+        template <class C>
+        static int ULongArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size()*8; }
+
+        template <class C>
+        static int FloatArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size()*4; }
+        template <class C>
+        static int DoubleArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size()*8; }
+
+        template <class C>
+        static int ByteUnboundedArraySize(const C& array) noexcept { return array.size(); }
+        template <class C>
+        static int UByteUnboundedArraySize(const C& array) noexcept { return array.size(); }
+
+        template <class C>
+        static int ShortUnboundedArraySize(const C& array) noexcept { return array.size()*2; }
+        template <class C>
+        static int UShortUnboundedArraySize(const C& array) noexcept { return array.size()*2; }
+
+        template <class C>
+        static int IntUnboundedArraySize(const C& array) noexcept { return array.size()*4; }
+        template <class C>
+        static int UIntUnboundedArraySize(const C& array) noexcept { return array.size()*4; }
+
+        template <class C>
+        static int LongUnboundedArraySize(const C& array) noexcept { return array.size()*8; }
+        template <class C>
+        static int ULongUnboundedArraySize(const C& array) noexcept { return array.size()*8; }
+
+        template <class C>
+        static int FloatUnboundedArraySize(const C& array) noexcept { return array.size()*4; }
+        template <class C>
+        static int DoubleUnboundedArraySize(const C& array) noexcept { return array.size()*8; }
+
+        template <class T, template <class> class C>
+        static int ArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size(); }
+
+        template <class T, template <class> class C>
+        static int UnboundedArraySizeSize(const C& array) noexcept { return array.size(); }
     private:
         uint8_t* mHead;
-        Packet mPacket;
+        Packet& mPacket;
     };
 }

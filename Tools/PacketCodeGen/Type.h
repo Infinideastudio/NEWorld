@@ -9,6 +9,7 @@ struct IType {
     [[nodiscard]] virtual int GetSize() const noexcept = 0;
     [[nodiscard]] virtual bool IsFixedSize() const noexcept = 0;
     [[nodiscard]] virtual const char* GetName() const noexcept = 0;
+    [[nodiscard]] virtual std::string GetSizeCall(const std::string& argName) const = 0;
     [[nodiscard]] virtual std::string GetSerializerCall(const std::string& argName) const = 0;
     [[nodiscard]] virtual std::string GetDeserializerCall(const std::string& argName) const = 0;
 };
@@ -30,6 +31,9 @@ private:
 struct BuiltInScalars : BuiltIn {
     BuiltInScalars(const char* string, int i) noexcept
             :BuiltIn(string), Size(i) { }
+    [[nodiscard]] std::string GetSizeCall(const std::string& argName) const override {
+        return "sizeof("+argName+')';
+    }
     [[nodiscard]] int GetSize() const noexcept override { return Size; }
     [[nodiscard]] bool IsFixedSize() const noexcept override { return true; }
 private:
@@ -39,6 +43,9 @@ private:
 struct BuiltInVariadic : BuiltIn {
     explicit BuiltInVariadic(const std::string& name)
             :BuiltIn(name) { }
+    [[nodiscard]] std::string GetSizeCall(const std::string& argName) const override {
+        return "PacketWriter::"+std::string(GetName())+"Size("+argName+")";
+    }
     [[nodiscard]] int GetSize() const noexcept override { return 0; }
     [[nodiscard]] bool IsFixedSize() const noexcept override { return false; }
 };
@@ -61,6 +68,9 @@ struct CustomType : IType {
     [[nodiscard]] int GetSize() const noexcept override { return 0; }
     [[nodiscard]] bool IsFixedSize() const noexcept override { return false; }
     [[nodiscard]] const char* GetName() const noexcept override { return NamespacedName.c_str(); }
+    [[nodiscard]] std::string GetSizeCall(const std::string& argName) const override {
+        return argName+".SerializedSize()";
+    }
     [[nodiscard]] std::string GetSerializerCall(const std::string& argName) const override {
         return argName+".Serialize(writer);";
     }
