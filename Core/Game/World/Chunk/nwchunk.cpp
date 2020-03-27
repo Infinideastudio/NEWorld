@@ -46,14 +46,14 @@ Chunk::Chunk(const Vec3i& position, const class World& world, const ChunkDataSto
 
 void Chunk::replaceChunk(const ChunkDataStorageType& data) noexcept {
     if(data.size()==1) { // Monotonic chunk
-        setMonotonic(data[0]);
+        setMonotonic(Game::World::BlockData(data[0]));
         return;
     }
 
     assert(data.size() == Chunk::BlocksSize);
     allocateBlocks();
-    static_assert(std::is_trivially_copyable<BlockData>::value);
-    std::memcpy(getBlocks()->data(), data.data(), sizeof(BlockData) * BlocksSize);
+    static_assert(std::is_trivially_copyable<Game::World::BlockData>::value);
+    std::memcpy(getBlocks()->data(), data.data(), sizeof(Game::World::BlockData) * BlocksSize);
     mLoading = false;
 }
 
@@ -63,7 +63,7 @@ Chunk::ChunkDataStorageType Chunk::getChunkForExport() const noexcept {
 
     std::vector<uint32_t> chunkData;
     chunkData.resize(BlocksSize);
-    std::memcpy(chunkData.data(), getBlocks()->data(), sizeof(BlockData) * Chunk::BlocksSize);
+    std::memcpy(chunkData.data(), getBlocks()->data(), sizeof(Game::World::BlockData) * Chunk::BlocksSize);
     return chunkData;
 }
 

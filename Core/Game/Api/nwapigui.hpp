@@ -25,7 +25,7 @@
 // API related to GUI or renderer
 
 typedef size_t NWtextureid;
-typedef void (*NWblockrenderfunc)(void* cthis, BlockData data, int x, int y, int z);
+typedef void (*NWblockrenderfunc)(void* cthis, Game::World::BlockData data, int x, int y, int z);
 
 struct NWblocktexture {
     NWtextureid right, left, top, bottom, front, back;

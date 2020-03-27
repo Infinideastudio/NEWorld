@@ -1,4 +1,5 @@
 #include "WorldStorage.h"
+#include "Blocks.h"
 #include <filesystem>
 #include <chrono>
 namespace fs = std::filesystem;
@@ -9,7 +10,7 @@ std::optional<Chunk::ChunkDataStorageType> WorldStorage::requestChunk(Vec3i chun
         auto data = Chunk::ChunkDataStorageType{};
         data.resize(Chunk::BlocksSize);
         file.seekg((*pos).offset);
-        file.read(reinterpret_cast<char*>(data.data()), Chunk::BlocksSize * sizeof(BlockData));
+        file.read(reinterpret_cast<char*>(data.data()), Chunk::BlocksSize * sizeof(Game::World::BlockData));
         return data;
     }
     return {};
@@ -17,7 +18,7 @@ std::optional<Chunk::ChunkDataStorageType> WorldStorage::requestChunk(Vec3i chun
 
 void WorldStorage::saveChunk(Vec3i chunkPos, const Chunk::ChunkDataStorageType& data) {
     return;
-    auto chunkSize = data.size() * sizeof(BlockData);
+    auto chunkSize = data.size() * sizeof(Game::World::BlockData);
     auto allocateSize = chunkSize;
 
     // Try find the chunk first

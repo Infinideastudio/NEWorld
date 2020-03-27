@@ -7,7 +7,7 @@ TEST(Core, TerrainSectionData) {
         for (int x = 0; x<32; x++)
             for (int y = 0; y<32; y++)
                 for (int z = 0; z<32; z++) {
-                    auto d = BlockData(getHash(x, y, z)%maxSize);
+                    auto d = Game::World::BlockData(getHash(x, y, z)%maxSize);
                     data.setBlock({x, y, z}, d);
                 }
     };
@@ -16,7 +16,7 @@ TEST(Core, TerrainSectionData) {
             for (int y = 0; y<32; y++)
                 for (int z = 0; z<32; z++) {
                     const auto l = data.getBlock({x, y, z});
-                    const auto r = BlockData(getHash(x, y, z)%maxSize);
+                    const auto r = Game::World::BlockData(getHash(x, y, z)%maxSize);
                     ASSERT_EQ(l, r);
                 }
     };
@@ -31,11 +31,11 @@ TEST(Core, TerrainSectionData) {
     dataCheck(data3, 1ull << data3.getBitLength());
 
     // Upsizing test
-    data2.setBlock({0, 0, 0}, 1024);
+    data2.setBlock({0, 0, 0}, Game::World::BlockData(1024));
     ASSERT_EQ(data2.getBitLength(), 32);
     dataValidate(data2, 8);
 
-    data3.setBlock({0, 0, 0}, 1024);
+    data3.setBlock({0, 0, 0}, Game::World::BlockData(1024));
     ASSERT_EQ(data3.getBitLength(), 8);
     dataValidate(data3, 4);
 

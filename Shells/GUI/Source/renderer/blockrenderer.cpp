@@ -26,8 +26,8 @@ size_t BlockTextureBuilder::mTexturePerLine = 8;
 std::vector<Texture::RawTexture> BlockTextureBuilder::mRawTexs{};
 std::vector<std::shared_ptr<BlockRenderer>> BlockRendererManager::mBlockRenderers{};
 
-static bool adjacentTest(BlockData a, BlockData b) noexcept {
-    return a.getID() != 0 && !Blocks::getInstance()[b.getID()].isOpaque() && !(a.getID() == b.getID());
+static bool adjacentTest(Game::World::BlockData a, Game::World::BlockData b) noexcept {
+    return a.getID() != 0 && !Game::World::Blocks::getInstance()[b.getID()].isOpaque() && !(a.getID() == b.getID());
 }
 
 // Render default block
@@ -35,8 +35,8 @@ static void defaultBlockRendererImplementation(VertexArray& target, const Chunk*
                                                const Vec3i& pos) {
     Vec3i worldpos = chunk->getPosition() * Chunk::Size() + pos;
 
-    BlockData curr = chunk->getBlock(pos);
-    BlockData neighbors[6] =
+    Game::World::BlockData curr = chunk->getBlock(pos);
+    Game::World::BlockData neighbors[6] =
     {
         pos.x == Chunk::Size() - 1
             ? chunk->getWorld()->getBlock(Vec3i(worldpos.x + 1, worldpos.y, worldpos.z))

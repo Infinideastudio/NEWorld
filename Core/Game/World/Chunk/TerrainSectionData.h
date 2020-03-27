@@ -18,11 +18,11 @@ public:
         allocateSpace();
     }
 
-    [[nodiscard]] BlockData getBlock(const Vec3i& pos) const noexcept {
+    [[nodiscard]] Game::World::BlockData getBlock(const Vec3i& pos) const noexcept {
         return getBlockDataFromId(getBlockIdByIndex(pos.x * ChunkSize * ChunkSize + pos.y * ChunkSize + pos.z, mChunkData, mIdLengthInBit));
     }
 
-    void setBlock(const Vec3i& pos, BlockData block) noexcept {
+    void setBlock(const Vec3i& pos, Game::World::BlockData block) noexcept {
         auto id = getIdFromBlockData(block);
         if (id == -1) id = addNewBlockToPalette(block);
         setBlockIdByIndex(pos.x * ChunkSize * ChunkSize + pos.y * ChunkSize + pos.z, id, mChunkData, mIdLengthInBit);
@@ -136,14 +136,14 @@ private:
         }
     }
 
-	const BlockData& getBlockDataFromId(uint32_t id) const noexcept {
-        if (mIdLengthInBit == 32) return id;
+	Game::World::BlockData getBlockDataFromId(uint32_t id) const noexcept {
+        if (mIdLengthInBit == 32) return Game::World::BlockData(id);
         assert(id < mPalette.size());
         return mPalette[id];
 	}
 
 	// Return (uint32_t)-1 if not found
-	uint32_t getIdFromBlockData(BlockData data) {
+	uint32_t getIdFromBlockData(Game::World::BlockData data) {
         if (mIdLengthInBit == 32) return data.getData();
         for (size_t i = 0; i < mPalette.size(); i++) {
             if (mPalette[i] == data) return i;
@@ -151,7 +151,7 @@ private:
         return -1;
     }
 
-    size_t addNewBlockToPalette(BlockData block) {
+    size_t addNewBlockToPalette(Game::World::BlockData block) {
         mPalette.push_back(block);
         if (mPalette.size() > getPaletteCapacity()) {
             if (mIdLengthInBit == 4) {
@@ -190,5 +190,5 @@ private:
     int mIdLengthInBit; // the length of chunk-specific id
     
     std::unique_ptr<InternalIDType[]> mChunkData;
-    std::vector<BlockData> mPalette;
+    std::vector<Game::World::BlockData> mPalette;
 };

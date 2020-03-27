@@ -19,10 +19,9 @@
 
 #include "chunkservice.hpp"
 #include "Common/JsonHelper.h"
-
 namespace {
     NW_MAKE_SERVICE(ChunkService, "org.newinfinideas.neworld.chunk_service", 0.0, _)
 }
 
 ChunkService::ChunkService() noexcept
-    : mWorlds(Blocks::getInstance()), mAuthority(true) {}
+    :mWorlds(Game::World::Blocks::getInstance()), mAuthority(true) {}

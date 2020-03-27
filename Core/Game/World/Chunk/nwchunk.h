@@ -27,10 +27,10 @@
 #include <utility>
 #include <array>
 #include <unordered_map>
-#include "Game/World/Blocks.h"
 #include "Common/Debug.h"
 #include "Common/Math/Vector.h"
 #include "Common/Utility.h"
+#include "Game/World/Blocks.h"
 
 class Chunk;
 
@@ -50,7 +50,7 @@ public:
     static constexpr int BlocksSize = 32 * 32 * 32;
     static constexpr int SizeLog2() { return 5; }
     static constexpr int Size() { return 32; };
-    using Blocks = std::array<BlockData, BlocksSize>;
+    using Blocks = std::array<Game::World::BlockData, BlocksSize>;
     using ChunkDataStorageType = std::vector<uint32_t>;
 
     enum class LoadBehavior { Build, Loading };
@@ -75,7 +75,7 @@ public:
     void setUpdated(bool updated) const noexcept { mUpdated = updated; }
 
     // Get block data in this chunk
-    BlockData getBlock(const Vec3i& pos) const {
+    Game::World::BlockData getBlock(const Vec3i& pos) const {
         Assert(pos.x >= 0 && pos.x < Size() && pos.y >= 0 && pos.y < Size() && pos.z >= 0 && pos.z < Size());
         return !isMonotonic() ? (*getBlocks())[pos.x * Size() * Size() + pos.y * Size() + pos.z] : mMonotonicBlock;
     }
@@ -86,7 +86,7 @@ public:
     ChunkDataStorageType getChunkForExport() const noexcept;
 
     // Set block data in this chunk
-    void setBlock(const Vec3i& pos, BlockData block) {
+    void setBlock(const Vec3i& pos, Game::World::BlockData block) {
         Assert(pos.x >= 0 && pos.x < Size() && pos.y >= 0 && pos.y < Size() && pos.z >= 0 && pos.z < Size());
         if (isMonotonic() && block != mMonotonicBlock) allocateBlocks();
         (*getBlocks())[pos.x * Size() * Size() + pos.y * Size() + pos.z] = block;
@@ -98,7 +98,7 @@ public:
 
     const World* getWorld() const noexcept { return mWorld; }
     bool isMonotonic() const noexcept { return mBlocks == nullptr; }
-    BlockData getMonotonicBlock() const noexcept { return mMonotonicBlock; }
+    Game::World::BlockData getMonotonicBlock() const noexcept { return mMonotonicBlock; }
     void allocateBlocks(bool fill = true) { /*Assert(isMonotonic());*/
         if (!isMonotonic()) return;
         mBlocks = std::make_unique<Blocks>();
@@ -106,13 +106,13 @@ public:
             std::fill(mBlocks->begin(), mBlocks->end(), mMonotonicBlock);
         }
     }
-    void setMonotonic(BlockData block) noexcept { Assert(isMonotonic()); mMonotonicBlock = block; }
+    void setMonotonic(Game::World::BlockData block) noexcept { Assert(isMonotonic()); mMonotonicBlock = block; }
 
 private:
     Vec3i mPosition;
     
     std::unique_ptr<Blocks> mBlocks;
-    BlockData mMonotonicBlock;
+    Game::World::BlockData mMonotonicBlock;
 
     // TODO: somehow avoid it! not safe.
     mutable bool mUpdated = false;
@@ -196,10 +196,10 @@ public:
     }
 
     // Get block data
-    [[nodiscard]] BlockData getBlock(const Vec3i& pos) const { return at(getPos(pos)).getBlock(getBlockPos(pos)); }
+    [[nodiscard]] Game::World::BlockData getBlock(const Vec3i& pos) const { return at(getPos(pos)).getBlock(getBlockPos(pos)); }
 
     // Set block data
-    void setBlock(const Vec3i& pos, BlockData block) { at(getPos(pos)).setBlock(getBlockPos(pos), block); }
+    void setBlock(const Vec3i& pos, Game::World::BlockData block) { at(getPos(pos)).setBlock(getBlockPos(pos), block); }
 
 private:
     array_t mChunks;

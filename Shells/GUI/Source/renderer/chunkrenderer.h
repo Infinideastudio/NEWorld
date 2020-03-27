@@ -45,8 +45,8 @@ public:
         for (tmp.x = 0; tmp.x < Chunk::Size(); ++tmp.x)
             for (tmp.y = 0; tmp.y < Chunk::Size(); ++tmp.y)
                 for (tmp.z = 0; tmp.z < Chunk::Size(); ++tmp.z) {
-                    BlockData b = chunk->getBlock(tmp);
-                    auto target = Blocks::getInstance()[b.getID()].isTranslucent() ? &mVATranslucent : &mVAOpacity;
+                    Game::World::BlockData b = chunk->getBlock(tmp);
+                    auto target = Game::World::Blocks::getInstance()[b.getID()].isTranslucent() ? &mVATranslucent : &mVAOpacity;
                     BlockRendererManager::render(*target, b.getID(), chunk, tmp);
                 }
     }

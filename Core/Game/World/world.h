@@ -29,6 +29,7 @@
 #include "Game/World/Chunk/nwchunk.h"
 #include "Common/Physics/AABB.h"
 #include "WorldStorage.h"
+#include "Blocks.h"
 
 class Player;
 class ChunkService;
@@ -36,7 +37,7 @@ class ModuleManager;
 
 class NWCOREAPI World final : public NonCopyable {
 public:
-    World(std::string name, const Blocks& blocks)
+    World(std::string name, const Game::World::Blocks& blocks)
         : mName(std::move(name)), mID(0), mBlocks(blocks), mChunks(1024), mDaylightBrightness(15),
           mWorldStorage(mName) { }
 
@@ -76,8 +77,8 @@ public:
     static Vec3i getChunkPos(const Vec3i& pos) { return ChunkManager::getPos(pos); }
     static int getBlockAxisPos(int pos) { return ChunkManager::getBlockAxisPos(pos); }
     static Vec3i getBlockPos(const Vec3i& pos) { return ChunkManager::getBlockPos(pos); }
-    [[nodiscard]] BlockData getBlock(const Vec3i& pos) const { return mChunks.getBlock(pos); }
-    void setBlock(const Vec3i& pos, BlockData block) { mChunks.setBlock(pos, block); }
+    [[nodiscard]] Game::World::BlockData getBlock(const Vec3i& pos) const { return mChunks.getBlock(pos); }
+    void setBlock(const Vec3i& pos, Game::World::BlockData block) { mChunks.setBlock(pos, block); }
     auto insertChunk(const Vec3i& pos, ChunkManager::data_t&& ptr) { return mChunks.insert(pos, std::move(ptr)); }
 
     auto insertChunkAndUpdate(const Vec3i& pos, ChunkManager::data_t&& ptr) {
@@ -117,7 +118,7 @@ protected:
     size_t mID;
     static size_t IDCount;
     // Loaded blocks
-    const Blocks& mBlocks;
+    const Game::World::Blocks& mBlocks;
     // All Chunks (chunk array)
     ChunkManager mChunks;
     int mDaylightBrightness;
@@ -127,7 +128,7 @@ protected:
 
 class WorldManager: public NonCopyable {
 public:
-    WorldManager(Blocks& blocks) : mBlocks(blocks) { }
+    WorldManager(Game::World::Blocks& blocks) :mBlocks(blocks) { }
 
     ~WorldManager() { mWorlds.clear(); }
 
@@ -171,5 +172,5 @@ public:
 
 private:
     std::vector<std::unique_ptr<World>> mWorlds;
-    Blocks& mBlocks;
+    Game::World::Blocks& mBlocks;
 };

@@ -35,7 +35,7 @@ public:
         if (!cs.isAuthority())
             RPC::getClient().async_call("pickBlock", mWorldID, mBlockPosition);
 
-        cs.getWorlds().getWorld(mWorldID)->setBlock(mBlockPosition, mBlockID);
+        cs.getWorlds().getWorld(mWorldID)->setBlock(mBlockPosition, Game::World::BlockData(mBlockID));
     }
 
 private:

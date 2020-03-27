@@ -20,24 +20,26 @@
 #include "Blocks.h"
 #include "Common/Logger.h"
 
-Blocks::Blocks()
-    : mBlocks{BlockType("Air", false, false, false, 0)} {}
+namespace Game::World {
+    Blocks::Blocks()
+            :mBlocks{BlockType("Air", false, false, false, 0)} { }
 
-size_t Blocks::registerBlock(const BlockType& block) {
-    mBlocks.push_back(block);
-    auto id = mBlocks.size() - 1;
-    BlockType type = mBlocks[id];
-    debugstream << "Registered block:"
-                << "Block \"" << type.getName() << "\"(ID = " << id << ") = {"
-                << "Solid: " << type.isSolid()
-                << ", Translucent: " << type.isTranslucent()
-                << ", Opaque: " << type.isOpaque()
-                << ", Hardness: " << type.getHardness()
-                << "}";
-    return id;
-}
+    size_t Blocks::registerBlock(const BlockType& block) {
+        mBlocks.push_back(block);
+        auto id = mBlocks.size()-1;
+        Game::World::BlockType type = mBlocks[id];
+        debugstream << "Registered block:"
+                    << "Block \"" << type.getName() << "\"(ID = " << id << ") = {"
+                    << "Solid: " << type.isSolid()
+                    << ", Translucent: " << type.isTranslucent()
+                    << ", Opaque: " << type.isOpaque()
+                    << ", Hardness: " << type.getHardness()
+                    << "}";
+        return id;
+    }
 
-Blocks &Blocks::getInstance() {
-    static Blocks mgr;
-    return mgr;
+    Blocks& Blocks::getInstance() {
+        static Blocks mgr;
+        return mgr;
+    }
 }

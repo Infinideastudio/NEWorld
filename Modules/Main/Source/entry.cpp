@@ -28,8 +28,8 @@ int32_t GrassID = 0, RockID, DirtID, SandID, WaterID;
 
 int32_t registerBlock(const char* name, bool solid, bool translucent, bool opaque,
                       int hardness) {
-    BlockType block { name, solid, translucent, opaque, hardness };
-    return Blocks::getInstance().registerBlock(block);
+    Game::World::BlockType block { name, solid, translucent, opaque, hardness };
+    return Game::World::Blocks::getInstance().registerBlock(block);
 }
 
 class MainModule : public ModuleObject {

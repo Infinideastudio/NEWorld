@@ -50,7 +50,7 @@ public:
     void task(ChunkService& cs) override {
         auto world = cs.getWorlds().getWorld(mWorldId);
         if (!world) return;
-        world->setBlock(mPos, BlockData{ 0,0,0 });
+        world->setBlock(mPos, Game::World::BlockData{ 0,0,0 });
     }
 
 private:
