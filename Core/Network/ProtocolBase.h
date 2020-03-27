@@ -2,11 +2,11 @@
 
 #include <cstdint>
 #include "Math/Vector3.h"
-#include "Network/States/Base.h"
+#include "StateBase.h"
 #include "Network/PacketReader.h"
 #include "Network/PacketWriter.h"
 
-namespace Game::Network::Protocol {
+namespace Network {
     using Bool = bool;
     using Byte = std::int8_t;
     using Short = std::int16_t;

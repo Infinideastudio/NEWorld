@@ -14,7 +14,7 @@ I: Int
 L: Long
 F: Float
 D: Double
-V: VarInt
+V: VarIntHelper
 s: String
 X: UUID
 @[A-Za-z0-9@@]+: External Parser With Full Qualifier

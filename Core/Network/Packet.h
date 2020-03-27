@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <Cfx/Utilities/TempAlloc.h>
 
-namespace Game::Network {
+namespace Network {
     class Packet {
     public:
         constexpr Packet() noexcept

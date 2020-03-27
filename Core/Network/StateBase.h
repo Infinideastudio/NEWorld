@@ -3,10 +3,10 @@
 #include "Network/PacketReader.h"
 #include "Network/PacketMultiplexer.h"
 
-namespace Game::Network::States {
+namespace Network {
     class StateBase {
     public:
-        explicit StateBase(Game::Network::PacketMultiplexer* mMuxRef) noexcept:mMuxRef(mMuxRef) { }
+        explicit StateBase(PacketMultiplexer* mMuxRef) noexcept:mMuxRef(mMuxRef) { }
 
         virtual ~StateBase() noexcept = default;
 
@@ -14,11 +14,13 @@ namespace Game::Network::States {
 
         void Outbound(Packet packet) { mMuxRef->Outbound(std::move(packet)); }
 
-        void Transition(int next) { mMuxRef->Transition(next); }
+        void Transition(std::unique_ptr<StateBase> newState) { mMuxRef->Transition(std::move(newState)); }
 
         template <class T>
         T& Down() { return static_cast<T&>(*this); } // NOLINT
+
+        [[nodiscard]] auto GetMux() const noexcept { return mMuxRef; }
     private:
-        Game::Network::PacketMultiplexer* mMuxRef;
+        PacketMultiplexer* mMuxRef;
     };
 }

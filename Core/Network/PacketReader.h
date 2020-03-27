@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Packet.h"
-#include "VarInt.h"
+#include "VarIntHelper.h"
 #include "UUID.h"
 #include <string>
 #include <vector>
 #include <Cfx/Utilities/TempAlloc.h>
 
-namespace Game::Network {
+namespace Network {
     class PacketReader {
     public:
         explicit PacketReader(Packet&& packet) noexcept: mHead(packet.Data()), mPacket(std::move(packet)) {}
@@ -59,7 +59,7 @@ namespace Game::Network {
             const auto u64 = UInt();
             return *reinterpret_cast<const double*>(&u64); // the double has to have the same endian as int64
         }
-        int VarInt() noexcept { return VarInt::LoadAdv(mHead); }
+        int VarInt() noexcept { return VarIntHelper::LoadAdv(mHead); }
 
         template <class A = Temp::Allocator<char>>
         std::basic_string<char, std::char_traits<char>, A> String() {

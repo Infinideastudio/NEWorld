@@ -1,5 +1,5 @@
 {
-  "Space": "Game::Network::Protocol::LoginPackets",
+  "Space": "Game::Protocol::LoginPackets",
   "In": [
     "0$LoginStart%%s$Name%",
     "1$EncryptionResponse%%[B$Secret%%[B$Token%",

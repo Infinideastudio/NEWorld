@@ -2,8 +2,8 @@
 
 #include "Packet.h"
 
-namespace Game::Network {
-    struct VarInt {
+namespace Network {
+    struct VarIntHelper {
         static constexpr int GetSize(const int v) noexcept {
             const auto uv = static_cast<unsigned int>(v);
             return uv<0x7F ? 1 : uv<0x3FFF ? 2 : uv<0x1FFFFF ? 3 : uv<0xFFFFFFF ? 4 : 5;

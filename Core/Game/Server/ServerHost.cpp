@@ -4,14 +4,14 @@
 #include <wangle/codec/ByteToMessageDecoder.h>
 #include <cstring>
 #include "Network/Packet.h"
-#include "Network/VarInt.h"
+#include "Network/VarIntHelper.h"
 #include "Network/PacketMultiplexer.h"
 
 namespace Game::Server {
     using namespace folly;
     using namespace wangle;
-    using Game::Network::Packet;
-    using Game::Network::VarInt;
+    using Network::Packet;
+    using Network::VarIntHelper;
 
     using PacketPipeline = Pipeline<IOBufQueue&, Packet>;
 
@@ -24,7 +24,7 @@ namespace Game::Server {
             int payloadLen;
             auto bytes = c.peekBytes();
             auto offset = bytes.data();
-            if (VarInt::TryLoadAdv(offset, offset+bytes.size(), payloadLen)) {
+            if (VarIntHelper::TryLoadAdv(offset, offset+bytes.size(), payloadLen)) {
                 const auto vSize = offset-bytes.data();
                 if (buf.chainLength()>=(vSize+payloadLen)) {
                     buf.trimStart(vSize);
@@ -49,7 +49,7 @@ namespace Game::Server {
     };
 
     class PacketHandler : public Handler<Packet, int, Packet, std::unique_ptr<IOBuf>>,
-                          public Game::Network::PacketMultiplexer {
+                          public Network::PacketMultiplexer {
     public:
         using Context = typename Handler<Packet, int, Packet, std::unique_ptr<IOBuf>>::Context;
 
@@ -61,11 +61,11 @@ namespace Game::Server {
         void read(Context* ctx, Packet buf) override { Inbound(std::move(buf)); }
 
         Future<Unit> write(Context* ctx, Packet msg) override {
-            const auto vSize = VarInt::GetSize(msg.Size());
+            const auto vSize = VarIntHelper::GetSize(msg.Size());
             // although we can eliminate this, but it is not trivial
             auto buf = IOBuf::copyBuffer(msg.Data(), msg.Size(), vSize);
             buf->prepend(vSize);
-            VarInt::Write(buf->writableData(), msg.Size());
+            VarIntHelper::Write(buf->writableData(), msg.Size());
             return ctx->fireWrite(std::move(buf));
         }
 

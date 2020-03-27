@@ -1,5 +1,5 @@
 {
-  "Space": "Game::Network::Protocol::QueryPackets",
+  "Space": "Game::Protocol::QueryPackets",
   "In": [
     "0$Request%",
     "1$Ping%%L$Payload%"

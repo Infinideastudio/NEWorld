@@ -1,10 +1,8 @@
 #include "PacketMultiplexer.h"
-#include "Network/States/NoStateServer.h"
-#include "Network/States/QueryStateServer.h"
-#include "Network/States/LoginStateServer.h"
-#include "Network/States/GameStateServer.h"
+#include "PacketReader.h"
+#include "StateBase.h"
 
-namespace Game::Network {
+namespace Network {
     PacketMultiplexer::PacketMultiplexer() { Transition(0); }
 
     PacketMultiplexer::PacketMultiplexer(PacketMultiplexer&&) noexcept = default;
@@ -18,17 +16,7 @@ namespace Game::Network {
         mState->Handle(reader.VarInt(), reader);
     }
 
-    void PacketMultiplexer::Transition(int mode) {
-        switch (mode) {
-        case 0: mState = std::make_unique<States::NoStateServer>(this);
-            break;
-        case 1: mState = std::make_unique<States::QueryStateServer>(this);
-            break;
-        case 2: mState = std::make_unique<States::LoginStateServer>(this);
-            break;
-        case 3: mState = std::make_unique<States::GameStateServer>(this);
-            break;
-        default: mState.reset();
-        }
+    void PacketMultiplexer::Transition(std::unique_ptr<StateBase> newState) {
+        mState = std::move(newState);
     }
 }

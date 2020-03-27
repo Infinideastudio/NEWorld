@@ -2,8 +2,8 @@
 
 #include "Packet.h"
 
-namespace Game::Network {
-    namespace States { class StateBase; }
+namespace Network {
+    class StateBase;
 
     class PacketMultiplexer {
     public:
@@ -23,8 +23,8 @@ namespace Game::Network {
 
         virtual void Outbound(Packet&& packet) = 0;
 
-        void Transition(int mode);
+        void Transition(std::unique_ptr<StateBase> newState);
     private:
-        std::unique_ptr<States::StateBase> mState;
+        std::unique_ptr<StateBase> mState;
     };
 }

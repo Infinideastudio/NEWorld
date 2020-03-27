@@ -17,6 +17,7 @@ public:
             else if (mPBase.back()!='/') mPBase.push_back('/');
         }
         ++mIndent;
+        Indent() << "using namespace ::Network;" << std::endl;
     }
 
     void Print(Signature&& sig, bool server) {
@@ -34,7 +35,7 @@ public:
         if (!sig.Arguments.empty()) mOut << std::endl;
         PrintDeserializer(sig);
         PrintSerializer(sig);
-        Indent() << "void Process(States::StateBase& state);" << std::endl;
+        Indent() << "void Process(StateBase& state);" << std::endl;
         --mIndent;
         Indent() << "};" << std::endl << std::endl;
         (server ? mSPackets : mCPackets).insert_or_assign(sig.Id, std::move(sig));
@@ -148,6 +149,7 @@ private:
         Indent() << "#include \"" << mPBase << ".g.h\"" << std::endl << std::endl;
         Indent() << "namespace " << mNs << " {" << std::endl;
         ++mIndent;
+        Indent() << "using namespace ::Network;" << std::endl;
         GenParseFn("Server");
         GenParseFn("Client");
         --mIndent;
@@ -159,7 +161,7 @@ private:
     }
 
     void GenParseFn(const std::string& side) {
-        Indent() << "bool TryHandle"+side+"(int id, PacketReader& reader, States::StateBase& state) {" << std::endl;
+        Indent() << "bool TryHandle"+side+"(int id, PacketReader& reader, StateBase& state) {" << std::endl;
         ++mIndent;
         Indent() << "switch(id) {" << std::endl;
         for (auto& x : (side=="Server" ? mSPackets : mCPackets)) {
@@ -177,8 +179,8 @@ private:
     }
 
     void GenHeader(const std::string& base) {
-        Indent() << "bool TryHandleClient(int id, PacketReader& reader, States::StateBase& state);" << std::endl;
-        Indent() << "bool TryHandleServer(int id, PacketReader& reader, States::StateBase& state);" << std::endl;
+        Indent() << "bool TryHandleClient(int id, PacketReader& reader, StateBase& state);" << std::endl;
+        Indent() << "bool TryHandleServer(int id, PacketReader& reader, StateBase& state);" << std::endl;
         --mIndent;
         Indent() << '}' << std::endl;
         std::cout << "Writing " << base+'/'+mPBase+".g.h" << std::endl;

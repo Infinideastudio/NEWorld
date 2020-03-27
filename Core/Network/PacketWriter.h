@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Packet.h"
-#include "VarInt.h"
+#include "VarIntHelper.h"
 #include <string>
 #include <vector>
 
-namespace Game::Network {
+namespace Network {
     class PacketWriter {
     public:
         explicit PacketWriter(Packet& packet) noexcept
@@ -29,7 +29,7 @@ namespace Game::Network {
             static_assert(std::numeric_limits<double>::is_iec559);
             ULong(*reinterpret_cast<const uint64_t*>(&v)); // the float has to have the same endian as int32
         }
-        void VarInt(int v) noexcept { VarInt::WriteAdv(mHead, v); }
+        void VarInt(int v) noexcept { VarIntHelper::WriteAdv(mHead, v); }
 
         template <class A>
         void String(const std::basic_string<char, std::char_traits<char>, A>& string) noexcept {
@@ -151,7 +151,7 @@ namespace Game::Network {
         static int UUIDSize(UUID uuid) { return 0; } // TODO: implement this
         void UUID(const UUID&) {} // TODO: Implement this
 
-        static int VarIntSize(const int v) noexcept { return VarInt::GetSize(v); }
+        static int VarIntSize(const int v) noexcept { return VarIntHelper::GetSize(v); }
 
         template <class A>
         static int StringSize(const std::basic_string<char, std::char_traits<char>, A>& string) noexcept {
