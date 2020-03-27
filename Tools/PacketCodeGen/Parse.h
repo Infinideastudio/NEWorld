@@ -69,7 +69,7 @@ private:
             Signature i{};
             i.Id = ToInt(ReadStringAssert('$', "invalid char after id"));
             i.Name = ReadStringAssert('%', "invalid char after name");
-            while (*mCurrent != 0) {
+            while (mCurrent != mString.cend()) {
                 AssertDelim('%', "invalid argument start char");
                 Argument argument{};
                 argument.T = GetOrAdd(ReadStringAssert('$', "invalid type end char"));
