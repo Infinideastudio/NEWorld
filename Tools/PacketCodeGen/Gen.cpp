@@ -222,7 +222,7 @@ int main(int argc, char** argv) {
         if (file.is_regular_file()) {
             if (file.path().extension()==".json") {
                 try {
-                    ParseGen(LoadTree(std::filesystem::absolute(file.path())), base);
+                    ParseGen(LoadTree(std::filesystem::absolute(file.path()).string()), base);
                 }
                 catch (std::exception& e) {
                     std::cout << "Error On Generating:" << std::filesystem::absolute(file.path()) << std::endl;

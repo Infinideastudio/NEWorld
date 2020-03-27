@@ -20,6 +20,7 @@
 #include "neworld.h"
 #include "gamescene.h"
 #include "Common/JsonHelper.h"
+#include "Game/SyncService/world/TerrainSectionData.h"
 
 UIShell::UIShell() {
     // Initialize
@@ -33,6 +34,7 @@ UIShell::UIShell() {
 }
 
 void UIShell::run() {
+    TerrainSectionData::unitTest();
     // Run
     const auto fps = getJsonValue<size_t>(getSettings()["gui"]["fps"], 60);
     const auto shouldLimitFps = getJsonValue<bool>(getSettings()["gui"]["limit"], false);
