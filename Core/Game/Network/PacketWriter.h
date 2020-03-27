@@ -10,26 +10,26 @@ namespace Game::Network {
     public:
         explicit PacketWriter(Packet& packet) noexcept
                 :mHead(packet.Data()), mPacket(packet) { }
-        void UByte(const uint8_t v) noexcept { *mHead++ = v; }
-        void Bool(const bool v) noexcept { UByte(v); }
-        void UShort(const uint16_t v) noexcept { (UByte(v >> 8u), UByte(v)); }
-        void UInt(const uint32_t v) noexcept { (UShort(v >> 16u), UShort(v)); }
-        void ULong(const uint64_t v) noexcept { (UInt(v >> 32u), UInt(v)); }
+        void UByte(uint8_t v) noexcept { *mHead++ = v; }
+        void Bool(bool v) noexcept { UByte(v); }
+        void UShort(uint16_t v) noexcept { (UByte(v >> 8u), UByte(v)); }
+        void UInt(uint32_t v) noexcept { (UShort(v >> 16u), UShort(v)); }
+        void ULong(uint64_t v) noexcept { (UInt(v >> 32u), UInt(v)); }
         // Completed By type punning, which is definitely not allowed by the standard
-        void Byte(const uint8_t v) noexcept { *mHead++ = v; }
-        void Short(const int16_t v) noexcept { UShort(reinterpret_cast<int16_t>(v)); }
-        void Int(const int32_t v) noexcept { UShort(reinterpret_cast<int32_t>(v)); }
-        void Long(const int64_t v) noexcept { UShort(reinterpret_cast<int64_t>(v)); }
+        void Byte(uint8_t v) noexcept { *mHead++ = v; }
+        void Short(int16_t v) noexcept { UShort(v); }
+        void Int(int32_t v) noexcept { UShort(v); }
+        void Long(int64_t v) noexcept { UShort(v); }
         // The following part is only designed to work on x64
-        void Float(const float v) noexcept {
+        void Float(float v) noexcept {
             static_assert(std::numeric_limits<float>::is_iec559);
             UInt(*reinterpret_cast<const uint32_t*>(&v)); // the float has to have the same endian as int32
         }
-        void Double(const double v) noexcept {
+        void Double(double v) noexcept {
             static_assert(std::numeric_limits<double>::is_iec559);
             ULong(*reinterpret_cast<const uint64_t*>(&v)); // the float has to have the same endian as int32
         }
-        void VarInt(const int v) noexcept { VarInt::WriteAdv(mHead, v); }
+        void VarInt(int v) noexcept { VarInt::WriteAdv(mHead, v); }
 
         template <class A>
         void String(const std::basic_string<char, std::char_traits<char>, A>& string) noexcept {
@@ -148,6 +148,7 @@ namespace Game::Network {
             for (const auto& x : array) x.Serialize(*this);
         }
 
+        static int UUIDSize(UUID uuid) { return 0; } // TODO: implement this
         void UUID(const UUID&) {} // TODO: Implement this
 
         static int VarIntSize(const int v) noexcept { return VarInt::GetSize(v); }
@@ -215,7 +216,6 @@ namespace Game::Network {
         template <class T, class C>
         static int UnboundedArraySizeSize(const C& array) noexcept { return array.size(); }
 
-        static int UUIDSize(UUID uuid) {return 0; } // TODO: implement this
     private:
         uint8_t* mHead;
         Packet& mPacket;

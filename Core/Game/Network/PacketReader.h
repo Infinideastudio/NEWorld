@@ -320,6 +320,7 @@ namespace Game::Network {
         }
 
         UUID UUID() noexcept {
+            return {};
             // TODO: implement this;
         }
 
