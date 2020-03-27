@@ -4,13 +4,13 @@
 #include "Game/Network/Protocol/NoStatePackets.g.h"
 
 namespace Game::Network::States {
-    class NoState : public StateBase {
+    class NoStateServer : public StateBase {
     public:
-        explicit NoState(PacketMultiplexer* mMuxRef) noexcept
+        explicit NoStateServer(PacketMultiplexer* mMuxRef) noexcept
                 :StateBase(mMuxRef) { }
 
         void Handle(int id, PacketReader& reader) override {
-            Protocol::NoStatePackets::TryHandle(id, reader, *this);
+            Protocol::NoStatePackets::TryHandleServer(id, reader, *this);
         }
     };
 }

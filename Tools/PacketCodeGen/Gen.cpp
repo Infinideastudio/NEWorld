@@ -9,7 +9,8 @@
 
 class PacketProcessGen {
 public:
-    explicit PacketProcessGen(const std::string& ns):mNs(ns) {
+    explicit PacketProcessGen(const std::string& ns)
+            :mNs(ns) {
         Indent() << "namespace " << ns << " {" << std::endl;
         for (auto x : ns) {
             if (x!=':') mPBase.push_back(x);
@@ -18,7 +19,7 @@ public:
         ++mIndent;
     }
 
-    void Print(Signature&& sig) {
+    void Print(Signature&& sig, bool server) {
         Indent() << "struct " << sig.Name << " final {" << std::endl;
         ++mIndent;
         // Insert the boilerplate
@@ -36,7 +37,7 @@ public:
         Indent() << "void Process(States::StateBase& state);" << std::endl;
         --mIndent;
         Indent() << "};" << std::endl << std::endl;
-        mPackets.insert_or_assign(sig.Id, std::move(sig));
+        (server ? mSPackets : mCPackets).insert_or_assign(sig.Id, std::move(sig));
     }
 
     void Complete(const std::string& base) {
@@ -66,7 +67,7 @@ private:
                 Indent() << arg.T->GetDeserializerCall(arg.Name) << std::endl;
             }
             else {
-                if (x.isSizeCheck == -1)
+                if (x.isSizeCheck==-1)
                     if (!x.isLast)
                         Indent() << "if (!reader.Good()) return false;" << std::endl;
                     else {
@@ -83,7 +84,7 @@ private:
     }
 
     void PrintSerializer(const Signature& sig) {
-        Indent() << "[[nodiscard]] Packet Deserialize() const noexcept {" << std::endl;
+        Indent() << "[[nodiscard]] Packet Serialize() const noexcept {" << std::endl;
         ++mIndent;
         Indent() << "int size = 0;" << std::endl;
         for (auto& x: sig.Arguments) {
@@ -116,18 +117,21 @@ private:
 
     static std::vector<Instruction> Optimize(const std::vector<Instruction>& raw) {
         std::vector<Instruction> ret{}, hold{};
-        for (int i = 0; i < raw.size(); i += 2) {
+        for (int i = 0; i<raw.size(); i += 2) {
             const auto& _1 = raw[i];
             const auto& _2 = raw[i+1];
-            if (_1.isSizeCheck == 0) {
-                if (!hold.empty()) { for (auto& x : hold) ret.push_back(x); hold.clear(); }
+            if (_1.isSizeCheck==0) {
+                if (!hold.empty()) {
+                    for (auto& x : hold) ret.push_back(x);
+                    hold.clear();
+                }
                 ret.push_back(_1);
                 hold.push_back(_2);
             }
             else {
                 if (hold.empty()) hold.push_back(_1);
                 else {
-                    if (hold[0].isSizeCheck == -1)
+                    if (hold[0].isSizeCheck==-1)
                         hold[0].isSizeCheck = _1.isSizeCheck;
                     else
                         hold[0].isSizeCheck += _1.isSizeCheck;
@@ -144,10 +148,21 @@ private:
         Indent() << "#include \"" << mPBase << ".g.h\"" << std::endl << std::endl;
         Indent() << "namespace " << mNs << " {" << std::endl;
         ++mIndent;
-        Indent() << "bool TryHandle(int id, PacketReader& reader, States::StateBase& state) {" << std::endl;
+        GenParseFn("Server");
+        GenParseFn("Client");
+        --mIndent;
+        Indent() << '}' << std::endl;
+        std::cout << "Writing " << base+'/'+mPBase+".g.parse.cpp" << std::endl;
+        std::ofstream gH(base+'/'+mPBase+".g.parse.cpp");
+        gH << mOut.rdbuf();
+        mOut.clear();
+    }
+
+    void GenParseFn(const std::string& side) {
+        Indent() << "bool TryHandle"+side+"(int id, PacketReader& reader, States::StateBase& state) {" << std::endl;
         ++mIndent;
         Indent() << "switch(id) {" << std::endl;
-        for (auto& x : mPackets) {
+        for (auto& x : (side=="Server" ? mSPackets : mCPackets)) {
             Indent() << "case " << x.first << ": {" << std::endl;
             ++mIndent;
             Indent() << x.second.Name << " x {};" << std::endl;
@@ -159,29 +174,24 @@ private:
         Indent() << "return false;" << std::endl;
         --mIndent;
         Indent() << "}" << std::endl;
-        --mIndent;
-        Indent() << '}' << std::endl;
-        std::cout << "Writing " << base + '/' +mPBase+ ".g.parse.cpp" << std::endl;
-        std::ofstream gH (base + '/' +mPBase+ ".g.parse.cpp");
-        gH << mOut.rdbuf();
-        mOut.clear();
     }
 
     void GenHeader(const std::string& base) {
-        Indent() << "bool TryHandle(int id, PacketReader& reader, States::StateBase& state);" << std::endl;
+        Indent() << "bool TryHandleClient(int id, PacketReader& reader, States::StateBase& state);" << std::endl;
+        Indent() << "bool TryHandleServer(int id, PacketReader& reader, States::StateBase& state);" << std::endl;
         --mIndent;
         Indent() << '}' << std::endl;
-        std::cout << "Writing " << base + '/' + mPBase+ ".g.h" << std::endl;
-        std::ofstream gH (base + '/' + mPBase+ ".g.h");
+        std::cout << "Writing " << base+'/'+mPBase+".g.h" << std::endl;
+        std::ofstream gH(base+'/'+mPBase+".g.h");
         gH << Headers() << mOut.rdbuf();
         mOut.clear();
     }
 
-    int mIndent { 0 };
+    int mIndent{0};
     std::string mNs;
     std::string mPBase;
     std::stringstream mOut;
-    std::map<int, Signature> mPackets;
+    std::map<int, Signature> mSPackets, mCPackets;
 };
 
 nlohmann::json LoadTree(const std::string& list) {
@@ -192,15 +202,16 @@ nlohmann::json LoadTree(const std::string& list) {
 }
 
 void ParseGen(const nlohmann::json& tree, const std::string& base) {
-    PacketProcessGen gen {tree["Space"]};
-    for (auto&& sig : tree["In"]) gen.Print(Parser(std::string(sig)).Get());
+    PacketProcessGen gen{tree["Space"]};
+    if (tree.find("In")!=tree.end()) for (auto&& sig : tree["In"]) gen.Print(Parser(std::string(sig)).Get(), true);
+    if (tree.find("Out")!=tree.end()) for (auto&& sig : tree["Out"]) gen.Print(Parser(std::string(sig)).Get(), false);
     gen.Complete(base);
 }
 
 int main(int argc, char** argv) {
     bool error = false;
     std::string lists, base;
-    if (argc == 3) {
+    if (argc==3) {
         lists = argv[1];
         base = argv[2];
     }
@@ -209,7 +220,7 @@ int main(int argc, char** argv) {
     }
     for (auto&& file : std::filesystem::directory_iterator(lists)) {
         if (file.is_regular_file()) {
-            if (file.path().extension() == ".json") {
+            if (file.path().extension()==".json") {
                 try {
                     ParseGen(LoadTree(std::filesystem::absolute(file.path())), base);
                 }

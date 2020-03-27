@@ -5,7 +5,7 @@
     "1$Ping%%L$Payload%"
   ],
   "Out": [
-    "0$Response%s$JSONResponse%",
+    "0$Response%%s$JSONResponse%",
     "1$Pong%%L$Payload%"
   ]
 }

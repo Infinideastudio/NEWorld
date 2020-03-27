@@ -4,13 +4,13 @@
 #include "Game/Network/Protocol/QueryPackets.g.h"
 
 namespace Game::Network::States {
-    class QueryState : public StateBase {
+    class QueryStateServer : public StateBase {
     public:
-        explicit QueryState(PacketMultiplexer* mMuxRef) noexcept
+        explicit QueryStateServer(PacketMultiplexer* mMuxRef) noexcept
                 :StateBase(mMuxRef) { }
 
         void Handle(int id, PacketReader& reader) override {
-            Protocol::QueryPackets::TryHandle(id, reader, *this);
+            Protocol::QueryPackets::TryHandleServer(id, reader, *this);
         }
     };
 }

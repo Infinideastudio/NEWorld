@@ -137,16 +137,18 @@ namespace Game::Network {
             for (const auto x : array) Double(x);
         }
 
-        template <class T, template <class> class C>
+        template <class T, class C>
         void Array(const C& array) noexcept {
             VarInt(array.size());
             for (const auto& x : array) x.Serialize(*this);
         }
 
-        template <class T, template <class> class C>
+        template <class T, class C>
         void UnboundedArray(const C& array) noexcept {
             for (const auto& x : array) x.Serialize(*this);
         }
+
+        void UUID(const UUID&) {} // TODO: Implement this
 
         static int VarIntSize(const int v) noexcept { return VarInt::GetSize(v); }
 
@@ -207,11 +209,13 @@ namespace Game::Network {
         template <class C>
         static int DoubleUnboundedArraySize(const C& array) noexcept { return array.size()*8; }
 
-        template <class T, template <class> class C>
+        template <class T, class C>
         static int ArraySize(const C& array) noexcept { return VarIntSize(array.size())+array.size(); }
 
-        template <class T, template <class> class C>
+        template <class T, class C>
         static int UnboundedArraySizeSize(const C& array) noexcept { return array.size(); }
+
+        static int UUIDSize(UUID uuid) {return 0; } // TODO: implement this
     private:
         uint8_t* mHead;
         Packet& mPacket;

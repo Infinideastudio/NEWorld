@@ -4,13 +4,13 @@
 #include "Game/Network/Protocol/LoginPackets.g.h"
 
 namespace Game::Network::States {
-    class LoginState: public StateBase {
+    class LoginStateServer: public StateBase {
     public:
-        explicit LoginState(PacketMultiplexer* mMuxRef) noexcept
+        explicit LoginStateServer(PacketMultiplexer* mMuxRef) noexcept
                 :StateBase(mMuxRef) {}
 
         void Handle(int id, PacketReader& reader) override {
-            Protocol::LoginPackets::TryHandle(id, reader, *this);
+            Protocol::LoginPackets::TryHandleServer(id, reader, *this);
         }
     };
 }
