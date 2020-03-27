@@ -125,13 +125,13 @@ private:
         case 4:
             auto holder4 = ids.length4Holder;
             if (offset == 0)return holder4.length4_1;
-            if (offset == 1)return holder4.length4_1;
-            if (offset == 2)return holder4.length4_2;
-            if (offset == 3)return holder4.length4_3;
-            if (offset == 4)return holder4.length4_4;
-            if (offset == 5)return holder4.length4_5;
-            if (offset == 6)return holder4.length4_6;
-            if (offset == 7)return holder4.length4_7;
+            if (offset == 1)return holder4.length4_2;
+            if (offset == 2)return holder4.length4_3;
+            if (offset == 3)return holder4.length4_4;
+            if (offset == 4)return holder4.length4_5;
+            if (offset == 5)return holder4.length4_6;
+            if (offset == 6)return holder4.length4_7;
+            if (offset == 7)return holder4.length4_8;
 
         case 8:
             auto holder8 = ids.length8Holder;
