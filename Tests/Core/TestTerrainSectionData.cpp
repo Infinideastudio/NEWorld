@@ -25,20 +25,44 @@ TEST(Core, TerrainSectionData) {
         dataValidate(data, maxSize);
     };
     TerrainSectionData data1, data2(8), data3(4);
+    ASSERT_EQ(data2.getBitLength(), 8);
+    ASSERT_EQ(data3.getBitLength(), 4);
 
-    //dataCheck(data1, data1.getPaletteCapacity());
-    dataCheck(data2, 1ull << data2.getBitLength());
-    dataCheck(data3, 1ull << data3.getBitLength());
+    dataCheck(data1, std::numeric_limits<size_t>::max());
+    dataCheck(data2, 1ull << 8);
+    dataCheck(data3, 1ull << 4);
 
     // Upsizing test
-    data2.setBlock({0, 0, 0}, Game::World::BlockData(1024));
+    auto oldBlock = data2.getBlock({ 0,0,0 });
+    data2.setBlock({ 0, 0, 0 }, Game::World::BlockData(1024));
+    data2.setBlock({ 0, 0, 0 }, oldBlock);
     ASSERT_EQ(data2.getBitLength(), 32);
-    dataValidate(data2, 8);
+    dataValidate(data2, 1 << 8);
 
-    data3.setBlock({0, 0, 0}, Game::World::BlockData(1024));
+    oldBlock = data3.getBlock({ 0,0,0 });
+    data3.setBlock({ 0, 0, 0 }, Game::World::BlockData(1024));
+    data3.setBlock({ 0, 0, 0 }, oldBlock);
     ASSERT_EQ(data3.getBitLength(), 8);
-    dataValidate(data3, 4);
+    dataValidate(data3, 1 << 4);
 
-    dataCheck(data2, 2ull << 32u);
-    dataCheck(data3, 2ull << 32u);
+    // Optimize test
+    data1.optimize();
+    ASSERT_EQ(data1.getBitLength(), 32);
+    dataValidate(data1, std::numeric_limits<size_t>::max());
+
+    data2.optimize();
+    ASSERT_EQ(data2.getBitLength(), 8);
+    dataValidate(data2, 1 << 8);
+
+    data3.optimize();
+    ASSERT_EQ(data3.getBitLength(), 4);
+    dataValidate(data3, 1 << 4);
+
+    dataCheck(data2, std::numeric_limits<size_t>::max());
+    dataCheck(data3, std::numeric_limits<size_t>::max());
+}
+
+int main(int argc, char** argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

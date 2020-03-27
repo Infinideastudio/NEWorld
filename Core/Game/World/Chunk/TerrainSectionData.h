@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include "Game/World/Blocks.h"
 #include "Common/Math/Vector.h"
+#include <set>
 
 /*
  * A class that stores the blocks data (id, etc.) in a chunk
@@ -25,29 +26,46 @@ public:
     void setBlock(const Vec3i& pos, Game::World::BlockData block) noexcept {
         auto id = getIdFromBlockData(block);
         if (id == -1) id = addNewBlockToPalette(block);
-        setBlockIdByIndex(pos.x * ChunkSize * ChunkSize + pos.y * ChunkSize + pos.z, id, mChunkData, mIdLengthInBit);
+        setBlockIdByIndex(getIndexByPosition(pos), id, mChunkData, mIdLengthInBit);
     }
 
 	// Find the appropriate length of id and compress data
     void optimize() noexcept {
-        std::unordered_set<uint32_t> newPalette;
+        class BlockDataHash {
+        public:
+            size_t operator()(const Game::World::BlockData& block) const noexcept {
+                return std::hash<size_t>()(block.getData());
+            }
+        };
+
+        // TODO: this code needs optimization!
+        std::unordered_set<Game::World::BlockData, BlockDataHash> newPalette;
         for (int x = 0; x < ChunkSize; x++) {
             for (int y = 0; y < ChunkSize; y++) {
                 for (int z = 0; z < ChunkSize; z++) {
-                    auto data = getBlock({ x, y, z}).getData();
+                    auto data = getBlock({ x, y, z});
                     if (newPalette.find(data) == newPalette.end()) newPalette.insert(data);
                 }
             }
         }
+        for (int x = 0; x < ChunkSize; x++) {
+            for (int y = 0; y < ChunkSize; y++) {
+                for (int z = 0; z < ChunkSize; z++) {
+                    auto data = getBlock({ x, y, z });
+                    auto id = std::distance(newPalette.begin(), newPalette.find(data));
+                    setBlockIdByIndex(getIndexByPosition({ x,y,z }), id, mChunkData, mIdLengthInBit);
+                }
+            }
+        }
+        mPalette = std::vector(newPalette.begin(), newPalette.end());
         auto oldLength = mIdLengthInBit;
         if (newPalette.size() <= 16) mIdLengthInBit = 4;
         else if (newPalette.size() <= 256) mIdLengthInBit = 8;
         else mIdLengthInBit = 32;
-		if(oldLength!= mIdLengthInBit) {
-            reallocateAndCopyData(oldLength);
+		if(oldLength != mIdLengthInBit) {
+            reallocateAndCopyData(oldLength, true);
 		}
     }
-
 
     [[nodiscard]] size_t getBitLength() const noexcept { return mIdLengthInBit; }
 private:
@@ -75,6 +93,10 @@ private:
             uint32_t length32;
         };
     };
+
+    static uint32_t getIndexByPosition(const Vec3i& pos) {
+        return pos.x * ChunkSize* ChunkSize + pos.y * ChunkSize + pos.z;
+    }
 
     [[nodiscard]] static uint32_t getBlockIdByIndex(size_t index, const std::unique_ptr<InternalIDType[]>& chunkData, size_t idLength) noexcept {
         size_t actualIndex = index * idLength / 32;
@@ -167,16 +189,27 @@ private:
         return mPalette.size() - 1;
     }
 
-	void reallocateAndCopyData(size_t oldLength) {
+    /* Reallocate the block data space and copy over the old id data.
+    // mIdLengthInBit should be set to the target size before calling this function.
+    // plainCopy: When true, even if new bit is 32, the ids are copied as-is without converting.
+    */
+    void reallocateAndCopyData(size_t oldLength, bool plainCopy = false) {
         auto oldSpace = allocateSpace();
-        for (size_t i = 0; i < BlocksSize; i++)
-            setBlockIdByIndex(i, getBlockIdByIndex(i, oldSpace, oldLength), mChunkData, mIdLengthInBit);
-        
+        if (mIdLengthInBit == 32 && !plainCopy) { // Since palette is not used in this case, the old ids need to be converted into block data.
+            for (int x = 0; x < 32; x++)
+                for (int y = 0; y < 32; y++)
+                    for (int z = 0; z < 32; z++)
+                        setBlock({ x,y,z }, mPalette[getBlockIdByIndex(getIndexByPosition({ x,y,z }), oldSpace, oldLength)]);
+        }
+        else {
+            for (size_t i = 0; i < BlocksSize; i++)
+                setBlockIdByIndex(i, getBlockIdByIndex(i, oldSpace, oldLength), mChunkData, mIdLengthInBit);
+        }
     }
 
     [[nodiscard]] size_t getPaletteCapacity() const noexcept {
-        if (mIdLengthInBit == 4) return (2 << 4);
-        if (mIdLengthInBit == 8) return (2 << 8);
+        if (mIdLengthInBit == 4) return (1 << 4);
+        if (mIdLengthInBit == 8) return (1 << 8);
         return std::numeric_limits<size_t>::max();
     }
 

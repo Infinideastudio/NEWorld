@@ -38,6 +38,8 @@ namespace Game::World {
 
         bool operator!=(const BlockData& rhs) const noexcept { return !(*this == rhs); }
 
+        bool operator<(const BlockData& rhs) const noexcept { return getData() < rhs.getData(); }
+
         [[nodiscard]] uint32_t getData() const noexcept { return mBlockDataUnion.allData; }
 
         [[nodiscard]] uint32_t getID() const noexcept { return mBlockDataUnion.data.id; }
