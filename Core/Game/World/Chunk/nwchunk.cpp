@@ -19,9 +19,9 @@
 
 #include <Common/Logger.h>
 #include "Common/Math/Vector.h"
-#include "Blocks.h"
+#include "Game/World/Blocks.h"
 #include "nwchunk.h"
-#include "world.h"
+#include "Game/World/world.h"
 
 void NWAPICALL DefaultChunkGen(const ChunkGenerateArgs*) {
     // This is the default terrain generator. Use this when no generators were loaded from plugins.

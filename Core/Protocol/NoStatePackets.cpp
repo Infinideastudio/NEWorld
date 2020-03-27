@@ -1,5 +1,5 @@
-#include "Game/Network/Protocol/NoStatePackets.g.h"
-#include "Game/Network/States/NoStateServer.h"
+#include "NoStatePackets.g.h"
+#include "Network/States/NoStateServer.h"
 
 namespace Game::Network::Protocol::NoStatePackets {
     void HandShake::Process(States::StateBase& state) {

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <Game/SyncService/world/playerobject.h>
+#include <Game/World/PlayerObject.h>
 #include <Game/SyncService/chunkservice.hpp>
 
 class NWCOREAPI Player : public PlayerObject {

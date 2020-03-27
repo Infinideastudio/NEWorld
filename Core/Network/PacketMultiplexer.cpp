@@ -1,8 +1,8 @@
 #include "PacketMultiplexer.h"
-#include "Game/Network/States/NoStateServer.h"
-#include "Game/Network/States/QueryStateServer.h"
-#include "Game/Network/States/LoginStateServer.h"
-#include "Game/Network/States/GameStateServer.h"
+#include "Network/States/NoStateServer.h"
+#include "Network/States/QueryStateServer.h"
+#include "Network/States/LoginStateServer.h"
+#include "Network/States/GameStateServer.h"
 
 namespace Game::Network {
     PacketMultiplexer::PacketMultiplexer() { Transition(0); }

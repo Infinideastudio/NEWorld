@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Base.h"
-#include "Game/Network/Protocol/LoginPackets.g.h"
+#include "Network/Protocol/LoginPackets.g.h"
 
 namespace Game::Network::States {
     class LoginStateServer: public StateBase {

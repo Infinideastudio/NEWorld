@@ -1,5 +1,5 @@
-#include "Game/Network/Protocol/Base.h"
-#include "Game/Network/Protocol/LoginPackets.g.h"
+#include "Network/ProtocolBase.h"
+#include "LoginPackets.g.h"
 
 namespace Game::Network::Protocol::LoginPackets {
     void LoginStart::Process(States::StateBase& state) {}

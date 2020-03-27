@@ -1,9 +1,9 @@
-#include "Blocks.h"
 #include <vector>
-#include <unordered_set>
 #include <cassert>
-#include "../../../Common/Math/Vector.h"
 #include <iostream>
+#include <unordered_set>
+#include "Game/World/Blocks.h"
+#include "Common/Math/Vector.h"
 
 /*
  * A class that stores the blocks data (id, etc.) in a chunk
@@ -48,49 +48,8 @@ public:
 		}
     }
 
-	// I know it shouldn't be here. But let it be for now, until we have a proper unit test module.
-	static void unitTest() {
-
-        auto getHash = [](int x, int y, int z) {return std::hash<size_t>()(x * ChunkSize * ChunkSize + y * ChunkSize + z); };
-        auto dataWrite = [&](TerrainSectionData& data, size_t maxSize) {
-            for (int x = 0; x < ChunkSize; x++)
-                for (int y = 0; y < ChunkSize; y++)
-                    for (int z = 0; z < ChunkSize; z++){
-                        auto d = BlockData(getHash(x, y, z) % maxSize);
-                        data.setBlock({ x,y,z }, d);
-                    }
-        };
-        auto dataValidate = [&](TerrainSectionData& data, size_t maxSize) {
-            for (int x = 0; x < ChunkSize; x++)
-                for (int y = 0; y < ChunkSize; y++)
-                    for (int z = 0; z < ChunkSize; z++)
-                        assert(data.getBlock({ x,y,z }) == BlockData(getHash(x, y, z) % maxSize));
-        };
-        auto dataCheck = [&](TerrainSectionData& data, size_t maxSize) {
-            dataWrite(data, maxSize);
-            dataValidate(data, maxSize);
-        };
-        TerrainSectionData data1, data2(8), data3(4);
-
-        //dataCheck(data1, data1.getPaletteCapacity());
-        dataCheck(data2, data2.getPaletteCapacity());
-        dataCheck(data3, data3.getPaletteCapacity());
-
-		// Upsizing test
-        data2.setBlock({ 0,0,0 }, 1024);
-        assert(data2.mIdLengthInBit == 32);
-        dataValidate(data2, 8);
-
-        data3.setBlock({ 0,0,0 }, 1024);
-        assert(data3.mIdLengthInBit == 8);
-        dataValidate(data3, 4);
-
-        dataCheck(data2, 2 << 32);
-        dataCheck(data3, 2 << 32);
-    }
 
     [[nodiscard]] size_t getBitLength() const noexcept { return mIdLengthInBit; }
-
 private:
     static constexpr int BlocksSize = 32 * 32 * 32;
     static constexpr int ChunkSize = 32;
@@ -122,24 +81,24 @@ private:
         size_t offset = index % (32 / idLength);
         InternalIDType ids = chunkData[actualIndex];
         switch (idLength) {
-        case 4:
+        case 4: {
             auto holder4 = ids.length4Holder;
-            if (offset == 0)return holder4.length4_1;
-            if (offset == 1)return holder4.length4_2;
-            if (offset == 2)return holder4.length4_3;
-            if (offset == 3)return holder4.length4_4;
-            if (offset == 4)return holder4.length4_5;
-            if (offset == 5)return holder4.length4_6;
-            if (offset == 6)return holder4.length4_7;
-            if (offset == 7)return holder4.length4_8;
-
-        case 8:
+            if (offset==0)return holder4.length4_1;
+            if (offset==1)return holder4.length4_2;
+            if (offset==2)return holder4.length4_3;
+            if (offset==3)return holder4.length4_4;
+            if (offset==4)return holder4.length4_5;
+            if (offset==5)return holder4.length4_6;
+            if (offset==6)return holder4.length4_7;
+            if (offset==7)return holder4.length4_8;
+        }
+        case 8: {
             auto holder8 = ids.length8Holder;
-            if (offset == 0)return holder8.length8_1;
-            if (offset == 1)return holder8.length8_2;
-            if (offset == 2)return holder8.length8_3;
-            if (offset == 3)return holder8.length8_4;
-
+            if (offset==0)return holder8.length8_1;
+            if (offset==1)return holder8.length8_2;
+            if (offset==2)return holder8.length8_3;
+            if (offset==3)return holder8.length8_4;
+        }
         case 32:
             return ids.length32;
         }

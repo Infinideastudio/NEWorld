@@ -3,17 +3,17 @@
 #include <wangle/channel/AsyncSocketHandler.h>
 #include <wangle/codec/ByteToMessageDecoder.h>
 #include <cstring>
-#include "Game/Network/Packet.h"
-#include "Game/Network/VarInt.h"
-#include "Game/Network/PacketMultiplexer.h"
+#include "Network/Packet.h"
+#include "Network/VarInt.h"
+#include "Network/PacketMultiplexer.h"
 
 namespace Game::Server {
     using namespace folly;
     using namespace wangle;
-    using ServerPipeline = Pipeline<IOBufQueue&, std::string>;
-
     using Game::Network::Packet;
     using Game::Network::VarInt;
+
+    using PacketPipeline = Pipeline<IOBufQueue&, Packet>;
 
     class FrameDecoder : public ByteToMessageDecoder<Packet> {
     public:
@@ -53,7 +53,7 @@ namespace Game::Server {
     public:
         using Context = typename Handler<Packet, int, Packet, std::unique_ptr<IOBuf>>::Context;
 
-        explicit PacketHandler(ServerPipeline::Ptr pipeline)
+        explicit PacketHandler(PacketPipeline::Ptr pipeline)
                 :mPipeline(std::move(pipeline)) {
             mPipeline->setOwner(this);
         }
@@ -75,15 +75,15 @@ namespace Game::Server {
             });
         }
     private:
-        ServerPipeline::Ptr mPipeline;
+        PacketPipeline::Ptr mPipeline;
     };
 
     // where we define the chain of handlers for each message received
-    class ServerPipelineFactory : public PipelineFactory<ServerPipeline> {
+    class PacketPipelineFactory : public PipelineFactory<PacketPipeline> {
     public:
-        ServerPipeline::Ptr newPipeline(std::shared_ptr<AsyncTransportWrapper> sock) override {
-            auto pipeline = ServerPipeline::create();
-            pipeline->addBack(AsyncSocketHandler(sock));
+        PacketPipeline::Ptr newPipeline(std::shared_ptr<AsyncTransportWrapper> sock) override {
+            auto pipeline = PacketPipeline::create();
+            pipeline->addBack(AsyncSocketHandler(std::move(sock)));
             pipeline->addBack(OutputBufferingHandler());
             pipeline->addBack(FrameDecoder());
             pipeline->addBack(PacketHandler(pipeline));

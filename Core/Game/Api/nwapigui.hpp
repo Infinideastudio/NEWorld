@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <Game/SyncService/world/Blocks.h>
+#include <Game/World/Blocks.h>
 #include "Common/Filesystem.h"
 
 // API related to GUI or renderer

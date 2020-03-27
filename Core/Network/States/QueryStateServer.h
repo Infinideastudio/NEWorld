@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Base.h"
-#include "Game/Network/Protocol/QueryPackets.g.h"
+#include "Network/Protocol/QueryPackets.g.h"
 
 namespace Game::Network::States {
     class QueryStateServer : public StateBase {

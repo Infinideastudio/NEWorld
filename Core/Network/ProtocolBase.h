@@ -2,9 +2,9 @@
 
 #include <cstdint>
 #include "Math/Vector3.h"
-#include "Game/Network/States/Base.h"
-#include "Game/Network/PacketReader.h"
-#include "Game/Network/PacketWriter.h"
+#include "Network/States/Base.h"
+#include "Network/PacketReader.h"
+#include "Network/PacketWriter.h"
 
 namespace Game::Network::Protocol {
     using Bool = bool;

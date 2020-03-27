@@ -22,8 +22,8 @@
 #include "blockrenderer.h"
 #include "renderer.h"
 #include "Common/Utility.h"
-#include "Game/SyncService/world/Blocks.h"
-#include "Game/SyncService/world/world.h"
+#include "Game/World/Blocks.h"
+#include "Game/World/world.h"
 #include "vertexarray.h"
 
 /**

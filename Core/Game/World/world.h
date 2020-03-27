@@ -26,9 +26,9 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
-#include "nwchunk.h"
+#include "Game/World/Chunk/nwchunk.h"
 #include "Common/Physics/AABB.h"
-#include "Game/SyncService/WorldStorage.h"
+#include "WorldStorage.h"
 
 class Player;
 class ChunkService;

@@ -33,8 +33,9 @@ public:
 
     BlockData(uint32_t allData) { mBlockDataUnion.allData = allData; }
 
-    bool operator==(const BlockData& rhs) { return rhs.getData() == getData(); }
-    bool operator!=(const BlockData& rhs) { return !(*this == rhs); }
+    bool operator==(const BlockData& rhs) const noexcept { return rhs.getData() == getData(); }
+
+    bool operator!=(const BlockData& rhs) const noexcept { return !(*this == rhs); }
 
     [[nodiscard]] uint32_t getData() const noexcept { return mBlockDataUnion.allData; }
 
@@ -48,7 +49,7 @@ public:
 
     void setBrightness(uint32_t brightness) noexcept { mBlockDataUnion.data.sky = brightness; }
 
-    void setState(uint32_t state) { mBlockDataUnion.data.state = state; }
+    void setState(uint32_t state) noexcept { mBlockDataUnion.data.state = state; }
 private:
     union BlockDataUnion {
         struct BlockDataUnionStruct {

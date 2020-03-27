@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "object.h"
+#include "Object.h"
 
 class PlayerObject : public Object {
 public:

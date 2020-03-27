@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Base.h"
-#include "Game/Network/Protocol/NoStatePackets.g.h"
+#include "Network/Protocol/NoStatePackets.g.h"
 
 namespace Game::Network::States {
     class NoStateServer : public StateBase {

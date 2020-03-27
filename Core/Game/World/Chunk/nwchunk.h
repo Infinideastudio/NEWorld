@@ -27,7 +27,7 @@
 #include <utility>
 #include <array>
 #include <unordered_map>
-#include "Blocks.h"
+#include "Game/World/Blocks.h"
 #include "Common/Debug.h"
 #include "Common/Math/Vector.h"
 #include "Common/Utility.h"

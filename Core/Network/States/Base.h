@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Game/Network/PacketReader.h"
-#include "Game/Network/PacketMultiplexer.h"
+#include "Network/PacketReader.h"
+#include "Network/PacketMultiplexer.h"
 
 namespace Game::Network::States {
     class StateBase {

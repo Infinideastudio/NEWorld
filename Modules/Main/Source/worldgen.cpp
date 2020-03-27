@@ -19,8 +19,8 @@
 
 #include <cmath>
 #include <Common/Math/Vector.h>
-#include <Game/SyncService/world/Blocks.h>
-#include <Game/SyncService/world/nwchunk.h>
+#include <Game/World/Blocks.h>
+#include <Game/World/Chunk/nwchunk.h>
 #include "worldgen.h"
 
 int WorldGen::seed = 1025;

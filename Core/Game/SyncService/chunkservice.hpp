@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "Game/SyncService/world/world.h"
+#include "Game/World/world.h"
 #include "Service.h"
 
 /**
