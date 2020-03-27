@@ -11,7 +11,7 @@
 *.userprefs
 
 # Build results
-Build/
+/Build/
 build/visualstudio_v14/**/[Dd]ebug/
 build/visualstudio_v14/**/[Rr]elease/
 build/visualstudio_v14/**/[Pp]rofile/
