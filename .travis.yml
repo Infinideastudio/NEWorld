@@ -12,16 +12,11 @@ matrix:
       addons:
         apt:
           sources:
-            - george-edison55-precise-backports
-            - kalakris-cmake
-            - llvm-toolchain-precise-3.8
             - ubuntu-toolchain-r-test
           packages:
-            - g++-8
-            - gcc-8
+            - g++-9
+            - gcc-9
             - p7zip
-            - cmake
-            - cmake-data
             - libgl-dev
             - mesa-common-dev
 install:
@@ -30,11 +25,13 @@ install:
     cd ./vcpkg
     ./bootstrap-vcpkg.sh
     ./vcpkg integrate install
-    ./vcpkg install sdl2 sdl2-image glew rpclib sqlite3 wangle
+    ./vcpkg install sdl2 sdl2-image glew sqlite3 wangle
     cd ..
 script:
   - git submodule update --recursive --init
   - mkdir cmakeBuild && cd cmakeBuild
-  - export CXX=g++-8 CC=gcc-8
-  - cmake -DVCPKG_USED=TRUE -DCMAKE_TOOLCHAIN_FILE=/home/travis/build/Infinideastudio/NEWorld/vcpkg/scripts/buildsystems/vcpkg.cmake ..
-  - make -j8
+  - export CXX=g++-9 CC=gcc-9
+  - cmake -DCMAKE_TOOLCHAIN_FILE=/home/travis/build/Infinideastudio/NEWorld/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+  - cmake --build . --target Core.CodeGen -- -j8
+  - cmake .
+  - cmake --build . -- -j8
