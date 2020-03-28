@@ -1,6 +1,7 @@
 image: Visual Studio 2019
 version: '{build}'
-cache: c:\tools\vcpkg\installed\
+cache:
+  - C:\neworld-dependency.zip
 platform:
   - x64
 configuration:
@@ -9,17 +10,23 @@ configuration:
 clone_folder: C:\NEWorld
 clone_depth: 1
 install:
-  - cd C:\Tools\vcpkg
-  - git pull
-  # - .\bootstrap-vcpkg.bat use the version provided instead
-  - .\vcpkg.exe integrate install
-  - .\vcpkg.exe install sdl2:x64-windows sdl2-image:x64-windows glew:x64-windows rpclib:x64-windows sqlite3:x64-windows wangle:x64-windows
+  - ps: |
+      cd C:\
+      $fileToCheck = "C:\neworld-dependency.zip"
+      if (!(Test-Path $fileToCheck -PathType leaf))
+      {
+          echo "Dependency file not cached, downloading dependency"
+          curl -O neworld-dependency.zip https://distribute.newinfinideas.org/neworld-dependency.zip
+      }
+      7z x neworld-dependency.zip
   - cd %APPVEYOR_BUILD_FOLDER%
 before_build:
   - git submodule update --recursive --init
   - mkdir projectBuild
   - cd projectBuild
-  - cmake ../ -G "Visual Studio 16 2019" -A %PLATFORM% -DVCPKG_USED=TRUE -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DCMAKE_TOOLCHAIN_FILE="C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake"
+  - cmake ../ -G "Visual Studio 16 2019" -A %PLATFORM% -DVCPKG_USED=TRUE -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DCMAKE_TOOLCHAIN_FILE="C:/neworld/scripts/buildsystems/vcpkg.cmake"
+  - cmake --build . --target Core.CodeGen
+  - cmake .
   - cd ..
 build:
   project: projectBuild/NEWorld.sln
