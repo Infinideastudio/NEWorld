@@ -1,7 +1,9 @@
 #include "WorldStorage.h"
 #include "Blocks.h"
-#include <filesystem>
 #include <chrono>
+#include <cstring>
+#include <filesystem>
+
 namespace fs = std::filesystem;
 
 std::optional<Chunk::ChunkDataStorageType> WorldStorage::requestChunk(Int3 chunkPos) {

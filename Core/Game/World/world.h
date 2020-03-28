@@ -26,7 +26,7 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
-#include "Game/World/Chunk/nwchunk.h"
+#include "Game/World/Chunk/Chunk.h"
 #include "Common/Physics/AABB.h"
 #include "WorldStorage.h"
 #include "Blocks.h"

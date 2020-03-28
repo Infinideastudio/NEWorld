@@ -18,7 +18,7 @@
 // 
 
 #include <Game/World/Blocks.h>
-#include <Game/World/Chunk/nwchunk.h>
+#include <Game/World/Chunk/Chunk.h>
 #include "worldgen.h"
 #include "Game/Api/nwapigui.hpp"
 #include "Common/EventBus.h"

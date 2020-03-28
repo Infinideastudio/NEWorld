@@ -23,7 +23,7 @@
 #include <fstream>
 #include <filesystem>
 #include "Common/Logger.h"
-#include "Chunk/nwchunk.h"
+#include "Game/World/Chunk/Chunk.h"
 #include <optional>
 
 class WorldStorage {

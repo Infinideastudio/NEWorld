@@ -19,7 +19,7 @@
 
 #include <cmath>
 #include <Math/Vector3.h>
-#include <Game/World/Chunk/nwchunk.h>
+#include <Game/World/Chunk/Chunk.h>
 #include "worldgen.h"
 
 int WorldGen::seed = 1025;

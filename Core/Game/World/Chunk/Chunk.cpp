@@ -17,11 +17,12 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#include <Common/Logger.h>
+#include "Chunk.h"
 #include <Math/Vector3.h>
+#include <Common/Logger.h>
 #include "Game/World/Blocks.h"
-#include "nwchunk.h"
 #include "Game/World/world.h"
+#include <cstring>
 
 void NWAPICALL DefaultChunkGen(const ChunkGenerateArgs*) {
     // This is the default terrain generator. Use this when no generators were loaded from plugins.
