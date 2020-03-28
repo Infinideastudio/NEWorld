@@ -8,7 +8,6 @@ git:
 cache:
   directories:
     - CMakeFiles/
-    - vcpkg/
     - dependencies/
 matrix:
   include:
@@ -25,7 +24,7 @@ matrix:
             - libgl-dev
             - mesa-common-dev
 install:
-  - ./Scripts/CILinuxVcpkgInstall.sh
+  - sh ./Scripts/CILinuxVcpkgInstall.sh
 script:
   - git submodule update --recursive --init
   - mkdir cmakeBuild && cd cmakeBuild
