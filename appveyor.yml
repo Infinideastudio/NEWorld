@@ -11,9 +11,9 @@ clone_depth: 1
 install:
   - cd C:\Tools\vcpkg
   - git pull
-  - .\bootstrap-vcpkg.bat
+  # - .\bootstrap-vcpkg.bat use the version provided instead
   - .\vcpkg.exe integrate install
-  - (vcpkg.exe install sdl2:x64-windows sdl2-image:x64-windows glew:x64-windows rpclib:x64-windows sqlite3:x64-windows wangle:x64-windows) > nul
+  - .\vcpkg.exe install sdl2:x64-windows sdl2-image:x64-windows glew:x64-windows rpclib:x64-windows sqlite3:x64-windows wangle:x64-windows
   - cd %APPVEYOR_BUILD_FOLDER%
 before_build:
   - git submodule update --recursive --init
