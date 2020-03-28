@@ -22,7 +22,7 @@
 #include "opengl.h"
 #include "Common/Math/Matrix.h"
 #include "Common/Logger.h"
-#include "Common/Math/Vector.h"
+#include <Math/Vector3.h>
 
 class Renderer {
 public:
@@ -35,12 +35,12 @@ public:
     static void restoreScale() { mModel = Mat4f{1.0f}; }
 
     // Apply translation
-    static void translate(const Vec3f& delta) {
+    static void translate(const Float3& delta) {
         mModel *= Mat4f::translation(delta);
     }
 
     // Apply rotation
-    static void rotate(float degrees, const Vec3f& scale) {
+    static void rotate(float degrees, const Float3& scale) {
         mModel *= Mat4f::rotation(degrees, scale);
     }
 
@@ -48,12 +48,12 @@ public:
     static void restoreView() { mView = Mat4f{1.0f}; }
 
     // Apply translation
-    static void translateView(const Vec3f& delta) {
+    static void translateView(const Float3& delta) {
         mView *= Mat4f::translation(delta);
     }
 
     // Apply rotation
-    static void rotateView(float degrees, const Vec3f& scale) {
+    static void rotateView(float degrees, const Float3& scale) {
         mView *= Mat4f::rotation(degrees, scale);
     }
 

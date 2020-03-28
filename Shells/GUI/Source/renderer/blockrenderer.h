@@ -22,7 +22,7 @@
 #include <vector>
 #include <memory>
 #include "texture.h"
-#include "Common/Math/Vector.h"
+#include <Math/Vector3.h>
 
 class VertexArray;
 
@@ -36,14 +36,14 @@ public:
     virtual ~BlockRenderer() = default;
 
     virtual void flushTexture() = 0;
-    virtual void render(VertexArray& target, const class Chunk* chunk, const Vec3i& pos) = 0;
+    virtual void render(VertexArray& target, const class Chunk* chunk, const Int3& pos) = 0;
 };
 
 class DefaultBlockRenderer : public BlockRenderer {
 public:
     DefaultBlockRenderer(const size_t data[]);
     void flushTexture() override;
-    void render(VertexArray& target, const class Chunk* chunk, const Vec3i& pos) override;
+    void render(VertexArray& target, const class Chunk* chunk, const Int3& pos) override;
 private:
     BlockTexCoord tex[6];
 };
@@ -71,7 +71,7 @@ private:
 
 class BlockRendererManager {
 public:
-    static void render(VertexArray& target, size_t id, const class Chunk* chunk, const Vec3i& pos); //RenderList
+    static void render(VertexArray& target, size_t id, const class Chunk* chunk, const Int3& pos); //RenderList
     static void setBlockRenderer(size_t pos, std::shared_ptr<BlockRenderer>&& blockRenderer);
     static void flushTextures();
 private:

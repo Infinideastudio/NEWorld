@@ -27,7 +27,7 @@
 
 class PutBlockTask : public ReadWriteTask {
 public:
-    PutBlockTask(size_t worldID, const Vec3i& blockPosition, size_t blockID)
+    PutBlockTask(size_t worldID, const Int3& blockPosition, size_t blockID)
             :mWorldID(worldID), mBlockPosition(blockPosition), mBlockID(blockID) { }
 
     void task(ChunkService& cs) override {
@@ -39,7 +39,7 @@ public:
 
 private:
     size_t mWorldID;
-    Vec3i mBlockPosition;
+    Int3 mBlockPosition;
     size_t mBlockID;
 };
 
@@ -56,26 +56,26 @@ public:
         auto& window = Window::getInstance();
         // TODO: Read keys from the configuration file
         if (window.getKeyBoardState(SDL_SCANCODE_UP)==KeyState::Hold)
-            mPlayer.accelerateRotation(Vec3d(1, 0.0, 0.0));
-        if (window.getKeyBoardState(SDL_SCANCODE_DOWN)==KeyState::Hold && mPlayer.getRotation().x>-90)
-            mPlayer.accelerateRotation(Vec3d(-1, 0.0, 0.0));
+            mPlayer.accelerateRotation(Double3(1, 0.0, 0.0));
+        if (window.getKeyBoardState(SDL_SCANCODE_DOWN)==KeyState::Hold && mPlayer.getRotation().X>-90)
+            mPlayer.accelerateRotation(Double3(-1, 0.0, 0.0));
         if (window.getKeyBoardState(SDL_SCANCODE_RIGHT)==KeyState::Hold)
-            mPlayer.accelerateRotation(Vec3d(0.0, -1, 0.0));
+            mPlayer.accelerateRotation(Double3(0.0, -1, 0.0));
         if (window.getKeyBoardState(SDL_SCANCODE_LEFT)==KeyState::Hold)
-            mPlayer.accelerateRotation(Vec3d(0.0, 1, 0.0));
+            mPlayer.accelerateRotation(Double3(0.0, 1, 0.0));
         if (window.getKeyBoardState(SDL_SCANCODE_W)==KeyState::Hold)
-            mPlayer.accelerate(Vec3d(0.0, 0.0, -speed));
+            mPlayer.accelerate(Double3(0.0, 0.0, -speed));
         if (window.getKeyBoardState(SDL_SCANCODE_S)==KeyState::Hold)
-            mPlayer.accelerate(Vec3d(0.0, 0.0, speed));
+            mPlayer.accelerate(Double3(0.0, 0.0, speed));
         if (window.getKeyBoardState(SDL_SCANCODE_A)==KeyState::Hold)
-            mPlayer.accelerate(Vec3d(-speed, 0.0, 0.0));
+            mPlayer.accelerate(Double3(-speed, 0.0, 0.0));
         if (window.getKeyBoardState(SDL_SCANCODE_D)==KeyState::Hold)
-            mPlayer.accelerate(Vec3d(speed, 0.0, 0.0));
+            mPlayer.accelerate(Double3(speed, 0.0, 0.0));
         if (window.getKeyBoardState(SDL_SCANCODE_E)==KeyState::Hold)
-            mPlayer.accelerate(Vec3d(0.0, 0.0, -speed*10));
+            mPlayer.accelerate(Double3(0.0, 0.0, -speed*10));
         if (window.getKeyBoardState(SDL_SCANCODE_SPACE)==KeyState::Hold) {
             if (mPlayer.isFlying())
-                mPlayer.accelerate(Vec3d(0.0, 2*speed, 0.0));
+                mPlayer.accelerate(Double3(0.0, 2*speed, 0.0));
             else
                 mPlayer.jump();
         }
@@ -96,7 +96,7 @@ public:
         if ((window.getKeyBoardState(SDL_SCANCODE_LCTRL)==KeyState::Hold
                 || window.getKeyBoardState(SDL_SCANCODE_RCTRL)==KeyState::Hold) && mPlayer.isFlying())
 #endif
-            mPlayer.accelerate(Vec3d(0.0, -2*speed, 0.0));
+            mPlayer.accelerate(Double3(0.0, -2*speed, 0.0));
 
         // Handle left-click events
         if (Window::getInstance().getMouseMotion().left) {
@@ -105,14 +105,15 @@ public:
             Mat4f trans(1.0f);
             const auto& position = mPlayer.getPosition();
             const auto& rotation = mPlayer.getRotation();
-            trans *= Mat4f::rotation(float(rotation.y), Vec3f(0.0f, 1.0f, 0.0f));
-            trans *= Mat4f::rotation(float(rotation.x), Vec3f(1.0f, 0.0f, 0.0f));
-            trans *= Mat4f::rotation(float(rotation.z), Vec3f(0.0f, 0.0f, 1.0f));
-            Vec3d dir = trans.transform(Vec3f(0.0f, 0.0f, -1.0f), 0.0f).first.normalize();
+            trans *= Mat4f::rotation(float(rotation.Y), Float3(0.0f, 1.0f, 0.0f));
+            trans *= Mat4f::rotation(float(rotation.X), Float3(1.0f, 0.0f, 0.0f));
+            trans *= Mat4f::rotation(float(rotation.Z), Float3(0.0f, 0.0f, 1.0f));
+            Double3 dir = trans.transform(Float3(0.0f, 0.0f, -1.0f), 0.0f).first;
+            dir.Normalize();
 
             for (double i = 0.0; i<SelectDistance; i += 1.0/SelectPrecision) {
-                Vec3d pos = position+dir*i;
-                Vec3i blockPos = Vec3i(int(std::floor(pos.x)), int(std::floor(pos.y)), int(std::floor(pos.z)));
+                Double3 pos = position+dir*i;
+                Int3 blockPos = Int3(int(std::floor(pos.X)), int(std::floor(pos.Y)), int(std::floor(pos.Z)));
                 try {
                     if (world->getBlock(blockPos).getID()!=0) {
                         TaskDispatch::addNext(
@@ -179,8 +180,8 @@ size_t GameScene::requestWorld() {
 GameScene::GameScene(const std::string& name, const Window& window)
         :mWindow(window), mPlayer(0), mGUIWidgets(mWindow.getNkContext()),
         chunkService(&hChunkService.Get<ChunkService>()) {
-    mPlayer.setPosition(Vec3d(-16.0, 48.0, 32.0));
-    mPlayer.setRotation(Vec3d(-45.0, -22.5, 0.0));
+    mPlayer.setPosition(Double3(-16.0, 48.0, 32.0));
+    mPlayer.setRotation(Double3(-45.0, -22.5, 0.0));
     Window::getInstance().lockCursor();
 
     if (isClient()) {
@@ -235,7 +236,7 @@ GameScene::GameScene(const std::string& name, const Window& window)
                 nk_labelf(ctx, NK_TEXT_LEFT, "NEWorld %s (v%u)", NEWorldVersionName, NEWorldVersion);
                 nk_labelf(ctx, NK_TEXT_LEFT, "FPS %zu, UPS %zu", mFpsLatest, mUpsLatest);
                 nk_labelf(ctx, NK_TEXT_LEFT, "Position: x %.1f y %.1f z %.1f",
-                        mPlayer.getPosition().x, mPlayer.getPosition().y, mPlayer.getPosition().z);
+                        mPlayer.getPosition().X, mPlayer.getPosition().Y, mPlayer.getPosition().Z);
                 nk_labelf(ctx, NK_TEXT_LEFT, "On ground: %s, flying %s",
                         mPlayer.onGround() ? "True" : "False", mPlayer.isFlying() ? "True" : "False");
                 nk_labelf(ctx, NK_TEXT_LEFT, "GUI Widgets: %zu", mGUIWidgets.getSize());
@@ -268,7 +269,7 @@ void GameScene::render() {
             getJsonValue<double>(getSettings()["gui"]["mouse_sensitivity"], 0.3);
     MouseState mouse = Window::getInstance().getMouseMotion();
     if (mouse.relative) // only rotate the camera when the cursor is locked.
-        mPlayer.accelerateRotation(Vec3d(-mouse.y*mouseSensitivity, -mouse.x*mouseSensitivity, 0.0));
+        mPlayer.accelerateRotation(Double3(-mouse.y*mouseSensitivity, -mouse.x*mouseSensitivity, 0.0));
 
     glClearColor(0.6f, 0.9f, 1.0f, 1.0f);
     glClearDepth(1.0f);
@@ -278,8 +279,8 @@ void GameScene::render() {
 
     double timeDelta = mUpdateScheduler.getDeltaTimeMs()/1000.0*UpdateFrequency;
     if (timeDelta>1.0) timeDelta = 1.0;
-    Vec3d playerRenderedPosition = mPlayer.getPosition()-mPlayer.getPositionDelta()*(1.0-timeDelta);
-    Vec3d playerRenderedRotation = mPlayer.getRotation()-mPlayer.getRotationDelta()*(1.0-timeDelta);
+    Double3 playerRenderedPosition = mPlayer.getPosition()-mPlayer.getPositionDelta()*(1.0-timeDelta);
+    Double3 playerRenderedRotation = mPlayer.getRotation()-mPlayer.getRotationDelta()*(1.0-timeDelta);
 
     glActiveTexture(GL_TEXTURE0);
     mTexture.bind(Texture::Texture2D);
@@ -290,13 +291,13 @@ void GameScene::render() {
     Renderer::restoreProj();
     Renderer::applyPerspective(70.0f, float(mWindow.getWidth())/mWindow.getHeight(), 0.1f, 3000.0f);
     Renderer::restoreView();
-    Renderer::rotateView(float(-playerRenderedRotation.x), Vec3f(1.0f, 0.0f, 0.0f));
-    Renderer::rotateView(float(-playerRenderedRotation.y), Vec3f(0.0f, 1.0f, 0.0f));
-    Renderer::rotateView(float(-playerRenderedRotation.z), Vec3f(0.0f, 0.0f, 1.0f));
+    Renderer::rotateView(float(-playerRenderedRotation.X), Float3(1.0f, 0.0f, 0.0f));
+    Renderer::rotateView(float(-playerRenderedRotation.Y), Float3(0.0f, 1.0f, 0.0f));
+    Renderer::rotateView(float(-playerRenderedRotation.Z), Float3(0.0f, 0.0f, 1.0f));
     Renderer::translateView(-playerRenderedPosition);
     Renderer::restoreScale();
     // Render
-    mWorldRenderer->render(Vec3i(mPlayer.getPosition()));
+    mWorldRenderer->render(Int3(mPlayer.getPosition()));
     // mPlayer.render();
 
     glDisable(GL_DEPTH_TEST);

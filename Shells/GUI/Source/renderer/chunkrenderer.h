@@ -41,10 +41,10 @@ public:
     void generate(const Chunk* chunk) {
         // TODO: merge face rendering
 
-        Vec3i tmp;
-        for (tmp.x = 0; tmp.x < Chunk::Size(); ++tmp.x)
-            for (tmp.y = 0; tmp.y < Chunk::Size(); ++tmp.y)
-                for (tmp.z = 0; tmp.z < Chunk::Size(); ++tmp.z) {
+        Int3 tmp;
+        for (tmp.X = 0; tmp.X < Chunk::Size(); ++tmp.X)
+            for (tmp.Y = 0; tmp.Y < Chunk::Size(); ++tmp.Y)
+                for (tmp.Z = 0; tmp.Z < Chunk::Size(); ++tmp.Z) {
                     Game::World::BlockData b = chunk->getBlock(tmp);
                     auto target = Game::World::Blocks::getInstance()[b.getID()].isTranslucent() ? &mVATranslucent : &mVAOpacity;
                     BlockRendererManager::render(*target, b.getID(), chunk, tmp);
@@ -86,21 +86,21 @@ public:
     }
 
     // Draw call
-    void render(const Vec3i& c) const {
+    void render(const Int3& c) const {
         if (!mBuffer.isEmpty()) {
-            Renderer::translate(Vec3f(c * Chunk::Size()));
+            Renderer::translate(Float3(c * Chunk::Size()));
             Renderer::setMatrix();
             mBuffer.render();
-            Renderer::translate(Vec3f(-c * Chunk::Size()));
+            Renderer::translate(Float3(-c * Chunk::Size()));
         }
     }
 
-    void renderTrans(const Vec3i& c) const {
+    void renderTrans(const Int3& c) const {
         if (!mBufferTrans.isEmpty()) {
-            Renderer::translate(Vec3f(c * Chunk::Size()));
+            Renderer::translate(Float3(c * Chunk::Size()));
             Renderer::setMatrix();
             mBufferTrans.render();
-            Renderer::translate(Vec3f(-c * Chunk::Size()));
+            Renderer::translate(Float3(-c * Chunk::Size()));
         }
     }
 

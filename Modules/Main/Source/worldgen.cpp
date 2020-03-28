@@ -18,8 +18,7 @@
 // 
 
 #include <cmath>
-#include <Common/Math/Vector.h>
-#include <Game/World/Blocks.h>
+#include <Math/Vector3.h>
 #include <Game/World/Chunk/nwchunk.h>
 #include "worldgen.h"
 
@@ -74,13 +73,13 @@ namespace {
 
     using HeightMap = int[ChunkSize][ChunkSize];
 
-    std::pair<int, int> getHeightMap(const Vec3i& pos, HeightMap& heights) noexcept {
+    std::pair<int, int> getHeightMap(const Int3& pos, HeightMap& heights) noexcept {
         int high = std::numeric_limits<int>::min(), low = std::numeric_limits<int>::max();
         for (int x = 0; x < ChunkSize; ++x) {
             for (int z = 0; z < ChunkSize; ++z) {
-                const auto absHeight = getHeight(pos.x * ChunkSize + x, pos.z * ChunkSize + z);
+                const auto absHeight = getHeight(pos.X * ChunkSize + x, pos.Z * ChunkSize + z);
                 heights[x][z] = absHeight;
-                const auto height = absHeight - pos.y * ChunkSize;
+                const auto height = absHeight - pos.Y * ChunkSize;
                 if (height > high) high = height;
                 if (height < low) low = height;
             }
@@ -94,7 +93,7 @@ namespace {
             args.chunk->setMonotonic({ static_cast<uint32_t>(RockID), 0,0 });
             return true;
         }
-        if (high < 0 && args.pos->y * ChunkSize > 0) {
+        if (high < 0 && args.pos->Y * ChunkSize > 0) {
             args.chunk->setMonotonic({ 0, static_cast<uint32_t>(args.skyLight),0 });
             return true;
         }
@@ -106,7 +105,7 @@ namespace {
         for (int x = 0; x < ChunkSize; x++)
             for (int z = 0; z < ChunkSize; z++) {
                 const auto absHeight = heightMap[x][z];
-                const auto height = absHeight - args->pos->y * ChunkSize;
+                const auto height = absHeight - args->pos->Y * ChunkSize;
                 const bool underWater = absHeight <= WaterLevel;
                 for (int y = 0; y < ChunkSize; y++) {
                     auto& block = blocks[x * ChunkSize * ChunkSize + y * ChunkSize + z];
@@ -117,7 +116,7 @@ namespace {
                         else { block.setID(RockID); }
                         block.setBrightness(0);
                     }
-                    else if (const auto by = args->pos->y * ChunkSize + y; by <= 0) {
+                    else if (const auto by = args->pos->Y * ChunkSize + y; by <= 0) {
                         block.setID(WaterID);
                         block.setBrightness(std::max(args->skyLight + (by / 2), 0));
                     } else {

@@ -21,14 +21,14 @@
 #include "Game/Client/player.h"
 #include "../renderdetector.hpp"
 
-size_t WorldRenderer::render(const Vec3i& position) const {
-    std::vector<std::pair<Vec3i, const ChunkRenderer*>> chunkPending;
+size_t WorldRenderer::render(const Int3& position) const {
+    std::vector<std::pair<Int3, const ChunkRenderer*>> chunkPending;
     chunkPending.reserve(512);
 
     Renderer::startFrame();
-    Vec3i chunkpos = World::getChunkPos(position);
+    Int3 chunkPos = World::getChunkPos(position);
     for (auto& c : mChunkRenderers) {
-        if (chunkpos.chebyshevDistance(c.first) <= mRenderDist) {
+        if (ChebyshevDistance(chunkPos, c.first) <= mRenderDist) {
             c.second.render(c.first);
             chunkPending.emplace_back(c.first, &c.second);
         }

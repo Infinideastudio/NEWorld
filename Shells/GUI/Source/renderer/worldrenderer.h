@@ -36,7 +36,7 @@ public:
     }
 
     // Render all chunks
-    [[nodiscard]] size_t render(const Vec3i& position) const;
+    [[nodiscard]] size_t render(const Int3& position) const;
 
     void registerTask(Player& player) noexcept;
 
@@ -48,5 +48,5 @@ private:
     // Ranges
     int mRenderDist = 0;
     // chunk Renderers
-    std::unordered_map<Vec3i, ChunkRenderer> mChunkRenderers;
+    std::unordered_map<Int3, ChunkRenderer> mChunkRenderers;
 };

@@ -32,30 +32,30 @@ static bool adjacentTest(Game::World::BlockData a, Game::World::BlockData b) noe
 
 // Render default block
 static void defaultBlockRendererImplementation(VertexArray& target, const Chunk* chunk, BlockTexCoord coord[],
-                                               const Vec3i& pos) {
-    Vec3i worldpos = chunk->getPosition() * Chunk::Size() + pos;
+                                               const Int3& pos) {
+    Int3 worldpos = chunk->getPosition() * Chunk::Size() + pos;
 
     Game::World::BlockData curr = chunk->getBlock(pos);
     Game::World::BlockData neighbors[6] =
     {
-        pos.x == Chunk::Size() - 1
-            ? chunk->getWorld()->getBlock(Vec3i(worldpos.x + 1, worldpos.y, worldpos.z))
-            : chunk->getBlock(Vec3i(pos.x + 1, pos.y, pos.z)),
-        pos.x == 0
-            ? chunk->getWorld()->getBlock(Vec3i(worldpos.x - 1, worldpos.y, worldpos.z))
-            : chunk->getBlock(Vec3i(pos.x - 1, pos.y, pos.z)),
-        pos.y == Chunk::Size() - 1
-            ? chunk->getWorld()->getBlock(Vec3i(worldpos.x, worldpos.y + 1, worldpos.z))
-            : chunk->getBlock(Vec3i(pos.x, pos.y + 1, pos.z)),
-        pos.y == 0
-            ? chunk->getWorld()->getBlock(Vec3i(worldpos.x, worldpos.y - 1, worldpos.z))
-            : chunk->getBlock(Vec3i(pos.x, pos.y - 1, pos.z)),
-        pos.z == Chunk::Size() - 1
-            ? chunk->getWorld()->getBlock(Vec3i(worldpos.x, worldpos.y, worldpos.z + 1))
-            : chunk->getBlock(Vec3i(pos.x, pos.y, pos.z + 1)),
-        pos.z == 0
-            ? chunk->getWorld()->getBlock(Vec3i(worldpos.x, worldpos.y, worldpos.z - 1))
-            : chunk->getBlock(Vec3i(pos.x, pos.y, pos.z - 1)),
+        pos.X == Chunk::Size() - 1
+            ? chunk->getWorld()->getBlock(Int3(worldpos.X + 1, worldpos.Y, worldpos.Z))
+            : chunk->getBlock(Int3(pos.X + 1, pos.Y, pos.Z)),
+        pos.X == 0
+            ? chunk->getWorld()->getBlock(Int3(worldpos.X - 1, worldpos.Y, worldpos.Z))
+            : chunk->getBlock(Int3(pos.X - 1, pos.Y, pos.Z)),
+        pos.Y == Chunk::Size() - 1
+            ? chunk->getWorld()->getBlock(Int3(worldpos.X, worldpos.Y + 1, worldpos.Z))
+            : chunk->getBlock(Int3(pos.X, pos.Y + 1, pos.Z)),
+        pos.Y == 0
+            ? chunk->getWorld()->getBlock(Int3(worldpos.X, worldpos.Y - 1, worldpos.Z))
+            : chunk->getBlock(Int3(pos.X, pos.Y - 1, pos.Z)),
+        pos.Z == Chunk::Size() - 1
+            ? chunk->getWorld()->getBlock(Int3(worldpos.X, worldpos.Y, worldpos.Z + 1))
+            : chunk->getBlock(Int3(pos.X, pos.Y, pos.Z + 1)),
+        pos.Z == 0
+            ? chunk->getWorld()->getBlock(Int3(worldpos.X, worldpos.Y, worldpos.Z - 1))
+            : chunk->getBlock(Int3(pos.X, pos.Y, pos.Z - 1)),
     };
 
     // Right
@@ -63,10 +63,10 @@ static void defaultBlockRendererImplementation(VertexArray& target, const Chunk*
         const float light = neighbors[0].getBrightness() / 16.0f * 0.5f;
         target.addPrimitive(4,
                             {
-                                coord[0].d[0], coord[0].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f,
-                                coord[0].d[0], coord[0].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 1.0f,
-                                coord[0].d[2], coord[0].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 0.0f,
-                                coord[0].d[2], coord[0].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f
+                                coord[0].d[0], coord[0].d[1], light, pos.X + 1.0f, pos.Y + 1.0f, pos.Z + 1.0f,
+                                coord[0].d[0], coord[0].d[3], light, pos.X + 1.0f, pos.Y + 0.0f, pos.Z + 1.0f,
+                                coord[0].d[2], coord[0].d[3], light, pos.X + 1.0f, pos.Y + 0.0f, pos.Z + 0.0f,
+                                coord[0].d[2], coord[0].d[1], light, pos.X + 1.0f, pos.Y + 1.0f, pos.Z + 0.0f
                             });
 
     }
@@ -75,10 +75,10 @@ static void defaultBlockRendererImplementation(VertexArray& target, const Chunk*
         const float light = neighbors[1].getBrightness() / 16.0f * 0.5f;
         target.addPrimitive(4,
                             {
-                                coord[1].d[0], coord[1].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 0.0f,
-                                coord[1].d[0], coord[1].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 0.0f,
-                                coord[1].d[2], coord[1].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 1.0f,
-                                coord[1].d[2], coord[1].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 1.0f
+                                coord[1].d[0], coord[1].d[1], light, pos.X + 0.0f, pos.Y + 1.0f, pos.Z + 0.0f,
+                                coord[1].d[0], coord[1].d[3], light, pos.X + 0.0f, pos.Y + 0.0f, pos.Z + 0.0f,
+                                coord[1].d[2], coord[1].d[3], light, pos.X + 0.0f, pos.Y + 0.0f, pos.Z + 1.0f,
+                                coord[1].d[2], coord[1].d[1], light, pos.X + 0.0f, pos.Y + 1.0f, pos.Z + 1.0f
                             });
     }
     // Top
@@ -86,10 +86,10 @@ static void defaultBlockRendererImplementation(VertexArray& target, const Chunk*
         const float light = neighbors[2].getBrightness() / 16.0f;
         target.addPrimitive(4,
                             {
-                                coord[2].d[0], coord[2].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 0.0f,
-                                coord[2].d[0], coord[2].d[3], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 1.0f,
-                                coord[2].d[2], coord[2].d[3], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f,
-                                coord[2].d[2], coord[2].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f
+                                coord[2].d[0], coord[2].d[1], light, pos.X + 0.0f, pos.Y + 1.0f, pos.Z + 0.0f,
+                                coord[2].d[0], coord[2].d[3], light, pos.X + 0.0f, pos.Y + 1.0f, pos.Z + 1.0f,
+                                coord[2].d[2], coord[2].d[3], light, pos.X + 1.0f, pos.Y + 1.0f, pos.Z + 1.0f,
+                                coord[2].d[2], coord[2].d[1], light, pos.X + 1.0f, pos.Y + 1.0f, pos.Z + 0.0f
                             });
     }
     // Bottom
@@ -97,10 +97,10 @@ static void defaultBlockRendererImplementation(VertexArray& target, const Chunk*
         const float light = neighbors[3].getBrightness() / 16.0f;
         target.addPrimitive(4,
                             {
-                                coord[3].d[0], coord[3].d[1], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 1.0f,
-                                coord[3].d[0], coord[3].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 0.0f,
-                                coord[3].d[2], coord[3].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 0.0f,
-                                coord[3].d[2], coord[3].d[1], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 1.0f
+                                coord[3].d[0], coord[3].d[1], light, pos.X + 0.0f, pos.Y + 0.0f, pos.Z + 1.0f,
+                                coord[3].d[0], coord[3].d[3], light, pos.X + 0.0f, pos.Y + 0.0f, pos.Z + 0.0f,
+                                coord[3].d[2], coord[3].d[3], light, pos.X + 1.0f, pos.Y + 0.0f, pos.Z + 0.0f,
+                                coord[3].d[2], coord[3].d[1], light, pos.X + 1.0f, pos.Y + 0.0f, pos.Z + 1.0f
                             });
     }
     // Front
@@ -108,10 +108,10 @@ static void defaultBlockRendererImplementation(VertexArray& target, const Chunk*
         const float light = neighbors[4].getBrightness() / 16.0f * 0.7f;
         target.addPrimitive(4,
                             {
-                                coord[4].d[0], coord[4].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 1.0f,
-                                coord[4].d[0], coord[4].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 1.0f,
-                                coord[4].d[2], coord[4].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 1.0f,
-                                coord[4].d[2], coord[4].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f
+                                coord[4].d[0], coord[4].d[1], light, pos.X + 0.0f, pos.Y + 1.0f, pos.Z + 1.0f,
+                                coord[4].d[0], coord[4].d[3], light, pos.X + 0.0f, pos.Y + 0.0f, pos.Z + 1.0f,
+                                coord[4].d[2], coord[4].d[3], light, pos.X + 1.0f, pos.Y + 0.0f, pos.Z + 1.0f,
+                                coord[4].d[2], coord[4].d[1], light, pos.X + 1.0f, pos.Y + 1.0f, pos.Z + 1.0f
                             });
     }
     // Back
@@ -119,15 +119,15 @@ static void defaultBlockRendererImplementation(VertexArray& target, const Chunk*
         const float light = neighbors[5].getBrightness() / 16.0f * 0.7f;
         target.addPrimitive(4,
                             {
-                                coord[5].d[0], coord[5].d[1], light, pos.x + 1.0f, pos.y + 1.0f, pos.z + 0.0f,
-                                coord[5].d[0], coord[5].d[3], light, pos.x + 1.0f, pos.y + 0.0f, pos.z + 0.0f,
-                                coord[5].d[2], coord[5].d[3], light, pos.x + 0.0f, pos.y + 0.0f, pos.z + 0.0f,
-                                coord[5].d[2], coord[5].d[1], light, pos.x + 0.0f, pos.y + 1.0f, pos.z + 0.0f
+                                coord[5].d[0], coord[5].d[1], light, pos.X + 1.0f, pos.Y + 1.0f, pos.Z + 0.0f,
+                                coord[5].d[0], coord[5].d[3], light, pos.X + 1.0f, pos.Y + 0.0f, pos.Z + 0.0f,
+                                coord[5].d[2], coord[5].d[3], light, pos.X + 0.0f, pos.Y + 0.0f, pos.Z + 0.0f,
+                                coord[5].d[2], coord[5].d[1], light, pos.X + 0.0f, pos.Y + 1.0f, pos.Z + 0.0f
                             });
     }
 }
 
-void BlockRendererManager::render(VertexArray& target, size_t id, const Chunk* chunk, const Vec3i& pos) {
+void BlockRendererManager::render(VertexArray& target, size_t id, const Chunk* chunk, const Int3& pos) {
     if (!mBlockRenderers.empty() && mBlockRenderers[id])
         mBlockRenderers[id]->render(target, chunk, pos);
 }
@@ -148,7 +148,7 @@ void DefaultBlockRenderer::flushTexture() {
         BlockTextureBuilder::getTexturePos(i.d, i.pos);
 }
 
-void DefaultBlockRenderer::render(VertexArray& target, const Chunk* chunk, const Vec3i& pos) {
+void DefaultBlockRenderer::render(VertexArray& target, const Chunk* chunk, const Int3& pos) {
     defaultBlockRendererImplementation(target, chunk, tex, pos);
 }
 
