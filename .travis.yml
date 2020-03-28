@@ -1,10 +1,15 @@
 language: generic
 sudo: required
 dist: bionic
+git:
+  depth: 1
+  quiet: true
+  submodules: true
 cache:
   directories:
     - CMakeFiles/
     - vcpkg/
+    - dependencies/
 matrix:
   include:
     - os: linux
@@ -20,18 +25,12 @@ matrix:
             - libgl-dev
             - mesa-common-dev
 install:
-  - |
-    git clone https://github.com/Microsoft/vcpkg.git
-    cd ./vcpkg
-    ./bootstrap-vcpkg.sh
-    ./vcpkg integrate install
-    ./vcpkg install sdl2 sdl2-image glew sqlite3 wangle
-    cd ..
+  - ./Scripts/CILinuxVcpkgInstall.sh
 script:
   - git submodule update --recursive --init
   - mkdir cmakeBuild && cd cmakeBuild
   - export CXX=g++-9 CC=gcc-9
-  - cmake -DCMAKE_TOOLCHAIN_FILE=/home/travis/build/Infinideastudio/NEWorld/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+  - cmake -DCMAKE_TOOLCHAIN_FILE=/home/travis/build/Infinideastudio/NEWorld/dependencies/scripts/buildsystems/vcpkg.cmake ..
   - cmake --build . --target Core.CodeGen -- -j8
   - cmake .
   - cmake --build . -- -j8

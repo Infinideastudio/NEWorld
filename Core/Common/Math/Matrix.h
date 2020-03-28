@@ -21,6 +21,7 @@
 
 #include <Math/Vector3.h>
 #include "Common/Debug.h"
+#include <cstring>
 
 #ifndef M_PI
 #define M_PI 3.141592653589793
