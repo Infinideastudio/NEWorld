@@ -2,7 +2,6 @@
 
 #include "Packet.h"
 #include "VarIntHelper.h"
-#include "UUID.h"
 #include <string>
 #include <vector>
 #include <Cfx/Utilities/TempAlloc.h>
@@ -318,11 +317,6 @@ namespace Network {
             }
             InternalFail();
             return {};
-        }
-
-        UUID UUID() noexcept {
-            return {};
-            // TODO: implement this;
         }
 
         [[nodiscard]] long Remains() const noexcept { return static_cast<long>(mPacket.Data()+mPacket.Size()-mHead); }

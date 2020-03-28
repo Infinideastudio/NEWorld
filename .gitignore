@@ -225,11 +225,6 @@ dependencies/
 # Binary output
 *.out
 
-# Executables for linux
-launcher
-libnwclient.so
-libnwserver.so
-
 # NEWorld files
 settings.json
 [Ww]orlds/

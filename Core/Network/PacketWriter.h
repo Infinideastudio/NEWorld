@@ -148,9 +148,6 @@ namespace Network {
             for (const auto& x : array) x.Serialize(*this);
         }
 
-        static int UUIDSize(UUID uuid) { return 0; } // TODO: implement this
-        void UUID(const UUID&) { } // TODO: Implement this
-
         static int VarIntSize(const int v) noexcept { return VarIntHelper::GetSize(v); }
 
         template <class A>

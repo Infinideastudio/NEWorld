@@ -4,58 +4,49 @@
 #include <sstream>
 #include <memory>
 
-static std::map<std::string, std::shared_ptr<IType>> Types;
+static std::map<std::string, std::shared_ptr<IType>> Types = std::map<std::string, std::shared_ptr<IType>>({
+        {"T", std::make_unique<BuiltInScalars>("Bool", 1)},
+        {"B", std::make_unique<BuiltInScalars>("Byte", 1)},
+        {"S", std::make_unique<BuiltInScalars>("Short", 2)},
+        {"I", std::make_unique<BuiltInScalars>("Int", 4)},
+        {"L", std::make_unique<BuiltInScalars>("Long", 8)},
+        {"UB", std::make_unique<BuiltInScalars>("UByte", 1)},
+        {"US", std::make_unique<BuiltInScalars>("UShort", 2)},
+        {"UI", std::make_unique<BuiltInScalars>("UInt", 4)},
+        {"UL", std::make_unique<BuiltInScalars>("ULong", 8)},
+        {"F", std::make_unique<BuiltInScalars>("Float", 4)},
+        {"D", std::make_unique<BuiltInScalars>("Double", 8)},
+        {"V", std::make_unique<BuiltInVariadic>("VarInt")},
+        {"s", std::make_unique<BuiltInVariadic>("String")},
 
-int InitBuiltin() {
-    // Add Builtin
-    Types = std::map<std::string, std::shared_ptr<IType>>({
-            {"T", std::make_unique<BuiltInScalars>("Bool", 1)},
-            {"B", std::make_unique<BuiltInScalars>("Byte", 1)},
-            {"S", std::make_unique<BuiltInScalars>("Short", 2)},
-            {"I", std::make_unique<BuiltInScalars>("Int", 4)},
-            {"L", std::make_unique<BuiltInScalars>("Long", 8)},
-            {"UB", std::make_unique<BuiltInScalars>("UByte", 1)},
-            {"US", std::make_unique<BuiltInScalars>("UShort", 2)},
-            {"UI", std::make_unique<BuiltInScalars>("UInt", 4)},
-            {"UL", std::make_unique<BuiltInScalars>("ULong", 8)},
-            {"F", std::make_unique<BuiltInScalars>("Float", 4)},
-            {"D", std::make_unique<BuiltInScalars>("Double", 8)},
-            {"V", std::make_unique<BuiltInVariadic>("VarInt")},
-            {"s", std::make_unique<BuiltInVariadic>("String")},
-            {"X", std::make_unique<BuiltInVariadic>("UUID")},
+        {"[T", std::make_unique<BuiltInArray>("Bool")},
+        {"[B", std::make_unique<BuiltInArray>("Byte")},
+        {"[S", std::make_unique<BuiltInArray>("Short")},
+        {"[I", std::make_unique<BuiltInArray>("Int")},
+        {"[L", std::make_unique<BuiltInArray>("Long")},
+        {"[UB", std::make_unique<BuiltInArray>("UByte")},
+        {"[US", std::make_unique<BuiltInArray>("UShort")},
+        {"[UI", std::make_unique<BuiltInArray>("UInt")},
+        {"[UL", std::make_unique<BuiltInArray>("ULong")},
+        {"[F", std::make_unique<BuiltInArray>("Float")},
+        {"[D", std::make_unique<BuiltInArray>("Double")},
+        {"[V", std::make_unique<BuiltInArray>("VarInt")},
+        {"[s", std::make_unique<BuiltInArray>("String")},
 
-            {"[T", std::make_unique<BuiltInArray>("Bool")},
-            {"[B", std::make_unique<BuiltInArray>("Byte")},
-            {"[S", std::make_unique<BuiltInArray>("Short")},
-            {"[I", std::make_unique<BuiltInArray>("Int")},
-            {"[L", std::make_unique<BuiltInArray>("Long")},
-            {"[UB", std::make_unique<BuiltInArray>("UByte")},
-            {"[US", std::make_unique<BuiltInArray>("UShort")},
-            {"[UI", std::make_unique<BuiltInArray>("UInt")},
-            {"[UL", std::make_unique<BuiltInArray>("ULong")},
-            {"[F", std::make_unique<BuiltInArray>("Float")},
-            {"[D", std::make_unique<BuiltInArray>("Double")},
-            {"[V", std::make_unique<BuiltInArray>("VarInt")},
-            {"[s", std::make_unique<BuiltInArray>("String")},
-            {"[X", std::make_unique<BuiltInArray>("UUID")},
-
-            {"{T", std::make_unique<BuiltUnboundedArray>("Bool")},
-            {"{B", std::make_unique<BuiltUnboundedArray>("Byte")},
-            {"{S", std::make_unique<BuiltUnboundedArray>("Short")},
-            {"{I", std::make_unique<BuiltUnboundedArray>("Int")},
-            {"{L", std::make_unique<BuiltUnboundedArray>("Long")},
-            {"{UB", std::make_unique<BuiltUnboundedArray>("UByte")},
-            {"{US", std::make_unique<BuiltUnboundedArray>("UShort")},
-            {"{UI", std::make_unique<BuiltUnboundedArray>("UInt")},
-            {"{UL", std::make_unique<BuiltUnboundedArray>("ULong")},
-            {"{F", std::make_unique<BuiltUnboundedArray>("Float")},
-            {"{D", std::make_unique<BuiltUnboundedArray>("Double")},
-            {"{V", std::make_unique<BuiltUnboundedArray>("VarInt")},
-            {"{s", std::make_unique<BuiltUnboundedArray>("String")},
-            {"{X", std::make_unique<BuiltUnboundedArray>("UUID")},
-    });
-    return 0;
-}
+        {"{T", std::make_unique<BuiltUnboundedArray>("Bool")},
+        {"{B", std::make_unique<BuiltUnboundedArray>("Byte")},
+        {"{S", std::make_unique<BuiltUnboundedArray>("Short")},
+        {"{I", std::make_unique<BuiltUnboundedArray>("Int")},
+        {"{L", std::make_unique<BuiltUnboundedArray>("Long")},
+        {"{UB", std::make_unique<BuiltUnboundedArray>("UByte")},
+        {"{US", std::make_unique<BuiltUnboundedArray>("UShort")},
+        {"{UI", std::make_unique<BuiltUnboundedArray>("UInt")},
+        {"{UL", std::make_unique<BuiltUnboundedArray>("ULong")},
+        {"{F", std::make_unique<BuiltUnboundedArray>("Float")},
+        {"{D", std::make_unique<BuiltUnboundedArray>("Double")},
+        {"{V", std::make_unique<BuiltUnboundedArray>("VarInt")},
+        {"{s", std::make_unique<BuiltUnboundedArray>("String")},
+});
 
 static std::vector<std::string> Imports = { // NOLINT
         "Network/ProtocolBase.h"
@@ -73,14 +64,23 @@ static std::string ToPath(const std::string& mangled) {
     return ret;
 }
 
-IType* GetOrAdd(const std::string& name) {
-    static int i = InitBuiltin();
+IType* GetOrAddImpl(const std::string& alias, const std::string& name) {
     auto it = Types.find(name);
     if (it == Types.end()) {
         Imports.push_back(ToPath(name));
-        it = Types.insert_or_assign(name, std::shared_ptr<IType>(new CustomType(name))).first;
+        it = Types.insert_or_assign(alias, std::shared_ptr<IType>(new CustomType(name))).first;
     }
     return it->second.get();
+}
+
+int InitBuiltin() {
+    GetOrAddImpl("X", "@Network@@Uuid");
+    return 0;
+}
+
+IType* GetOrAdd(const std::string& name) {
+    static auto i = InitBuiltin();
+    return GetOrAddImpl(name, name);
 }
 
 std::string Headers() {
