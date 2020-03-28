@@ -3,7 +3,7 @@
 #include <iostream>
 #include <unordered_set>
 #include "Game/World/Blocks.h"
-#include "Common/Math/Vector.h"
+#include <Math/Vector3.h>
 #include <set>
 
 /*
@@ -19,11 +19,11 @@ public:
         allocateSpace();
     }
 
-    [[nodiscard]] Game::World::BlockData getBlock(const Vec3i& pos) const noexcept {
-        return getBlockDataFromId(getBlockIdByIndex(pos.x * ChunkSize * ChunkSize + pos.y * ChunkSize + pos.z, mChunkData, mIdLengthInBit));
+    [[nodiscard]] Game::World::BlockData getBlock(const Int3& pos) const noexcept {
+        return getBlockDataFromId(getBlockIdByIndex(pos.X * ChunkSize * ChunkSize + pos.Y * ChunkSize + pos.Z, mChunkData, mIdLengthInBit));
     }
 
-    void setBlock(const Vec3i& pos, Game::World::BlockData block) noexcept {
+    void setBlock(const Int3& pos, Game::World::BlockData block) noexcept {
         auto id = getIdFromBlockData(block);
         if (id == -1) id = addNewBlockToPalette(block);
         setBlockIdByIndex(getIndexByPosition(pos), id, mChunkData, mIdLengthInBit);
@@ -94,8 +94,8 @@ private:
         };
     };
 
-    static uint32_t getIndexByPosition(const Vec3i& pos) {
-        return pos.x * ChunkSize* ChunkSize + pos.y * ChunkSize + pos.z;
+    static uint32_t getIndexByPosition(const Int3& pos) {
+        return pos.X * ChunkSize* ChunkSize + pos.Y * ChunkSize + pos.Z;
     }
 
     [[nodiscard]] static uint32_t getBlockIdByIndex(size_t index, const std::unique_ptr<InternalIDType[]>& chunkData, size_t idLength) noexcept {

@@ -65,45 +65,45 @@ public:
     [[nodiscard]] const ChunkManager& getChunks() const noexcept { return mChunks; }
     // Alias declearations for Chunk management
     [[nodiscard]] size_t getChunkCount() const { return mChunks.size(); }
-    ChunkReference getChunk(const Vec3i& ChunkPos) { return mChunks[ChunkPos]; }
-    [[nodiscard]] bool isChunkLoaded(const Vec3i& ChunkPos) const noexcept { return mChunks.isLoaded(ChunkPos); }
-    void deleteChunk(const Vec3i& ChunkPos) {
+    ChunkReference getChunk(const Int3& ChunkPos) { return mChunks[ChunkPos]; }
+    [[nodiscard]] bool isChunkLoaded(const Int3& ChunkPos) const noexcept { return mChunks.isLoaded(ChunkPos); }
+    void deleteChunk(const Int3& ChunkPos) {
         // TODO: check if the chunk needs to be saved.
         if (!isChunkLoaded(ChunkPos)) return;
         mWorldStorage.saveChunk(ChunkPos, getChunk(ChunkPos).getChunkForExport());
         mChunks.erase(ChunkPos);
     }
     static int getChunkAxisPos(int pos) { return ChunkManager::getAxisPos(pos); }
-    static Vec3i getChunkPos(const Vec3i& pos) { return ChunkManager::getPos(pos); }
+    static Int3 getChunkPos(const Int3& pos) { return ChunkManager::getPos(pos); }
     static int getBlockAxisPos(int pos) { return ChunkManager::getBlockAxisPos(pos); }
-    static Vec3i getBlockPos(const Vec3i& pos) { return ChunkManager::getBlockPos(pos); }
-    [[nodiscard]] Game::World::BlockData getBlock(const Vec3i& pos) const { return mChunks.getBlock(pos); }
-    void setBlock(const Vec3i& pos, Game::World::BlockData block) { mChunks.setBlock(pos, block); }
-    auto insertChunk(const Vec3i& pos, ChunkManager::data_t&& ptr) { return mChunks.insert(pos, std::move(ptr)); }
+    static Int3 getBlockPos(const Int3& pos) { return ChunkManager::getBlockPos(pos); }
+    [[nodiscard]] Game::World::BlockData getBlock(const Int3& pos) const { return mChunks.getBlock(pos); }
+    void setBlock(const Int3& pos, Game::World::BlockData block) { mChunks.setBlock(pos, block); }
+    auto insertChunk(const Int3& pos, ChunkManager::data_t&& ptr) { return mChunks.insert(pos, std::move(ptr)); }
 
-    auto insertChunkAndUpdate(const Vec3i& pos, ChunkManager::data_t&& ptr) {
+    auto insertChunkAndUpdate(const Int3& pos, ChunkManager::data_t&& ptr) {
         const auto chunkPosition = ptr->getPosition();
         const auto ret = insertChunk(pos, std::move(ptr));
-        constexpr std::array<Vec3i, 6> delta
+        constexpr std::array<Int3, 6> delta
         {
-            Vec3i(1, 0, 0), Vec3i(-1, 0, 0),
-            Vec3i(0, 1, 0), Vec3i(0, -1, 0),
-            Vec3i(0, 0, 1), Vec3i(0, 0, -1)
+            Int3(1, 0, 0), Int3(-1, 0, 0),
+            Int3(0, 1, 0), Int3(0, -1, 0),
+            Int3(0, 0, 1), Int3(0, 0, -1)
         };
         for (auto&& p : delta)
             doIfChunkLoaded(chunkPosition + p, [](Chunk& chk) { chk.setUpdated(true); });
         return ret;
     }
 
-    auto resetChunk(const Vec3i& pos, Chunk* ptr) { return mChunks.reset(pos, ptr); }
+    auto resetChunk(const Int3& pos, Chunk* ptr) { return mChunks.reset(pos, ptr); }
 
     template <typename... ArgType, typename Func>
-    void doIfChunkLoaded(const Vec3i& ChunkPos, Func func, ArgType&&... args) {
+    void doIfChunkLoaded(const Int3& ChunkPos, Func func, ArgType&&... args) {
         mChunks.doIfLoaded(ChunkPos, func, std::forward<ArgType>(args)...);
     };
 
     // Add Chunk
-    Chunk* addChunk(const Vec3i& chunkPos) {
+    Chunk* addChunk(const Int3& chunkPos) {
         return insertChunk(chunkPos, std::make_unique<Chunk>(chunkPos, *this))->second.get();
     }
 

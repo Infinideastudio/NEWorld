@@ -24,7 +24,7 @@
 class PlayerObject : public Object {
 public:
     explicit PlayerObject(size_t worldID)
-        : Object(worldID, Vec3d(), Vec3d(), Vec3d(1.0, 1.0, 1.0), AABB()),
+        : Object(worldID, Double3(), Double3(), Double3(1.0, 1.0, 1.0), AABB()),
           mHeight(1.6), mWidth(0.6), mSpeed(0.2) { refreshHitbox(); }
 
     PlayerObject(const Object& obj)
@@ -32,23 +32,23 @@ public:
 
     ~PlayerObject() override = default;
 
-    void rotate(const Vec3d& rotation) { mRotation += rotation; }
+    void rotate(const Double3& rotation) { mRotation += rotation; }
 
-    void setDirection(const Vec3d& direction) { mRotation = direction; }
+    void setDirection(const Double3& direction) { mRotation = direction; }
 
-    [[nodiscard]] Vec3d getDirection() const { return mRotation; }
+    [[nodiscard]] Double3 getDirection() const { return mRotation; }
 
     void setSpeed(double speed) { mSpeed = speed; }
 
     [[nodiscard]] double getSpeed() const { return mSpeed; }
 
 private:
-    Vec3d mDirection; // Body direction, head direction is `mRotation` in class Object
+    Double3 mDirection; // Body direction, head direction is `mRotation` in class Object
     double mHeight, mWidth, mSpeed;
-    Vec3d mHitboxSize;
+    Double3 mHitboxSize;
 
     void refreshHitbox() {
-        mHitboxSize = Vec3d(mWidth, mHeight, mWidth);
+        mHitboxSize = Double3(mWidth, mHeight, mWidth);
         mHitbox = AABB(-mHitboxSize, mHitboxSize / 2);
     }
 };

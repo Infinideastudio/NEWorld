@@ -32,23 +32,23 @@ size_t World::IDCount = 0;
 
 std::vector<AABB> World::getHitboxes(const AABB& range) const {
     std::vector<AABB> res;
-    Vec3i curr;
-    for (curr.x = int(floor(range.min.x)); curr.x < int(ceil(range.max.x)); curr.x++)
-        for (curr.y = int(floor(range.min.y)); curr.y < int(ceil(range.max.y)); curr.y++)
-            for (curr.z = int(floor(range.min.z)); curr.z < int(ceil(range.max.z)); curr.z++) {
+    Int3 curr;
+    for (curr.X = int(floor(range.min.X)); curr.X < int(ceil(range.max.X)); curr.X++)
+        for (curr.Y = int(floor(range.min.Y)); curr.Y < int(ceil(range.max.Y)); curr.Y++)
+            for (curr.Z = int(floor(range.min.Z)); curr.Z < int(ceil(range.max.Z)); curr.Z++) {
                 // TODO: BlockType::getAABB
                 if (!isChunkLoaded(getChunkPos(curr)))
                     continue;
                 if (getBlock(curr).getID() == 0)
                     continue;
-                Vec3d currd = curr;
-                res.emplace_back(currd, currd + Vec3d(1.0, 1.0, 1.0));
+                Double3 currd = curr;
+                res.emplace_back(currd, currd + Double3(1.0, 1.0, 1.0));
             }
     return res;
 }
 
-static constexpr Vec3i middleOffset() noexcept {
-    return Vec3i(Chunk::Size() / 2 - 1, Chunk::Size() / 2 - 1, Chunk::Size() / 2 - 1);
+static constexpr Int3 middleOffset() noexcept {
+    return Int3(Chunk::Size() / 2 - 1, Chunk::Size() / 2 - 1, Chunk::Size() / 2 - 1);
 }
 
 /**
@@ -61,26 +61,26 @@ static constexpr Vec3i middleOffset() noexcept {
 * \param unloadList (Output) chunk unload list [pointer, distance]
 */
 static void generateLoadUnloadList(
-    const World& world, const Vec3i& centerPos, int loadRange,
-    PodOrderedList<int, Vec3i, MaxChunkLoadCount>& loadList,
+    const World& world, const Int3& centerPos, int loadRange,
+    PodOrderedList<int, Int3, MaxChunkLoadCount>& loadList,
     PodOrderedList<int, Chunk*, MaxChunkUnloadCount, std::greater>& unloadList) {
     // centerPos to chunk coords
-    Vec3i centerCPos = World::getChunkPos(centerPos);
+    Int3 centerCPos = World::getChunkPos(centerPos);
 
     for (auto&& chunk : world.getChunks()) {
-        Vec3i curPos = chunk.second->getPosition();
+        Int3 curPos = chunk.second->getPosition();
         // Out of load range, pending to unload
-        if (centerCPos.chebyshevDistance(curPos) > loadRange)
-            unloadList.insert((curPos * Chunk::Size() + middleOffset() - centerPos).lengthSqr(), chunk.second.get());
+        if (ChebyshevDistance(centerCPos, curPos) > loadRange)
+            unloadList.insert((curPos * Chunk::Size() + middleOffset() - centerPos).LengthSquared(), chunk.second.get());
     }
 
-    for (int x = centerCPos.x - loadRange; x <= centerCPos.x + loadRange; x++)
-        for (int y = centerCPos.y - loadRange; y <= centerCPos.y + loadRange; y++)
-            for (int z = centerCPos.z - loadRange; z <= centerCPos.z + loadRange; z++)
+    for (int x = centerCPos.X - loadRange; x <= centerCPos.X + loadRange; x++)
+        for (int y = centerCPos.Y - loadRange; y <= centerCPos.Y + loadRange; y++)
+            for (int z = centerCPos.Z - loadRange; z <= centerCPos.Z + loadRange; z++)
                 // In load range, pending to load
-                if (!world.isChunkLoaded(Vec3i(x, y, z)))
-                    loadList.insert((Vec3i(x, y, z) * Chunk::Size() + middleOffset() - centerPos).lengthSqr(),
-                                    Vec3i(x, y, z));
+                if (!world.isChunkLoaded(Int3(x, y, z)))
+                    loadList.insert((Int3(x, y, z) * Chunk::Size() + middleOffset() - centerPos).LengthSquared(),
+                                    Int3(x, y, z));
 }
 
 class AddToWorldTask : public ReadWriteTask {
@@ -110,7 +110,7 @@ public:
      * \param worldID the target world's id
      * \param chunk the target chunk
      */
-    LoadFinishedTask(size_t worldID, Vec3i chunkPos, std::vector<uint32_t> data)
+    LoadFinishedTask(size_t worldID, Int3 chunkPos, std::vector<uint32_t> data)
         : mWorldId(worldID), mChunkPos(chunkPos), mData(std::move(data)) { }
 
     void task(ChunkService& cs) override {
@@ -124,7 +124,7 @@ public:
 
 private:
     size_t mWorldId;
-    Vec3i mChunkPos;
+    Int3 mChunkPos;
     std::vector<uint32_t> mData;
 };
 
@@ -135,7 +135,7 @@ public:
     * \param world the target world
     * \param chunkPosition the position of the chunk
     */
-    UnloadChunkTask(const World& world, Vec3i chunkPosition)
+    UnloadChunkTask(const World& world, Int3 chunkPosition)
         : mWorld(world), mChunkPosition(chunkPosition) { }
 
     void task(ChunkService& cs) override {
@@ -145,7 +145,7 @@ public:
 
 private:
     const World& mWorld;
-    Vec3i mChunkPosition;
+    Int3 mChunkPosition;
 };
 
 class BuildOrLoadChunkTask : public ReadOnlyTask {
@@ -155,7 +155,7 @@ public:
      * \param world the target world
      * \param chunkPosition the position of the chunk
      */
-    BuildOrLoadChunkTask(const World& world, Vec3i chunkPosition)
+    BuildOrLoadChunkTask(const World& world, Int3 chunkPosition)
         : mWorld(world), mChunkPosition(chunkPosition) { }
 
     void task(const ChunkService& cs) override {
@@ -176,7 +176,7 @@ public:
 
 private:
     const World& mWorld;
-    Vec3i mChunkPosition;
+    Int3 mChunkPosition;
 };
 
 class LoadUnloadDetectorTask : public ReadOnlyTask {
@@ -186,7 +186,7 @@ public:
     void task(const ChunkService& cs) override {
         // TODO: FIXME: Chunks might be repeatedly loaded or removed.
 
-        PodOrderedList<int, Vec3i, MaxChunkLoadCount> loadList;
+        PodOrderedList<int, Int3, MaxChunkLoadCount> loadList;
         PodOrderedList<int, Chunk*, MaxChunkUnloadCount, std::greater> unloadList;
 
         generateLoadUnloadList(mWorld, mPlayer.getPosition(),

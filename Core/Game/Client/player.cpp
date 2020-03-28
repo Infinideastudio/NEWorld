@@ -38,44 +38,44 @@ private:
 void Player::move(const World& world) {
     //mSpeed.normalize();
     //m.speed *= PlayerSpeed;
-    mPositionDelta = Mat4d::rotation(mRotation.y, Vec3d(0.0, 1.0, 0.0)).transform(mSpeed, 0.0).first;
-    Vec3d originalDelta = mPositionDelta;
+    mPositionDelta = Mat4d::rotation(mRotation.Y, Double3(0.0, 1.0, 0.0)).transform(mSpeed, 0.0).first;
+    Double3 originalDelta = mPositionDelta;
     std::vector<AABB> hitboxes = world.getHitboxes(getHitbox().expand(mPositionDelta));
 
     for (auto& curr : hitboxes)
-        mPositionDelta.x = getHitbox().maxMoveOnXclip(curr, mPositionDelta.x);
-    moveHitbox(Vec3d(mPositionDelta.x, 0.0, 0.0));
-    if (mPositionDelta.x != originalDelta.x) mSpeed.x = 0.0;
+        mPositionDelta.X = getHitbox().maxMoveOnXclip(curr, mPositionDelta.X);
+    moveHitbox(Double3(mPositionDelta.X, 0.0, 0.0));
+    if (mPositionDelta.X != originalDelta.X) mSpeed.X = 0.0;
 
     for (auto& curr : hitboxes)
-        mPositionDelta.z = getHitbox().maxMoveOnZclip(curr, mPositionDelta.z);
-    moveHitbox(Vec3d(0.0, 0.0, mPositionDelta.z));
-    if (mPositionDelta.z != originalDelta.z) mSpeed.z = 0.0;
+        mPositionDelta.Z = getHitbox().maxMoveOnZclip(curr, mPositionDelta.Z);
+    moveHitbox(Double3(0.0, 0.0, mPositionDelta.Z));
+    if (mPositionDelta.Z != originalDelta.Z) mSpeed.Z = 0.0;
 
     for (auto& curr : hitboxes)
-        mPositionDelta.y = getHitbox().maxMoveOnYclip(curr, mPositionDelta.y);
-    moveHitbox(Vec3d(0.0, mPositionDelta.y, 0.0));
-    if (mPositionDelta.y != originalDelta.y) mSpeed.y = 0.0;
+        mPositionDelta.Y = getHitbox().maxMoveOnYclip(curr, mPositionDelta.Y);
+    moveHitbox(Double3(0.0, mPositionDelta.Y, 0.0));
+    if (mPositionDelta.Y != originalDelta.Y) mSpeed.Y = 0.0;
 
     mPosition += mPositionDelta;
 
-    mOnGround = mPositionDelta.y == 0;
+    mOnGround = mPositionDelta.Y == 0;
 
     mSpeed *= 0.8;
-    //mSpeed += Vec3d(0.0, -0.05, 0.0);
+    //mSpeed += Double3(0.0, -0.05, 0.0);
 }
 
 void Player::rotationMove() {
     static bool rotationInteria = getJsonValue<bool>(getSettings()["gui"]["rotation_interia"], false);
 
-    if (mRotation.x + mRotationSpeed.x > 90.0)
-        mRotationSpeed.x = 90.0 - mRotation.x;
-    if (mRotation.x + mRotationSpeed.x < -90.0)
-        mRotationSpeed.x = -90.0 - mRotation.x;
+    if (mRotation.X + mRotationSpeed.X > 90.0)
+        mRotationSpeed.X = 90.0 - mRotation.X;
+    if (mRotation.X + mRotationSpeed.X < -90.0)
+        mRotationSpeed.X = -90.0 - mRotation.X;
     mRotation += mRotationSpeed;
     mRotationDelta = mRotationSpeed;
     if (rotationInteria) mRotationSpeed *= 0.6;
-    else mRotationSpeed = 0;
+    else mRotationSpeed = Double3(0.0);
 }
 
 Player::Player(size_t worldID) : PlayerObject(worldID) {
@@ -93,20 +93,20 @@ void Player::render() {
     // X
     glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_LINES);
-    glVertex3f(mPosition.x - 2.0f, mPosition.y, mPosition.z);
-    glVertex3f(mPosition.x + 2.0f, mPosition.y, mPosition.z);
+    glVertex3f(mPosition.X - 2.0f, mPosition.Y, mPosition.Z);
+    glVertex3f(mPosition.X + 2.0f, mPosition.Y, mPosition.Z);
     glEnd();
     //Y
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_LINES);
-    glVertex3f(mPosition.x, mPosition.y - 2.0f, mPosition.z);
-    glVertex3f(mPosition.x, mPosition.y + 2.0f, mPosition.z);
+    glVertex3f(mPosition.X, mPosition.Y - 2.0f, mPosition.Z);
+    glVertex3f(mPosition.X, mPosition.Y + 2.0f, mPosition.Z);
     glEnd();
     //Z
     glColor3f(0.0f, 1.0f, 0.0f);
     glBegin(GL_LINES);
-    glVertex3f(mPosition.x, mPosition.y, mPosition.z - 2.0f);
-    glVertex3f(mPosition.x, mPosition.y, mPosition.z + 2.0f);
+    glVertex3f(mPosition.X, mPosition.Y, mPosition.Z - 2.0f);
+    glVertex3f(mPosition.X, mPosition.Y, mPosition.Z + 2.0f);
     glEnd();
     glEnable(GL_CULL_FACE);
     */

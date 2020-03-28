@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "Vector.h"
+#include <Math/Vector3.h>
 #include "Common/Debug.h"
 
 #ifndef M_PI
@@ -191,26 +191,26 @@ public:
     // Construct a translation matrix
     static Mat4 translation(const Vec3<T>& delta) {
         Mat4 res(T(1.0));
-        res.data[3] = delta.x;
-        res.data[7] = delta.y;
-        res.data[11] = delta.z;
+        res.data[3] = delta.X;
+        res.data[7] = delta.Y;
+        res.data[11] = delta.Z;
         return res;
     }
 
     // Construct a rotation matrix
     static Mat4 rotation(T degrees, Vec3<T> vec) {
         Mat4 res;
-        vec.normalize();
+        vec.Normalize();
         T alpha = degrees * T(Pi) / T(180.0), s = sin(alpha), c = cos(alpha), t = 1.0f - c;
-        res.data[0] = t * vec.x * vec.x + c;
-        res.data[1] = t * vec.x * vec.y - s * vec.z;
-        res.data[2] = t * vec.x * vec.z + s * vec.y;
-        res.data[4] = t * vec.x * vec.y + s * vec.z;
-        res.data[5] = t * vec.y * vec.y + c;
-        res.data[6] = t * vec.y * vec.z - s * vec.x;
-        res.data[8] = t * vec.x * vec.z - s * vec.y;
-        res.data[9] = t * vec.y * vec.z + s * vec.x;
-        res.data[10] = t * vec.z * vec.z + c;
+        res.data[0] = t * vec.X * vec.X + c;
+        res.data[1] = t * vec.X * vec.Y - s * vec.Z;
+        res.data[2] = t * vec.X * vec.Z + s * vec.Y;
+        res.data[4] = t * vec.X * vec.Y + s * vec.Z;
+        res.data[5] = t * vec.Y * vec.Y + c;
+        res.data[6] = t * vec.Y * vec.Z - s * vec.X;
+        res.data[8] = t * vec.X * vec.Z - s * vec.Y;
+        res.data[9] = t * vec.Y * vec.Z + s * vec.X;
+        res.data[10] = t * vec.Z * vec.Z + c;
         res.data[15] = T(1.0);
         return res;
     }
@@ -246,10 +246,10 @@ public:
 
     // Multiply with Vec4(vec, w)
     std::pair<Vec3<T>, T> transform(const Vec3<T>& vec, T w) const {
-        Vec3<T> res(data[0] * vec.x + data[1] * vec.y + data[2] * vec.z + data[3] * w,
-                    data[4] * vec.x + data[5] * vec.y + data[6] * vec.z + data[7] * w,
-                    data[8] * vec.x + data[9] * vec.y + data[10] * vec.z + data[11] * w);
-        T rw = data[12] * vec.x + data[13] * vec.y + data[14] * vec.z + data[15] * w;
+        Vec3<T> res(data[0] * vec.X + data[1] * vec.Y + data[2] * vec.Z + data[3] * w,
+                    data[4] * vec.X + data[5] * vec.Y + data[6] * vec.Z + data[7] * w,
+                    data[8] * vec.X + data[9] * vec.Y + data[10] * vec.Z + data[11] * w);
+        T rw = data[12] * vec.X + data[13] * vec.Y + data[14] * vec.Z + data[15] * w;
         return std::make_pair(res, rw);
     }
 };

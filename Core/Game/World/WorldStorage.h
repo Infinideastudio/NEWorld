@@ -50,8 +50,8 @@ public:
         sqlite3_close(mWorldInfo);
     }
 
-    std::optional<Chunk::ChunkDataStorageType> requestChunk(Vec3i chunkPos);
-    void saveChunk(Vec3i chunkPos, const Chunk::ChunkDataStorageType& data);
+    std::optional<Chunk::ChunkDataStorageType> requestChunk(Int3 chunkPos);
+    void saveChunk(Int3 chunkPos, const Chunk::ChunkDataStorageType& data);
 
     static bool saveFileExists(const std::string& worldName) {
         return std::filesystem::exists(getChunkInfoPath(worldName));
@@ -75,8 +75,8 @@ private:
         return std::string(BaseWorldPath) + worldName + "_" + std::to_string(id) + ".chunks";
     }
 
-    static std::string chunkPosToString(Vec3i pos) {
-        return std::to_string(pos.x) + "," + std::to_string(pos.y) + "," + std::to_string(pos.z);
+    static std::string chunkPosToString(Int3 pos) {
+        return std::to_string(pos.X) + "," + std::to_string(pos.Y) + "," + std::to_string(pos.Z);
     }
 
     static int printSQLOutput(void* arg, int cnt, char** vals, char** col);
@@ -86,11 +86,11 @@ private:
 
     bool executeSQLCommand(const char* sql, SQLCallback callback, void* argument = nullptr);
 
-    std::optional<ChunkInfo> getChunkInfo(Vec3i chunkPos);
+    std::optional<ChunkInfo> getChunkInfo(Int3 chunkPos);
 
     static size_t getFileSize(std::fstream& file);
     size_t getFirstAvailableFileID(size_t sizeNeeded);
-    void insertChunkInfo(Vec3i pos, const ChunkInfo& info);
+    void insertChunkInfo(Int3 pos, const ChunkInfo& info);
     void writeChunkToFile(std::fstream& file, const ChunkInfo& info, const Chunk::ChunkDataStorageType& data);
 
     std::fstream& loadDataFile(size_t id) {

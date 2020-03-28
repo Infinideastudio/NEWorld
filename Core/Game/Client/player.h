@@ -26,17 +26,17 @@ class NWCOREAPI Player : public PlayerObject {
 public:
     Player(size_t worldID);
 
-    void accelerate(const Vec3d& acceleration) { mSpeed += acceleration; }
+    void accelerate(const Double3& acceleration) { mSpeed += acceleration; }
 
-    void accelerateRotation(const Vec3d& acceleration) { mRotationSpeed += acceleration; }
+    void accelerateRotation(const Double3& acceleration) { mRotationSpeed += acceleration; }
 
-    void setSpeed(const Vec3d& speed) { mSpeed = speed; }
+    void setSpeed(const Double3& speed) { mSpeed = speed; }
 
     [[nodiscard]] double getMovingSpeed() const noexcept { return mPlayerMovingSpeed * FlyingSpeedBooster; }
 
-    [[nodiscard]] Vec3d getPositionDelta() const { return mPositionDelta; }
+    [[nodiscard]] Double3 getPositionDelta() const { return mPositionDelta; }
 
-    [[nodiscard]] Vec3d getRotationDelta() const { return mRotationDelta; }
+    [[nodiscard]] Double3 getRotationDelta() const { return mRotationDelta; }
 
     void render() override;
 
@@ -52,8 +52,8 @@ public:
 
     friend class PlayerUpdateTask;
 private:
-    Vec3d mSpeed, mRotationSpeed;
-    Vec3d mPositionDelta, mRotationDelta;
+    Double3 mSpeed, mRotationSpeed;
+    Double3 mPositionDelta, mRotationDelta;
     static constexpr double mJumpHeight = 3;
     double mJumpProcess = 0.0;
     bool mOnGround = true;
@@ -64,8 +64,8 @@ private:
     void update(const World& world) override {
         move(world);
         rotationMove();
-        if(!isFlying()) accelerate(Vec3d(0.0, -0.1, 0.0)); // Gravity
-        if (mJumpProcess > 0) { mJumpProcess--; accelerate(Vec3d(0.0, 0.3, 0.0)); }
+        if(!isFlying()) accelerate(Double3(0.0, -0.1, 0.0)); // Gravity
+        if (mJumpProcess > 0) { mJumpProcess--; accelerate(Double3(0.0, 0.3, 0.0)); }
     }
 
     void move(const World& world);

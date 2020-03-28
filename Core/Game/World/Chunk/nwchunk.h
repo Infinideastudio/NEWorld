@@ -28,14 +28,14 @@
 #include <array>
 #include <unordered_map>
 #include "Common/Debug.h"
-#include "Common/Math/Vector.h"
+#include <Math/Vector3.h>
 #include "Common/Utility.h"
 #include "Game/World/Blocks.h"
 
 class Chunk;
 
 struct ChunkGenerateArgs {
-    const Vec3i* pos;
+    const Int3* pos;
     Chunk* const chunk;
     const int skyLight;
 };
@@ -55,12 +55,12 @@ public:
 
     enum class LoadBehavior { Build, Loading };
 
-    explicit Chunk(const Vec3i& position, const class World& world, LoadBehavior behavior = LoadBehavior::Build);
-    explicit Chunk(const Vec3i& position, const class World& world, const ChunkDataStorageType& data);
+    explicit Chunk(const Int3& position, const class World& world, LoadBehavior behavior = LoadBehavior::Build);
+    explicit Chunk(const Int3& position, const class World& world, const ChunkDataStorageType& data);
     ~Chunk() = default;
 
     // Get chunk position
-    const Vec3i& getPosition() const noexcept { return mPosition; }
+    const Int3& getPosition() const noexcept { return mPosition; }
 
     // Get chunk updated flag
     bool isUpdated() const noexcept { return mUpdated; }
@@ -75,9 +75,9 @@ public:
     void setUpdated(bool updated) const noexcept { mUpdated = updated; }
 
     // Get block data in this chunk
-    Game::World::BlockData getBlock(const Vec3i& pos) const {
-        Assert(pos.x >= 0 && pos.x < Size() && pos.y >= 0 && pos.y < Size() && pos.z >= 0 && pos.z < Size());
-        return !isMonotonic() ? (*getBlocks())[pos.x * Size() * Size() + pos.y * Size() + pos.z] : mMonotonicBlock;
+    Game::World::BlockData getBlock(const Int3& pos) const {
+        Assert(pos.X >= 0 && pos.X < Size() && pos.Y >= 0 && pos.Y < Size() && pos.Z >= 0 && pos.Z < Size());
+        return !isMonotonic() ? (*getBlocks())[pos.X * Size() * Size() + pos.Y * Size() + pos.Z] : mMonotonicBlock;
     }
 
     // Get block pointer. Note that they might return nullptr in case of monotonic chunk.
@@ -86,10 +86,10 @@ public:
     ChunkDataStorageType getChunkForExport() const noexcept;
 
     // Set block data in this chunk
-    void setBlock(const Vec3i& pos, Game::World::BlockData block) {
-        Assert(pos.x >= 0 && pos.x < Size() && pos.y >= 0 && pos.y < Size() && pos.z >= 0 && pos.z < Size());
+    void setBlock(const Int3& pos, Game::World::BlockData block) {
+        Assert(pos.X >= 0 && pos.X < Size() && pos.Y >= 0 && pos.Y < Size() && pos.Z >= 0 && pos.Z < Size());
         if (isMonotonic() && block != mMonotonicBlock) allocateBlocks();
-        (*getBlocks())[pos.x * Size() * Size() + pos.y * Size() + pos.z] = block;
+        (*getBlocks())[pos.X * Size() * Size() + pos.Y * Size() + pos.Z] = block;
         mUpdated = true;
     }
 
@@ -109,7 +109,7 @@ public:
     void setMonotonic(Game::World::BlockData block) noexcept { Assert(isMonotonic()); mMonotonicBlock = block; }
 
 private:
-    Vec3i mPosition;
+    Int3 mPosition;
     
     std::unique_ptr<Blocks> mBlocks;
     Game::World::BlockData mMonotonicBlock;
@@ -123,15 +123,15 @@ private:
 
 
 struct ChunkHasher {
-    constexpr size_t operator()(const Vec3i& t) const noexcept {
-        return static_cast<size_t>(t.x * 23947293731 + t.z * 3296467037 + t.y * 1234577);
+    constexpr size_t operator()(const Int3& t) const noexcept {
+        return static_cast<size_t>(t.X * 23947293731 + t.Z * 3296467037 + t.Y * 1234577);
     }
 };
 
 class ChunkManager : public NonCopyable {
 public:
     using data_t = std::unique_ptr<Chunk>;
-    using array_t = std::unordered_map<Vec3i, data_t, ChunkHasher>;
+    using array_t = std::unordered_map<Int3, data_t, ChunkHasher>;
     using iterator = array_t::iterator;
     using const_iterator = array_t::const_iterator;
     using reference = Chunk&;
@@ -147,35 +147,35 @@ public:
     [[nodiscard]] const_iterator begin() const noexcept { return mChunks.cbegin(); }
     [[nodiscard]] const_iterator end() const noexcept { return mChunks.cend(); }
 
-    reference at(const Vec3i& chunkPos) { return *(mChunks.at(chunkPos)); }
-    [[nodiscard]] const_reference at(const Vec3i& chunkPos) const { return *(mChunks.at(chunkPos)); }
+    reference at(const Int3& chunkPos) { return *(mChunks.at(chunkPos)); }
+    [[nodiscard]] const_reference at(const Int3& chunkPos) const { return *(mChunks.at(chunkPos)); }
 
-    reference operator[](const Vec3i& chunkPos) { return at(chunkPos); }
-    const_reference operator[](const Vec3i& chunkPos) const { return at(chunkPos); }
+    reference operator[](const Int3& chunkPos) { return at(chunkPos); }
+    const_reference operator[](const Int3& chunkPos) const { return at(chunkPos); }
 
-    iterator insert(const Vec3i& chunkPos, data_t&& chunk) {
+    iterator insert(const Int3& chunkPos, data_t&& chunk) {
         mChunks[chunkPos] = std::move(chunk);
         return mChunks.find(chunkPos);
     }
 
     iterator erase(iterator it) { return mChunks.erase(it); }
-    void erase(const Vec3i& chunkPos) { mChunks.erase(chunkPos); }
+    void erase(const Int3& chunkPos) { mChunks.erase(chunkPos); }
 
     iterator reset(iterator it, Chunk* chunk) {
         it->second.reset(chunk);
         return it;
     }
 
-    iterator reset(const Vec3i& chunkPos, Chunk* chunk) { return reset(mChunks.find(chunkPos), chunk); }
+    iterator reset(const Int3& chunkPos, Chunk* chunk) { return reset(mChunks.find(chunkPos), chunk); }
 
     template <typename... ArgType, typename Func>
-    void doIfLoaded(const Vec3i& chunkPos, Func func, ArgType&&... args) {
+    void doIfLoaded(const Int3& chunkPos, Func func, ArgType&&... args) {
         auto iter = mChunks.find(chunkPos);
         if (iter != mChunks.end())
             func(*(iter->second), std::forward<ArgType>(args)...);
     };
 
-    [[nodiscard]] bool isLoaded(const Vec3i& chunkPos) const noexcept { return mChunks.find(chunkPos) != mChunks.end(); }
+    [[nodiscard]] bool isLoaded(const Int3& chunkPos) const noexcept { return mChunks.find(chunkPos) != mChunks.end(); }
 
     // Convert world position to chunk coordinate (one axis)
     static int getAxisPos(int pos) noexcept {
@@ -183,23 +183,23 @@ public:
     }
 
     // Convert world position to chunk coordinate (all axes)
-    static Vec3i getPos(const Vec3i& pos) noexcept {
-        return Vec3i(getAxisPos(pos.x), getAxisPos(pos.y), getAxisPos(pos.z));
+    static Int3 getPos(const Int3& pos) noexcept {
+        return Int3(getAxisPos(pos.X), getAxisPos(pos.Y), getAxisPos(pos.Z));
     }
 
     // Convert world position to block coordinate in chunk (one axis)
     static int getBlockAxisPos(int pos) noexcept { return pos & (Chunk::Size() - 1); }
 
     // Convert world position to block coordinate in chunk (all axes)
-    static Vec3i getBlockPos(const Vec3i& pos) noexcept {
-        return Vec3i(getBlockAxisPos(pos.x), getBlockAxisPos(pos.y), getBlockAxisPos(pos.z));
+    static Int3 getBlockPos(const Int3& pos) noexcept {
+        return Int3(getBlockAxisPos(pos.X), getBlockAxisPos(pos.Y), getBlockAxisPos(pos.Z));
     }
 
     // Get block data
-    [[nodiscard]] Game::World::BlockData getBlock(const Vec3i& pos) const { return at(getPos(pos)).getBlock(getBlockPos(pos)); }
+    [[nodiscard]] Game::World::BlockData getBlock(const Int3& pos) const { return at(getPos(pos)).getBlock(getBlockPos(pos)); }
 
     // Set block data
-    void setBlock(const Vec3i& pos, Game::World::BlockData block) { at(getPos(pos)).setBlock(getBlockPos(pos), block); }
+    void setBlock(const Int3& pos, Game::World::BlockData block) { at(getPos(pos)).setBlock(getBlockPos(pos), block); }
 
 private:
     array_t mChunks;

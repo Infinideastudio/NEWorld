@@ -20,38 +20,38 @@
 #pragma once
 
 #include <algorithm>
-#include "Common/Math/Vector.h"
+#include <Math/Vector3.h>
 
 // Axis aligned bounding box
 class AABB {
 public:
     // Min bound
-    Vec3d min;
+    Double3 min;
     // Max bound
-    Vec3d max;
+    Double3 max;
 
     AABB() = default;
 
-    AABB(const Vec3d& min_, const Vec3d& max_) : min(min_), max(max_) { }
+    AABB(const Double3& min_, const Double3& max_) : min(min_), max(max_) { }
 
     AABB(const AABB& rhs) = default;
 
     // Is intersect on X axis
     [[nodiscard]] bool intersectX(const AABB& box) const {
-        return (min.x > box.min.x && min.x < box.max.x) || (max.x > box.min.x && max.x < box.max.x) ||
-            (box.min.x > min.x && box.min.x < max.x) || (box.max.x > min.x && box.max.x < max.x);
+        return (min.X > box.min.X && min.X < box.max.X) || (max.X > box.min.X && max.X < box.max.X) ||
+            (box.min.X > min.X && box.min.X < max.X) || (box.max.X > min.X && box.max.X < max.X);
     }
 
     // Is intersect on Y axis
     [[nodiscard]] bool intersectY(const AABB& box) const {
-        return (min.y > box.min.y && min.y < box.max.y) || (max.y > box.min.y && max.y < box.max.y) ||
-            (box.min.y > min.y && box.min.y < max.y) || (box.max.y > min.y && box.max.y < max.y);
+        return (min.Y > box.min.Y && min.Y < box.max.Y) || (max.Y > box.min.Y && max.Y < box.max.Y) ||
+            (box.min.Y > min.Y && box.min.Y < max.Y) || (box.max.Y > min.Y && box.max.Y < max.Y);
     }
 
     // Is intersect on Z axis
     [[nodiscard]] bool intersectZ(const AABB& box) const {
-        return (min.z > box.min.z && min.z < box.max.z) || (max.z > box.min.z && max.z < box.max.z) ||
-            (box.min.z > min.z && box.min.z < max.z) || (box.max.z > min.z && box.max.z < max.z);
+        return (min.Z > box.min.Z && min.Z < box.max.Z) || (max.Z > box.min.Z && max.Z < box.max.Z) ||
+            (box.min.Z > min.Z && box.min.Z < max.Z) || (box.max.Z > min.Z && box.max.Z < max.Z);
     }
 
     // Is intersect on all axes
@@ -61,10 +61,10 @@ public:
     [[nodiscard]] double maxMoveOnXclip(const AABB& box, double orgmove) const {
         if (!(intersectY(box) && intersectZ(box)))
             return orgmove;
-        if (min.x >= box.max.x && orgmove < 0.0)
-            return std::max(box.max.x - min.x, orgmove);
-        if (max.x <= box.min.x && orgmove > 0.0)
-            return std::min(box.min.x - max.x, orgmove);
+        if (min.X >= box.max.X && orgmove < 0.0)
+            return std::max(box.max.X - min.X, orgmove);
+        if (max.X <= box.min.X && orgmove > 0.0)
+            return std::min(box.min.X - max.X, orgmove);
 
         return orgmove;
     }
@@ -73,10 +73,10 @@ public:
     [[nodiscard]] double maxMoveOnYclip(const AABB& box, double orgmove) const {
         if (!(intersectX(box) && intersectZ(box)))
             return orgmove;
-        if (min.y >= box.max.y && orgmove < 0.0)
-            return std::max(box.max.y - min.y, orgmove);
-        if (max.y <= box.min.y && orgmove > 0.0)
-            return std::min(box.min.y - max.y, orgmove);
+        if (min.Y >= box.max.Y && orgmove < 0.0)
+            return std::max(box.max.Y - min.Y, orgmove);
+        if (max.Y <= box.min.Y && orgmove > 0.0)
+            return std::min(box.min.Y - max.Y, orgmove);
 
         return orgmove;
     }
@@ -85,38 +85,38 @@ public:
     [[nodiscard]] double maxMoveOnZclip(const AABB& box, double orgmove) const {
         if (!(intersectX(box) && intersectY(box)))
             return orgmove;
-        if (min.z >= box.max.z && orgmove < 0.0)
-            return std::max(box.max.z - min.z, orgmove);
-        if (max.z <= box.min.z && orgmove > 0.0)
-            return std::min(box.min.z - max.z, orgmove);
+        if (min.Z >= box.max.Z && orgmove < 0.0)
+            return std::max(box.max.Z - min.Z, orgmove);
+        if (max.Z <= box.min.Z && orgmove > 0.0)
+            return std::min(box.min.Z - max.Z, orgmove);
 
         return orgmove;
     }
 
     // Get expanded AABB
-    [[nodiscard]] AABB expand(const Vec3d& arg) const {
+    [[nodiscard]] AABB expand(const Double3& arg) const {
         AABB res = *this;
 
-        if (arg.x > 0.0)
-            res.max.x += arg.x;
+        if (arg.X > 0.0)
+            res.max.X += arg.X;
         else
-            res.min.x += arg.x;
+            res.min.X += arg.X;
 
-        if (arg.y > 0.0)
-            res.max.y += arg.y;
+        if (arg.Y > 0.0)
+            res.max.Y += arg.Y;
         else
-            res.min.y += arg.y;
+            res.min.Y += arg.Y;
 
-        if (arg.z > 0.0)
-            res.max.z += arg.z;
+        if (arg.Z > 0.0)
+            res.max.Z += arg.Z;
         else
-            res.min.z += arg.z;
+            res.min.Z += arg.Z;
 
         return res;
     }
 
     // Move AABB
-    void move(const Vec3d& arg) {
+    void move(const Double3& arg) {
         min += arg;
         max += arg;
     }

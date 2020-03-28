@@ -18,7 +18,7 @@
 // 
 
 #include <Common/Logger.h>
-#include "Common/Math/Vector.h"
+#include <Math/Vector3.h>
 #include "Game/World/Blocks.h"
 #include "nwchunk.h"
 #include "Game/World/world.h"
@@ -33,13 +33,13 @@ void NWAPICALL DefaultChunkGen(const ChunkGenerateArgs*) {
 bool Chunk::ChunkGeneratorLoaded = false;
 ChunkGenerator Chunk::ChunkGen = DefaultChunkGen;
 
-Chunk::Chunk(const Vec3i& position, const class World& world, LoadBehavior behavior)
+Chunk::Chunk(const Int3& position, const class World& world, LoadBehavior behavior)
     : mPosition(position), mWorld(&world) {
     if (behavior == LoadBehavior::Build) build(mWorld->getDaylightBrightness());
     else mLoading = true;
 }
 
-Chunk::Chunk(const Vec3i& position, const class World& world, const ChunkDataStorageType& data)
+Chunk::Chunk(const Int3& position, const class World& world, const ChunkDataStorageType& data)
     : mPosition(position), mWorld(&world) {
     replaceChunk(data);
 }

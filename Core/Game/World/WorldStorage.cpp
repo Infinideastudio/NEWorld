@@ -4,7 +4,7 @@
 #include <chrono>
 namespace fs = std::filesystem;
 
-std::optional<Chunk::ChunkDataStorageType> WorldStorage::requestChunk(Vec3i chunkPos) {
+std::optional<Chunk::ChunkDataStorageType> WorldStorage::requestChunk(Int3 chunkPos) {
     if (auto pos = getChunkInfo(chunkPos)) {
         auto& file = loadDataFile(pos->file_id);
         auto data = Chunk::ChunkDataStorageType{};
@@ -16,7 +16,7 @@ std::optional<Chunk::ChunkDataStorageType> WorldStorage::requestChunk(Vec3i chun
     return {};
 }
 
-void WorldStorage::saveChunk(Vec3i chunkPos, const Chunk::ChunkDataStorageType& data) {
+void WorldStorage::saveChunk(Int3 chunkPos, const Chunk::ChunkDataStorageType& data) {
     return;
     auto chunkSize = data.size() * sizeof(Game::World::BlockData);
     auto allocateSize = chunkSize;
@@ -111,7 +111,7 @@ bool WorldStorage::executeSQLCommand(const char* sql, SQLCallback callback, void
     return true;
 }
 
-std::optional<WorldStorage::ChunkInfo> WorldStorage::getChunkInfo(Vec3i chunkPos) {
+std::optional<WorldStorage::ChunkInfo> WorldStorage::getChunkInfo(Int3 chunkPos) {
     std::string sql = "SELECT * from chunk_info where position = \"" + chunkPosToString(chunkPos) + "\"";
     std::optional<ChunkInfo> chunkInfo;
     if (executeSQLCommand(sql.c_str(), chunkInfoCallback, &chunkInfo)){
@@ -135,7 +135,7 @@ size_t WorldStorage::getFirstAvailableFileID(size_t sizeNeeded) {
     }
 }
 
-void WorldStorage::insertChunkInfo(Vec3i pos, const ChunkInfo& info) {
+void WorldStorage::insertChunkInfo(Int3 pos, const ChunkInfo& info) {
     std::string sql = "INSERT INTO chunk_info(position, file_id, offset, time, size, capacity) "
         "VALUES (\"" + chunkPosToString(pos) + "\", " + std::to_string(info.file_id)
         + ", " + std::to_string(info.offset) + "," + std::to_string(info.time) + "," + std::to_string(info.size)
