@@ -26,8 +26,6 @@
 #include <string>
 #include <array>
 
-class LoggerManager;
-
 class NWCOREAPI Logger {
 public:
     enum class Level {
@@ -63,15 +61,6 @@ private:
     const char* mFuncName;
     bool fileOnly{false};
     std::stringstream mContent;
-
-    static Level coutLevel;
-    static Level cerrLevel;
-    static Level fileLevel;
-    static Level lineLevel;
-    static std::vector<std::ofstream> fsink;
-    static std::array<const char*, 6> levelTags;
-
-    void writeOstream(std::ostream& ostream, bool noColor = false) const;
 };
 
 #define loggerstream(level) Logger(__FILE__, __FUNCTION__, __LINE__, Logger::Level::level, NWCompartmentLoggerPrefix)

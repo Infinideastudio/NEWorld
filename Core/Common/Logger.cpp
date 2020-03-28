@@ -19,151 +19,147 @@
 
 #include <map>
 #include <ctime>
+#include <mutex>
 #include <fstream>
 #include <iostream>
-#include <mutex>
-#include "Logger.h"
-#include "Common/Filesystem.h"
+#include <filesystem>
+#include <string_view>
 #include "Common/Console.h"
+#include "Logger.h"
 
-std::vector<std::ofstream> Logger::fsink;
-std::array<const char*, 6> Logger::levelTags
-{
-    "[verbose]", "[debug]", "[info]", "[warning]", "[error]", "[fatal]"
-};
-Logger::Level Logger::coutLevel = Level::verbose;
-Logger::Level Logger::cerrLevel = Level::fatal;
-Logger::Level Logger::fileLevel = Level::info;
-Logger::Level Logger::lineLevel = Level::error;
+namespace {
+    constexpr std::array<const char*, 6> levelTags = {
+            "[verbose]", "[debug]", "[info]", "[warning]", "[error]", "[fatal]"
+    };
 
-template <size_t length>
-static std::string convert(int arg) {
-    char arr[13];
-    int siz = 0u;
-    while (arg) {
-        arr[siz++] = (arg % 10) + '0';
-        arg /= 10;
+    std::vector<std::ofstream> fSink{};
+
+    Logger::Level coutLevel = Logger::Level::verbose;
+    Logger::Level cerrLevel = Logger::Level::fatal;
+    Logger::Level fileLevel = Logger::Level::info;
+    Logger::Level lineLevel = Logger::Level::error;
+
+    template <size_t length>
+    std::string convert(int arg) {
+        char arr[13];
+        int siz = 0u;
+        while (arg) {
+            arr[siz++] = arg%10+'0'; // NOLINT
+            arg /= 10;
+        }
+        std::string ret(length-siz, '0');
+        ret.reserve(length);
+        for (int i = siz-1; i>=0; i--) ret += arr[i];
+        return ret;
     }
-    std::string ret(length - siz, '0');
-    ret.reserve(length);
-    for (int i = siz - 1; i >= 0; i--)
-        ret += arr[i];
-    return ret;
-}
 
-static std::string getTimeString(char dateSplit, char midSplit, char timeSplit) {
-    time_t timer = time(nullptr);
-    tm currtime;
+    std::string getTimeString(const char dateSplit, const char midSplit, const char timeSplit) {
+        time_t timer = time(nullptr);
+        tm currtime;
 #if _MSC_VER
-    localtime_s(&currtime, &timer); // MSVC
+        localtime_s(&currtime, &timer); // MSVC
 #else
-    localtime_r(&timer, &currtime); // POSIX
+        localtime_r(&timer, &currtime); // POSIX
 #endif
-    return convert<4u>(currtime.tm_year + 1900) + dateSplit + convert<2u>(currtime.tm_mon)
-        + dateSplit + convert<2u>(currtime.tm_mday) + midSplit + convert<2u>(currtime.tm_hour)
-        + timeSplit + convert<2u>(currtime.tm_min) + timeSplit + convert<2u>(currtime.tm_sec);
+        return convert<4u>(currtime.tm_year+1900)+dateSplit+convert<2u>(currtime.tm_mon)
+                +dateSplit+convert<2u>(currtime.tm_mday)+midSplit+convert<2u>(currtime.tm_hour)
+                +timeSplit+convert<2u>(currtime.tm_min)+timeSplit+convert<2u>(currtime.tm_sec);
+    }
+
+    void setLogColor(const Logger::Level& level, std::stringstream& content) {
+        switch (level) {
+        case Logger::Level::verbose:
+        case Logger::Level::debug: return (content << LColor::white, (void) 0);
+        case Logger::Level::info: return (content << LColor::lwhite, (void) 0);
+        case Logger::Level::warning: return (content << LColor::lyellow, (void) 0);
+        case Logger::Level::error: return (content << LColor::lred, (void) 0);
+        case Logger::Level::fatal: return (content << LColor::red, (void) 0);
+        default: return;
+        }
+    }
+
+    constexpr char styleChar = '&';
+
+    LColorFunc::ColorFunc queryColorFunc(const char style) {
+        using namespace LColorFunc;
+        static std::map<char, ColorFunc> map = {
+                {'0', black}, {'1', red}, {'2', yellow}, {'3', green},
+                {'4', cyan}, {'5', blue}, {'6', magenta}, {'7', white},
+                {'8', lblack}, {'9', lred}, {'a', lyellow}, {'b', lgreen},
+                {'c', lcyan}, {'d', lblue}, {'e', lmagenta}, {'f', lwhite},
+        };
+        const auto chNorm = (style>='A' && style<='F') ? style-'A'+'a' : style;
+        const auto sRes = map.find(chNorm);
+        return (sRes!=map.end()) ? sRes->second : ColorFunc();
+    }
+
+    void chConsumeStyled(std::ostream& ostream, const char ch) {
+        if (const auto cf = queryColorFunc(ch); cf)
+            return (ostream << cf, (void) 0);
+        if (ch==styleChar) ostream << styleChar; // Escaped to `stylechar`
+        else ostream << styleChar << ch; // Wrong color code
+    }
+
+    template <class Fn>
+    auto transitStyleString(const std::string& str, Fn fn) {
+        std::string_view vw{str};
+        std::string::size_type pos1 = 0;
+        std::stringstream ss{};
+        for (;;) {
+            const auto pos2 = vw.find(styleChar, pos1);
+            if (std::string::npos==pos2) return (ss << vw.substr(pos1, str.size()), ss.str());
+            ss << vw.substr(pos1, pos2-pos1);
+            if (pos2<str.size()) fn(ss, str[pos2+1]);
+            pos1 = pos2+2;
+        }
+    }
+
+    void lockedFlush(std::ostream& stream, const std::string& string) {
+        static std::mutex mutex;
+        std::lock_guard<std::mutex> lock(mutex);
+        stream << string;
+    }
+
+    void flushConsole(const Logger::Level level, const std::string& string) {
+        const auto line = transitStyleString(string, chConsumeStyled);
+        if (level>=cerrLevel)
+            lockedFlush(std::cerr, line);
+        else if (level>=coutLevel)
+            lockedFlush(std::cout, line);
+    }
+
+    void flushFiles(const Logger::Level level, const std::string& string) {
+        if (level>=fileLevel) {
+            const auto line = transitStyleString(string, [](auto&&, auto&&) { });
+            for (auto& it : fSink) {
+                lockedFlush(it, line);
+                if (level>=cerrLevel) it.flush();
+            }
+        }
+    }
 }
 
 void Logger::addFileSink(const std::string& path, const std::string& prefix) {
-    filesystem::create_directory(path);
-    fsink.emplace_back(path + prefix + "_" + getTimeString('-', '_', '-') + ".log");
+    std::filesystem::create_directory(path);
+    fSink.emplace_back(path+prefix+"_"+getTimeString('-', '_', '-')+".log");
 }
 
 Logger::Logger(const char* fileName, const char* funcName, int lineNumber, Level level, const char* mgr)
-    : mLevel(level) {
-    if (mLevel >= lineLevel) {
-        mFileName = fileName;
-        mFuncName = funcName;
-        mLineNumber = lineNumber;
-    }
-    mContent << LColor::white << getTimeString('-', ' ', ':')
-        << '[' << mgr << ']';
-    switch (level) {
-    case Level::verbose:
-        mContent << LColor::white;
-        break;
-    case Level::debug:
-        mContent << LColor::white;
-        break;
-    case Level::info:
-        mContent << LColor::lwhite;
-        break;
-    case Level::warning:
-        mContent << LColor::lyellow;
-        break;
-    case Level::error:
-        mContent << LColor::lred;
-        break;
-    case Level::fatal:
-        mContent << LColor::red;
-        break;
-    default:
-        break;
-    }
+        :mLevel(level), mFileName(fileName), mFuncName(funcName), mLineNumber(lineNumber) {
+    mContent << LColor::white << getTimeString('-', ' ', ':') << '[' << mgr << ']';
+    setLogColor(level, mContent);
     mContent << levelTags[static_cast<size_t>(level)];
 }
 
-void Logger::writeOstream(std::ostream& ostream, bool noColor) const {
-    static std::mutex mutex;
-    std::lock_guard<std::mutex> lock(mutex);
-
-    using namespace LColorFunc;
-    constexpr static char stylechar = '&';
-    static std::map<char, ColorFunc> cmap =
-    {
-        {'0', black}, {'1', red}, {'2', yellow}, {'3', green},
-        {'4', cyan}, {'5', blue}, {'6', magenta}, {'7', white},
-        {'8', lblack}, {'9', lred}, {'a', lyellow}, {'b', lgreen},
-        {'c', lcyan}, {'d', lblue}, {'e', lmagenta}, {'f', lwhite},
-    };
-    std::string str = mContent.str();
-    std::string::size_type pos1 = 0, pos2 = str.find(stylechar);
-    for (;;) {
-        if (std::string::npos == pos2) {
-            ostream << str.substr(pos1, str.size());
-            return;
-        }
-        ostream << str.substr(pos1, pos2 - pos1);
-        if (pos2 < str.size()) {
-            char ch = str[pos2 + 1];
-            if (!noColor) {
-                ColorFunc cf = cmap[(ch >= 'A' && ch <= 'F') ? ch - 'A' + 'a' : ch];
-                if (cf)
-                    ostream << cf;
-                else {
-                    if (ch == stylechar) {
-                        ostream << stylechar; // Escaped to `stylechar`
-                    }
-                    else {
-                        ostream << stylechar << ch; // Wrong color code
-                    }
-                }
-            }
-        }
-        pos1 = pos2 + 2;
-        pos2 = str.find(stylechar, pos1);
-    }
-}
-
 Logger::~Logger() {
-    if (mLevel >= lineLevel) {
+    if (mLevel>=lineLevel) {
         mContent << std::endl
-            << "\tSource :\t" << mFileName << std::endl
-            << "\tAt Line :\t" << mLineNumber << std::endl
-            << "\tFunction :\t" << mFuncName << std::endl;
+                 << "\tSource :\t" << mFileName << std::endl
+                 << "\tAt Line :\t" << mLineNumber << std::endl
+                 << "\tFunction :\t" << mFuncName << std::endl;
     }
     mContent << std::endl;
-    if (!fileOnly) {
-        if (mLevel >= cerrLevel)
-            writeOstream(std::cerr);
-        else if (mLevel >= coutLevel)
-            writeOstream(std::cout);
-    }
-    if (mLevel >= fileLevel) {
-        for (auto& it : fsink) {
-            writeOstream(it, true);
-            if (mLevel >= cerrLevel)
-                it.flush();
-        }
-    }
+    const auto string = mContent.str();
+    if (!fileOnly) flushConsole(mLevel, string);
+    flushFiles(mLevel, string);
 }
