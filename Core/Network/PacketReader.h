@@ -10,7 +10,8 @@
 namespace Network {
     class PacketReader {
     public:
-        explicit PacketReader(Packet&& packet) noexcept: mHead(packet.Data()), mPacket(std::move(packet)) {}
+        explicit PacketReader(Packet&& packet) noexcept
+                :mHead(packet.Data()), mPacket(std::move(packet)) { }
 
         uint8_t UByte() noexcept { return *(mHead++); }
 
@@ -64,7 +65,7 @@ namespace Network {
         template <class A = Temp::Allocator<char>>
         std::basic_string<char, std::char_traits<char>, A> String() {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(char)) {
+            if (Remains()>=size*sizeof(char)) {
                 std::basic_string<char, std::char_traits<char>, A> ret(size, '\0');
                 for (auto& x : ret) { x = Byte(); }
                 return ret;
@@ -76,7 +77,7 @@ namespace Network {
         template <class A = Temp::Allocator<int8_t>>
         std::vector<int8_t, A> ByteArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(int8_t)) {
+            if (Remains()>=size*sizeof(int8_t)) {
                 std::vector<int8_t, A> ret(size);
                 for (auto& x : ret) { x = Byte(); }
                 return ret;
@@ -87,7 +88,7 @@ namespace Network {
         template <class A = Temp::Allocator<uint8_t>>
         std::vector<uint8_t, A> UByteArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(uint8_t)) {
+            if (Remains()>=size*sizeof(uint8_t)) {
                 std::vector<uint8_t, A> ret(size);
                 for (auto& x : ret) { x = UByte(); }
                 return ret;
@@ -99,7 +100,7 @@ namespace Network {
         template <class A = Temp::Allocator<int16_t>>
         std::vector<int16_t, A> ShortArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(int16_t)) {
+            if (Remains()>=size*sizeof(int16_t)) {
                 std::vector<int16_t, A> ret(size);
                 for (auto& x : ret) { x = Short(); }
                 return ret;
@@ -110,7 +111,7 @@ namespace Network {
         template <class A = Temp::Allocator<uint16_t>>
         std::vector<uint16_t, A> UShortArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(uint16_t)) {
+            if (Remains()>=size*sizeof(uint16_t)) {
                 std::vector<uint16_t, A> ret(size);
                 for (auto& x : ret) { x = UShort(); }
                 return ret;
@@ -122,7 +123,7 @@ namespace Network {
         template <class A = Temp::Allocator<int32_t>>
         std::vector<int32_t, A> IntArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(int32_t)) {
+            if (Remains()>=size*sizeof(int32_t)) {
                 std::vector<int32_t, A> ret(size);
                 for (auto& x : ret) { x = Int(); }
                 return ret;
@@ -133,7 +134,7 @@ namespace Network {
         template <class A = Temp::Allocator<uint32_t>>
         std::vector<uint32_t, A> UIntArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(uint32_t)) {
+            if (Remains()>=size*sizeof(uint32_t)) {
                 std::vector<uint32_t, A> ret(size);
                 for (auto& x : ret) { x = UInt(); }
                 return ret;
@@ -145,7 +146,7 @@ namespace Network {
         template <class A = Temp::Allocator<int64_t>>
         std::vector<int64_t, A> LongArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(int64_t)) {
+            if (Remains()>=size*sizeof(int64_t)) {
                 std::vector<int64_t, A> ret(size);
                 for (auto& x : ret) { x = Long(); }
                 return ret;
@@ -156,7 +157,7 @@ namespace Network {
         template <class A = Temp::Allocator<uint64_t>>
         std::vector<uint64_t, A> ULongArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(uint64_t)) {
+            if (Remains()>=size*sizeof(uint64_t)) {
                 std::vector<uint64_t, A> ret(size);
                 for (auto& x : ret) { x = ULong(); }
                 return ret;
@@ -168,7 +169,7 @@ namespace Network {
         template <class A = Temp::Allocator<float>>
         std::vector<float, A> FloatArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(float)) {
+            if (Remains()>=size*sizeof(float)) {
                 std::vector<float, A> ret(size);
                 for (auto& x : ret) { x = Float(); }
                 return ret;
@@ -179,7 +180,7 @@ namespace Network {
         template <class A = Temp::Allocator<double>>
         std::vector<double, A> DoubleArray() noexcept {
             const auto size = VarInt();
-            if (Remains() >= size *sizeof(double)) {
+            if (Remains()>=size*sizeof(double)) {
                 std::vector<double, A> ret(size);
                 for (auto& x : ret) { x = Double(); }
                 return ret;
@@ -324,11 +325,11 @@ namespace Network {
             // TODO: implement this;
         }
 
-        [[nodiscard]] long Remains() const noexcept { return mPacket.Data() + mPacket.Size() - mHead; }
+        [[nodiscard]] long Remains() const noexcept { return static_cast<long>(mPacket.Data()+mPacket.Size()-mHead); }
 
-        [[nodiscard]] bool Good() const noexcept { return Remains() >= 0; }
+        [[nodiscard]] bool Good() const noexcept { return Remains()>=0; }
     private:
-        void InternalFail() noexcept { mHead = mPacket.Data() + mPacket.Size() + 1; }
+        void InternalFail() noexcept { mHead = mPacket.Data()+mPacket.Size()+1; }
         const uint8_t* mHead;
         Packet mPacket;
     };

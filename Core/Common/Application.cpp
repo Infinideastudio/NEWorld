@@ -19,7 +19,6 @@
 
 #include <iostream>
 #include <Cfx/Application.h>
-
 #include "Application.h"
 #include "Logger.h"
 

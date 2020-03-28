@@ -19,11 +19,12 @@
 
 #pragma once
 
+#include <Compile/Slangs.h>
+
 // Compiler flags
 #if _MSC_VER
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)
-#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 #ifdef _DEBUG
@@ -40,19 +41,8 @@
     #define NWAPICALL
 #endif
 
-// NWAPIEXPORT
-#if (__CYGWIN__ || _WIN32)
-#if  _MSC_VER
-#define NWAPIENTRY __declspec(dllimport)
-#define NWAPIEXPORT __declspec(dllexport)
-#else
-#define NWAPIENTRY __attribute__((dllimport))
-#define NWAPIEXPORT __attribute__((dllexport))
-#endif
-#else
-#define NWAPIENTRY __attribute__((visibility("default")))
-#define NWAPIEXPORT __attribute__((visibility("default")))
-#endif
+#define NWAPIENTRY IMPORT
+#define NWAPIEXPORT EXPORT
 
 constexpr const char* NEWorldVersionName = "Beta 0.1";
 constexpr unsigned short NEWorldVersion = 40u;
