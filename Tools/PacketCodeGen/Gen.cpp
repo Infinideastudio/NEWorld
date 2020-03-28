@@ -163,8 +163,16 @@ private:
     void GenParseFn(const std::string& side) {
         Indent() << "bool TryHandle"+side+"(int id, PacketReader& reader, StateBase& state) {" << std::endl;
         ++mIndent;
+        const auto& packets = (side=="Server" ? mSPackets : mCPackets);
+        if (!packets.empty()) GenParseFnDoPackets(packets);
+        else Indent() << "return false;" << std::endl;
+        --mIndent;
+        Indent() << "}" << std::endl;
+    }
+
+    void GenParseFnDoPackets(const std::map<int, Signature>& packets) {
         Indent() << "switch(id) {" << std::endl;
-        for (auto& x : (side=="Server" ? mSPackets : mCPackets)) {
+        for (auto& x : packets) {
             Indent() << "case " << x.first << ": {" << std::endl;
             ++mIndent;
             Indent() << x.second.Name << " x {};" << std::endl;
@@ -172,9 +180,7 @@ private:
             --mIndent;
             Indent() << '}' << std::endl;
         }
-        Indent() << "}" << std::endl;
-        Indent() << "return false;" << std::endl;
-        --mIndent;
+        Indent() << "default: return false;" << std::endl;
         Indent() << "}" << std::endl;
     }
 
