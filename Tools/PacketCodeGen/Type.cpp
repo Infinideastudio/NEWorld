@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <sstream>
+#include <memory>
 
 static std::map<std::string, std::shared_ptr<IType>> Types;
 
