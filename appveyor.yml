@@ -2,7 +2,6 @@ image: Visual Studio 2019
 version: '{build}'
 cache: c:\tools\vcpkg\installed\
 platform:
-  - Win32
   - x64
 configuration:
   - Debug
@@ -14,7 +13,7 @@ install:
   - git pull
   - .\bootstrap-vcpkg.bat
   - .\vcpkg.exe integrate install
-  - if %PLATFORM% equ Win32 (vcpkg.exe install sdl2 sdl2-image glew rpclib sqlite3) else (vcpkg.exe install sdl2:x64-windows sdl2-image:x64-windows glew:x64-windows rpclib:x64-windows sqlite3:x64-windows) > nul
+  - (vcpkg.exe install sdl2:x64-windows sdl2-image:x64-windows glew:x64-windows rpclib:x64-windows sqlite3:x64-windows wangle:x64-windows) > nul
   - cd %APPVEYOR_BUILD_FOLDER%
 before_build:
   - git submodule update --recursive --init
@@ -31,6 +30,5 @@ on_success:
   - cd .\projectBuild
   - 7z a c:\NEWorld.zip .\Product
   - 7z a c:\NEWorld.zip .\SDK
-  - if %PLATFORM% equ x64 rename c:\NEWorld.zip NEWorld_x64.zip
-  - if %PLATFORM% equ x64 (appveyor PushArtifact c:\NEWorld_x64.zip) else (appveyor PushArtifact c:\NEWorld.zip)
+  - appveyor PushArtifact c:\NEWorld.zip
   

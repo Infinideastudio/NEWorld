@@ -3,3 +3,9 @@ languages:
 - cpp
 exclude:
 - \/3rdParty\/.*
+production:
+  exclude:
+    - \/Tests\/.*
+test:
+  include:
+    - \/Tests\/.*
