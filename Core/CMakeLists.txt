@@ -18,9 +18,8 @@ target_compile_definitions(Core
     PRIVATE -DNWCompartmentLoggerPrefix="Core")
 
 # Link libraries for Core
-find_package(rpclib CONFIG REQUIRED)
 find_package(sqlite3 CONFIG REQUIRED)
 find_package(wangle CONFIG REQUIRED)
-target_link_libraries(Core rpclib::rpc NRT.CFX NRT.Math sqlite3 wangle::wangle)
+target_link_libraries(Core NRT.CFX NRT.Math sqlite3 wangle::wangle)
 target_include_directories(Core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 add_dependencies(Core Core.CodeGen)

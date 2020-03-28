@@ -25,7 +25,6 @@
 #include "window.h"
 #include "renderer/texture.h"
 #include "renderer/worldrenderer.h"
-#include "Game/Server/server.h"
 
 class GameScene {
 public:
@@ -44,7 +43,7 @@ private:
     ChunkService* chunkService;
 
     // Local server
-    std::unique_ptr<Server> mServer = nullptr;
+    //std::unique_ptr<Server> mServer = nullptr;
     // Window
     const Window& mWindow;
     // Texture test

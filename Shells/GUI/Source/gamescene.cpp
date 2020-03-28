@@ -20,7 +20,6 @@
 #include <atomic>
 #include <chrono>
 #include <mutex>
-#include <Common/RPC/RPC.h>
 #include <Game/SyncService/taskdispatcher.hpp>
 #include "gamescene.h"
 #include "Common/JsonHelper.h"
@@ -32,8 +31,8 @@ public:
             :mWorldID(worldID), mBlockPosition(blockPosition), mBlockID(blockID) { }
 
     void task(ChunkService& cs) override {
-        if (!cs.isAuthority())
-            RPC::getClient().async_call("pickBlock", mWorldID, mBlockPosition);
+        //if (!cs.isAuthority())
+           // RPC::getClient().async_call("pickBlock", mWorldID, mBlockPosition);
 
         cs.getWorlds().getWorld(mWorldID)->setBlock(mBlockPosition, Game::World::BlockData(mBlockID));
     }
@@ -153,7 +152,7 @@ static bool isClient() { return Application::args()["multiplayer-client"]; }
 size_t GameScene::requestWorld() {
     // TODO: change this
 
-    if (isClient()) {
+    /*if (isClient()) {
         auto& client = RPC::getClient();
         debugstream << "Connecting the server for world information...";
         auto worldIds = client.call("getAvailableWorldId").as<std::vector<uint32_t>>();
@@ -167,7 +166,7 @@ size_t GameScene::requestWorld() {
         debugstream << "World info fetched from the server: "
                        "name: " << worldInfo["name"];
         chunkService->getWorlds().addWorld(worldInfo["name"]);
-    }
+    }*/
 
     // It's a simple wait-until-we-have-a-world procedure now.
     // But it should be changed into get player information
@@ -190,14 +189,14 @@ GameScene::GameScene(const std::string& name, const Window& window)
     }
     else {
         // Initialize server
-        mServer = std::make_unique<Server>(getJsonValue<unsigned short>(getSettings()["server"]["port"], 31111));
-        mServer->run(getJsonValue<size_t>(getSettings()["server"]["rpc_thread_number"], 1));
+        //mServer = std::make_unique<Server>(getJsonValue<unsigned short>(getSettings()["server"]["port"], 31111));
+        //mServer->run(getJsonValue<size_t>(getSettings()["server"]["rpc_thread_number"], 1));
     }
 
     // Initialize connection
-    RPC::enableClient(
+    /*RPC::enableClient(
             getJsonValue<std::string>(getSettings()["server"]["ip"], "127.0.0.1"),
-            getJsonValue<unsigned short>(getSettings()["server"]["port"], 31111));
+            getJsonValue<unsigned short>(getSettings()["server"]["port"], 31111));*/
 
     mCurrentWorld = chunkService->getWorlds().getWorld(requestWorld());
     mWorldRenderer = std::make_unique<WorldRenderer>(*mCurrentWorld,

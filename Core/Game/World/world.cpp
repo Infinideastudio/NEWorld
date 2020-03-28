@@ -21,7 +21,6 @@
 #include <Game/SyncService/taskdispatcher.hpp>
 #include <Game/SyncService/chunkservice.hpp>
 #include <Game/Client/player.h>
-#include <Common/RPC/RPC.h>
 #include <mutex>
 #include "world.h"
 #include "Common/JsonHelper.h"
@@ -129,44 +128,6 @@ private:
     std::vector<uint32_t> mData;
 };
 
-template<typename R>
-bool isReady(std::future<R> const& f) {
-    return f.wait_for(std::chrono::milliseconds(10)) != std::future_status::timeout;
-}
-
-class RPCLoadWait : public ReadOnlyTask {
-public:
-    /**
-     * \brief Add a constructed chunk into world.
-     * \param worldID the target world's id
-     * \param chunk the target chunk
-     */
-    RPCLoadWait(size_t worldID, std::future<clmdep_msgpack::object_handle>&& chunkData, Vec3i chunkPosition)
-        : mWorldId(worldID), mChunkData(std::move(chunkData)), mChunkPosition(chunkPosition) { }
-
-    void task(const ChunkService& cs) override {
-        if (!mChunkData.valid()) return;
-        if (!isReady(mChunkData)) { // if not ready, check again in the next tick.
-            TaskDispatch::addNow(
-                    std::make_unique<RPCLoadWait>(mWorldId, std::move(mChunkData), mChunkPosition)
-            );
-            return;
-        }
-
-        auto data = mChunkData.get().as<std::vector<uint32_t>>();
-
-        // Add LoadFinishedTask
-        TaskDispatch::addNext(
-                std::make_unique<LoadFinishedTask>(mWorldId, mChunkPosition, std::move(data))
-        );
-    }
-
-private:
-    size_t mWorldId;
-    std::future<clmdep_msgpack::object_handle> mChunkData;
-    Vec3i mChunkPosition;
-};
-
 class UnloadChunkTask : public ReadWriteTask {
 public:
     /**
@@ -218,42 +179,6 @@ private:
     Vec3i mChunkPosition;
 };
 
-class RPCGetChunkTask : public ReadOnlyTask {
-public:
-    /**
-    * \brief Given a chunk, it will try to use RPC to load it
-    * \param world the target world
-    * \param chunkPosition the position of the chunk
-    * \note It will be used when the chunk service is not the authority.
-    *       Usually when it's the client of a multiplayer session.
-    */
-    RPCGetChunkTask(const World& world, Vec3i chunkPosition)
-        : mWorld(world), mChunkPosition(chunkPosition) { }
-
-    void task(const ChunkService& cs) override {
-        if (mWorld.getChunks().isLoaded(mChunkPosition)) return;
-
-        static std::mutex mutex;
-        std::lock_guard<std::mutex> lock(mutex);
-        auto data = RPC::getClient()
-            .async_call("getChunk", mWorld.getWorldID(), mChunkPosition);
-
-        ChunkManager::data_t chunk(new Chunk(mChunkPosition, mWorld, Chunk::LoadBehavior::Loading));
-        // Add addToWorldTask
-        TaskDispatch::addNext(
-                std::make_unique<AddToWorldTask>(mWorld.getWorldID(), std::move(chunk))
-        );
-        // Add a task to monitor its status
-        TaskDispatch::addNow(
-                std::make_unique<RPCLoadWait>(mWorld.getWorldID(), std::move(data), mChunkPosition)
-        );
-    }
-
-private:
-    const World& mWorld;
-    Vec3i mChunkPosition;
-};
-
 class LoadUnloadDetectorTask : public ReadOnlyTask {
 public:
     LoadUnloadDetectorTask(World& world, const Player& player): mPlayer(player), mWorld(world) { }
@@ -275,9 +200,7 @@ public:
                 );
             }
             else {
-                TaskDispatch::addNow(
-                        std::make_unique<RPCGetChunkTask>(mWorld, loadPos.second)
-                );
+                //TODO: implement load chunk
             }
         }
         for (auto& unloadChunk : unloadList) {

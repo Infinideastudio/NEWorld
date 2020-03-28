@@ -20,7 +20,6 @@
 #include <Common/Application.h>
 #include "cli.hpp"
 #include "Common/JsonHelper.h"
-#include "Game/Server/server.h"
 #include "Common/Modules.h"
 
 CmdOption help{ { "help", {"-h", "--help"}, "shows this help message", 0 } };
@@ -29,8 +28,8 @@ class CLIShell : public Application {
 public:
     void run() override {
         ServerCommandLine cli;
-        Server server(getJsonValue<unsigned short>(getSettings()["server"]["port"], 31111));
-        server.run(getJsonValue<size_t>(getSettings()["server"]["rpc_thread_number"], 1));
+        //Server server(getJsonValue<unsigned short>(getSettings()["server"]["port"], 31111));
+        //server.run(getJsonValue<size_t>(getSettings()["server"]["rpc_thread_number"], 1));
         loadModules();
         cli.start();
     }

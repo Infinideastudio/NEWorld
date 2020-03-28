@@ -17,7 +17,6 @@
 // along with NEWorld.  If not, see <http://www.gnu.org/licenses/>.
 // 
 
-#include <Common/RPC/RPC.h>
 #include "cli.hpp"
 #include "Common/JsonHelper.h"
 #include "Game/SyncService/chunkservice.hpp"
@@ -36,7 +35,7 @@ void ServerCommandLine::initBuiltinCommands() noexcept {
     mCommands.registerCommand("server.stop", {"internal", "Stop the server."},
                               [this](const Command& cmd)-> CommandExecuteStat {
                                   debugstream << "The server is stopping...";
-                                  RPC::getServer().stop();
+                                  //RPC::getServer().stop();
                                   infostream << "Server RPC stopped.";
                                   mCommands.setRunningStatus(false);
                                   return {true, ""};

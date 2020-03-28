@@ -23,7 +23,6 @@
 #include <utility>
 #include <functional>
 #include <type_traits>
-#include <rpc/msgpack/adaptor/define_decl.hpp>
 
 template <typename T>
 class Vec2 {
@@ -31,8 +30,6 @@ public:
     using param_type = T;
 
     T x, y;
-
-    MSGPACK_DEFINE_ARRAY(x, y)
 
     constexpr Vec2() : x(), y() { }
 
@@ -147,8 +144,6 @@ public:
     using param_type = T;
 
     T x, y, z;
-
-    MSGPACK_DEFINE_ARRAY(x, y, z)
 
     constexpr Vec3() : x(), y(), z() { }
 
