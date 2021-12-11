@@ -70,13 +70,19 @@ namespace World {
         if (cy > 4) {
             Empty = true;
             if (!initIfEmpty) return;
-            for (auto i = 0; i < 4096; i++) mBrightness[i] = skylight;
+            for (auto i = 0; i < 4096; i++) {
+                mBlock.Set(i, Blocks::ENV);
+                mBrightness[i] = skylight;
+            }
             return;
         }
         if (cy < 0) {
             Empty = true;
             if (!initIfEmpty) return;
-            for (auto i = 0; i < 4096; i++) mBrightness[i] = BRIGHTNESSMIN;
+            for (auto i = 0; i < 4096; i++) {
+                mBlock.Set(i, Blocks::ENV);
+                mBrightness[i] = BRIGHTNESSMIN;
+            }
             return;
         }
 
@@ -85,7 +91,10 @@ namespace World {
         if (cy > cur.high) {
             Empty = true;
             if (!initIfEmpty) return;
-            for (auto i = 0; i < 4096; i++) mBrightness[i] = skylight;
+            for (auto i = 0; i < 4096; i++) {
+                mBlock.Set(i, Blocks::ENV);
+                mBrightness[i] = skylight;
+            }
             return;
         }
         if (cy < cur.low) {

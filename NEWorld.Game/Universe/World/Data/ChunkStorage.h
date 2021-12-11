@@ -15,7 +15,7 @@ namespace World {
 }
 
 namespace World::Data {
-    constexpr int SIZE = World::ChunkCubicSize;
+    static constexpr uintptr_t EmptyDataValue = ~uintptr_t(0);
 
     struct InitializeT {
     };
@@ -31,7 +31,7 @@ namespace World::Data {
         BlocksSparse4() = default;
 
         explicit BlocksSparse4(InitializeT) noexcept
-                : mStorage(SIZE >> 1, {0, 0}) {}
+                : mStorage(ChunkCubicSize >> 1, {0, 0}) {}
 
         [[nodiscard]] int Get(const int index) const noexcept {
             const auto sec = mStorage[index >> 1u]; // NOLINT
@@ -56,7 +56,7 @@ namespace World::Data {
         BlocksSparse8() = default;
 
         explicit BlocksSparse8(InitializeT) noexcept
-                : mStorage(SIZE, 0) {}
+                : mStorage(ChunkCubicSize, 0) {}
 
         [[nodiscard]] int Get(const int index) const noexcept { return mStorage[index]; }
 
@@ -75,7 +75,7 @@ namespace World::Data {
         BlocksSparse16() = default;
 
         explicit BlocksSparse16(InitializeT) noexcept
-                : mStorage(SIZE, 0) {}
+                : mStorage(ChunkCubicSize, 0) {}
 
         [[nodiscard]] int Get(const int index) const noexcept { return mStorage[index]; }
 
@@ -91,7 +91,7 @@ namespace World::Data {
 
     class BlockPalette4 {
     public:
-        uintptr_t toVal(const int id) const noexcept { return ((id < mSize) ? mT[id] : 0); }
+        [[nodiscard]] uintptr_t toVal(const int id) const noexcept { return ((id < mSize) ? mT[id] : 0); }
 
         [[nodiscard]] int tryFromVal(const uintptr_t val) const noexcept {
             for (int i = 0; i < mSize; ++i) { if (mT[i] == val) return i; }
@@ -115,7 +115,6 @@ namespace World::Data {
 
     class BlockPalette8 {
         static constexpr int LdRev(int size) noexcept { return (size >> 2) * 5; } // NOLINT, 0.8 Load Factor
-        static constexpr uintptr_t EmptyVal = ~uintptr_t(0);
     public:
         explicit BlockPalette8(int bits = 5) noexcept: mSize(0), mCurMax(1u << bits), mCurMask(mCurMax - 1) { // NOLINT
             StgCreate();
@@ -127,14 +126,14 @@ namespace World::Data {
             ReHash();
         }
 
-        uintptr_t toVal(const int id) const noexcept { return ((id < mSize) ? mT[id] : 0); }
+        [[nodiscard]] uintptr_t toVal(const int id) const noexcept { return ((id < mSize) ? mT[id] : 0); }
 
         [[nodiscard]] int tryFromVal(const uintptr_t val) const noexcept {
             for (auto i = Hash(val);; ++i) {
                 const auto m = i & mCurMask; // NOLINT
                 const auto v = rLookUp[m];
                 if (v == val) return rMap[m];
-                if (v == EmptyVal) return -1;
+                if (v == EmptyDataValue) return -1;
             }
         }
 
@@ -144,7 +143,7 @@ namespace World::Data {
                 const auto m = i & mCurMask; // NOLINT
                 const auto v = rLookUp[m];
                 if (v == val) return rMap[m];
-                if (v == EmptyVal) return (rLookUp[m] = val, mT[mSize] = val, rMap[m] = mSize++);
+                if (v == EmptyDataValue) return (rLookUp[m] = val, mT[mSize] = val, rMap[m] = mSize++);
             }
         }
 
@@ -165,7 +164,7 @@ namespace World::Data {
                 for (auto u = Hash(mT[i]);; ++u) {
                     const auto m = u & mCurMask; // NOLINT
                     const auto v = rLookUp[m];
-                    if (v == EmptyVal) {
+                    if (v == EmptyDataValue) {
                         (rLookUp[m] = mT[i], rMap[m] = i);
                         break;
                     }
@@ -189,7 +188,7 @@ namespace World::Data {
     // TODO(Need to be worked on)
     class BlockPalette16 {
     public:
-        uintptr_t toVal(const int id) const noexcept { return id; } // NOLINT
+        [[nodiscard]] uintptr_t toVal(const int id) const noexcept { return id; } // NOLINT
 
         [[nodiscard]] int tryFromVal(const uintptr_t val) const noexcept { return val; } // NOLINT
 
