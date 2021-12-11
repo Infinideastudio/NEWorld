@@ -125,8 +125,6 @@ void loadTextures() {
     }
 
     BlockTextures = Textures::LoadRGBATexture("./Assets/Textures/Blocks/Terrain.bmp", "./Assets/Textures/Blocks/Terrainmask.bmp");
-    BlockTextures3D = Textures::LoadBlock3DTexture("./Assets/Textures/Blocks/Terrain3D.bmp",
-                                                   "./Assets/Textures/Blocks/Terrain3Dmask.bmp");
     loadItemsTextures();
 }
 

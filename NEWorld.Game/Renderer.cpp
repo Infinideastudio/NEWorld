@@ -178,16 +178,14 @@ namespace Renderer {
     void initShaders() {
         ShaderAttribLoc = 1;
         std::set<std::string> defines;
-        defines.insert("MergeFace");
-
         sunlightXrot = 30.0f;
         sunlightYrot = 60.0f;
         shadowdist = std::min(MaxShadowDist, viewdistance);
-        shaders.reserve(4);
-        shaders.push_back(Shader("Shaders/Main.vsh", "Shaders/Main.fsh", true));
-        shaders.push_back(Shader("Shaders/Main.vsh", "Shaders/Main.fsh", true, defines));
-        shaders.push_back(Shader("Shaders/Shadow.vsh", "Shaders/Shadow.fsh", false));
-        shaders.push_back(Shader("Shaders/Depth.vsh", "Shaders/Depth.fsh", false, defines));
+        shaders = {
+                Shader("./Assets/Shaders/Main.vsh", "./Assets/Shaders/Main.fsh", true),
+                Shader("./Assets/Shaders/Shadow.vsh", "./Assets/Shaders/Shadow.fsh", false),
+                Shader("./Assets/Shaders/Depth.vsh", "./Assets/Shaders/Depth.fsh", false, defines)
+        };
 
         glGenTextures(1, &DepthTexture);
         glBindTexture(GL_TEXTURE_2D, DepthTexture);
@@ -211,19 +209,16 @@ namespace Renderer {
         }
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 
-        for (auto i = 0; i < 2; i++) {
-            shaders[i].bind();
-            if (i == 0) shaders[i].setUniform("Tex", 0);
-            else shaders[i].setUniform("Tex3D", 0);
-            shaders[i].setUniform("DepthTex", 1);
-            shaders[i].setUniform("SkyColor", skycolorR, skycolorG, skycolorB, 1.0f);
-        }
+        shaders[MainShader].bind();
+        shaders[MainShader].setUniform("Tex", 0);
+        shaders[MainShader].setUniform("DepthTex", 1);
+        shaders[MainShader].setUniform("SkyColor", skycolorR, skycolorG, skycolorB, 1.0f);
         Shader::unbind();
     }
 
     void destroyShaders() {
-        for (size_t i = 0; i != shaders.size(); i++)
-            shaders[i].release();
+        for (auto & shader : shaders)
+            shader.release();
         shaders.clear();
         glDeleteTextures(1, &DepthTexture);
         glDeleteFramebuffersEXT(1, &ShadowFBO);
@@ -233,8 +228,8 @@ namespace Renderer {
         shadowdist = std::min(MaxShadowDist, viewdistance);
 
         //Enable shader
-        auto& shader = shaders[MergeFace ? MergeFaceShader : MainShader];
-        bindShader(MergeFace ? MergeFaceShader : MainShader);
+        auto& shader = shaders[MainShader];
+        bindShader(MainShader);
 
         //Calc matrix
         const auto scale = 16.0f * sqrt(3.0f);

@@ -8,8 +8,6 @@
 namespace ChunkRenderer {
     void RenderChunk(World::Chunk *c);
 
-    void MergeFaceRender(World::Chunk *c);
-
     void RenderDepthModel(World::Chunk *c);
 }
 
@@ -234,8 +232,7 @@ namespace World {
             loadAnim = cy * 16.0f + 16.0f;
         }
 
-        if (MergeFace) ChunkRenderer::MergeFaceRender(this);
-        else ChunkRenderer::RenderChunk(this);
+        ChunkRenderer::RenderChunk(this);
         if (Renderer::AdvancedRender) ChunkRenderer::RenderDepthModel(this);
 
         updated = false;
