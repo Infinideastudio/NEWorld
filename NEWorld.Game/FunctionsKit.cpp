@@ -7,7 +7,7 @@
 #include <Windows.h>
 #endif
 
-unsigned int g_seed;
+unsigned int g_seed = 0;
 
 std::vector<std::string> split(const std::string &str, const std::string &pattern) {
     std::vector<std::string> ret;

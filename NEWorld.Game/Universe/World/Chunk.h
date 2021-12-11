@@ -6,6 +6,7 @@
 #include "Frustum.h"
 #include <cstring>
 #include <Math/Vector3.h>
+#include "Data/ChunkStorage.h"
 
 class Object;
 
@@ -14,17 +15,9 @@ namespace World {
     extern Brightness BRIGHTNESSMIN;
     extern Brightness skylight;
 
-    constexpr unsigned int ChunkEdgeSizeLog2 = 4;
-    constexpr unsigned int ChunkPlaneSizeLog2 = ChunkEdgeSizeLog2 * 2u;
-    constexpr unsigned int ChunkCubicSizeLog2 = ChunkEdgeSizeLog2 * 3u;
-    constexpr unsigned int ChunkEdgeSize = 1u << ChunkEdgeSizeLog2;
-    constexpr unsigned int ChunkPlaneSize = 1u << ChunkPlaneSizeLog2;
-    constexpr unsigned int ChunkCubicSize = 1u << ChunkCubicSizeLog2;
-
-
     class Chunk {
     private:
-        Block *mBlock;
+        Data::ChunkStorage mBlock{4, Data::Init};
         Brightness *mBrightness;
         std::vector<Object *> objects;
         static double relBaseX, relBaseY, relBaseZ;
@@ -34,6 +27,7 @@ namespace World {
             const auto v = UInt3(vec);
             return (v.X << ChunkPlaneSizeLog2) | (v.Y << ChunkEdgeSizeLog2) | v.Z;
         }
+
     public:
         //竟然一直都没有构造函数/析构函数 还要手动调用Init...我受不了啦(╯‵□′)╯︵┻━┻ --Null
         //2333 --qiaozhanrong
@@ -71,19 +65,6 @@ namespace World {
 
         void build(bool initIfEmpty = true);
 
-        std::string getChunkPath() {
-            //assert(Empty == false);
-            std::stringstream ss;
-            ss << "Worlds/" << worldname << "/chunks/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldChunk";
-            return ss.str();
-        }
-
-        std::string getObjectsPath() {
-            std::stringstream ss;
-            ss << "Worlds/" << worldname << "/objects/chunk_" << cx << "_" << cy << "_" << cz << ".NEWorldObjects";
-            return ss.str();
-        }
-
         bool LoadFromFile(); //返回true代表区块文件打开成功
 
         void SaveToFile();
@@ -92,12 +73,12 @@ namespace World {
 
         void destroyRender();
 
-        Block GetBlock(const Int3 vec) noexcept {return mBlock[GetIndex(vec)];}
+        Block GetBlock(const Int3 vec) noexcept {return mBlock.Get(GetIndex(vec));}
 
         Brightness GetBrightness(const Int3 vec) noexcept {return mBrightness[GetIndex(vec)];}
 
         void SetBlock(const Int3 vec, Block block) noexcept {
-            mBlock[GetIndex(vec)] = block;
+            mBlock.Set(GetIndex(vec), block);
             Modified = true;
         }
 

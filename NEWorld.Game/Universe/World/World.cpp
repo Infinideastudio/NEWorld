@@ -172,7 +172,7 @@ namespace World {
     void updateblock(int x, int y, int z, bool blockchanged, int depth) {
         //Blockupdate
 
-        if (depth > 4096) return;
+        if (depth > 200) return;
         depth++;
 
         auto updated = blockchanged;
@@ -440,6 +440,7 @@ namespace World {
     }
 
     void buildtree(int x, int y, int z) {
+        /*
         //对生成条件进行更严格的检测
         //一：正上方五格必须为空气
         for (auto i = y + 1; i < y + 6; i++) {
@@ -498,7 +499,8 @@ namespace World {
                     }
                 }
             }
-        }
+        }*/
+        // TODO(move this function when terrain carving for terrain generation is possible)
     }
 
     void explode(int x, int y, int z, int r, Chunk *c) {
