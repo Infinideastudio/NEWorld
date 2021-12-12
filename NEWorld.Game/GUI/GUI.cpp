@@ -1,11 +1,7 @@
 #include <deque>
-#include <climits>
 #include "GUI.h"
 #include "TextRenderer.h"
-#include "Frustum.h"
-#include "AudioSystem.h"
 #include <NsRender/GLFactory.h>
-#include <NsApp/ThemeProviders.h>
 #include <NoesisPCH.h>
 #include "Shader.h"
 
@@ -31,15 +27,16 @@ namespace GUI {
     }
 
     void Scene::render() {
+        mFPS.update();
+
+        auto currentTime = timer();
+        auto timeElapsed = currentTime - mLastRenderTimeInSec;
+        mLastRenderTimeInSec = currentTime;
+
         if (mView) {
             // Update view (layout, animations, ...)
-            mView->Update(1 / 30.0f);
+            mView->Update(timeElapsed);
 
-            // Offscreen rendering phase populates textures needed by the on-screen rendering
-            mView->GetRenderer()->UpdateRenderTree();
-            mView->GetRenderer()->RenderOffscreen();
-            // If you are going to render here with your own engine you need to restore the GPU state
-            // because noesis changes it. In this case only framebuffer and viewport need to be restored
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glViewport(0, 0, windowwidth, windowheight);
 
@@ -54,6 +51,9 @@ namespace GUI {
 
         if (mView) {
             glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_DEPTH_BUFFER_BIT);
+            // Offscreen rendering phase populates textures needed by the on-screen rendering
+            mView->GetRenderer()->UpdateRenderTree();
+            mView->GetRenderer()->RenderOffscreen();
             // Rendering is done in the active framebuffer
             mView->GetRenderer()->Render();
             glPopAttrib();

@@ -21,9 +21,15 @@
 #include "NsApp/LocalTextureProvider.h"
 #include "NsApp/LocalFontProvider.h"
 #include "NsApp/LocalXamlProvider.h"
+#include <NsApp/Interaction.h>
 #include "GameView.h"
 #include "GUI/Menus/Menus.h"
 #include "Common/Logger.h"
+#include "NsApp/StyleInteraction.h"
+#include "NsApp/EventTrigger.h"
+#include "NsApp/TriggerCollection.h"
+#include "NsCore/RegisterComponent.inl"
+#include "NsApp/GoToStateAction.h"
 void loadOptions();
 
 void saveOptions();
@@ -66,6 +72,11 @@ void ApplicationBeforeLaunch() {
     NoesisApp::SetThemeProviders(xamlProvider, fontProvider, textureProvider);
 
     Noesis::GUI::LoadApplicationResources("Theme/NEWorld.xaml");
+    Noesis::RegisterComponent<NoesisApp::EventTrigger>();
+    Noesis::RegisterComponent<NoesisApp::TriggerCollection>();
+    Noesis::RegisterComponent<NoesisApp::GoToStateAction>();
+    Noesis::TypeOf<NoesisApp::Interaction>(); // Force the creation of its reflection type
+    Noesis::TypeOf<NoesisApp::StyleInteraction>(); // Force the creation of its reflection type
 }
 
 void ApplicationAfterLaunch() {

@@ -42,6 +42,8 @@ External/Neosis/Src/Packages/App/Theme/Data/Theme/Fonts
 file(GLOB NOESIS_APP_SRCS
 External/Neosis/Src/Packages/App/Theme/Src/*.cpp
 External/Neosis/Src/Packages/App/Providers/Src/*.cpp
+External/Neosis/Src/Packages/App/Interactivity/Src/*.cpp
+External/Neosis/Src/Packages/App/MediaElement/Src/*.cpp
 External/Neosis/Src/Packages/Render/GLRenderDevice/Src/*.cpp
 )
 
@@ -73,7 +75,11 @@ execute_process(COMMAND python bin2h.py
     WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
 
 target_enable_ipo(NEWorld)
-target_compile_definitions(NEWorld PRIVATE NEWORLD_GAME NS_APP_PROVIDERS_API=)
+target_compile_definitions(NEWorld PRIVATE NEWORLD_GAME
+    NS_APP_PROVIDERS_API=
+    NS_APP_INTERACTIVITY_API=
+    NS_APP_MEDIAELEMENT_API=
+)
 target_include_directories(NEWorld PRIVATE NEWorld.Game ${OPENAL_INCLUDE_DIR} External Noesis ${NOESIS_APP_INCLUDE})
 target_link_libraries(NEWorld PRIVATE OpenGL::GL GLEW::GLEW glfw Freetype::Freetype NEWorld.Base Noesis)
 if (APPLE)
