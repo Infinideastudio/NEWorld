@@ -68,7 +68,7 @@ namespace World {
         const auto cid = GetChunkId(vec);  //Chunk ID
         const auto chunkIter = LowerChunkBound(cid);
         if (chunkIter != chunks.end()) {
-            if ((*chunkIter)->id == cid) {
+            if ((*chunkIter)->GetId() == cid) {
                 printf("[Console][Error]");
                 printf("Chunk(%d,%d,%d)has been loaded,when adding Chunk.\n", vec.X, vec.Y, vec.Z);
                 return *chunkIter;
@@ -95,7 +95,7 @@ namespace World {
             const auto iter = LowerChunkBound(cid);
             if (iter != chunks.end()) {
                 const auto chunk = *iter;
-                if (chunk->id == cid) {
+                if (chunk->GetId() == cid) {
                     ret = chunk;
                     cpCacheID = cid;
                     cpCachePtr = ret;
@@ -111,7 +111,7 @@ namespace World {
         const auto id = GetChunkId(vec);  //Chunk ID
         const auto chunkIter = LowerChunkBound(id);
         if (chunkIter != chunks.end()) {
-            if ((*chunkIter)->id == id) {
+            if ((*chunkIter)->GetId() == id) {
                 const auto chunk = *chunkIter;
                 chunks.erase(chunkIter);
                 if (cpCachePtr == chunk) {
@@ -401,21 +401,21 @@ namespace World {
 
     void calcVisible(double xpos, double ypos, double zpos, Frustum &frus) {
         Chunk::setRelativeBase(xpos, ypos, zpos, frus);
-        for (auto ci = 0; ci != chunks.size(); ci++) chunks[ci]->calcVisible();
+        for (auto & chunk : chunks) chunk->calcVisible();
     }
 
     void saveAllChunks() {
 #ifndef NEWORLD_DEBUG_NO_FILEIO
-        for (auto i = 0; i != chunks.size(); i++) {
-            chunks[i]->SaveToFile();
+        for (auto & chunk : chunks) {
+            chunk->SaveToFile();
         }
 #endif
     }
 
     void destroyAllChunks() {
-        for (auto i = 0; i != chunks.size(); i++) {
-            if (!chunks[i]->Empty) {
-                delete chunks[i];
+        for (auto & chunk : chunks) {
+            if (!chunk->Empty) {
+                delete chunk;
             }
         }
         chunks.clear();
@@ -439,8 +439,8 @@ namespace World {
         chunkBuildRenders = 0;
     }
 
-    void buildtree(int x, int y, int z) {
-        /*
+    void buildtree(Int3 pos) {
+        auto [x, y, z] = pos.Data;
         //对生成条件进行更严格的检测
         //一：正上方五格必须为空气
         for (auto i = y + 1; i < y + 6; i++) {
@@ -499,7 +499,7 @@ namespace World {
                     }
                 }
             }
-        }*/
+        }
         // TODO(move this function when terrain carving for terrain generation is possible)
     }
 

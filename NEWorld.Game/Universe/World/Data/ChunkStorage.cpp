@@ -69,7 +69,7 @@ namespace World::Data {
     void ChunkStorage::Scale48() noexcept {
         BlocksSparse8 b8{Init};
         BlockPalette8 p8{mP.p4};
-        for (int i = 0; i<4096; ++i) b8.Set(i, mV.b4.Get(i)); // id is kept
+        for (int i = 0; i<4096; ++i) b8.Set(i, mV.b4.Get(i)); // mId is kept
         // close the 4-bit storage
         mV.b4.~BlocksSparse4();
         mP.p4.~BlockPalette4();
@@ -77,10 +77,8 @@ namespace World::Data {
         mBit = 5;
         mT = 1;
         // enable the 8-bit storage
-        new(&mV.b8) BlocksSparse8();
-        new(&mP.p8) BlockPalette8();
-        mV.b8 = std::move(b8);
-        mP.p8 = std::move(p8);
+        new(&mV.b8) BlocksSparse8(std::move(b8));
+        new(&mP.p8) BlockPalette8(std::move(p8));
     }
 
     void ChunkStorage::Scale8H() noexcept {
@@ -94,10 +92,8 @@ namespace World::Data {
         mBit = 9;
         mT = 2;
         // enable the 16-bit storage
-        new(&mV.b16) BlocksSparse16();
-        new(&mP.p16) BlockPalette16();
-        mV.b16 = std::move(b16);
-        mP.p16 = p16;
+        new(&mV.b16) BlocksSparse16(std::move(b16));
+        new(&mP.p16) BlockPalette16(p16);
     }
 
     void ChunkStorage::UpScale() noexcept {

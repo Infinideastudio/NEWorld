@@ -7,8 +7,7 @@ namespace ChunkRenderer {
 
     void renderblock(int x, int y, int z, World::Chunk *chunkptr) {
         double colors, color1, color2, color3, color4, tcx, tcy, size, EPS = 0.0;
-        auto cx = chunkptr->cx, cy = chunkptr->cy, cz = chunkptr->cz;
-        auto gx = cx * 16 + x, gy = cy * 16 + y, gz = cz * 16 + z;
+        const auto [gx, gy, gz] = (chunkptr->GetPosition() * 16 + Int3(x, y, z)).Data;
         Block blk[7] = {(chunkptr->GetBlock({x, y, z})),
                         z < 15 ? chunkptr->GetBlock({(x), (y), (z + 1)}) : World::GetBlock({(gx), (gy), (gz + 1)}, Blocks::ROCK),
                         z > 0 ? chunkptr->GetBlock({(x), (y), (z - 1)}) : World::GetBlock({(gx), (gy), (gz - 1)}, Blocks::ROCK),
@@ -419,7 +418,7 @@ namespace ChunkRenderer {
     }
 
     void RenderDepthModel(World::Chunk *c) {
-        const auto cx = c->cx, cy = c->cy, cz = c->cz;
+        const auto cp = c->GetPosition();
         auto x = 0, y = 0, z = 0;
         QuadPrimitive_Depth cur;
         Block bl, neighbour;
@@ -440,7 +439,7 @@ namespace ChunkRenderer {
                         bl = c->GetBlock({x, y, z});
                         //Get neighbour ID
                         const auto xx = x + delta[d][0], yy = y + delta[d][1], zz = z + delta[d][2];
-                        const auto gx = cx * 16 + xx, gy = cy * 16 + yy, gz = cz * 16 + zz;
+                        const auto [gx, gy, gz] = (cp * 16 + Int3(xx, yy, zz)).Data;
                         if (xx < 0 || xx >= 16 || yy < 0 || yy >= 16 || zz < 0 || zz >= 16) {
                             neighbour = World::GetBlock({(gx), (gy), (gz)});
                         }

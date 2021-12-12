@@ -79,7 +79,7 @@ public:
             conv(command[2], y);
             int z;
             conv(command[3], z);
-            World::buildtree(x, y, z);
+            World::buildtree({x, y, z});
             return true;
         });
         commands.emplace_back("/explode", [](const std::vector<std::string> &command) {

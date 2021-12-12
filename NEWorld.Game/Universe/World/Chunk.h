@@ -20,6 +20,9 @@ namespace World {
         Data::ChunkStorage mBlock{4, Data::Init};
         Brightness *mBrightness;
         std::vector<Object *> objects;
+        chunkid mId;
+        const Int3 mPos;
+        Hitbox::AABB mBounds;
         static double relBaseX, relBaseY, relBaseZ;
         static Frustum TestFrustum;
 
@@ -31,25 +34,22 @@ namespace World {
     public:
         //竟然一直都没有构造函数/析构函数 还要手动调用Init...我受不了啦(╯‵□′)╯︵┻━┻ --Null
         //2333 --qiaozhanrong
-        Chunk(int cxi, int cyi, int czi, chunkid idi) : cx(cxi), cy(cyi), cz(czi), id(idi),
+        Chunk(int cxi, int cyi, int czi, chunkid idi) : mPos(cxi, cyi, czi), mId(idi),
                                                         Modified(false), Empty(false), updated(false),
                                                         renderBuilt(false), DetailGenerated(false), loadAnim(0.0) {
             memset(vertexes, 0, sizeof(vertexes));
             memset(vbuffer, 0, sizeof(vbuffer));
         }
 
-        [[nodiscard]] Int3 GetPosition() const noexcept { return {cx, cy, cz}; }
+        [[nodiscard]] Int3 GetPosition() const noexcept { return mPos; }
 
-        int cx, cy, cz;
-        Hitbox::AABB aabb;
         bool Empty, updated, renderBuilt, Modified, DetailGenerated;
-        chunkid id;
         vtxCount vertexes[4];
         VBOID vbuffer[4];
         double loadAnim;
         bool visible;
 
-        [[nodiscard]] chunkid GetId() const noexcept { return id; }
+        [[nodiscard]] chunkid GetId() const noexcept { return mId; }
 
         void create();
 

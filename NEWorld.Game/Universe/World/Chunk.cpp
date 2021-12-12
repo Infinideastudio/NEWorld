@@ -50,7 +50,7 @@ namespace World {
     Frustum Chunk::TestFrustum;
 
     void Chunk::create() {
-        aabb = getBaseAABB();
+        mBounds = getBaseAABB();
         mBrightness = new Brightness[4096];
     }
 
@@ -63,6 +63,7 @@ namespace World {
     }
 
     void Chunk::buildTerrain(bool initIfEmpty) {
+        auto [cx, cy, cz] = GetPosition().Data;
         //Fast generate parts
         //Part1 out of the terrain bound
         if (cy > 4) {
@@ -162,17 +163,12 @@ namespace World {
 
     void Chunk::buildDetail() {
         auto index = 0;
-        for (auto x = 0; x < 16; x++) {
-            for (auto y = 0; y < 16; y++) {
-                for (auto z = 0; z < 16; z++) {
-                    //Tree
-                    if (mBlock.Get(index) == Blocks::GRASS && rnd() < 0.005) {
-                        buildtree(cx * 16 + x, cy * 16 + y, cz * 16 + z);
-                    }
-                    index++;
-                }
+        Cursor(Int3{0}, Int3{16}, [this, &index](const auto &v) noexcept {
+            if (mBlock.Get(index) == Blocks::GRASS && rnd() < 0.005) {
+                buildtree(GetPosition() * 16 + v);
             }
-        }
+            index++;
+        });
     }
 
     void Chunk::build(bool initIfEmpty) {
@@ -218,8 +214,8 @@ namespace World {
             for (auto y = -1; y <= 1; y++) {
                 for (auto z = -1; z <= 1; z++) {
                     if (x == 0 && y == 0 && z == 0) continue;
-                    if (ChunkOutOfBound({(cx + x), (cy + y), (cz + z)})) continue;
-                    if (!ChunkLoaded({(cx + x), (cy + y), (cz + z)})) return;
+                    if (ChunkOutOfBound(GetPosition() + Int3{x, y, z})) continue;
+                    if (!ChunkLoaded(GetPosition() + Int3{x, y, z})) return;
                 }
             }
         }
@@ -229,7 +225,7 @@ namespace World {
 
         if (!renderBuilt) {
             renderBuilt = true;
-            loadAnim = cy * 16.0f + 16.0f;
+            loadAnim = static_cast<float>(GetPosition().Y) * 16.0f + 16.0f;
         }
 
         ChunkRenderer::RenderChunk(this);
@@ -250,24 +246,19 @@ namespace World {
     }
 
     Hitbox::AABB Chunk::getBaseAABB() {
-        Hitbox::AABB ret{};
-        ret.xmin = cx * 16 - 0.5;
-        ret.ymin = cy * 16 - 0.5;
-        ret.zmin = cz * 16 - 0.5;
-        ret.xmax = cx * 16 + 16 - 0.5;
-        ret.ymax = cy * 16 + 16 - 0.5;
-        ret.zmax = cz * 16 + 16 - 0.5;
-        return ret;
+        const auto min = Double3(GetPosition() * 16) - Double3(0.5);
+        const auto max = Double3(GetPosition() * 16) + Double3(16.0 - 0.5);
+        return {min.X, min.Y, min.Z, max.X, max.Y, max.Z};
     }
 
     Frustum::ChunkBox Chunk::getRelativeAABB() {
         Frustum::ChunkBox ret{};
-        ret.xmin = static_cast<float>(aabb.xmin - relBaseX);
-        ret.xmax = static_cast<float>(aabb.xmax - relBaseX);
-        ret.ymin = static_cast<float>(aabb.ymin - loadAnim - relBaseY);
-        ret.ymax = static_cast<float>(aabb.ymax - loadAnim - relBaseY);
-        ret.zmin = static_cast<float>(aabb.zmin - relBaseZ);
-        ret.zmax = static_cast<float>(aabb.zmax - relBaseZ);
+        ret.xmin = static_cast<float>(mBounds.xmin - relBaseX);
+        ret.xmax = static_cast<float>(mBounds.xmax - relBaseX);
+        ret.ymin = static_cast<float>(mBounds.ymin - loadAnim - relBaseY);
+        ret.ymax = static_cast<float>(mBounds.ymax - loadAnim - relBaseY);
+        ret.zmin = static_cast<float>(mBounds.zmin - relBaseZ);
+        ret.zmax = static_cast<float>(mBounds.zmax - relBaseZ);
         return ret;
     }
 
