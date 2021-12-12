@@ -238,11 +238,7 @@ public:
 
         MutexUnlock(Mutex);
 
-        if (MergeFace) {
-            glDisable(GL_TEXTURE_2D);
-            glEnable(GL_TEXTURE_3D);
-            glBindTexture(GL_TEXTURE_3D, BlockTextures3D);
-        } else glBindTexture(GL_TEXTURE_2D, BlockTextures);
+        glBindTexture(GL_TEXTURE_2D, BlockTextures);
 
         if (DebugMergeFace) {
             glDisable(GL_LINE_SMOOTH);
@@ -263,10 +259,6 @@ public:
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
 
-        if (MergeFace) {
-            glDisable(GL_TEXTURE_3D);
-            glEnable(GL_TEXTURE_2D);
-        }
         glEnable(GL_BLEND);
 
         if (DebugMergeFace) {
@@ -305,11 +297,7 @@ public:
 
         if (Renderer::AdvancedRender) Renderer::EnableShaders();
 
-        if (MergeFace) {
-            glDisable(GL_TEXTURE_2D);
-            glEnable(GL_TEXTURE_3D);
-            glBindTexture(GL_TEXTURE_3D, BlockTextures3D);
-        } else glBindTexture(GL_TEXTURE_2D, BlockTextures);
+        glBindTexture(GL_TEXTURE_2D, BlockTextures);
 
         if (DebugMergeFace) {
             glDisable(GL_LINE_SMOOTH);
@@ -325,11 +313,6 @@ public:
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
-
-        if (MergeFace) {
-            glDisable(GL_TEXTURE_3D);
-            glEnable(GL_TEXTURE_2D);
-        }
 
         if (DebugMergeFace) {
             glEnable(GL_LINE_SMOOTH);

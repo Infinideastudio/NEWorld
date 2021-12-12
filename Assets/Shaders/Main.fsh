@@ -1,6 +1,4 @@
 #version 110
-
-##NEWORLD_SHADER_DEFINES MergeFace MERGE_FACE
 #define SMOOTH_SHADOW
 
 const mat4 normalize = mat4(
@@ -12,7 +10,6 @@ const float delta = 0.05;
 
 uniform sampler2D Tex;
 uniform sampler2D DepthTex;
-uniform sampler3D Tex3D;
 uniform mat4 Depth_proj;
 uniform mat4 Depth_modl;
 uniform mat4 TransMat;
@@ -79,11 +76,7 @@ void main() {
 	else shadow = 1.2;
 	
 	//Texture color
-#ifdef MERGE_FACE
-	vec4 texel = texture3D(Tex3D, gl_TexCoord[0].stp);
-#else
 	vec4 texel = texture2D(Tex, gl_TexCoord[0].st);
-#endif
 
 	vec4 color = vec4(texel.rgb * shadow, texel.a) * gl_Color;
 	

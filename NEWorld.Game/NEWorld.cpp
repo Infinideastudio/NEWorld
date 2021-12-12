@@ -153,7 +153,6 @@ void loadOptions() {
     loadoption(options, "CloudWidth", cloudwidth);
     loadoption(options, "SmoothLighting", SmoothLighting);
     loadoption(options, "FancyGrass", NiceGrass);
-    loadoption(options, "MergeFaceRendering", MergeFace);
     loadoption(options, "MultiSample", Multisample);
     loadoption(options, "AdvancedRender", Renderer::AdvancedRender);
     loadoption(options, "ShadowMapRes", Renderer::ShadowRes);
@@ -182,7 +181,6 @@ void saveOptions() {
     saveoption(fileout, "CloudWidth", cloudwidth);
     saveoption(fileout, "SmoothLighting", SmoothLighting);
     saveoption(fileout, "FancyGrass", NiceGrass);
-    saveoption(fileout, "MergeFaceRendering", MergeFace);
     saveoption(fileout, "MultiSample", Multisample);
     saveoption(fileout, "AdvancedRender", Renderer::AdvancedRender);
     saveoption(fileout, "ShadowMapRes", Renderer::ShadowRes);

@@ -28,7 +28,6 @@ extern float runspeed;
 extern int MaxAirJumps;
 extern bool SmoothLighting;
 extern bool NiceGrass;
-extern bool MergeFace;
 extern bool GUIScreenBlur;
 extern bool ppistretch;
 extern int linelength;
@@ -49,7 +48,7 @@ extern int windowwidth;
 extern int windowheight;
 extern bool gamebegin, gameexit, bagOpened;
 
-extern TextureID BlockTextures, BlockTextures3D;
+extern TextureID BlockTextures;
 extern TextureID tex_select, tex_unselect, tex_title, tex_mainmenu[6];
 extern TextureID DestroyImage[11];
 extern TextureID DefaultSkin;

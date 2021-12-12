@@ -20,7 +20,7 @@ namespace WorldRenderer {
     }
 
     void RenderChunks(double x, double y, double z, int buffer) {
-        auto TexcoordCount = MergeFace ? 3 : 2, ColorCount = 3;
+        auto TexcoordCount = 2, ColorCount = 3;
         float m[16];
         if (buffer != 3) {
             memset(m, 0, sizeof(m));

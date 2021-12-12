@@ -9,7 +9,7 @@ namespace Renderer {
     //猜对了  --Null
 
     enum {
-        MainShader, MergeFaceShader, ShadowShader, DepthShader
+        MainShader, ShadowShader, DepthShader
     };
 
     const int ArraySize = 2621440;

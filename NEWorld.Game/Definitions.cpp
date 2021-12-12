@@ -37,7 +37,7 @@ bool multiplayer = false;
 std::string serverip;
 unsigned short port = 30001;
 
-TextureID BlockTextures, BlockTextures3D;
+TextureID BlockTextures;
 TextureID tex_select, tex_unselect, tex_mainmenu[6];
 TextureID DestroyImage[11];
 TextureID DefaultSkin;

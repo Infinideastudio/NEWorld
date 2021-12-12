@@ -543,7 +543,7 @@ public:
     void RandomTick() const {
         for (auto &chunk : World::chunks) {
             const auto cPos = chunk->GetPosition();
-            const auto bPos = Int3{int(rnd() * 16), int(rnd() * 16), int(rnd() * 16)};
+            const auto bPos = Int3{std::min(15, int(rnd() * 16)), std::min(15, int(rnd() * 16)), std::min(15, int(rnd() * 16))};
             const auto gPos = (cPos << World::ChunkEdgeSizeLog2) + bPos;
             const auto block = chunk->GetBlock(bPos);
             if (block != Blocks::ENV) {
