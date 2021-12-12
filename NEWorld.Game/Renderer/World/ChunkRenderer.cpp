@@ -5,24 +5,40 @@
 namespace ChunkRenderer {
     using World::getbrightness;
 
+    enum Face {
+        Front, Back, Right, Left, Top, Bottom
+    };
+
     void renderblock(int x, int y, int z, World::Chunk *chunkptr) {
         double colors, color1, color2, color3, color4, tcx, tcy, size, EPS = 0.0;
-        const auto [gx, gy, gz] = (chunkptr->GetPosition() * 16 + Int3(x, y, z)).Data;
+        const auto[gx, gy, gz] = (chunkptr->GetPosition() * 16 + Int3(x, y, z)).Data;
         Block blk[7] = {(chunkptr->GetBlock({x, y, z})),
-                        z < 15 ? chunkptr->GetBlock({(x), (y), (z + 1)}) : World::GetBlock({(gx), (gy), (gz + 1)}, Blocks::ROCK),
-                        z > 0 ? chunkptr->GetBlock({(x), (y), (z - 1)}) : World::GetBlock({(gx), (gy), (gz - 1)}, Blocks::ROCK),
-                        x < 15 ? chunkptr->GetBlock({(x + 1), (y), (z)}) : World::GetBlock({(gx + 1), (gy), (gz)}, Blocks::ROCK),
-                        x > 0 ? chunkptr->GetBlock({(x - 1), (y), (z)}) : World::GetBlock({(gx - 1), (gy), (gz)}, Blocks::ROCK),
-                        y < 15 ? chunkptr->GetBlock({(x), (y + 1), (z)}) : World::GetBlock({(gx), (gy + 1), (gz)}, Blocks::ROCK),
-                        y > 0 ? chunkptr->GetBlock({(x), (y - 1), (z)}) : World::GetBlock({(gx), (gy - 1), (gz)}, Blocks::ROCK)};
+                        z < 15 ? chunkptr->GetBlock({(x), (y), (z + 1)}) : World::GetBlock({(gx), (gy), (gz + 1)},
+                                                                                           Blocks::ROCK),
+                        z > 0 ? chunkptr->GetBlock({(x), (y), (z - 1)}) : World::GetBlock({(gx), (gy), (gz - 1)},
+                                                                                          Blocks::ROCK),
+                        x < 15 ? chunkptr->GetBlock({(x + 1), (y), (z)}) : World::GetBlock({(gx + 1), (gy), (gz)},
+                                                                                           Blocks::ROCK),
+                        x > 0 ? chunkptr->GetBlock({(x - 1), (y), (z)}) : World::GetBlock({(gx - 1), (gy), (gz)},
+                                                                                          Blocks::ROCK),
+                        y < 15 ? chunkptr->GetBlock({(x), (y + 1), (z)}) : World::GetBlock({(gx), (gy + 1), (gz)},
+                                                                                           Blocks::ROCK),
+                        y > 0 ? chunkptr->GetBlock({(x), (y - 1), (z)}) : World::GetBlock({(gx), (gy - 1), (gz)},
+                                                                                          Blocks::ROCK)};
 
         Brightness brt[7] = {(chunkptr->GetBrightness({(x), (y), (z)})),
-                             z < 15 ? chunkptr->GetBrightness({(x), (y), (z + 1)}) : World::getbrightness(gx, gy, gz + 1),
-                             z > 0 ? chunkptr->GetBrightness({(x), (y), (z - 1)}) : World::getbrightness(gx, gy, gz - 1),
-                             x < 15 ? chunkptr->GetBrightness({(x + 1), (y), (z)}) : World::getbrightness(gx + 1, gy, gz),
-                             x > 0 ? chunkptr->GetBrightness({(x - 1), (y), (z)}) : World::getbrightness(gx - 1, gy, gz),
-                             y < 15 ? chunkptr->GetBrightness({(x), (y + 1), (z)}) : World::getbrightness(gx, gy + 1, gz),
-                             y > 0 ? chunkptr->GetBrightness({(x), (y - 1), (z)}) : World::getbrightness(gx, gy - 1, gz)};
+                             z < 15 ? chunkptr->GetBrightness({(x), (y), (z + 1)}) : World::getbrightness(gx, gy,
+                                                                                                          gz + 1),
+                             z > 0 ? chunkptr->GetBrightness({(x), (y), (z - 1)}) : World::getbrightness(gx, gy,
+                                                                                                         gz - 1),
+                             x < 15 ? chunkptr->GetBrightness({(x + 1), (y), (z)}) : World::getbrightness(gx + 1, gy,
+                                                                                                          gz),
+                             x > 0 ? chunkptr->GetBrightness({(x - 1), (y), (z)}) : World::getbrightness(gx - 1, gy,
+                                                                                                         gz),
+                             y < 15 ? chunkptr->GetBrightness({(x), (y + 1), (z)}) : World::getbrightness(gx, gy + 1,
+                                                                                                          gz),
+                             y > 0 ? chunkptr->GetBrightness({(x), (y - 1), (z)}) : World::getbrightness(gx, gy - 1,
+                                                                                                         gz)};
 
         size = 1 / 8.0f - EPS;
 
@@ -66,21 +82,13 @@ namespace ChunkRenderer {
                 color3 *= 0.5;
                 color4 *= 0.5;
             }
-
-            if (Renderer::AdvancedRender) Renderer::Attrib1f(0.0f);
-            Renderer::Color3d(color1, color1, color1);
-            Renderer::TexCoord2d(tcx, tcy);
-            Renderer::Vertex3d(-0.5 + x, -0.5 + y, 0.5 + z);
-            Renderer::Color3d(color2, color2, color2);
-            Renderer::TexCoord2d(tcx + size, tcy);
-            Renderer::Vertex3d(0.5 + x, -0.5 + y, 0.5 + z);
-            Renderer::Color3d(color3, color3, color3);
-            Renderer::TexCoord2d(tcx + size, tcy + size);
-            Renderer::Vertex3d(0.5 + x, 0.5 + y, 0.5 + z);
-            Renderer::Color3d(color4, color4, color4);
-            Renderer::TexCoord2d(tcx, tcy + size);
-            Renderer::Vertex3d(-0.5 + x, 0.5 + y, 0.5 + z);
-
+            // att, tex, col vert
+            Renderer::Batch<4>(
+                    0.0f, tcx, tcy, color1, color1, color1, -0.5 + x, -0.5 + y, 0.5 + z,
+                    0.0f, tcx + size, tcy, color2, color2, color2, 0.5 + x, -0.5 + y, 0.5 + z,
+                    0.0f, tcx + size, tcy + size, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
+                    0.0f, tcx, tcy + size, color4, color4, color4, -0.5 + x, 0.5 + y, 0.5 + z
+            );
         }
 
         if (NiceGrass && blk[0] == Blocks::GRASS &&
@@ -123,21 +131,13 @@ namespace ChunkRenderer {
                 color3 *= 0.5;
                 color4 *= 0.5;
             }
-
-            if (Renderer::AdvancedRender) Renderer::Attrib1f(1.0f);
-            Renderer::Color3d(color1, color1, color1);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 0.0);
-            Renderer::Vertex3d(-0.5 + x, -0.5 + y, -0.5 + z);
-            Renderer::Color3d(color2, color2, color2);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 1.0);
-            Renderer::Vertex3d(-0.5 + x, 0.5 + y, -0.5 + z);
-            Renderer::Color3d(color3, color3, color3);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 1.0);
-            Renderer::Vertex3d(0.5 + x, 0.5 + y, -0.5 + z);
-            Renderer::Color3d(color4, color4, color4);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 0.0);
-            Renderer::Vertex3d(0.5 + x, -0.5 + y, -0.5 + z);
-
+            // att, tex, col vert
+            Renderer::Batch<4>(
+                    1.0f, tcx + size * 1.0, tcy + size * 0.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
+                    1.0f, tcx + size * 1.0, tcy + size * 1.0, color2, color2, color2, -0.5 + x, 0.5 + y, -0.5 + z,
+                    1.0f, tcx + size * 0.0, tcy + size * 1.0, color3, color3, color3, 0.5 + x, 0.5 + y, -0.5 + z,
+                    1.0f, tcx + size * 0.0, tcy + size * 0.0, color4, color4, color4, 0.5 + x, -0.5 + y, -0.5 + z
+            );
         }
 
         if (NiceGrass && blk[0] == Blocks::GRASS &&
@@ -181,20 +181,13 @@ namespace ChunkRenderer {
                 color4 *= 0.7;
             }
 
-            if (Renderer::AdvancedRender) Renderer::Attrib1f(2.0f);
-            Renderer::Color3d(color1, color1, color1);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 0.0);
-            Renderer::Vertex3d(0.5 + x, -0.5 + y, -0.5 + z);
-            Renderer::Color3d(color2, color2, color2);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 1.0);
-            Renderer::Vertex3d(0.5 + x, 0.5 + y, -0.5 + z);
-            Renderer::Color3d(color3, color3, color3);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 1.0);
-            Renderer::Vertex3d(0.5 + x, 0.5 + y, 0.5 + z);
-            Renderer::Color3d(color4, color4, color4);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 0.0);
-            Renderer::Vertex3d(0.5 + x, -0.5 + y, 0.5 + z);
-
+            // att, tex, col vert
+            Renderer::Batch<4>(
+                    2.0f, tcx + size * 1.0, tcy + size * 0.0, color1, color1, color1, 0.5 + x, -0.5 + y, -0.5 + z,
+                    2.0f, tcx + size * 1.0, tcy + size * 1.0, color2, color2, color2, 0.5 + x, 0.5 + y, -0.5 + z,
+                    2.0f, tcx + size * 0.0, tcy + size * 1.0, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
+                    2.0f, tcx + size * 0.0, tcy + size * 0.0, color4, color4, color4, 0.5 + x, -0.5 + y, 0.5 + z
+            );
         }
 
         if (NiceGrass && blk[0] == Blocks::GRASS &&
@@ -238,20 +231,13 @@ namespace ChunkRenderer {
                 color4 *= 0.7;
             }
 
-            if (Renderer::AdvancedRender) Renderer::Attrib1f(3.0f);
-            Renderer::Color3d(color1, color1, color1);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 0.0);
-            Renderer::Vertex3d(-0.5 + x, -0.5 + y, -0.5 + z);
-            Renderer::Color3d(color2, color2, color2);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 0.0);
-            Renderer::Vertex3d(-0.5 + x, -0.5 + y, 0.5 + z);
-            Renderer::Color3d(color3, color3, color3);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 1.0);
-            Renderer::Vertex3d(-0.5 + x, 0.5 + y, 0.5 + z);
-            Renderer::Color3d(color4, color4, color4);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 1.0);
-            Renderer::Vertex3d(-0.5 + x, 0.5 + y, -0.5 + z);
-
+            // att, tex, col vert
+            Renderer::Batch<4>(
+                    3.0f, tcx + size * 0.0, tcy + size * 0.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
+                    3.0f, tcx + size * 1.0, tcy + size * 0.0, color2, color2, color2, -0.5 + x, -0.5 + y, 0.5 + z,
+                    3.0f, tcx + size * 1.0, tcy + size * 1.0, color3, color3, color3, -0.5 + x, 0.5 + y, 0.5 + z,
+                    3.0f, tcx + size * 0.0, tcy + size * 1.0, color4, color4, color4, -0.5 + x, 0.5 + y, -0.5 + z
+            );
         }
 
         tcx = Textures::getTexcoordX(blk[0], 1);
@@ -283,20 +269,13 @@ namespace ChunkRenderer {
             color3 /= World::BRIGHTNESSMAX;
             color4 /= World::BRIGHTNESSMAX;
 
-            if (Renderer::AdvancedRender) Renderer::Attrib1f(4.0f);
-            Renderer::Color3d(color1, color1, color1);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 1.0);
-            Renderer::Vertex3d(-0.5 + x, 0.5 + y, -0.5 + z);
-            Renderer::Color3d(color2, color2, color2);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 0.0);
-            Renderer::Vertex3d(-0.5 + x, 0.5 + y, 0.5 + z);
-            Renderer::Color3d(color3, color3, color3);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 0.0);
-            Renderer::Vertex3d(0.5 + x, 0.5 + y, 0.5 + z);
-            Renderer::Color3d(color4, color4, color4);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 1.0);
-            Renderer::Vertex3d(0.5 + x, 0.5 + y, -0.5 + z);
-
+            // att, tex, col vert
+            Renderer::Batch<4>(
+                    4.0f, tcx + size * 0.0, tcy + size * 1.0, color1, color1, color1, -0.5 + x, 0.5 + y, -0.5 + z,
+                    4.0f, tcx + size * 0.0, tcy + size * 0.0, color2, color2, color2, -0.5 + x, 0.5 + y, 0.5 + z,
+                    4.0f, tcx + size * 1.0, tcy + size * 0.0, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
+                    4.0f, tcx + size * 1.0, tcy + size * 1.0, color4, color4, color4, 0.5 + x, 0.5 + y, -0.5 + z
+            );
         }
 
         tcx = Textures::getTexcoordX(blk[0], 3);
@@ -328,61 +307,43 @@ namespace ChunkRenderer {
             color3 /= World::BRIGHTNESSMAX;
             color4 /= World::BRIGHTNESSMAX;
 
-            if (Renderer::AdvancedRender) Renderer::Attrib1f(5.0f);
-            Renderer::Color3d(color1, color1, color1);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 1.0);
-            Renderer::Vertex3d(-0.5 + x, -0.5 + y, -0.5 + z);
-            Renderer::Color3d(color2, color2, color2);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 1.0);
-            Renderer::Vertex3d(0.5 + x, -0.5 + y, -0.5 + z);
-            Renderer::Color3d(color3, color3, color3);
-            Renderer::TexCoord2d(tcx + size * 0.0, tcy + size * 0.0);
-            Renderer::Vertex3d(0.5 + x, -0.5 + y, 0.5 + z);
-            Renderer::Color3d(color4, color4, color4);
-            Renderer::TexCoord2d(tcx + size * 1.0, tcy + size * 0.0);
-            Renderer::Vertex3d(-0.5 + x, -0.5 + y, 0.5 + z);
-
+            // att, tex, col vert
+            Renderer::Batch<4>(
+                    5.0f, tcx + size * 1.0, tcy + size * 1.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
+                    5.0f, tcx + size * 0.0, tcy + size * 1.0, color2, color2, color2, 0.5 + x, -0.5 + y, -0.5 + z,
+                    5.0f, tcx + size * 0.0, tcy + size * 0.0, color3, color3, color3, 0.5 + x, -0.5 + y, 0.5 + z,
+                    5.0f, tcx + size * 1.0, tcy + size * 0.0, color4, color4, color4, -0.5 + x, -0.5 + y, 0.5 + z
+            );
         }
     }
 
     void RenderPrimitive_Depth(QuadPrimitive_Depth &p) {
         const auto x = p.x, y = p.y, z = p.z, length = p.length;
-        if (p.direction == 0) {
-            Renderer::Vertex3d(x + 0.5, y - 0.5, z - 0.5);
-            Renderer::Vertex3d(x + 0.5, y + 0.5, z - 0.5);
-            Renderer::Vertex3d(x + 0.5, y + 0.5, z + length + 0.5);
-            Renderer::Vertex3d(x + 0.5, y - 0.5, z + length + 0.5);
-        } else if (p.direction == 1) {
-            Renderer::Vertex3d(x - 0.5, y + 0.5, z - 0.5);
-            Renderer::Vertex3d(x - 0.5, y - 0.5, z - 0.5);
-            Renderer::Vertex3d(x - 0.5, y - 0.5, z + length + 0.5);
-            Renderer::Vertex3d(x - 0.5, y + 0.5, z + length + 0.5);
-        } else if (p.direction == 2) {
-            Renderer::Vertex3d(x + 0.5, y + 0.5, z - 0.5);
-            Renderer::Vertex3d(x - 0.5, y + 0.5, z - 0.5);
-            Renderer::Vertex3d(x - 0.5, y + 0.5, z + length + 0.5);
-            Renderer::Vertex3d(x + 0.5, y + 0.5, z + length + 0.5);
-        } else if (p.direction == 3) {
-            Renderer::Vertex3d(x - 0.5, y - 0.5, z - 0.5);
-            Renderer::Vertex3d(x + 0.5, y - 0.5, z - 0.5);
-            Renderer::Vertex3d(x + 0.5, y - 0.5, z + length + 0.5);
-            Renderer::Vertex3d(x - 0.5, y - 0.5, z + length + 0.5);
-        } else if (p.direction == 4) {
-            Renderer::Vertex3d(x - 0.5, y + 0.5, z + 0.5);
-            Renderer::Vertex3d(x - 0.5, y - 0.5, z + 0.5);
-            Renderer::Vertex3d(x + length + 0.5, y - 0.5, z + 0.5);
-            Renderer::Vertex3d(x + length + 0.5, y + 0.5, z + 0.5);
-        } else if (p.direction == 5) {
-            Renderer::Vertex3d(x - 0.5, y - 0.5, z - 0.5);
-            Renderer::Vertex3d(x - 0.5, y + 0.5, z - 0.5);
-            Renderer::Vertex3d(x + length + 0.5, y + 0.5, z - 0.5);
-            Renderer::Vertex3d(x + length + 0.5, y - 0.5, z - 0.5);
+        switch (p.direction) {
+            case 0:
+                return Renderer::Batch<4>(x + 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z - 0.5,
+                                          x + 0.5, y + 0.5, z + length + 0.5, x + 0.5, y - 0.5, z + length + 0.5);
+            case 1:
+                return Renderer::Batch<4>(x - 0.5, y + 0.5, z - 0.5, x - 0.5, y - 0.5, z - 0.5,
+                                          x - 0.5, y - 0.5, z + length + 0.5, x - 0.5, y + 0.5, z + length + 0.5);
+            case 2:
+                return Renderer::Batch<4>(x + 0.5, y + 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
+                                          x - 0.5, y + 0.5, z + length + 0.5, x + 0.5, y + 0.5, z + length + 0.5);
+            case 3:
+                return Renderer::Batch<4>(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y - 0.5, z - 0.5,
+                                          x + 0.5, y - 0.5, z + length + 0.5, x - 0.5, y - 0.5, z + length + 0.5);
+            case 4:
+                return Renderer::Batch<4>(x - 0.5, y + 0.5, z + 0.5, x - 0.5, y - 0.5, z + 0.5,
+                                          x + length + 0.5, y - 0.5, z + 0.5, x + length + 0.5, y + 0.5, z + 0.5);
+            case 5:
+                return Renderer::Batch<4>(x - 0.5, y - 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
+                                          x + length + 0.5, y + 0.5, z - 0.5, x + length + 0.5, y - 0.5, z - 0.5);
         }
     }
 
     void RenderChunk(World::Chunk *c) {
         int x, y, z;
-        if (Renderer::AdvancedRender) Renderer::Init(2, 3, 1); else Renderer::Init(2, 3);
+        Renderer::Init(2, 3, 1);
         for (x = 0; x < 16; x++) {
             for (y = 0; y < 16; y++) {
                 for (z = 0; z < 16; z++) {
@@ -393,7 +354,7 @@ namespace ChunkRenderer {
             }
         }
         Renderer::Flush(c->vbuffer[0], c->vertexes[0]);
-        if (Renderer::AdvancedRender) Renderer::Init(2, 3, 1); else Renderer::Init(2, 3);
+        Renderer::Init(2, 3, 1);
         for (x = 0; x < 16; x++) {
             for (y = 0; y < 16; y++) {
                 for (z = 0; z < 16; z++) {
@@ -404,7 +365,7 @@ namespace ChunkRenderer {
             }
         }
         Renderer::Flush(c->vbuffer[1], c->vertexes[1]);
-        if (Renderer::AdvancedRender) Renderer::Init(2, 3, 1); else Renderer::Init(2, 3);
+        Renderer::Init(2, 3, 1);
         for (x = 0; x < 16; x++) {
             for (y = 0; y < 16; y++) {
                 for (z = 0; z < 16; z++) {
@@ -439,11 +400,10 @@ namespace ChunkRenderer {
                         bl = c->GetBlock({x, y, z});
                         //Get neighbour ID
                         const auto xx = x + delta[d][0], yy = y + delta[d][1], zz = z + delta[d][2];
-                        const auto [gx, gy, gz] = (cp * 16 + Int3(xx, yy, zz)).Data;
+                        const auto[gx, gy, gz] = (cp * 16 + Int3(xx, yy, zz)).Data;
                         if (xx < 0 || xx >= 16 || yy < 0 || yy >= 16 || zz < 0 || zz >= 16) {
                             neighbour = World::GetBlock({(gx), (gy), (gz)});
-                        }
-                        else {
+                        } else {
                             neighbour = c->GetBlock({(xx), (yy), (zz)});
                         }
                         //Render

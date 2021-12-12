@@ -32,11 +32,13 @@ namespace WorldRenderer {
             const auto offset = Double3(cr.position) * 16.0 - Double3(x, cr.loadAnim + y, z);
             glPushMatrix();
             glTranslated(offset.X, offset.Y, offset.Z);
-            if (Renderer::AdvancedRender && buffer != 3) {
-                m[12] = static_cast<float>(offset.X);
-                m[13] = static_cast<float>(offset.Y);
-                m[14] = static_cast<float>(offset.Z);
-                Renderer::shaders[Renderer::ActiveShader].setUniform("TransMat", m);
+            if (buffer != 3) {
+                if (Renderer::AdvancedRender) {
+                    m[12] = static_cast<float>(offset.X);
+                    m[13] = static_cast<float>(offset.Y);
+                    m[14] = static_cast<float>(offset.Z);
+                    Renderer::shaders[Renderer::ActiveShader].setUniform("TransMat", m);
+                }
                 Renderer::RenderBufferDirect(cr.vbuffers[buffer], cr.vertexes[buffer], TexcoordCount, ColorCount, 1);
             } else Renderer::RenderBufferDirect(cr.vbuffers[buffer], cr.vertexes[buffer], TexcoordCount, ColorCount);
             glPopMatrix();

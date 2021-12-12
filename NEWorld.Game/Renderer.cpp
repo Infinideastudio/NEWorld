@@ -65,7 +65,7 @@ namespace Renderer {
         index = 0;
         VA = VertexArray;
         Vertexes = 0;
-        size = (tc + cc + +ac + 3) * 4;
+        size = (tc + cc + ac + 3);
     }
 
     void Vertex3f(float x, float y, float z) {
@@ -86,26 +86,11 @@ namespace Renderer {
         TexCoords[1] = y;
     }
 
-    void TexCoord3f(float x, float y, float z) {
-        TexCoords[0] = x;
-        TexCoords[1] = y;
-        TexCoords[2] = z;
-    }
-
     void Color3f(float r, float g, float b) {
         Colors[0] = r;
         Colors[1] = g;
         Colors[2] = b;
     }
-
-    void Color4f(float r, float g, float b, float a) {
-        Colors[0] = r;
-        Colors[1] = g;
-        Colors[2] = b;
-        Colors[3] = a;
-    }
-
-    void Attrib1f(float a) { Attribs = a; }
 
     void Flush(VBOID &buffer, vtxCount &vtxs) {
 
@@ -117,49 +102,38 @@ namespace Renderer {
             if (buffer == 0) glGenBuffers(1, &buffer);
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
             glBufferData(GL_ARRAY_BUFFER,
-                            Vertexes * ((Texcoordc + Colorc + Attribc + 3) * sizeof(float)),
-                            VertexArray, GL_STATIC_DRAW);
+                         Vertexes * (size * sizeof(float)),
+                         VertexArray, GL_STATIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
     }
 
     void BatchStart(int tc, int cc, int ac) noexcept {
-        auto cnt = tc + cc + 3;
+        auto cnt = tc + cc + ac + 3;
         if (!AdvancedRender || ac == 0) {
             if (tc != 0) {
                 if (cc != 0) {
-                    glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), static_cast<float *>(0));
-                    glColorPointer(cc, GL_FLOAT, cnt * sizeof(float), (float *) (tc * sizeof(float)));
-                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((tc + cc) * sizeof(float)));
+                    glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
+                    glColorPointer(cc, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc) * sizeof(float)));
+                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc + cc) * sizeof(float)));
                 } else {
-                    glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), static_cast<float *>(0));
-                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) (tc * sizeof(float)));
+                    glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
+                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc) * sizeof(float)));
                 }
             } else {
                 if (cc != 0) {
-                    glColorPointer(cc, GL_FLOAT, cnt * sizeof(float), static_cast<float *>(0));
-                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) (cc * sizeof(float)));
-                } else glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), static_cast<float *>(0));
+                    glColorPointer(cc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
+                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + cc) * sizeof(float)));
+                } else glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
             }
         } else {
-            cnt += ac;
-            glVertexAttribPointer(ShaderAttribLoc, ac, GL_FLOAT, GL_FALSE, cnt * sizeof(float), static_cast<float *>(0));
+           // cnt += ac;
+            glVertexAttribPointer(ShaderAttribLoc, ac, GL_FLOAT, GL_FALSE, cnt * sizeof(float),
+                                  static_cast<float *>(0));
             glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
             glColorPointer(cc, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc) * sizeof(float)));
             glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc + cc) * sizeof(float)));
         }
-    }
-
-    void RenderBuffer(VBOID buffer, vtxCount vtxs) {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        //这个框是不是很装逼2333 --qiaozhanrong
-        //====================================================================================================//
-        /**/                                                                                                /**/
-        /**/                                                                                                /**/
-        /**/                                glDrawArrays(GL_QUADS, 0, vtxs);                                /**/
-        /**/                                                                                                /**/
-        /**/                                                                                                /**/
-        //====================================================================================================//
     }
 
     void RenderBufferDirect(VBOID buffer, vtxCount vtxs, int tc, int cc, int ac) {
@@ -217,7 +191,7 @@ namespace Renderer {
     }
 
     void destroyShaders() {
-        for (auto & shader : shaders)
+        for (auto &shader: shaders)
             shader.release();
         shaders.clear();
         glDeleteTextures(1, &DepthTexture);
@@ -228,7 +202,7 @@ namespace Renderer {
         shadowdist = std::min(MaxShadowDist, viewdistance);
 
         //Enable shader
-        auto& shader = shaders[MainShader];
+        auto &shader = shaders[MainShader];
         bindShader(MainShader);
 
         //Calc matrix
