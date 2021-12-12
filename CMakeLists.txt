@@ -44,6 +44,7 @@ External/Neosis/Src/Packages/App/Theme/Src/*.cpp
 External/Neosis/Src/Packages/App/Providers/Src/*.cpp
 External/Neosis/Src/Packages/App/Interactivity/Src/*.cpp
 External/Neosis/Src/Packages/App/MediaElement/Src/*.cpp
+External/Neosis/Src/Packages/App/ApplicationLauncher/Src/NotifyPropertyChangedBase.cpp
 External/Neosis/Src/Packages/Render/GLRenderDevice/Src/*.cpp
 )
 
@@ -79,6 +80,7 @@ target_compile_definitions(NEWorld PRIVATE NEWORLD_GAME
     NS_APP_PROVIDERS_API=
     NS_APP_INTERACTIVITY_API=
     NS_APP_MEDIAELEMENT_API=
+    NS_APP_APPLICATIONLAUNCHER_API=
 )
 target_include_directories(NEWorld PRIVATE NEWorld.Game ${OPENAL_INCLUDE_DIR} External Noesis ${NOESIS_APP_INCLUDE})
 target_link_libraries(NEWorld PRIVATE OpenGL::GL GLEW::GLEW glfw Freetype::Freetype NEWorld.Base Noesis)

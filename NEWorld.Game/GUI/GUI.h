@@ -46,6 +46,8 @@ namespace GUI {
         Noesis::Ptr<Noesis::Grid> mRoot;
         Noesis::Ptr<Noesis::IView> mView;
 
+        FpsCounter mFPS;
+
     private:
         void render();
         void update();
@@ -54,7 +56,6 @@ namespace GUI {
         const char* mXamlPath;
         bool mHasCursor;
         double mLastRenderTimeInSec;
-        FpsCounter mFPS;
     };
 
     void pushScene(std::unique_ptr<Scene> scene);

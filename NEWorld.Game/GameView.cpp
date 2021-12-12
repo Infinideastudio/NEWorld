@@ -16,6 +16,11 @@
 #include "Setup.h"
 #include "Universe/Game.h"
 #include "Common/Logger.h"
+#include "NsApp/NotifyPropertyChangedBase.h"
+
+namespace NoesisApp {
+    class Window;
+}
 
 ThreadFunc updateThreadFunc(void *);
 
@@ -27,22 +32,45 @@ int getMouseScroll() { return mw; }
 
 int getMouseButton() { return mb; }
 
+
+class GameViewViewModel : public NoesisApp::NotifyPropertyChangedBase {
+public:
+    const char* getDebugInfo() const {
+        return mDebugInfo.c_str();
+    }
+
+    void setDebugInfo(std::string debugInfo) {
+        if (debugInfo != mDebugInfo) {
+            mDebugInfo = std::move(debugInfo);
+            OnPropertyChanged("DebugInfo");
+        }
+    }
+
+private:
+    std::string mDebugInfo;
+
+    NS_IMPLEMENT_INLINE_REFLECTION(GameViewViewModel, NotifyPropertyChangedBase) {
+        NsProp("DebugInfo", &GameViewViewModel::getDebugInfo);
+    }
+};
+
 class GameView : public virtual GUI::Scene, public Game {
 private:
 
-    int fps{}, fpsc{}, ups{}, upsc{};
-    double fctime{}, uctime{};
+    int ups{}, upsc{};
+    double uctime{};
 
     int selface{};
     float selt{};
     bool selce{};
+    Noesis::Ptr<GameViewViewModel> mViewModel;
 
     int getMouseScroll() { return mw; }
 
     int getMouseButton() { return mb; }
 
 public:
-    GameView() : Scene(nullptr, false) {}
+    GameView() : Scene("InGame.xaml", false), mViewModel(Noesis::MakePtr<GameViewViewModel>()) {}
 
     void GameThreadloop() {
         //Wait until start...
@@ -91,29 +119,11 @@ public:
         MutexUnlock(Mutex);
     }
 
-    static void debugText(std::string s, bool init) {
-        static auto pos = 0;
-        if (init) {
-            pos = 0;
-            return;
-        }
-        TextRenderer::renderASCIIString(0, 16 * pos, std::move(s));
-        pos++;
-    }
-
     void Grender() {
         //画场景
         const auto curtime = timer();
         double TimeDelta;
         auto renderedChunk = 0;
-
-        //检测帧速率
-        if (timer() - fctime >= 1.0) {
-            fps = fpsc;
-            fpsc = 0;
-            fctime = timer();
-        }
-        fpsc++;
 
         lastframe = curtime;
 
@@ -451,34 +461,21 @@ public:
         glDisable(GL_LINE_SMOOTH);
     }
     
-    void RenderDebugText() const {
+    void debugInfo() const {
+        std::stringstream ss;
+
         if (DebugMode) {
-            std::stringstream ss;
-            //ss << std::fixed << std::setprecision(4);
             ss << "NEWorld v" << VERSION << " [OpenGL " << GLVersionMajor << "." << GLVersionMinor << "|"
-               << GLVersionRev << "]";
-            debugText(ss.str(), false);
-            ss.str("");
-            ss << "Fps:" << fps << "|" << "Ups:" << ups;
-            debugText(ss.str(), false);
-            ss.str("");
-
-            ss << "Debug Mode:" << boolstr(DebugMode);
-            debugText(ss.str(), false);
-            ss.str("");
+                << GLVersionRev << "]" << std::endl
+                << "Fps:" << mFPS.getFPS() << "|" << "Ups:" << ups << std::endl
+                << "Debug Mode:" << boolstr(DebugMode) << std::endl;
             if (Renderer::AdvancedRender) {
-                ss << "Shadow View:" << boolstr(DebugShadow);
-                debugText(ss.str(), false);
-                ss.str("");
+                ss << "Shadow View:" << boolstr(DebugShadow) << std::endl;
             }
-            ss << "X:" << Player::Pos.X << " Y:" << Player::Pos.Y << " Z:" << Player::Pos.Z;
-            debugText(ss.str(), false);
-            ss.str("");
-            ss << "Direction:" << Player::heading << " Head:" << Player::lookupdown << "Jump speed:" << Player::jump;
-            debugText(ss.str(), false);
-            ss.str("");
-
-            ss << "Stats:";
+            ss << "X: " << Player::Pos.X << " Y: " << Player::Pos.Y << " Z: " << Player::Pos.Z << std::endl
+                << "Direction:" << Player::heading << " Head:" << Player::lookupdown << std::endl
+                << "Jump speed:" << Player::jump << std::endl
+                << "Stats:";
             if (Player::Flying) ss << " Flying";
             if (Player::OnGround) ss << " On_ground";
             if (Player::NearWall) ss << " Near_wall";
@@ -486,49 +483,31 @@ public:
             if (Player::CrossWall) ss << " Cross_Wall";
             if (Player::Glide) ss << " Gliding_enabled";
             if (Player::glidingNow) ss << "Gliding";
-            debugText(ss.str(), false);
-            ss.str("");
-
-            ss << "Energy:" << Player::glidingEnergy;
-            debugText(ss.str(), false);
-            ss.str("");
-            ss << "Speed:" << Player::glidingSpeed;
-            debugText(ss.str(), false);
-            ss.str("");
-
+            ss << std::endl;
+            ss << "Energy:" << Player::glidingEnergy << std::endl;
+            ss << "Speed:" << Player::glidingSpeed << std::endl;
             auto h = gametime / (30 * 60);
             auto m = gametime % (30 * 60) / 30;
             auto s = gametime % 30 * 2;
             ss << "Time: "
-               << (h < 10 ? "0" : "") << h << ":"
-               << (m < 10 ? "0" : "") << m << ":"
-               << (s < 10 ? "0" : "") << s
-               << " (" << gametime << "/" << gameTimeMax << ")";
-            debugText(ss.str(), false);
-            ss.str("");
-
-            ss << "load:" << World::chunks.size() << " unload:" << World::unloadedChunks
-               << " render:" << WorldRenderer::RenderChunkList.size() << " update:" << World::updatedChunks;
-            debugText(ss.str(), false);
-            ss.str("");
+                << (h < 10 ? "0" : "") << h << ":"
+                << (m < 10 ? "0" : "") << m << ":"
+                << (s < 10 ? "0" : "") << s
+                << " (" << gametime << "/" << gameTimeMax << ")" << std::endl;
+            ss  << "load:" << World::chunks.size() << " unload:" << World::unloadedChunks
+                << " render:" << WorldRenderer::RenderChunkList.size() << " update:" << World::updatedChunks;
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
-            ss << c_getChunkPtrFromCPA << " CPA requests";
-            debugText(ss.str()); ss.str("");
-            ss << c_getChunkPtrFromSearch << " search requests";
-            debugText(ss.str()); ss.str("");
-            ss << c_getHeightFromHMap << " heightmap requests";
-            debugText(ss.str()); ss.str("");
-            ss << c_getHeightFromWorldGen << " worldgen requests";
-            debugText(ss.str()); ss.str("");
+            ss << c_getChunkPtrFromCPA << " CPA requests" << std::endl;
+            ss << c_getChunkPtrFromSearch << " search requests" << std::endl;
+            ss << c_getHeightFromHMap << " heightmap requests" << std::endl;
+            ss << c_getHeightFromWorldGen << " worldgen requests" << std::endl;
 #endif
-            debugText("", true);
-        } else {
-            TextRenderer::setFontColor(1.0f, 1.0f, 1.0f, 0.9f);
-            std::stringstream ss;
-            ss << "v" << VERSION << "  Fps:" << fps;
-            TextRenderer::renderString(10, 30, ss.str());
         }
+        else {
+            ss << "v" << VERSION << "  Fps:" << mFPS.getFPS();
+        }
+        mViewModel->setDebugInfo(ss.str());
     }
 
     static void drawCloud(double px, double pz) {
@@ -666,6 +645,8 @@ public:
     }
 
     void onLoad() override {
+        mRoot->SetDataContext(mViewModel);
+
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_TEXTURE_2D);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -705,7 +686,7 @@ public:
         myl = my;
         infostream << "Main loop started";
         updateThreadRun = true;
-        fctime = uctime = lastupdate = timer();
+        uctime = lastupdate = timer();
     }
 
     void onUpdate() override {
@@ -719,7 +700,7 @@ public:
             upsc = 0;
         }
 
-        //Grender();
+        debugInfo();
 
         if (glfwGetKey(MainWindow, GLFW_KEY_ESCAPE) == 1) {
             updateThreadPaused = true;
