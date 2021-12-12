@@ -4,9 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
       xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
       d:DesignWidth="1500" d:DesignHeight="900">
-  <Grid.Background>
-    <ImageBrush ImageSource="GUI/mainmenu3.bmp"/>
-  </Grid.Background>
   <Grid.RowDefinitions>
     <RowDefinition Height="300*"/>
     <RowDefinition Height="300*"/>

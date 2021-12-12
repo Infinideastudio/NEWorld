@@ -37,6 +37,7 @@ bool Shader::setUniform(const char *uniform, float value) {
 
 bool Shader::setUniform(const char *uniform, int value) {
     const auto loc = glGetUniformLocationARB(shaderProgram, uniform);
+    auto err = glGetError();
     assert(loc != -1);
     if (loc == -1) return false;
     glUniform1iARB(loc, value);

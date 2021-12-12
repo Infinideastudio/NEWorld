@@ -184,10 +184,10 @@ namespace Renderer {
         sunlightYrot = 60.0f;
         shadowdist = std::min(MaxShadowDist, viewdistance);
         shaders.reserve(4);
-        shaders.push_back(Shader("Shaders/Main.vsh", "Shaders/Main.fsh", true));
-        shaders.push_back(Shader("Shaders/Main.vsh", "Shaders/Main.fsh", true, defines));
-        shaders.push_back(Shader("Shaders/Shadow.vsh", "Shaders/Shadow.fsh", false));
-        shaders.push_back(Shader("Shaders/Depth.vsh", "Shaders/Depth.fsh", false, defines));
+        shaders.push_back(Shader("Assets/Shaders/Main.vsh", "Assets/Shaders/Main.fsh", true));
+        shaders.push_back(Shader("Assets/Shaders/Main.vsh", "Assets/Shaders/Main.fsh", true, defines));
+        shaders.push_back(Shader("Assets/Shaders/Shadow.vsh", "Assets/Shaders/Shadow.fsh", false));
+        shaders.push_back(Shader("Assets/Shaders/Depth.vsh", "Assets/Shaders/Depth.fsh", false, defines));
 
         glGenTextures(1, &DepthTexture);
         glBindTexture(GL_TEXTURE_2D, DepthTexture);

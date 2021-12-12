@@ -31,7 +31,7 @@ namespace GUI {
     }
 
     void Scene::render() {
-        if (mView&&false) {
+        if (mView) {
             // Update view (layout, animations, ...)
             mView->Update(1 / 30.0f);
 
@@ -52,9 +52,11 @@ namespace GUI {
         Shader::unbind();
         onRender();
 
-        if (mView && false) {
+        if (mView) {
+            glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_DEPTH_BUFFER_BIT);
             // Rendering is done in the active framebuffer
             mView->GetRenderer()->Render();
+            glPopAttrib();
         }
     }
 
@@ -70,8 +72,12 @@ namespace GUI {
     }
 
     void Scene::load() {
-        static Noesis::Ptr<Noesis::RenderDevice> renderDevice =
-            NoesisApp::GLFactory::CreateDevice(false);
+        static Noesis::Ptr<Noesis::RenderDevice> renderDevice = nullptr;
+        if (!renderDevice) {
+            glPushAttrib(GL_ALL_ATTRIB_BITS);
+            renderDevice = NoesisApp::GLFactory::CreateDevice(false);
+            glPopAttrib();
+        }
 
         glfwSetInputMode(MainWindow, GLFW_CURSOR, mHasCursor ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
         if (mXamlPath) {
