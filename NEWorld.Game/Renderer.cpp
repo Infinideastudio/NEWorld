@@ -41,11 +41,6 @@ namespace Renderer {
     ====================================================
     */
 
-    int Vertexes, Texcoordc, Colorc, Attribc;
-    float *VertexArray = nullptr;
-    float *VA = nullptr;
-    float TexCoords[3], Colors[4], Attribs;
-    //unsigned int Buffers[3];
     bool AdvancedRender;
     int ShadowRes = 4096;
     int MaxShadowDist = 4;
@@ -56,33 +51,6 @@ namespace Renderer {
     int index = 0, size = 0;
     unsigned int ShadowFBO, DepthTexture;
     unsigned int ShaderAttribLoc = 0;
-
-    void Init(int tc, int cc, int ac) {
-        Texcoordc = tc;
-        Colorc = cc;
-        Attribc = ac;
-        if (VertexArray == nullptr) VertexArray = new float[ArraySize];
-        index = 0;
-        VA = VertexArray;
-        Vertexes = 0;
-        size = (tc + cc + ac + 3);
-    }
-
-    void Flush(VBOID &buffer, vtxCount &vtxs) {
-
-        //上次才知道原来Flush还有冲厕所的意思QAQ
-        //OpenGL有个函数glFlush()，翻译过来就是GL冲厕所() ←_←
-
-        vtxs = Vertexes;
-        if (Vertexes != 0) {
-            if (buffer == 0) glGenBuffers(1, &buffer);
-            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER,
-                         Vertexes * (size * sizeof(float)),
-                         VertexArray, GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-        }
-    }
 
     void BatchStart(int tc, int cc, int ac) noexcept {
         auto cnt = tc + cc + ac + 3;

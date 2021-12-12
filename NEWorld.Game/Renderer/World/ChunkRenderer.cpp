@@ -1,6 +1,7 @@
 #include "ChunkRenderer.h"
 #include "Renderer.h"
 #include "Universe/World/World.h"
+#include "Renderer/VertexBufferBuilder.h"
 
 namespace ChunkRenderer {
     using World::getbrightness;
@@ -9,7 +10,7 @@ namespace ChunkRenderer {
         Front, Back, Right, Left, Top, Bottom
     };
 
-    void renderblock(int x, int y, int z, World::Chunk *chunkptr) {
+    void renderblock(Renderer::VertexBufferBuilder& builder, int x, int y, int z, World::Chunk *chunkptr) {
         double colors, color1, color2, color3, color4, tcx, tcy, size, EPS = 0.0;
         const auto[gx, gy, gz] = (chunkptr->GetPosition() * 16 + Int3(x, y, z)).Data;
         Block blk[7] = {(chunkptr->GetBlock({x, y, z})),
@@ -83,7 +84,7 @@ namespace ChunkRenderer {
                 color4 *= 0.5;
             }
             // att, tex, col vert
-            Renderer::Batch<4>(
+            builder.put<4>(
                     0.0f, tcx, tcy, color1, color1, color1, -0.5 + x, -0.5 + y, 0.5 + z,
                     0.0f, tcx + size, tcy, color2, color2, color2, 0.5 + x, -0.5 + y, 0.5 + z,
                     0.0f, tcx + size, tcy + size, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
@@ -132,7 +133,7 @@ namespace ChunkRenderer {
                 color4 *= 0.5;
             }
             // att, tex, col vert
-            Renderer::Batch<4>(
+            builder.put<4>(
                     1.0f, tcx + size * 1.0, tcy + size * 0.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
                     1.0f, tcx + size * 1.0, tcy + size * 1.0, color2, color2, color2, -0.5 + x, 0.5 + y, -0.5 + z,
                     1.0f, tcx + size * 0.0, tcy + size * 1.0, color3, color3, color3, 0.5 + x, 0.5 + y, -0.5 + z,
@@ -182,7 +183,7 @@ namespace ChunkRenderer {
             }
 
             // att, tex, col vert
-            Renderer::Batch<4>(
+            builder.put<4>(
                     2.0f, tcx + size * 1.0, tcy + size * 0.0, color1, color1, color1, 0.5 + x, -0.5 + y, -0.5 + z,
                     2.0f, tcx + size * 1.0, tcy + size * 1.0, color2, color2, color2, 0.5 + x, 0.5 + y, -0.5 + z,
                     2.0f, tcx + size * 0.0, tcy + size * 1.0, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
@@ -232,7 +233,7 @@ namespace ChunkRenderer {
             }
 
             // att, tex, col vert
-            Renderer::Batch<4>(
+            builder.put<4>(
                     3.0f, tcx + size * 0.0, tcy + size * 0.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
                     3.0f, tcx + size * 1.0, tcy + size * 0.0, color2, color2, color2, -0.5 + x, -0.5 + y, 0.5 + z,
                     3.0f, tcx + size * 1.0, tcy + size * 1.0, color3, color3, color3, -0.5 + x, 0.5 + y, 0.5 + z,
@@ -270,7 +271,7 @@ namespace ChunkRenderer {
             color4 /= World::BRIGHTNESSMAX;
 
             // att, tex, col vert
-            Renderer::Batch<4>(
+            builder.put<4>(
                     4.0f, tcx + size * 0.0, tcy + size * 1.0, color1, color1, color1, -0.5 + x, 0.5 + y, -0.5 + z,
                     4.0f, tcx + size * 0.0, tcy + size * 0.0, color2, color2, color2, -0.5 + x, 0.5 + y, 0.5 + z,
                     4.0f, tcx + size * 1.0, tcy + size * 0.0, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
@@ -308,7 +309,7 @@ namespace ChunkRenderer {
             color4 /= World::BRIGHTNESSMAX;
 
             // att, tex, col vert
-            Renderer::Batch<4>(
+            builder.put<4>(
                     5.0f, tcx + size * 1.0, tcy + size * 1.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
                     5.0f, tcx + size * 0.0, tcy + size * 1.0, color2, color2, color2, 0.5 + x, -0.5 + y, -0.5 + z,
                     5.0f, tcx + size * 0.0, tcy + size * 0.0, color3, color3, color3, 0.5 + x, -0.5 + y, 0.5 + z,
@@ -317,65 +318,46 @@ namespace ChunkRenderer {
         }
     }
 
-    void RenderPrimitive_Depth(QuadPrimitive_Depth &p) {
+    void RenderPrimitive_Depth(Renderer::VertexBufferBuilder& builder, QuadPrimitive_Depth &p) {
         const auto x = p.x, y = p.y, z = p.z, length = p.length;
         switch (p.direction) {
             case 0:
-                return Renderer::Batch<4>(x + 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z - 0.5,
+                return builder.put<4>(x + 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z - 0.5,
                                           x + 0.5, y + 0.5, z + length + 0.5, x + 0.5, y - 0.5, z + length + 0.5);
             case 1:
-                return Renderer::Batch<4>(x - 0.5, y + 0.5, z - 0.5, x - 0.5, y - 0.5, z - 0.5,
+                return builder.put<4>(x - 0.5, y + 0.5, z - 0.5, x - 0.5, y - 0.5, z - 0.5,
                                           x - 0.5, y - 0.5, z + length + 0.5, x - 0.5, y + 0.5, z + length + 0.5);
             case 2:
-                return Renderer::Batch<4>(x + 0.5, y + 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
+                return builder.put<4>(x + 0.5, y + 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
                                           x - 0.5, y + 0.5, z + length + 0.5, x + 0.5, y + 0.5, z + length + 0.5);
             case 3:
-                return Renderer::Batch<4>(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y - 0.5, z - 0.5,
+                return builder.put<4>(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y - 0.5, z - 0.5,
                                           x + 0.5, y - 0.5, z + length + 0.5, x - 0.5, y - 0.5, z + length + 0.5);
             case 4:
-                return Renderer::Batch<4>(x - 0.5, y + 0.5, z + 0.5, x - 0.5, y - 0.5, z + 0.5,
+                return builder.put<4>(x - 0.5, y + 0.5, z + 0.5, x - 0.5, y - 0.5, z + 0.5,
                                           x + length + 0.5, y - 0.5, z + 0.5, x + length + 0.5, y + 0.5, z + 0.5);
             case 5:
-                return Renderer::Batch<4>(x - 0.5, y - 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
+                return builder.put<4>(x - 0.5, y - 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
                                           x + length + 0.5, y + 0.5, z - 0.5, x + length + 0.5, y - 0.5, z - 0.5);
         }
     }
 
     void RenderChunk(World::Chunk *c) {
-        int x, y, z;
-        Renderer::Init(2, 3, 1);
-        for (x = 0; x < 16; x++) {
-            for (y = 0; y < 16; y++) {
-                for (z = 0; z < 16; z++) {
+        Renderer::VertexBufferBuilder b0{}, b1{}, b2{};
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
                     const auto curr = c->GetBlock({x, y, z});
                     if (curr == Blocks::ENV) continue;
-                    if (!BlockInfo(curr).isTranslucent()) renderblock(x, y, z, c);
+                    if (!BlockInfo(curr).isTranslucent()) renderblock(b0, x, y, z, c);
+                    if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(b1, x, y, z, c);
+                    if (!BlockInfo(curr).isSolid()) renderblock(b2, x, y, z, c);
                 }
             }
         }
-        Renderer::Flush(c->vbuffer[0], c->vertexes[0]);
-        Renderer::Init(2, 3, 1);
-        for (x = 0; x < 16; x++) {
-            for (y = 0; y < 16; y++) {
-                for (z = 0; z < 16; z++) {
-                    const auto curr = c->GetBlock({x, y, z});
-                    if (curr == Blocks::ENV) continue;
-                    if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(x, y, z, c);
-                }
-            }
-        }
-        Renderer::Flush(c->vbuffer[1], c->vertexes[1]);
-        Renderer::Init(2, 3, 1);
-        for (x = 0; x < 16; x++) {
-            for (y = 0; y < 16; y++) {
-                for (z = 0; z < 16; z++) {
-                    const auto curr = c->GetBlock({x, y, z});
-                    if (curr == Blocks::ENV) continue;
-                    if (!BlockInfo(curr).isSolid()) renderblock(x, y, z, c);
-                }
-            }
-        }
-        Renderer::Flush(c->vbuffer[2], c->vertexes[2]);
+        b0.flush(c->vbuffer[0], c->vertexes[0]);
+        b1.flush(c->vbuffer[1], c->vertexes[1]);
+        b2.flush(c->vbuffer[2], c->vertexes[2]);
     }
 
     void RenderDepthModel(World::Chunk *c) {
@@ -386,7 +368,7 @@ namespace ChunkRenderer {
         auto valid = false;
         int cur_l_mx = bl = neighbour = 0;
         //Linear merge for depth model
-        Renderer::Init(0, 0);
+        Renderer::VertexBufferBuilder builder{};
         for (auto d = 0; d < 6; d++) {
             cur.direction = d;
             for (auto i = 0; i < 16; i++)
@@ -415,7 +397,7 @@ namespace ChunkRenderer {
                                     if (cur_l_mx < cur.length) cur_l_mx = cur.length;
                                     cur_l_mx++;
                                 } else {
-                                    RenderPrimitive_Depth(cur);
+                                    RenderPrimitive_Depth(builder, cur);
                                     valid = false;
                                 }
                             }
@@ -433,11 +415,11 @@ namespace ChunkRenderer {
                         }
                     }
                     if (valid) {
-                        RenderPrimitive_Depth(cur);
+                        RenderPrimitive_Depth(builder, cur);
                         valid = false;
                     }
                 }
         }
-        Renderer::Flush(c->vbuffer[3], c->vertexes[3]);
+        builder.flush(c->vbuffer[3], c->vertexes[3]);
     }
 }

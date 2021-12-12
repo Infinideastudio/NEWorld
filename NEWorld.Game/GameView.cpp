@@ -9,12 +9,12 @@
 #include "Universe/World/World.h"
 #include "Renderer/World/WorldRenderer.h"
 #include "Particles.h"
-#include "Hitbox.h"
 #include "GUI.h"
 #include "Menus.h"
 #include "Command.h"
 #include "Setup.h"
 #include "Universe/Game.h"
+#include "Renderer/VertexBufferBuilder.h"
 
 ThreadFunc updateThreadFunc(void *);
 
@@ -698,22 +698,22 @@ public:
         if (!generated) {
             generated = true;
             for (auto & i : World::cloud) {
-                for (auto j = 0; j != 128; j++) {
-                    i[j] = int(rnd() * 2);
+                for (int & j : i) {
+                    j = int(rnd() * 2);
                 }
             }
             glGenBuffersARB(128, cloudvb);
             for (auto i = 0; i != 128; i++) {
-                Renderer::Init(0, 0);
+                Renderer::VertexBufferBuilder builder{};
                 for (auto j = 0; j != 128; j++) {
                     if (World::cloud[i][j] != 0) {
-                        Renderer::Batch<4>(
+                        builder.put<4>(
                                 j * cloudwidth, 128.0, 0.0, j * cloudwidth, 128.0, cloudwidth,
                                 (j + 1) * cloudwidth, 128.0, cloudwidth, (j + 1) * cloudwidth, 128.0, 0.0
                         );
                     }
                 }
-                Renderer::Flush(cloudvb[i], vtxs[i]);
+                builder.flush(cloudvb[i], vtxs[i]);
             }
         }
 
