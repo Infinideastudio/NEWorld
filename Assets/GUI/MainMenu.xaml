@@ -14,6 +14,9 @@
     <SolidColorBrush x:Key="Brush.Background.Pressed" Color="Black" Opacity="0.8"/>
     <SolidColorBrush x:Key="Brush.Foreground.Pressed" Color="White" Opacity="1"/>
     <SolidColorBrush x:Key="Brush.Border.Over" Color="White" Opacity="0.5"/>
+    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="FontFamily" Value="/#VCR OSD Mono"/>
+    </Style>
 
     <!-- story boards -->
     <Storyboard x:Key="MainMenu">

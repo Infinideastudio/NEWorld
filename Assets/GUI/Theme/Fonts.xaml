@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <FontFamily x:Key="Font.Family.Default">/#VCR OSD Mono</FontFamily>
+    <FontFamily x:Key="Font.Family.Default">#Consolas</FontFamily>
     <sys:Double x:Key="Font.Size.Header">17</sys:Double>
     <sys:Double x:Key="Font.Size.Normal">15</sys:Double>
     <sys:Double x:Key="Font.Size.ToolTip">12</sys:Double>
