@@ -27,16 +27,6 @@ namespace Renderer {
 
     void Init(int tc, int cc, int ac = 0);
 
-    void Vertex3f(float x, float y, float z);
-
-    void TexCoord2f(float x, float y);
-
-    void Color3f(float r, float g, float b);
-
-    inline void Vertex3d(double x, double y, double z) { Vertex3f(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)); }
-
-    inline void TexCoord2d(double x, double y) { TexCoord2f(static_cast<float>(x), static_cast<float>(y)); }
-
     template <int count, class... Elem>
     inline void Batch(Elem... elem) noexcept {
         std::initializer_list<float> v {static_cast<float>(std::forward<Elem>(elem))...};

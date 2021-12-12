@@ -146,7 +146,7 @@ public:
 
         const auto xpos = Player::Pos.X - Player::xd + (curtime - lastupdate) * 30.0 * Player::xd;
         const auto ypos = Player::Pos.Y + Player::height + Player::heightExt - Player::yd +
-            (curtime - lastupdate) * 30.0 * Player::yd;
+                          (curtime - lastupdate) * 30.0 * Player::yd;
         const auto zpos = Player::Pos.Z - Player::zd + (curtime - lastupdate) * 30.0 * Player::zd;
 
         if (!bagOpened) {
@@ -172,7 +172,8 @@ public:
 
         //更新区块VBO
         World::sortChunkBuildRenderList(RoundInt(Player::Pos.X), RoundInt(Player::Pos.Y), RoundInt(Player::Pos.Z));
-        const auto brl = World::chunkBuildRenders > World::MaxChunkRenders ? World::MaxChunkRenders : World::chunkBuildRenders;
+        const auto brl =
+                World::chunkBuildRenders > World::MaxChunkRenders ? World::MaxChunkRenders : World::chunkBuildRenders;
         for (auto i = 0; i < brl; i++) {
             const auto ci = World::chunkBuildRenderList[i][1];
             World::chunks[ci]->buildRender();
@@ -315,7 +316,7 @@ public:
         if (DebugHitbox) {
             glDisable(GL_CULL_FACE);
             glDisable(GL_TEXTURE_2D);
-            for (const auto &Hitboxe : Player::Hitboxes) {
+            for (const auto &Hitboxe: Player::Hitboxes) {
                 renderAABB(Hitboxe, GUI::FgR, GUI::FgG, GUI::FgB, 3, 0.002);
             }
 
@@ -326,7 +327,7 @@ public:
 
             renderAABB(Player::playerbox, 1.0f, 1.0f, 1.0f, 1);
             renderAABB(Hitbox::Expand(Player::playerbox, Player::xd, Player::yd, Player::zd), 1.0f, 1.0f, 1.0f,
-                               1);
+                       1);
         }
 
         glEnable(GL_CULL_FACE);
@@ -574,6 +575,7 @@ public:
         RenderDebugText();
         glFlush();
     }
+
     void RenderHealthBar() const {
         if (Player::gamemode == Player::Survival) {
             glColor4d(0.8, 0.0, 0.0, 0.3);
@@ -594,6 +596,7 @@ public:
             glEnd();
         }
     }
+
     void RenderDebugText() const {
         if (DebugMode) {
             std::stringstream ss;
@@ -694,9 +697,9 @@ public:
 
         if (!generated) {
             generated = true;
-            for (auto i = 0; i != 128; i++) {
+            for (auto & i : World::cloud) {
                 for (auto j = 0; j != 128; j++) {
-                    World::cloud[i][j] = int(rnd() * 2);
+                    i[j] = int(rnd() * 2);
                 }
             }
             glGenBuffersARB(128, cloudvb);
@@ -704,10 +707,10 @@ public:
                 Renderer::Init(0, 0);
                 for (auto j = 0; j != 128; j++) {
                     if (World::cloud[i][j] != 0) {
-                        Renderer::Vertex3d(j * cloudwidth, 128.0, 0.0);
-                        Renderer::Vertex3d(j * cloudwidth, 128.0, cloudwidth);
-                        Renderer::Vertex3d((j + 1) * cloudwidth, 128.0, cloudwidth);
-                        Renderer::Vertex3d((j + 1) * cloudwidth, 128.0, 0.0);
+                        Renderer::Batch<4>(
+                                j * cloudwidth, 128.0, 0.0, j * cloudwidth, 128.0, cloudwidth,
+                                (j + 1) * cloudwidth, 128.0, cloudwidth, (j + 1) * cloudwidth, 128.0, 0.0
+                        );
                     }
                 }
                 Renderer::Flush(cloudvb[i], vtxs[i]);
@@ -840,7 +843,7 @@ public:
         const auto curtime = timer();
         const auto TimeDelta = curtime - bagAnimTimer;
         const auto bagAnim = static_cast<float>(1.0 - pow(0.9, TimeDelta * 60.0) +
-            pow(0.9, bagAnimDuration * 60.0) / bagAnimDuration * TimeDelta);
+                                                pow(0.9, bagAnimDuration * 60.0) / bagAnimDuration * TimeDelta);
 
         if (bagOpened) {
 
@@ -936,14 +939,15 @@ public:
             if (curtime - bagAnimTimer <= bagAnimDuration) {
                 xbase = static_cast<int>(round(((windowwidth / stretch - 392) / 2) * bagAnim));
                 ybase = static_cast<int>(round(
-                    (windowheight / stretch - 152 - 16 + 120 - (windowheight / stretch - 32)) * bagAnim +
-                    (windowheight / stretch - 32)));
+                        (windowheight / stretch - 152 - 16 + 120 - (windowheight / stretch - 32)) * bagAnim +
+                        (windowheight / stretch - 32)));
                 spac = static_cast<int>(round(8 * bagAnim));
                 drawBagRow(3, -1, xbase, ybase, spac, alpha);
                 xbase = static_cast<int>(round(
-                    ((windowwidth / stretch - 392) / 2 - windowwidth / stretch) * bagAnim + windowwidth / stretch));
-                ybase = static_cast<int>(round((windowheight / stretch - 152 - 16 - (windowheight / stretch - 32)) * bagAnim +
-                    (windowheight / stretch - 32)));
+                        ((windowwidth / stretch - 392) / 2 - windowwidth / stretch) * bagAnim + windowwidth / stretch));
+                ybase = static_cast<int>(round(
+                        (windowheight / stretch - 152 - 16 - (windowheight / stretch - 32)) * bagAnim +
+                        (windowheight / stretch - 32)));
                 for (auto i = 0; i < 3; i++) {
                     glColor4f(1.0f, 1.0f, 1.0f, bagAnim);
                     drawBagRow(i, -1, xbase, ybase + i * 40, spac, alpha);
@@ -972,19 +976,21 @@ public:
                 auto xbase = 0, ybase = 0, spac = 0;
                 const auto alpha = 1.0f - 0.5f * bagAnim;
                 xbase = static_cast<int>(round(
-                    ((windowwidth / stretch - 392) / 2) - ((windowwidth / stretch - 392) / 2) * bagAnim));
-                ybase = static_cast<int>(round((windowheight / stretch - 152 - 16 + 120 - (windowheight / stretch - 32)) -
-                    (windowheight / stretch - 152 - 16 + 120 - (windowheight - 32)) * bagAnim +
-                    (windowheight / stretch - 32)));
+                        ((windowwidth / stretch - 392) / 2) - ((windowwidth / stretch - 392) / 2) * bagAnim));
+                ybase = static_cast<int>(round(
+                        (windowheight / stretch - 152 - 16 + 120 - (windowheight / stretch - 32)) -
+                        (windowheight / stretch - 152 - 16 + 120 - (windowheight - 32)) * bagAnim +
+                        (windowheight / stretch - 32)));
                 spac = static_cast<int>(round(8 - 8 * bagAnim));
                 glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
                 drawBagRow(3, Player::indexInHand, xbase, ybase, spac, alpha);
                 xbase = static_cast<int>(round(((windowwidth / stretch - 392) / 2 - windowwidth / stretch) -
-                    ((windowwidth / stretch - 392) / 2 - windowwidth / stretch) * bagAnim +
-                    windowwidth / stretch));
+                                               ((windowwidth / stretch - 392) / 2 - windowwidth / stretch) * bagAnim +
+                                               windowwidth / stretch));
                 ybase = static_cast<int>(round((windowheight / stretch - 152 - 16 - (windowheight / stretch - 32)) -
-                    (windowheight / stretch - 152 - 16 - (windowheight / stretch - 32)) * bagAnim +
-                    (windowheight / stretch - 32)));
+                                               (windowheight / stretch - 152 - 16 - (windowheight / stretch - 32)) *
+                                               bagAnim +
+                                               (windowheight / stretch - 32)));
                 for (auto i = 0; i < 3; i++) {
                     glColor4f(1.0f, 1.0f, 1.0f, 1.0f - bagAnim);
                     drawBagRow(i, -1, xbase, ybase + i * 40, spac, alpha);

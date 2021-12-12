@@ -68,30 +68,6 @@ namespace Renderer {
         size = (tc + cc + ac + 3);
     }
 
-    void Vertex3f(float x, float y, float z) {
-        if ((Vertexes + 1) * (Texcoordc + Colorc + 3) > ArraySize) return;
-        if (Attribc != 0) VertexArray[index++] = Attribs;
-        if (Texcoordc != 0) memcpy(VertexArray + index, TexCoords, Texcoordc * sizeof(float));
-        index += Texcoordc;
-        if (Colorc != 0) memcpy(VertexArray + index, Colors, Colorc * sizeof(float));
-        index += Colorc;
-        VertexArray[index++] = x;
-        VertexArray[index++] = y;
-        VertexArray[index++] = z;
-        Vertexes++;
-    }
-
-    void TexCoord2f(float x, float y) {
-        TexCoords[0] = x;
-        TexCoords[1] = y;
-    }
-
-    void Color3f(float r, float g, float b) {
-        Colors[0] = r;
-        Colors[1] = g;
-        Colors[2] = b;
-    }
-
     void Flush(VBOID &buffer, vtxCount &vtxs) {
 
         //上次才知道原来Flush还有冲厕所的意思QAQ
