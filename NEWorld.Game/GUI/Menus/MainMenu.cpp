@@ -40,7 +40,7 @@ namespace Menus {
 
     class MainMenu : public GUI::Scene {
     public:
-        MainMenu() : GUI::Scene("MainMenu.xaml"){}
+        MainMenu() : Scene("MainMenu.xaml"){}
     private:
         Noesis::Ptr<GameMenuViewModel> mViewModel;
 

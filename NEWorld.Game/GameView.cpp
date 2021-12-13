@@ -17,6 +17,7 @@
 #include "Universe/Game.h"
 #include "Common/Logger.h"
 #include "NsApp/NotifyPropertyChangedBase.h"
+#include "NsGui/Button.h"
 
 namespace NoesisApp {
     class Window;
@@ -45,12 +46,23 @@ public:
             OnPropertyChanged("DebugInfo");
         }
     }
+    bool getGamePaused() const {
+        return mGamePaused;
+    }
 
+    void setGamePaused(bool gamePaused) {
+        if (gamePaused != mGamePaused) {
+            mGamePaused = gamePaused;
+            OnPropertyChanged("GamePaused");
+        }
+    }
 private:
     std::string mDebugInfo;
+    bool mGamePaused = false;
 
     NS_IMPLEMENT_INLINE_REFLECTION(GameViewViewModel, NotifyPropertyChangedBase) {
         NsProp("DebugInfo", &GameViewViewModel::getDebugInfo);
+        NsProp("GamePaused", &GameViewViewModel::getGamePaused);
     }
 };
 
@@ -163,23 +175,6 @@ public:
             (curtime - lastupdate) * 30.0 * Player::yd;
         const auto zpos = Player::Pos.Z - Player::zd + (curtime - lastupdate) * 30.0 * Player::zd;
 
-        if (!bagOpened) {
-            //转头！你治好了我多年的颈椎病！
-            if (mx != mxl) Player::xlookspeed -= (mx - mxl) * mousemove;
-            if (my != myl) Player::ylookspeed += (my - myl) * mousemove;
-            if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1)
-                Player::xlookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1)
-                Player::xlookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1)
-                Player::ylookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1)
-                Player::ylookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
-            //限制角度，别把头转掉下来了 ←_←
-            if (Player::lookupdown + Player::ylookspeed < -90.0) Player::ylookspeed = -90.0 - Player::lookupdown;
-            if (Player::lookupdown + Player::ylookspeed > 90.0) Player::ylookspeed = 90.0 - Player::lookupdown;
-        }
-
         Player::cxt = World::GetChunkPos(static_cast<int>(Player::Pos.X));
         Player::cyt = World::GetChunkPos(static_cast<int>(Player::Pos.Y));
         Player::czt = World::GetChunkPos(static_cast<int>(Player::Pos.Z));
@@ -200,8 +195,8 @@ public:
 
         glFlush();
 
-        const auto plookupdown = Player::lookupdown + Player::ylookspeed;
-        const auto pheading = Player::heading + Player::xlookspeed;
+        const auto plookupdown = Player::lookupdown;
+        const auto pheading = Player::heading;
 
         glDepthFunc(GL_LEQUAL);
         glEnable(GL_CULL_FACE);
@@ -627,9 +622,16 @@ public:
         saveScreenshot(0, 0, windowwidth, windowheight, ss.str());
     }
 
-    void onLoad() override {
+    void onViewBinding() override {
         mRoot->SetDataContext(mViewModel);
+        mRoot->FindName<Noesis::Button>("Resume")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+            mViewModel->setGamePaused(false);
+            updateThreadPaused = false;
+            glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        };
+    }
 
+    void onLoad() override {
         glEnable(GL_LINE_SMOOTH);
         glEnable(GL_TEXTURE_2D);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -686,7 +688,9 @@ public:
         debugInfo();
 
         if (glfwGetKey(MainWindow, GLFW_KEY_ESCAPE) == 1) {
+            mViewModel->setGamePaused(true);
             updateThreadPaused = true;
+            glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             createThumbnail();
         }
     }

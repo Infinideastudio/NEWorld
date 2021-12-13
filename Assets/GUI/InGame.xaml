@@ -28,4 +28,31 @@
     <Line X1="-8" Y1="0" X2="8" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
     <Line X1="0" Y1="8" X2="0" Y2="-8" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
   </StackPanel>
+  <!-- pause menu -->
+  <Grid.Resources>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+  </Grid.Resources>
+  <ViewBox x:Name="Overlay" Stretch="Fill"
+           Visibility="{Binding GamePaused, Converter={StaticResource BooleanToVisibility}}">
+    <Rectangle Width="100" Height="100" Fill="Black" Opacity="0.25" />
+  </ViewBox>
+  <Grid x:Name="PauseMenu"
+        Visibility="{Binding GamePaused, Converter={StaticResource BooleanToVisibility}}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="300*"/>
+      <RowDefinition Height="300*"/>
+      <RowDefinition Height="100*"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="80*"/>
+      <ColumnDefinition Width="300*"/>
+      <ColumnDefinition Width="80*"/>
+    </Grid.ColumnDefinitions>
+    <Viewbox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+      <TextBlock Grid.Row="0" Text="Game Paused" Foreground="White"/>
+    </Viewbox>
+    <Viewbox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
+      <Button x:Name="Resume" Content="Resume" Width="600" Height="50"/>
+    </Viewbox>
+  </Grid>
 </Grid>
