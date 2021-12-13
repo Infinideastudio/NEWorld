@@ -39,6 +39,14 @@ void createWindow() {
     title << "NEWorld " << MAJOR_VERSION << MINOR_VERSION << EXT_VERSION;
     if (Multisample != 0) glfwWindowHint(GLFW_SAMPLES, Multisample);
     MainWindow = glfwCreateWindow(windowwidth, windowheight, title.str().c_str(), NULL, NULL);
+
+    // high dpi screens deserve a larger window
+    float widthScale, heightScale;
+    glfwGetWindowContentScale(MainWindow, &widthScale, &heightScale);
+    windowwidth *= widthScale;
+    windowheight *= heightScale;
+    glfwSetWindowSize(MainWindow, windowwidth, windowheight);
+
     MouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     glfwMakeContextCurrent(MainWindow);
     glewInit();
