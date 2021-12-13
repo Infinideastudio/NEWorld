@@ -1,6 +1,6 @@
 #include "ShadowMaps.h"
 #include "Universe/World/World.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 #include "Renderer/World/WorldRenderer.h"
 
 namespace ShadowMaps {

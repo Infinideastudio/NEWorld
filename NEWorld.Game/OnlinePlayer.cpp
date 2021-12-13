@@ -1,5 +1,5 @@
 #include "OnlinePlayer.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 
 std::map<SkinID, std::pair<VBOID, vtxCount>> playerSkins;
 std::vector<OnlinePlayer> players;

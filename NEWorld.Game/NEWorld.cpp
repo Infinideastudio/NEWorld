@@ -2,7 +2,7 @@
 //==============================初始化(包括闪屏)================================//
 
 #include "Definitions.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 #include "TextRenderer.h"
 #include "Universe/World/World.h"
 #include "GUI.h"

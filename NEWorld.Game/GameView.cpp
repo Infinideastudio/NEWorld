@@ -3,7 +3,7 @@
 #include <Renderer/World/ShadowMaps.h>
 #include "Universe/World/Blocks.h"
 #include "Textures.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 #include "TextRenderer.h"
 #include "Player.h"
 #include "Universe/World/World.h"
@@ -14,7 +14,7 @@
 #include "Command.h"
 #include "Setup.h"
 #include "Universe/Game.h"
-#include "Renderer/VertexBufferBuilder.h"
+#include "Renderer/BufferBuilder.h"
 
 ThreadFunc updateThreadFunc(void *);
 
@@ -704,7 +704,7 @@ public:
             }
             glGenBuffersARB(128, cloudvb);
             for (auto i = 0; i != 128; i++) {
-                Renderer::VertexBufferBuilder builder{};
+                Renderer::BufferBuilder builder{};
                 for (auto j = 0; j != 128; j++) {
                     if (World::cloud[i][j] != 0) {
                         builder.put<4>(

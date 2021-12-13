@@ -6,7 +6,7 @@
 #include "GameView.h"
 #include "Universe/World/Blocks.h"
 #include "Textures.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 #include "TextRenderer.h"
 #include "Player.h"
 #include "Universe/World/World.h"

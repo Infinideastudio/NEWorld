@@ -4,7 +4,7 @@
 #include "Definitions.h"
 #include "Textures.h"
 #include "TextRenderer.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 #include "Universe/World/World.h"
 #include "Items.h"
 

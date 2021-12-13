@@ -3,6 +3,7 @@
 #include <set>
 #include <string>
 #include "stdinclude.h"
+#include "Renderer/GL/Pipeline.h"
 
 class Shader {
 public:
@@ -11,9 +12,9 @@ public:
 
     Shader(std::string vshPath, std::string fshPath, bool bindLocation, std::set<std::string> defines);
 
-    void bind() { glUseProgramObjectARB(shaderProgram); }
+    void bind() { glUseProgram(mProgram); }
 
-    static void unbind() { glUseProgramObjectARB(0); }
+    static void unbind() { glUseProgram(0); }
 
     void release();
 
@@ -26,11 +27,5 @@ public:
     bool setUniform(const char *uniform, float *value);
 
 private:
-    GLhandleARB loadShader(std::string filename, unsigned int mode, std::set<std::string> defines);
-
-    void checkErrors(GLhandleARB res, int status, std::string errorMessage);
-
-    GLhandleARB shaderFragment;
-    GLhandleARB shaderVertex;
-    GLhandleARB shaderProgram;
+    GLuint mProgram;
 };

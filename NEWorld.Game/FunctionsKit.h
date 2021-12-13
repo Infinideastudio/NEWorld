@@ -5,6 +5,7 @@
 #include <chrono>
 #include <vector>
 #include <sstream>
+#include <string_view>
 
 extern double stretch;
 
@@ -49,6 +50,11 @@ inline std::string itos(int i) {
 }
 
 inline bool beginWith(const std::string &str, const std::string &begin) {
+    if (str.size() < begin.size()) return false;
+    return str.substr(0, begin.size()) == begin;
+}
+
+inline bool beginWith(std::string_view str, std::string_view begin) {
     if (str.size() < begin.size()) return false;
     return str.substr(0, begin.size()) == begin;
 }

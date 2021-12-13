@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Universe/World/World.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 
 namespace WorldRenderer {
     struct RenderChunk {

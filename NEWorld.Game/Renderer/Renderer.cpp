@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include <algorithm>
 #include "Frustum.h"
+#include "BufferBuilder.h"
 
 namespace Renderer {
 
@@ -52,6 +53,18 @@ namespace Renderer {
     unsigned int ShadowFBO, DepthTexture;
     unsigned int ShaderAttribLoc = 0;
 
+    GLuint GetDefaultQuadIndex() {
+        static auto buffer = []() {
+            BufferBuilder<uint32_t> builder{};
+            for (auto i = 0; i < 262144; i += 4) builder.put<1>(i, i + 1, i + 2, i, i + 2, i + 3);
+            GLuint ibo{0};
+            vtxCount count{0};
+            builder.flush(ibo, count);
+            return ibo;
+        }();
+        return buffer;
+    }
+
     void BatchStart(int tc, int cc, int ac) noexcept {
         auto cnt = tc + cc + ac + 3;
         if (!AdvancedRender || ac == 0) {
@@ -71,7 +84,7 @@ namespace Renderer {
                 } else glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
             }
         } else {
-           // cnt += ac;
+            // cnt += ac;
             glVertexAttribPointer(ShaderAttribLoc, ac, GL_FLOAT, GL_FALSE, cnt * sizeof(float),
                                   static_cast<float *>(0));
             glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
@@ -80,17 +93,20 @@ namespace Renderer {
         }
     }
 
+    struct IndirectBaseVertex {
+        uint32_t count;
+        uint32_t instanceCount;
+        uint32_t firstIndex;
+        uint32_t baseVertex;
+        uint32_t baseInstance;
+    };
+
     void RenderBufferDirect(VBOID buffer, vtxCount vtxs, int tc, int cc, int ac) {
         glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GetDefaultQuadIndex());
         BatchStart(tc, cc, ac);
-        //这个框是不是很装逼2333 --qiaozhanrong
-        //====================================================================================================//
-        /**/                                                                                                /**/
-        /**/                                                                                                /**/
-        /**/                                glDrawArrays(GL_QUADS, 0, vtxs);                                /**/
-        /**/                                                                                                /**/
-        /**/                                                                                                /**/
-        //====================================================================================================//
+        IndirectBaseVertex command = {static_cast<uint32_t>(vtxs + vtxs / 2), 1, 0, 0, 0};
+        glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, &command, 1, 0);
     }
 
     void initShaders() {

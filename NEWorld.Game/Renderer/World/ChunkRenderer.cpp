@@ -1,7 +1,7 @@
 #include "ChunkRenderer.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 #include "Universe/World/World.h"
-#include "Renderer/VertexBufferBuilder.h"
+#include "Renderer/BufferBuilder.h"
 
 namespace ChunkRenderer {
     using World::getbrightness;
@@ -10,7 +10,7 @@ namespace ChunkRenderer {
         Front, Back, Right, Left, Top, Bottom
     };
 
-    void renderblock(Renderer::VertexBufferBuilder& builder, int x, int y, int z, World::Chunk *chunkptr) {
+    void renderblock(Renderer::BufferBuilder<>& builder, int x, int y, int z, World::Chunk *chunkptr) {
         double colors, color1, color2, color3, color4, tcx, tcy, size, EPS = 0.0;
         const auto[gx, gy, gz] = (chunkptr->GetPosition() * 16 + Int3(x, y, z)).Data;
         Block blk[7] = {(chunkptr->GetBlock({x, y, z})),
@@ -318,7 +318,7 @@ namespace ChunkRenderer {
         }
     }
 
-    void RenderPrimitive_Depth(Renderer::VertexBufferBuilder& builder, QuadPrimitive_Depth &p) {
+    void RenderPrimitive_Depth(Renderer::BufferBuilder<>& builder, QuadPrimitive_Depth &p) {
         const auto x = p.x, y = p.y, z = p.z, length = p.length;
         switch (p.direction) {
             case 0:
@@ -343,7 +343,7 @@ namespace ChunkRenderer {
     }
 
     void RenderChunk(World::Chunk *c) {
-        Renderer::VertexBufferBuilder b0{}, b1{}, b2{};
+        Renderer::BufferBuilder b0{}, b1{}, b2{};
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 for (int z = 0; z < 16; z++) {
@@ -368,7 +368,7 @@ namespace ChunkRenderer {
         auto valid = false;
         int cur_l_mx = bl = neighbour = 0;
         //Linear merge for depth model
-        Renderer::VertexBufferBuilder builder{};
+        Renderer::BufferBuilder builder{};
         for (auto d = 0; d < 6; d++) {
             cur.direction = d;
             for (auto i = 0; i < 16; i++)
