@@ -175,6 +175,21 @@ public:
             (curtime - lastupdate) * 30.0 * Player::yd;
         const auto zpos = Player::Pos.Z - Player::zd + (curtime - lastupdate) * 30.0 * Player::zd;
 
+        if(!mViewModel->getGamePaused()) {
+            //转头！你治好了我多年的颈椎病！
+            if (mx != mxl) Player::xlookspeed -= (mx - mxl) * mousemove;
+            if (my != myl) Player::ylookspeed += (my - myl) * mousemove;
+            if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1)
+                Player::xlookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
+            if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1)
+                Player::xlookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
+            if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1)
+                Player::ylookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
+            if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1)
+                Player::ylookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
+
+        }
+
         Player::cxt = World::GetChunkPos(static_cast<int>(Player::Pos.X));
         Player::cyt = World::GetChunkPos(static_cast<int>(Player::Pos.Y));
         Player::czt = World::GetChunkPos(static_cast<int>(Player::Pos.Z));
@@ -195,8 +210,8 @@ public:
 
         glFlush();
 
-        const auto plookupdown = Player::lookupdown;
-        const auto pheading = Player::heading;
+        const auto plookupdown = Player::lookupdown + Player::ylookspeed;
+        const auto pheading = Player::heading + Player::xlookspeed;
 
         glDepthFunc(GL_LEQUAL);
         glEnable(GL_CULL_FACE);

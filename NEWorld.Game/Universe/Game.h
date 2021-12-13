@@ -109,20 +109,6 @@ public:
             BlockClick = PlayerInteract(BlockPos, lx, ly, lz);
             Player::IntPos = Int3(Player::Pos, RoundInt);
 
-            auto curtime = timer();
-
-            //转头！你治好了我多年的颈椎病！
-            if (mx != mxl) Player::xlookspeed -= (mx - mxl) * mousemove;
-            if (my != myl) Player::ylookspeed += (my - myl) * mousemove;
-            if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1)
-                Player::xlookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1)
-                Player::xlookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1)
-                Player::ylookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1)
-                Player::ylookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
-
             //限制角度，别把头转掉下来了 ←_←
             if (Player::lookupdown + Player::ylookspeed < -90.0) Player::ylookspeed = -90.0 - Player::lookupdown;
             if (Player::lookupdown + Player::ylookspeed > 90.0) Player::ylookspeed = 90.0 - Player::lookupdown;
