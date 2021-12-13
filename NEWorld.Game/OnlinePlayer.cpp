@@ -28,6 +28,5 @@ void OnlinePlayer::render() const {
     glNormal3f(0, 0, 0);
     glColor4f(1.0, 1.0, 1.0, 0.5);
     glBindTexture(GL_TEXTURE_2D, _skinID == 0 ? DefaultSkin : _skinID);
-    Renderer::RenderBufferDirect(VBO, vtxs, true, true);
     glEnable(GL_CULL_FACE);
 }

@@ -51,7 +51,6 @@ namespace Renderer {
     int ActiveShader;
     int index = 0, size = 0;
     unsigned int ShadowFBO, DepthTexture;
-    unsigned int ShaderAttribLoc = 0;
 
     GLuint GetDefaultQuadIndex() {
         static auto buffer = []() {
@@ -67,21 +66,17 @@ namespace Renderer {
 
     void BatchStartNormal(int tc, int cc, int ac) noexcept {
         const auto stride = static_cast<GLsizei>((tc + cc + ac + 3) * sizeof(float));
-        if (tc) glTexCoordPointer(tc, GL_FLOAT, stride, (float *) (ac * sizeof(float)));
-        if (cc) glColorPointer(cc, GL_FLOAT, stride, (float *) ((ac + tc) * sizeof(float)));
-        glVertexPointer(3, GL_FLOAT, stride, (float *) ((ac + tc + cc) * sizeof(float)));
+        if (tc) glVertexAttribPointer(2, tc, GL_FLOAT, GL_FALSE, stride, (float *) (ac * sizeof(float)));
+        if (cc) glVertexAttribPointer(3, cc, GL_FLOAT, GL_FALSE, stride, (float *) ((ac + tc) * sizeof(float)));
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, (float *) ((ac + tc + cc) * sizeof(float)));
     }
 
     void BatchStartAdvance(int tc, int cc, int ac) noexcept {
         const auto stride = static_cast<GLsizei>((tc + cc + ac + 3) * sizeof(float));
-        if (ac == 0) {
-            BatchStartNormal(tc, cc, ac);
-        } else {
-            glVertexAttribPointer(ShaderAttribLoc, ac, GL_FLOAT, GL_FALSE, stride, static_cast<float *>(0));
-            glTexCoordPointer(tc, GL_FLOAT, stride, (float *) (ac * sizeof(float)));
-            glColorPointer(cc, GL_FLOAT, stride, (float *) ((ac + tc) * sizeof(float)));
-            glVertexPointer(3, GL_FLOAT, stride, (float *) ((ac + tc + cc) * sizeof(float)));
-        }
+        if (ac) glVertexAttribPointer(1, ac, GL_FLOAT, GL_FALSE, stride, static_cast<float *>(0));
+        if (tc) glVertexAttribPointer(2, tc, GL_FLOAT, GL_FALSE, stride, (float *) (ac * sizeof(float)));
+        if (cc) glVertexAttribPointer(3, cc, GL_FLOAT, GL_FALSE, stride, (float *) ((ac + tc) * sizeof(float)));
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, (float *) ((ac + tc + cc) * sizeof(float)));
     }
 
     void BatchStart(int tc, int cc, int ac) noexcept {
@@ -105,15 +100,15 @@ namespace Renderer {
     }
 
     void initShaders() {
-        ShaderAttribLoc = 1;
         std::set<std::string> defines;
         sunlightXrot = 30.0f;
         sunlightYrot = 60.0f;
         shadowdist = std::min(MaxShadowDist, viewdistance);
         shaders = {
-                Shader("./Assets/Shaders/Main.vsh", "./Assets/Shaders/Main.fsh", true),
+                Shader("./Assets/Shaders/Main.vsh", "./Assets/Shaders/Main.fsh", false),
                 Shader("./Assets/Shaders/Shadow.vsh", "./Assets/Shaders/Shadow.fsh", false),
-                Shader("./Assets/Shaders/Depth.vsh", "./Assets/Shaders/Depth.fsh", false, defines)
+                Shader("./Assets/Shaders/Depth.vsh", "./Assets/Shaders/Depth.fsh", false, defines),
+                Shader("./Assets/Shaders/Simple.vsh", "./Assets/Shaders/Simple.fsh", false)
         };
 
         glGenTextures(1, &DepthTexture);
@@ -142,6 +137,7 @@ namespace Renderer {
         shaders[MainShader].setUniform("Tex", 0);
         shaders[MainShader].setUniform("DepthTex", 1);
         shaders[MainShader].setUniform("SkyColor", skycolorR, skycolorG, skycolorB, 1.0f);
+        shaders[SimpleShader].setUniform("Tex", 0);
         Shader::unbind();
     }
 
@@ -153,7 +149,7 @@ namespace Renderer {
         glDeleteFramebuffersEXT(1, &ShadowFBO);
     }
 
-    void EnableShaders() {
+    void EnableAdvancedShaders() {
         shadowdist = std::min(MaxShadowDist, viewdistance);
 
         //Enable shader
@@ -175,15 +171,30 @@ namespace Renderer {
         shader.setUniform("Depth_modl", frus.getModlMatrix());
 
         //Enable arrays for additional vertex attributes
-        glEnableVertexAttribArray(ShaderAttribLoc);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
+        glEnableVertexAttribArray(4);
+    }
+
+    void EnableSimpleShaders() {
+        bindShader(SimpleShader);
+        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
+        glEnableVertexAttribArray(4);
+    }
+
+    void EnableShaders() {
+        if (AdvancedRender) EnableAdvancedShaders(); else EnableSimpleShaders();
     }
 
     void DisableShaders() {
-        //Disable shader
         Shader::unbind();
-
-        //Disable arrays for additional vertex attributes
-        glDisableVertexAttribArray(ShaderAttribLoc);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(3);
+        glDisableVertexAttribArray(4);
     }
 
     void StartShadowPass() {
@@ -203,5 +214,4 @@ namespace Renderer {
         Shader::unbind();
         glViewport(0, 0, windowwidth, windowheight);
     }
-
 }

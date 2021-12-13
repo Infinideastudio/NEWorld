@@ -89,7 +89,7 @@ void setupScreen() {
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClearDepth(1.0);
     glGenBuffersARB(1, &World::EmptyBuffer);
-    if (Renderer::AdvancedRender) Renderer::initShaders();
+    Renderer::initShaders();
     if (vsync) glfwSwapInterval(1);
     else glfwSwapInterval(0);
 }

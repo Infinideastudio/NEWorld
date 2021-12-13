@@ -16,10 +16,16 @@ uniform mat4 TransMat;
 uniform vec4 SkyColor;
 uniform float renderdist;
 
-in vec4 vertex;
-flat in int facing;
+in vOut {
+	vec2 fTexCrood;
+	vec3 fShade;
+	vec3 fCrood;
+	flat int facing;
+};
+out vec4 fragment;
 
 void main() {
+	vec4 vertex = vec4(fCrood, 1.0);
 	mat4 transf = normalize * Depth_proj * Depth_modl * TransMat;
 	vec4 ShadowCoords = transf * vertex;
 #ifdef SMOOTH_SHADOW
@@ -27,7 +33,6 @@ void main() {
 	vec4 ShadowCoords21;
 	vec4 ShadowCoords10;
 	vec4 ShadowCoords12;
-
 	float dist = length(gl_ModelViewMatrix * vertex);
 	//Shadow smoothing (Super-sample)
 	if (dist < 16.0) {
@@ -71,10 +76,10 @@ void main() {
 	else shadow = 1.2;
 	
 	//Texture color
-	vec4 texel = texture2D(Tex, gl_TexCoord[0].st);
-	vec4 color = vec4(texel.rgb * shadow, texel.a) * gl_Color;
+	vec4 texel = texture2D(Tex, fTexCrood);
+	vec4 color = vec4(texel.rgb * shadow * fShade, texel.a);
 	
 	//Fog calculation & Final color
 	//if (color.a < 0.99) color = vec4(color.rgb, mix(1.0, 0.3, clamp((renderdist * 0.5 - dist) / 64.0, 0.0, 1.0)));
-	gl_FragColor = mix(SkyColor, color, clamp((renderdist - dist) / 32.0, 0.0, 1.0));
+	fragment = mix(SkyColor, color, clamp((renderdist - dist) / 32.0, 0.0, 1.0));
 }

@@ -216,9 +216,6 @@ public:
         glLoadIdentity();
         glMultMatrixf(Player::ViewFrustum.getProjMatrix());
         glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glRotated(plookupdown, 1, 0, 0);
-        glRotated(360.0 - pheading, 0, 1, 0);
 
         World::calcVisible(xpos, ypos, zpos, Player::ViewFrustum);
         renderedChunk = WorldRenderer::ListRenderChunks(Player::cxt, Player::cyt, Player::czt, viewdistance, curtime);
@@ -227,31 +224,16 @@ public:
 
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
 
-        if (DebugMergeFace) {
-            glDisable(GL_LINE_SMOOTH);
-            glPolygonMode(GL_FRONT, GL_LINE);
-        }
-
+        // 渲染层1
+        glLoadIdentity();
+        glRotated(plookupdown, 1, 0, 0);
+        glRotated(360.0 - pheading, 0, 1, 0);
         glDisable(GL_BLEND);
-        glEnableClientState(GL_COLOR_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnableClientState(GL_VERTEX_ARRAY);
-
-        if (Renderer::AdvancedRender) Renderer::EnableShaders();
+        Renderer::EnableShaders();
         if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 0);
-        if (Renderer::AdvancedRender) Renderer::DisableShaders();
-
+        Renderer::DisableShaders();
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-
         glEnable(GL_BLEND);
-
-        if (DebugMergeFace) {
-            glEnable(GL_LINE_SMOOTH);
-            glPolygonMode(GL_FRONT, GL_FILL);
-        }
 
         MutexLock(Mutex);
 
@@ -272,39 +254,20 @@ public:
 
         MutexUnlock(Mutex);
 
+        // 渲染层2&3
         glLoadIdentity();
         glRotated(plookupdown, 1, 0, 0);
         glRotated(360.0 - pheading, 0, 1, 0);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_CULL_FACE);
-
-        glEnableClientState(GL_COLOR_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnableClientState(GL_VERTEX_ARRAY);
-
-        if (Renderer::AdvancedRender) Renderer::EnableShaders();
-
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
-
-        if (DebugMergeFace) {
-            glDisable(GL_LINE_SMOOTH);
-            glPolygonMode(GL_FRONT, GL_LINE);
-        }
-
+        Renderer::EnableShaders();
         if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 1);
         glDisable(GL_CULL_FACE);
         if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 2);
-        if (Renderer::AdvancedRender) Renderer::DisableShaders();
+        Renderer::DisableShaders();
 
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-
-        if (DebugMergeFace) {
-            glEnable(GL_LINE_SMOOTH);
-            glPolygonMode(GL_FRONT, GL_FILL);
-        }
 
         glLoadIdentity();
         glRotated(plookupdown, 1, 0, 0);
@@ -675,58 +638,6 @@ public:
             ss << "v" << VERSION << "  Fps:" << fps;
             TextRenderer::renderString(10, 30, ss.str());
         }
-    }
-
-    static void drawCloud(double px, double pz) {
-        //glFogf(GL_FOG_START, 100.0);
-        //glFogf(GL_FOG_END, 300.0);
-        static double ltimer;
-        static bool generated;
-        static unsigned int cloudvb[128];
-        static int vtxs[128];
-        static float f;
-        static int l;
-        if (ltimer == 0.0) ltimer = timer();
-        f += static_cast<float>(timer() - ltimer) * 0.25f;
-        ltimer = timer();
-        if (f >= 1.0) {
-            l += int(f);
-            f -= int(f);
-            l %= 128;
-        }
-
-        if (!generated) {
-            generated = true;
-            for (auto & i : World::cloud) {
-                for (int & j : i) {
-                    j = int(rnd() * 2);
-                }
-            }
-            glGenBuffersARB(128, cloudvb);
-            for (auto i = 0; i != 128; i++) {
-                Renderer::BufferBuilder builder{};
-                for (auto j = 0; j != 128; j++) {
-                    if (World::cloud[i][j] != 0) {
-                        builder.put<4>(
-                                j * cloudwidth, 128.0, 0.0, j * cloudwidth, 128.0, cloudwidth,
-                                (j + 1) * cloudwidth, 128.0, cloudwidth, (j + 1) * cloudwidth, 128.0, 0.0
-                        );
-                    }
-                }
-                builder.flush(cloudvb[i], vtxs[i]);
-            }
-        }
-
-        glDisable(GL_TEXTURE_2D);
-        glDisable(GL_CULL_FACE);
-        glColor4f(1.0, 1.0, 1.0, 0.5);
-        for (auto i = 0; i < 128; i++) {
-            glPushMatrix();
-            glTranslated(-64.0 * cloudwidth - px, 0.0, cloudwidth * ((l + i) % 128 + f) - 64.0 * cloudwidth - pz);
-            Renderer::RenderBufferDirect(cloudvb[i], vtxs[i], 0, 0);
-            glPopMatrix();
-        }
-        //setupNormalFog();
     }
 
     static void renderDestroy(float level, int x, int y, int z) {
