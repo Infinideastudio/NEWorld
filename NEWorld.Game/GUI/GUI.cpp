@@ -1,6 +1,5 @@
 #include <deque>
 #include "GUI.h"
-#include "TextRenderer.h"
 #include <NsRender/GLFactory.h>
 #include <NoesisPCH.h>
 #include "Shader.h"
@@ -159,7 +158,6 @@ namespace GUI {
         glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glDisable(GL_CULL_FACE);
-        TextRenderer::setFontColor(1.0, 1.0, 1.0, 1.0);
 
         while (!scenes.empty()) {
             auto& currentScene = scenes.back();

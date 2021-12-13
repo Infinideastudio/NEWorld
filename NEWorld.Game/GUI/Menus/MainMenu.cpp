@@ -1,5 +1,4 @@
 #include "Menus.h"
-#include "TextRenderer.h"
 #include "../GUI.h"
 #include "NsRender/GLFactory.h"
 #include "NsGui/Grid.h"

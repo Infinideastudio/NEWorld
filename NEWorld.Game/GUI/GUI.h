@@ -13,13 +13,17 @@ namespace GUI {
     public:
         double getFPS() const noexcept { return mFPS; }
         void update() noexcept {
+            check();
+            frame();
+        }
+        void check() noexcept {
             if (timer() - mLastTimeInSec >= 1.0) {
                 mFPS = mFPSCounter;
                 mFPSCounter = 0;
                 mLastTimeInSec = timer();
             }
-            mFPSCounter++;
         }
+        void frame() noexcept { mFPSCounter++; }
     private:
         int mFPSCounter = 0;
         int mFPS = 0;

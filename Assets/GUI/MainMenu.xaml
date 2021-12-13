@@ -17,7 +17,7 @@
     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
       <Setter Property="FontFamily" Value="/#VCR OSD Mono"/>
     </Style>
-    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
       <Setter Property="FontFamily" Value="/#VCR OSD Mono"/>
     </Style>
     <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">

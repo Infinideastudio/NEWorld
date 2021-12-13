@@ -309,7 +309,7 @@ public:
             DebugMergeFace = !DebugMergeFace;
             DebugMode = true;
         }
-        if (isPressed(GLFW_KEY_F4 && Player::gamemode == Player::Creative))
+        if (isPressed(GLFW_KEY_F4) && Player::gamemode == Player::Creative)
             Player::CrossWall = !Player::CrossWall;
         if (isPressed(GLFW_KEY_F5)) GUIrenderswitch = !GUIrenderswitch;
         if (isPressed(GLFW_KEY_F6)) Player::Glide = !Player::Glide;

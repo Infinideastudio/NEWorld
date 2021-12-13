@@ -4,7 +4,6 @@
 #include "Universe/World/Blocks.h"
 #include "Textures.h"
 #include "Renderer.h"
-#include "TextRenderer.h"
 #include "Player.h"
 #include "Universe/World/World.h"
 #include "Renderer/World/WorldRenderer.h"
@@ -18,6 +17,15 @@
 #include "Common/Logger.h"
 #include "NsApp/NotifyPropertyChangedBase.h"
 #include "NsGui/Button.h"
+#include "NsGui/Image.h"
+#include "NsDrawing/Int32Rect.h"
+#include "NsDrawing/Thickness.h"
+#include "NsGui/CroppedBitmap.h"
+#include "NsRender/GLFactory.h"
+#include "NsGui/TextureSource.h"
+#include <NsRender/Texture.h>
+#include "NsGui/TextBlock.h"
+#include "NsGui/Label.h"
 
 namespace NoesisApp {
     class Window;
@@ -68,9 +76,9 @@ private:
 
 class GameView : public virtual GUI::Scene, public Game {
 private:
-
-    int ups{}, upsc{};
-    double uctime{};
+    GUI::FpsCounter mUpsCounter;
+    Noesis::Image* mHotBar[10];
+    Noesis::TextBlock* mHotBarCnt[10];
 
     int selface{};
     float selt{};
@@ -114,19 +122,14 @@ public:
             updateTimer = timer();
             if (updateTimer - lastupdate >= 5.0) lastupdate = updateTimer;
 
-            while ((updateTimer - lastupdate) >= 1.0 / 30.0 && upsc < 60) {
+            while (updateTimer - lastupdate >= 1.0 / 30.0 && mUpsCounter.getFPS() < 60) {
                 lastupdate += 1.0 / 30.0;
-                upsc++;
+                mUpsCounter.frame();
                 updategame();
                 FirstUpdateThisFrame = false;
             }
 
-            if ((timer() - uctime) >= 1.0) {
-                uctime = timer();
-                ups = upsc;
-                upsc = 0;
-            }
-
+            mUpsCounter.check();
         }
         MutexUnlock(Mutex);
     }
@@ -458,9 +461,9 @@ public:
         std::stringstream ss;
 
         if (DebugMode) {
-            ss << "NEWorld v" << VERSION << " [OpenGL " << GLVersionMajor << "." << GLVersionMinor << "|"
+            ss << "NEWorld v" << VERSION << " [OpenGL " << GLVersionMajor << "." << GLVersionMinor << " "
                 << GLVersionRev << "]" << std::endl
-                << "Fps:" << mFPS.getFPS() << "|" << "Ups:" << ups << std::endl
+                << "Fps:" << mFPS.getFPS() << " Ups:" << mUpsCounter.getFPS() << std::endl
                 << "Debug Mode:" << boolstr(DebugMode) << std::endl;
             if (Renderer::AdvancedRender) {
                 ss << "Shadow View:" << boolstr(DebugShadow) << std::endl;
@@ -644,6 +647,10 @@ public:
             updateThreadPaused = false;
             glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         };
+        for (int i = 0; i <= 9; ++i) {
+            mHotBar[i] = mRoot->FindName<Noesis::Image>((std::string("Hotbar") + std::to_string(i)).c_str());
+            mHotBarCnt[i] = mRoot->FindName<Noesis::TextBlock>((std::string("HotbarCnt") + std::to_string(i)).c_str());
+        }
     }
 
     void onLoad() override {
@@ -686,21 +693,42 @@ public:
         myl = my;
         infostream << "Main loop started";
         updateThreadRun = true;
-        uctime = lastupdate = timer();
+        lastupdate = timer();
+    }
+
+    static Noesis::ImageSource* getTextureForItem(item i) {
+        static auto blockTextures = Noesis::MakePtr<Noesis::TextureSource>(NoesisApp::GLFactory::WrapTexture(
+            BlockTextures, 256, 256, 0, false, true
+        ));
+        static std::unordered_map<item, Noesis::Ptr<Noesis::CroppedBitmap>> itemTextures;
+
+        if (i == Blocks::ENV) return nullptr;
+        // find from cache first
+        auto itemTextureIter = itemTextures.find(i);
+
+        if (itemTextureIter != itemTextures.end())
+            return (*itemTextureIter).second.GetPtr();
+
+        const auto tcX = Textures::getTexcoordX(i, 1) * 256;
+        const auto tcY = Textures::getTexcoordY(i, 1) * 256;
+        return itemTextures[i] = Noesis::MakePtr<Noesis::CroppedBitmap>(
+            blockTextures.GetPtr(), Noesis::Int32Rect(tcX, tcY, 32, 32)  // TODO: refactor
+        );
     }
 
     void onUpdate() override {
         glfwGetCursorPos(MainWindow, &mx, &my);
-        //MutexUnlock(Mutex);
-        //MutexLock(Mutex);
-
-        if ((timer() - uctime) >= 1.0) {
-            uctime = timer();
-            ups = upsc;
-            upsc = 0;
-        }
-
+        
         debugInfo();
+        for (int i = 0; i < 10; ++i) {
+            mHotBar[i]->SetSource(getTextureForItem(Player::inventory[3][i]));
+            mHotBarCnt[i]->SetText(std::to_string(Player::inventoryAmount[3][i]).c_str());
+            // should have used proper data binding to seperate logic from styling
+            // but hey it works
+            static_cast<Noesis::Label*>(mHotBar[i]->GetParent()->GetParent())->SetBorderThickness(
+                Noesis::Thickness(i == Player::indexInHand ? 5.f : 1.f)
+            );
+        }
 
         if (glfwGetKey(MainWindow, GLFW_KEY_ESCAPE) == 1) {
             mViewModel->setGamePaused(true);
@@ -712,11 +740,9 @@ public:
 
     ~GameView() override {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        TextRenderer::setFontColor(1.0, 1.0, 1.0, 1.0);
-        TextRenderer::renderString(0, 0, "Saving world...");
         glfwSwapBuffers(MainWindow);
         glfwPollEvents();
-        printf("[Console][Game]Terminate threads\n");
+        infostream << "Terminate threads";
         updateThreadRun = false;
         //MutexUnlock(Mutex);
         ThreadWait(updateThread);

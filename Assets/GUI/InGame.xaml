@@ -36,8 +36,8 @@
   </TextBlock>
   <!-- cross hair -->
   <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-    <Line X1="-8" Y1="0" X2="8" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
-    <Line X1="0" Y1="8" X2="0" Y2="-8" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
+    <Line X1="-16" Y1="0" X2="16" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
+    <Line X1="0" Y1="16" X2="0" Y2="-16" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
   </StackPanel>
   <!-- pause menu -->
   <ViewBox x:Name="Overlay" Stretch="Fill"
@@ -63,4 +63,36 @@
       <Button x:Name="Resume" Content="Resume" Width="600" Height="50"/>
     </Viewbox>
   </Grid>
+  <!-- Hot bar -->
+  <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 50 0 128">
+    <StackPanel.Resources>
+      <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="Margin" Value="0 0 16 0"/>
+      </Style>
+      <Style TargetType="TextBlock">
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="Margin" Value="0 0 5 5"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+      </Style>
+      <Style TargetType="Image">
+        <Setter Property="Width" Value="128"/>
+        <Setter Property="Height" Value="128"/>
+        <Setter Property="Stretch" Value="Fill"/>
+      </Style>
+    </StackPanel.Resources>
+    <Label><Grid><Image x:Name="Hotbar0"/><TextBlock x:Name="HotbarCnt0"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar1"/><TextBlock x:Name="HotbarCnt1"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar2"/><TextBlock x:Name="HotbarCnt2"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar3"/><TextBlock x:Name="HotbarCnt3"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar4"/><TextBlock x:Name="HotbarCnt4"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar5"/><TextBlock x:Name="HotbarCnt5"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar6"/><TextBlock x:Name="HotbarCnt6"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar7"/><TextBlock x:Name="HotbarCnt7"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar8"/><TextBlock x:Name="HotbarCnt8"/></Grid></Label>
+    <Label><Grid><Image x:Name="Hotbar9"/><TextBlock x:Name="HotbarCnt9"/></Grid></Label>
+  </StackPanel>
 </Grid>
