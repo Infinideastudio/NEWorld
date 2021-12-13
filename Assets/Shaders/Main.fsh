@@ -1,4 +1,4 @@
-#version 110
+#version 450 compatibility
 #define SMOOTH_SHADOW
 
 const mat4 normalize = mat4(
@@ -16,49 +16,44 @@ uniform mat4 TransMat;
 uniform vec4 SkyColor;
 uniform float renderdist;
 
-varying vec4 VertCoords;
-varying float facing_float;
+in vec4 vertex;
+flat in int facing;
 
 void main() {
-	
 	mat4 transf = normalize * Depth_proj * Depth_modl * TransMat;
-	vec4 rel = gl_ModelViewMatrix * VertCoords;
-	vec4 ShadowCoords = transf * VertCoords;
+	vec4 ShadowCoords = transf * vertex;
 #ifdef SMOOTH_SHADOW
 	vec4 ShadowCoords01;
 	vec4 ShadowCoords21;
 	vec4 ShadowCoords10;
 	vec4 ShadowCoords12;
-#endif
-	int facing = int(facing_float + 0.5);
-	float shadow = 0.0;
-	float dist = length(rel);
-	
-#ifdef SMOOTH_SHADOW
+
+	float dist = length(gl_ModelViewMatrix * vertex);
 	//Shadow smoothing (Super-sample)
 	if (dist < 16.0) {
 		if (facing == 0 || facing == 1) {
-			ShadowCoords01 = transf * vec4(VertCoords.x - delta, VertCoords.yzw);
-			ShadowCoords21 = transf * vec4(VertCoords.x + delta, VertCoords.yzw);
-			ShadowCoords10 = transf * vec4(VertCoords.x, VertCoords.y - delta, VertCoords.zw);
-			ShadowCoords12 = transf * vec4(VertCoords.x, VertCoords.y + delta, VertCoords.zw);
+			ShadowCoords01 = transf * vec4(vertex.x - delta, vertex.yzw);
+			ShadowCoords21 = transf * vec4(vertex.x + delta, vertex.yzw);
+			ShadowCoords10 = transf * vec4(vertex.x, vertex.y - delta, vertex.zw);
+			ShadowCoords12 = transf * vec4(vertex.x, vertex.y + delta, vertex.zw);
 		}
 		else if (facing == 2 || facing == 3) {
-			ShadowCoords01 = transf * vec4(VertCoords.x, VertCoords.y - delta, VertCoords.zw);
-			ShadowCoords21 = transf * vec4(VertCoords.x, VertCoords.y + delta, VertCoords.zw);
-			ShadowCoords10 = transf * vec4(VertCoords.xy, VertCoords.z - delta, VertCoords.w);
-			ShadowCoords12 = transf * vec4(VertCoords.xy, VertCoords.z + delta, VertCoords.w);
+			ShadowCoords01 = transf * vec4(vertex.x, vertex.y - delta, vertex.zw);
+			ShadowCoords21 = transf * vec4(vertex.x, vertex.y + delta, vertex.zw);
+			ShadowCoords10 = transf * vec4(vertex.xy, vertex.z - delta, vertex.w);
+			ShadowCoords12 = transf * vec4(vertex.xy, vertex.z + delta, vertex.w);
 		}
 		else if (facing == 4 || facing == 5) {
-			ShadowCoords01 = transf * vec4(VertCoords.x - delta, VertCoords.yzw);
-			ShadowCoords21 = transf * vec4(VertCoords.x + delta, VertCoords.yzw);
-			ShadowCoords10 = transf * vec4(VertCoords.xy, VertCoords.z - delta, VertCoords.w);
-			ShadowCoords12 = transf * vec4(VertCoords.xy, VertCoords.z + delta, VertCoords.w);
+			ShadowCoords01 = transf * vec4(vertex.x - delta, vertex.yzw);
+			ShadowCoords21 = transf * vec4(vertex.x + delta, vertex.yzw);
+			ShadowCoords10 = transf * vec4(vertex.xy, vertex.z - delta, vertex.w);
+			ShadowCoords12 = transf * vec4(vertex.xy, vertex.z + delta, vertex.w);
 		}
 	}
 #endif
-	
+
 	//Shadow calculation
+	float shadow = 0.0;
 	if (facing == 1 || facing == 2 || facing == 5) shadow = 0.5;
 	else if (ShadowCoords.x >= 0.0 && ShadowCoords.x <= 1.0 &&
 			 ShadowCoords.y >= 0.0 && ShadowCoords.y <= 1.0 && ShadowCoords.z <= 1.0) {
@@ -77,7 +72,6 @@ void main() {
 	
 	//Texture color
 	vec4 texel = texture2D(Tex, gl_TexCoord[0].st);
-
 	vec4 color = vec4(texel.rgb * shadow, texel.a) * gl_Color;
 	
 	//Fog calculation & Final color

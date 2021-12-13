@@ -1,6 +1,4 @@
-#version 110
-varying vec4 pos;
+#version 450 compatibility
 void main() {
-	pos = ftransform();
-	gl_Position = pos;
+	gl_Position = ftransform();
 }

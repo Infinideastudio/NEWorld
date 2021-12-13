@@ -11,41 +11,20 @@ namespace {
         return result;
     }
 
-
-    struct uniform_info_t {
-        GLint location;
-        GLsizei count;
-    };
-
-    void PrintDebug(GLuint program_name) {
+    void PrintDebug(GLuint program) {
         GLint uniform_count = 0;
-        glGetProgramiv(program_name, GL_ACTIVE_UNIFORMS, &uniform_count);
-
-        if (uniform_count != 0)
-        {
-            GLint 	max_name_len = 0;
+        glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &uniform_count);
+        if (uniform_count != 0) {
+            GLint max_name_len = 0;
             GLsizei length = 0;
             GLsizei count = 0;
-            GLenum 	type = GL_NONE;
-            glGetProgramiv(program_name, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_name_len);
-
-            auto uniform_name = std::make_unique<char[]>(max_name_len);
-
-            std::unordered_map<std::string, uniform_info_t> uniforms;
-
-            for (GLint i = 0; i < uniform_count; ++i)
-            {
-                glGetActiveUniform(program_name, i, max_name_len, &length, &count, &type, uniform_name.get());
-
-                uniform_info_t uniform_info = {};
-                uniform_info.location = glGetUniformLocation(program_name, uniform_name.get());
-                uniform_info.count = count;
-
-                uniforms.emplace(std::make_pair(std::string(uniform_name.get(), length), uniform_info));
-            }
-
-            for (auto&& [name, info] : uniforms) {
-                std::cout << name << ":" << info.location << " count:" << info.count << std::endl;
+            GLenum type = GL_NONE;
+            glGetProgramiv(program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_name_len);
+            auto uName = std::make_unique<char[]>(max_name_len);
+            for (GLint i = 0; i < uniform_count; ++i) {
+                glGetActiveUniform(program, i, max_name_len, &length, &count, &type, uName.get());
+                std::cout << uName.get() << ":"
+                          << glGetUniformLocation(program, uName.get()) << " count:" << count << std::endl;
             }
         }
     }
@@ -90,7 +69,7 @@ namespace {
     void CheckErrors(GLuint res, int status, const std::string &eMsg) {
         auto st = GL_TRUE;
         glGetShaderiv(res, status, &st);
-        if (st == GL_FALSE) DebugWarning(eMsg);
+        if (st == GL_FALSE) DebugWarning(eMsg); else return;
         int logLength, charsWritten;
         glGetShaderiv(res, GL_INFO_LOG_LENGTH, &logLength);
         if (logLength > 1) {
@@ -110,7 +89,8 @@ namespace {
 
     using GLObject = Renderer::Internal::Object;
 
-    auto MakeProgram(const temp::unordered_map<Renderer::ShaderType, Renderer::GLShader> &stages, const std::map<int, std::string>& binds) {
+    auto MakeProgram(const temp::unordered_map<Renderer::ShaderType, Renderer::GLShader> &stages,
+                     const std::map<int, std::string> &binds) {
         auto program = glCreateProgram();
         auto deleter = [](GLObject *ptr) noexcept { glDeleteProgram(FromFakePtr(ptr)); };
         auto result = std::unique_ptr<GLObject, decltype(deleter)>(ToFakePtr(program), deleter);
@@ -122,8 +102,8 @@ namespace {
             glBindAttribLocation(program, id, name.c_str());
         }
         glLinkProgram(program);
-        CheckErrors(program, GL_LINK_STATUS, "Shader linking error!");
         PrintDebug(program);
+        CheckErrors(program, GL_LINK_STATUS, "Shader linking error!");
         return result;
     }
 
@@ -278,7 +258,7 @@ namespace Renderer {
         return {ToFakePtr(res), [](auto ptr) noexcept { glDeleteShader(FromFakePtr(ptr)); }};
     }
 
-    GLuint CreateProgram(GLShader vert, GLShader frag, const std::map<int, std::string>& binds) {
+    GLuint CreateProgram(GLShader vert, GLShader frag, const std::map<int, std::string> &binds) {
         temp::unordered_map<Renderer::ShaderType, Renderer::GLShader> stages{};
         stages.insert_or_assign(ShaderType::Vertex, std::move(vert));
         stages.insert_or_assign(ShaderType::Fragment, std::move(frag));

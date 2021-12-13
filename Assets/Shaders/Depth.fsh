@@ -1,6 +1,6 @@
-#version 110
-varying vec4 pos;
+#version 450
+layout(location = 0) out vec4 color;
 void main() {
-	float color = (pos.z / pos.w + 1.0) * 0.5;
-	gl_FragColor = vec4(color, color, color, 1.0);
+	float shade = (gl_FragCoord.z / gl_FragCoord.w + 1.0) * 0.5;
+	color = vec4(shade, shade, shade, 1.0);
 }

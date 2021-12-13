@@ -2,13 +2,14 @@
 
 #include <set>
 #include <string>
+#include <utility>
 #include "stdinclude.h"
 #include "Renderer/GL/Pipeline.h"
 
 class Shader {
 public:
-    Shader(std::string vshPath, std::string fshPath, bool bindLocation = false) : Shader(vshPath, fshPath, bindLocation,
-                                                                                         std::set<std::string>()) {}
+    Shader(std::string vshPath, std::string fshPath, bool bindLocation = false) :
+            Shader(std::move(vshPath), std::move(fshPath), bindLocation, {}) {}
 
     Shader(std::string vshPath, std::string fshPath, bool bindLocation, std::set<std::string> defines);
 

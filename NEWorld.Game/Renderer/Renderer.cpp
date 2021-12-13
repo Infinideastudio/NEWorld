@@ -65,32 +65,27 @@ namespace Renderer {
         return buffer;
     }
 
-    void BatchStart(int tc, int cc, int ac) noexcept {
-        auto cnt = tc + cc + ac + 3;
-        if (!AdvancedRender || ac == 0) {
-            if (tc != 0) {
-                if (cc != 0) {
-                    glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
-                    glColorPointer(cc, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc) * sizeof(float)));
-                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc + cc) * sizeof(float)));
-                } else {
-                    glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
-                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc) * sizeof(float)));
-                }
-            } else {
-                if (cc != 0) {
-                    glColorPointer(cc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
-                    glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + cc) * sizeof(float)));
-                } else glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
-            }
+    void BatchStartNormal(int tc, int cc, int ac) noexcept {
+        const auto stride = static_cast<GLsizei>((tc + cc + ac + 3) * sizeof(float));
+        if (tc) glTexCoordPointer(tc, GL_FLOAT, stride, (float *) (ac * sizeof(float)));
+        if (cc) glColorPointer(cc, GL_FLOAT, stride, (float *) ((ac + tc) * sizeof(float)));
+        glVertexPointer(3, GL_FLOAT, stride, (float *) ((ac + tc + cc) * sizeof(float)));
+    }
+
+    void BatchStartAdvance(int tc, int cc, int ac) noexcept {
+        const auto stride = static_cast<GLsizei>((tc + cc + ac + 3) * sizeof(float));
+        if (ac == 0) {
+            BatchStartNormal(tc, cc, ac);
         } else {
-            // cnt += ac;
-            glVertexAttribPointer(ShaderAttribLoc, ac, GL_FLOAT, GL_FALSE, cnt * sizeof(float),
-                                  static_cast<float *>(0));
-            glTexCoordPointer(tc, GL_FLOAT, cnt * sizeof(float), (float *) (ac * sizeof(float)));
-            glColorPointer(cc, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc) * sizeof(float)));
-            glVertexPointer(3, GL_FLOAT, cnt * sizeof(float), (float *) ((ac + tc + cc) * sizeof(float)));
+            glVertexAttribPointer(ShaderAttribLoc, ac, GL_FLOAT, GL_FALSE, stride, static_cast<float *>(0));
+            glTexCoordPointer(tc, GL_FLOAT, stride, (float *) (ac * sizeof(float)));
+            glColorPointer(cc, GL_FLOAT, stride, (float *) ((ac + tc) * sizeof(float)));
+            glVertexPointer(3, GL_FLOAT, stride, (float *) ((ac + tc + cc) * sizeof(float)));
         }
+    }
+
+    void BatchStart(int tc, int cc, int ac) noexcept {
+       if (AdvancedRender) BatchStartAdvance(tc, cc, ac); else BatchStartNormal(tc, cc, ac);
     }
 
     struct IndirectBaseVertex {
