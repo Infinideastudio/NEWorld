@@ -105,22 +105,26 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
           </Grid.RowDefinitions>
-          <TextBlock Grid.Column="0" Grid.Row="0" Text="FOV" FontSize="16" HorizontalAlignment="Left"/>
-          <Slider Grid.Column="1" Grid.Row="0" Width="300" Height="30" Margin="8,0,0,0"
-                  TickPlacement="TopLeft" SelectionStart="1" SelectionEnd="120" Interval="5"/>
+          <TextBlock Grid.Column="0" Grid.Row="0" FontSize="16" HorizontalAlignment="Left"
+                     Text="{Binding FOV, StringFormat=FOV ({0})}"/>
+          <Slider Grid.Column="1" Grid.Row="0" Width="300" Height="30" Margin="8,0,0,0" TickPlacement="TopLeft"
+                  Minimum="1" Maximum="120" Value="{Binding FOV, Mode=TwoWay}" Interval="1"/>
 
-          <TextBlock Grid.Column="0" Grid.Row="1" Text="Render Distance" FontSize="16" HorizontalAlignment="Left"/>
-          <Slider Grid.Column="1" Grid.Row="1" Width="300" Height="30" Margin="8,0,0,0"
-                  TickPlacement="TopLeft" SelectionStart="1" SelectionEnd="8" Interval="1"/>
+          <TextBlock Grid.Column="0" Grid.Row="1" FontSize="16" HorizontalAlignment="Left"
+                     Text="{Binding RenderDistance, StringFormat=Render Distance ({0} chunks)}"/>
+          <Slider Grid.Column="1" Grid.Row="1" Width="300" Height="30" Margin="8,0,0,0" TickPlacement="TopLeft"
+                  Minimum="0" Maximum="8" Value="{Binding RenderDistanceTick, Mode=TwoWay}" Interval="1" IsSnapToTickEnabled="True" />
 
-          <TextBlock Grid.Column="0" Grid.Row="2" Text="Mouse Sensitivity" FontSize="16" HorizontalAlignment="Left"/>
-          <Slider Grid.Column="1" Grid.Row="2" Width="300" Height="30" Margin="8,0,0,0"
-                  TickPlacement="TopLeft" SelectionStart="0" SelectionEnd="1" Interval="0.1"/>
+          <TextBlock Grid.Column="0" Grid.Row="2" FontSize="16" HorizontalAlignment="Left"
+                     Text="{Binding MouseSensitivity, StringFormat=Mouse Sensitivity ({0:F2})}"/>
+          <Slider Grid.Column="1" Grid.Row="2" Width="300" Height="30" Margin="8,0,0,0" TickPlacement="TopLeft"
+                  Minimum="0" Maximum="1" Value="{Binding MouseSensitivity, Mode=TwoWay}"/>
+
         </Grid>
-        <CheckBox Margin="20,8,0,0">Smooth lighting</CheckBox>
-        <CheckBox Margin="20,8,0,0">Nice Grass</CheckBox>
-        <CheckBox Margin="20,8,0,0">VSync</CheckBox>
-        <CheckBox Margin="20,8,0,20">Shadows</CheckBox>
+        <CheckBox Margin="20,8,0,0" IsChecked="{Binding SmoothLighting, Mode=TwoWay}">Smooth lighting</CheckBox>
+        <CheckBox Margin="20,8,0,0" IsChecked="{Binding NiceGrass, Mode=TwoWay}">Nice Grass</CheckBox>
+        <CheckBox Margin="20,8,0,0" IsChecked="{Binding VSync, Mode=TwoWay}">VSync</CheckBox>
+        <CheckBox Margin="20,8,0,20" IsChecked="{Binding Shadows, Mode=TwoWay}">Shadows</CheckBox>
       </StackPanel>
       <Button x:Name="Save" Content="Save" Margin="0 10 0 0"></Button>
     </StackPanel>

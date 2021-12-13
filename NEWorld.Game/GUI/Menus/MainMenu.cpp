@@ -7,13 +7,13 @@
 #include "GameView.h"
 #include "Frustum.h"
 #include "NsApp/NotifyPropertyChangedBase.h"
+#include "Renderer.h"
 
 namespace Menus {
 
     class GameMenuViewModel : public NoesisApp::NotifyPropertyChangedBase {
     public:
         enum class State { MAIN_MENU, SETTINGS };
-
         const char* getState() const {
             switch (mState) {
             case State::MAIN_MENU: return "MainMenu";
@@ -22,7 +22,6 @@ namespace Menus {
             }
             return nullptr;
         }
-
         void setState(State state) noexcept {
             if(mState!=state) {
                 mState = state;
@@ -30,11 +29,56 @@ namespace Menus {
             }
         }
 
+#define SETTING_ITEM(TYPE, MEMBER_NAME, PROP_NAME) \
+        TYPE get##PROP_NAME() const noexcept { return MEMBER_NAME; }\
+        void set##PROP_NAME(TYPE value) noexcept {\
+            if (value == MEMBER_NAME) return;\
+            MEMBER_NAME = value;\
+            OnPropertyChanged(#PROP_NAME);\
+        }
+
+        SETTING_ITEM(int, mFOV, FOV);
+        SETTING_ITEM(float, mMouseSensitivity, MouseSensitivity);
+        SETTING_ITEM(bool, mNiceGrass, NiceGrass);
+        SETTING_ITEM(bool, mSmoothLighting, SmoothLighting);
+        SETTING_ITEM(bool, mVSync, VSync);
+        SETTING_ITEM(bool, mShadows, Shadows);
+
+#undef SETTING_ITEM
+
+        int getRenderDistance() const { return mRenderDistance; }
+        int getRenderDistanceTick() const noexcept { return mRenderDistanceTick; }
+        void setRenderDistanceTick(int renderDistanceTick) noexcept {
+            if (mRenderDistanceTick != renderDistanceTick) {
+                mRenderDistanceTick = renderDistanceTick;
+                mRenderDistance = 1 << renderDistanceTick; // 2^renderDistanceTick
+                OnPropertyChanged("RenderDistanceTick");
+                OnPropertyChanged("RenderDistance");
+            }
+        }
+
     private:
         State mState = State::MAIN_MENU;
+        float& mFOV = FOVyNormal;
+        float& mMouseSensitivity = mousemove;
+        int& mRenderDistance = viewdistance;
+        int mRenderDistanceTick = int(std::log2(viewdistance));
+        bool& mNiceGrass = NiceGrass;
+        bool& mVSync = vsync;
+        bool& mSmoothLighting = SmoothLighting;
+        bool& mShadows  = Renderer::AdvancedRender;
 
         NS_IMPLEMENT_INLINE_REFLECTION(GameMenuViewModel, NotifyPropertyChangedBase) {
             NsProp("State", &GameMenuViewModel::getState);
+            // settings 
+            NsProp("FOV", &GameMenuViewModel::getFOV, &GameMenuViewModel::setFOV);
+            NsProp("RenderDistanceTick", &GameMenuViewModel::getRenderDistanceTick, &GameMenuViewModel::setRenderDistanceTick);
+            NsProp("RenderDistance", &GameMenuViewModel::getRenderDistance);
+            NsProp("MouseSensitivity", &GameMenuViewModel::getMouseSensitivity, &GameMenuViewModel::setMouseSensitivity);
+            NsProp("NiceGrass", &GameMenuViewModel::getNiceGrass, &GameMenuViewModel::setNiceGrass);
+            NsProp("VSync", &GameMenuViewModel::getVSync, &GameMenuViewModel::setVSync);
+            NsProp("SmoothLighting", &GameMenuViewModel::getSmoothLighting, &GameMenuViewModel::setSmoothLighting);
+            NsProp("Shadows", &GameMenuViewModel::getShadows, &GameMenuViewModel::setShadows);
         }
     };
 
@@ -52,6 +96,9 @@ namespace Menus {
             };
             mRoot->FindName<Noesis::Button>("settings")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 mViewModel->setState(GameMenuViewModel::State::SETTINGS);
+            };
+            mRoot->FindName<Noesis::Button>("Save")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+                mViewModel->setState(GameMenuViewModel::State::MAIN_MENU);
             };
             mRoot->FindName<Noesis::Button>("exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 requestLeave();
