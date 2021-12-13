@@ -6,6 +6,7 @@
 #include "Renderer.h"
 #include "Universe/World/World.h"
 #include "Items.h"
+#include "System/MessageBus.h"
 
 void splashScreen() {
     auto splTex = Textures::LoadRGBTexture("./Assets/Textures/GUI/SplashScreen.bmp");
@@ -46,6 +47,7 @@ void createWindow() {
     windowwidth *= widthScale;
     windowheight *= heightScale;
     glfwSetWindowSize(MainWindow, windowwidth, windowheight);
+    glfwSwapBuffers(MainWindow);
 
     MouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     glfwMakeContextCurrent(MainWindow);
@@ -152,6 +154,7 @@ void MouseButtonFunc(GLFWwindow *, int button, int action, int) {
 }
 
 void CharInputFunc(GLFWwindow *, unsigned int c) {
+    MessageBus::Default().Get<int>("KeyEvents")->Send(nullptr, c);
     if (c >= 128) {
         const auto pwszUnicode = new wchar_t[2];
         pwszUnicode[0] = static_cast<wchar_t>(c);

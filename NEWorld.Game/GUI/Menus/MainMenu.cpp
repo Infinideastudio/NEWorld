@@ -8,16 +8,42 @@
 #include "Frustum.h"
 #include "NsApp/NotifyPropertyChangedBase.h"
 #include "Renderer.h"
+#include "NsGui/ObservableCollection.h"
+#include <filesystem>
+#include "Universe/World/Chunk.h"
+#include "NsGui/TextBox.h"
+#include "NsGui/ListView.h"
 
 namespace Menus {
+    class WorldModel : public NoesisApp::NotifyPropertyChangedBase
+    {
+    public:
+        WorldModel(std::string name) : mName(std::move(name)) {}
+        const char* name() const { return mName.c_str(); }
+
+    private:
+        std::string mName;
+
+        NS_IMPLEMENT_INLINE_REFLECTION(WorldModel, NotifyPropertyChangedBase) {
+            NsProp("Name", &WorldModel::name);
+        }
+    };
 
     class GameMenuViewModel : public NoesisApp::NotifyPropertyChangedBase {
     public:
-        enum class State { MAIN_MENU, SETTINGS };
+        GameMenuViewModel() {
+            for (auto&& x : std::filesystem::directory_iterator("./Worlds/")) {
+                if (is_directory(x)) {
+                    mWorlds.Add(Noesis::MakePtr<WorldModel>(x.path().filename().string()));
+                }
+            }
+        }
+        enum class State { MAIN_MENU, SETTINGS, SELECT_WORLD };
         const char* getState() const {
             switch (mState) {
             case State::MAIN_MENU: return "MainMenu";
             case State::SETTINGS: return "Settings";
+            case State::SELECT_WORLD: return "SelectWorld";
             default: assert(false);
             }
             return nullptr;
@@ -57,6 +83,10 @@ namespace Menus {
             }
         }
 
+        const Noesis::ObservableCollection<WorldModel>* getWorlds() const {
+            return &mWorlds;
+        }
+
     private:
         State mState = State::MAIN_MENU;
         float& mFOV = FOVyNormal;
@@ -67,6 +97,8 @@ namespace Menus {
         bool& mVSync = vsync;
         bool& mSmoothLighting = SmoothLighting;
         bool& mShadows  = Renderer::AdvancedRender;
+
+        Noesis::ObservableCollection<WorldModel> mWorlds;
 
         NS_IMPLEMENT_INLINE_REFLECTION(GameMenuViewModel, NotifyPropertyChangedBase) {
             NsProp("State", &GameMenuViewModel::getState);
@@ -79,6 +111,8 @@ namespace Menus {
             NsProp("VSync", &GameMenuViewModel::getVSync, &GameMenuViewModel::setVSync);
             NsProp("SmoothLighting", &GameMenuViewModel::getSmoothLighting, &GameMenuViewModel::setSmoothLighting);
             NsProp("Shadows", &GameMenuViewModel::getShadows, &GameMenuViewModel::setShadows);
+            // Select World
+            NsProp("Worlds", &GameMenuViewModel::getWorlds);
         }
     };
 
@@ -91,8 +125,8 @@ namespace Menus {
         void onViewBinding() override {
             mViewModel = Noesis::MakePtr<GameMenuViewModel>();
             mRoot->SetDataContext(mViewModel);
-            mRoot->FindName<Noesis::Button>("startGame")->Click() += [](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
-                pushGameView();
+            mRoot->FindName<Noesis::Button>("startGame")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+                mViewModel->setState(GameMenuViewModel::State::SELECT_WORLD);
             };
             mRoot->FindName<Noesis::Button>("settings")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 mViewModel->setState(GameMenuViewModel::State::SETTINGS);
@@ -100,9 +134,23 @@ namespace Menus {
             mRoot->FindName<Noesis::Button>("Save")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 mViewModel->setState(GameMenuViewModel::State::MAIN_MENU);
             };
+            mRoot->FindName<Noesis::Button>("Back")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+                mViewModel->setState(GameMenuViewModel::State::MAIN_MENU);
+            };
+            mRoot->FindName<Noesis::Button>("Create")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+                World::worldname = mRoot->FindName<Noesis::TextBox>("NewWorldNameTextBox")->GetText();
+                pushGameView();
+            };
+            mRoot->FindName<Noesis::Button>("Play")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+                World::worldname = static_cast<WorldModel*>(
+                    mRoot->FindName<Noesis::ListView>("WorldList")->GetSelectedItem()
+                )->name();
+                pushGameView();
+            };
             mRoot->FindName<Noesis::Button>("exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 requestLeave();
             };
+
         }
 
         void onRender() override {
@@ -200,6 +248,6 @@ namespace Menus {
     };
 
     std::unique_ptr<GUI::Scene> startMenu() {
-        return std::make_unique<Menus::MainMenu>();
+        return std::make_unique<MainMenu>();
     }
 }

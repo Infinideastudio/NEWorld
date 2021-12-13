@@ -5,6 +5,7 @@
 #include <NsCore/Ptr.h>
 #include <NsGui/IView.h>
 #include "NsGui/Grid.h"
+#include "System/PmrBase.h"
 
 namespace GUI {
     class FpsCounter
@@ -57,6 +58,8 @@ namespace GUI {
         const char* mXamlPath;
         bool mHasCursor;
         double mEnterTimeInSec;
+
+        std::vector<std::shared_ptr<PmrBase>> mListeners;
     };
 
     void pushScene(std::unique_ptr<Scene> scene);

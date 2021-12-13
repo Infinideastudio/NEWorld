@@ -7,10 +7,8 @@
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "variables": [],
       "cmakeToolchain": "D:/Projects/vcpkg/scripts/buildsystems/vcpkg.cmake"
     },
     {
@@ -23,7 +21,6 @@
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "variables": [],
       "cmakeToolchain": "C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
     },
     {

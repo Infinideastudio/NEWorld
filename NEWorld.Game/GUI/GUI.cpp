@@ -4,8 +4,57 @@
 #include <NsRender/GLFactory.h>
 #include <NoesisPCH.h>
 #include "Shader.h"
+#include "System/MessageBus.h"
+#include "Common/Logger.h"
 
 namespace GUI {
+    static Noesis::Key mapKey(int glfwKey)
+    {
+        using namespace Noesis;
+        static Noesis::Key keyTable[255] = {};
+        static bool keysLoaded = false;
+        if (!keysLoaded) {
+            keyTable['0'] = Key_D0;
+            keyTable['1'] = Key_D1;
+            keyTable['2'] = Key_D2;
+            keyTable['3'] = Key_D3;
+            keyTable['4'] = Key_D4;
+            keyTable['5'] = Key_D5;
+            keyTable['6'] = Key_D6;
+            keyTable['7'] = Key_D7;
+            keyTable['8'] = Key_D8;
+            keyTable['9'] = Key_D9;
+            keyTable['A'] = Key_A;
+            keyTable['B'] = Key_B;
+            keyTable['C'] = Key_C;
+            keyTable['D'] = Key_D;
+            keyTable['E'] = Key_E;
+            keyTable['F'] = Key_F;
+            keyTable['G'] = Key_G;
+            keyTable['H'] = Key_H;
+            keyTable['I'] = Key_I;
+            keyTable['J'] = Key_J;
+            keyTable['K'] = Key_K;
+            keyTable['L'] = Key_L;
+            keyTable['M'] = Key_M;
+            keyTable['N'] = Key_N;
+            keyTable['O'] = Key_O;
+            keyTable['P'] = Key_P;
+            keyTable['Q'] = Key_Q;
+            keyTable['R'] = Key_R;
+            keyTable['S'] = Key_S;
+            keyTable['T'] = Key_T;
+            keyTable['U'] = Key_U;
+            keyTable['V'] = Key_V;
+            keyTable['W'] = Key_W;
+            keyTable['X'] = Key_X;
+            keyTable['Y'] = Key_Y;
+            keyTable['Z'] = Key_Z;
+            keysLoaded = true;
+        }
+        if (glfwKey >= 'a' && glfwKey <= 'z') glfwKey = toupper(glfwKey);
+        return keyTable[glfwKey];
+    }
 
     void Scene::update() {
         // TODO: change to use glfw callback + message bus?
@@ -21,6 +70,9 @@ namespace GUI {
             else {
                 mView->MouseButtonUp(xpos, ypos, Noesis::MouseButton_Left);
             }
+            mListeners.push_back(MessageBus::Default().Get<int>("KeyEvents")->Listen([this](void*, int k) {
+                mView->KeyDown(mapKey(k)); 
+            }));
         }
 
         onUpdate();

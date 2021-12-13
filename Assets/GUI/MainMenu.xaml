@@ -23,18 +23,25 @@
     <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
       <Setter Property="FontFamily" Value="/#VCR OSD Mono"/>
     </Style>
+
     <!-- story boards -->
     <Storyboard x:Key="MainMenu">
       <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainMenuView">
         <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
       </DoubleAnimationUsingKeyFrames>
-      <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SettingsView">
-        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-      </DoubleAnimationUsingKeyFrames>
       <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="MainMenuView">
         <DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
       </BooleanAnimationUsingKeyFrames>
+      <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SettingsView">
+        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+      </DoubleAnimationUsingKeyFrames>
       <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="SettingsView">
+        <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+      </BooleanAnimationUsingKeyFrames>
+      <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SelectWorldView">
+        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+      </DoubleAnimationUsingKeyFrames>
+      <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="SelectWorldView">
         <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
       </BooleanAnimationUsingKeyFrames>
     </Storyboard>
@@ -42,16 +49,52 @@
       <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainMenuView">
         <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
       </DoubleAnimationUsingKeyFrames>
+      <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="MainMenuView">
+        <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+      </BooleanAnimationUsingKeyFrames>
       <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SettingsView">
         <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+      </DoubleAnimationUsingKeyFrames>
+      <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="SettingsView">
+        <DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
+      </BooleanAnimationUsingKeyFrames>
+      <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SelectWorldView">
+        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+      </DoubleAnimationUsingKeyFrames>
+      <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="SelectWorldView">
+        <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+      </BooleanAnimationUsingKeyFrames>
+    </Storyboard>
+    <Storyboard x:Key="SelectWorld">
+      <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MainMenuView">
+        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
       </DoubleAnimationUsingKeyFrames>
       <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="MainMenuView">
         <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
       </BooleanAnimationUsingKeyFrames>
+      <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SettingsView">
+        <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+      </DoubleAnimationUsingKeyFrames>
       <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="SettingsView">
+        <DiscreteBooleanKeyFrame KeyTime="0" Value="False"/>
+      </BooleanAnimationUsingKeyFrames>
+      <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SelectWorldView">
+        <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+      </DoubleAnimationUsingKeyFrames>
+      <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="SelectWorldView">
         <DiscreteBooleanKeyFrame KeyTime="0" Value="True"/>
       </BooleanAnimationUsingKeyFrames>
     </Storyboard>
+
+    <!-- Select World - Item Template -->
+    <DataTemplate x:Key="WorldItemTemplate">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding Name}" FontSize="20" Margin="5, 0, 5, 0" Grid.Column="0"/>
+      </Grid>
+    </DataTemplate>
   </Grid.Resources>
 
   <!-- states -->
@@ -59,6 +102,7 @@
     <VisualStateGroup x:Name="States">
       <VisualState x:Name="MainMenu" Storyboard="{StaticResource MainMenu}"/>
       <VisualState x:Name="Settings" Storyboard="{StaticResource Settings}"/>
+      <VisualState x:Name="SelectWorld" Storyboard="{StaticResource SelectWorld}"/>
     </VisualStateGroup>
   </VisualStateManager.VisualStateGroups>
 
@@ -80,6 +124,8 @@
   </Grid.ColumnDefinitions>
 
   <Image Grid.Column="1" Source="GUI/title.png" VerticalAlignment="Center" />
+
+  <!-- Main Menu -->
   <Viewbox x:Name="MainMenuView" Stretch="Uniform" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
     <StackPanel>
       <Button x:Name="startGame" Content="Start Game" Margin="0 0 0 10" Height="50" Width="600" />
@@ -88,6 +134,7 @@
     </StackPanel>
   </Viewbox>
 
+  <!-- Settings View -->
   <Viewbox x:Name="SettingsView" Stretch="Uniform" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
     <StackPanel>
       <StackPanel TextElement.Foreground="White">
@@ -127,6 +174,29 @@
         <CheckBox Margin="20,8,0,20" IsChecked="{Binding Shadows, Mode=TwoWay}">Shadows</CheckBox>
       </StackPanel>
       <Button x:Name="Save" Content="Save" Margin="0 10 0 0"></Button>
+    </StackPanel>
+  </Viewbox>
+  <!-- Select World View -->
+  <Viewbox x:Name="SelectWorldView" Stretch="Uniform" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
+    <StackPanel>
+      <TextBlock Text="Select World" FontSize="20" Margin="20,10,20,20" HorizontalAlignment="Left"/>
+      <StackPanel TextElement.Foreground="White">
+        <StackPanel.Background>
+          <SolidColorBrush Color="Black" Opacity="0.5"/>
+        </StackPanel.Background>
+        <ListBox
+          x:Name="WorldList"
+          SelectionMode="Single"
+          Height="100"
+          ItemsSource="{Binding Worlds}"
+          ItemTemplate="{StaticResource WorldItemTemplate}"/>
+      </StackPanel>
+      <Button x:Name="Play" Content="Play" Margin="0 10 0 0"></Button>
+      <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+        <TextBox x:Name="NewWorldNameTextBox" Placeholder="World Name" MinWidth="200"/>
+        <Button x:Name="Create" Content="Create" Margin="10 0 0 0"></Button>
+      </StackPanel>
+      <Button x:Name="Back" Content="Back" Margin="0 10 0 0"></Button>
     </StackPanel>
   </Viewbox>
 </Grid>
