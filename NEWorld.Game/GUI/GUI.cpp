@@ -33,6 +33,11 @@ namespace GUI {
             // Update view (layout, animations, ...)
             mView->Update(timer() - mEnterTimeInSec);
 
+            glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_DEPTH_BUFFER_BIT);
+            // Offscreen rendering phase populates textures needed by the on-screen rendering
+            mView->GetRenderer()->UpdateRenderTree();
+            mView->GetRenderer()->RenderOffscreen();
+            glPopAttrib();
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glViewport(0, 0, windowwidth, windowheight);
 
@@ -47,9 +52,6 @@ namespace GUI {
 
         if (mView) {
             glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_DEPTH_BUFFER_BIT);
-            // Offscreen rendering phase populates textures needed by the on-screen rendering
-            mView->GetRenderer()->UpdateRenderTree();
-            mView->GetRenderer()->RenderOffscreen();
             // Rendering is done in the active framebuffer
             mView->GetRenderer()->Render();
             glPopAttrib();

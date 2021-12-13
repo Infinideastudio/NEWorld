@@ -7,6 +7,17 @@
       mc:Ignorable="d"
       xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
       d:DesignWidth="1500" d:DesignHeight="900">
+  <Grid.Resources>
+    <SolidColorBrush x:Key="Brush.Background.Normal" Color="Black" Opacity="0.5"/>
+    <SolidColorBrush x:Key="Brush.Foreground.Normal" Color="White" Opacity="1"/>
+    <SolidColorBrush x:Key="Brush.Background.Pressed" Color="Black" Opacity="0.8"/>
+    <SolidColorBrush x:Key="Brush.Foreground.Pressed" Color="White" Opacity="1"/>
+    <SolidColorBrush x:Key="Brush.Border.Over" Color="White" Opacity="0.5"/>
+    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="FontFamily" Value="/#VCR OSD Mono"/>
+    </Style>
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+  </Grid.Resources>
   <!-- debug info (top left) -->
   <TextBlock x:Name="Debug"
              VerticalAlignment="Top"
@@ -29,9 +40,6 @@
     <Line X1="0" Y1="8" X2="0" Y2="-8" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
   </StackPanel>
   <!-- pause menu -->
-  <Grid.Resources>
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
-  </Grid.Resources>
   <ViewBox x:Name="Overlay" Stretch="Fill"
            Visibility="{Binding GamePaused, Converter={StaticResource BooleanToVisibility}}">
     <Rectangle Width="100" Height="100" Fill="Black" Opacity="0.25" />
