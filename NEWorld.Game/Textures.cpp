@@ -93,7 +93,7 @@ namespace Textures {
         bitmap.sizeX = bitmap.sizeY = 0;
         std::ifstream bmpfile(Filename, std::ios::binary | std::ios::in); //位图文件（二进制）
         if (!bmpfile.is_open()) {
-            printf("[console][Warning] Cannot load %s\n", Filename.c_str());
+            warningstream << "Cannot load " << Filename;
             return;
         }
         BITMAPINFOHEADER bih; //各种关于位图的参数

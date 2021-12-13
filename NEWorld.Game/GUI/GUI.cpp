@@ -69,9 +69,6 @@ namespace GUI {
             else {
                 mView->MouseButtonUp(xpos, ypos, Noesis::MouseButton_Left);
             }
-            mListeners.push_back(MessageBus::Default().Get<int>("KeyEvents")->Listen([this](void*, int k) {
-                mView->KeyDown(mapKey(k)); 
-            }));
         }
 
         onUpdate();
@@ -135,7 +132,12 @@ namespace GUI {
             mView = Noesis::GUI::CreateView(mRoot);
             mView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
             mView->GetRenderer()->Init(renderDevice);
+
+            mListeners.push_back(MessageBus::Default().Get<int>("KeyEvents")->Listen([this](void*, int k) {
+                mView->KeyDown(mapKey(k));
+                }));
         }
+
         onLoad();
     }
 

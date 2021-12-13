@@ -60,7 +60,10 @@
       <TextBlock Grid.Row="0" Text="Game Paused" Foreground="White"/>
     </Viewbox>
     <Viewbox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
-      <Button x:Name="Resume" Content="Resume" Width="600" Height="50"/>
+      <StackPanel>
+        <Button x:Name="Resume" Content="Resume" Width="600" Height="50" Margin="0 0 0 10"/>
+        <Button x:Name="Exit" Content="Exit" Width="600" Height="50" Margin="0 0 0 10"/>
+      </StackPanel>
     </Viewbox>
   </Grid>
   <!-- Hot bar -->
@@ -73,14 +76,13 @@
       </Style>
       <Style TargetType="TextBlock">
         <Setter Property="FontSize" Value="32"/>
-        <Setter Property="Margin" Value="0 0 5 5"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
       </Style>
       <Style TargetType="Image">
-        <Setter Property="Width" Value="128"/>
-        <Setter Property="Height" Value="128"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="100"/>
         <Setter Property="Stretch" Value="Fill"/>
       </Style>
     </StackPanel.Resources>

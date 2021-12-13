@@ -26,6 +26,7 @@
 #include <NsRender/Texture.h>
 #include "NsGui/TextBlock.h"
 #include "NsGui/Label.h"
+#include "GUI/Menus/Menus.h"
 
 namespace NoesisApp {
     class Window;
@@ -647,6 +648,12 @@ public:
             updateThreadPaused = false;
             glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         };
+        mRoot->FindName<Noesis::Button>("Exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+            mViewModel->setGamePaused(false);
+            updateThreadPaused = false;
+            requestLeave();
+            GUI::pushScene(Menus::startMenu());
+        };
         for (int i = 0; i <= 9; ++i) {
             mHotBar[i] = mRoot->FindName<Noesis::Image>((std::string("Hotbar") + std::to_string(i)).c_str());
             mHotBarCnt[i] = mRoot->FindName<Noesis::TextBlock>((std::string("HotbarCnt") + std::to_string(i)).c_str());
@@ -723,7 +730,7 @@ public:
         for (int i = 0; i < 10; ++i) {
             mHotBar[i]->SetSource(getTextureForItem(Player::inventory[3][i]));
             mHotBarCnt[i]->SetText(std::to_string(Player::inventoryAmount[3][i]).c_str());
-            // should have used proper data binding to seperate logic from styling
+            // should have used proper data binding to separate logic from styling
             // but hey it works
             static_cast<Noesis::Label*>(mHotBar[i]->GetParent()->GetParent())->SetBorderThickness(
                 Noesis::Thickness(i == Player::indexInHand ? 5.f : 1.f)
