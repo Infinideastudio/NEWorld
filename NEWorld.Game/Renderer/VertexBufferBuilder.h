@@ -22,11 +22,11 @@ namespace Renderer {
             const auto remain = size - off;
             if (off == 0) make_sector();
             if (remain >= static_cast<ptrdiff_t>(v.size())) {
-                std::copy(v.begin(), v.end(), mSectors.back().begin() + off);
+                std::copy(v.begin(), v.end(), mSectors.back()->begin() + off);
             } else {
-                std::copy(v.begin(), v.begin() + remain, mSectors.back().begin() + off);
+                std::copy(v.begin(), v.begin() + remain, mSectors.back()->begin() + off);
                 make_sector();
-                std::copy(v.begin() + remain, v.end(), mSectors.back().begin());
+                std::copy(v.begin() + remain, v.end(), mSectors.back()->begin());
             }
             mTail += static_cast<ptrdiff_t>(v.size());
             mVts += count;
@@ -44,7 +44,7 @@ namespace Renderer {
                         GL_ARRAY_BUFFER, 0, segmentSize,
                         GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_FLUSH_EXPLICIT_BIT
                 ));
-                for (auto &s: mSectors) target = std::copy(s.begin(), s.end(), target);
+                for (auto &s: mSectors) target = std::copy(s->begin(), s->end(), target);
                 glFlushMappedBufferRange(GL_ARRAY_BUFFER, 0, segmentSize);
                 glUnmapBuffer(GL_ARRAY_BUFFER);
                 glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -52,9 +52,9 @@ namespace Renderer {
         }
 
     private:
-        void make_sector() noexcept { mSectors.emplace_back(); }
+        void make_sector() noexcept { mSectors.emplace_back(temp::make_unique<std::array<float, size>>()); }
 
-        temp::vector<std::array<float, size>> mSectors{};
+        temp::vector<temp::unique_ptr<std::array<float, size>>> mSectors{};
         ptrdiff_t mTail{0u}, mVts{0u};
     };
 }
