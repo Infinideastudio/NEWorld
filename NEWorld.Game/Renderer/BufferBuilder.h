@@ -39,7 +39,8 @@ namespace Renderer {
         void flush(VBOID &buffer, vtxCount &vts) const noexcept {
             vts = static_cast<vtxCount>(mVts);
             if (mVts != 0) {
-                if (buffer == 0) glCreateBuffers(1, &buffer);
+                if (buffer != 0) glDeleteBuffers(1, &buffer);
+                glCreateBuffers(1, &buffer);
                 const auto segmentSize = static_cast<GLsizeiptr>(mSectors.size() * size * sizeof(B));
                 glBindBuffer(GL_ARRAY_BUFFER, buffer);
                 glNamedBufferStorage(buffer, segmentSize, nullptr, GL_MAP_WRITE_BIT);

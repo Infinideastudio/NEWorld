@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Definitions.h"
-#include "Shader.h"
+#include "GL/Pipeline.h"
 #include <cstring>
 
 namespace Renderer {
@@ -19,19 +19,13 @@ namespace Renderer {
     extern int shadowdist;
     extern float sunlightXrot, sunlightYrot;
     extern unsigned int DepthTexture;
-    extern std::vector<Shader> shaders;
-    extern int ActiveShader;
+    extern int ActivePipeline;
 
     void BatchStart(int tc, int cc, int ac) noexcept;
 
-    void RenderBufferDirect(VBOID buffer, vtxCount vtxs, int tc, int cc, int ac = 0);
+    void RenderBufferDirect(VBOID buffer, vtxCount vtxs);
 
     void initShaders();
-
-    inline void bindShader(int shaderID) {
-        shaders[shaderID].bind();
-        ActiveShader = shaderID;
-    }
 
     void destroyShaders();
 

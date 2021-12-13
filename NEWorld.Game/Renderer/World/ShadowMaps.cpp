@@ -39,7 +39,6 @@ namespace ShadowMaps {
     void RenderShadowMap(double xpos, double ypos, double zpos, double curtime) {
         const auto cx = World::GetChunkPos(static_cast<int>(xpos)), cy = World::GetChunkPos(static_cast<int>(ypos)), cz = World::GetChunkPos(static_cast<int>(zpos));
 
-        Renderer::bindShader(Renderer::DepthShader);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnableVertexAttribArray(4);
         glDisable(GL_TEXTURE_2D);
@@ -62,7 +61,6 @@ namespace ShadowMaps {
 
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
         glDisableVertexAttribArray(4);
-        Shader::unbind();
 
         glEnable(GL_FOG);
         glEnable(GL_BLEND);

@@ -232,7 +232,6 @@ public:
         Renderer::EnableShaders();
         if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 0);
         Renderer::DisableShaders();
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
         glEnable(GL_BLEND);
 
         MutexLock(Mutex);
@@ -266,8 +265,6 @@ public:
         glDisable(GL_CULL_FACE);
         if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 2);
         Renderer::DisableShaders();
-
-        glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 
         glLoadIdentity();
         glRotated(plookupdown, 1, 0, 0);

@@ -66,7 +66,7 @@ namespace {
         return GL_INVALID_ENUM;
     }
 
-    void CheckErrors(GLuint res, int status, const std::string &eMsg) {
+    void CheckErrorShader(GLuint res, int status, const std::string &eMsg) {
         auto st = GL_TRUE;
         glGetShaderiv(res, status, &st);
         if (st == GL_FALSE) DebugWarning(eMsg); else return;
@@ -75,6 +75,19 @@ namespace {
         if (logLength > 1) {
             const auto log = temp::make_unique<GLchar[]>(logLength);
             glGetShaderInfoLog(res, logLength, &charsWritten, log.get());
+            throw std::runtime_error(log.get());
+        }
+    }
+
+    void CheckErrorProgram(GLuint res, int status, const std::string &eMsg) {
+        auto st = GL_TRUE;
+        glGetProgramiv(res, status, &st);
+        if (st == GL_FALSE) DebugWarning(eMsg); else return;
+        int logLength, charsWritten;
+        glGetProgramiv(res, GL_INFO_LOG_LENGTH, &logLength);
+        if (logLength > 1) {
+            const auto log = temp::make_unique<GLchar[]>(logLength);
+            glGetProgramInfoLog(res, logLength, &charsWritten, log.get());
             throw std::runtime_error(log.get());
         }
     }
@@ -89,21 +102,21 @@ namespace {
 
     using GLObject = Renderer::Internal::Object;
 
-    auto MakeProgram(const temp::unordered_map<Renderer::ShaderType, Renderer::GLShader> &stages,
-                     const std::map<int, std::string> &binds) {
+    auto MakeProgram(const temp::unordered_map<Renderer::ShaderType, Renderer::GLShader> &stages) {
         auto program = glCreateProgram();
-        auto deleter = [](GLObject *ptr) noexcept { glDeleteProgram(FromFakePtr(ptr)); };
+        auto deleter = [](GLObject *ptr) noexcept {
+            if (ptr) {
+                glDeleteProgram(FromFakePtr(ptr));
+            }
+        };
         auto result = std::unique_ptr<GLObject, decltype(deleter)>(ToFakePtr(program), deleter);
         // TODO(implement checks)
         for (auto&&[type, shader]: stages) {
             glAttachShader(program, FromFakePtr(shader.get()));
         }
-        for (auto&&[id, name]: binds) {
-            glBindAttribLocation(program, id, name.c_str());
-        }
         glLinkProgram(program);
-        PrintDebug(program);
-        CheckErrors(program, GL_LINK_STATUS, "Shader linking error!");
+        //PrintDebug(program);
+        CheckErrorProgram(program, GL_LINK_STATUS, "Shader linking error!");
         return result;
     }
 
@@ -125,8 +138,10 @@ namespace {
         GLuint vao;
         glCreateVertexArrays(1, &vao);
         auto deleter = [](GLObject *ptr) noexcept {
-            auto vao = FromFakePtr(ptr);
-            glDeleteVertexArrays(1, &vao);
+            if (ptr) {
+                auto vao = FromFakePtr(ptr);
+                glDeleteVertexArrays(1, &vao);
+            }
         };
         auto result = std::unique_ptr<GLObject, decltype(deleter)>(ToFakePtr(vao), deleter);
         // TODO(implement checks)
@@ -143,7 +158,7 @@ namespace {
         for (auto&&[bind, zip]: binds) {
             if (result.size() <= bind) result.resize(bind + 1, 0);
             result[bind] = zip.first;
-            glVertexArrayBindingDivisor(vao, bind, zip.second);
+            //glVertexArrayBindingDivisor(vao, bind, zip.second);
         }
         return result;
     }
@@ -210,12 +225,21 @@ namespace {
             glDrawArraysInstanced(mMode, first, count, instance);
         }
 
+        struct IndirectIndexedBaseVertex {
+            uint32_t count;
+            uint32_t instanceCount;
+            uint32_t firstIndex;
+            uint32_t baseVertex;
+            uint32_t baseInstance;
+        };
+
         void DrawIndexed(int count, int first, int instance) override {
-            intptr_t offset = first;
-            if (mElement == GL_UNSIGNED_SHORT) offset *= 2;
-            if (mElement == GL_UNSIGNED_INT) offset *= 4;
-            if (instance == 1) return glDrawElements(mMode, count, mElement, reinterpret_cast<void *>(offset));
-            glDrawElementsInstanced(mMode, count, mElement, reinterpret_cast<void *>(offset), instance);
+            IndirectIndexedBaseVertex command = {
+                    static_cast<uint32_t>(count),
+                    static_cast<uint32_t>(instance),
+                    static_cast<uint32_t>(first), 0, 0
+            };
+            glDrawElementsIndirect(GL_TRIANGLES, mElement, &command);
         }
 
         void SetUniform(GLint loc, float value) override {
@@ -254,23 +278,17 @@ namespace Renderer {
         const auto dataL = static_cast<int>(preprocessed.size());
         glShaderSource(res, 1, reinterpret_cast<const GLchar *const *>(&dataP), &dataL);
         glCompileShader(res);
-        CheckErrors(res, GL_COMPILE_STATUS, "Shader compilation error! Shader: " + std::string(program));
+        CheckErrorShader(res, GL_COMPILE_STATUS, "Shader compilation error! Shader: " + std::string(program));
         return {ToFakePtr(res), [](auto ptr) noexcept { glDeleteShader(FromFakePtr(ptr)); }};
     }
 
-    GLuint CreateProgram(GLShader vert, GLShader frag, const std::map<int, std::string> &binds) {
-        temp::unordered_map<Renderer::ShaderType, Renderer::GLShader> stages{};
-        stages.insert_or_assign(ShaderType::Vertex, std::move(vert));
-        stages.insert_or_assign(ShaderType::Fragment, std::move(frag));
-        return FromFakePtr(MakeProgram(stages, binds).release());
-    }
-
     Pipeline PipelineBuilder::Build() {
-        auto program = MakeProgram(mStages, {});
+        auto program = MakeProgram(mStages);
         auto vao = MakeVAO(mSpecs);
-        auto binds = ZipBinds(FromFakePtr(vao.get()), mBindings);
+        auto strides = ZipBinds(FromFakePtr(vao.get()), mBindings);
         auto object = std::make_shared<PipelineOGL>(
-                CastTopology(mTopology), std::move(binds), FromFakePtr(program.release()), FromFakePtr(vao.release())
+                CastTopology(mTopology), std::move(strides),
+                FromFakePtr(vao.release()), FromFakePtr(program.release())
         );
         return std::static_pointer_cast<IPipeline>(std::move(object));
     }

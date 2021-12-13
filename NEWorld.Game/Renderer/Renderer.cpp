@@ -1,6 +1,7 @@
 #include "Renderer.h"
-#include "Shader.h"
+#include <fstream>
 #include <algorithm>
+#include "Temp/String.h"
 #include "Frustum.h"
 #include "BufferBuilder.h"
 
@@ -47,8 +48,8 @@ namespace Renderer {
     int MaxShadowDist = 4;
     int shadowdist;
     float sunlightXrot, sunlightYrot;
-    std::vector<Shader> shaders;
-    int ActiveShader;
+    std::vector<Pipeline> pipelines;
+    int ActivePipeline;
     int index = 0, size = 0;
     unsigned int ShadowFBO, DepthTexture;
 
@@ -64,25 +65,6 @@ namespace Renderer {
         return buffer;
     }
 
-    void BatchStartNormal(int tc, int cc, int ac) noexcept {
-        const auto stride = static_cast<GLsizei>((tc + cc + ac + 3) * sizeof(float));
-        if (tc) glVertexAttribPointer(2, tc, GL_FLOAT, GL_FALSE, stride, (float *) (ac * sizeof(float)));
-        if (cc) glVertexAttribPointer(3, cc, GL_FLOAT, GL_FALSE, stride, (float *) ((ac + tc) * sizeof(float)));
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, (float *) ((ac + tc + cc) * sizeof(float)));
-    }
-
-    void BatchStartAdvance(int tc, int cc, int ac) noexcept {
-        const auto stride = static_cast<GLsizei>((tc + cc + ac + 3) * sizeof(float));
-        if (ac) glVertexAttribPointer(1, ac, GL_FLOAT, GL_FALSE, stride, static_cast<float *>(0));
-        if (tc) glVertexAttribPointer(2, tc, GL_FLOAT, GL_FALSE, stride, (float *) (ac * sizeof(float)));
-        if (cc) glVertexAttribPointer(3, cc, GL_FLOAT, GL_FALSE, stride, (float *) ((ac + tc) * sizeof(float)));
-        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, (float *) ((ac + tc + cc) * sizeof(float)));
-    }
-
-    void BatchStart(int tc, int cc, int ac) noexcept {
-       if (AdvancedRender) BatchStartAdvance(tc, cc, ac); else BatchStartNormal(tc, cc, ac);
-    }
-
     struct IndirectBaseVertex {
         uint32_t count;
         uint32_t instanceCount;
@@ -91,24 +73,51 @@ namespace Renderer {
         uint32_t baseInstance;
     };
 
-    void RenderBufferDirect(VBOID buffer, vtxCount vtxs, int tc, int cc, int ac) {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GetDefaultQuadIndex());
-        BatchStart(tc, cc, ac);
-        IndirectBaseVertex command = {static_cast<uint32_t>(vtxs + vtxs / 2), 1, 0, 0, 0};
-        glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, &command, 1, 0);
+    void RenderBufferDirect(VBOID buffer, vtxCount vtxs) {
+        pipelines[ActivePipeline]->BindVertexBuffer(1, buffer, 0);
+        pipelines[ActivePipeline]->DrawIndexed(vtxs + vtxs/2, 0);
+    }
+
+    static temp::string LoadFile(const std::string &path) {
+        auto ss = temp::ostringstream{};
+        std::ifstream input_file(path);
+        if (!input_file.is_open()) {
+            throw std::runtime_error("No such file:" + path);
+        }
+        ss << input_file.rdbuf();
+        return ss.str();
+    }
+
+    Pipeline BuildPipeline(
+            const std::string& vshPath, const std::string& fshPath,
+            int tc, int cc, int ac, bool useAc, const std::vector<std::string>& defines = {}
+    ) noexcept {
+        constexpr int sof = sizeof(float);
+        PipelineBuilder builder{Topology::TriangleList};
+        builder.SetBinding(1, (tc + cc + ac + 3) * sof, 0);
+        if (ac && useAc) builder.AddAttribute(DataType::Float32, 1, 1, ac, 0);
+        if (tc) builder.AddAttribute(DataType::Float32, 1, 2, tc, ac * sof);
+        if (cc) builder.AddAttribute(DataType::Float32, 1, 3, cc, (ac + tc) * sof);
+        builder.AddAttribute(DataType::Float32, 1, 4, 3, (ac + tc + cc) * sof);
+        const auto sourceVsh = LoadFile(vshPath);
+        const auto sourceFsh = LoadFile(fshPath);
+        builder.SetShader(ShaderType::Vertex, Compile(ShaderType::Vertex, sourceVsh, defines));
+        builder.SetShader(ShaderType::Fragment, Compile(ShaderType::Fragment, sourceFsh, defines));
+        auto result = builder.Build();
+        result->BindIndexBuffer(GetDefaultQuadIndex(), IndexType::U32);
+        return result;
     }
 
     void initShaders() {
-        std::set<std::string> defines;
+        std::vector<std::string> defines {};
         sunlightXrot = 30.0f;
         sunlightYrot = 60.0f;
         shadowdist = std::min(MaxShadowDist, viewdistance);
-        shaders = {
-                Shader("./Assets/Shaders/Main.vsh", "./Assets/Shaders/Main.fsh", false),
-                Shader("./Assets/Shaders/Shadow.vsh", "./Assets/Shaders/Shadow.fsh", false),
-                Shader("./Assets/Shaders/Depth.vsh", "./Assets/Shaders/Depth.fsh", false, defines),
-                Shader("./Assets/Shaders/Simple.vsh", "./Assets/Shaders/Simple.fsh", false)
+        pipelines = {
+                BuildPipeline("./Assets/Shaders/Main.vsh", "./Assets/Shaders/Main.fsh", 2, 3, 1, true),
+                BuildPipeline("./Assets/Shaders/Shadow.vsh", "./Assets/Shaders/Shadow.fsh", 0,0,0, false),
+                BuildPipeline("./Assets/Shaders/Depth.vsh", "./Assets/Shaders/Depth.fsh", 0, 0, 0, false, defines),
+                BuildPipeline("./Assets/Shaders/Simple.vsh", "./Assets/Shaders/Simple.fsh", 2, 3, 1, false)
         };
 
         glGenTextures(1, &DepthTexture);
@@ -133,28 +142,27 @@ namespace Renderer {
         }
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 
-        shaders[MainShader].bind();
-        shaders[MainShader].setUniform("Tex", 0);
-        shaders[MainShader].setUniform("DepthTex", 1);
-        shaders[MainShader].setUniform("SkyColor", skycolorR, skycolorG, skycolorB, 1.0f);
-        shaders[SimpleShader].setUniform("Tex", 0);
-        Shader::unbind();
+        pipelines[MainShader]->SetUniform(0, 0);
+        pipelines[MainShader]->SetUniform(1, 1);
+        pipelines[MainShader]->SetUniform(5, skycolorR, skycolorG, skycolorB, 1.0f);
+        pipelines[SimpleShader]->SetUniform(0, 0);
     }
 
     void destroyShaders() {
-        for (auto &shader: shaders)
-            shader.release();
-        shaders.clear();
         glDeleteTextures(1, &DepthTexture);
         glDeleteFramebuffersEXT(1, &ShadowFBO);
     }
 
+    void BindPipeline(int shaderID) {
+        pipelines[shaderID]->Use();
+        ActivePipeline = shaderID;
+    }
+
     void EnableAdvancedShaders() {
         shadowdist = std::min(MaxShadowDist, viewdistance);
-
-        //Enable shader
-        auto &shader = shaders[MainShader];
-        bindShader(MainShader);
+        //Enable pipeline
+        auto &pipeline = pipelines[MainShader];
+        BindPipeline(MainShader);
 
         //Calc matrix
         const auto scale = 16.0f * sqrt(3.0f);
@@ -166,23 +174,13 @@ namespace Renderer {
         frus.MultRotate(sunlightYrot, 0.0f, 1.0f, 0.0f);
 
         //Set uniform
-        shader.setUniform("renderdist", viewdistance * 16.0f);
-        shader.setUniform("Depth_proj", frus.getProjMatrix());
-        shader.setUniform("Depth_modl", frus.getModlMatrix());
-
-        //Enable arrays for additional vertex attributes
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-        glEnableVertexAttribArray(3);
-        glEnableVertexAttribArray(4);
+        pipeline->SetUniform(6, viewdistance * 16.0f);
+        pipeline->SetUniform(2, frus.getProjMatrix());
+        pipeline->SetUniform(3, frus.getModlMatrix());
     }
 
     void EnableSimpleShaders() {
-        bindShader(SimpleShader);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-        glEnableVertexAttribArray(3);
-        glEnableVertexAttribArray(4);
+        BindPipeline(SimpleShader);
     }
 
     void EnableShaders() {
@@ -190,18 +188,15 @@ namespace Renderer {
     }
 
     void DisableShaders() {
-        Shader::unbind();
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
-        glDisableVertexAttribArray(3);
-        glDisableVertexAttribArray(4);
+        glBindVertexArray(0);
+        glUseProgram(0);
     }
 
     void StartShadowPass() {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, ShadowFBO);
         glDrawBuffer(GL_NONE);
         glReadBuffer(GL_NONE);
-        bindShader(ShadowShader);
+        BindPipeline(ShadowShader);
         glViewport(0, 0, ShadowRes, ShadowRes);
     }
 
@@ -211,7 +206,7 @@ namespace Renderer {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
         glDrawBuffer(GL_BACK);
         glReadBuffer(GL_BACK);
-        Shader::unbind();
+        glBindVertexArray(0);
         glViewport(0, 0, windowwidth, windowheight);
     }
 }

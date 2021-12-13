@@ -8,13 +8,13 @@ const mat4 normalize = mat4(
 	0.5, 0.5, 0.499, 1.0);
 const float delta = 0.05;
 
-uniform sampler2D Tex;
-uniform sampler2D DepthTex;
-uniform mat4 Depth_proj;
-uniform mat4 Depth_modl;
-uniform mat4 TransMat;
-uniform vec4 SkyColor;
-uniform float renderdist;
+layout(location=0) uniform sampler2D Tex;
+layout(location=1) uniform sampler2D DepthTex;
+layout(location=2) uniform mat4 Depth_proj;
+layout(location=3) uniform mat4 Depth_modl;
+layout(location=4) uniform mat4 TransMat;
+layout(location=5) uniform vec4 SkyColor;
+layout(location=6) uniform float renderdist;
 
 in vOut {
 	vec2 fTexCrood;

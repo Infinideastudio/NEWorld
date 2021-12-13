@@ -1,6 +1,6 @@
 #version 450
 
-uniform sampler2D Tex;
+layout(location=0) uniform sampler2D Tex;
 
 in vOut {
 	vec2 fTexCrood;

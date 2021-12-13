@@ -37,9 +37,6 @@ namespace Renderer {
 
     GLShader Compile(ShaderType type, std::string_view program, const std::vector<std::string> &defines);
 
-    //TODO(Temp Function)
-    GLuint CreateProgram(GLShader vert, GLShader frag, const std::map<int, std::string>& binds);
-
     struct IPipeline {
         virtual void Use() = 0;
 
@@ -70,23 +67,24 @@ namespace Renderer {
     public:
         explicit PipelineBuilder(Topology topology) noexcept: mTopology(topology) {}
 
-        void AddBinding(int location, int stride, int divisor) noexcept {
+        void SetBinding(int location, int stride, int divisor) noexcept {
             mBindings.insert_or_assign(location, std::pair(stride, divisor));
         }
 
         bool AddAttribute(DataType type, int binding, int location, int width, int offset) noexcept {
             const auto binds = mBindings.find(binding);
             if (binds == mBindings.end()) return false; // 没有对应binding记录
+            const auto stride = binds->second.first;
             switch (type) {
                 case DataType::Float16:
-                    if (offset + width * 2 > binds->first) return false; //超出stride长度
+                    if (offset + width * 2 > stride) return false; //超出stride长度
                     break;
                 case DataType::Int32:
                 case DataType::Float32:
-                    if (offset + width * 4 > binds->first) return false; //超出stride长度
+                    if (offset + width * 4 > stride) return false; //超出stride长度
                     break;
                 case DataType::Float64:
-                    if (offset + width * 8 > binds->first) return false; //超出stride长度
+                    if (offset + width * 8 > stride) return false; //超出stride长度
                     break;
                 default:
                     return false; //未定义的数据类别

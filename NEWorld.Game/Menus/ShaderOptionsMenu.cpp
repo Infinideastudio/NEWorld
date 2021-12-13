@@ -19,7 +19,6 @@ namespace Menus {
                                           0.0, 0.0);
             backbtn = GUI::button(GetStrbyKey("NEWorld.render.back"), -250, 250, -44, -20, 0.5, 0.5, 1.0, 1.0);
             registerControls(5, &title, &enablebtn, &shadowresbar, &shadowdistbar, &backbtn);
-            //Renderer::destroyShaders();
             if (!Renderer::AdvancedRender) shadowresbar.enabled = shadowdistbar.enabled = false;
         }
 
@@ -33,7 +32,6 @@ namespace Menus {
             Renderer::MaxShadowDist = (shadowdistbar.barpos + 1) / 4 + 2;
             if (backbtn.clicked) {
                 GUI::PopPage();
-                if (Renderer::AdvancedRender) Renderer::initShaders();
             }
             enablebtn.text = GetStrbyKey("NEWorld.shaders.enable") + BoolYesNo(Renderer::AdvancedRender);
             std::stringstream ss;
