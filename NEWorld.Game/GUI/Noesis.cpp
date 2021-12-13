@@ -18,8 +18,7 @@
 #include <NsApp/Interaction.h>
 #include "Common/Logger.h"
 
-void GUI::noesisSetup()
-{
+void GUI::noesisSetup() {
     Noesis::SetLogHandler([](const char*, uint32_t, uint32_t level, const char*, const char* msg) {
         Logger::Level prefixes[] = {
             Logger::Level::debug,
@@ -54,4 +53,9 @@ void GUI::noesisSetup()
     Noesis::RegisterComponent<NoesisApp::GoToStateAction>();
     Noesis::TypeOf<NoesisApp::Interaction>(); // Force the creation of its reflection type
     Noesis::TypeOf<NoesisApp::StyleInteraction>(); // Force the creation of its reflection type
+}
+
+
+void GUI::noesisShutdown() {
+    Noesis::GUI::Shutdown();
 }

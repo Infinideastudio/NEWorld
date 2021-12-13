@@ -140,10 +140,9 @@ namespace Menus {
                 World::worldname = mRoot->FindName<Noesis::TextBox>("NewWorldNameTextBox")->GetText();
                 pushGameView();
             };
-            mRoot->FindName<Noesis::Button>("Play")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
-                World::worldname = static_cast<WorldModel*>(
-                    mRoot->FindName<Noesis::ListView>("WorldList")->GetSelectedItem()
-                )->name();
+            auto worldList = mRoot->FindName<Noesis::ListView>("WorldList");
+            worldList->MouseDoubleClick() += [this, worldList](Noesis::BaseComponent*, const Noesis::MouseButtonEventArgs&) {
+                World::worldname = static_cast<WorldModel*>(worldList->GetSelectedItem())->name();
                 pushGameView();
             };
             mRoot->FindName<Noesis::Button>("exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {

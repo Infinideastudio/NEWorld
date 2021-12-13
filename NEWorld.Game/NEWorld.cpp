@@ -73,6 +73,7 @@ int main() {
     //不对啊这不是FB！！！这是正宗的C++！！！！！！
     //楼上的楼上在瞎说！！！别信他的！！！
     //……所以你是不是应该说“吐槽C艹”中？——地鼠
+    GUI::noesisShutdown();
     glfwTerminate();
     //反初始化音频系统
     AudioSystem::UnInit();

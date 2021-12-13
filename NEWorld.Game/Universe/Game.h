@@ -3,6 +3,7 @@
 #include "CommandHandler.h"
 #include <al.h>
 #include "AudioSystem.h"
+#include "Common/Logger.h"
 
 
 class Game : public CommandHandler {
@@ -572,6 +573,7 @@ public:
     }
 
     static void saveGame() {
+        infostream << "Saving world";
         World::saveAllChunks();
         if (!Player::save(World::worldname)) {
 #ifdef NEWORLD_CONSOLE_OUTPUT

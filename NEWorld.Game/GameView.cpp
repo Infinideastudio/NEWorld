@@ -92,7 +92,7 @@ private:
 
 public:
     GameView() : Scene("InGame.xaml", false), mViewModel(Noesis::MakePtr<GameViewViewModel>()) {}
-
+    
     void GameThreadloop() {
         //Wait until start...
         MutexLock(Mutex);

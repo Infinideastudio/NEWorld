@@ -2,4 +2,5 @@
 
 namespace GUI {
     void noesisSetup();
+    void noesisShutdown();
 }

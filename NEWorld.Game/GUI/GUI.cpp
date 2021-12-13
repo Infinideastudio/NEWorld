@@ -7,8 +7,7 @@
 #include "Common/Logger.h"
 
 namespace GUI {
-    static Noesis::Key mapKey(int glfwKey)
-    {
+    static Noesis::Key mapKey(int glfwKey) {
         using namespace Noesis;
         static Noesis::Key keyTable[255] = {};
         static bool keysLoaded = false;
@@ -58,15 +57,24 @@ namespace GUI {
     void Scene::update() {
         // TODO: change to use glfw callback + message bus?
         if (mView) {
+            static bool pressed = false;
+            static double lastPressedTime = 0;
             double xpos, ypos;
             glfwGetCursorPos(MainWindow, &xpos, &ypos);
             mView->MouseMove(xpos, ypos);
             mView->SetSize(windowwidth, windowheight);
             int state = glfwGetMouseButton(MainWindow, GLFW_MOUSE_BUTTON_LEFT);
-            if (state == GLFW_PRESS) {
+            if (state == GLFW_PRESS && !pressed) {
                 mView->MouseButtonDown(xpos, ypos, Noesis::MouseButton_Left);
+                auto curTime = timer();
+                if (curTime - lastPressedTime < 0.5) {
+                    mView->MouseDoubleClick(xpos, ypos, Noesis::MouseButton_Left);
+                }
+                pressed = true;
+                lastPressedTime = curTime;
             }
-            else {
+            else if(state != GLFW_PRESS && pressed) {
+                pressed = false;
                 mView->MouseButtonUp(xpos, ypos, Noesis::MouseButton_Left);
             }
         }
@@ -107,7 +115,10 @@ namespace GUI {
     }
 
     Scene::~Scene() {
-
+        if (mView) {
+            mView->GetRenderer()->Shutdown();
+            mView.Reset();
+        }
     }
 
     void Scene::singleLoop() {
@@ -135,6 +146,7 @@ namespace GUI {
 
             mListeners.push_back(MessageBus::Default().Get<int>("KeyEvents")->Listen([this](void*, int k) {
                 mView->KeyDown(mapKey(k));
+                mView->Char(k);
                 }));
         }
 
