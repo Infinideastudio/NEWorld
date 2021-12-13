@@ -28,7 +28,7 @@ namespace GUI {
     class Scene {
     public:
         Scene(const char* xaml, bool hasCursor = true) :
-            mXamlPath(xaml), mHasCursor(hasCursor) {}
+            mXamlPath(xaml), mHasCursor(hasCursor), mEnterTimeInSec(timer()) {}
 
         virtual ~Scene();
 
@@ -42,6 +42,7 @@ namespace GUI {
         virtual void onRender() {}
         virtual void onUpdate() {}
         virtual void onLoad() {}
+        virtual void onViewBinding() {}
 
         Noesis::Ptr<Noesis::Grid> mRoot;
         Noesis::Ptr<Noesis::IView> mView;
@@ -55,7 +56,7 @@ namespace GUI {
         bool mShouldLeave = false;
         const char* mXamlPath;
         bool mHasCursor;
-        double mLastRenderTimeInSec;
+        double mEnterTimeInSec;
     };
 
     void pushScene(std::unique_ptr<Scene> scene);

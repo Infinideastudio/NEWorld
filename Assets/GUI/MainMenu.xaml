@@ -57,6 +57,12 @@
     </VisualStateGroup>
   </VisualStateManager.VisualStateGroups>
 
+  <b:Interaction.Triggers>
+    <ei:DataTrigger Binding="{Binding State}" Value="{Binding State}">
+      <ei:GoToStateAction StateName="{Binding State}"/>
+    </ei:DataTrigger>
+  </b:Interaction.Triggers>
+
   <Grid.RowDefinitions>
     <RowDefinition Height="300*"/>
     <RowDefinition Height="300*"/>
@@ -68,27 +74,15 @@
     <ColumnDefinition Width="80*"/>
   </Grid.ColumnDefinitions>
 
-  <i:Interaction.Triggers>
-    <i:EventTrigger EventName="Loaded">
-      <ei:GoToStateAction StateName="MainMenu"/>
-    </i:EventTrigger>
-  </i:Interaction.Triggers>
-
   <Image Grid.Column="1" Source="GUI/title.png" VerticalAlignment="Center" />
   <Viewbox x:Name="MainMenuView" Stretch="Uniform" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
     <StackPanel>
       <Button x:Name="startGame" Content="Start Game" Margin="0 0 0 10" Height="50" Width="600" />
-      <Button x:Name="settings" Content="Settings" Margin="0 0 0 10" Height="50" Width="600">
-        <i:Interaction.Triggers>
-          <i:EventTrigger EventName="Click">
-            <ei:GoToStateAction StateName="Settings"/>
-          </i:EventTrigger>
-        </i:Interaction.Triggers>
-      </Button>
+      <Button x:Name="settings" Content="Settings" Margin="0 0 0 10" Height="50" Width="600" />
       <Button x:Name="exit" Content="Exit" Margin="0 0 0 10" Height="50" Width="600"/>
     </StackPanel>
   </Viewbox>
-  <Viewbox x:Name="SettingsView" Stretch="Uniform" Opacity="0" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
+  <Viewbox x:Name="SettingsView" Stretch="Uniform" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center">
     <StackPanel>
       <TextBlock Text="Settings Page" FontSize="24" Margin="0,10,0,20" HorizontalAlignment="Left"/>
     </StackPanel>

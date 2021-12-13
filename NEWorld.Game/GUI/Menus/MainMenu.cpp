@@ -6,17 +6,54 @@
 #include "NsGui/Button.h"
 #include "GameView.h"
 #include "Frustum.h"
+#include "NsApp/NotifyPropertyChangedBase.h"
 
 namespace Menus {
+
+    class GameMenuViewModel : public NoesisApp::NotifyPropertyChangedBase {
+    public:
+        enum class State { MAIN_MENU, SETTINGS };
+
+        const char* getState() const {
+            switch (mState) {
+            case State::MAIN_MENU: return "MainMenu";
+            case State::SETTINGS: return "Settings";
+            default: assert(false);
+            }
+            return nullptr;
+        }
+
+        void setState(State state) noexcept {
+            if(mState!=state) {
+                mState = state;
+                OnPropertyChanged("State");
+            }
+        }
+
+    private:
+        State mState = State::MAIN_MENU;
+
+        NS_IMPLEMENT_INLINE_REFLECTION(GameMenuViewModel, NotifyPropertyChangedBase) {
+            NsProp("State", &GameMenuViewModel::getState);
+        }
+    };
+
     class MainMenu : public GUI::Scene {
     public:
         MainMenu() : GUI::Scene("MainMenu.xaml"){}
     private:
-        void onLoad() override {
-            mRoot->FindName<Noesis::Button>("startGame")->Click() += [](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args) {
+        Noesis::Ptr<GameMenuViewModel> mViewModel;
+
+        void onViewBinding() override {
+            mViewModel = Noesis::MakePtr<GameMenuViewModel>();
+            mRoot->SetDataContext(mViewModel);
+            mRoot->FindName<Noesis::Button>("startGame")->Click() += [](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 pushGameView();
             };
-            mRoot->FindName<Noesis::Button>("exit")->Click() += [this](Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args) {
+            mRoot->FindName<Noesis::Button>("settings")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+                mViewModel->setState(GameMenuViewModel::State::SETTINGS);
+            };
+            mRoot->FindName<Noesis::Button>("exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 requestLeave();
             };
         }

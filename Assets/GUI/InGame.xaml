@@ -7,6 +7,7 @@
       mc:Ignorable="d"
       xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
       d:DesignWidth="1500" d:DesignHeight="900">
+  <!-- debug info (top left) -->
   <TextBlock x:Name="Debug"
              VerticalAlignment="Top"
              HorizontalAlignment="Left"
@@ -22,4 +23,9 @@
       <SolidColorBrush Color="Black" Opacity="0.3"/>
     </TextBlock.Background>
   </TextBlock>
+  <!-- cross hair -->
+  <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Line X1="-8" Y1="0" X2="8" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
+    <Line X1="0" Y1="8" X2="0" Y2="-8" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
+  </StackPanel>
 </Grid>

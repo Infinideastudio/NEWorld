@@ -29,13 +29,9 @@ namespace GUI {
     void Scene::render() {
         mFPS.update();
 
-        auto currentTime = timer();
-        auto timeElapsed = currentTime - mLastRenderTimeInSec;
-        mLastRenderTimeInSec = currentTime;
-
         if (mView) {
             // Update view (layout, animations, ...)
-            mView->Update(timeElapsed);
+            mView->Update(timer() - mEnterTimeInSec);
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glViewport(0, 0, windowwidth, windowheight);
@@ -82,6 +78,7 @@ namespace GUI {
         glfwSetInputMode(MainWindow, GLFW_CURSOR, mHasCursor ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
         if (mXamlPath) {
             mRoot = Noesis::GUI::LoadXaml<Noesis::Grid>(mXamlPath);
+            onViewBinding();
             mView = Noesis::GUI::CreateView(mRoot);
             mView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
             mView->GetRenderer()->Init(renderDevice);
