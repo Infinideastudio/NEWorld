@@ -76,6 +76,11 @@ namespace Renderer {
     void RenderBufferDirect(VBOID buffer, vtxCount vtxs) {
         pipelines[ActivePipeline]->BindVertexBuffer(1, buffer, 0);
         pipelines[ActivePipeline]->DrawIndexed(vtxs + vtxs/2, 0);
+        /*glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GetDefaultQuadIndex());
+        BatchStart(tc, cc, ac);
+        IndirectBaseVertex command = {static_cast<uint32_t>(vtxs + vtxs / 2), 1, 0, 0, 0};
+        glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, &command, 1, 0);*/
     }
 
     static temp::string LoadFile(const std::string &path) {

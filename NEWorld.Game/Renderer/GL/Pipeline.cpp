@@ -66,9 +66,9 @@ namespace {
         return GL_INVALID_ENUM;
     }
 
-    void CheckErrorShader(GLuint res, int status, const std::string &eMsg) {
+    void CheckErrorShader(GLuint res, const std::string &eMsg) {
         auto st = GL_TRUE;
-        glGetShaderiv(res, status, &st);
+        glGetShaderiv(res, GL_COMPILE_STATUS, &st);
         if (st == GL_FALSE) DebugWarning(eMsg); else return;
         int logLength, charsWritten;
         glGetShaderiv(res, GL_INFO_LOG_LENGTH, &logLength);
@@ -79,9 +79,9 @@ namespace {
         }
     }
 
-    void CheckErrorProgram(GLuint res, int status, const std::string &eMsg) {
+    void CheckErrorProgram(GLuint res, const std::string &eMsg) {
         auto st = GL_TRUE;
-        glGetProgramiv(res, status, &st);
+        glGetProgramiv(res, GL_LINK_STATUS, &st);
         if (st == GL_FALSE) DebugWarning(eMsg); else return;
         int logLength, charsWritten;
         glGetProgramiv(res, GL_INFO_LOG_LENGTH, &logLength);
@@ -116,7 +116,7 @@ namespace {
         }
         glLinkProgram(program);
         //PrintDebug(program);
-        CheckErrorProgram(program, GL_LINK_STATUS, "Shader linking error!");
+        CheckErrorProgram(program, "Shader linking error!");
         return result;
     }
 
@@ -158,7 +158,7 @@ namespace {
         for (auto&&[bind, zip]: binds) {
             if (result.size() <= bind) result.resize(bind + 1, 0);
             result[bind] = zip.first;
-            //glVertexArrayBindingDivisor(vao, bind, zip.second);
+            glVertexArrayBindingDivisor(vao, bind, zip.second);
         }
         return result;
     }
@@ -225,21 +225,12 @@ namespace {
             glDrawArraysInstanced(mMode, first, count, instance);
         }
 
-        struct IndirectIndexedBaseVertex {
-            uint32_t count;
-            uint32_t instanceCount;
-            uint32_t firstIndex;
-            uint32_t baseVertex;
-            uint32_t baseInstance;
-        };
-
         void DrawIndexed(int count, int first, int instance) override {
-            IndirectIndexedBaseVertex command = {
-                    static_cast<uint32_t>(count),
-                    static_cast<uint32_t>(instance),
-                    static_cast<uint32_t>(first), 0, 0
-            };
-            glDrawElementsIndirect(GL_TRIANGLES, mElement, &command);
+            intptr_t offset = first;
+            if (mElement == GL_UNSIGNED_SHORT) offset *= 2;
+            if (mElement == GL_UNSIGNED_INT) offset *= 4;
+            if (instance == 1) return glDrawElements(mMode, count, mElement, reinterpret_cast<void *>(offset));
+            glDrawElementsInstanced(mMode, count, mElement, reinterpret_cast<void *>(offset), instance);
         }
 
         void SetUniform(GLint loc, float value) override {
@@ -278,7 +269,7 @@ namespace Renderer {
         const auto dataL = static_cast<int>(preprocessed.size());
         glShaderSource(res, 1, reinterpret_cast<const GLchar *const *>(&dataP), &dataL);
         glCompileShader(res);
-        CheckErrorShader(res, GL_COMPILE_STATUS, "Shader compilation error! Shader: " + std::string(program));
+        CheckErrorShader(res, "Shader compilation error! Shader: " + std::string(program));
         return {ToFakePtr(res), [](auto ptr) noexcept { glDeleteShader(FromFakePtr(ptr)); }};
     }
 

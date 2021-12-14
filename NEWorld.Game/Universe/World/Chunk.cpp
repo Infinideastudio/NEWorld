@@ -163,12 +163,12 @@ namespace World {
 
     void Chunk::buildDetail() {
         auto index = 0;
-        Cursor(Int3{0}, Int3{16}, [this, &index](const auto &v) noexcept {
+        /*Cursor(Int3{0}, Int3{16}, [this, &index](const auto& v) noexcept {
             if (mBlock.Get(index) == Blocks::GRASS && rnd() < 0.005) {
                 buildtree(GetPosition() * 16 + v);
             }
             index++;
-        });
+        });*/
     }
 
     void Chunk::build(bool initIfEmpty) {
