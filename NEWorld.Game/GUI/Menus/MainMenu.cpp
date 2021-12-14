@@ -124,7 +124,7 @@ namespace Menus {
         Noesis::Ptr<GameMenuViewModel> mViewModel;
 
         void onViewBinding() override {
-            mViewModel = Noesis::MakePtr<GameMenuViewModel>();
+            if(!mViewModel) mViewModel = Noesis::MakePtr<GameMenuViewModel>();
             mRoot->SetDataContext(mViewModel);
             // Main Menu
             mRoot->FindName<Noesis::Button>("startGame")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
