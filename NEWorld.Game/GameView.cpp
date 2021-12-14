@@ -8,9 +8,7 @@
 #include "Universe/World/World.h"
 #include "Renderer/World/WorldRenderer.h"
 #include "Particles.h"
-#include "Hitbox.h"
 #include "GUI/GUI.h"
-#include "Menus.h"
 #include "Command.h"
 #include "Setup.h"
 #include "Universe/Game.h"
@@ -56,6 +54,7 @@ public:
             OnPropertyChanged("DebugInfo");
         }
     }
+
     bool getGamePaused() const {
         return mGamePaused;
     }
@@ -66,6 +65,11 @@ public:
             OnPropertyChanged("GamePaused");
         }
     }
+
+    double getHP() const { return Player::health; }
+    double getHPMax() const { return Player::healthMax; }
+    void notifyHPChanges() { OnPropertyChanged("HP"); OnPropertyChanged("HPMax"); }
+
 private:
     std::string mDebugInfo;
     bool mGamePaused = false;
@@ -73,6 +77,8 @@ private:
     NS_IMPLEMENT_INLINE_REFLECTION(GameViewViewModel, NotifyPropertyChangedBase) {
         NsProp("DebugInfo", &GameViewViewModel::getDebugInfo);
         NsProp("GamePaused", &GameViewViewModel::getGamePaused);
+        NsProp("HP", &GameViewViewModel::getHP);
+        NsProp("HPMax", &GameViewViewModel::getHPMax);
     }
 };
 
@@ -81,10 +87,6 @@ private:
     GUI::FpsCounter mUpsCounter;
     Noesis::Image* mHotBar[10];
     Noesis::TextBlock* mHotBarCnt[10];
-
-    int selface{};
-    float selt{};
-    bool selce{};
     Noesis::Ptr<GameViewViewModel> mViewModel;
 
     int getMouseScroll() { return mw; }
@@ -93,7 +95,7 @@ private:
 
 public:
     GameView() : Scene("InGame.xaml", false), mViewModel(Noesis::MakePtr<GameViewViewModel>()) {}
-    
+
     void GameThreadloop() {
         //Wait until start...
         MutexLock(Mutex);
@@ -646,6 +648,7 @@ public:
                 Noesis::Thickness(i == Player::indexInHand ? 5.f : 1.f)
             );
         }
+        mViewModel->notifyHPChanges(); // just notify every frame for now.
 
         if (glfwGetKey(MainWindow, GLFW_KEY_ESCAPE) == 1) {
             mViewModel->setGamePaused(true);

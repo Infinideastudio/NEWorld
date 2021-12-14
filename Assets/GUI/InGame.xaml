@@ -6,6 +6,7 @@
       xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
       mc:Ignorable="d"
       xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:local="clr-namespace:NEWorld"
       d:DesignWidth="1500" d:DesignHeight="900">
   <Grid.Resources>
     <SolidColorBrush x:Key="Brush.Background.Normal" Color="Black" Opacity="0.5"/>
@@ -15,6 +16,9 @@
     <SolidColorBrush x:Key="Brush.Border.Over" Color="White" Opacity="0.5"/>
     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
       <Setter Property="FontFamily" Value="/#VCR OSD Mono"/>
+    </Style>
+    <Style TargetType="TextBlock">
+	    <Setter Property="FontFamily" Value="/#VCR OSD Mono"/>
     </Style>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
   </Grid.Resources>
@@ -39,33 +43,6 @@
     <Line X1="-16" Y1="0" X2="16" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
     <Line X1="0" Y1="-18" X2="0" Y2="16" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
   </StackPanel>
-  <!-- pause menu -->
-  <ViewBox x:Name="Overlay" Stretch="Fill"
-           Visibility="{Binding GamePaused, Converter={StaticResource BooleanToVisibility}}">
-    <Rectangle Width="100" Height="100" Fill="Black" Opacity="0.25" />
-  </ViewBox>
-  <Grid x:Name="PauseMenu"
-        Visibility="{Binding GamePaused, Converter={StaticResource BooleanToVisibility}}">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="300*"/>
-      <RowDefinition Height="300*"/>
-      <RowDefinition Height="100*"/>
-    </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="80*"/>
-      <ColumnDefinition Width="300*"/>
-      <ColumnDefinition Width="80*"/>
-    </Grid.ColumnDefinitions>
-    <Viewbox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-      <TextBlock Grid.Row="0" Text="Game Paused" Foreground="White"/>
-    </Viewbox>
-    <Viewbox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
-      <StackPanel>
-        <Button x:Name="Resume" Content="Resume" Width="600" Height="50" Margin="0 0 0 10"/>
-        <Button x:Name="Exit" Content="Exit" Width="600" Height="50" Margin="0 0 0 10"/>
-      </StackPanel>
-    </Viewbox>
-  </Grid>
   <!-- Hot bar -->
   <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 50 0 128">
     <StackPanel.Resources>
@@ -96,4 +73,56 @@
     <Label><Grid><Image x:Name="Hotbar8"/><TextBlock x:Name="HotbarCnt8"/></Grid></Label>
     <Label><Grid><Image x:Name="Hotbar9"/><TextBlock x:Name="HotbarCnt9"/></Grid></Label>
   </StackPanel>
+
+  <!-- Health bar -->
+	<Canvas Margin="100 100 0 0">
+		<Grid Width="500">
+			<Viewbox Stretch="Uniform">
+				<Grid>
+					<Line X1="0" X2="{Binding HP}" Y1="0" Y2="0" Stroke="Red" Opacity="0.8" StrokeThickness="2"
+					      StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+					<Line X1="0" X2="{Binding HPMax}" Y1="0" Y2="0" Stroke="Orange" Opacity="0.5" StrokeThickness="3"
+					      StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+				</Grid>
+			</Viewbox>
+			<Grid Margin="0 0 0 30" HorizontalAlignment="Right">
+				<TextBlock FontSize="30">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{}{0}/{1}">
+							<Binding Path="HP" />
+							<Binding Path="HPMax" />
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+			</Grid>
+		</Grid>
+  </Canvas>
+
+  <!-- pause menu -->
+  <ViewBox x:Name="Overlay" Stretch="Fill"
+           Visibility="{Binding GamePaused, Converter={StaticResource BooleanToVisibility}}">
+	  <Rectangle Width="100" Height="100" Fill="Black" Opacity="0.25" />
+  </ViewBox>
+  <Grid x:Name="PauseMenu"
+        Visibility="{Binding GamePaused, Converter={StaticResource BooleanToVisibility}}">
+	  <Grid.RowDefinitions>
+		  <RowDefinition Height="300*"/>
+		  <RowDefinition Height="300*"/>
+		  <RowDefinition Height="100*"/>
+	  </Grid.RowDefinitions>
+	  <Grid.ColumnDefinitions>
+		  <ColumnDefinition Width="80*"/>
+		  <ColumnDefinition Width="300*"/>
+		  <ColumnDefinition Width="80*"/>
+	  </Grid.ColumnDefinitions>
+	  <Viewbox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+		  <TextBlock Grid.Row="0" Text="Game Paused" Foreground="White"/>
+	  </Viewbox>
+	  <Viewbox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
+		  <StackPanel>
+			  <Button x:Name="Resume" Content="Resume" Width="600" Height="50" Margin="0 0 0 10"/>
+			  <Button x:Name="Exit" Content="Exit" Width="600" Height="50" Margin="0 0 0 10"/>
+		  </StackPanel>
+	  </Viewbox>
+  </Grid>
 </Grid>

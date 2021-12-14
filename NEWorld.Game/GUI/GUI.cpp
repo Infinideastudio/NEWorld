@@ -120,6 +120,10 @@ namespace GUI {
 
     void Scene::loadView() {
         mRoot = Noesis::GUI::LoadXaml<Noesis::Grid>(mXamlPath);
+        if (!mRoot) {
+            errorstream << "UI failed to load!";
+            return;
+        }
         onViewBinding();
         mView = Noesis::GUI::CreateView(mRoot);
         mView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
@@ -144,7 +148,7 @@ namespace GUI {
                 else if (action == GLFW_RELEASE) mView->KeyUp(mapKey(key));
 
                 if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
-                    // reload view. might be memory leak but it's for debug only
+                    // reload view. might leak memory but it's for debug only
                     infostream << "Reloading View";
                     loadView();
                 }
