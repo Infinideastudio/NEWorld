@@ -58,6 +58,9 @@ void createWindow() {
     glfwSetMouseButtonCallback(MainWindow, &MouseButtonFunc);
     glfwSetScrollCallback(MainWindow, &MouseScrollFunc);
     glfwSetCharCallback(MainWindow, &CharInputFunc);
+    glfwSetKeyCallback(MainWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods){
+        MessageBus::Default().Get<std::pair<int, int>>("KeyEvents")->Send(nullptr, std::make_pair(key, action));
+    });
 }
 
 void setupScreen() {
@@ -154,7 +157,7 @@ void MouseButtonFunc(GLFWwindow *, int button, int action, int) {
 }
 
 void CharInputFunc(GLFWwindow *, unsigned int c) {
-    MessageBus::Default().Get<int>("KeyEvents")->Send(nullptr, c);
+    MessageBus::Default().Get<int>("InputEvents")->Send(nullptr, c);
     if (c >= 128) {
         const auto pwszUnicode = new wchar_t[2];
         pwszUnicode[0] = static_cast<wchar_t>(c);

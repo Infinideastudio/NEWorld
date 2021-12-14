@@ -7,6 +7,11 @@
 #include "NsGui/Grid.h"
 #include "System/PmrBase.h"
 
+namespace Noesis
+{
+	class RenderDevice;
+}
+
 namespace GUI {
     class FpsCounter
     {
@@ -57,6 +62,7 @@ namespace GUI {
     private:
         void render();
         void update();
+        void loadView(Noesis::Ptr<Noesis::RenderDevice> renderDevice);
 
         bool mShouldLeave = false;
         const char* mXamlPath;

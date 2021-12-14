@@ -9,48 +9,46 @@
 namespace GUI {
     static Noesis::Key mapKey(int glfwKey) {
         using namespace Noesis;
-        static Noesis::Key keyTable[255] = {};
-        static bool keysLoaded = false;
-        if (!keysLoaded) {
-            keyTable['0'] = Key_D0;
-            keyTable['1'] = Key_D1;
-            keyTable['2'] = Key_D2;
-            keyTable['3'] = Key_D3;
-            keyTable['4'] = Key_D4;
-            keyTable['5'] = Key_D5;
-            keyTable['6'] = Key_D6;
-            keyTable['7'] = Key_D7;
-            keyTable['8'] = Key_D8;
-            keyTable['9'] = Key_D9;
-            keyTable['A'] = Key_A;
-            keyTable['B'] = Key_B;
-            keyTable['C'] = Key_C;
-            keyTable['D'] = Key_D;
-            keyTable['E'] = Key_E;
-            keyTable['F'] = Key_F;
-            keyTable['G'] = Key_G;
-            keyTable['H'] = Key_H;
-            keyTable['I'] = Key_I;
-            keyTable['J'] = Key_J;
-            keyTable['K'] = Key_K;
-            keyTable['L'] = Key_L;
-            keyTable['M'] = Key_M;
-            keyTable['N'] = Key_N;
-            keyTable['O'] = Key_O;
-            keyTable['P'] = Key_P;
-            keyTable['Q'] = Key_Q;
-            keyTable['R'] = Key_R;
-            keyTable['S'] = Key_S;
-            keyTable['T'] = Key_T;
-            keyTable['U'] = Key_U;
-            keyTable['V'] = Key_V;
-            keyTable['W'] = Key_W;
-            keyTable['X'] = Key_X;
-            keyTable['Y'] = Key_Y;
-            keyTable['Z'] = Key_Z;
-            keysLoaded = true;
-        }
-        if (glfwKey >= 'a' && glfwKey <= 'z') glfwKey = toupper(glfwKey);
+        static std::unordered_map<int, Noesis::Key> keyTable = {
+			{GLFW_KEY_SPACE ,Key_Space},
+			{GLFW_KEY_MINUS ,Key_Subtract},
+            {GLFW_KEY_0, Key_D0},
+            {GLFW_KEY_1, Key_D1},
+            {GLFW_KEY_2, Key_D2},
+            {GLFW_KEY_3, Key_D3},
+            {GLFW_KEY_4, Key_D4},
+            {GLFW_KEY_5, Key_D5},
+            {GLFW_KEY_6, Key_D6},
+            {GLFW_KEY_7, Key_D7},
+            {GLFW_KEY_8, Key_D8},
+            {GLFW_KEY_9, Key_D9},
+            {GLFW_KEY_A, Key_A},
+            {GLFW_KEY_B, Key_B},
+            {GLFW_KEY_C, Key_C},
+            {GLFW_KEY_D, Key_D},
+            {GLFW_KEY_E, Key_E},
+            {GLFW_KEY_F, Key_F},
+            {GLFW_KEY_G, Key_G},
+            {GLFW_KEY_H, Key_H},
+            {GLFW_KEY_I, Key_I},
+            {GLFW_KEY_J, Key_J},
+            {GLFW_KEY_K, Key_K},
+            {GLFW_KEY_L, Key_L},
+            {GLFW_KEY_M, Key_M},
+            {GLFW_KEY_N, Key_N},
+            {GLFW_KEY_O, Key_O},
+            {GLFW_KEY_P, Key_P},
+            {GLFW_KEY_Q, Key_Q},
+            {GLFW_KEY_R, Key_R},
+            {GLFW_KEY_S, Key_S},
+            {GLFW_KEY_T, Key_T},
+            {GLFW_KEY_U, Key_U},
+            {GLFW_KEY_V, Key_V},
+            {GLFW_KEY_W, Key_W},
+            {GLFW_KEY_X, Key_X},
+            {GLFW_KEY_Y, Key_Y},
+            {GLFW_KEY_Z, Key_Z}
+        };
         return keyTable[glfwKey];
     }
 
@@ -121,6 +119,14 @@ namespace GUI {
         }
     }
 
+    void Scene::loadView(const Noesis::Ptr<Noesis::RenderDevice>& renderDevice) {
+        mRoot = Noesis::GUI::LoadXaml<Noesis::Grid>(mXamlPath);
+        onViewBinding();
+        mView = Noesis::GUI::CreateView(mRoot);
+        mView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
+        mView->GetRenderer()->Init(renderDevice);
+    }
+
     void Scene::singleLoop() {
         update();
         render();
@@ -136,18 +142,23 @@ namespace GUI {
             glPopAttrib();
         }
 
+    	loadView(renderDevice);
+
         glfwSetInputMode(MainWindow, GLFW_CURSOR, mHasCursor ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
         if (mXamlPath) {
-            mRoot = Noesis::GUI::LoadXaml<Noesis::Grid>(mXamlPath);
-            onViewBinding();
-            mView = Noesis::GUI::CreateView(mRoot);
-            mView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
-            mView->GetRenderer()->Init(renderDevice);
+            mListeners.push_back(MessageBus::Default().Get<std::pair<int, int>>("KeyEvents")->Listen([this](void*, std::pair<int, int> keyAndAction) {
+                auto [key, action] = keyAndAction;
+                if (action == GLFW_PRESS) mView->KeyDown(mapKey(key));
+                else if (action == GLFW_RELEASE) mView->KeyUp(mapKey(key));
 
-            mListeners.push_back(MessageBus::Default().Get<int>("KeyEvents")->Listen([this](void*, int k) {
-                mView->KeyDown(mapKey(k));
+                if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
+                    // reload view. might be memory leak but it's for debug only
+                    loadView(renderDevice);
+                }
+            }));
+            mListeners.push_back(MessageBus::Default().Get<int>("InputEvents")->Listen([this](void*, int k) {
                 mView->Char(k);
-                }));
+            }));
         }
 
         onLoad();
