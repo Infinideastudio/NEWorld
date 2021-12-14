@@ -37,7 +37,7 @@
   <!-- cross hair -->
   <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
     <Line X1="-16" Y1="0" X2="16" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
-    <Line X1="0" Y1="16" X2="0" Y2="-16" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
+    <Line X1="0" Y1="-18" X2="0" Y2="16" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
   </StackPanel>
   <!-- pause menu -->
   <ViewBox x:Name="Overlay" Stretch="Fill"
@@ -70,9 +70,9 @@
   <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 50 0 128">
     <StackPanel.Resources>
       <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="BorderBrush" Value="White"/>
-        <Setter Property="Margin" Value="0 0 16 0"/>
+        <Setter Property="Margin" Value="0 0 32 0"/>
       </Style>
       <Style TargetType="TextBlock">
         <Setter Property="FontSize" Value="32"/>
@@ -81,9 +81,8 @@
         <Setter Property="VerticalAlignment" Value="Bottom"/>
       </Style>
       <Style TargetType="Image">
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Height" Value="100"/>
-        <Setter Property="Stretch" Value="Fill"/>
+        <Setter Property="Width" Value="80"/>
+        <Setter Property="Height" Value="80"/>
       </Style>
     </StackPanel.Resources>
     <Label><Grid><Image x:Name="Hotbar0"/><TextBlock x:Name="HotbarCnt0"/></Grid></Label>

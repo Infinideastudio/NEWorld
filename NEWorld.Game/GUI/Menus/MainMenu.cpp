@@ -9,6 +9,8 @@
 #include "Renderer.h"
 #include "NsGui/ObservableCollection.h"
 #include <filesystem>
+
+#include "GameSettings.h"
 #include "Universe/World/Chunk.h"
 #include "NsGui/TextBox.h"
 #include "NsGui/ListView.h"
@@ -124,15 +126,22 @@ namespace Menus {
         void onViewBinding() override {
             mViewModel = Noesis::MakePtr<GameMenuViewModel>();
             mRoot->SetDataContext(mViewModel);
+            // Main Menu
             mRoot->FindName<Noesis::Button>("startGame")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 mViewModel->setState(GameMenuViewModel::State::SELECT_WORLD);
             };
             mRoot->FindName<Noesis::Button>("settings")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 mViewModel->setState(GameMenuViewModel::State::SETTINGS);
             };
+            mRoot->FindName<Noesis::Button>("exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+                requestLeave();
+            };
+            // Settings
             mRoot->FindName<Noesis::Button>("Save")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 mViewModel->setState(GameMenuViewModel::State::MAIN_MENU);
+                GameSettings::getInstance().saveOptions();
             };
+            // Select World View
             mRoot->FindName<Noesis::Button>("Back")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
                 mViewModel->setState(GameMenuViewModel::State::MAIN_MENU);
             };
@@ -145,10 +154,6 @@ namespace Menus {
                 World::worldname = static_cast<WorldModel*>(worldList->GetSelectedItem())->name();
                 pushGameView();
             };
-            mRoot->FindName<Noesis::Button>("exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
-                requestLeave();
-            };
-
         }
 
         void onRender() override {

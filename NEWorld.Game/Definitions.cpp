@@ -16,7 +16,6 @@ bool MergeFace = false;
 bool GUIScreenBlur = false;
 int linelength = 10;
 int linedist = 30;
-bool ppistretch = false;
 float skycolorR = 0.7f;
 float skycolorG = 1.0f;
 float skycolorB = 1.0f;
