@@ -58,7 +58,7 @@ struct Vec3 {
     constexpr Vec3 operator<<(T r) const noexcept { return {X << r, Y << r, Z << r}; }
 
     template<class = std::enable_if<std::is_integral_v<T>>>
-    constexpr Vec3 operator<<(const Vec3 &r) const noexcept { return {X << r.X, Y << r.Y, Z << r.Y}; }
+    constexpr Vec3 operator<<(const Vec3 &r) const noexcept { return {X << r.X, Y << r.Y, Z << r.Z}; }
 
     template<class = std::enable_if<std::is_integral_v<T>>>
     constexpr Vec3 &operator<<=(T r) noexcept { return (X <<= r, Y <<= r, Z <<= r, *this); }
