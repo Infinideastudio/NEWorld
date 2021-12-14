@@ -2,7 +2,6 @@
 #include "Setup.h"
 #include "Definitions.h"
 #include "Textures.h"
-#include "TextRenderer.h"
 #include "Renderer.h"
 #include "Universe/World/World.h"
 #include "Items.h"
@@ -95,8 +94,6 @@ void setupScreen() {
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     glColor4f(0.0, 0.0, 0.0, 1.0);
-    TextRenderer::BuildFont(windowwidth, windowheight);
-    TextRenderer::setFontColor(1.0, 1.0, 1.0, 1.0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClearDepth(1.0);
     glGenBuffersARB(1, &World::EmptyBuffer);

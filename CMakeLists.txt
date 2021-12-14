@@ -30,7 +30,6 @@ find_package(GLEW REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(OpenAL REQUIRED)
-find_package(Freetype REQUIRED)
 
 # find noesis core and its app
 find_package(Noesis REQUIRED)
@@ -83,7 +82,7 @@ target_compile_definitions(NEWorld PRIVATE NEWORLD_GAME
     NS_APP_APPLICATIONLAUNCHER_API=
 )
 target_include_directories(NEWorld PRIVATE NEWorld.Game ${OPENAL_INCLUDE_DIR} External Noesis ${NOESIS_APP_INCLUDE})
-target_link_libraries(NEWorld PRIVATE OpenGL::GL GLEW::GLEW glfw Freetype::Freetype NEWorld.Base Noesis)
+target_link_libraries(NEWorld PRIVATE OpenGL::GL GLEW::GLEW glfw NEWorld.Base Noesis)
 if (APPLE)
     target_link_libraries(NEWorld PRIVATE Boost::filesystem)
 endif()
