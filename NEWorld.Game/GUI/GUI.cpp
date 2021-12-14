@@ -66,13 +66,13 @@ namespace GUI {
             if (state == GLFW_PRESS && !pressed) {
                 mView->MouseButtonDown(xpos, ypos, Noesis::MouseButton_Left);
                 auto curTime = timer();
-                if (curTime - lastPressedTime < 0.5) {
+                if (curTime - lastPressedTime < 0.25) {
                     mView->MouseDoubleClick(xpos, ypos, Noesis::MouseButton_Left);
                 }
                 pressed = true;
                 lastPressedTime = curTime;
             }
-            else if(state != GLFW_PRESS && pressed) {
+            else if (state != GLFW_PRESS && pressed) {
                 pressed = false;
                 mView->MouseButtonUp(xpos, ypos, Noesis::MouseButton_Left);
             }

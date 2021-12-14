@@ -5,6 +5,7 @@
 #include "Renderer/Renderer.h"
 #include "Universe/World/World.h"
 #include "Items.h"
+#include "Common/Logger.h"
 #include "System/MessageBus.h"
 
 void splashScreen() {
@@ -112,7 +113,7 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity,
                 return "HIGH";
         }
     }();
-    std::cout << src_str << ", " << type_str << ", " << severity_str << ", " << id << ": " << message << std::endl;
+    infostream << src_str << ", " << type_str << ", " << severity_str << ", " << id << ": " << message;
 }
 
 void setupScreen() {
