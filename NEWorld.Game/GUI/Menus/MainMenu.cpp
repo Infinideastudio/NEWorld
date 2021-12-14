@@ -6,7 +6,6 @@
 #include "GameView.h"
 #include "Frustum.h"
 #include "NsApp/NotifyPropertyChangedBase.h"
-#include "Renderer.h"
 #include "NsGui/ObservableCollection.h"
 #include <filesystem>
 
@@ -14,6 +13,7 @@
 #include "Universe/World/Chunk.h"
 #include "NsGui/TextBox.h"
 #include "NsGui/ListView.h"
+#include "Renderer/Renderer.h"
 
 namespace Menus {
     class WorldModel : public NoesisApp::NotifyPropertyChangedBase

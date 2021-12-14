@@ -4,7 +4,6 @@
 #include "Universe/World/Blocks.h"
 #include "Textures.h"
 #include "Renderer/Renderer.h"
-#include "TextRenderer.h"
 #include "Player.h"
 #include "Universe/World/World.h"
 #include "Renderer/World/WorldRenderer.h"
@@ -467,6 +466,7 @@ public:
         else {
             ss << "v" << VERSION << "  Fps:" << mFPS.getFPS();
         }
+        mViewModel->setDebugInfo(ss.str());
     }
 
     static void renderDestroy(float level, int x, int y, int z) {

@@ -4,7 +4,6 @@
 #include <NoesisPCH.h>
 
 #include "Noesis.h"
-#include "Shader.h"
 #include "System/MessageBus.h"
 #include "Common/Logger.h"
 
@@ -101,9 +100,7 @@ namespace GUI {
             glClearStencil(0);
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         }
-
-        //Disable shader
-        Shader::unbind();
+        
         onRender();
 
         if (mView) {

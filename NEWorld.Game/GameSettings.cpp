@@ -3,9 +3,9 @@
 #include <fstream>
 #include <map>
 #include "Definitions.h"
-#include "Renderer.h"
 #include "Globalization.h"
 #include "AudioSystem.h"
+#include "Renderer/Renderer.h"
 
 constexpr const char* SettingsFile = "./Configs/options.ini";
 
