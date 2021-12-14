@@ -1,5 +1,4 @@
 #include "Renderer.h"
-#include <fstream>
 #include <algorithm>
 #include "Temp/String.h"
 #include "Frustum.h"
@@ -53,17 +52,6 @@ namespace Renderer {
     int index = 0, size = 0;
     unsigned int ShadowFBO, DepthTexture;
 
-    GLuint GetDefaultQuadIndex() {
-        static auto buffer = []() {
-            BufferBuilder<uint32_t> builder{};
-            for (auto i = 0; i < 262144; i += 4) builder.put<1>(i, i + 1, i + 2, i, i + 2, i + 3);
-            GLuint ibo{0};
-            vtxCount count{0};
-            builder.flush(ibo, count);
-            return ibo;
-        }();
-        return buffer;
-    }
 
     struct IndirectBaseVertex {
         uint32_t count;
@@ -83,16 +71,6 @@ namespace Renderer {
         glMultiDrawElementsIndirect(GL_TRIANGLES, GL_UNSIGNED_INT, &command, 1, 0);*/
     }
 
-    static temp::string LoadFile(const std::string &path) {
-        auto ss = temp::ostringstream{};
-        std::ifstream input_file(path);
-        if (!input_file.is_open()) {
-            throw std::runtime_error("No such file:" + path);
-        }
-        ss << input_file.rdbuf();
-        return ss.str();
-    }
-
     Pipeline BuildPipeline(
             const std::string& vshPath, const std::string& fshPath,
             int tc, int cc, int ac, bool useAc, const std::vector<std::string>& defines = {}
@@ -104,10 +82,8 @@ namespace Renderer {
         if (tc) builder.AddAttribute(DataType::Float32, 1, 2, tc, ac * sof);
         if (cc) builder.AddAttribute(DataType::Float32, 1, 3, cc, (ac + tc) * sof);
         builder.AddAttribute(DataType::Float32, 1, 4, 3, (ac + tc + cc) * sof);
-        const auto sourceVsh = LoadFile(vshPath);
-        const auto sourceFsh = LoadFile(fshPath);
-        builder.SetShader(ShaderType::Vertex, Compile(ShaderType::Vertex, sourceVsh, defines));
-        builder.SetShader(ShaderType::Fragment, Compile(ShaderType::Fragment, sourceFsh, defines));
+        builder.SetShader(ShaderType::Vertex, CompileFile(ShaderType::Vertex, vshPath, defines));
+        builder.SetShader(ShaderType::Fragment, CompileFile(ShaderType::Fragment, fshPath, defines));
         auto result = builder.Build();
         result->BindIndexBuffer(GetDefaultQuadIndex(), IndexType::U32);
         return result;
@@ -213,5 +189,9 @@ namespace Renderer {
         glReadBuffer(GL_BACK);
         glBindVertexArray(0);
         glViewport(0, 0, windowwidth, windowheight);
+    }
+
+    Pipeline& GetPipeline() {
+        return pipelines[ActivePipeline];
     }
 }

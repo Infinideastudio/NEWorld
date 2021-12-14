@@ -36,6 +36,7 @@ namespace Renderer {
     using GLShader = std::shared_ptr<Internal::Object>;
 
     GLShader Compile(ShaderType type, std::string_view program, const std::vector<std::string> &defines);
+    GLShader CompileFile(ShaderType type, const std::string &path, const std::vector<std::string> &defines);
 
     struct IPipeline {
         virtual void Use() = 0;
@@ -105,4 +106,6 @@ namespace Renderer {
         temp::unordered_map<ShaderType, GLShader> mStages;
         temp::unordered_map<int, std::pair<int, int>> mBindings;
     };
+
+    GLuint GetDefaultQuadIndex();
 }

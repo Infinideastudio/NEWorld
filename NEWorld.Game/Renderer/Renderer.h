@@ -25,6 +25,8 @@ namespace Renderer {
 
     void RenderBufferDirect(VBOID buffer, vtxCount vtxs);
 
+    Pipeline& GetPipeline();
+
     void initShaders();
 
     void destroyShaders();

@@ -1,8 +1,10 @@
+#include <fstream>
+#include <iostream>
 #include "Pipeline.h"
+#include "FunctionsKit.h"
 #include "Temp/String.h"
 #include "Temp/OrderedAsscociation.h"
-#include "FunctionsKit.h"
-#include <iostream>
+#include "Renderer/BufferBuilder.h"
 
 namespace {
     auto CollapseDefines(const std::vector<std::string> &defines) noexcept {
@@ -256,6 +258,16 @@ namespace {
         GLenum mElement{};
         std::vector<int> mStrides;
     };
+
+    temp::string LoadFile(const std::string &path) {
+        auto ss = temp::ostringstream{};
+        std::ifstream input_file(path);
+        if (!input_file.is_open()) {
+            throw std::runtime_error("No such file:" + path);
+        }
+        ss << input_file.rdbuf();
+        return ss.str();
+    }
 }
 
 namespace Renderer {
@@ -273,6 +285,11 @@ namespace Renderer {
         return {ToFakePtr(res), [](auto ptr) noexcept { glDeleteShader(FromFakePtr(ptr)); }};
     }
 
+    GLShader CompileFile(ShaderType type, const std::string &path, const std::vector<std::string> &defines) {
+        const auto source = LoadFile(path);
+        return Compile(type, source, defines);
+    }
+
     Pipeline PipelineBuilder::Build() {
         auto program = MakeProgram(mStages);
         auto vao = MakeVAO(mSpecs);
@@ -282,5 +299,17 @@ namespace Renderer {
                 FromFakePtr(vao.release()), FromFakePtr(program.release())
         );
         return std::static_pointer_cast<IPipeline>(std::move(object));
+    }
+
+    GLuint GetDefaultQuadIndex() {
+        static auto buffer = []() {
+            BufferBuilder<uint32_t> builder{};
+            for (auto i = 0; i < 262144; i += 4) builder.put<1>(i, i + 1, i + 2, i, i + 2, i + 3);
+            GLuint ibo{0};
+            vtxCount count{0};
+            builder.flush(ibo, count);
+            return ibo;
+        }();
+        return buffer;
     }
 }
