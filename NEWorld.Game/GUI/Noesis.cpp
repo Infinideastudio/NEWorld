@@ -1,5 +1,6 @@
 #include "Noesis.h"
 
+#include <GL/glew.h>
 #include <NsApp/StyleInteraction.h>
 #include <NsApp/EventTrigger.h>
 #include <NsApp/TriggerCollection.h>
@@ -17,6 +18,9 @@
 #include <NsApp/BehaviorCollection.h>
 #include <NsApp/Interaction.h>
 #include "Common/Logger.h"
+#include "NsRender/GLFactory.h"
+
+Noesis::Ptr<Noesis::RenderDevice> GUI::renderDevice;
 
 void GUI::noesisSetup() {
     Noesis::SetLogHandler([](const char*, uint32_t, uint32_t level, const char*, const char* msg) {
@@ -32,6 +36,11 @@ void GUI::noesisSetup() {
 
     // Sets the active license
     Noesis::GUI::SetLicense(NS_LICENSE_NAME, NS_LICENSE_KEY);
+    if (std::string(NS_LICENSE_NAME).empty()) {
+        errorstream << "Noesis License not set.";
+        errorstream << "Please add a valid license into External/Noesis/Include/NoesisLicense.h";
+        errorstream << "You can get one from https://www.noesisengine.com/trial/";
+    }
 
     // Noesis initialization. This must be the first step before using any NoesisGUI functionality
     Noesis::GUI::Init();
@@ -53,9 +62,15 @@ void GUI::noesisSetup() {
     Noesis::RegisterComponent<NoesisApp::GoToStateAction>();
     Noesis::TypeOf<NoesisApp::Interaction>(); // Force the creation of its reflection type
     Noesis::TypeOf<NoesisApp::StyleInteraction>(); // Force the creation of its reflection type
+
+    // Setup Render Device
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    renderDevice = NoesisApp::GLFactory::CreateDevice(false);
+    glPopAttrib();
 }
 
 
 void GUI::noesisShutdown() {
+    GUI::renderDevice.Reset();
     Noesis::GUI::Shutdown();
 }

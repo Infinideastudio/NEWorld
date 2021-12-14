@@ -62,7 +62,7 @@ namespace GUI {
     private:
         void render();
         void update();
-        void loadView(const Noesis::Ptr<Noesis::RenderDevice>& renderDevice);
+        void loadView();
 
         bool mShouldLeave = false;
         const char* mXamlPath;

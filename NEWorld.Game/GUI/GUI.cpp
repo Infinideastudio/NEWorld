@@ -2,6 +2,8 @@
 #include "GUI.h"
 #include <NsRender/GLFactory.h>
 #include <NoesisPCH.h>
+
+#include "Noesis.h"
 #include "Shader.h"
 #include "System/MessageBus.h"
 #include "Common/Logger.h"
@@ -119,12 +121,12 @@ namespace GUI {
         }
     }
 
-    void Scene::loadView(const Noesis::Ptr<Noesis::RenderDevice>& renderDevice) {
+    void Scene::loadView() {
         mRoot = Noesis::GUI::LoadXaml<Noesis::Grid>(mXamlPath);
         onViewBinding();
         mView = Noesis::GUI::CreateView(mRoot);
         mView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
-        mView->GetRenderer()->Init(renderDevice);
+        mView->GetRenderer()->Init(GUI::renderDevice);
     }
 
     void Scene::singleLoop() {
@@ -135,14 +137,7 @@ namespace GUI {
     }
 
     void Scene::load() {
-        static Noesis::Ptr<Noesis::RenderDevice> renderDevice = nullptr;
-        if (!renderDevice) {
-            glPushAttrib(GL_ALL_ATTRIB_BITS);
-            renderDevice = NoesisApp::GLFactory::CreateDevice(false);
-            glPopAttrib();
-        }
-
-    	loadView(renderDevice);
+    	loadView();
 
         glfwSetInputMode(MainWindow, GLFW_CURSOR, mHasCursor ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
         if (mXamlPath) {
@@ -153,7 +148,7 @@ namespace GUI {
 
                 if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
                     // reload view. might be memory leak but it's for debug only
-                    loadView(renderDevice);
+                    loadView();
                 }
             }));
             mListeners.push_back(MessageBus::Default().Get<int>("InputEvents")->Listen([this](void*, int k) {

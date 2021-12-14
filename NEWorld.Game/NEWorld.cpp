@@ -30,7 +30,6 @@ void ApplicationBeforeLaunch() {
     NEWorld::filesystem::create_directories("./Worlds");
     NEWorld::filesystem::create_directories("./Screenshots");
     NEWorld::filesystem::create_directories("./Mods");
-    GUI::noesisSetup();
 }
 
 void ApplicationAfterLaunch() {
@@ -56,6 +55,9 @@ int main() {
     }
     createWindow();
     setupScreen();
+
+    GUI::noesisSetup();
+
     glDisable(GL_CULL_FACE);
     //splashScreen();
     ApplicationAfterLaunch();

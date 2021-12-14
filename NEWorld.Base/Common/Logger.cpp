@@ -146,9 +146,9 @@ void Logger::addFileSink(const std::string& path, const std::string& prefix) {
 
 Logger::Logger(const char* fileName, const char* funcName, int lineNumber, Level level, const char* mgr)
     :mLevel(level), mFileName(fileName), mFuncName(funcName), mLineNumber(lineNumber) {
-    mContent << LColor::white << getTimeString('-', ' ', ':') << '[' << mgr << ']';
+    mContent << LColor::white << getTimeString('-', ' ', ':') << " [" << mgr << ']';
     setLogColor(level, mContent);
-    mContent << levelTags[static_cast<size_t>(level)];
+    mContent << levelTags[static_cast<size_t>(level)] << ' ';
 }
 
 Logger::~Logger() {
