@@ -1,16 +1,10 @@
 #pragma once
 
 #include "Definitions.h"
-#include "Globalization.h"
 #include <NsCore/Ptr.h>
 #include <NsGui/IView.h>
 #include "NsGui/Grid.h"
 #include "System/PmrBase.h"
-
-namespace Noesis
-{
-	class RenderDevice;
-}
 
 namespace GUI {
     class FpsCounter

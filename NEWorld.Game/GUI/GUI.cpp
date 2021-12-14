@@ -148,6 +148,7 @@ namespace GUI {
 
                 if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
                     // reload view. might be memory leak but it's for debug only
+                    infostream << "Reloading View";
                     loadView();
                 }
             }));
