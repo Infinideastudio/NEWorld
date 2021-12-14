@@ -120,6 +120,8 @@ struct Vec3 {
 
     constexpr bool operator==(const Vec3 &r) const noexcept { return (X == r.X) && (Y == r.Y) && (Z == r.Z); }
 
+    constexpr bool operator!=(const Vec3& r) const noexcept { return !(*this == r); }
+
     constexpr bool operator<(const Vec3 &r) const noexcept { return LengthSquared() < r.LengthSquared(); }
 
     constexpr bool operator>(const Vec3 &r) const noexcept { return LengthSquared() > r.LengthSquared(); }

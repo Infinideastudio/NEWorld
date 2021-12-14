@@ -31,7 +31,6 @@ void GameSettings::loadOptions() {
 	loadOption(options, "ShadowMapRes", Renderer::ShadowRes);
 	loadOption(options, "ShadowDistance", Renderer::MaxShadowDist);
 	loadOption(options, "VerticalSync", vsync);
-	loadOption(options, "GUIBackgroundBlur", GUIScreenBlur);
 	loadOption(options, "GainOfBGM", AudioSystem::BGMGain);
 	loadOption(options, "GainOfSound", AudioSystem::SoundGain);
 }
@@ -52,7 +51,6 @@ void GameSettings::saveOptions() {
 	saveOption(fileout, "ShadowMapRes", Renderer::ShadowRes);
 	saveOption(fileout, "ShadowDistance", Renderer::MaxShadowDist);
 	saveOption(fileout, "VerticalSync", vsync);
-	saveOption(fileout, "GUIBackgroundBlur", GUIScreenBlur);
 	saveOption(fileout, "GainOfBGM", AudioSystem::BGMGain);
 	saveOption(fileout, "GainOfSound", AudioSystem::SoundGain);
 	fileout.close();

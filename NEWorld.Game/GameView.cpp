@@ -282,19 +282,19 @@ public:
 
         MutexLock(Mutex);
 
-        if (seldes > 0.0) {
-            glTranslated(selx - xpos, sely - ypos, selz - zpos);
-            renderDestroy(seldes, 0, 0, 0);
-            glTranslated(-selx + xpos, -sely + ypos, -selz + zpos);
+        if (mBlockDestructionProgress > 0.0) {
+            glTranslated(mCurrentSelectedBlockPos.X - xpos, mCurrentSelectedBlockPos.Y - ypos, mCurrentSelectedBlockPos.Z - zpos);
+            renderDestroy(mBlockDestructionProgress, 0, 0, 0);
+            glTranslated(-mCurrentSelectedBlockPos.X + xpos, -mCurrentSelectedBlockPos.Y + ypos, -mCurrentSelectedBlockPos.Z + zpos);
         }
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
         Particles::renderall(xpos, ypos, zpos);
 
         glDisable(GL_TEXTURE_2D);
-        if (GUIrenderswitch && sel) {
-            glTranslated(selx - xpos, sely - ypos, selz - zpos);
+        if (mShouldRenderGUI && mIsSelectingBlock) {
+            glTranslated(mCurrentSelectedBlockPos.X - xpos, mCurrentSelectedBlockPos.Y - ypos, mCurrentSelectedBlockPos.Z - zpos);
             drawBorder(0, 0, 0);
-            glTranslated(-selx + xpos, -sely + ypos, -selz + zpos);
+            glTranslated(-mCurrentSelectedBlockPos.X + xpos, -mCurrentSelectedBlockPos.Y + ypos, -mCurrentSelectedBlockPos.Z + zpos);
         }
 
         MutexUnlock(Mutex);
@@ -684,7 +684,7 @@ public:
         World::Init();
         registerCommands();
 
-        GUIrenderswitch = true;
+        mShouldRenderGUI = true;
         glDepthFunc(GL_LEQUAL);
         glEnable(GL_CULL_FACE);
         setupNormalFog();
@@ -763,7 +763,7 @@ public:
             World::vbuffersShouldDelete.clear();
         }
         commands.clear();
-        chatMessages.clear();
+        mChatMessages.clear();
         //GUI::popScene();
     }
 };

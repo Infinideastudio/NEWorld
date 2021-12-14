@@ -46,8 +46,8 @@ int main() {
 	}
     test->Send(nullptr, 0);
     ApplicationBeforeLaunch();
-    windowwidth = defaultwindowwidth;
-    windowheight = defaultwindowheight;
+    windowwidth = DefaultWindowWidth;
+    windowheight = DefaultWindowHeight;
     if (glfwInit() == 1) {
         infostream << "Initialize GLFW";
     } else {

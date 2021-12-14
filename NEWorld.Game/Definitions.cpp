@@ -12,8 +12,6 @@ float runspeed = 0.3f;
 int MaxAirJumps = 3 - 1;
 bool SmoothLighting = true;
 bool NiceGrass = true;
-bool MergeFace = false;
-bool GUIScreenBlur = false;
 int linelength = 10;
 int linedist = 30;
 float skycolorR = 0.7f;
@@ -29,7 +27,6 @@ int gametime = 0;
 
 int windowwidth;
 int windowheight;
-bool gamebegin, gameexit, bagOpened;
 
 //������Ϸ
 bool multiplayer = false;
