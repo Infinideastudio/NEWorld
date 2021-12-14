@@ -110,7 +110,7 @@ namespace World {
 
     void destroyAllChunks();
 
-    void buildtree(int x, int y, int z);
+    void buildtree(Int3 pos);
 
     void explode(int x, int y, int z, int r, Chunk *c = nullptr);
 }

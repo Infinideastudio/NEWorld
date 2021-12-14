@@ -1,17 +1,17 @@
 #pragma once
 
 #include "Universe/World/World.h"
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 
 namespace WorldRenderer {
     struct RenderChunk {
-        int cx, cy, cz;
+        Int3 position;
         vtxCount vertexes[4];
         VBOID vbuffers[4];
         double loadAnim;
 
         RenderChunk(World::Chunk *c, double TimeDelta) :
-                cx(c->cx), cy(c->cy), cz(c->cz), loadAnim(c->loadAnim * pow(0.6, TimeDelta)) {
+                position(c->GetPosition()), loadAnim(c->loadAnim * pow(0.6, TimeDelta)) {
             memcpy(vbuffers, c->vbuffer, sizeof(vbuffers));
             memcpy(vertexes, c->vertexes, sizeof(vertexes));
         }

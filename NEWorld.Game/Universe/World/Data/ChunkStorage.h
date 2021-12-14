@@ -157,7 +157,7 @@ namespace World::Data {
         }
 
     private:
-        [[nodiscard]] uint8_t Hash(const uint16_t v) const noexcept { return v & mCurMask; } // NOLINT
+        [[nodiscard]] uint8_t Hash(const uintptr_t v) const noexcept { return static_cast<uint8_t>(v & mCurMask); }
 
         void ReHash() noexcept {
             for (int i = 0; i < mSize; ++i) {
@@ -190,7 +190,7 @@ namespace World::Data {
     public:
         [[nodiscard]] uintptr_t toVal(const int id) const noexcept { return id; } // NOLINT
 
-        [[nodiscard]] int tryFromVal(const uintptr_t val) const noexcept { return val; } // NOLINT
+        [[nodiscard]] int tryFromVal(const uintptr_t val) const noexcept { return static_cast<int>(val); } // NOLINT
 
         int fromVal(const uintptr_t val) noexcept { return tryFromVal(val); } // NOLINT
     };
@@ -203,7 +203,7 @@ namespace World::Data {
 
         ~ChunkStorage() noexcept;
 
-        [[nodiscard]] int Get(const int index) const noexcept {
+        [[nodiscard]] uintptr_t Get(const int index) const noexcept {
             switch (mT) {
                 case 0:
                     return mP.p4.toVal(mV.b4.Get(index));
