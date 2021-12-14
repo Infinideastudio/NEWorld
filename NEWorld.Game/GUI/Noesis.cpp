@@ -23,24 +23,6 @@
 
 Noesis::Ptr<Noesis::RenderDevice> GUI::renderDevice;
 
-class Multiplier final : public Noesis::BaseValueConverter {
-public:
-    bool TryConvert(BaseComponent* value, const Noesis::Type* targetType, BaseComponent* parameter,
-                    Noesis::Ptr<BaseComponent>& result) override {
-        if (Noesis::Boxing::CanUnbox<double>(value) && Noesis::Boxing::CanUnbox<Noesis::String>(parameter)) {
-            double val = Noesis::Boxing::Boxer<double>::Unbox(value);
-            Noesis::String mul = Noesis::Boxing::Boxer<Noesis::String>::Unbox(parameter);
-            result = Noesis::Boxing::Boxer<double>::Box(val* std::stod(mul.Str()));
-            return true;
-        }
-
-        return false;
-    }
-
-private:
-    NS_IMPLEMENT_INLINE_REFLECTION_(Multiplier, BaseValueConverter, "NEWorld.Multiplier")
-};
-
 void GUI::noesisSetup() {
     Noesis::SetLogHandler([](const char*, uint32_t, uint32_t level, const char*, const char* msg) {
         Logger::Level prefixes[] = {
@@ -79,7 +61,6 @@ void GUI::noesisSetup() {
     Noesis::RegisterComponent<NoesisApp::DataTrigger>();
     Noesis::RegisterComponent<NoesisApp::MouseDragElementBehavior>();
     Noesis::RegisterComponent<NoesisApp::GoToStateAction>();
-    Noesis::RegisterComponent<Multiplier>();
     Noesis::TypeOf<NoesisApp::Interaction>(); // Force the creation of its reflection type
     Noesis::TypeOf<NoesisApp::StyleInteraction>(); // Force the creation of its reflection type
 
