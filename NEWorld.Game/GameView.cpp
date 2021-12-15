@@ -692,6 +692,18 @@ public:
         mViewModel->notifyHPChanges(); // just notify every frame for now.
         mViewModel->setBagOpen(mBagOpened);
 
+        static bool wasBagOpen = false;
+        if (mViewModel->getBagOpen()) {
+            if (!wasBagOpen) {
+                wasBagOpen = true;
+                glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            }
+        }
+        else if (wasBagOpen) {
+            wasBagOpen = false;
+            glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+
         if (glfwGetKey(MainWindow, GLFW_KEY_ESCAPE) == 1) {
             mViewModel->setGamePaused(true);
             updateThreadPaused = true;

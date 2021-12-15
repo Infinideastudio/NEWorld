@@ -142,10 +142,7 @@ public:
         if (isPressed(GLFW_KEY_E) && mShouldRenderGUI && !mChatMode) {
             mBagOpened = !mBagOpened;
             bagAnimTimer = timer();
-            if (!mBagOpened) {
-                glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            } else {
-                glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            if (mBagOpened) {
                 shouldGetThumbnail = true;
                 Player::xlookspeed = Player::ylookspeed = 0.0;
             }
