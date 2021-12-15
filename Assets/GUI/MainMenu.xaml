@@ -137,7 +137,7 @@
 			<RowDefinition Height="400*"/>
 			<RowDefinition Height="50*"/>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Text="Settings" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="128"/>
+		<TextBlock Grid.Row="0" Text="Settings" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="64"/>
 		<Viewbox Grid.Row="1" Stretch="Uniform" VerticalAlignment="Center">
 			<StackPanel Width="Auto">
 				<StackPanel TextElement.Foreground="White">
@@ -187,7 +187,7 @@
 			<RowDefinition Height="400*"/>
 			<RowDefinition Height="50*"/>
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0" Text="Select World" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="128"/>
+		<TextBlock Grid.Row="0" Text="Select World" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="64"/>
 		<Viewbox Grid.Row="1" Stretch="Uniform" VerticalAlignment="Center">
 			<StackPanel TextElement.Foreground="White">
 				<ListBox

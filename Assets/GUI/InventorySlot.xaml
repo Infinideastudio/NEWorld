@@ -16,11 +16,11 @@
 			<Setter Property="BorderBrush" Value="White"/>
 		</Style>
 		<Style TargetType="TextBlock">
-			<Setter Property="FontSize" Value="32"/>
-			<Setter Property="Foreground" Value="Gray"/>
+			<Setter Property="FontSize" Value="15"/>
+			<Setter Property="Foreground" Value="Black"/>
 			<Setter Property="HorizontalAlignment" Value="Right"/>
 			<Setter Property="VerticalAlignment" Value="Bottom"/>
-			<Setter Property="Margin" Value="10" />
+			<Setter Property="Margin" Value="0" />
 			<Setter Property="Stroke" Value="White" />
 			<Setter Property="StrokeThickness" Value="2" />
 			<Setter Property="FontFamily" Value="/#VCR OSD Mono"/>
@@ -28,7 +28,7 @@
 		<BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
 	</UserControl.Resources>
 
-	<Button>
+	<Button Width="50" Height="50">
 		<b:Interaction.Triggers>
 			<ei:DataTrigger Binding="{Binding Selected, ElementName=InventorySlot}" Value="True">
 				<ei:ChangePropertyAction PropertyName="Background" Value="{StaticResource Brush.Background.Selected}" />
@@ -38,7 +38,7 @@
 			</ei:DataTrigger>
 		</b:Interaction.Triggers>
 		<Grid>
-			<Image x:Name="ItemTexture" Margin="8" Width="80" Height="80"/>
+			<Image x:Name="ItemTexture" Width="32" Height="32"/>
 			<TextBlock Text="{Binding Amount, ElementName=InventorySlot}">
 				<b:Interaction.Triggers>
 					<ei:DataTrigger Binding="{Binding Amount, ElementName=InventorySlot}" Value="0">

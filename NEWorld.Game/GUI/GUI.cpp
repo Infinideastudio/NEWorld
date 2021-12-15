@@ -139,6 +139,10 @@ namespace GUI {
         mView = Noesis::GUI::CreateView(mRoot);
         mView->SetFlags(Noesis::RenderFlags_PPAA | Noesis::RenderFlags_LCD);
         mView->GetRenderer()->Init(GUI::renderDevice);
+        // high dpi support
+        float scale;
+        glfwGetWindowContentScale(MainWindow, &scale, nullptr);
+        mView->SetScale(scale);
     }
 
     void Scene::singleLoop() {

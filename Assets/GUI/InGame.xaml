@@ -31,7 +31,7 @@
 			   Margin="15"
 			   Padding="2"
 			   Text="{Binding DebugInfo}"
-			   FontSize="25"
+			   FontSize="16"
 			   FontFamily="/#VCR OSD Mono">
 		<TextBlock.Foreground>
 			<SolidColorBrush Color="White"/>
@@ -43,43 +43,42 @@
 
 	<!-- cross hair -->
 	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-		<Line X1="-16" Y1="0" X2="16" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
-		<Line X1="0" Y1="-18" X2="0" Y2="16" Stroke="White" Opacity="0.5" StrokeThickness="5"  />
+		<Line X1="-8" Y1="0" X2="8" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
+		<Line X1="0" Y1="-9" X2="0" Y2="8" Stroke="White" Opacity="0.5" StrokeThickness="2"  />
 	</StackPanel>
 
 	<!-- Hot bar -->
-	<StackPanel x:Name="Hotbar" VerticalAlignment="Bottom" HorizontalAlignment="Center" Orientation="Horizontal" Margin="0 50 0 128">
+	<StackPanel x:Name="Hotbar" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+	            Orientation="Horizontal" Margin="0 0 0 50">
 		<WrapPanel.Resources>
 			<Style TargetType="local:InventorySlot">
-				<Setter Property="Margin" Value="10"/>
+				<Setter Property="Margin" Value="5"/>
 			</Style>
 		</WrapPanel.Resources>
 	</StackPanel>
 
 	<!-- Inventory -->
 	<WrapPanel x:Name="Inventory" HorizontalAlignment="Center" Orientation="Horizontal"
-			   VerticalAlignment="Center" ItemWidth="120" ItemHeight="120" Width="1200"
+			   VerticalAlignment="Center" ItemWidth="64" ItemHeight="64" Width="640"
 			   Visibility="{Binding BagOpen, Converter={StaticResource BooleanToVisibility}}">
 		<WrapPanel.Resources>
 			<Style TargetType="local:InventorySlot">
-				<Setter Property="Margin" Value="10"/>
+				<Setter Property="Margin" Value="5"/>
 			</Style>
 		</WrapPanel.Resources>
 	</WrapPanel>
 
 	<!-- Health bar -->
-	<Canvas Margin="100 100 0 0">
-		<Grid Width="500">
+	<Canvas VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="32 0 32 32">
+		<Grid Width="250" Margin="0 0 32 32">
 			<Viewbox Stretch="Uniform">
 				<Grid>
-					<Line X1="0" X2="{Binding HP}" Y1="0" Y2="0" Stroke="Red" Opacity="0.8" StrokeThickness="1.5"
-					      StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
-					<Line X1="0" X2="{Binding HPMax}" Y1="0" Y2="0" Stroke="Orange" Opacity="0.5" StrokeThickness="2"
-					      StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+					<Line X1="0" X2="{Binding HP}" Y1="0" Y2="0" Stroke="Red" Opacity="1" StrokeThickness="1"/>
+					<Line X1="0" X2="{Binding HPMax}" Y1="0" Y2="0" Stroke="White" Opacity="0.5" StrokeThickness="1.5"/>
 				</Grid>
 			</Viewbox>
-			<Grid Margin="0 0 0 30" HorizontalAlignment="Right">
-				<TextBlock FontSize="30">
+			<Grid Margin="0 0 0 10" HorizontalAlignment="Center">
+				<TextBlock FontSize="12" Foreground="Black">
 					<TextBlock.Text>
 						<MultiBinding StringFormat="{}{0:F1}/{1:F1}">
 							<Binding Path="HP"/>
