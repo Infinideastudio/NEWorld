@@ -65,6 +65,8 @@ public:
 
     static item BlockInHand;
     static ubyte indexInHand;
+
+    static constexpr int MaxStack = 255;
     static item inventory[4][10];
     static short inventoryAmount[4][10];
 

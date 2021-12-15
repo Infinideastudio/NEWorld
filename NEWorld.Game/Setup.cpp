@@ -1,12 +1,12 @@
 #include <iostream>
 #include "Setup.h"
-#include "GUI.h"
 #include "Definitions.h"
 #include "Textures.h"
-#include "TextRenderer.h"
 #include "Renderer/Renderer.h"
 #include "Universe/World/World.h"
 #include "Items.h"
+#include "Common/Logger.h"
+#include "System/MessageBus.h"
 
 void splashScreen() {
     auto splTex = Textures::LoadRGBTexture("./Assets/Textures/GUI/SplashScreen.bmp");
@@ -40,6 +40,15 @@ void createWindow() {
     title << "NEWorld " << MAJOR_VERSION << MINOR_VERSION << EXT_VERSION;
     if (Multisample != 0) glfwWindowHint(GLFW_SAMPLES, Multisample);
     MainWindow = glfwCreateWindow(windowwidth, windowheight, title.str().c_str(), NULL, NULL);
+
+    // high dpi screens deserve a larger window
+    float widthScale, heightScale;
+    glfwGetWindowContentScale(MainWindow, &widthScale, &heightScale);
+    windowwidth *= widthScale;
+    windowheight *= heightScale;
+    glfwSetWindowSize(MainWindow, windowwidth, windowheight);
+    glfwSwapBuffers(MainWindow);
+
     MouseCursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
     glfwMakeContextCurrent(MainWindow);
     glewInit();
@@ -49,7 +58,9 @@ void createWindow() {
     glfwSetMouseButtonCallback(MainWindow, &MouseButtonFunc);
     glfwSetScrollCallback(MainWindow, &MouseScrollFunc);
     glfwSetCharCallback(MainWindow, &CharInputFunc);
-    if (ppistretch) GUI::InitStretch();
+    glfwSetKeyCallback(MainWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods){
+        MessageBus::Default().Get<std::pair<int, int>>("KeyEvents")->Send(nullptr, std::make_pair(key, action));
+    });
 }
 
 void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity,
@@ -102,7 +113,7 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity,
                 return "HIGH";
         }
     }();
-    std::cout << src_str << ", " << type_str << ", " << severity_str << ", " << id << ": " << message << std::endl;
+    infostream << src_str << ", " << type_str << ", " << severity_str << ", " << id << ": " << message;
 }
 
 void setupScreen() {
@@ -141,8 +152,6 @@ void setupScreen() {
     glPixelStorei(GL_PACK_ALIGNMENT, 4);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     glColor4f(0.0, 0.0, 0.0, 1.0);
-    TextRenderer::BuildFont(windowwidth, windowheight);
-    TextRenderer::setFontColor(1.0, 1.0, 1.0, 1.0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClearDepth(1.0);
     glGenBuffersARB(1, &World::EmptyBuffer);
@@ -166,7 +175,6 @@ void loadTextures() {
 
     tex_select = Textures::LoadRGBATexture("./Assets/Textures/GUI/select.bmp", "");
     tex_unselect = Textures::LoadRGBATexture("./Assets/Textures/GUI/unselect.bmp", "");
-    tex_title = Textures::LoadRGBATexture("./Assets/Textures/GUI/title.bmp", "./Assets/Textures/GUI/titlemask.bmp");
     for (auto i = 0; i < 6; i++) {
         std::stringstream ss;
         ss << "./Assets/Textures/GUI/mainmenu" << i << ".bmp";
@@ -205,6 +213,7 @@ void MouseButtonFunc(GLFWwindow *, int button, int action, int) {
 }
 
 void CharInputFunc(GLFWwindow *, unsigned int c) {
+    MessageBus::Default().Get<int>("InputEvents")->Send(nullptr, c);
     if (c >= 128) {
         const auto pwszUnicode = new wchar_t[2];
         pwszUnicode[0] = static_cast<wchar_t>(c);

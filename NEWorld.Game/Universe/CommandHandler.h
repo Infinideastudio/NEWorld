@@ -1,24 +1,10 @@
 #pragma once
 
-#include <utility>
-#include <Renderer/World/ShadowMaps.h>
 #include "Command.h"
-#include "GameView.h"
 #include "Universe/World/Blocks.h"
-#include "Textures.h"
-#include "Renderer/Renderer.h"
-#include "TextRenderer.h"
 #include "Player.h"
 #include "Universe/World/World.h"
-#include "Renderer/World/WorldRenderer.h"
-#include "Particles.h"
-#include "Hitbox.h"
-#include "GUI.h"
-#include "Menus.h"
 #include "Items.h"
-#include "Setup.h"
-#include "AudioSystem.h"
-#include "Universe/Game.h"
 
 std::vector<Command> commands;
 

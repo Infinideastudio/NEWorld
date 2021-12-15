@@ -3,6 +3,7 @@
 #include "Universe/World/Blocks.h"
 #include <cstring>
 #include <fstream>
+#include "Common/Logger.h"
 
 int BLOCKTEXTURE_SIZE, BLOCKTEXTURE_UNITSIZE, BLOCKTEXTURE_UNITS;
 
@@ -92,7 +93,7 @@ namespace Textures {
         bitmap.sizeX = bitmap.sizeY = 0;
         std::ifstream bmpfile(Filename, std::ios::binary | std::ios::in); //位图文件（二进制）
         if (!bmpfile.is_open()) {
-            printf("[console][Warning] Cannot load %s\n", Filename.c_str());
+            warningstream << "Cannot load " << Filename;
             return;
         }
         BITMAPINFOHEADER bih; //各种关于位图的参数
@@ -124,15 +125,11 @@ namespace Textures {
         std::ifstream maskfile;
         if (!noMaskFile)maskfile.open(MkFilename, std::ios::binary | std::ios::in);
         if (!bmpfile.is_open()) {
-            std::stringstream ss;
-            ss << "Cannot load bitmap " << Filename;
-            DebugWarning(ss.str());
+            warningstream << "Cannot load bitmap " << Filename;
             return;
         }
         if (!noMaskFile && !maskfile.is_open()) {
-            std::stringstream ss;
-            ss << "Cannot load bitmap " << MkFilename;
-            DebugWarning(ss.str());
+            warningstream << "Cannot load bitmap " << MkFilename;
             return;
         }
         BITMAPFILEHEADER bfh;

@@ -30,7 +30,22 @@ find_package(GLEW REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(OpenAL REQUIRED)
-find_package(Freetype REQUIRED)
+
+# find noesis core and its app
+find_package(Noesis REQUIRED)
+file(GLOB NOESIS_APP_INCLUDE 
+External/Noesis/Src/Packages/*/*/Include
+External/Noesis/Src/Packages/App/Theme/Data/Theme
+External/Noesis/Src/Packages/App/Theme/Data/Theme/Fonts
+)
+file(GLOB NOESIS_APP_SRCS
+External/Noesis/Src/Packages/App/Theme/Src/*.cpp
+External/Noesis/Src/Packages/App/Providers/Src/*.cpp
+External/Noesis/Src/Packages/App/Interactivity/Src/*.cpp
+External/Noesis/Src/Packages/App/MediaElement/Src/*.cpp
+External/Noesis/Src/Packages/App/ApplicationLauncher/Src/NotifyPropertyChangedBase.cpp
+External/Noesis/Src/Packages/Render/GLRenderDevice/Src/*.cpp
+)
 
 if (APPLE)
     find_package(Boost REQUIRED COMPONENTS filesystem)
@@ -47,11 +62,27 @@ target_include_directories(NEWorld.Base PUBLIC NEWorld.Base)
 target_link_libraries(NEWorld.Base PRIVATE SQLite::SQLite3)
 
 file(GLOB_RECURSE SOURCE NEWorld.Game/*.*)
-add_executable(NEWorld ${SOURCE})
+add_executable(NEWorld ${SOURCE} ${NOESIS_APP_SRCS})
+
+# copy assets
+add_custom_command(TARGET NEWorld POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/Assets $<TARGET_FILE_DIR:NEWorld>/Assets)
+file(COPY ${NOESIS_DLL} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+# build noesis files
+execute_process(COMMAND python bin2h.py
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR})
+
 target_enable_ipo(NEWorld)
-target_compile_definitions(NEWorld PRIVATE -DNEWORLD_GAME)
-target_include_directories(NEWorld PRIVATE NEWorld.Game ${OPENAL_INCLUDE_DIR} External)
-target_link_libraries(NEWorld PRIVATE OpenGL::GL GLEW::GLEW glfw Freetype::Freetype NEWorld.Base)
+target_compile_definitions(NEWorld PRIVATE NEWORLD_GAME
+    NS_APP_PROVIDERS_API=
+    NS_APP_INTERACTIVITY_API=
+    NS_APP_MEDIAELEMENT_API=
+    NS_APP_APPLICATIONLAUNCHER_API=
+)
+target_include_directories(NEWorld PRIVATE NEWorld.Game ${OPENAL_INCLUDE_DIR} External Noesis ${NOESIS_APP_INCLUDE})
+target_link_libraries(NEWorld PRIVATE OpenGL::GL GLEW::GLEW glfw NEWorld.Base Noesis)
 if (APPLE)
     target_link_libraries(NEWorld PRIVATE Boost::filesystem)
 endif()

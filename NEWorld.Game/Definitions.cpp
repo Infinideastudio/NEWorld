@@ -12,11 +12,8 @@ float runspeed = 0.3f;
 int MaxAirJumps = 3 - 1;
 bool SmoothLighting = true;
 bool NiceGrass = true;
-bool MergeFace = false;
-bool GUIScreenBlur = false;
 int linelength = 10;
 int linedist = 30;
-bool ppistretch = false;
 float skycolorR = 0.7f;
 float skycolorG = 1.0f;
 float skycolorB = 1.0f;
@@ -30,7 +27,6 @@ int gametime = 0;
 
 int windowwidth;
 int windowheight;
-bool gamebegin, gameexit, bagOpened;
 
 //������Ϸ
 bool multiplayer = false;
@@ -38,7 +34,7 @@ std::string serverip;
 unsigned short port = 30001;
 
 TextureID BlockTextures;
-TextureID tex_select, tex_unselect, tex_title, tex_mainmenu[6];
+TextureID tex_select, tex_unselect, tex_mainmenu[6];
 TextureID DestroyImage[11];
 TextureID DefaultSkin;
 

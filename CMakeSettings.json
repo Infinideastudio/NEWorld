@@ -8,8 +8,7 @@
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
       "buildCommandArgs": "-v",
-      "ctestCommandArgs": "",
-      "cmakeToolchain": "C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      "ctestCommandArgs": ""
     },
     {
       "name": "x64-ReleaseDbg",
@@ -20,8 +19,7 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
-      "cmakeToolchain": "C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      "inheritEnvironments": [ "msvc_x64_x64" ]
     },
     {
       "name": "x64-Release",
@@ -32,8 +30,7 @@
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
-      "cmakeToolchain": "C:/Tools/vcpkg/scripts/buildsystems/vcpkg.cmake"
+      "inheritEnvironments": [ "msvc_x64_x64" ]
     }
   ]
 }

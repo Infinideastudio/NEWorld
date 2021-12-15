@@ -16,8 +16,6 @@ namespace Menus {
 
     void createworldmenu();
 
-    void gamemenu();
-
     void multiplayermenu();
 
     void languagemenu();
