@@ -56,25 +56,36 @@ namespace GUI {
     void Scene::update() {
         // TODO: change to use glfw callback + message bus?
         if (mView) {
-            static bool pressed = false;
+            static bool leftPressed = false, rightPressed = false;
             static double lastPressedTime = 0;
             double xpos, ypos;
             glfwGetCursorPos(MainWindow, &xpos, &ypos);
             mView->MouseMove(xpos, ypos);
             mView->SetSize(windowwidth, windowheight);
-            int state = glfwGetMouseButton(MainWindow, GLFW_MOUSE_BUTTON_LEFT);
-            if (state == GLFW_PRESS && !pressed) {
+
+            const int leftCurrentlyPressed = glfwGetMouseButton(MainWindow, GLFW_MOUSE_BUTTON_LEFT);
+            if (leftCurrentlyPressed == GLFW_PRESS && !leftPressed) {
                 mView->MouseButtonDown(xpos, ypos, Noesis::MouseButton_Left);
                 auto curTime = timer();
                 if (curTime - lastPressedTime < 0.25) {
                     mView->MouseDoubleClick(xpos, ypos, Noesis::MouseButton_Left);
                 }
-                pressed = true;
+                leftPressed = true;
                 lastPressedTime = curTime;
             }
-            else if (state != GLFW_PRESS && pressed) {
-                pressed = false;
+            else if (leftCurrentlyPressed != GLFW_PRESS && leftPressed) {
+                leftPressed = false;
                 mView->MouseButtonUp(xpos, ypos, Noesis::MouseButton_Left);
+            }
+
+            const int rightCurrentlyPressed = glfwGetMouseButton(MainWindow, GLFW_MOUSE_BUTTON_RIGHT);
+            if (rightCurrentlyPressed == GLFW_PRESS && !rightPressed) {
+                mView->MouseButtonDown(xpos, ypos, Noesis::MouseButton_Right);
+                rightPressed = true;
+            }
+            else if (rightCurrentlyPressed != GLFW_PRESS && rightPressed) {
+                rightPressed = false;
+                mView->MouseButtonUp(xpos, ypos, Noesis::MouseButton_Right);
             }
         }
 

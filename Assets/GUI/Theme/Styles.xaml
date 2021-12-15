@@ -143,6 +143,7 @@
     </ControlTemplate.Resources>
     <ControlTemplate.Triggers>
       <Trigger Property="IsMouseOver" Value="True">
+	    <Setter Property="Background" Value="{DynamicResource Brush.Background.Over}" TargetName="Border"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border.Over}" TargetName="Border"/>
         <Setter Property="BorderThickness" Value="{DynamicResource Border.Over}" TargetName="Border"/>
         <Setter Property="CornerRadius" Value="{DynamicResource Corner.Border2}" TargetName="Border"/>

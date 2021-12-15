@@ -7,8 +7,7 @@
 #include "System/PmrBase.h"
 
 namespace GUI {
-    class FpsCounter
-    {
+    class FpsCounter {
     public:
         double getFPS() const noexcept { return mFPS; }
         void update() noexcept {

@@ -20,11 +20,13 @@
 #include "Common/Logger.h"
 #include "NsGui/BaseValueConverter.h"
 #include "NsRender/GLFactory.h"
+#include "GUI/InventorySlot.h"
+#include "NsApp/ChangePropertyAction.h"
 
 Noesis::Ptr<Noesis::RenderDevice> GUI::renderDevice;
 
 void GUI::noesisSetup() {
-    Noesis::SetLogHandler([](const char*, uint32_t, uint32_t level, const char*, const char* msg) {
+    Noesis::SetLogHandler([](const char* file, uint32_t line, uint32_t level, const char* channel, const char* msg) {
         Logger::Level prefixes[] = {
             Logger::Level::debug,
             Logger::Level::debug,
@@ -32,7 +34,7 @@ void GUI::noesisSetup() {
             Logger::Level::warning,
             Logger::Level::error
         };
-        Logger(__FILE__, __FUNCTION__, __LINE__, prefixes[level], "Noesis") << msg;
+        Logger(file, "", line, prefixes[level], "Noesis") << msg;
         });
 
     // Sets the active license
@@ -61,6 +63,9 @@ void GUI::noesisSetup() {
     Noesis::RegisterComponent<NoesisApp::DataTrigger>();
     Noesis::RegisterComponent<NoesisApp::MouseDragElementBehavior>();
     Noesis::RegisterComponent<NoesisApp::GoToStateAction>();
+    Noesis::RegisterComponent<NoesisApp::ChangePropertyAction>();
+    Noesis::RegisterComponent<Noesis::EnumConverter<NoesisApp::ComparisonConditionType>>();
+    Noesis::RegisterComponent<InventorySlot>();
     Noesis::TypeOf<NoesisApp::Interaction>(); // Force the creation of its reflection type
     Noesis::TypeOf<NoesisApp::StyleInteraction>(); // Force the creation of its reflection type
 
@@ -72,6 +77,7 @@ void GUI::noesisSetup() {
 
 
 void GUI::noesisShutdown() {
+    InventorySlot::clearCache();
     GUI::renderDevice.Reset();
     Noesis::GUI::Shutdown();
 }

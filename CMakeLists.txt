@@ -34,17 +34,17 @@ find_package(OpenAL REQUIRED)
 # find noesis core and its app
 find_package(Noesis REQUIRED)
 file(GLOB NOESIS_APP_INCLUDE 
-External/Neosis/Src/Packages/*/*/Include
-External/Neosis/Src/Packages/App/Theme/Data/Theme
-External/Neosis/Src/Packages/App/Theme/Data/Theme/Fonts
+External/Noesis/Src/Packages/*/*/Include
+External/Noesis/Src/Packages/App/Theme/Data/Theme
+External/Noesis/Src/Packages/App/Theme/Data/Theme/Fonts
 )
 file(GLOB NOESIS_APP_SRCS
-External/Neosis/Src/Packages/App/Theme/Src/*.cpp
-External/Neosis/Src/Packages/App/Providers/Src/*.cpp
-External/Neosis/Src/Packages/App/Interactivity/Src/*.cpp
-External/Neosis/Src/Packages/App/MediaElement/Src/*.cpp
-External/Neosis/Src/Packages/App/ApplicationLauncher/Src/NotifyPropertyChangedBase.cpp
-External/Neosis/Src/Packages/Render/GLRenderDevice/Src/*.cpp
+External/Noesis/Src/Packages/App/Theme/Src/*.cpp
+External/Noesis/Src/Packages/App/Providers/Src/*.cpp
+External/Noesis/Src/Packages/App/Interactivity/Src/*.cpp
+External/Noesis/Src/Packages/App/MediaElement/Src/*.cpp
+External/Noesis/Src/Packages/App/ApplicationLauncher/Src/NotifyPropertyChangedBase.cpp
+External/Noesis/Src/Packages/Render/GLRenderDevice/Src/*.cpp
 )
 
 if (APPLE)

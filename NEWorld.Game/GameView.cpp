@@ -1,4 +1,6 @@
 #include "GameView.h"
+
+#include <optional>
 #include <utility>
 #include <Renderer/World/ShadowMaps.h>
 #include "Universe/World/Blocks.h"
@@ -19,13 +21,13 @@
 #include "NsDrawing/Int32Rect.h"
 #include "NsDrawing/Thickness.h"
 #include "NsGui/CroppedBitmap.h"
-#include "NsRender/GLFactory.h"
-#include "NsGui/TextureSource.h"
-#include <NsRender/Texture.h>
+#include "GUI/InventorySlot.h"
 #include "NsGui/TextBlock.h"
 #include "NsGui/Label.h"
 #include "GUI/Menus/Menus.h"
-#include "Renderer/BufferBuilder.h"
+#include "NsGui/StackPanel.h"
+#include "NsGui/UIElementCollection.h"
+#include "NsGui/WrapPanel.h"
 
 namespace NoesisApp {
     class Window;
@@ -65,7 +67,16 @@ public:
             OnPropertyChanged("GamePaused");
         }
     }
+    bool getBagOpen() const {
+        return mBagOpen;
+    }
 
+    void setBagOpen(bool bagOpen) {
+        if (bagOpen != mBagOpen) {
+            mBagOpen = bagOpen;
+            OnPropertyChanged("BagOpen");
+        }
+    }
     double getHP() const { return Player::health; }
     double getHPMax() const { return Player::healthMax; }
     void notifyHPChanges() { OnPropertyChanged("HP"); OnPropertyChanged("HPMax"); }
@@ -73,10 +84,12 @@ public:
 private:
     std::string mDebugInfo;
     bool mGamePaused = false;
+    bool mBagOpen = false;
 
     NS_IMPLEMENT_INLINE_REFLECTION(GameViewViewModel, NotifyPropertyChangedBase) {
         NsProp("DebugInfo", &GameViewViewModel::getDebugInfo);
         NsProp("GamePaused", &GameViewViewModel::getGamePaused);
+        NsProp("BagOpen", &GameViewViewModel::getBagOpen);
         NsProp("HP", &GameViewViewModel::getHP);
         NsProp("HPMax", &GameViewViewModel::getHPMax);
     }
@@ -85,9 +98,15 @@ private:
 class GameView : public virtual GUI::Scene, public Game {
 private:
     GUI::FpsCounter mUpsCounter;
-    Noesis::Image* mHotBar[10];
-    Noesis::TextBlock* mHotBarCnt[10];
+    InventorySlot* mHotBar[10];
+    InventorySlot* mInventory[4][10];
     Noesis::Ptr<GameViewViewModel> mViewModel;
+
+    struct ItemMoveContext {
+        int row, col;
+        int quantity;
+    };
+    std::optional<ItemMoveContext> mInventoryMoveFrom;
 
     int getMouseScroll() { return mw; }
 
@@ -182,7 +201,7 @@ public:
                           (curtime - lastupdate) * 30.0 * Player::yd;
         const auto zpos = Player::Pos.Z - Player::zd + (curtime - lastupdate) * 30.0 * Player::zd;
 
-        if(!mViewModel->getGamePaused()) {
+        if(!mViewModel->getGamePaused() && !mBagOpened) {
             //转头！你治好了我多年的颈椎病！
             if (mx != mxl) Player::xlookspeed -= (mx - mxl) * mousemove;
             if (my != myl) Player::ylookspeed += (my - myl) * mousemove;
@@ -564,11 +583,49 @@ public:
             mViewModel->setGamePaused(false);
             updateThreadPaused = false;
             requestLeave();
-            GUI::pushScene(Menus::startMenu());
+            pushScene(Menus::startMenu());
         };
-        for (int i = 0; i <= 9; ++i) {
-            mHotBar[i] = mRoot->FindName<Noesis::Image>((std::string("Hotbar") + std::to_string(i)).c_str());
-            mHotBarCnt[i] = mRoot->FindName<Noesis::TextBlock>((std::string("HotbarCnt") + std::to_string(i)).c_str());
+        auto hotbar = mRoot->FindName<Noesis::StackPanel>("Hotbar");
+        for (auto& slot : mHotBar) {
+            hotbar->GetChildren()->Add(slot = new InventorySlot());
+        }
+        auto inventory = mRoot->FindName<Noesis::WrapPanel>("Inventory");
+        for (int row = 0; row < 4; ++row) {
+            for (int i = 0; i < 10; ++i) {
+                inventory->GetChildren()->Add(mInventory[row][i] = new InventorySlot());
+
+                mInventory[row][i]->PreviewMouseUp() += [this, row, i](Noesis::BaseComponent*, const Noesis::MouseButtonEventArgs& args) {
+                    auto& thisAmount = Player::inventoryAmount[row][i];
+                    auto& thisItem = Player::inventory[row][i];
+                    bool rightClick = args.changedButton == Noesis::MouseButton_Right;
+                    if (mInventoryMoveFrom.has_value()) { // if has already selected one
+                        auto& from = mInventoryMoveFrom.value();
+                        auto& fromAmount = Player::inventoryAmount[from.row][from.col];
+                        auto& fromItem = Player::inventory[from.row][from.col];
+                        if (thisItem != fromItem && thisItem != Blocks::ENV) { // different item - swap
+                            std::swap(fromAmount, thisAmount);
+                            std::swap(fromItem, thisItem);
+                            from.quantity = 0;
+                        }
+                        else { // same item or empty - stack
+                            const auto moveAmount = rightClick ? 1 : std::min(Player::MaxStack - thisAmount, std::min(from.quantity, int(fromAmount)));
+                            thisItem = fromItem;
+                            fromAmount -= moveAmount;
+                            thisAmount += moveAmount;
+                            from.quantity -= moveAmount;
+                        }
+                    	if (fromAmount == 0) fromItem = Blocks::ENV;
+                        if (from.quantity == 0) mInventoryMoveFrom.reset(); // done transfer
+                    }
+                    else if (thisAmount != 0) { // if not selected and this one is selectable
+                        mInventoryMoveFrom = ItemMoveContext{
+                            row,
+                            i ,
+                            args.changedButton == Noesis::MouseButton_Left ? thisAmount :std::max(thisAmount / 2, 1)
+                        };
+                    }
+                };
+            }
         }
     }
 
@@ -615,40 +672,28 @@ public:
         lastupdate = timer();
     }
 
-    static Noesis::ImageSource* getTextureForItem(item i) {
-        static auto blockTextures = Noesis::MakePtr<Noesis::TextureSource>(NoesisApp::GLFactory::WrapTexture(
-            BlockTextures, 256, 256, 0, false, true
-        ));
-        static std::unordered_map<item, Noesis::Ptr<Noesis::CroppedBitmap>> itemTextures;
-
-        if (i == Blocks::ENV) return nullptr;
-        // find from cache first
-        auto itemTextureIter = itemTextures.find(i);
-
-        if (itemTextureIter != itemTextures.end())
-            return (*itemTextureIter).second.GetPtr();
-
-        const auto tcX = Textures::getTexcoordX(i, 1) * 256;
-        const auto tcY = Textures::getTexcoordY(i, 1) * 256;
-        return itemTextures[i] = Noesis::MakePtr<Noesis::CroppedBitmap>(
-            blockTextures.GetPtr(), Noesis::Int32Rect(tcX, tcY, 32, 32)  // TODO: refactor
-        );
-    }
-
     void onUpdate() override {
         glfwGetCursorPos(MainWindow, &mx, &my);
         
         debugInfo();
         for (int i = 0; i < 10; ++i) {
-            mHotBar[i]->SetSource(getTextureForItem(Player::inventory[3][i]));
-            mHotBarCnt[i]->SetText(std::to_string(Player::inventoryAmount[3][i]).c_str());
-            // should have used proper data binding to separate logic from styling
-            // but hey it works
-            static_cast<Noesis::Label*>(mHotBar[i]->GetParent()->GetParent())->SetBorderThickness(
-                Noesis::Thickness(i == Player::indexInHand ? 5.f : 1.f)
-            );
+            mHotBar[i]->setItem(Player::inventory[3][i]);
+            mHotBar[i]->setAmount(Player::inventoryAmount[3][i]);
+            mHotBar[i]->setSelected(i == Player::indexInHand);
+        }
+        for (int row = 0; row < 4;++row) {
+            for (int i = 0; i < 10; ++i) {
+                mInventory[row][i]->setItem(Player::inventory[row][i]);
+                mInventory[row][i]->setAmount(Player::inventoryAmount[row][i]);
+                mInventory[row][i]->setSelected(mInventoryMoveFrom.has_value() && 
+                    row == mInventoryMoveFrom.value().row && i == mInventoryMoveFrom.value().col);
+            }
         }
         mViewModel->notifyHPChanges(); // just notify every frame for now.
+        mViewModel->setBagOpen(mBagOpened);
+        if (mBagOpened) {
+            glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
 
         if (glfwGetKey(MainWindow, GLFW_KEY_ESCAPE) == 1) {
             mViewModel->setGamePaused(true);
