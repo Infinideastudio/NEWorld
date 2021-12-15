@@ -145,6 +145,7 @@ public:
             if (!mBagOpened) {
                 glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
             } else {
+                glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 shouldGetThumbnail = true;
                 Player::xlookspeed = Player::ylookspeed = 0.0;
             }

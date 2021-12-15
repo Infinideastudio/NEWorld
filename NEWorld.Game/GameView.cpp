@@ -577,7 +577,7 @@ public:
         mRoot->FindName<Noesis::Button>("Resume")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
             mViewModel->setGamePaused(false);
             updateThreadPaused = false;
-            glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+            glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         };
         mRoot->FindName<Noesis::Button>("Exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
             mViewModel->setGamePaused(false);
@@ -691,9 +691,6 @@ public:
         }
         mViewModel->notifyHPChanges(); // just notify every frame for now.
         mViewModel->setBagOpen(mBagOpened);
-        if (mBagOpened) {
-            glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        }
 
         if (glfwGetKey(MainWindow, GLFW_KEY_ESCAPE) == 1) {
             mViewModel->setGamePaused(true);

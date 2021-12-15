@@ -155,7 +155,7 @@ namespace GUI {
     void Scene::load() {
     	loadView();
 
-        glfwSetInputMode(MainWindow, GLFW_CURSOR, mHasCursor ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(MainWindow, GLFW_CURSOR, mHasCursor ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
         if (mXamlPath) {
             mListeners.push_back(MessageBus::Default().Get<std::pair<int, int>>("KeyEvents")->Listen([this](void*, std::pair<int, int> keyAndAction) {
                 auto [key, action] = keyAndAction;
