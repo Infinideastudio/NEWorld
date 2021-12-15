@@ -201,3 +201,7 @@ CMakeSettings.json
 .idea/
 Mods/
 cmake-build-*
+
+# External SDK
+/External/Noesis/
+/out/
