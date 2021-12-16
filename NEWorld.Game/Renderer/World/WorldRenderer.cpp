@@ -12,7 +12,7 @@ namespace WorldRenderer {
             if (ChebyshevDistance(cPos, chunk->GetPosition()) <= renderdistance) {
                 if (!frustest || chunk->visible) {
                     renderedChunks++;
-                    RenderChunkList.emplace_back(chunk, (curtime - lastupdate) * 30.0);
+                    RenderChunkList.emplace_back(chunk, (curtime - lastUpdate) * 30.0);
                 }
             }
         }

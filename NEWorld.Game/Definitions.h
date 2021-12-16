@@ -47,21 +47,14 @@ extern TextureID tex_select, tex_unselect, tex_title, tex_mainmenu[6];
 extern TextureID DestroyImage[11];
 extern TextureID DefaultSkin;
 
-extern bool multiplayer;
-extern std::string serverip;
-extern unsigned short port;
-
 extern Mutex_t Mutex;
-extern Thread_t updateThread;
-extern double lastupdate, updateTimer;
-extern double lastframe;
+extern double lastUpdate;
 extern bool updateThreadRun, updateThreadPaused;
 
 extern bool mpclient, mpserver;
 extern bool shouldGetScreenshot;
 extern bool shouldGetThumbnail;
 extern bool FirstUpdateThisFrame;
-extern bool FirstFrameThisUpdate;
 extern double SpeedupAnimTimer;
 extern double TouchdownAnimTimer;
 extern double screenshotAnimTimer;

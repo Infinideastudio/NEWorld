@@ -20,7 +20,6 @@ typedef uint64 chunkid;
 typedef unsigned int onlineid;
 #ifdef NEWORLD_GAME
 typedef std::mutex *Mutex_t;
-typedef std::thread *Thread_t;
 
 typedef unsigned int(*ThreadFunc_t)(void *param);
 

@@ -40,13 +40,13 @@ public:
         //切换方块
         if (isPressed(GLFW_KEY_Z) && Player::indexInHand > 0) Player::indexInHand--;
         if (isPressed(GLFW_KEY_X) && Player::indexInHand < 9) Player::indexInHand++;
-        if (static_cast<int>(Player::indexInHand) + (mwl - mw) < 0)Player::indexInHand = 0;
-        else if (static_cast<int>(Player::indexInHand) + (mwl - mw) > 9)Player::indexInHand = 9;
+        if (static_cast<int>(Player::indexInHand) + (mwl - mw) < 0)Player::indexInHand = 9;
+        else if (static_cast<int>(Player::indexInHand) + (mwl - mw) > 9)Player::indexInHand = 0;
         else Player::indexInHand += static_cast<char>(mwl - mw);
         mwl = mw;
     }
 
-    void updategame() {
+    void updateGame() {
         static double Wprstm;
         static bool WP;
 
@@ -160,7 +160,6 @@ public:
         }
 
         mbp = mb;
-        FirstFrameThisUpdate = true;
         Particles::updateall();
 
         Player::IntPos = Int3(Player::Pos, RoundInt);
@@ -523,17 +522,13 @@ public:
         infostream << "Saving world";
         World::saveAllChunks();
         if (!Player::save(World::worldname)) {
-#ifdef NEWORLD_CONSOLE_OUTPUT
-            DebugWarning("Failed saving player info!");
-#endif
+            warningstream << "Failed saving player info!";
         }
     }
 
     static bool loadGame() {
         if (!Player::load(World::worldname)) {
-#ifdef NEWORLD_CONSOLE_OUTPUT
-            DebugWarning("Failed loading player info!");
-#endif
+            warningstream << "Failed loading player info!";
             return false;
         }
         return true;

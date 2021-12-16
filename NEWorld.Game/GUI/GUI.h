@@ -9,7 +9,7 @@
 namespace GUI {
     class FpsCounter {
     public:
-        double getFPS() const noexcept { return mFPS; }
+        int getFPS() const noexcept { return mFPS; }
         void update() noexcept {
             check();
             frame();

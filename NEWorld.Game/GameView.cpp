@@ -18,12 +18,8 @@
 #include "NsApp/NotifyPropertyChangedBase.h"
 #include "NsGui/Button.h"
 #include "NsGui/Image.h"
-#include "NsDrawing/Int32Rect.h"
-#include "NsDrawing/Thickness.h"
-#include "NsGui/CroppedBitmap.h"
 #include "GUI/InventorySlot.h"
 #include "NsGui/TextBlock.h"
-#include "NsGui/Label.h"
 #include "GUI/Menus/Menus.h"
 #include "NsGui/StackPanel.h"
 #include "NsGui/UIElementCollection.h"
@@ -32,8 +28,6 @@
 namespace NoesisApp {
     class Window;
 }
-
-ThreadFunc updateThreadFunc(void *);
 
 class GameView;
 // pretty hacky. try to remove later.
@@ -101,6 +95,7 @@ private:
     InventorySlot* mHotBar[10];
     InventorySlot* mInventory[4][10];
     Noesis::Ptr<GameViewViewModel> mViewModel;
+    std::thread mUpdateThread;
 
     struct ItemMoveContext {
         int row, col;
@@ -115,7 +110,7 @@ private:
 public:
     GameView() : Scene("InGame.xaml", false), mViewModel(Noesis::MakePtr<GameViewViewModel>()) {}
 
-    void GameThreadloop() {
+    void gameThread() {
         //Wait until start...
         MutexLock(Mutex);
         while (!updateThreadRun) {
@@ -127,7 +122,7 @@ public:
 
         //Thread start
         MutexLock(Mutex);
-        lastupdate = timer();
+        lastUpdate = timer();
 
         while (updateThreadRun) {
             MutexUnlock(Mutex);
@@ -138,17 +133,17 @@ public:
                 MutexUnlock(Mutex);
                 std::this_thread::yield();
                 MutexLock(Mutex);
-                lastupdate = updateTimer = timer();
+                lastUpdate = timer();
             }
 
             FirstUpdateThisFrame = true;
-            updateTimer = timer();
-            if (updateTimer - lastupdate >= 5.0) lastupdate = updateTimer;
-
-            while (updateTimer - lastupdate >= 1.0 / 30.0 && mUpsCounter.getFPS() < 60) {
-                lastupdate += 1.0 / 30.0;
+            double currentTime = timer();
+            if (currentTime - lastUpdate >= 5.0) lastUpdate = currentTime;
+            
+            while (currentTime - lastUpdate >= 1.0 / 30.0 && mUpsCounter.getFPS() < 60) {
+                lastUpdate += 1.0 / 30.0;
                 mUpsCounter.frame();
-                updategame();
+                updateGame();
                 FirstUpdateThisFrame = false;
             }
 
@@ -157,28 +152,23 @@ public:
         MutexUnlock(Mutex);
     }
 
-    void Grender() {
+    void gameRender() {
         //画场景
-        const auto curtime = timer();
-        double TimeDelta;
-        auto renderedChunk = 0;
-
-        lastframe = curtime;
+        const auto currentTime = timer();
+        static double lastFrameTime = currentTime;
 
         if (Player::Running) {
             if (FOVyExt < 9.8) {
-                TimeDelta = curtime - SpeedupAnimTimer;
-                FOVyExt = 10.0f - (10.0f - FOVyExt) * static_cast<float>(pow(0.8, TimeDelta * 30));
-                SpeedupAnimTimer = curtime;
+                FOVyExt = 10.0f - (10.0f - FOVyExt) * static_cast<float>(pow(0.8, (currentTime - SpeedupAnimTimer) * 30));
+                SpeedupAnimTimer = currentTime;
             } else FOVyExt = 10.0;
         } else {
             if (FOVyExt > 0.2) {
-                TimeDelta = curtime - SpeedupAnimTimer;
-                FOVyExt *= static_cast<float>(pow(0.8, TimeDelta * 30));
-                SpeedupAnimTimer = curtime;
+                FOVyExt *= static_cast<float>(pow(0.8, (currentTime - SpeedupAnimTimer) * 30));
+                SpeedupAnimTimer = currentTime;
             } else FOVyExt = 0.0;
         }
-        SpeedupAnimTimer = curtime;
+        SpeedupAnimTimer = currentTime;
 
         if (Player::OnGround) {
             //半蹲特效
@@ -187,32 +177,32 @@ public:
                     Player::heightExt = -(Player::height - 0.5f);
                 else
                     Player::heightExt = static_cast<float>(Player::jump);
-                TouchdownAnimTimer = curtime;
+                TouchdownAnimTimer = currentTime;
             } else {
                 if (Player::heightExt <= -0.005) {
-                    Player::heightExt *= static_cast<float>(pow(0.8, (curtime - TouchdownAnimTimer) * 30));
-                    TouchdownAnimTimer = curtime;
+                    Player::heightExt *= static_cast<float>(pow(0.8, (currentTime - TouchdownAnimTimer) * 30));
+                    TouchdownAnimTimer = currentTime;
                 }
             }
         }
 
-        const auto xpos = Player::Pos.X - Player::xd + (curtime - lastupdate) * 30.0 * Player::xd;
+        const auto xpos = Player::Pos.X - Player::xd + (currentTime - lastUpdate) * 30.0 * Player::xd;
         const auto ypos = Player::Pos.Y + Player::height + Player::heightExt - Player::yd +
-                          (curtime - lastupdate) * 30.0 * Player::yd;
-        const auto zpos = Player::Pos.Z - Player::zd + (curtime - lastupdate) * 30.0 * Player::zd;
+                          (currentTime - lastUpdate) * 30.0 * Player::yd;
+        const auto zpos = Player::Pos.Z - Player::zd + (currentTime - lastUpdate) * 30.0 * Player::zd;
 
         if(!mViewModel->getGamePaused() && !mBagOpened) {
             //转头！你治好了我多年的颈椎病！
             if (mx != mxl) Player::xlookspeed -= (mx - mxl) * mousemove;
             if (my != myl) Player::ylookspeed += (my - myl) * mousemove;
             if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1)
-                Player::xlookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
+                Player::xlookspeed -= mousemove * 16 * (currentTime - lastFrameTime) * 30.0;
             if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1)
-                Player::xlookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
+                Player::xlookspeed += mousemove * 16 * (currentTime - lastFrameTime) * 30.0;
             if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1)
-                Player::ylookspeed -= mousemove * 16 * (curtime - lastframe) * 30.0;
+                Player::ylookspeed -= mousemove * 16 * (currentTime - lastFrameTime) * 30.0;
             if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1)
-                Player::ylookspeed += mousemove * 16 * (curtime - lastframe) * 30.0;
+                Player::ylookspeed += mousemove * 16 * (currentTime - lastFrameTime) * 30.0;
 
         }
 
@@ -248,8 +238,8 @@ public:
         //Renderer::sunlightXrot = 90 * daylight;
         if (Renderer::AdvancedRender) {
             //Build shadow map
-            if (!DebugShadow) ShadowMaps::BuildShadowMap(xpos, ypos, zpos, curtime);
-            else ShadowMaps::RenderShadowMap(xpos, ypos, zpos, curtime);
+            if (!DebugShadow) ShadowMaps::BuildShadowMap(xpos, ypos, zpos, currentTime);
+            else ShadowMaps::RenderShadowMap(xpos, ypos, zpos, currentTime);
         }
         glClearColor(skycolorR, skycolorG, skycolorB, 1.0);
         if (!DebugShadow) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -268,7 +258,7 @@ public:
         glMatrixMode(GL_MODELVIEW);
 
         World::calcVisible(xpos, ypos, zpos, Player::ViewFrustum);
-        renderedChunk = WorldRenderer::ListRenderChunks(Player::cxt, Player::cyt, Player::czt, viewdistance, curtime);
+        WorldRenderer::ListRenderChunks(Player::cxt, Player::cyt, Player::czt, viewdistance, currentTime);
 
         MutexUnlock(Mutex);
 
@@ -353,8 +343,8 @@ public:
         }
 
         glDisable(GL_TEXTURE_2D);
-        if (curtime - screenshotAnimTimer <= 1.0 && !shouldGetScreenshot) {
-            const auto col = 1.0f - static_cast<float>(curtime - screenshotAnimTimer);
+        if (currentTime - screenshotAnimTimer <= 1.0 && !shouldGetScreenshot) {
+            const auto col = 1.0f - static_cast<float>(currentTime - screenshotAnimTimer);
             glColor4f(1.0f, 1.0f, 1.0f, col);
             glBegin(GL_QUADS);
             glVertex2i(0, 0);
@@ -367,7 +357,7 @@ public:
 
         if (shouldGetScreenshot) {
             shouldGetScreenshot = false;
-            screenshotAnimTimer = curtime;
+            screenshotAnimTimer = currentTime;
             auto t = time(nullptr);
             char tmp[64];
             const auto timeinfo = localtime(&t);
@@ -383,13 +373,12 @@ public:
         }
         mxl = mx;
         myl = my;
-        //屏幕刷新，千万别删，后果自负！！！
-        //====refresh====//
+        lastFrameTime = timer();
     }
 
     void onRender() override {
         MutexLock(Mutex);
-        Grender();
+        gameRender();
         MutexUnlock(Mutex);
         //==refresh end==//
     }
@@ -639,12 +628,7 @@ public:
         Mutex = MutexCreate();
         //MutexLock(Mutex);
         currentGame = this;
-        updateThread = ThreadCreate(&updateThreadFunc, nullptr);
-        if (multiplayer) {
-            fastSrand(static_cast<unsigned int>(time(nullptr)));
-            Player::name = "";
-            Player::onlineID = rand();
-        }
+        mUpdateThread = std::thread([this] {gameThread(); });
         //初始化游戏状态
         infostream << "Init player...";
         if (loadGame()) Player::init(Player::Pos);
@@ -669,7 +653,7 @@ public:
         myl = my;
         infostream << "Main loop started";
         updateThreadRun = true;
-        lastupdate = timer();
+        lastUpdate = timer();
     }
 
     void onUpdate() override {
@@ -719,8 +703,7 @@ public:
         infostream << "Terminate threads";
         updateThreadRun = false;
         //MutexUnlock(Mutex);
-        ThreadWait(updateThread);
-        ThreadDestroy(updateThread);
+        mUpdateThread.join();
         currentGame = nullptr;
         MutexDestroy(Mutex);
         saveGame();
@@ -736,8 +719,3 @@ public:
 };
 
 void pushGameView() { GUI::pushScene(std::make_unique<GameView>()); }
-
-ThreadFunc updateThreadFunc(void *) {
-    if(currentGame) currentGame->GameThreadloop();
-    return 0;
-}

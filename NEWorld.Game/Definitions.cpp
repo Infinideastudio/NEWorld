@@ -39,15 +39,12 @@ TextureID DestroyImage[11];
 TextureID DefaultSkin;
 
 Mutex_t Mutex;
-Thread_t updateThread;
-double lastupdate, updateTimer;
-double lastframe;
+double lastUpdate;
 bool updateThreadRun, updateThreadPaused;
 
 bool shouldGetScreenshot;
 bool shouldGetThumbnail;
 bool FirstUpdateThisFrame;
-bool FirstFrameThisUpdate;
 double SpeedupAnimTimer;
 double TouchdownAnimTimer;
 double screenshotAnimTimer;

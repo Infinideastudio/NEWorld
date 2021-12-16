@@ -84,12 +84,6 @@ inline void MutexLock(Mutex_t _hMutex) { _hMutex->lock(); }
 
 inline void MutexUnlock(Mutex_t _hMutex) { _hMutex->unlock(); }
 
-inline Thread_t ThreadCreate(ThreadFunc_t func, void *param) { return new std::thread([=] { func(param); }); }
-
-inline void ThreadWait(Thread_t _hThread) { _hThread->join(); }
-
-inline void ThreadDestroy(Thread_t _hThread) { delete _hThread; }
-
 unsigned int MByteToWChar(wchar_t *dst, const char *src, unsigned int n);
 
 unsigned int WCharToMByte(char *dst, const wchar_t *src, unsigned int n);
