@@ -37,7 +37,7 @@ void ApplicationAfterLaunch() {
     //初始化音频系统
     AudioSystem::Init();
 }
-
+#include "Universe/Entity/Entity.h"
 int main() {
     auto test = MessageBus::Default().Get<NullArg>("TEST");
     {

@@ -2,11 +2,13 @@
 
 #include "CommandHandler.h"
 #include "Common/Logger.h"
-
+#include "Entity/Entity.h"
 
 class Game : public CommandHandler {
     Vec3<int> mLastSelectedBlockPos{};
     Brightness mSelectedBlockBrightness{};
+    std::vector<std::unique_ptr<Entity>> mEntities{};
+
 protected:
     bool DebugHitbox{};
     bool DebugMergeFace{};
@@ -166,6 +168,17 @@ public:
         Player::updatePosition();
         Player::PosOld = Player::Pos;
         Player::IntPosOld = Int3(Player::Pos, RoundInt);
+
+        EntitiesMovement();
+    }
+
+    void EntitiesMovement() {
+        // movement of entities
+        if (mEntities.empty()) return;
+        EntityBVH bvh(mEntities, true);
+        for (auto& entity : mEntities) {
+            entity->move(bvh);
+        }
     }
 
     void ChunkLoadUnload() const {

@@ -7,6 +7,7 @@
 #include "Hitbox.h"
 #include "Blocks.h"
 #include "OrderedArray.h"
+#include "Universe/Entity/bvh.h"
 
 extern int viewdistance;
 
@@ -74,7 +75,8 @@ namespace World {
         return GetChunk(v);
     }
 
-    std::vector<Hitbox::AABB> getHitboxes(const Hitbox::AABB &box);
+    std::vector<Hitbox::AABB> getHitboxes(const Hitbox::AABB& box); // deprecated
+    std::vector<BoundingBox> getHitboxes(const BoundingBox& box);
 
     bool inWater(const Hitbox::AABB &box);
 

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <algorithm>
 #include <type_traits>
+#include <bvh/vector.hpp>
 
 template<class T, class = std::enable_if<std::is_arithmetic_v<T>>>
 struct Vec3 {
@@ -133,6 +134,8 @@ struct Vec3 {
     [[nodiscard]] constexpr T Dot(const Vec3 &r) const noexcept { return X * r.X + Y * r.Y + Z * r.Z; }
 
     [[nodiscard]] T Length() const noexcept { return std::sqrt(LengthSquared()); }
+
+    operator bvh::Vector3<T>() const { return bvh::Vector3<T>(X, Y, Z); }
 
     void Normalize() noexcept { (*this) /= Length(); }
 };

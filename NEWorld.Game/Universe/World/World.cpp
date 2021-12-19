@@ -149,6 +149,22 @@ namespace World {
         return Hitboxes;
     }
 
+    std::vector<BoundingBox> getHitboxes(const BoundingBox& box) {
+        std::vector<BoundingBox> ret;
+
+        for (auto a = int(box.min.values[0] + 0.5) - 1; a <= int(box.max.values[0] + 0.5) + 1; a++) {
+            for (auto b = int(box.min.values[1] + 0.5) - 1; b <= int(box.max.values[1] + 0.5) + 1; b++) {
+                for (auto c = int(box.min.values[2] + 0.5) - 1; c <= int(box.max.values[2] + 0.5) + 1; c++) {
+                    if (BlockInfo(GetBlock({ a, b, c })).isSolid()) {
+                        BoundingBox blockbox{{a-0.5,b-0.5,c-0.5},{a+0.5,b+0.5,c+0.5}};
+                        if (AABB::Intersect(box, blockbox)) ret.push_back(blockbox);
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
     bool inWater(const Hitbox::AABB &box) {
         Hitbox::AABB blockbox{};
         for (auto a = int(box.xmin + 0.5) - 1; a <= int(box.xmax + 0.5); a++) {
