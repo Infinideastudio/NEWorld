@@ -630,9 +630,7 @@ public:
         currentGame = this;
         mUpdateThread = std::thread([this] {gameThread(); });
         //初始化游戏状态
-        infostream << "Init player...";
-        if (loadGame()) Player::init(Player::Pos);
-        else Player::spawn();
+        InitGame();
         infostream << "Init world...";
         World::Init();
         registerCommands();

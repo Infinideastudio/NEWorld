@@ -110,34 +110,15 @@ void Player::spawn() {
     }
 }
 
-void Player::updatePosition() {
+void Player::updatePosition(Double3 velocity) {
     inWater = World::inWater(playerbox);
     if (!Flying && !CrossWall && inWater) {
         xa *= 0.6;
         ya *= 0.6;
         za *= 0.6;
     }
-    const auto xal = xa, yal = ya, zal = za;
-
-    if (!CrossWall) {
-        Hitboxes.clear();
-        Hitboxes = World::getHitboxes(Hitbox::Expand(playerbox, xa, ya, za));
-        const int num = Hitboxes.size();
-        if (num > 0) {
-            for (auto i = 0; i < num; i++) {
-                ya = Hitbox::MaxMoveOnYclip(playerbox, Hitboxes[i], ya);
-            }
-            Hitbox::Move(playerbox, 0.0, ya, 0.0);
-            for (auto i = 0; i < num; i++) {
-                xa = Hitbox::MaxMoveOnXclip(playerbox, Hitboxes[i], xa);
-            }
-            Hitbox::Move(playerbox, xa, 0.0, 0.0);
-            for (auto i = 0; i < num; i++) {
-                za = Hitbox::MaxMoveOnZclip(playerbox, Hitboxes[i], za);
-            }
-            Hitbox::Move(playerbox, 0.0, 0.0, za);
-        }
-    }
+    const auto xal = velocity.X, yal = velocity.Y, zal = velocity.Z;
+    
     if (ya != yal && yal < 0.0) {
         OnGround = true;
         Player::glidingEnergy = 0;
@@ -149,7 +130,7 @@ void Player::updatePosition() {
     } else OnGround = false;
     if (ya != yal && yal > 0.0) jump = 0.0;
     if (xa != xal || za != zal) NearWall = true; else NearWall = false;
-
+    
     xa = static_cast<double>(static_cast<int>(xa * 100000)) / 100000.0;
     ya = static_cast<double>(static_cast<int>(ya * 100000)) / 100000.0;
     za = static_cast<double>(static_cast<int>(za * 100000)) / 100000.0;
@@ -157,7 +138,6 @@ void Player::updatePosition() {
     xd = xa;
     yd = ya;
     zd = za;
-	Pos += Double3(xa, ya, za);
     xa *= 0.8;
     za *= 0.8;
     if (Flying || CrossWall) ya *= 0.8;

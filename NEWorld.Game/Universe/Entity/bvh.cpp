@@ -44,6 +44,7 @@ EntityBVH::EntityBVH(const std::vector<std::unique_ptr<Entity>>& entities, bool 
     for (const auto& e : entities) {
         bboxes.emplace_back(for_movement ? e->movement_bounding_box() : e->bounding_box());
         centers.emplace_back(e->center());
+        mEntities.emplace_back(e.get());
     }
 
     construct_bvh(bboxes, centers);
@@ -53,7 +54,7 @@ std::vector<Entity*> EntityBVH::intersect(const BoundingBox& box) const {
     AABBIntersector<Bvh, Entity*, true> intersector(mBvh, mEntities.data());
     aabb_intersect(mBvh, 0, intersector, box);
     std::vector<Entity*> entities;
-    for (const auto index : intersector.result_indices) entities.push_back(entities[index]);
+    for (const auto index : intersector.result_indices) entities.push_back(mEntities[index]);
     return entities;
 }
 

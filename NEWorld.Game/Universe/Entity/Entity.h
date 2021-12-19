@@ -10,9 +10,14 @@ public:
     Entity(Double3 position, Double3 size) : mPosition(position), mSize(size), mVelocity() {}
 
     [[nodiscard]] Vector3 center() const { return mPosition; }
-    [[nodiscard]] BoundingBox bounding_box() const { return { mPosition, mPosition + mSize }; }
+    [[nodiscard]] BoundingBox bounding_box() const {
+	    return { mPosition - mSize / 2, mPosition + mSize / 2 };
+    }
     [[nodiscard]] BoundingBox movement_bounding_box() const {
-        return bounding_box().extend({ mPosition + mVelocity, mPosition + mSize + mVelocity });
+        auto box = bounding_box();
+        box.min += mVelocity;
+        box.max += mVelocity;
+        return bounding_box().extend(box);
     }
 
     [[nodiscard]] bool intersect(const BoundingBox& box) const {
@@ -27,7 +32,6 @@ public:
     // Move the position by velocity. Will use World for collision check
     void move(const EntityBVH& bvh);
 
-private:
+protected:
     Double3 mPosition, mSize, mVelocity;
-
 };

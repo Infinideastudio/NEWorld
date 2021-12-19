@@ -41,12 +41,14 @@ namespace AABB {
 
     inline double MaxMove(const BoundingBox& boxA, const BoundingBox& boxB, double distance, int axis) {
         // perform collision from A to B
-    	if (!(InClip(boxA, boxB, axis) && InClip(boxA, boxB, axis)))
+        if (!((axis == 0 || InClip(boxA, boxB, 0)) &&
+            (axis == 1 || InClip(boxA, boxB, 1)) &&
+            (axis == 2 || InClip(boxA, boxB, 2))))
             return distance;
         if (boxA.min.values[axis] >= boxB.max.values[axis] && distance < 0.0)
             return std::max(boxB.max.values[axis] - boxA.min.values[axis], distance);
         if (boxA.max.values[axis] <= boxB.min.values[axis] && distance > 0.0)
             return std::min(boxB.min.values[axis] - boxA.max.values[axis], distance);
-        return 0.0;
+        return distance;
     }
 }

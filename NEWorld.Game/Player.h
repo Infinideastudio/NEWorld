@@ -17,7 +17,7 @@ public:
 
     static void spawn();
 
-    static void updatePosition();
+    static void updatePosition(Double3 velocity);
 
     static bool save(std::string worldn);
 

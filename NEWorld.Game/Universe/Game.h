@@ -3,13 +3,15 @@
 #include "CommandHandler.h"
 #include "Common/Logger.h"
 #include "Entity/Entity.h"
+#include "Entity/PlayerEntity.h"
 
 class Game : public CommandHandler {
     Vec3<int> mLastSelectedBlockPos{};
     Brightness mSelectedBlockBrightness{};
     std::vector<std::unique_ptr<Entity>> mEntities{};
-
 protected:
+    PlayerEntity* mPlayer = nullptr;
+
     bool DebugHitbox{};
     bool DebugMergeFace{};
     bool DebugMode{};
@@ -26,6 +28,21 @@ protected:
 
     bool mBagOpened = false;
 public:
+    void InitGame() {
+        infostream << "Init player...";
+        if (loadGame()) {
+            auto player = std::make_unique<PlayerEntity>(Player::Pos);
+            mPlayer = player.get();
+            mEntities.emplace_back(std::move(player));
+        }
+        else { // TODO:fixme
+            auto player = std::make_unique<PlayerEntity>(Player::Pos);
+            mPlayer = player.get();
+            mEntities.emplace_back(std::move(player));
+            mPlayer->spawn();
+        }
+    }
+
     void PlayerGlideEnergyDamper() {
         auto &E = Player::glidingEnergy;
         const auto oldh = Player::Pos.Y + Player::height + Player::heightExt + Player::ya;
@@ -58,7 +75,10 @@ public:
             if (Player::Pos.Y < -100) Player::health -= ((-100) - Player::Pos.Y) / 100;
             if (Player::health < Player::healthMax) Player::health += Player::healSpeed;
             if (Player::health > Player::healthMax) Player::health = Player::healthMax;
-        } else Player::spawn();
+        } else {
+            Player::health = Player::healthMax;
+            mPlayer->spawn();
+        }
 
         //时间
         gametime++;
@@ -102,7 +122,6 @@ public:
 
         if (!mBagOpened) {
         	PlayerInteract(lx, ly, lz);
-            Player::IntPos = Int3(Player::Pos, RoundInt);
 
             //限制角度，别把头转掉下来了 ←_←
             if (Player::lookupdown + Player::ylookspeed < -90.0) Player::ylookspeed = -90.0 - Player::lookupdown;
@@ -164,12 +183,12 @@ public:
         mbp = mb;
         Particles::updateall();
 
-        Player::IntPos = Int3(Player::Pos, RoundInt);
-        Player::updatePosition();
-        Player::PosOld = Player::Pos;
-        Player::IntPosOld = Int3(Player::Pos, RoundInt);
-
+        // TODO: temp hack to support old Player:: stuff
+        mPlayer->setVelocity({ Player::xa, Player::ya, Player::za });
         EntitiesMovement();
+        Player::Pos = mPlayer->getPosition();
+        Player::updatePosition(mPlayer->getVelocity());
+        Player::IntPos = Int3(Player::Pos, RoundInt);
     }
 
     void EntitiesMovement() {
