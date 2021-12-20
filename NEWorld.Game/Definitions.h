@@ -64,10 +64,6 @@ extern double bagAnimDuration;
 extern int GLVersionMajor, GLVersionMinor, GLVersionRev;
 extern GLFWwindow *MainWindow;
 extern GLFWcursor *MouseCursor;
-extern double mx, my, mxl, myl;
-extern int mw, mb, mbp, mbl, mwl;
-extern double mxdelta, mydelta;
-extern std::string inputstr;
 
 void AppCleanUp();
 

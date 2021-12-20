@@ -24,6 +24,7 @@
 #include "NsGui/StackPanel.h"
 #include "NsGui/UIElementCollection.h"
 #include "NsGui/WrapPanel.h"
+#include "ControlContext.h"
 
 namespace NoesisApp {
     class Window;
@@ -32,11 +33,6 @@ namespace NoesisApp {
 class GameView;
 // pretty hacky. try to remove later.
 GameView* currentGame = nullptr;
-
-int getMouseScroll() { return mw; }
-
-int getMouseButton() { return mb; }
-
 
 class GameViewViewModel : public NoesisApp::NotifyPropertyChangedBase {
 public:
@@ -71,14 +67,23 @@ public:
             OnPropertyChanged("BagOpen");
         }
     }
-    double getHP() const { return Player::health; }
-    double getHPMax() const { return Player::healthMax; }
-    void notifyHPChanges() { OnPropertyChanged("HP"); OnPropertyChanged("HPMax"); }
+    double getHP() const { return mHealth; }
+    double getHPMax() const { return mHealthMax; }
+    void notifyHPChanges(PlayerEntity* player) {
+        if (mHealth != player->getHealth() || mHealthMax != player->getMaxHealth()) {
+            mHealth = player->getHealth();
+            mHealthMax = player->getMaxHealth();
+
+            OnPropertyChanged("HP");
+            OnPropertyChanged("HPMax");
+        }
+    }
 
 private:
     std::string mDebugInfo;
     bool mGamePaused = false;
     bool mBagOpen = false;
+    double mHealth, mHealthMax;
 
     NS_IMPLEMENT_INLINE_REFLECTION(GameViewViewModel, NotifyPropertyChangedBase) {
         NsProp("DebugInfo", &GameViewViewModel::getDebugInfo);
@@ -96,16 +101,13 @@ private:
     InventorySlot* mInventory[4][10];
     Noesis::Ptr<GameViewViewModel> mViewModel;
     std::thread mUpdateThread;
+    Frustum mFrustum;
 
     struct ItemMoveContext {
         int row, col;
         int quantity;
     };
     std::optional<ItemMoveContext> mInventoryMoveFrom;
-
-    int getMouseScroll() { return mw; }
-
-    int getMouseButton() { return mb; }
 
 public:
     GameView() : Scene("InGame.xaml", false), mViewModel(Noesis::MakePtr<GameViewViewModel>()) {}
@@ -155,9 +157,10 @@ public:
     void gameRender() {
         //画场景
         const auto currentTime = timer();
-        static double lastFrameTime = currentTime;
 
-        if (Player::Running) {
+        const double xpos = mPlayer->getPosition().X, ypos = mPlayer->getPosition().Y, zpos = mPlayer->getPosition().Z;
+
+        if (mPlayer->isRunning()) {
             if (FOVyExt < 9.8) {
                 FOVyExt = 10.0f - (10.0f - FOVyExt) * static_cast<float>(pow(0.8, (currentTime - SpeedupAnimTimer) * 30));
                 SpeedupAnimTimer = currentTime;
@@ -170,48 +173,12 @@ public:
         }
         SpeedupAnimTimer = currentTime;
 
-        if (Player::OnGround) {
-            //半蹲特效
-            if (Player::jump < -0.005) {
-                if (Player::jump <= -(Player::height - 0.5f))
-                    Player::heightExt = -(Player::height - 0.5f);
-                else
-                    Player::heightExt = static_cast<float>(Player::jump);
-                TouchdownAnimTimer = currentTime;
-            } else {
-                if (Player::heightExt <= -0.005) {
-                    Player::heightExt *= static_cast<float>(pow(0.8, (currentTime - TouchdownAnimTimer) * 30));
-                    TouchdownAnimTimer = currentTime;
-                }
-            }
-        }
-
-        const auto xpos = Player::Pos.X - Player::xd + (currentTime - lastUpdate) * 30.0 * Player::xd;
-        const auto ypos = Player::Pos.Y + Player::height + Player::heightExt - Player::yd +
-                          (currentTime - lastUpdate) * 30.0 * Player::yd;
-        const auto zpos = Player::Pos.Z - Player::zd + (currentTime - lastUpdate) * 30.0 * Player::zd;
-
-        if(!mViewModel->getGamePaused() && !mBagOpened) {
-            //转头！你治好了我多年的颈椎病！
-            if (mx != mxl) Player::xlookspeed -= (mx - mxl) * mousemove;
-            if (my != myl) Player::ylookspeed += (my - myl) * mousemove;
-            if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1)
-                Player::xlookspeed -= mousemove * 16 * (currentTime - lastFrameTime) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1)
-                Player::xlookspeed += mousemove * 16 * (currentTime - lastFrameTime) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1)
-                Player::ylookspeed -= mousemove * 16 * (currentTime - lastFrameTime) * 30.0;
-            if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1)
-                Player::ylookspeed += mousemove * 16 * (currentTime - lastFrameTime) * 30.0;
-
-        }
-
-        Player::cxt = World::GetChunkPos(static_cast<int>(Player::Pos.X));
-        Player::cyt = World::GetChunkPos(static_cast<int>(Player::Pos.Y));
-        Player::czt = World::GetChunkPos(static_cast<int>(Player::Pos.Z));
-
         //更新区块VBO
-        World::sortChunkBuildRenderList(RoundInt(Player::Pos.X), RoundInt(Player::Pos.Y), RoundInt(Player::Pos.Z));
+        World::sortChunkBuildRenderList(
+            RoundInt(mPlayer->getPosition().X),
+            RoundInt(mPlayer->getPosition().Y), 
+            RoundInt(mPlayer->getPosition().Z)
+        );
         const auto brl =
                 World::chunkBuildRenders > World::MaxChunkRenders ? World::MaxChunkRenders : World::chunkBuildRenders;
         for (auto i = 0; i < brl; i++) {
@@ -227,9 +194,6 @@ public:
 
         glFlush();
 
-        const auto plookupdown = Player::lookupdown + Player::ylookspeed;
-        const auto pheading = Player::heading + Player::xlookspeed;
-
         glDepthFunc(GL_LEQUAL);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
@@ -238,27 +202,32 @@ public:
         //Renderer::sunlightXrot = 90 * daylight;
         if (Renderer::AdvancedRender) {
             //Build shadow map
-            if (!DebugShadow) ShadowMaps::BuildShadowMap(xpos, ypos, zpos, currentTime);
+            if (!DebugShadow) ShadowMaps::BuildShadowMap(mPlayer->getPosition().X, ypos, zpos, currentTime);
             else ShadowMaps::RenderShadowMap(xpos, ypos, zpos, currentTime);
         }
         glClearColor(skycolorR, skycolorG, skycolorB, 1.0);
         if (!DebugShadow) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_TEXTURE_2D);
 
-        Player::ViewFrustum.LoadIdentity();
-        Player::ViewFrustum.SetPerspective(FOVyNormal + FOVyExt, static_cast<float>(windowwidth) / windowheight, 0.05f,
+        mFrustum.LoadIdentity();
+        mFrustum.SetPerspective(FOVyNormal + FOVyExt, static_cast<float>(windowwidth) / windowheight, 0.05f,
                                            viewdistance * 16.0f);
-        Player::ViewFrustum.MultRotate(static_cast<float>(plookupdown), 1, 0, 0);
-        Player::ViewFrustum.MultRotate(360.0f - static_cast<float>(pheading), 0, 1, 0);
-        Player::ViewFrustum.update();
+        mFrustum.MultRotate(static_cast<float>(mPlayer->getLookUpDown()), 1, 0, 0);
+        mFrustum.MultRotate(360.0f - static_cast<float>(mPlayer->getHeading()), 0, 1, 0);
+        mFrustum.update();
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glMultMatrixf(Player::ViewFrustum.getProjMatrix());
+        glMultMatrixf(mFrustum.getProjMatrix());
         glMatrixMode(GL_MODELVIEW);
 
-        World::calcVisible(xpos, ypos, zpos, Player::ViewFrustum);
-        WorldRenderer::ListRenderChunks(Player::cxt, Player::cyt, Player::czt, viewdistance, currentTime);
+        World::calcVisible(xpos, ypos, zpos, mFrustum);
+        auto playerChunk = mPlayer->getChunkPosition();
+        WorldRenderer::ListRenderChunks(
+            playerChunk.X, playerChunk.Y, playerChunk.Z,
+            viewdistance,
+            currentTime
+        );
 
         MutexUnlock(Mutex);
 
@@ -266,8 +235,8 @@ public:
 
         // 渲染层1
         glLoadIdentity();
-        glRotated(plookupdown, 1, 0, 0);
-        glRotated(360.0 - pheading, 0, 1, 0);
+        glRotated(mPlayer->getLookUpDown(), 1, 0, 0);
+        glRotated(360.0 - mPlayer->getHeading(), 0, 1, 0);
         glDisable(GL_BLEND);
         Renderer::EnableShaders();
         if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 0);
@@ -295,8 +264,8 @@ public:
 
         // 渲染层2&3
         glLoadIdentity();
-        glRotated(plookupdown, 1, 0, 0);
-        glRotated(360.0 - pheading, 0, 1, 0);
+        glRotated(mPlayer->getLookUpDown(), 1, 0, 0);
+        glRotated(360.0 - mPlayer->getHeading(), 0, 1, 0);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_CULL_FACE);
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
@@ -307,8 +276,8 @@ public:
         Renderer::DisableShaders();
 
         glLoadIdentity();
-        glRotated(plookupdown, 1, 0, 0);
-        glRotated(360.0 - pheading, 0, 1, 0);
+        glRotated(mPlayer->getLookUpDown(), 1, 0, 0);
+        glRotated(360.0 - mPlayer->getHeading(), 0, 1, 0);
         glTranslated(-xpos, -ypos, -zpos);
 
         MutexLock(Mutex);
@@ -371,16 +340,12 @@ public:
             shouldGetThumbnail = false;
             createThumbnail();
         }
-        mxl = mx;
-        myl = my;
-        lastFrameTime = timer();
     }
 
     void onRender() override {
         MutexLock(Mutex);
         gameRender();
         MutexUnlock(Mutex);
-        //==refresh end==//
     }
 
     static void drawBorder(int x, int y, int z) {
@@ -441,20 +406,15 @@ public:
             if (Renderer::AdvancedRender) {
                 ss << "Shadow View:" << boolstr(DebugShadow) << std::endl;
             }
-            ss << "X: " << Player::Pos.X << " Y: " << Player::Pos.Y << " Z: " << Player::Pos.Z << std::endl
-                << "Direction:" << Player::heading << " Head:" << Player::lookupdown << std::endl
-                << "Jump speed:" << Player::jump << std::endl
+            ss << "X: " << mPlayer->getPosition().X << " Y: " << mPlayer->getPosition().Y << " Z: " << mPlayer->getPosition().Z << std::endl
+                << "Direction:" << mPlayer->getHeading() << " Head:" << mPlayer->getLookUpDown() << std::endl
+                << "Jump speed:" << mPlayer->getCurrentJumpSpeed() << std::endl
                 << "Stats:";
-            if (Player::Flying) ss << " Flying";
-            if (Player::OnGround) ss << " On_ground";
-            if (Player::NearWall) ss << " Near_wall";
-            if (Player::inWater) ss << " In_water";
-            if (Player::CrossWall) ss << " Cross_Wall";
-            if (Player::Glide) ss << " Gliding_enabled";
-            if (Player::glidingNow) ss << "Gliding";
+            if (mPlayer->isFlying()) ss << " Flying";
+            if (mPlayer->isOnGround()) ss << " On_ground";
+            if (mPlayer->isNearWall()) ss << " Near_wall";
+            if (mPlayer->isCrossWall()) ss << " Cross_Wall";
             ss << std::endl;
-            ss << "Energy:" << Player::glidingEnergy << std::endl;
-            ss << "Speed:" << Player::glidingSpeed << std::endl;
             auto h = gametime / (30 * 60);
             auto m = gametime % (30 * 60) / 30;
             auto s = gametime % 30 * 2;
@@ -584,20 +544,21 @@ public:
                 inventory->GetChildren()->Add(mInventory[row][i] = new InventorySlot());
 
                 mInventory[row][i]->PreviewMouseUp() += [this, row, i](Noesis::BaseComponent*, const Noesis::MouseButtonEventArgs& args) {
-                    auto& thisAmount = Player::inventoryAmount[row][i];
-                    auto& thisItem = Player::inventory[row][i];
+                    auto playerInventory = mPlayer->getInventory();
+                    auto& thisAmount = playerInventory[row][i].amount;
+                    auto& thisItem = playerInventory[row][i].item;
                     bool rightClick = args.changedButton == Noesis::MouseButton_Right;
                     if (mInventoryMoveFrom.has_value()) { // if has already selected one
                         auto& from = mInventoryMoveFrom.value();
-                        auto& fromAmount = Player::inventoryAmount[from.row][from.col];
-                        auto& fromItem = Player::inventory[from.row][from.col];
+                        auto& fromAmount = playerInventory[from.row][from.col].amount;
+                        auto& fromItem = playerInventory[from.row][from.col].item;
                         if (thisItem != fromItem && thisItem != Blocks::ENV) { // different item - swap
                             std::swap(fromAmount, thisAmount);
                             std::swap(fromItem, thisItem);
                             from.quantity = 0;
                         }
                         else { // same item or empty - stack
-                            const auto moveAmount = rightClick ? 1 : std::min(Player::MaxStack - thisAmount, std::min(from.quantity, int(fromAmount)));
+                            const auto moveAmount = rightClick ? 1 : std::min(255 - thisAmount, std::min(from.quantity, int(fromAmount)));
                             thisItem = fromItem;
                             fromAmount -= moveAmount;
                             thisAmount += moveAmount;
@@ -647,31 +608,28 @@ public:
 
         //这才是游戏开始!
         glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        mxl = mx;
-        myl = my;
         infostream << "Main loop started";
         updateThreadRun = true;
         lastUpdate = timer();
     }
 
     void onUpdate() override {
-        glfwGetCursorPos(MainWindow, &mx, &my);
-        
+        mControls.Update();
+
         debugInfo();
+        auto inventory = mPlayer->getInventory();
         for (int i = 0; i < 10; ++i) {
-            mHotBar[i]->setItem(Player::inventory[3][i]);
-            mHotBar[i]->setAmount(Player::inventoryAmount[3][i]);
-            mHotBar[i]->setSelected(i == Player::indexInHand);
+            mHotBar[i]->setItemStack(inventory[3][i]);
+            mHotBar[i]->setSelected(i == mPlayer->getCurrentHotbarSelection());
         }
         for (int row = 0; row < 4;++row) {
             for (int i = 0; i < 10; ++i) {
-                mInventory[row][i]->setItem(Player::inventory[row][i]);
-                mInventory[row][i]->setAmount(Player::inventoryAmount[row][i]);
+                mInventory[row][i]->setItemStack(inventory[row][i]);
                 mInventory[row][i]->setSelected(mInventoryMoveFrom.has_value() && 
                     row == mInventoryMoveFrom.value().row && i == mInventoryMoveFrom.value().col);
             }
         }
-        mViewModel->notifyHPChanges(); // just notify every frame for now.
+        mViewModel->notifyHPChanges(mPlayer);
         mViewModel->setBagOpen(mBagOpened);
 
         static bool wasBagOpen = false;
@@ -692,6 +650,8 @@ public:
             glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             createThumbnail();
         }
+
+        mPlayer->renderUpdate(mControls, mBagOpened);
     }
 
     ~GameView() override {
@@ -711,8 +671,6 @@ public:
             World::vbuffersShouldDelete.clear();
         }
         commands.clear();
-        mChatMessages.clear();
-        //GUI::popScene();
     }
 };
 

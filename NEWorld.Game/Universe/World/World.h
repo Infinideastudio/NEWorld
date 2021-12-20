@@ -4,7 +4,6 @@
 #include "ChunkPtrArray.h"
 #include "HeightMap.h"
 #include "Chunk.h"
-#include "Hitbox.h"
 #include "Blocks.h"
 #include "OrderedArray.h"
 #include "Universe/Entity/bvh.h"
@@ -75,10 +74,9 @@ namespace World {
         return GetChunk(v);
     }
 
-    std::vector<Hitbox::AABB> getHitboxes(const Hitbox::AABB& box); // deprecated
     std::vector<BoundingBox> getHitboxes(const BoundingBox& box);
 
-    bool inWater(const Hitbox::AABB &box);
+    bool inWater(const BoundingBox& box);
 
     void updateblock(int x, int y, int z, bool blockchanged, int depth = 0);
 

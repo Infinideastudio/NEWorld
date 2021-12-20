@@ -57,11 +57,6 @@ int GLVersionMajor, GLVersionMinor, GLVersionRev;
 GLFWwindow *MainWindow;
 GLFWcursor *MouseCursor;
 
-double mx, my, mxl, myl;
-int mw, mb, mbp, mbl, mwl;
-double mxdelta, mydelta;
-std::string inputstr;
-
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
 int c_getChunkPtrFromCPA;
 int c_getChunkPtrFromSearch;

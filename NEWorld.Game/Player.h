@@ -6,17 +6,13 @@
 const double g = 9.8;
 const double EDrop = 0.1;
 const double speedCast = 1 / 20.0;
-
+/*
 struct PlayerPacket;
 namespace Hitbox { struct AABB; }
 class Frustum;
 
 class Player {
 public:
-    static void init(Double3 pos);
-
-    static void spawn();
-
     static void updatePosition(Double3 velocity);
 
     static bool save(std::string worldn);
@@ -54,11 +50,9 @@ public:
 
     static double speed;
     static int AirJumps;
-    static int cxt, cyt, czt, cxtl, cytl, cztl;
-	static Double3 Pos, PosOld;
+	static Double3 Pos;
     static double lookupdown, heading, jump;
     static double xlookspeed, ylookspeed;
-    static Int3 IntPos, IntPosOld;
 
     static float height;
     static float heightExt;
@@ -72,4 +66,4 @@ public:
 
     static double glidingEnergy, glidingSpeed;
 
-};
+};*/

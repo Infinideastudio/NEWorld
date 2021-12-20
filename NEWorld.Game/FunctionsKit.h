@@ -10,22 +10,6 @@
 extern double stretch;
 
 //常用函数
-inline void UITrans(double x, double y) {
-    glTranslated(x * stretch, y * stretch, 0);
-}
-
-inline void UITrans(int x, int y) {
-    glTranslated((static_cast<double>(x)) * stretch, (static_cast<double>(y)) * stretch, 0);
-}
-
-inline void UIVertex(double x, double y) {
-    glVertex2d(x * stretch, y * stretch);
-}
-
-inline void UIVertex(int x, int y) {
-    glVertex2i(static_cast<int>(x * stretch), static_cast<int>(y * stretch));
-}
-
 extern unsigned int g_seed;
 
 inline unsigned int fastRand() {

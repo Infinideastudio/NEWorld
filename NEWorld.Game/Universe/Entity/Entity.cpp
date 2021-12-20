@@ -1,10 +1,11 @@
 #include "Entity.h"
 
-#include "Player.h"
-#include "../World/World.h"
+#include "Universe/World/World.h"
 
-void Entity::move(const EntityBVH& bvh)
-{
+Int3 Entity::getChunkPosition() const noexcept
+{ return Int3(mPosition, World::GetChunkPos<int>); }
+
+void Entity::move(const EntityBVH& bvh) {
 	if (!doCollisionCheck()) {
 		mPosition += mVelocity;
 		return;
@@ -33,9 +34,6 @@ void Entity::move(const EntityBVH& bvh)
 	for (const auto& box : hitboxes) {
 		actualMovement.Z = AABB::MaxMove(currentHitbox, box, actualMovement.Z, 2);
 	}
-	// hack, remove after not needed
-	Player::xa = actualMovement.X;
-	Player::ya = actualMovement.Y;
-	Player::za = actualMovement.Z;
 	mPosition += actualMovement;
+	afterMove(actualMovement);
 }

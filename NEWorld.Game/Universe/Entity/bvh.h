@@ -4,6 +4,8 @@
 #include <bvh/vector.hpp>
 #include <bvh/ray.hpp>
 
+#include "Math/Vector3.h"
+
 using Scalar = double;
 using Vector3 = bvh::Vector3<Scalar>;
 using BoundingBox = bvh::BoundingBox<Scalar>;
@@ -50,5 +52,10 @@ namespace AABB {
         if (boxA.max.values[axis] <= boxB.min.values[axis] && distance > 0.0)
             return std::min(boxB.min.values[axis] - boxA.max.values[axis], distance);
         return distance;
+    }
+
+    inline BoundingBox BoxForBlock(Int3 pos) {
+        return { {pos.X - 0.5, pos.Y - 0.5, pos.Z - 0.5},
+        	{ pos.X + 0.5, pos.Y + 0.5, pos.Z + 0.5 } };
     }
 }

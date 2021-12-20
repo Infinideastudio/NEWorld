@@ -123,41 +123,17 @@ namespace World {
             }
         }
     }
-
-
-    std::vector<Hitbox::AABB> getHitboxes(const Hitbox::AABB &box) {
-        //返回与box相交的所有方块AABB
-
-        Hitbox::AABB blockbox;
-        std::vector<Hitbox::AABB> Hitboxes;
-
-        for (auto a = int(box.xmin + 0.5) - 1; a <= int(box.xmax + 0.5) + 1; a++) {
-            for (auto b = int(box.ymin + 0.5) - 1; b <= int(box.ymax + 0.5) + 1; b++) {
-                for (auto c = int(box.zmin + 0.5) - 1; c <= int(box.zmax + 0.5) + 1; c++) {
-                    if (BlockInfo(GetBlock({a, b, c})).isSolid()) {
-                        blockbox.xmin = a - 0.5;
-                        blockbox.xmax = a + 0.5;
-                        blockbox.ymin = b - 0.5;
-                        blockbox.ymax = b + 0.5;
-                        blockbox.zmin = c - 0.5;
-                        blockbox.zmax = c + 0.5;
-                        if (Hitbox::Hit(box, blockbox)) Hitboxes.push_back(blockbox);
-                    }
-                }
-            }
-        }
-        return Hitboxes;
-    }
-
+    
     std::vector<BoundingBox> getHitboxes(const BoundingBox& box) {
         std::vector<BoundingBox> ret;
 
         for (auto a = int(box.min.values[0] + 0.5) - 1; a <= int(box.max.values[0] + 0.5) + 1; a++) {
             for (auto b = int(box.min.values[1] + 0.5) - 1; b <= int(box.max.values[1] + 0.5) + 1; b++) {
                 for (auto c = int(box.min.values[2] + 0.5) - 1; c <= int(box.max.values[2] + 0.5) + 1; c++) {
-                    if (BlockInfo(GetBlock({ a, b, c })).isSolid()) {
-                        BoundingBox blockbox{{a-0.5,b-0.5,c-0.5},{a+0.5,b+0.5,c+0.5}};
-                        if (AABB::Intersect(box, blockbox)) ret.push_back(blockbox);
+                    Int3 pos = { a, b, c };
+                    if (BlockInfo(GetBlock(pos)).isSolid()) {
+                        auto blockBox = AABB::BoxForBlock(pos);
+                        if (AABB::Intersect(box, blockBox)) ret.push_back(blockBox);
                     }
                 }
             }
@@ -165,19 +141,14 @@ namespace World {
         return ret;
     }
 
-    bool inWater(const Hitbox::AABB &box) {
-        Hitbox::AABB blockbox{};
-        for (auto a = int(box.xmin + 0.5) - 1; a <= int(box.xmax + 0.5); a++) {
-            for (auto b = int(box.ymin + 0.5) - 1; b <= int(box.ymax + 0.5); b++) {
-                for (auto c = int(box.zmin + 0.5) - 1; c <= int(box.zmax + 0.5); c++) {
-                    if (GetBlock({(a), (b), (c)}) == Blocks::WATER || GetBlock({(a), (b), (c)}) == Blocks::LAVA) {
-                        blockbox.xmin = a - 0.5;
-                        blockbox.xmax = a + 0.5;
-                        blockbox.ymin = b - 0.5;
-                        blockbox.ymax = b + 0.5;
-                        blockbox.zmin = c - 0.5;
-                        blockbox.zmax = c + 0.5;
-                        if (Hitbox::Hit(box, blockbox)) return true;
+    bool inWater(const BoundingBox &box) {
+        for (auto a = int(box.min.values[0] + 0.5) - 1; a <= int(box.max.values[0] + 0.5) + 1; a++) {
+            for (auto b = int(box.min.values[1] + 0.5) - 1; b <= int(box.max.values[1] + 0.5) + 1; b++) {
+                for (auto c = int(box.min.values[2] + 0.5) - 1; c <= int(box.max.values[2] + 0.5) + 1; c++) {
+                    Int3 pos = { a,b,c };
+                    auto block = GetBlock(pos);
+                    if (block == Blocks::WATER || block == Blocks::LAVA) {
+                        if (AABB::Intersect(box, AABB::BoxForBlock(pos))) return true;
                     }
                 }
             }
