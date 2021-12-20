@@ -73,6 +73,7 @@ public:
         mCurrentSelectedBlockPos = {};
 
         if (!mBagOpened) {
+            ProcessInteract();
             mPlayer->controlUpdate(mControls);
             HotkeySettingsToggle();
         }
@@ -106,6 +107,75 @@ public:
         }
     }
 
+    void ProcessInteract() {
+        auto pos = mPlayer->getPosition();
+        Int3 blockBefore = pos;
+        const auto heading = mPlayer->getHeading();
+        const auto lookUpDown = mPlayer->getLookUpDown();
+        for (auto i = 0; i < selectPrecision * selectDistance; i++) {
+            //线段延伸
+            pos.X += sin(M_PI / 180 * (heading - 180)) * sin(M_PI / 180 * (lookUpDown + 90)) / selectPrecision;
+            pos.Y += cos(M_PI / 180 * (lookUpDown + 90)) / selectPrecision;
+            pos.Z += cos(M_PI / 180 * (heading - 180)) * sin(M_PI / 180 * (lookUpDown + 90)) / selectPrecision;
+
+            //碰到方块
+            if (BlockInfo(World::GetBlock(Int3(pos, RoundInt))).isSolid()) {
+                break;
+            }
+            blockBefore = pos;
+        }
+
+        mCurrentSelectedBlockPos = Int3(pos, RoundInt);
+        mIsSelectingBlock = true;
+
+        //找方块所在区块及位置
+        mSelectedBlockBrightness = World::GetBrightness(mCurrentSelectedBlockPos);
+        mCurrentSelectedBlock = World::GetBlock(mCurrentSelectedBlockPos);
+
+        auto& itemSelection = mPlayer->getCurrentSelectedItem();
+
+    	if (mControls.ShouldDo(ControlContext::Action::PICK_BLOCK)) {
+            Particles::throwParticle(mCurrentSelectedBlock, mCurrentSelectedBlockPos);
+            // Reset progress if selecting a different block
+            if (mCurrentSelectedBlockPos != mLastSelectedBlockPos) mBlockDestructionProgress = 0.0;
+            else {
+                double factor = itemSelection.item == STICK ? 4 : 30.0 / (BlockInfo(itemSelection.item).getHardness() + 0.1);
+
+                factor = std::clamp(factor, 1.0, 1.7);
+
+                mBlockDestructionProgress += BlockInfo(mCurrentSelectedBlock).getHardness() *
+                    (mPlayer->getGameMode() == GameMode::Creative ? 10.0f : 0.3f) * factor;
+            }
+
+            if (mBlockDestructionProgress >= 100.0) {
+                for (auto j = 1; j <= 25; j++) {
+                    Particles::throwParticle(mCurrentSelectedBlock, mCurrentSelectedBlockPos);
+                }
+                World::PickBlock(mCurrentSelectedBlockPos);
+            }
+        } else mBlockDestructionProgress = 0.0;
+
+        if (mControls.ShouldDo(ControlContext::Action::PLACE_BLOCK)) { 
+            if (itemSelection.amount > 0 && isBlock(itemSelection.item)) {
+                //放置方块
+                if (mPlayer->putBlock(blockBefore, itemSelection.item)) {
+                    itemSelection.amount--;
+                    if (itemSelection.amount == 0)
+                        itemSelection.item = Blocks::ENV;
+                }
+            }
+            else {
+                //使用物品
+                if (itemSelection.item == APPLE) {
+                    itemSelection.amount--;
+                    if (itemSelection.amount == 0)
+                        itemSelection.item = Blocks::ENV;
+                    mPlayer->setHealth(mPlayer->getMaxHealth());
+                }
+            }
+        }
+        mLastSelectedBlockPos = mCurrentSelectedBlockPos;
+    }
     void ChunkLoadUnload() const {
         World::sortChunkLoadUnloadList(mPlayer->getPosition());
         for (const auto&[_, chunk] : World::ChunkUnloadList) {

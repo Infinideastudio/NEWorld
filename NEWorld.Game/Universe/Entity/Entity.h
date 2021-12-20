@@ -12,10 +12,7 @@ public:
 	    return { mPosition - mSize / 2, mPosition + mSize / 2 };
     }
     [[nodiscard]] BoundingBox movement_bounding_box() const {
-        auto box = bounding_box();
-        box.min += mVelocity;
-        box.max += mVelocity;
-        return bounding_box().extend(box);
+        return bounding_box().extend(AABB::Move(bounding_box(), mVelocity));
     }
 
     [[nodiscard]] bool intersect(const BoundingBox& box) const {

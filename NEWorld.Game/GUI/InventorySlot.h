@@ -8,6 +8,7 @@
 #include "NsGui/TextureSource.h"
 #include "NsGui/UIElementData.h"
 #include "NsGui/UserControl.h"
+#include "Universe/Entity/PlayerEntity.h"
 
 class InventorySlot : public Noesis::UserControl
 {

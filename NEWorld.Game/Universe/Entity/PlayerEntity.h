@@ -9,6 +9,11 @@ struct ItemStack {
 	uint8_t amount;
 };
 
+struct CameraPosition {
+	Double3 position;
+	double heading, lookUpDown;
+};
+
 enum class GameMode { Survival, Creative };
 class PlayerEntity: public Entity {
 public:
@@ -36,13 +41,15 @@ public:
 	void render() override {}
 
 	void controlUpdate(const ControlContext& control); // called by update thread
-	void renderUpdate(const ControlContext& control, bool freeze); // called by render thread
+	CameraPosition renderUpdate(const ControlContext& control, bool freeze); // called by render thread
 
 	GameMode getGameMode() const noexcept { return mGameMode; }
 	void toggleCrossWall() noexcept { mCrossWall = !mCrossWall; }
 	auto getInventory() noexcept { return mInventory; }
-	auto getCurrentHotbarSelection() noexcept { return mIndexInHand; }
+	ItemStack& getCurrentSelectedItem() noexcept { return mInventory[3][mIndexInHand]; }
+	int getCurrentHotbarSelection() noexcept { return mIndexInHand; }
 	double getHealth() const noexcept { return mHealth; }
+	void setHealth(double health) noexcept { mHealth = health; }
 	double getMaxHealth() const noexcept { return mMaxHealth; }
 	double getHeading() const noexcept { return mHeading; }
 	double getLookUpDown() const noexcept { return mLookUpDown; }
@@ -56,10 +63,11 @@ public:
 		// TODO: impl super-sprint
 		return mRunning ? runspeed : walkspeed;
 	}
+
 private:
 	void ProcessInteract(const ControlContext& control);
 	void ProcessJump();
-	bool ProcessNavigate(const ControlContext& control);
+	void ProcessNavigate(const ControlContext& control);
 	void HotbarItemSelect(const ControlContext& control);
 	void StartJump();
 
@@ -75,6 +83,9 @@ private:
 	double mHealth = 20, mMaxHealth = 20;
 	double mHealSpeed = 0.01;
 	double mDropDamage = 5.0;
+
+	double mHeight = 1.2;
+	double mHeightExt = 0;
 
 	// status
 	bool mOnGround = false;

@@ -23,35 +23,29 @@ void PlayerEntity::update() {
     }
 }
 
-void PlayerEntity::renderUpdate(const ControlContext& control, bool freeze) {
+CameraPosition PlayerEntity::renderUpdate(const ControlContext& control, bool freeze) {
     if (freeze) {
         mYLookSpeed = mXLookSpeed = 0;
-        return;
+        return{ mPosition, mHeading, mLookUpDown };
     }
-    double heightExt = 0;
     if (isOnGround()) {
         //半蹲特效
         if (mCurrentJumpSpeed < -0.005) {
-            if (mCurrentJumpSpeed <= -(Player::height - 0.5f))
-                Player::heightExt = -(Player::height - 0.5f);
+            if (mCurrentJumpSpeed <= -(mHeight - 0.5f))
+                mHeightExt = -(mHeight - 0.5f);
             else
-                Player::heightExt = static_cast<float>(mCurrentJumpSpeed);
+                mHeightExt = static_cast<float>(mCurrentJumpSpeed);
             TouchdownAnimTimer = control.Current.Time;
         }
         else {
-            if (Player::heightExt <= -0.005) {
-                Player::heightExt *= static_cast<float>(pow(0.8, (control.Current.Time - TouchdownAnimTimer) * 30));
+            if (mHeightExt <= -0.005) {
+                mHeightExt *= static_cast<float>(pow(0.8, (control.Current.Time - TouchdownAnimTimer) * 30));
                 TouchdownAnimTimer = control.Current.Time;
             }
         }
     }
 
     auto timeDelta = control.Current.Time - control.Last.Time;
-    const auto xpos = mPosition.X - Player::xd + timeDelta * 30.0 * Player::xd;
-    const auto ypos = mPosition.Y + Player::height + Player::heightExt - Player::yd + timeDelta * 30.0 * Player::yd;
-    const auto zpos = mPosition.Z - Player::zd + timeDelta * 30.0 * Player::zd;
-    const auto plookupdown = mLookUpDown + mYLookSpeed;
-    const auto pheading = mHeading + mXLookSpeed;
 
     //转头！你治好了我多年的颈椎病！
     mXLookSpeed -= (control.Current.MousePosition.X - control.Last.MousePosition.X) * mousemove;
@@ -64,11 +58,13 @@ void PlayerEntity::renderUpdate(const ControlContext& control, bool freeze) {
         mYLookSpeed -= mousemove * 16 * timeDelta * 30.0;
     if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1)
         mYLookSpeed += mousemove * 16 * timeDelta * 30.0;
+
+    auto cameraPosition = mPosition + (timeDelta * 30.0 - 1) * mVelocity;
+    cameraPosition.Y += mHeight + mHeightExt;
+    return{ cameraPosition, mHeading + mXLookSpeed,mLookUpDown + mYLookSpeed };
 }
 
 void PlayerEntity::controlUpdate(const ControlContext& control) {
-    ProcessInteract(control);
-    
     //更新方向
     mHeading = fmod(mHeading + mXLookSpeed, 360.0);
     mLookUpDown = std::clamp(mLookUpDown + mYLookSpeed, -90.0, 90.0);
@@ -87,7 +83,7 @@ void PlayerEntity::controlUpdate(const ControlContext& control) {
     ProcessJump();
 }
 
-bool PlayerEntity::ProcessNavigate(const ControlContext& control) {
+void PlayerEntity::ProcessNavigate(const ControlContext& control) {
     auto speed = getSpeed();
     // TODO: mRunning = true; impl running
     if (control.KeyPressed(GLFW_KEY_W)) {
@@ -149,106 +145,6 @@ void PlayerEntity::ProcessJump() {
             if (!mOnGround) mVelocity.Y -= 0.1;
         }
     }
-}
-
-bool PlayerEntity::ProcessInteract(double lx, double ly, double lz) {
-    bool blockClick{ false };//从玩家位置发射一条线段
-    for (auto i = 0; i < selectPrecision * selectDistance; i++) {
-        const auto lxl = lx;
-        const auto lyl = ly;
-        const auto lzl = lz;
-
-        //线段延伸
-        lx += sin(M_PI / 180 * (Player::heading - 180)) * sin(M_PI / 180 * (Player::lookupdown + 90)) /
-            static_cast<double>(selectPrecision);
-        ly += cos(M_PI / 180 * (Player::lookupdown + 90)) / static_cast<double>(selectPrecision);
-        lz += cos(M_PI / 180 * (Player::heading - 180)) * sin(M_PI / 180 * (Player::lookupdown + 90)) /
-            static_cast<double>(selectPrecision);
-
-        //碰到方块
-        if (BlockInfo(World::GetBlock({ RoundInt(lx), RoundInt(ly), RoundInt(lz) })).isSolid()) {
-            const auto x = RoundInt(lx);
-            const auto y = RoundInt(ly);
-            const auto z = RoundInt(lz);
-            const auto xl = RoundInt(lxl);
-            const auto yl = RoundInt(lyl);
-            const auto zl = RoundInt(lzl);
-
-            mCurrentSelectedBlockPos = { x,y,z };
-            mIsSelectingBlock = true;
-
-            //找方块所在区块及位置
-            mSelectedBlockBrightness = World::getbrightness(xl, yl, zl);
-            mCurrentSelectedBlock = World::GetBlock({ (x), (y), (z) });
-            if (mb == 1 || glfwGetKey(MainWindow, GLFW_KEY_ENTER) == GLFW_PRESS) {
-                Particles::throwParticle(
-                    mCurrentSelectedBlock,
-                    float(x + rnd() - 0.5f), float(y + rnd() - 0.2f),
-                    float(z + rnd() - 0.5f),
-                    float(rnd() * 0.2f - 0.1f), float(rnd() * 0.2f - 0.1f),
-                    float(rnd() * 0.2f - 0.1f),
-                    float(rnd() * 0.01f + 0.02f), int(rnd() * 30) + 30
-                );
-                // Reset progress if selecting a different block
-                if (mCurrentSelectedBlockPos != mLastSelectedBlockPos) mBlockDestructionProgress = 0.0;
-                else {
-                    float factor{};
-                    if (Player::inventory[3][Player::indexInHand] == STICK)factor = 4;
-                    else
-                        factor = 30.0 /
-                        (BlockInfo(Player::inventory[3][Player::indexInHand]).getHardness() + 0.1);
-                    if (factor < 1.0)factor = 1.0;
-                    if (factor > 1.7)factor = 1.7;
-                    mBlockDestructionProgress += BlockInfo(mCurrentSelectedBlock).getHardness() *
-                        ((Player::gamemode == Player::Creative) ? 10.0f : 0.3f) * factor;
-                    blockClick = true;
-                }
-
-                if (mBlockDestructionProgress >= 100.0) {
-                    for (auto j = 1; j <= 25; j++) {
-                        Particles::throwParticle(
-                            mCurrentSelectedBlock,
-                            float(x + rnd() - 0.5f), float(y + rnd() - 0.2f),
-                            float(z + rnd() - 0.5f),
-                            float(rnd() * 0.2f - 0.1f), float(rnd() * 0.2f - 0.1f),
-                            float(rnd() * 0.2f - 0.1f),
-                            float(rnd() * 0.02 + 0.03), int(rnd() * 60) + 30);
-                    }
-                    World::PickBlock({ (x), (y), (z) });
-                    blockClick = true;
-                }
-            }
-            if (((mb == 2 && mbp == 0) || (!mChatMode && isPressed(GLFW_KEY_TAB)))) { //鼠标右键
-                if (Player::inventoryAmount[3][Player::indexInHand] > 0 &&
-                    isBlock(Player::inventory[3][Player::indexInHand])) {
-                    //放置方块
-                    if (Player::putBlock(xl, yl, zl, Player::BlockInHand)) {
-                        Player::inventoryAmount[3][Player::indexInHand]--;
-                        if (Player::inventoryAmount[3][Player::indexInHand] == 0)
-                            Player::inventory[3][Player::indexInHand] = Blocks::ENV;
-
-                        blockClick = true;
-                    }
-                }
-                else {
-                    //使用物品
-                    if (Player::inventory[3][Player::indexInHand] == APPLE) {
-                        Player::inventoryAmount[3][Player::indexInHand]--;
-                        if (Player::inventoryAmount[3][Player::indexInHand] == 0)
-                            Player::inventory[3][Player::indexInHand] = Blocks::ENV;
-                        Player::health = Player::healthMax;
-                    }
-                }
-            }
-            break;
-        }
-    }
-
-    if (mCurrentSelectedBlockPos != mLastSelectedBlockPos ||
-        (mb == 0 && glfwGetKey(MainWindow, GLFW_KEY_ENTER) != GLFW_PRESS))
-        mBlockDestructionProgress = 0.0;
-    mLastSelectedBlockPos = mCurrentSelectedBlockPos;
-    return blockClick;
 }
 
 void PlayerEntity::HotbarItemSelect(const ControlContext& control) {
@@ -332,7 +228,10 @@ void PlayerEntity::afterMove(Double3 actualMovement) {
 
     mVelocity *= 0.8;
     if (mFlying || mCrossWall) mVelocity.Y *= 0.8;
-    if (mOnGround) mVelocity *= Double3(.7, 0, .7);
+    if (mOnGround) {
+        mVelocity *= .7;
+        mVelocity.Y = 0;
+    }
 }
 
 bool PlayerEntity::putBlock(Int3 position, Block blockname) {

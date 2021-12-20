@@ -13,7 +13,7 @@ namespace Blocks {
     void BlockType::AfterBlockDestroy(const Int3& position, Block block) noexcept {
         // should be an item drop here
         // TODO: replace when entity is implemented
-        Player::addItem(block);
+        //Player::addItem(block);
     }
 
     void BlockType::OnRandomTick(const Int3& position, Block block) noexcept { }
@@ -88,11 +88,11 @@ namespace Blocks {
             : BlockType(blockData[8]) { }
 
         void AfterBlockDestroy(const Int3& position, Block) noexcept override {
-            if (rnd() < 0.2) {
-                if (rnd() < 0.5)Player::addItem(APPLE);
-                else Player::addItem(STICK);
-            }
-            else { Player::addItem(Blocks::LEAF); }
+            //if (rnd() < 0.2) {
+            //    if (rnd() < 0.5)Player::addItem(APPLE);
+            //    else Player::addItem(STICK);
+            //}
+            //else { Player::addItem(Blocks::LEAF); }
         }
     } gLeaf;
 

@@ -19,7 +19,7 @@ extern float FOVyNormal;
 extern float mousemove;
 extern int viewdistance;
 extern int cloudwidth;
-extern int selectPrecision;
+extern double selectPrecision;
 extern int selectDistance;
 extern float walkspeed;
 extern float runspeed;

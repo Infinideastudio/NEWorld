@@ -1,11 +1,13 @@
 #pragma once
-
+#include "stdinclude.h"
 #include <GLFW/glfw3.h>
 
 #include "Math/Vector2.h"
+#include "FunctionsKit.h"
 
 class ControlContext {
 public:
+	enum class Action { PLACE_BLOCK, PICK_BLOCK };
 	struct Frame {
 		bool LeftMouse, MiddleMouse, RightMouse;
 		double MouseScroll;
@@ -15,9 +17,7 @@ public:
 		int KeyPressed[GLFW_KEY_LAST];
 		friend class ControlContext;
 	};
-	ControlContext(GLFWwindow* window) {
-		
-	}
+	ControlContext(GLFWwindow* window) :mWindow(window){}
 	ControlContext(ControlContext&) = delete;
 	ControlContext operator=(ControlContext&) = delete;
 
@@ -39,6 +39,16 @@ public:
 
 	bool KeyPressed(int key) const noexcept {
 		return glfwGetKey(mWindow, key); // TODO: update frame
+	}
+
+	bool ShouldDo(Action action) {
+		switch(action)
+		{
+		case Action::PLACE_BLOCK:
+			return (Current.RightMouse && !Last.RightMouse) || KeyPressed(GLFW_KEY_TAB);
+		case Action::PICK_BLOCK:
+			return Current.LeftMouse || KeyPressed(GLFW_KEY_ENTER);
+		}
 	}
 private:
 	GLFWwindow* mWindow;

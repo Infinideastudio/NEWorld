@@ -54,6 +54,12 @@ namespace AABB {
         return distance;
     }
 
+    inline BoundingBox Move(BoundingBox box, Double3 direction) {
+        box.min += direction;
+        box.max += direction;
+        return box;
+    }
+
     inline BoundingBox BoxForBlock(Int3 pos) {
         return { {pos.X - 0.5, pos.Y - 0.5, pos.Z - 0.5},
         	{ pos.X + 0.5, pos.Y + 0.5, pos.Z + 0.5 } };
