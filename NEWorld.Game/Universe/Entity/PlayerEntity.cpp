@@ -23,10 +23,10 @@ void PlayerEntity::update() {
     }
 }
 
-CameraPosition PlayerEntity::renderUpdate(const ControlContext& control, bool freeze, double lastUpdate) {
+RenderProperties PlayerEntity::renderUpdate(const ControlContext& control, bool freeze, double lastUpdate) {
     if (freeze) {
         mYLookSpeed = mXLookSpeed = 0;
-        return{ mPosition, mHeading, mLookUpDown };
+        return getPropertiesForRender(0);
     }
     if (isOnGround()) {
         //°ë¶×ÌØÐ§
@@ -58,10 +58,8 @@ CameraPosition PlayerEntity::renderUpdate(const ControlContext& control, bool fr
         mYLookSpeed -= mousemove * 16 * timeDelta * 30.0;
     if (control.KeyPressed(GLFW_KEY_DOWN))
         mYLookSpeed += mousemove * 16 * timeDelta * 30.0;
-
-    auto cameraPosition = mPosition + (timeDelta * MaxUpdateFPS - 1) * getVelocityForRendering();
-    cameraPosition.Y += mHeight + mHeightExt;
-    return{ cameraPosition, mHeading + mXLookSpeed, std::clamp(mLookUpDown + mYLookSpeed, -90.0, 90.0) };
+    
+    return getPropertiesForRender(timeDelta);
 }
 
 void PlayerEntity::controlUpdate(const ControlContext& control) {

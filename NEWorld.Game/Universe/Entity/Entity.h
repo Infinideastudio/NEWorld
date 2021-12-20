@@ -1,7 +1,13 @@
 #pragma once
 
 #include "bvh.h"
+#include "Definitions.h"
 #include "Math/Vector3.h"
+
+struct RenderProperties {
+    Double3 position;
+    double heading, lookUpDown;
+};
 
 class Entity {
 public:
@@ -31,14 +37,23 @@ public:
 
     virtual void update() = 0;
     virtual void render() = 0;
+    
+    [[nodiscard]] double getHeading() const noexcept { return mHeading; }
+    [[nodiscard]] double getLookUpDown() const noexcept { return mLookUpDown; }
 
-    [[nodiscard]] Double3 getVelocityForRendering() const noexcept {
-        // The actual velocity used for movement in this frame (before collision checks)
-        // can be used for inter-frame interpolation.
-        return mVelocityForRendering;
+    [[nodiscard]] virtual RenderProperties getPropertiesForRender(double timeDelta) const noexcept {
+        // timeDelta is the time since the last update frame.
+        auto cameraPosition = mPosition + (timeDelta * MaxUpdateFPS - 1) * mVelocityForRendering;
+        return{ cameraPosition, mHeading + mXLookSpeed, std::clamp(mLookUpDown + mYLookSpeed, -90.0, 90.0) };
     }
+
 protected:
     Double3 mPosition, mSize, mVelocity;
+
+    double mLookUpDown = 90, mHeading = 0;
+    double mXLookSpeed = 0, mYLookSpeed = 0;
 private:
+    // The actual velocity used for movement in this frame (before collision checks)
+    // can be used for inter-frame interpolation.
     Double3 mVelocityForRendering;
 };

@@ -260,6 +260,8 @@ public:
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
         Particles::renderall(xpos, ypos, zpos);
 
+        RenderEntities();
+
         glDisable(GL_TEXTURE_2D);
         if (mShouldRenderGUI && mCurrentSelection) {
             auto selectingBlock = mCurrentSelection->second;
@@ -347,6 +349,10 @@ public:
             shouldGetThumbnail = false;
             createThumbnail();
         }
+    }
+
+    void RenderEntities() {
+        for (auto& entity : mEntities) entity->render();
     }
 
     void onRender() override {

@@ -8,8 +8,8 @@
 
 class Game : public CommandHandler {
     Vec3<int> mLastSelectedBlockPos{};
-    std::vector<std::unique_ptr<Entity>> mEntities{};
 protected:
+    std::vector<std::unique_ptr<Entity>> mEntities{};
     PlayerEntity* mPlayer = nullptr;
     ControlContext mControlsForUpdate{ MainWindow };
 
@@ -66,7 +66,9 @@ public:
         RandomTick();
 
         if (!mBagOpened) {
-            ProcessInteract();
+            // Get camera position. Used delta=0 so there might be a little errors but shouldn't be noticeable.
+            const auto props = mPlayer->getPropertiesForRender(0);
+            ProcessInteract(props.position, props.heading, props.lookUpDown);
             mPlayer->controlUpdate(mControlsForUpdate);
             HotkeySettingsToggle();
         }
@@ -100,11 +102,10 @@ public:
         }
     }
 
-    void ProcessInteract() {
-        auto pos = mPlayer->getPosition();
+    // handle ray/bounding box collision check to pick/place blocks
+    void ProcessInteract(Double3 startPosition, double heading, double lookUpDown) {
+        auto pos = startPosition;
         Int3 blockBefore = pos;
-        const auto heading = mPlayer->getHeading();
-        const auto lookUpDown = mPlayer->getLookUpDown();
         mCurrentSelection = std::nullopt;
 
         for (auto i = 0; i < selectPrecision * selectDistance; i++) {

@@ -9,11 +9,6 @@ struct ItemStack {
 	uint8_t amount;
 };
 
-struct CameraPosition {
-	Double3 position;
-	double heading, lookUpDown;
-};
-
 enum class GameMode { Survival, Creative };
 class PlayerEntity: public Entity {
 public:
@@ -29,7 +24,7 @@ public:
 	void render() override {}
 
 	void controlUpdate(const ControlContext& control); // called by update thread
-	CameraPosition renderUpdate(const ControlContext& control, bool freeze, double lastUpdate); // called by render thread
+	RenderProperties renderUpdate(const ControlContext& control, bool freeze, double lastUpdate); // called by render thread
 
 	GameMode getGameMode() const noexcept { return mGameMode; }
 	void setVelocity(Double3 vel) { mVelocity = vel; }
@@ -40,8 +35,6 @@ public:
 	double getHealth() const noexcept { return mHealth; }
 	void setHealth(double health) noexcept { mHealth = health; }
 	double getMaxHealth() const noexcept { return mMaxHealth; }
-	double getHeading() const noexcept { return mHeading; }
-	double getLookUpDown() const noexcept { return mLookUpDown; }
 	double getCurrentJumpSpeed() const noexcept { return mCurrentJumpSpeed; }
 	bool isRunning() const noexcept { return mRunning; }
 	bool isOnGround() const noexcept { return mOnGround; }
@@ -52,6 +45,11 @@ public:
 		// TODO: impl super-sprint
 		return mRunning ? runspeed : walkspeed;
 	}
+	RenderProperties getPropertiesForRender(double timeDelta) const noexcept override {
+		auto props = Entity::getPropertiesForRender(timeDelta);
+		props.position.Y += mHeightExt + mHeight - mSize.Y / 2;
+		return props;
+	}
 
 private:
 	void ProcessInteract(const ControlContext& control);
@@ -59,9 +57,6 @@ private:
 	void ProcessNavigate(const ControlContext& control);
 	void HotbarItemSelect(const ControlContext& control);
 	void StartJump();
-
-	double mLookUpDown = 90, mHeading = 0;
-	double mXLookSpeed = 0, mYLookSpeed = 0;
 
 	int mAirJumps = 0;
 	double mCurrentJumpSpeed = 0;
@@ -72,7 +67,7 @@ private:
 	double mHealSpeed = 0.01;
 	double mDropDamage = 5.0;
 
-	double mHeight = 1.2;
+	double mHeight = 1.7; // height of eyes
 	double mHeightExt = 0;
 
 	// status
