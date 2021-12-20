@@ -235,14 +235,15 @@ void PlayerEntity::afterMove(Double3 actualMovement) {
 }
 
 bool PlayerEntity::putBlock(Int3 position, Block blockname) {
-    auto success = false;
     if (!World::ChunkOutOfBound(getChunkPosition())
-        && ((!AABB::Intersect(bounding_box(), AABB::BoxForBlock(position)) || mCrossWall ||
-            !BlockInfo(blockname).isSolid()) && !BlockInfo(World::GetBlock(position)).isSolid())) {
+        && (!AABB::Intersect(bounding_box(), AABB::BoxForBlock(position)) || mCrossWall || !BlockInfo(blockname).isSolid())
+        && !BlockInfo(World::GetBlock(position)).isSolid()) {
+
         World::PutBlock(position, blockname);
-        success = true;
+        return true;
+
     }
-    return success;
+    return false;
 }
 
 bool PlayerEntity::save(std::ofstream isave) {

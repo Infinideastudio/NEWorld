@@ -17,7 +17,7 @@ struct CameraPosition {
 enum class GameMode { Survival, Creative };
 class PlayerEntity: public Entity {
 public:
-	PlayerEntity(Double3 pos) : Entity(pos, { .6,1.6,.6 }) {}
+	PlayerEntity(Double3 pos) : Entity(pos, { .6,1.7,.6 }) {}
 	PlayerEntity() : PlayerEntity({ 0,0,0 }) { spawn(); }
 
 	void setVelocity(Double3 vel) { mVelocity = vel; }

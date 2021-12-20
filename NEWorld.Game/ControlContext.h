@@ -22,7 +22,7 @@ public:
 		if(!Listener) Listener = MessageBus::Default().Get<std::pair<int, int>>("KeyEvents")->Listen(
 			[this](void*, std::pair<int, int> keyAndAction) {
 				auto [key, action] = keyAndAction;
-				KeyStates[key] = action == GLFW_PRESS;
+				KeyStates[key] = action != GLFW_RELEASE;
 			});
 	}
 	ControlContext(ControlContext&) = delete;

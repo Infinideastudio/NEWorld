@@ -121,7 +121,7 @@ public:
                 mCurrentSelection = std::make_pair(currentBlock, currentBlockPos);
                 break;
             }
-            blockBefore = pos;
+            blockBefore = currentBlockPos;
         }
         if (!mCurrentSelection) return;
         
