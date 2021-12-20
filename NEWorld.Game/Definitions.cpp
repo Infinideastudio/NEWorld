@@ -5,7 +5,7 @@ float FOVyNormal = 60.0f;
 float mousemove = 0.2f;
 int viewdistance = 8;
 int cloudwidth = 10;
-int selectPrecision = 32;
+double selectPrecision = 32;
 int selectDistance = 8;
 float walkspeed = 0.15f;
 float runspeed = 0.3f;
@@ -56,11 +56,6 @@ int GLVersionMajor, GLVersionMinor, GLVersionRev;
 //GLFW
 GLFWwindow *MainWindow;
 GLFWcursor *MouseCursor;
-
-double mx, my, mxl, myl;
-int mw, mb, mbp, mbl, mwl;
-double mxdelta, mydelta;
-std::string inputstr;
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
 int c_getChunkPtrFromCPA;

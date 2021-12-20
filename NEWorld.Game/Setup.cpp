@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Setup.h"
+
+#include "ControlContext.h"
 #include "Definitions.h"
 #include "Textures.h"
 #include "Renderer/Renderer.h"
@@ -56,7 +58,7 @@ void createWindow() {
     glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetWindowSizeCallback(MainWindow, &WindowSizeFunc);
     glfwSetMouseButtonCallback(MainWindow, &MouseButtonFunc);
-    glfwSetScrollCallback(MainWindow, &MouseScrollFunc);
+    glfwSetScrollCallback(MainWindow, &ControlContext::MouseScrollCallback);
     glfwSetCharCallback(MainWindow, &CharInputFunc);
     glfwSetKeyCallback(MainWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods){
         MessageBus::Default().Get<std::pair<int, int>>("KeyEvents")->Send(nullptr, std::make_pair(key, action));
@@ -204,12 +206,7 @@ void WindowSizeFunc(GLFWwindow *win, int width, int height) {
 }
 
 void MouseButtonFunc(GLFWwindow *, int button, int action, int) {
-    mb = 0;
-    if (action == GLFW_PRESS) {
-        if (button == GLFW_MOUSE_BUTTON_LEFT)mb += 1;
-        if (button == GLFW_MOUSE_BUTTON_RIGHT)mb += 2;
-        if (button == GLFW_MOUSE_BUTTON_MIDDLE)mb += 4;
-    } else mb = 0;
+    MessageBus::Default().Get<std::pair<int, int>>("Mouse")->Send(nullptr, std::make_pair(button, action));
 }
 
 void CharInputFunc(GLFWwindow *, unsigned int c) {
@@ -220,12 +217,7 @@ void CharInputFunc(GLFWwindow *, unsigned int c) {
         pwszUnicode[1] = '\0';
         auto pszMultiByte = static_cast<char *>(malloc(static_cast<unsigned int>(4)));
         pszMultiByte = static_cast<char *>(realloc(pszMultiByte, WCharToMByte(pszMultiByte, pwszUnicode, 4)));
-        inputstr += pszMultiByte;
         free(pszMultiByte);
         delete[] pwszUnicode;
-    } else inputstr += static_cast<char>(c);
-}
-
-void MouseScrollFunc(GLFWwindow *, double, double yoffset) {
-    mw += static_cast<int>(yoffset);
+    }
 }

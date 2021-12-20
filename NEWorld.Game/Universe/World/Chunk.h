@@ -1,12 +1,12 @@
 ﻿#pragma once
 
 #include "Definitions.h"
-#include "Hitbox.h"
 #include "Blocks.h"
 #include "Frustum.h"
 #include <cstring>
 #include <Math/Vector3.h>
 #include "Data/ChunkStorage.h"
+#include "Universe/Entity/bvh.h"
 
 class Object;
 
@@ -22,7 +22,7 @@ namespace World {
         std::vector<Object *> objects;
         chunkid mId;
         const Int3 mPos;
-        Hitbox::AABB mBounds;
+        BoundingBox mBounds;
         static double relBaseX, relBaseY, relBaseZ;
         static Frustum TestFrustum;
 
@@ -94,7 +94,7 @@ namespace World {
             TestFrustum = frus;
         }
 
-        Hitbox::AABB getBaseAABB();
+        BoundingBox getBaseAABB();
 
         Frustum::ChunkBox getRelativeAABB();
 

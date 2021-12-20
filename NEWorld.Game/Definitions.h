@@ -10,6 +10,7 @@
 
 //Global Vars
 const unsigned int VERSION = 39;
+constexpr double MaxUpdateFPS = 30;
 constexpr const char* MAJOR_VERSION = "Alpha 0.";
 constexpr const char* MINOR_VERSION = "5";
 constexpr const char* EXT_VERSION = " Technical Perview";
@@ -19,7 +20,7 @@ extern float FOVyNormal;
 extern float mousemove;
 extern int viewdistance;
 extern int cloudwidth;
-extern int selectPrecision;
+extern double selectPrecision;
 extern int selectDistance;
 extern float walkspeed;
 extern float runspeed;
@@ -64,10 +65,6 @@ extern double bagAnimDuration;
 extern int GLVersionMajor, GLVersionMinor, GLVersionRev;
 extern GLFWwindow *MainWindow;
 extern GLFWcursor *MouseCursor;
-extern double mx, my, mxl, myl;
-extern int mw, mb, mbp, mbl, mwl;
-extern double mxdelta, mydelta;
-extern std::string inputstr;
 
 void AppCleanUp();
 

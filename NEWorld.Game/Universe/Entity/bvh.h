@@ -4,6 +4,8 @@
 #include <bvh/vector.hpp>
 #include <bvh/ray.hpp>
 
+#include "Math/Vector3.h"
+
 using Scalar = double;
 using Vector3 = bvh::Vector3<Scalar>;
 using BoundingBox = bvh::BoundingBox<Scalar>;
@@ -41,12 +43,25 @@ namespace AABB {
 
     inline double MaxMove(const BoundingBox& boxA, const BoundingBox& boxB, double distance, int axis) {
         // perform collision from A to B
-    	if (!(InClip(boxA, boxB, axis) && InClip(boxA, boxB, axis)))
+        if (!((axis == 0 || InClip(boxA, boxB, 0)) &&
+            (axis == 1 || InClip(boxA, boxB, 1)) &&
+            (axis == 2 || InClip(boxA, boxB, 2))))
             return distance;
         if (boxA.min.values[axis] >= boxB.max.values[axis] && distance < 0.0)
             return std::max(boxB.max.values[axis] - boxA.min.values[axis], distance);
         if (boxA.max.values[axis] <= boxB.min.values[axis] && distance > 0.0)
             return std::min(boxB.min.values[axis] - boxA.max.values[axis], distance);
-        return 0.0;
+        return distance;
+    }
+
+    inline BoundingBox Move(BoundingBox box, Double3 direction) {
+        box.min += direction;
+        box.max += direction;
+        return box;
+    }
+
+    inline BoundingBox BoxForBlock(Int3 pos) {
+        return { {pos.X - 0.5, pos.Y - 0.5, pos.Z - 0.5},
+        	{ pos.X + 0.5, pos.Y + 0.5, pos.Z + 0.5 } };
     }
 }

@@ -8,6 +8,7 @@
 #include "NsGui/TextureSource.h"
 #include "NsGui/UIElementData.h"
 #include "NsGui/UserControl.h"
+#include "Universe/Entity/PlayerEntity.h"
 
 class InventorySlot : public Noesis::UserControl
 {
@@ -22,6 +23,10 @@ public:
 	    mItem = i;
         FindName<Noesis::Image>("ItemTexture")->SetSource(getTextureForItem(i));
     }
+    void setItemStack(ItemStack stack) {
+        setItem(stack.item);
+        setAmount(stack.amount);
+    } 
     bool isSelected() const noexcept { return mSelected; }
     void setSelected(bool selected) { mSelected = selected; SetValue<bool>(SelectedProperty, selected); }
 

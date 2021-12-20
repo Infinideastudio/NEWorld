@@ -32,31 +32,31 @@ namespace Particles {
 
     void update(Particle &ptc) {
         const auto psz = ptc.psize;
-        ptc.hb.xmin = ptc.xpos - psz;
-        ptc.hb.xmax = ptc.xpos + psz;
-        ptc.hb.ymin = ptc.ypos - psz;
-        ptc.hb.ymax = ptc.ypos + psz;
-        ptc.hb.zmin = ptc.zpos - psz;
-        ptc.hb.zmax = ptc.zpos + psz;
+        ptc.hb.min.values[0] = ptc.xpos - psz;
+        ptc.hb.max.values[0] = ptc.xpos + psz;
+        ptc.hb.min.values[1] = ptc.ypos - psz;
+        ptc.hb.min.values[1] = ptc.ypos + psz;
+        ptc.hb.min.values[2] = ptc.zpos - psz;
+        ptc.hb.min.values[2] = ptc.zpos + psz;
 
         double dx = ptc.xsp;
         double dy = ptc.ysp;
         double dz = ptc.zsp;
 
-        auto Hitboxes = World::getHitboxes(Hitbox::Expand(ptc.hb, dx, dy, dz));
+        auto Hitboxes = World::getHitboxes(ptc.hb.extend(AABB::Move(ptc.hb, { dx, dy, dz })));
         const int hitnum = Hitboxes.size();
         for (auto i = 0; i < hitnum; i++) {
-            dy = Hitbox::MaxMoveOnYclip(ptc.hb, Hitboxes[i], dy);
+            dy = AABB::MaxMove(ptc.hb, Hitboxes[i], dy, 1);
         }
-        Hitbox::Move(ptc.hb, 0.0, dy, 0.0);
+        ptc.hb = AABB::Move(ptc.hb, { 0.0, dy, 0.0 });
         for (auto i = 0; i < hitnum; i++) {
-            dx = Hitbox::MaxMoveOnXclip(ptc.hb, Hitboxes[i], dx);
+            dx = AABB::MaxMove(ptc.hb, Hitboxes[i], dx,0);
         }
-        Hitbox::Move(ptc.hb, dx, 0.0, 0.0);
+        ptc.hb = AABB::Move(ptc.hb, { dx, 0.0, 0.0 });
         for (auto i = 0; i < hitnum; i++) {
-            dz = Hitbox::MaxMoveOnZclip(ptc.hb, Hitboxes[i], dz);
+            dz = AABB::MaxMove(ptc.hb, Hitboxes[i], dz, 2);
         }
-        Hitbox::Move(ptc.hb, 0.0, 0.0, dz);
+        ptc.hb = AABB::Move(ptc.hb, { 0.0, 0.0, dz });
 
         ptc.xpos += dx;
         ptc.ypos += dy;
@@ -166,12 +166,12 @@ namespace Particles {
         ptc.ysp = ys;
         ptc.zsp = zs;
         ptc.psize = psz;
-        ptc.hb.xmin = x - psz;
-        ptc.hb.xmax = x + psz;
-        ptc.hb.ymin = y - psz;
-        ptc.hb.ymax = y + psz;
-        ptc.hb.zmin = z - psz;
-        ptc.hb.zmax = z + psz;
+        ptc.hb.min.values[0] = x - psz;
+        ptc.hb.max.values[0] = x + psz;
+        ptc.hb.min.values[1] = y - psz;
+        ptc.hb.max.values[1] = y + psz;
+        ptc.hb.min.values[2] = z - psz;
+        ptc.hb.max.values[2] = z + psz;
         ptc.lasts = last;
         ptc.tcX = tcX1 + static_cast<float>(rnd()) * (static_cast<float>(BLOCKTEXTURE_UNITSIZE) / BLOCKTEXTURE_SIZE) *
                          (1.0f - psz);
