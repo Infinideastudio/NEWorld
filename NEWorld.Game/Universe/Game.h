@@ -151,7 +151,7 @@ public:
         if (mControlsForUpdate.ShouldDo(ControlContext::Action::PLACE_BLOCK)) {
             if (itemSelection.amount > 0 && isBlock(itemSelection.item)) {
                 //放置方块
-                if (mPlayer->putBlock(blockBefore, itemSelection.item)) {
+                if (mPlayer->placeBlock(blockBefore, itemSelection.item)) {
                     itemSelection.amount--;
                     if (itemSelection.amount == 0)
                         itemSelection.item = Blocks::ENV;
@@ -187,7 +187,7 @@ public:
     
     void HotkeySettingsToggle() {//各种设置切换
         if (isPressed(GLFW_KEY_F1)) {
-            mPlayer->changeGameMode(mPlayer->getGameMode() == GameMode::Creative ? GameMode::Survival : GameMode::Creative);
+            mPlayer->setGameMode(mPlayer->getGameMode() == GameMode::Creative ? GameMode::Survival : GameMode::Creative);
         }
         if (isPressed(GLFW_KEY_F2)) shouldGetScreenshot = true;
         if (isPressed(GLFW_KEY_F3)) {

@@ -76,14 +76,18 @@ void PlayerEntity::controlUpdate(const ControlContext& control) {
     if (control.KeyPressed(GLFW_KEY_LEFT_SHIFT) || control.KeyPressed(GLFW_KEY_RIGHT_SHIFT)) {
         if (mCrossWall || mFlying) mVelocity.Y -= walkspeed / 2;
     }
-
+    mSpeedBoost = control.KeyPressed(GLFW_KEY_F) ? 10 : 1;
 	//ÌøÔ¾
     ProcessJump();
 }
 
 void PlayerEntity::ProcessNavigate(const ControlContext& control) {
     auto speed = getSpeed();
-    // TODO: mRunning = true; impl running
+
+    if (control.KeyJustDoublePressed(GLFW_KEY_W)) {
+        mRunning = true;
+    }
+        
     if (control.KeyPressed(GLFW_KEY_W)) {
         mVelocity.X += -sin(mHeading * M_PI / 180.0) * speed;
         mVelocity.Z += -cos(mHeading * M_PI / 180.0) * speed;
@@ -232,7 +236,7 @@ void PlayerEntity::afterMove(Double3 actualMovement) {
     }
 }
 
-bool PlayerEntity::putBlock(Int3 position, Block blockname) {
+bool PlayerEntity::placeBlock(Int3 position, Block blockname) {
     if (!World::ChunkOutOfBound(getChunkPosition())
         && (!AABB::Intersect(bounding_box(), AABB::BoxForBlock(position)) || mCrossWall || !BlockInfo(blockname).isSolid())
         && !BlockInfo(World::GetBlock(position)).isSolid()) {
@@ -274,7 +278,7 @@ bool PlayerEntity::addItem(item itemname, short amount) {
     return false;
 }
 
-void PlayerEntity::changeGameMode(GameMode _gamemode) {
+void PlayerEntity::setGameMode(GameMode _gamemode) {
     mGameMode = _gamemode;
     switch (_gamemode) {
     case GameMode::Survival:

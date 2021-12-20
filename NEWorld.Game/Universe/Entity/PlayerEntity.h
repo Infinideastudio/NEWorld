@@ -15,17 +15,17 @@ public:
 	PlayerEntity(Double3 pos) : Entity(pos, { .6,1.7,.6 }) {}
 	PlayerEntity() : PlayerEntity({ 0,0,0 }) { spawn(); }
 
-	void spawn();
 	void afterMove(Double3 velocity) override;
-	bool addItem(item itemName, short amount = 1);
-	bool putBlock(Int3 position, Block blockName);
-	void changeGameMode(GameMode gameMode);
-	void update() override;
-	void render() override {}
 
+	void render() override {}
+	void update() override;
 	void controlUpdate(const ControlContext& control); // called by update thread
 	RenderProperties renderUpdate(const ControlContext& control, bool freeze, double lastUpdate); // called by render thread
 
+	void spawn();
+	bool addItem(item itemName, short amount = 1);
+	bool placeBlock(Int3 position, Block blockName);
+	void setGameMode(GameMode gameMode);
 	GameMode getGameMode() const noexcept { return mGameMode; }
 	void setVelocity(Double3 vel) { mVelocity = vel; }
 	void toggleCrossWall() noexcept { mCrossWall = !mCrossWall; }
@@ -43,7 +43,7 @@ public:
 	bool isCrossWall() const noexcept { return mCrossWall; }
 	double getSpeed() const noexcept {
 		// TODO: impl super-sprint
-		return mRunning ? runspeed : walkspeed;
+		return (mRunning ? runspeed : walkspeed) * mSpeedBoost;
 	}
 	RenderProperties getPropertiesForRender(double timeDelta) const noexcept override {
 		auto props = Entity::getPropertiesForRender(timeDelta);
@@ -67,6 +67,7 @@ private:
 	double mHealSpeed = 0.01;
 	double mDropDamage = 5.0;
 
+	double mSpeedBoost = 1;
 	double mHeight = 1.7; // height of eyes
 	double mHeightExt = 0;
 

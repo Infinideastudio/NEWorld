@@ -6,8 +6,8 @@ Int3 Entity::getChunkPosition() const noexcept
 { return Int3(mPosition, World::GetChunkPos<int>); }
 
 void Entity::move(const EntityBVH& bvh) {
-	mVelocityForRendering = mVelocity;
 	if (!doCollisionCheck()) {
+		mVelocityForRendering = mVelocity;
 		mPosition += mVelocity;
 		return;
 	}
@@ -36,5 +36,6 @@ void Entity::move(const EntityBVH& bvh) {
 		actualMovement.Z = AABB::MaxMove(currentHitbox, box, actualMovement.Z, 2);
 	}
 	mPosition += actualMovement;
+	mVelocityForRendering = actualMovement;
 	afterMove(actualMovement);
 }

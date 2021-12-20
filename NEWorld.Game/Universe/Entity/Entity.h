@@ -53,7 +53,7 @@ protected:
     double mLookUpDown = 90, mHeading = 0;
     double mXLookSpeed = 0, mYLookSpeed = 0;
 private:
-    // The actual velocity used for movement in this frame (before collision checks)
+    // The actual velocity used for movement in this frame
     // can be used for inter-frame interpolation.
     Double3 mVelocityForRendering;
 };
