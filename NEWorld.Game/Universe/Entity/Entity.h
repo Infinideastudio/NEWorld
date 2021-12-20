@@ -12,6 +12,7 @@ struct RenderProperties {
 class Entity {
 public:
     Entity(Double3 position, Double3 size) : mPosition(position), mSize(size), mVelocity() {}
+    virtual ~Entity() = default;
 
     [[nodiscard]] Vector3 center() const { return mPosition; }
     [[nodiscard]] BoundingBox bounding_box() const {
