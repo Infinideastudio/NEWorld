@@ -142,8 +142,8 @@ public:
             double currentTime = timer();
             if (currentTime - lastUpdate >= 5.0) lastUpdate = currentTime;
             
-            while (currentTime - lastUpdate >= 1.0 / 30.0 && mUpsCounter.getFPS() < 60) {
-                lastUpdate += 1.0 / 30.0;
+            while (currentTime - lastUpdate >= 1.0 / MaxUpdateFPS && mUpsCounter.getFPS() < 60) {
+                lastUpdate += 1.0 / MaxUpdateFPS;
                 mUpsCounter.frame();
                 updateGame();
                 FirstUpdateThisFrame = false;
@@ -158,7 +158,13 @@ public:
         //画场景
         const auto currentTime = timer();
 
-        const double xpos = mPlayer->getPosition().X, ypos = mPlayer->getPosition().Y, zpos = mPlayer->getPosition().Z;
+        const auto camera = mPlayer->renderUpdate(
+            mControls, 
+            mBagOpened || mViewModel->getGamePaused(),
+            mControlsForUpdate.Current.Time
+        );
+
+        const double xpos = camera.position.X, ypos = camera.position.Y, zpos = camera.position.Z;
 
         if (mPlayer->isRunning()) {
             if (FOVyExt < 9.8) {
@@ -202,7 +208,7 @@ public:
         //Renderer::sunlightXrot = 90 * daylight;
         if (Renderer::AdvancedRender) {
             //Build shadow map
-            if (!DebugShadow) ShadowMaps::BuildShadowMap(mPlayer->getPosition().X, ypos, zpos, currentTime);
+            if (!DebugShadow) ShadowMaps::BuildShadowMap(xpos, ypos, zpos, currentTime);
             else ShadowMaps::RenderShadowMap(xpos, ypos, zpos, currentTime);
         }
         glClearColor(skycolorR, skycolorG, skycolorB, 1.0);
@@ -212,8 +218,8 @@ public:
         mFrustum.LoadIdentity();
         mFrustum.SetPerspective(FOVyNormal + FOVyExt, static_cast<float>(windowwidth) / windowheight, 0.05f,
                                            viewdistance * 16.0f);
-        mFrustum.MultRotate(static_cast<float>(mPlayer->getLookUpDown()), 1, 0, 0);
-        mFrustum.MultRotate(360.0f - static_cast<float>(mPlayer->getHeading()), 0, 1, 0);
+        mFrustum.MultRotate(static_cast<float>(camera.lookUpDown), 1, 0, 0);
+        mFrustum.MultRotate(360.0f - static_cast<float>(camera.heading), 0, 1, 0);
         mFrustum.update();
 
         glMatrixMode(GL_PROJECTION);
@@ -235,8 +241,8 @@ public:
 
         // 渲染层1
         glLoadIdentity();
-        glRotated(mPlayer->getLookUpDown(), 1, 0, 0);
-        glRotated(360.0 - mPlayer->getHeading(), 0, 1, 0);
+        glRotated(camera.lookUpDown, 1, 0, 0);
+        glRotated(360.0 - camera.heading, 0, 1, 0);
         glDisable(GL_BLEND);
         Renderer::EnableShaders();
         if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 0);
@@ -266,8 +272,8 @@ public:
 
         // 渲染层2&3
         glLoadIdentity();
-        glRotated(mPlayer->getLookUpDown(), 1, 0, 0);
-        glRotated(360.0 - mPlayer->getHeading(), 0, 1, 0);
+        glRotated(camera.lookUpDown, 1, 0, 0);
+        glRotated(360.0 - camera.heading, 0, 1, 0);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_CULL_FACE);
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
@@ -278,8 +284,8 @@ public:
         Renderer::DisableShaders();
 
         glLoadIdentity();
-        glRotated(mPlayer->getLookUpDown(), 1, 0, 0);
-        glRotated(360.0 - mPlayer->getHeading(), 0, 1, 0);
+        glRotated(camera.lookUpDown, 1, 0, 0);
+        glRotated(360.0 - camera.heading, 0, 1, 0);
         glTranslated(-xpos, -ypos, -zpos);
 
         MutexLock(Mutex);
@@ -651,8 +657,6 @@ public:
             glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             createThumbnail();
         }
-
-        mPlayer->renderUpdate(mControls, mBagOpened);
     }
 
     ~GameView() override {

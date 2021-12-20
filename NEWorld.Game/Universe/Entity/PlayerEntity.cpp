@@ -23,7 +23,7 @@ void PlayerEntity::update() {
     }
 }
 
-CameraPosition PlayerEntity::renderUpdate(const ControlContext& control, bool freeze) {
+CameraPosition PlayerEntity::renderUpdate(const ControlContext& control, bool freeze, double lastUpdate) {
     if (freeze) {
         mYLookSpeed = mXLookSpeed = 0;
         return{ mPosition, mHeading, mLookUpDown };
@@ -45,7 +45,7 @@ CameraPosition PlayerEntity::renderUpdate(const ControlContext& control, bool fr
         }
     }
 
-    auto timeDelta = control.Current.Time - control.Last.Time;
+    const auto timeDelta = control.Current.Time - lastUpdate;
 
     //转头！你治好了我多年的颈椎病！
     mXLookSpeed -= (control.Current.MousePosition.X - control.Last.MousePosition.X) * mousemove;
@@ -59,9 +59,9 @@ CameraPosition PlayerEntity::renderUpdate(const ControlContext& control, bool fr
     if (control.KeyPressed(GLFW_KEY_DOWN))
         mYLookSpeed += mousemove * 16 * timeDelta * 30.0;
 
-    auto cameraPosition = mPosition + (timeDelta * 30.0 - 1) * mVelocity;
+    auto cameraPosition = mPosition + (timeDelta * MaxUpdateFPS - 1) * getVelocityForRendering();
     cameraPosition.Y += mHeight + mHeightExt;
-    return{ cameraPosition, mHeading + mXLookSpeed,mLookUpDown + mYLookSpeed };
+    return{ cameraPosition, mHeading + mXLookSpeed, std::clamp(mLookUpDown + mYLookSpeed, -90.0, 90.0) };
 }
 
 void PlayerEntity::controlUpdate(const ControlContext& control) {
@@ -244,56 +244,6 @@ bool PlayerEntity::putBlock(Int3 position, Block blockname) {
 
     }
     return false;
-}
-
-bool PlayerEntity::save(std::ofstream isave) {
-    return false;
-    // isave.write((char*)&curversion, sizeof(curversion));
-    // isave.write((char*)&Pos, sizeof(Pos));
-    // isave.write((char*)&lookupdown, sizeof(lookupdown));
-    // isave.write((char*)&heading, sizeof(heading));
-    // isave.write((char*)&jump, sizeof(jump));
-    // isave.write((char*)&OnGround, sizeof(OnGround));
-    // isave.write((char*)&Running, sizeof(Running));
-    // isave.write((char*)&AirJumps, sizeof(AirJumps));
-    // isave.write((char*)&Flying, sizeof(Flying));
-    // isave.write((char*)&CrossWall, sizeof(CrossWall));
-    // isave.write((char*)&indexInHand, sizeof(indexInHand));
-    // isave.write((char*)&health, sizeof(health));
-    // isave.write((char*)&gamemode, sizeof(gamemode));
-    // isave.write((char*)&gametime, sizeof(gametime));
-    // isave.write((char*)inventory, sizeof(inventory));
-    // isave.write((char*)inventoryAmount, sizeof(inventoryAmount));
-    // isave.close();
-    // return true;
-}
-
-bool PlayerEntity::load(std::ifstream file) {
-    return false;
-    // uint32 targetVersion;
-    // std::stringstream ss;
-    // ss << "Worlds/" << worldn << "/player.NEWorldPlayer";
-    // std::ifstream iload(ss.str().c_str(), std::ios::binary | std::ios::in);
-    // if (!iload.is_open()) return false;
-    // iload.read((char*)&targetVersion, sizeof(targetVersion));
-    // if (targetVersion != VERSION) return false;
-    // iload.read((char*)&Pos, sizeof(Pos));
-    // iload.read((char*)&lookupdown, sizeof(lookupdown));
-    // iload.read((char*)&heading, sizeof(heading));
-    // iload.read((char*)&jump, sizeof(jump));
-    // iload.read((char*)&OnGround, sizeof(OnGround));
-    // iload.read((char*)&Running, sizeof(Running));
-    // iload.read((char*)&AirJumps, sizeof(AirJumps));
-    // iload.read((char*)&Flying, sizeof(Flying));
-    // iload.read((char*)&CrossWall, sizeof(CrossWall));
-    // iload.read((char*)&indexInHand, sizeof(indexInHand));
-    // iload.read((char*)&health, sizeof(health));
-    // iload.read((char*)&gamemode, sizeof(gamemode));
-    // iload.read((char*)&gametime, sizeof(gametime));
-    // iload.read((char*)inventory, sizeof(inventory));
-    // iload.read((char*)inventoryAmount, sizeof(inventoryAmount));
-    // iload.close();
-    // return true;
 }
 
 bool PlayerEntity::addItem(item itemname, short amount) {

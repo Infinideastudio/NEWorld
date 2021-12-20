@@ -10,6 +10,7 @@
 
 //Global Vars
 const unsigned int VERSION = 39;
+constexpr double MaxUpdateFPS = 30;
 constexpr const char* MAJOR_VERSION = "Alpha 0.";
 constexpr const char* MINOR_VERSION = "5";
 constexpr const char* EXT_VERSION = " Technical Perview";

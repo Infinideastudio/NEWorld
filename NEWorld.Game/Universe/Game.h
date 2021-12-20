@@ -14,7 +14,6 @@ protected:
     ControlContext mControlsForUpdate{ MainWindow };
 
     bool DebugHitbox{};
-    bool DebugMergeFace{};
     bool DebugMode{};
     bool DebugShadow{};
 
@@ -203,10 +202,6 @@ public:
                 }
             }
             else DebugShadow = false;
-            if (isPressed(GLFW_KEY_G)) {
-                DebugMergeFace = !DebugMergeFace;
-                DebugMode = true;
-            }
         }
         if (isPressed(GLFW_KEY_F4) && mPlayer->getGameMode() == GameMode::Creative)
             mPlayer->toggleCrossWall();

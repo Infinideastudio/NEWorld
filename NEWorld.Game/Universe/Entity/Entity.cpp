@@ -6,6 +6,7 @@ Int3 Entity::getChunkPosition() const noexcept
 { return Int3(mPosition, World::GetChunkPos<int>); }
 
 void Entity::move(const EntityBVH& bvh) {
+	mVelocityForRendering = mVelocity;
 	if (!doCollisionCheck()) {
 		mPosition += mVelocity;
 		return;

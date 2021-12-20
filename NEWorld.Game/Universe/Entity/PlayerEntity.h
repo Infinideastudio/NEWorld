@@ -20,30 +20,19 @@ public:
 	PlayerEntity(Double3 pos) : Entity(pos, { .6,1.7,.6 }) {}
 	PlayerEntity() : PlayerEntity({ 0,0,0 }) { spawn(); }
 
-	void setVelocity(Double3 vel) { mVelocity = vel; }
-
 	void spawn();
-
 	void afterMove(Double3 velocity) override;
-
-	bool save(std::ofstream file);
-
-	bool load(std::ifstream file);
-
 	bool addItem(item itemName, short amount = 1);
-
 	bool putBlock(Int3 position, Block blockName);
-
 	void changeGameMode(GameMode gameMode);
-
 	void update() override;
-
 	void render() override {}
 
 	void controlUpdate(const ControlContext& control); // called by update thread
-	CameraPosition renderUpdate(const ControlContext& control, bool freeze); // called by render thread
+	CameraPosition renderUpdate(const ControlContext& control, bool freeze, double lastUpdate); // called by render thread
 
 	GameMode getGameMode() const noexcept { return mGameMode; }
+	void setVelocity(Double3 vel) { mVelocity = vel; }
 	void toggleCrossWall() noexcept { mCrossWall = !mCrossWall; }
 	auto getInventory() noexcept { return mInventory; }
 	ItemStack& getCurrentSelectedItem() noexcept { return mInventory[3][mIndexInHand]; }
@@ -73,7 +62,6 @@ private:
 
 	double mLookUpDown = 90, mHeading = 0;
 	double mXLookSpeed = 0, mYLookSpeed = 0;
-	Double3 mVelocityInput {0};
 
 	int mAirJumps = 0;
 	double mCurrentJumpSpeed = 0;

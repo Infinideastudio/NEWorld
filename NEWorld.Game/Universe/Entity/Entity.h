@@ -31,6 +31,14 @@ public:
 
     virtual void update() = 0;
     virtual void render() = 0;
+
+    [[nodiscard]] Double3 getVelocityForRendering() const noexcept {
+        // The actual velocity used for movement in this frame (before collision checks)
+        // can be used for inter-frame interpolation.
+        return mVelocityForRendering;
+    }
 protected:
     Double3 mPosition, mSize, mVelocity;
+private:
+    Double3 mVelocityForRendering;
 };
