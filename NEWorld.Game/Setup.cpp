@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Setup.h"
+
+#include "ControlContext.h"
 #include "Definitions.h"
 #include "Textures.h"
 #include "Renderer/Renderer.h"
@@ -56,7 +58,7 @@ void createWindow() {
     glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetWindowSizeCallback(MainWindow, &WindowSizeFunc);
     glfwSetMouseButtonCallback(MainWindow, &MouseButtonFunc);
-    glfwSetScrollCallback(MainWindow, &MouseScrollFunc);
+    glfwSetScrollCallback(MainWindow, &ControlContext::MouseScrollCallback);
     glfwSetCharCallback(MainWindow, &CharInputFunc);
     glfwSetKeyCallback(MainWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods){
         MessageBus::Default().Get<std::pair<int, int>>("KeyEvents")->Send(nullptr, std::make_pair(key, action));
@@ -218,8 +220,4 @@ void CharInputFunc(GLFWwindow *, unsigned int c) {
         free(pszMultiByte);
         delete[] pwszUnicode;
     }
-}
-
-void MouseScrollFunc(GLFWwindow *, double, double yoffset) {
-    //mw += static_cast<int>(yoffset);
 }

@@ -95,6 +95,7 @@ private:
 
 class GameView : public virtual GUI::Scene, public Game {
 private:
+    ControlContext mControls{ MainWindow };
     GUI::FpsCounter mUpsCounter;
     InventorySlot* mHotBar[10];
     InventorySlot* mInventory[4][10];
@@ -245,18 +246,20 @@ public:
         MutexLock(Mutex);
 
         if (mBlockDestructionProgress > 0.0) {
-            glTranslated(mCurrentSelectedBlockPos.X - xpos, mCurrentSelectedBlockPos.Y - ypos, mCurrentSelectedBlockPos.Z - zpos);
+            auto breakingBlock = mCurrentSelection->second;
+            glTranslated(breakingBlock.X - xpos, breakingBlock.Y - ypos, breakingBlock.Z - zpos);
             renderDestroy(mBlockDestructionProgress, 0, 0, 0);
-            glTranslated(-mCurrentSelectedBlockPos.X + xpos, -mCurrentSelectedBlockPos.Y + ypos, -mCurrentSelectedBlockPos.Z + zpos);
+            glTranslated(-breakingBlock.X + xpos, -breakingBlock.Y + ypos, -breakingBlock.Z + zpos);
         }
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
         Particles::renderall(xpos, ypos, zpos);
 
         glDisable(GL_TEXTURE_2D);
-        if (mShouldRenderGUI && mIsSelectingBlock) {
-            glTranslated(mCurrentSelectedBlockPos.X - xpos, mCurrentSelectedBlockPos.Y - ypos, mCurrentSelectedBlockPos.Z - zpos);
+        if (mShouldRenderGUI && mCurrentSelection) {
+            auto selectingBlock = mCurrentSelection->second;
+            glTranslated(selectingBlock.X - xpos, selectingBlock.Y - ypos, selectingBlock.Z - zpos);
             drawBorder(0, 0, 0);
-            glTranslated(-mCurrentSelectedBlockPos.X + xpos, -mCurrentSelectedBlockPos.Y + ypos, -mCurrentSelectedBlockPos.Z + zpos);
+            glTranslated(-selectingBlock.X + xpos, -selectingBlock.Y + ypos, -selectingBlock.Z + zpos);
         }
 
         MutexUnlock(Mutex);
@@ -330,7 +333,6 @@ public:
             char tmp[64];
             const auto timeinfo = localtime(&t);
             strftime(tmp, sizeof(tmp), "%Y年%m月%d日%H时%M分%S秒", timeinfo);
-            delete timeinfo;
             std::stringstream ss;
             ss << "Screenshots/" << tmp << ".bmp";
             saveScreenshot(0, 0, windowwidth, windowheight, ss.str());

@@ -49,14 +49,14 @@ CameraPosition PlayerEntity::renderUpdate(const ControlContext& control, bool fr
 
     //转头！你治好了我多年的颈椎病！
     mXLookSpeed -= (control.Current.MousePosition.X - control.Last.MousePosition.X) * mousemove;
-    mYLookSpeed -= (control.Current.MousePosition.Y - control.Last.MousePosition.Y) * mousemove;
-    if (glfwGetKey(MainWindow, GLFW_KEY_RIGHT) == 1)
+    mYLookSpeed += (control.Current.MousePosition.Y - control.Last.MousePosition.Y) * mousemove;
+    if (control.KeyPressed(GLFW_KEY_RIGHT))
         mXLookSpeed -= mousemove * 16 * timeDelta * 30.0;
-    if (glfwGetKey(MainWindow, GLFW_KEY_LEFT) == 1)
+    if (control.KeyPressed(GLFW_KEY_LEFT))
         mXLookSpeed += mousemove * 16 * timeDelta * 30.0;
-    if (glfwGetKey(MainWindow, GLFW_KEY_UP) == 1)
+    if (control.KeyPressed(GLFW_KEY_UP))
         mYLookSpeed -= mousemove * 16 * timeDelta * 30.0;
-    if (glfwGetKey(MainWindow, GLFW_KEY_DOWN) == 1)
+    if (control.KeyPressed(GLFW_KEY_DOWN))
         mYLookSpeed += mousemove * 16 * timeDelta * 30.0;
 
     auto cameraPosition = mPosition + (timeDelta * 30.0 - 1) * mVelocity;

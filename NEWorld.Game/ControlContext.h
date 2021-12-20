@@ -1,23 +1,30 @@
 #pragma once
 #include "stdinclude.h"
 #include <GLFW/glfw3.h>
-
+#include <array>
 #include "Math/Vector2.h"
 #include "FunctionsKit.h"
+#include "Common/Logger.h"
+#include "System/MessageBus.h"
 
 class ControlContext {
 public:
 	enum class Action { PLACE_BLOCK, PICK_BLOCK };
 	struct Frame {
-		bool LeftMouse, MiddleMouse, RightMouse;
-		double MouseScroll;
-		Double2 MousePosition;
-		double Time;
-	private:
-		int KeyPressed[GLFW_KEY_LAST];
-		friend class ControlContext;
+		bool LeftMouse{}, MiddleMouse{}, RightMouse{};
+		double MouseScroll{};
+		Double2 MousePosition{};
+		double Time{};
+		std::array<int, GLFW_KEY_LAST> KeyPressed{};
 	};
-	ControlContext(GLFWwindow* window) :mWindow(window){}
+
+	ControlContext(GLFWwindow* window) :mWindow(window) {
+		if(!Listener) Listener = MessageBus::Default().Get<std::pair<int, int>>("KeyEvents")->Listen(
+			[this](void*, std::pair<int, int> keyAndAction) {
+				auto [key, action] = keyAndAction;
+				KeyStates[key] = action == GLFW_PRESS;
+			});
+	}
 	ControlContext(ControlContext&) = delete;
 	ControlContext operator=(ControlContext&) = delete;
 
@@ -32,16 +39,19 @@ public:
 		Current.RightMouse = glfwGetMouseButton(mWindow, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 		Current.MiddleMouse = glfwGetMouseButton(mWindow, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS;
 		Current.Time = timer();
-		// MouseScroll will be updated by callback
-		// KeyPressed will be updated lazily
-		memset(Current.KeyPressed, 0, sizeof Current.KeyPressed );
+		Current.MouseScroll = MouseScroll;
+		std::copy(KeyStates.begin(), KeyStates.end(), Current.KeyPressed.begin());
 	}
 
-	bool KeyPressed(int key) const noexcept {
-		return glfwGetKey(mWindow, key); // TODO: update frame
+	[[nodiscard]] bool KeyPressed(int key) const noexcept {
+		return Current.KeyPressed[key];
 	}
 
-	bool ShouldDo(Action action) {
+	[[nodiscard]] bool KeyJustPressed(int key) const noexcept {
+		return Current.KeyPressed[key] && !Last.KeyPressed[key];
+	}
+
+	[[nodiscard]] bool ShouldDo(Action action) {
 		switch(action)
 		{
 		case Action::PLACE_BLOCK:
@@ -50,7 +60,16 @@ public:
 			return Current.LeftMouse || KeyPressed(GLFW_KEY_ENTER);
 		}
 	}
+
+	static void MouseScrollCallback(GLFWwindow*, double, double yOffset) {
+		MouseScroll += yOffset;
+	}
+
 private:
 	GLFWwindow* mWindow;
 	size_t mFrameCounter;
+
+	inline static std::shared_ptr<PmrBase> Listener;
+	inline static double MouseScroll = 0;
+	inline static std::array<bool, GLFW_KEY_LAST> KeyStates;
 };

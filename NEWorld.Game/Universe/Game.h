@@ -8,11 +8,10 @@
 
 class Game : public CommandHandler {
     Vec3<int> mLastSelectedBlockPos{};
-    Brightness mSelectedBlockBrightness{};
     std::vector<std::unique_ptr<Entity>> mEntities{};
 protected:
     PlayerEntity* mPlayer = nullptr;
-    ControlContext mControls{ MainWindow };
+    ControlContext mControlsForUpdate{ MainWindow };
 
     bool DebugHitbox{};
     bool DebugMergeFace{};
@@ -20,10 +19,8 @@ protected:
     bool DebugShadow{};
 
     bool mShouldRenderGUI{};
-    bool mIsSelectingBlock{};
-    Block mCurrentSelectedBlock{};
     float mBlockDestructionProgress{};
-    Vec3<int> mCurrentSelectedBlockPos{};
+    std::optional<std::pair<Block, Vec3<int>>> mCurrentSelection{};
 
     bool mBagOpened = false;
 public:
@@ -35,6 +32,7 @@ public:
     }
     
     void updateGame() {
+        mControlsForUpdate.Update();
         //时间
         gametime++;
         if (glfwGetKey(MainWindow, GLFW_KEY_F8)) gametime += 30;
@@ -68,13 +66,9 @@ public:
         //随机状态更新
         RandomTick();
 
-        mIsSelectingBlock = false;
-    	mCurrentSelectedBlock = mSelectedBlockBrightness = 0;
-        mCurrentSelectedBlockPos = {};
-
         if (!mBagOpened) {
             ProcessInteract();
-            mPlayer->controlUpdate(mControls);
+            mPlayer->controlUpdate(mControlsForUpdate);
             HotkeySettingsToggle();
         }
 
@@ -112,50 +106,49 @@ public:
         Int3 blockBefore = pos;
         const auto heading = mPlayer->getHeading();
         const auto lookUpDown = mPlayer->getLookUpDown();
+        mCurrentSelection = std::nullopt;
+
         for (auto i = 0; i < selectPrecision * selectDistance; i++) {
             //线段延伸
             pos.X += sin(M_PI / 180 * (heading - 180)) * sin(M_PI / 180 * (lookUpDown + 90)) / selectPrecision;
             pos.Y += cos(M_PI / 180 * (lookUpDown + 90)) / selectPrecision;
             pos.Z += cos(M_PI / 180 * (heading - 180)) * sin(M_PI / 180 * (lookUpDown + 90)) / selectPrecision;
 
+            const auto currentBlockPos = Int3(pos, RoundInt);
+            const auto currentBlock = World::GetBlock(currentBlockPos);
             //碰到方块
-            if (BlockInfo(World::GetBlock(Int3(pos, RoundInt))).isSolid()) {
+            if (BlockInfo(currentBlock).isSolid()) {
+                mCurrentSelection = std::make_pair(currentBlock, currentBlockPos);
                 break;
             }
             blockBefore = pos;
         }
-
-        mCurrentSelectedBlockPos = Int3(pos, RoundInt);
-        mIsSelectingBlock = true;
-
-        //找方块所在区块及位置
-        mSelectedBlockBrightness = World::GetBrightness(mCurrentSelectedBlockPos);
-        mCurrentSelectedBlock = World::GetBlock(mCurrentSelectedBlockPos);
-
+        if (!mCurrentSelection) return;
+        
         auto& itemSelection = mPlayer->getCurrentSelectedItem();
 
-    	if (mControls.ShouldDo(ControlContext::Action::PICK_BLOCK)) {
-            Particles::throwParticle(mCurrentSelectedBlock, mCurrentSelectedBlockPos);
+    	if (mControlsForUpdate.ShouldDo(ControlContext::Action::PICK_BLOCK)) {
+            Particles::throwParticle(mCurrentSelection->first, mCurrentSelection->second);
             // Reset progress if selecting a different block
-            if (mCurrentSelectedBlockPos != mLastSelectedBlockPos) mBlockDestructionProgress = 0.0;
+            if (mCurrentSelection->second != mLastSelectedBlockPos) mBlockDestructionProgress = 0.0;
             else {
                 double factor = itemSelection.item == STICK ? 4 : 30.0 / (BlockInfo(itemSelection.item).getHardness() + 0.1);
 
                 factor = std::clamp(factor, 1.0, 1.7);
 
-                mBlockDestructionProgress += BlockInfo(mCurrentSelectedBlock).getHardness() *
+                mBlockDestructionProgress += BlockInfo(mCurrentSelection->first).getHardness() *
                     (mPlayer->getGameMode() == GameMode::Creative ? 10.0f : 0.3f) * factor;
             }
 
             if (mBlockDestructionProgress >= 100.0) {
                 for (auto j = 1; j <= 25; j++) {
-                    Particles::throwParticle(mCurrentSelectedBlock, mCurrentSelectedBlockPos);
+                    Particles::throwParticle(mCurrentSelection->first, mCurrentSelection->second);
                 }
-                World::PickBlock(mCurrentSelectedBlockPos);
+                World::PickBlock(mCurrentSelection->second);
             }
         } else mBlockDestructionProgress = 0.0;
 
-        if (mControls.ShouldDo(ControlContext::Action::PLACE_BLOCK)) { 
+        if (mControlsForUpdate.ShouldDo(ControlContext::Action::PLACE_BLOCK)) {
             if (itemSelection.amount > 0 && isBlock(itemSelection.item)) {
                 //放置方块
                 if (mPlayer->putBlock(blockBefore, itemSelection.item)) {
@@ -174,7 +167,7 @@ public:
                 }
             }
         }
-        mLastSelectedBlockPos = mCurrentSelectedBlockPos;
+        mLastSelectedBlockPos = mCurrentSelection->second;
     }
     void ChunkLoadUnload() const {
         World::sortChunkLoadUnloadList(mPlayer->getPosition());
@@ -222,7 +215,7 @@ public:
         if (isPressed(GLFW_KEY_L)) World::saveAllChunks();
     }
 
-    bool isPressed(int key) { return mControls.KeyPressed(key); }
+    bool isPressed(int key) { return mControlsForUpdate.KeyJustPressed(key); }
 
     void RandomTick() const {
         for (auto &chunk : World::chunks) {
