@@ -5,7 +5,6 @@
 #include <cmath>
 #include <algorithm>
 #include "System/FileSystem.h"
-#include "Player.h"
 
 namespace World {
 

@@ -6,7 +6,6 @@
 #include "Universe/World/Blocks.h"
 #include "Textures.h"
 #include "Renderer/Renderer.h"
-#include "Player.h"
 #include "Universe/World/World.h"
 #include "Renderer/World/WorldRenderer.h"
 #include "Particles.h"
