@@ -1,5 +1,4 @@
 ﻿#include "World.h"
-#include "Textures.h"
 #include "Particles.h"
 #include <cmath>
 #include <algorithm>
@@ -7,13 +6,11 @@
 #include "TerrainGen/Generate.h"
 
 namespace World {
-
     std::string worldname;
     Brightness skylight = 15;         //Sky light level
     Brightness BRIGHTNESSMAX = 15;    //Maximum brightness
     Brightness BRIGHTNESSMIN = 2;     //Mimimum brightness
     Brightness BRIGHTNESSDEC = 1;     //Brightness decrease
-    Chunk *EmptyChunkPtr;
     unsigned int EmptyBuffer;
     int MaxChunkLoads = 64;
     int MaxChunkUnloads = 64;
@@ -42,8 +39,6 @@ namespace World {
         ss.str("");
         ss << "Worlds/" << worldname << "/chunks";
         NEWorld::filesystem::create_directories(ss.str());
-
-        EmptyChunkPtr = (Chunk *) ~0;
 
         cpCachePtr = nullptr;
         cpCacheID = 0;
@@ -167,10 +162,6 @@ namespace World {
 
         auto cptr = GetChunk({cx, cy, cz});
         if (cptr != nullptr) {
-            if (cptr == EmptyChunkPtr) {
-                cptr = AddChunk({cx, cy, cz});
-                cptr->Empty = false;
-            }
             const auto oldbrightness = cptr->GetBrightness(b);
             auto skylighted = true;
             auto yi = y + 1;
@@ -254,10 +245,6 @@ namespace World {
 
     bool ChunkHintMatch(const Int3 c, Chunk *const cptr) noexcept { return cptr && cptr->GetPosition() == c; }
 
-    bool ChunkHintNoneEmptyMatch(const Int3 c, Chunk *const cptr) noexcept {
-        return cptr != EmptyChunkPtr && ChunkHintMatch(c, cptr);
-    }
-
     Block GetBlock(const Int3 v, Block mask, Chunk *const hint) {
         //获取方块
         const auto c = GetChunkPos(v);
@@ -265,7 +252,6 @@ namespace World {
         const auto b = GetBlockPos(v);
         if (ChunkHintMatch(c, hint)) { return hint->GetBlock(b); }
         const auto ci = GetChunk(c);
-        if (ci == EmptyChunkPtr) return Blocks::ENV;
         if (ci) { return ci->GetBlock(b); }
         return mask;
     }
@@ -277,25 +263,19 @@ namespace World {
         const auto b = GetBlockPos(v);
         if (ChunkHintMatch(c, hint)) { return hint->GetBrightness(b); }
         const auto ci = GetChunk(c);
-        if (ci == EmptyChunkPtr) if (c.Y < 0) return BRIGHTNESSMIN; else return skylight;
         if (ci) { return ci->GetBrightness(b); }
         return skylight;
     }
 
     Chunk *GetChunkNoneLazy(const Int3 c) noexcept {
-        auto i = GetChunk(c);
-        if (i == EmptyChunkPtr) {
-            i = AddChunk(c);
-            i->Empty = false;
-        }
-        return i;
+        return GetChunk(c);
     }
 
     void SetBlock(Int3 v, Block block, Chunk *hint) {
         //设置方块
         const auto c = GetChunkPos(v);
         const auto b = GetBlockPos(v);
-        if (ChunkHintNoneEmptyMatch(c, hint)) {
+        if (ChunkHintMatch(c, hint)) {
             hint->SetBlock(b, block);
             updateblock(v.X, v.Y, v.Z, true);
         } else if (!ChunkOutOfBound(c)) {
@@ -310,7 +290,7 @@ namespace World {
         //设置亮度
         const auto c = GetChunkPos(v);
         const auto b = GetBlockPos(v);
-        if (ChunkHintNoneEmptyMatch(c, hint)) {
+        if (ChunkHintMatch(c, hint)) {
             hint->SetBrightness(b, brightness);
         } else if (!ChunkOutOfBound(c)) {
             if (const auto i = GetChunkNoneLazy(c); i) {
@@ -321,7 +301,7 @@ namespace World {
 
     bool chunkUpdated(const Int3 vec) {
         const auto i = GetChunk(vec);
-        if (!i || i == EmptyChunkPtr) return false;
+        if (!i) return false;
         return i->updated;
     }
 

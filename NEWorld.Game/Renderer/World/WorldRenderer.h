@@ -17,6 +17,10 @@ namespace WorldRenderer {
         }
     };
 
+    struct ChunkRenderInfo {
+
+    };
+
     extern std::vector<RenderChunk> RenderChunkList;
 
     int ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curtime, bool frustest = true);

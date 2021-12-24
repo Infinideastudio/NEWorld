@@ -165,17 +165,8 @@ public:
     }
     void ChunkLoadUnload() const {
         World::sortChunkLoadUnloadList(mPlayer->getPosition());
-        for (const auto&[_, chunk] : World::ChunkUnloadList) {
-            const auto c = chunk->GetPosition();
-            World::DeleteChunk(c);
-        }
-        for (const auto&[_, pos]: World::ChunkLoadList) {
-            auto c = World::AddChunk(pos);
-            if (c->Empty) {
-                World::DeleteChunk(pos);
-                World::cpArray.Set(pos, World::EmptyChunkPtr);
-            }
-        }
+        for (const auto&[_, chunk] : World::ChunkUnloadList) World::DeleteChunk(chunk->GetPosition());
+        for (const auto&[_, pos]: World::ChunkLoadList) World::AddChunk(pos);
     }
     
     void HotkeySettingsToggle() {//各种设置切换

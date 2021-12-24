@@ -10,7 +10,6 @@
 extern int viewdistance;
 
 namespace World {
-
     extern std::string worldname;
     const int worldsize = 134217728;
     const int worldheight = 128;
@@ -18,7 +17,6 @@ namespace World {
     extern Brightness BRIGHTNESSMAX;    //Maximum brightness
     extern Brightness BRIGHTNESSMIN;    //Mimimum brightness
     extern Brightness BRIGHTNESSDEC;    //Brightness decree
-    extern Chunk *EmptyChunkPtr;
     extern unsigned int EmptyBuffer;
     extern int MaxChunkLoads;
     extern int MaxChunkUnloads;
