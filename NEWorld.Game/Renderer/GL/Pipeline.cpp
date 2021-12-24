@@ -222,17 +222,14 @@ namespace {
         }
 
         void Draw(int count, int first, int instance) override {
-            if (instance == 1)
-                return glDrawArrays(mMode, first, count);
-            glDrawArraysInstanced(mMode, first, count, instance);
+            glDrawArraysInstancedBaseInstance(mMode, first, count, instance, 0);
         }
 
         void DrawIndexed(int count, int first, int instance) override {
             intptr_t offset = first;
             if (mElement == GL_UNSIGNED_SHORT) offset *= 2;
             if (mElement == GL_UNSIGNED_INT) offset *= 4;
-            if (instance == 1) return glDrawElements(mMode, count, mElement, reinterpret_cast<void *>(offset));
-            glDrawElementsInstanced(mMode, count, mElement, reinterpret_cast<void *>(offset), instance);
+            glDrawElementsInstancedBaseVertexBaseInstance(mMode, count, mElement, nullptr, instance, 0, 0);
         }
 
         void SetUniform(GLint loc, float value) override {

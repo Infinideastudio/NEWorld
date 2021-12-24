@@ -15,7 +15,7 @@ What you see here is the latest attempt to incrementally clean the codebase whil
 
 ## Features
 
-1. C++17
+1. C++20
 2. Optimized for performance
 3. Should be cross-platform (although the development is currently focused in Windows)
 4. Depends on OpenGL 4.5, glew, glfw, Noesis GUI.
@@ -27,5 +27,5 @@ What you see here is the latest attempt to incrementally clean the codebase whil
 1. Clone this repo
 2. Install vcpkg and install dependencies
 3. Download [Noesis](https://www.noesisengine.com/), and put it into `External/Noesis`
-4. Fill the license key into `External/Noesis/Include/NoesisLicense.h`
+4. Draft the license key into `External/Noesis/Include/NoesisLicense.h`
 5. Compile and run!

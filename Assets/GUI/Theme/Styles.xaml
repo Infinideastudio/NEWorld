@@ -637,7 +637,7 @@
               <Setter Property="Fill" Value="{DynamicResource Brush.Thumb.Pressed}" TargetName="Thumb"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-              <Setter Property="Fill" Value="{DynamicResource Brush.Border.DisabledChecked}" TargetName="Thumb"/>
+              <Setter Property="Draft" Value="{DynamicResource Brush.Border.DisabledChecked}" TargetName="Thumb"/>
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>

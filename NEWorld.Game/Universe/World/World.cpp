@@ -1,10 +1,10 @@
 ﻿#include "World.h"
 #include "Textures.h"
-#include "WorldGen.h"
 #include "Particles.h"
 #include <cmath>
 #include <algorithm>
 #include "System/FileSystem.h"
+#include "TerrainGen/Generate.h"
 
 namespace World {
 
@@ -23,7 +23,6 @@ namespace World {
     Chunk *cpCachePtr = nullptr;
     chunkid cpCacheID = 0;
     ChunkPtrArray cpArray;
-    HeightMap HMap;
     int cloud[128][128];
     int rebuiltChunks, rebuiltChunksCount;
     int updatedChunks, updatedChunksCount;
@@ -46,15 +45,10 @@ namespace World {
 
         EmptyChunkPtr = (Chunk *) ~0;
 
-        WorldGen::perlinNoiseInit(3404);
         cpCachePtr = nullptr;
         cpCacheID = 0;
 
         cpArray.Create((viewdistance + 2) * 2);
-
-        HMap.setSize((viewdistance + 2) * 2 * 16);
-        HMap.create();
-
     }
 
     auto LowerChunkBound(chunkid cid) noexcept {
@@ -73,7 +67,8 @@ namespace World {
                 return *chunkIter;
             }
         }
-        const auto newChunk = new Chunk(vec.X, vec.Y, vec.Z, cid);
+        // TODO(Actually try to load from disk)
+        const auto newChunk = TerrainGen::Generate::Get().Run(vec);
         chunks.insert(chunkIter, newChunk);
         cpCacheID = cid;
         cpCachePtr = newChunk;
@@ -174,7 +169,6 @@ namespace World {
         if (cptr != nullptr) {
             if (cptr == EmptyChunkPtr) {
                 cptr = AddChunk({cx, cy, cz});
-                cptr->Load();
                 cptr->Empty = false;
             }
             const auto oldbrightness = cptr->GetBrightness(b);
@@ -292,7 +286,6 @@ namespace World {
         auto i = GetChunk(c);
         if (i == EmptyChunkPtr) {
             i = AddChunk(c);
-            i->Load();
             i->Empty = false;
         }
         return i;
@@ -391,11 +384,6 @@ namespace World {
     }
 
     void saveAllChunks() {
-#ifndef NEWORLD_DEBUG_NO_FILEIO
-        for (auto & chunk : chunks) {
-            chunk->SaveToFile();
-        }
-#endif
     }
 
     void destroyAllChunks() {
@@ -408,7 +396,6 @@ namespace World {
         chunks.shrink_to_fit();
 
         cpArray.Finalize();
-        HMap.destroy();
 
         rebuiltChunks = 0;
         rebuiltChunksCount = 0;

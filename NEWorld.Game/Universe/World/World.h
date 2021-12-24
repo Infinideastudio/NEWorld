@@ -2,7 +2,6 @@
 
 #include "Definitions.h"
 #include "ChunkPtrArray.h"
-#include "HeightMap.h"
 #include "Chunk.h"
 #include "Blocks.h"
 #include "OrderedArray.h"
@@ -26,7 +25,6 @@ namespace World {
     extern int MaxChunkRenders;
 
     extern std::vector<Chunk*> chunks;
-    extern HeightMap HMap;
     extern ChunkPtrArray cpArray;
 
     extern int cloud[128][128];
@@ -52,17 +50,6 @@ namespace World {
     void DeleteChunk(Int3 vec);
 
     Chunk *GetChunk(Int3 vec);
-
-    inline chunkid GetChunkId(Int3 vec) noexcept {
-        if (vec.Y == -128) vec.Y= 0;
-        if (vec.Y <= 0) vec.Y = abs(vec.Y) + (1LL << 7);
-        if (vec.X == -134217728) vec.X = 0;
-        if (vec.X <= 0) vec.X = abs(vec.X) + (1LL << 27);
-        if (vec.Z  == -134217728) vec.Z  = 0;
-        if (vec.Z  <= 0) vec.Z  = abs(vec.Z) + (1LL << 27);
-        return (chunkid(vec.Y) << 56) + (chunkid(vec.X) << 28) + vec.Z ;
-    }
-
 
     constexpr bool ChunkOutOfBound(const Int3 v) noexcept {
         return v.Y < -worldheight || v.Y > worldheight - 1 ||

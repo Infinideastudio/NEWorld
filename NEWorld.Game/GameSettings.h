@@ -1,5 +1,7 @@
-#include <unordered_map>
+#pragma once
 #include <string>
+#include <sstream>
+#include <unordered_map>
 
 class GameSettings {
 public:
@@ -17,7 +19,6 @@ public:
 	void saveOptions();
 
 private:
-
     template<typename T>
     void loadOption(std::unordered_map<std::string, std::string>& m, const char* name, T& value) {
         if (m.find(name) == m.end()) return;
@@ -27,7 +28,7 @@ private:
     }
 
     template<typename T>
-    void saveOption(std::ofstream& out, const char* name, T& value) {
+    void saveOption(std::ostream& out, const char* name, T& value) {
         out << std::string(name) << " " << value << std::endl;
     }
 };

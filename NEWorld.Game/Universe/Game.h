@@ -46,12 +46,6 @@ public:
         const auto shiftedChunkStart = playerChunk - Int3(viewdistance + 2);
         World::cpArray.MoveTo(shiftedChunkStart);
 
-        //HeightMap move
-        if (World::HMap.originX != shiftedChunkStart.X * 16 ||
-            World::HMap.originZ != shiftedChunkStart.Z * 16) {
-            World::HMap.moveTo(shiftedChunkStart.X * 16, shiftedChunkStart.Z * 16);
-        }
-
         if (FirstUpdateThisFrame) {
             ChunkLoadUnload();
         }
@@ -177,7 +171,6 @@ public:
         }
         for (const auto&[_, pos]: World::ChunkLoadList) {
             auto c = World::AddChunk(pos);
-            c->Load(false);
             if (c->Empty) {
                 World::DeleteChunk(pos);
                 World::cpArray.Set(pos, World::EmptyChunkPtr);
