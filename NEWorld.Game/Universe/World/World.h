@@ -17,12 +17,9 @@ namespace World {
     extern Brightness BRIGHTNESSMAX;    //Maximum brightness
     extern Brightness BRIGHTNESSMIN;    //Mimimum brightness
     extern Brightness BRIGHTNESSDEC;    //Brightness decree
-    extern unsigned int EmptyBuffer;
-    extern int MaxChunkLoads;
-    extern int MaxChunkUnloads;
     extern int MaxChunkRenders;
 
-    extern std::vector<Chunk*> chunks;
+    extern std::vector<std::shared_ptr<Chunk>> chunks;
     extern ChunkPtrArray cpArray;
 
     extern int cloud[128][128];

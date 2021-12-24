@@ -11,12 +11,9 @@ namespace World {
     Brightness BRIGHTNESSMAX = 15;    //Maximum brightness
     Brightness BRIGHTNESSMIN = 2;     //Mimimum brightness
     Brightness BRIGHTNESSDEC = 1;     //Brightness decrease
-    unsigned int EmptyBuffer;
-    int MaxChunkLoads = 64;
-    int MaxChunkUnloads = 64;
     int MaxChunkRenders = 1;
 
-    std::vector<Chunk *> chunks{};
+    std::vector<std::shared_ptr<Chunk>> chunks{};
     Chunk *cpCachePtr = nullptr;
     chunkid cpCacheID = 0;
     ChunkPtrArray cpArray;
@@ -59,12 +56,12 @@ namespace World {
             if ((*chunkIter)->GetId() == cid) {
                 printf("[Console][Error]");
                 printf("Chunk(%d,%d,%d)has been loaded,when adding Chunk.\n", vec.X, vec.Y, vec.Z);
-                return *chunkIter;
+                return chunkIter->get();
             }
         }
         // TODO(Actually try to load from disk)
         const auto newChunk = TerrainGen::Generate::Get().Run(vec);
-        chunks.insert(chunkIter, newChunk);
+        chunks.insert(chunkIter, std::shared_ptr<Chunk>(newChunk));
         cpCacheID = cid;
         cpCachePtr = newChunk;
         cpArray.Add(newChunk, vec);
@@ -83,12 +80,12 @@ namespace World {
         if (!chunks.empty()) {
             const auto iter = LowerChunkBound(cid);
             if (iter != chunks.end()) {
-                const auto chunk = *iter;
+                const auto& chunk = *iter;
                 if (chunk->GetId() == cid) {
-                    ret = chunk;
+                    ret = chunk.get();
                     cpCacheID = cid;
                     cpCachePtr = ret;
-                    cpArray.Add(chunk, vec);
+                    cpArray.Add(ret, vec);
                     return ret;
                 }
             }
@@ -101,14 +98,13 @@ namespace World {
         const auto chunkIter = LowerChunkBound(id);
         if (chunkIter != chunks.end()) {
             if ((*chunkIter)->GetId() == id) {
-                const auto chunk = *chunkIter;
-                chunks.erase(chunkIter);
+                const auto chunk = chunkIter->get();
                 if (cpCachePtr == chunk) {
                     cpCacheID = 0;
                     cpCachePtr = nullptr;
                 }
-                delete chunk;
                 cpArray.Remove(vec);
+                chunks.erase(chunkIter);
             }
         }
     }
@@ -346,7 +342,7 @@ namespace World {
         for (auto &chunk : chunks) {
             const auto c = chunk->GetPosition();
             if (ChebyshevDistance(c, cp) > viewdistance)
-                ChunkUnloadList.Insert(DistanceSquared(c * 16 + ccOffset, pos), chunk);
+                ChunkUnloadList.Insert(DistanceSquared(c * 16 + ccOffset, pos), chunk.get());
         }
 
         ChunkLoadList.Clear();
@@ -367,11 +363,6 @@ namespace World {
     }
 
     void destroyAllChunks() {
-        for (auto & chunk : chunks) {
-            if (!chunk->Empty) {
-                delete chunk;
-            }
-        }
         chunks.clear();
         chunks.shrink_to_fit();
 

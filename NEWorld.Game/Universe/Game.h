@@ -51,7 +51,7 @@ public:
         }
 
         //加载动画
-        for (auto cp : World::chunks) {
+        for (const auto& cp : World::chunks) {
             if (cp->loadAnim <= 0.3f) cp->loadAnim = 0.0f;
             else cp->loadAnim *= 0.6f;
         }
