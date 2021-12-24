@@ -11,7 +11,8 @@
 
 class Object;
 
-namespace World {extern std::string worldname;
+namespace World {
+    extern std::string worldname;
     extern Brightness BRIGHTNESSMIN;
     extern Brightness BRIGHTNESSMAX;    //Maximum brightness
     extern Brightness skylight;
@@ -142,10 +143,5 @@ namespace World {extern std::string worldname;
         }
 
         void calcVisible() { visible = TestFrustum.FrustumTest(getRelativeAABB()); }
-
     };
-
-    using ChunkGenerator = void (*)(Chunk&);
-
-    void UseChunkGenerator(ChunkGenerator newGenerator) noexcept;
 }

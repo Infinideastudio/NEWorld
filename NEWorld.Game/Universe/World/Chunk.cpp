@@ -11,15 +11,7 @@ namespace Renderer {
     extern bool AdvancedRender;
 }
 
-namespace {
-    World::ChunkGenerator gChunkGenerator = nullptr;
-}
-
 namespace World {
-    void UseChunkGenerator(const ChunkGenerator newGenerator) noexcept {
-        gChunkGenerator = newGenerator;
-    }
-
     double Chunk::relBaseX, Chunk::relBaseY, Chunk::relBaseZ;
     Frustum Chunk::TestFrustum;
 
@@ -79,5 +71,4 @@ namespace World {
         ret.zmax = static_cast<float>(mBounds.max.values[2] - relBaseZ);
         return ret;
     }
-
 }
