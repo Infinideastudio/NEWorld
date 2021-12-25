@@ -30,12 +30,13 @@ namespace NoesisApp {
 }
 
 class GameView;
+
 // pretty hacky. try to remove later.
-GameView* currentGame = nullptr;
+GameView *currentGame = nullptr;
 
 class GameViewViewModel : public NoesisApp::NotifyPropertyChangedBase {
 public:
-    const char* getDebugInfo() const {
+    const char *getDebugInfo() const {
         return mDebugInfo.c_str();
     }
 
@@ -56,6 +57,7 @@ public:
             OnPropertyChanged("GamePaused");
         }
     }
+
     bool getBagOpen() const {
         return mBagOpen;
     }
@@ -66,9 +68,12 @@ public:
             OnPropertyChanged("BagOpen");
         }
     }
+
     double getHP() const { return mHealth; }
+
     double getHPMax() const { return mHealthMax; }
-    void notifyHPChanges(PlayerEntity* player) {
+
+    void notifyHPChanges(PlayerEntity *player) {
         if (mHealth != player->getHealth() || mHealthMax != player->getMaxHealth()) {
             mHealth = player->getHealth();
             mHealthMax = player->getMaxHealth();
@@ -84,7 +89,7 @@ private:
     bool mBagOpen = false;
     double mHealth, mHealthMax;
 
-    NS_IMPLEMENT_INLINE_REFLECTION(GameViewViewModel, NotifyPropertyChangedBase) {
+NS_IMPLEMENT_INLINE_REFLECTION(GameViewViewModel, NotifyPropertyChangedBase) {
         NsProp("DebugInfo", &GameViewViewModel::getDebugInfo);
         NsProp("GamePaused", &GameViewViewModel::getGamePaused);
         NsProp("BagOpen", &GameViewViewModel::getBagOpen);
@@ -95,13 +100,14 @@ private:
 
 class GameView : public virtual GUI::Scene, public Game {
 private:
-    ControlContext mControls{ MainWindow };
+    ControlContext mControls{MainWindow};
     GUI::FpsCounter mUpsCounter;
-    InventorySlot* mHotBar[10];
-    InventorySlot* mInventory[4][10];
+    InventorySlot *mHotBar[10];
+    InventorySlot *mInventory[4][10];
     Noesis::Ptr<GameViewViewModel> mViewModel;
     std::thread mUpdateThread;
     Frustum mFrustum;
+    WorldRenderer::ChunksRenderer& mChunksRenderer = WorldRenderer::ChunksRenderer::Default();
 
     struct ItemMoveContext {
         int row, col;
@@ -141,7 +147,7 @@ public:
             FirstUpdateThisFrame = true;
             double currentTime = timer();
             if (currentTime - lastUpdate >= 5.0) lastUpdate = currentTime;
-            
+
             while (currentTime - lastUpdate >= 1.0 / MaxUpdateFPS && mUpsCounter.getFPS() < 60) {
                 lastUpdate += 1.0 / MaxUpdateFPS;
                 mUpsCounter.frame();
@@ -159,16 +165,17 @@ public:
         const auto currentTime = timer();
 
         const auto camera = mPlayer->renderUpdate(
-            mControls, 
-            mBagOpened || mViewModel->getGamePaused(),
-            mControlsForUpdate.Current.Time
+                mControls,
+                mBagOpened || mViewModel->getGamePaused(),
+                mControlsForUpdate.Current.Time
         );
 
         const double xpos = camera.position.X, ypos = camera.position.Y, zpos = camera.position.Z;
 
         if (mPlayer->isRunning()) {
             if (FOVyExt < 9.8) {
-                FOVyExt = 10.0f - (10.0f - FOVyExt) * static_cast<float>(pow(0.8, (currentTime - SpeedupAnimTimer) * 30));
+                FOVyExt =
+                        10.0f - (10.0f - FOVyExt) * static_cast<float>(pow(0.8, (currentTime - SpeedupAnimTimer) * 30));
                 SpeedupAnimTimer = currentTime;
             } else FOVyExt = 10.0;
         } else {
@@ -180,23 +187,20 @@ public:
         SpeedupAnimTimer = currentTime;
 
         //更新区块VBO
-        World::sortChunkBuildRenderList(
-            RoundInt(mPlayer->getPosition().X),
-            RoundInt(mPlayer->getPosition().Y), 
-            RoundInt(mPlayer->getPosition().Z)
+        mFrustum.LoadIdentity();
+        mFrustum.SetPerspective(FOVyNormal + FOVyExt, static_cast<float>(windowwidth) / windowheight, 0.05f,
+                                viewdistance * 16.0f);
+        mFrustum.MultRotate(static_cast<float>(camera.lookUpDown), 1, 0, 0);
+        mFrustum.MultRotate(360.0f - static_cast<float>(camera.heading), 0, 1, 0);
+        mFrustum.update();
+        mChunksRenderer.Update(
+                Int3{
+                        RoundInt(mPlayer->getPosition().X),
+                        RoundInt(mPlayer->getPosition().Y),
+                        RoundInt(mPlayer->getPosition().Z)
+                },
+                {xpos, ypos, zpos}, mFrustum
         );
-        const auto brl =
-                World::chunkBuildRenders > World::MaxChunkRenders ? World::MaxChunkRenders : World::chunkBuildRenders;
-        for (auto i = 0; i < brl; i++) {
-            const auto ci = World::chunkBuildRenderList[i][1];
-            World::chunks[ci]->buildRender();
-        }
-
-        //删除已卸载区块的VBO
-        if (!World::vbuffersShouldDelete.empty()) {
-            glDeleteBuffersARB(World::vbuffersShouldDelete.size(), World::vbuffersShouldDelete.data());
-            World::vbuffersShouldDelete.clear();
-        }
 
         glFlush();
 
@@ -208,33 +212,19 @@ public:
         //Renderer::sunlightXrot = 90 * daylight;
         if (Renderer::AdvancedRender) {
             //Build shadow map
-            if (!DebugShadow) ShadowMaps::BuildShadowMap(xpos, ypos, zpos, currentTime);
-            else ShadowMaps::RenderShadowMap(xpos, ypos, zpos, currentTime);
+            if (!DebugShadow) ShadowMaps::BuildShadowMap(mChunksRenderer, xpos, ypos, zpos, currentTime);
+            else ShadowMaps::RenderShadowMap(mChunksRenderer, xpos, ypos, zpos, currentTime);
         }
         glClearColor(skycolorR, skycolorG, skycolorB, 1.0);
         if (!DebugShadow) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_TEXTURE_2D);
 
-        mFrustum.LoadIdentity();
-        mFrustum.SetPerspective(FOVyNormal + FOVyExt, static_cast<float>(windowwidth) / windowheight, 0.05f,
-                                           viewdistance * 16.0f);
-        mFrustum.MultRotate(static_cast<float>(camera.lookUpDown), 1, 0, 0);
-        mFrustum.MultRotate(360.0f - static_cast<float>(camera.heading), 0, 1, 0);
-        mFrustum.update();
-
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glMultMatrixf(mFrustum.getProjMatrix());
         glMatrixMode(GL_MODELVIEW);
-
-        World::calcVisible(xpos, ypos, zpos, mFrustum);
         auto playerChunk = mPlayer->getChunkPosition();
-        WorldRenderer::ListRenderChunks(
-            playerChunk.X, playerChunk.Y, playerChunk.Z,
-            viewdistance,
-            currentTime
-        );
-
+        auto frameRenderer = mChunksRenderer.List(playerChunk, viewdistance); // currentTime
         MutexUnlock(Mutex);
 
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
@@ -245,7 +235,7 @@ public:
         glRotated(360.0 - camera.heading, 0, 1, 0);
         glDisable(GL_BLEND);
         Renderer::EnableShaders();
-        if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 0);
+        if (!DebugShadow) frameRenderer.Render(xpos, ypos, zpos, 0);
         Renderer::DisableShaders();
         glEnable(GL_BLEND);
 
@@ -280,9 +270,9 @@ public:
         glEnable(GL_CULL_FACE);
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
         Renderer::EnableShaders();
-        if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 1);
+        if (!DebugShadow) frameRenderer.Render(xpos, ypos, zpos, 1);
         glDisable(GL_CULL_FACE);
-        if (!DebugShadow) WorldRenderer::RenderChunks(xpos, ypos, zpos, 2);
+        if (!DebugShadow) frameRenderer.Render(xpos, ypos, zpos, 2);
         Renderer::DisableShaders();
 
         glLoadIdentity();
@@ -352,7 +342,7 @@ public:
     }
 
     void RenderEntities() {
-        for (auto& entity : mEntities) entity->render();
+        for (auto &entity: mEntities) entity->render();
     }
 
     void onRender() override {
@@ -407,22 +397,23 @@ public:
         glEnd();
         glDisable(GL_LINE_SMOOTH);
     }
-    
+
     void debugInfo() const {
         std::stringstream ss;
 
         if (DebugMode) {
             ss << "NEWorld v" << VERSION << " [OpenGL " << GLVersionMajor << "." << GLVersionMinor << " "
-                << GLVersionRev << "]" << std::endl
-                << "Fps:" << mFPS.getFPS() << " Ups:" << mUpsCounter.getFPS() << std::endl
-                << "Debug Mode:" << boolstr(DebugMode) << std::endl;
+               << GLVersionRev << "]" << std::endl
+               << "Fps:" << mFPS.getFPS() << " Ups:" << mUpsCounter.getFPS() << std::endl
+               << "Debug Mode:" << boolstr(DebugMode) << std::endl;
             if (Renderer::AdvancedRender) {
                 ss << "Shadow View:" << boolstr(DebugShadow) << std::endl;
             }
-            ss << "X: " << mPlayer->getPosition().X << " Y: " << mPlayer->getPosition().Y << " Z: " << mPlayer->getPosition().Z << std::endl
-                << "Direction:" << mPlayer->getHeading() << " Head:" << mPlayer->getLookUpDown() << std::endl
-                << "Jump speed:" << mPlayer->getCurrentJumpSpeed() << std::endl
-                << "Stats:";
+            ss << "X: " << mPlayer->getPosition().X << " Y: " << mPlayer->getPosition().Y << " Z: "
+               << mPlayer->getPosition().Z << std::endl
+               << "Direction:" << mPlayer->getHeading() << " Head:" << mPlayer->getLookUpDown() << std::endl
+               << "Jump speed:" << mPlayer->getCurrentJumpSpeed() << std::endl
+               << "Stats:";
             if (mPlayer->isFlying()) ss << " Flying";
             if (mPlayer->isOnGround()) ss << " On_ground";
             if (mPlayer->isNearWall()) ss << " Near_wall";
@@ -432,12 +423,13 @@ public:
             auto m = gametime % (30 * 60) / 30;
             auto s = gametime % 30 * 2;
             ss << "Time: "
-                << (h < 10 ? "0" : "") << h << ":"
-                << (m < 10 ? "0" : "") << m << ":"
-                << (s < 10 ? "0" : "") << s
-                << " (" << gametime << "/" << gameTimeMax << ")" << std::endl;
-            ss  << "load:" << World::chunks.size() << " unload:" << World::unloadedChunks
-                << " render:" << WorldRenderer::RenderChunkList.size() << " update:" << World::updatedChunks;
+               << (h < 10 ? "0" : "") << h << ":"
+               << (m < 10 ? "0" : "") << m << ":"
+               << (s < 10 ? "0" : "") << s
+               << " (" << gametime << "/" << gameTimeMax << ")" << std::endl;
+            // TODO(add rendering statistics)
+            ss << "load:" << World::chunks.size() << " unload:" << World::unloadedChunks
+               << " render:??" << " update:" << World::updatedChunks;
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
             ss << c_getChunkPtrFromCPA << " CPA requests" << std::endl;
@@ -445,8 +437,7 @@ public:
             ss << c_getHeightFromHMap << " heightmap requests" << std::endl;
             ss << c_getHeightFromWorldGen << " worldgen requests" << std::endl;
 #endif
-        }
-        else {
+        } else {
             ss << "v" << VERSION << "  Fps:" << mFPS.getFPS();
         }
         mViewModel->setDebugInfo(ss.str());
@@ -536,19 +527,21 @@ public:
 
     void onViewBinding() override {
         mRoot->SetDataContext(mViewModel);
-        mRoot->FindName<Noesis::Button>("Resume")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+        mRoot->FindName<Noesis::Button>("Resume")->Click() += [this](Noesis::BaseComponent *,
+                                                                     const Noesis::RoutedEventArgs &) {
             mViewModel->setGamePaused(false);
             updateThreadPaused = false;
             glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         };
-        mRoot->FindName<Noesis::Button>("Exit")->Click() += [this](Noesis::BaseComponent*, const Noesis::RoutedEventArgs&) {
+        mRoot->FindName<Noesis::Button>("Exit")->Click() += [this](Noesis::BaseComponent *,
+                                                                   const Noesis::RoutedEventArgs &) {
             mViewModel->setGamePaused(false);
             updateThreadPaused = false;
             requestLeave();
             pushScene(Menus::startMenu());
         };
         auto hotbar = mRoot->FindName<Noesis::StackPanel>("Hotbar");
-        for (auto& slot : mHotBar) {
+        for (auto &slot: mHotBar) {
             hotbar->GetChildren()->Add(slot = new InventorySlot());
         }
         auto inventory = mRoot->FindName<Noesis::WrapPanel>("Inventory");
@@ -556,35 +549,36 @@ public:
             for (int i = 0; i < 10; ++i) {
                 inventory->GetChildren()->Add(mInventory[row][i] = new InventorySlot());
 
-                mInventory[row][i]->PreviewMouseUp() += [this, row, i](Noesis::BaseComponent*, const Noesis::MouseButtonEventArgs& args) {
+                mInventory[row][i]->PreviewMouseUp() += [this, row, i](Noesis::BaseComponent *,
+                                                                       const Noesis::MouseButtonEventArgs &args) {
                     auto playerInventory = mPlayer->getInventory();
-                    auto& thisAmount = playerInventory[row][i].amount;
-                    auto& thisItem = playerInventory[row][i].item;
+                    auto &thisAmount = playerInventory[row][i].amount;
+                    auto &thisItem = playerInventory[row][i].item;
                     bool rightClick = args.changedButton == Noesis::MouseButton_Right;
                     if (mInventoryMoveFrom.has_value()) { // if has already selected one
-                        auto& from = mInventoryMoveFrom.value();
-                        auto& fromAmount = playerInventory[from.row][from.col].amount;
-                        auto& fromItem = playerInventory[from.row][from.col].item;
+                        auto &from = mInventoryMoveFrom.value();
+                        auto &fromAmount = playerInventory[from.row][from.col].amount;
+                        auto &fromItem = playerInventory[from.row][from.col].item;
                         if (thisItem != fromItem && thisItem != Blocks::ENV) { // different item - swap
                             std::swap(fromAmount, thisAmount);
                             std::swap(fromItem, thisItem);
                             from.quantity = 0;
-                        }
-                        else { // same item or empty - stack
-                            const auto moveAmount = rightClick ? 1 : std::min(255 - thisAmount, std::min(from.quantity, int(fromAmount)));
+                        } else { // same item or empty - stack
+                            const auto moveAmount = rightClick ? 1 : std::min(255 - thisAmount,
+                                                                              std::min(from.quantity, int(fromAmount)));
                             thisItem = fromItem;
                             fromAmount -= moveAmount;
                             thisAmount += moveAmount;
                             from.quantity -= moveAmount;
                         }
-                    	if (fromAmount == 0) fromItem = Blocks::ENV;
+                        if (fromAmount == 0) fromItem = Blocks::ENV;
                         if (from.quantity == 0) mInventoryMoveFrom.reset(); // done transfer
-                    }
-                    else if (thisAmount != 0) { // if not selected and this one is selectable
+                    } else if (thisAmount != 0) { // if not selected and this one is selectable
                         mInventoryMoveFrom = ItemMoveContext{
-                            row,
-                            i ,
-                            args.changedButton == Noesis::MouseButton_Left ? thisAmount :std::max(thisAmount / 2, 1)
+                                row,
+                                i,
+                                args.changedButton == Noesis::MouseButton_Left ? thisAmount : std::max(thisAmount / 2,
+                                                                                                       1)
                         };
                     }
                 };
@@ -602,7 +596,7 @@ public:
         Mutex = MutexCreate();
         //MutexLock(Mutex);
         currentGame = this;
-        mUpdateThread = std::thread([this] {gameThread(); });
+        mUpdateThread = std::thread([this] { gameThread(); });
         //初始化游戏状态
         InitGame();
         infostream << "Init world...";
@@ -635,11 +629,12 @@ public:
             mHotBar[i]->setItemStack(inventory[3][i]);
             mHotBar[i]->setSelected(i == mPlayer->getCurrentHotbarSelection());
         }
-        for (int row = 0; row < 4;++row) {
+        for (int row = 0; row < 4; ++row) {
             for (int i = 0; i < 10; ++i) {
                 mInventory[row][i]->setItemStack(inventory[row][i]);
-                mInventory[row][i]->setSelected(mInventoryMoveFrom.has_value() && 
-                    row == mInventoryMoveFrom.value().row && i == mInventoryMoveFrom.value().col);
+                mInventory[row][i]->setSelected(mInventoryMoveFrom.has_value() &&
+                                                row == mInventoryMoveFrom.value().row &&
+                                                i == mInventoryMoveFrom.value().col);
             }
         }
         mViewModel->notifyHPChanges(mPlayer);
@@ -651,8 +646,7 @@ public:
                 wasBagOpen = true;
                 glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
             }
-        }
-        else if (wasBagOpen) {
+        } else if (wasBagOpen) {
             wasBagOpen = false;
             glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
@@ -677,10 +671,6 @@ public:
         MutexDestroy(Mutex);
         saveGame();
         World::destroyAllChunks();
-        if (!World::vbuffersShouldDelete.empty()) {
-            glDeleteBuffersARB(World::vbuffersShouldDelete.size(), World::vbuffersShouldDelete.data());
-            World::vbuffersShouldDelete.clear();
-        }
         commands.clear();
     }
 };

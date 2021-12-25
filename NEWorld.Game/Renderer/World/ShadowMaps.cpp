@@ -1,11 +1,14 @@
 #include "ShadowMaps.h"
 #include "Universe/World/World.h"
 #include "Renderer/Renderer.h"
-#include "Renderer/World/WorldRenderer.h"
 
 namespace ShadowMaps {
-    void BuildShadowMap(double xpos, double ypos, double zpos, double curtime) {
-        const auto cx = World::GetChunkPos(static_cast<int>(xpos)), cy = World::GetChunkPos(static_cast<int>(ypos)), cz = World::GetChunkPos(static_cast<int>(zpos));
+    void BuildShadowMap(
+            WorldRenderer::ChunksRenderer &chunksRenderer,
+            double xpos, double ypos, double zpos, double curtime
+    ) {
+        const auto cx = World::GetChunkPos(static_cast<int>(xpos)), cy = World::GetChunkPos(
+                static_cast<int>(ypos)), cz = World::GetChunkPos(static_cast<int>(zpos));
 
         Renderer::StartShadowPass();
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -23,9 +26,9 @@ namespace ShadowMaps {
         glRotated(Renderer::sunlightXrot, 1.0, 0.0, 0.0);
         glRotated(Renderer::sunlightYrot, 0.0, 1.0, 0.0);
 
-        WorldRenderer::ListRenderChunks(cx, cy, cz, Renderer::shadowdist + 1, curtime, false);
+        auto frame = chunksRenderer.List({cx, cy, cz}, Renderer::shadowdist + 1, /*curtime,*/ false);
         MutexUnlock(Mutex);
-        WorldRenderer::RenderChunks(xpos, ypos, zpos, 3);
+        frame.Render(xpos, ypos, zpos, 3);
         MutexLock(Mutex);
 
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
@@ -36,8 +39,12 @@ namespace ShadowMaps {
         glEnable(GL_BLEND);
     }
 
-    void RenderShadowMap(double xpos, double ypos, double zpos, double curtime) {
-        const auto cx = World::GetChunkPos(static_cast<int>(xpos)), cy = World::GetChunkPos(static_cast<int>(ypos)), cz = World::GetChunkPos(static_cast<int>(zpos));
+    void RenderShadowMap(
+            WorldRenderer::ChunksRenderer &chunksRenderer,
+            double xpos, double ypos, double zpos, double curtime
+    ) {
+        const auto cx = World::GetChunkPos(static_cast<int>(xpos)), cy = World::GetChunkPos(
+                static_cast<int>(ypos)), cz = World::GetChunkPos(static_cast<int>(zpos));
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnableVertexAttribArray(4);
@@ -54,9 +61,9 @@ namespace ShadowMaps {
         glRotated(Renderer::sunlightXrot, 1.0, 0.0, 0.0);
         glRotated(Renderer::sunlightYrot, 0.0, 1.0, 0.0);
 
-        WorldRenderer::ListRenderChunks(cx, cy, cz, Renderer::shadowdist + 1, curtime, false);
+        auto frame = chunksRenderer.List({cx, cy, cz}, Renderer::shadowdist + 1, /*curtime,*/ false);
         MutexUnlock(Mutex);
-        WorldRenderer::RenderChunks(xpos, ypos, zpos, 3);
+        frame.Render(xpos, ypos, zpos, 3);
         MutexLock(Mutex);
 
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);

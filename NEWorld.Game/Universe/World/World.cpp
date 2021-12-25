@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "System/FileSystem.h"
 #include "TerrainGen/Generate.h"
+#include "Renderer/World/WorldRenderer.h"
 
 namespace World {
     std::string worldname;
@@ -11,7 +12,6 @@ namespace World {
     Brightness BRIGHTNESSMAX = 15;    //Maximum brightness
     Brightness BRIGHTNESSMIN = 2;     //Mimimum brightness
     Brightness BRIGHTNESSDEC = 1;     //Brightness decrease
-    int MaxChunkRenders = 1;
 
     std::vector<std::shared_ptr<Chunk>> chunks{};
     Chunk *cpCachePtr = nullptr;
@@ -22,7 +22,6 @@ namespace World {
     int updatedChunks, updatedChunksCount;
     int unloadedChunks, unloadedChunksCount;
     int chunkBuildRenderList[256][2];
-    std::vector<unsigned int> vbuffersShouldDelete;
     int chunkBuildRenders;
 
     OrderedList<int, Int3, 64> ChunkLoadList{};
@@ -61,7 +60,8 @@ namespace World {
         }
         // TODO(Actually try to load from disk)
         const auto newChunk = TerrainGen::Generate::Get().Run(vec);
-        chunks.insert(chunkIter, std::shared_ptr<Chunk>(newChunk));
+        const auto& ptr = *chunks.insert(chunkIter, std::shared_ptr<Chunk>(newChunk));
+        WorldRenderer::ChunksRenderer::Default().Add(ptr);
         cpCacheID = cid;
         cpCachePtr = newChunk;
         cpArray.Add(newChunk, vec);
@@ -306,34 +306,8 @@ namespace World {
             i->updated = value;
         }
     }
-    
+
     static constexpr auto ccOffset = Int3(7); // offset to a chunk center
-
-    void sortChunkBuildRenderList(int xpos, int ypos, int zpos) {
-        auto p = 0;
-        const auto pos = Int3{xpos, ypos, zpos};
-        const auto cp = GetChunkPos(pos);
-
-        for (auto ci = 0; ci < chunks.size(); ci++) {
-            if (!chunks[ci]->updated) continue;
-            const auto c = chunks[ci]->GetPosition();
-            if (ChebyshevDistance(c, cp) > viewdistance) continue;
-            const auto dist = DistanceSquared(c * 16 + ccOffset, pos);
-            for (auto i = 0; i < MaxChunkRenders; i++) {
-                if (dist < chunkBuildRenderList[i][0] || p <= i) {
-                    for (auto j = MaxChunkRenders - 1; j >= i + 1; j--) {
-                        chunkBuildRenderList[j][0] = chunkBuildRenderList[j - 1][0];
-                        chunkBuildRenderList[j][1] = chunkBuildRenderList[j - 1][1];
-                    }
-                    chunkBuildRenderList[i][0] = dist;
-                    chunkBuildRenderList[i][1] = ci;
-                    break;
-                }
-            }
-            if (p < MaxChunkRenders) p++;
-        }
-        chunkBuildRenders = p;
-    }
 
     void sortChunkLoadUnloadList(Int3 pos) {
         const auto cp = GetChunkPos(pos);
@@ -352,11 +326,6 @@ namespace World {
             if (!cpArray.Get(c))
                 ChunkLoadList.Insert(DistanceSquared(c * 16 + ccOffset, pos), c);
         });
-    }
-
-    void calcVisible(double xpos, double ypos, double zpos, Frustum &frus) {
-        Chunk::setRelativeBase(xpos, ypos, zpos, frus);
-        for (auto & chunk : chunks) chunk->calcVisible();
     }
 
     void saveAllChunks() {

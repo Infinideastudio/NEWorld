@@ -1,29 +1,40 @@
 #pragma once
 
-#include "Universe/World/World.h"
 #include "Renderer/Renderer.h"
+#include "ChunkRenderer.h"
+#include <Temp/Vector.h>
 
 namespace WorldRenderer {
-    struct RenderChunk {
-        Int3 position;
-        vtxCount vertexes[4];
-        VBOID vbuffers[4];
-        double loadAnim;
+    class FrameChunksRenderer {
+    public:
+        explicit FrameChunksRenderer(
+                const std::vector<ChunkRender> &list,
+                Int3 cPos, int renderDist, bool frus = true
+        );
 
-        RenderChunk(World::Chunk *c, double TimeDelta) :
-                position(c->GetPosition()), loadAnim(c->loadAnim * pow(0.6, TimeDelta)) {
-            memcpy(vbuffers, c->vbuffer, sizeof(vbuffers));
-            memcpy(vertexes, c->vertexes, sizeof(vertexes));
+        void Render(double x, double y, double z, int buffer);
+    private:
+        temp::vector<const ChunkRender *> mFiltered;
+    };
+
+    class ChunksRenderer {
+    public:
+        void Update(Int3 position, Double3 camera, Frustum &frus);
+
+        auto List(Int3 cPos, int renderDist, bool frus = true) {
+            return FrameChunksRenderer(mChunks, cPos, renderDist, frus);
         }
+
+        void Add(const std::shared_ptr<World::Chunk>& c) {
+            mChunks.emplace_back(c);
+        }
+
+        // TODO(Try to remove this)
+        static ChunksRenderer& Default() {
+            static ChunksRenderer instance{};
+            return instance;
+        }
+    private:
+        std::vector<ChunkRender> mChunks;
     };
-
-    struct ChunkRenderInfo {
-
-    };
-
-    extern std::vector<RenderChunk> RenderChunkList;
-
-    int ListRenderChunks(int cx, int cy, int cz, int renderdistance, double curtime, bool frustest = true);
-
-    void RenderChunks(double x, double y, double z, int buffer);
 }

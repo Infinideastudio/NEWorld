@@ -1,4 +1,4 @@
-﻿#include "Textures.h"
+#include "Textures.h"
 #include "Items.h"
 #include "Universe/World/Blocks.h"
 #include <cstring>
@@ -224,51 +224,6 @@ namespace Textures {
         return ret;
     }
 
-    TextureID LoadBlock3DTexture(std::string Filename, std::string MkFilename) {
-        const auto sz = BLOCKTEXTURE_UNITSIZE, cnt = BLOCKTEXTURE_UNITS * BLOCKTEXTURE_UNITS;
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_TEXTURE_3D);
-        TextureID ret;
-        TEXTURE_RGBA image;
-        LoadRGBAImage(image, Filename, MkFilename);
-        auto src = image.buffer.get();
-        const auto cur = new ubyte[sz * sz * cnt * 4];
-        glGenTextures(1, &ret);
-        glBindTexture(GL_TEXTURE_3D, ret);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_BASE_LEVEL, 0);
-        //glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, mipmapLevel);
-        //glTexParameterf(GL_TEXTURE_3D, GL_TEXTURE_MIN_LOD, 0);
-        //glTexParameterf(GL_TEXTURE_3D, GL_TEXTURE_MAX_LOD, mipmapLevel);
-        //glTexEnvf(GL_TEXTURE_FILTER_CONTROL, GL_TEXTURE_LOD_BIAS, 0.0);
-        glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA, sz, sz, cnt, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.buffer.get());
-        /*
-        for (int i = 1; i <= mipmapLevel; i++) {
-            scale *= 2; cursize = sz / scale;
-            for (int z = 0; z < cnt; z++) {
-                for (int x = 0; x < cursize; x++) for (int y = 0; y < cursize; y++) {
-                    for (int col = 0; col < 4; col++) {
-                        sum = 0;
-                        for (int xx = 0; xx < scale; xx++) for (int yy = 0; yy < scale; yy++) {
-                            sum += src[(z*sz*sz + (x * scale + xx) * sz + y * scale + yy) * 4 + col];
-                        }
-                        cur[(z*cursize*cursize + x*cursize + y) * 4 + col] = sum / (scale*scale);
-                    }
-                }
-            }
-            glTexImage3D(GL_TEXTURE_3D, i, GL_RGBA, cursize, cursize, cnt / scale, 0, GL_RGBA, GL_UNSIGNED_BYTE, cur);
-        }
-        */
-        glDisable(GL_TEXTURE_3D);
-        glEnable(GL_TEXTURE_2D);
-        delete[] cur;
-        return ret;
-    }
-
     void SaveRGBImage(std::string filename, TEXTURE_RGB &image) {
         BITMAPFILEHEADER bitmapfileheader;
         BITMAPINFOHEADER bitmapinfoheader;
@@ -277,7 +232,6 @@ namespace Textures {
         bitmapinfoheader.biHeight = image.sizeY;
         bitmapinfoheader.biSizeImage = image.sizeX * image.sizeY * 3;
         for (unsigned int i = 0; i != image.sizeX * image.sizeY * 3; i += 3) {
-            //°ÑRGB¸ñÊ½×ª»»ÎªBGR¸ñÊ½
             const auto t = image.buffer.get()[i];
             image.buffer.get()[i] = image.buffer.get()[i + 2];
             image.buffer.get()[i + 2] = t;

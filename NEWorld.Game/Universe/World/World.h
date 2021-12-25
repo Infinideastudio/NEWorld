@@ -17,7 +17,6 @@ namespace World {
     extern Brightness BRIGHTNESSMAX;    //Maximum brightness
     extern Brightness BRIGHTNESSMIN;    //Mimimum brightness
     extern Brightness BRIGHTNESSDEC;    //Brightness decree
-    extern int MaxChunkRenders;
 
     extern std::vector<std::shared_ptr<Chunk>> chunks;
     extern ChunkPtrArray cpArray;
@@ -26,8 +25,6 @@ namespace World {
     extern int rebuiltChunks, rebuiltChunksCount;
     extern int updatedChunks, updatedChunksCount;
     extern int unloadedChunks, unloadedChunksCount;
-    extern int chunkBuildRenderList[256][2];
-    extern std::vector<unsigned int> vbuffersShouldDelete;
     extern int chunkBuildRenders;
     extern OrderedList<int, Int3, 64> ChunkLoadList;
     extern OrderedList<int, Chunk*, 64, std::greater> ChunkUnloadList;
@@ -85,8 +82,6 @@ namespace World {
     void sortChunkBuildRenderList(int xpos, int ypos, int zpos);
 
     void sortChunkLoadUnloadList(Int3 pos);
-
-    void calcVisible(double xpos, double ypos, double zpos, Frustum &frus);
 
     void saveAllChunks();
 

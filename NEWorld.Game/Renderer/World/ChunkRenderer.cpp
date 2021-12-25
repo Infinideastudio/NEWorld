@@ -3,14 +3,15 @@
 #include "Universe/World/World.h"
 #include "Renderer/BufferBuilder.h"
 
-namespace ChunkRenderer {
+namespace WorldRenderer {
     using World::getbrightness;
 
     enum Face {
         Front, Back, Right, Left, Top, Bottom
     };
 
-    void renderblock(Renderer::BufferBuilder<>& builder, int x, int y, int z, World::Chunk *chunkptr) {
+    //TODO(simplify this function)
+    static void renderblock(Renderer::BufferBuilder<>& builder, int x, int y, int z, World::Chunk *chunkptr) {
         double colors, color1, color2, color3, color4, tcx, tcy, size, EPS = 0.0;
         const auto[gx, gy, gz] = (chunkptr->GetPosition() * 16 + Int3(x, y, z)).Data;
         Block blk[7] = {(chunkptr->GetBlock({x, y, z})),
@@ -318,7 +319,7 @@ namespace ChunkRenderer {
         }
     }
 
-    void RenderPrimitive_Depth(Renderer::BufferBuilder<>& builder, QuadPrimitive_Depth &p) {
+    static void RenderPrimitive_Depth(Renderer::BufferBuilder<>& builder, QuadPrimitive_Depth &p) {
         const auto x = p.x, y = p.y, z = p.z, length = p.length;
         switch (p.direction) {
             case 0:
@@ -342,25 +343,7 @@ namespace ChunkRenderer {
         }
     }
 
-    void RenderChunk(World::Chunk *c) {
-        Renderer::BufferBuilder b0{}, b1{}, b2{};
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 16; y++) {
-                for (int z = 0; z < 16; z++) {
-                    const auto curr = c->GetBlock({x, y, z});
-                    if (curr == Blocks::ENV) continue;
-                    if (!BlockInfo(curr).isTranslucent()) renderblock(b0, x, y, z, c);
-                    if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(b1, x, y, z, c);
-                    if (!BlockInfo(curr).isSolid()) renderblock(b2, x, y, z, c);
-                }
-            }
-        }
-        b0.flush(c->vbuffer[0], c->vertexes[0]);
-        b1.flush(c->vbuffer[1], c->vertexes[1]);
-        b2.flush(c->vbuffer[2], c->vertexes[2]);
-    }
-
-    void RenderDepthModel(World::Chunk *c) {
+    static void RenderDepthModel(World::Chunk *c, ChunkRender& r) {
         const auto cp = c->GetPosition();
         auto x = 0, y = 0, z = 0;
         QuadPrimitive_Depth cur;
@@ -420,6 +403,43 @@ namespace ChunkRenderer {
                     }
                 }
         }
-        builder.flush(c->vbuffer[3], c->vertexes[3]);
+        builder.flush(r.Renders[3].Buffer, r.Renders[3].Count);
+    }
+
+    static void RenderChunk(World::Chunk *c, ChunkRender& r) {
+        Renderer::BufferBuilder b0{}, b1{}, b2{};
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    const auto curr = c->GetBlock({x, y, z});
+                    if (curr == Blocks::ENV) continue;
+                    if (!BlockInfo(curr).isTranslucent()) renderblock(b0, x, y, z, c);
+                    if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(b1, x, y, z, c);
+                    if (!BlockInfo(curr).isSolid()) renderblock(b2, x, y, z, c);
+                }
+            }
+        }
+        b0.flush(r.Renders[0].Buffer, r.Renders[0].Count);
+        b0.flush(r.Renders[1].Buffer, r.Renders[1].Count);
+        b0.flush(r.Renders[2].Buffer, r.Renders[2].Count);
+    }
+
+    bool ChunkRender::TryRebuild(const std::shared_ptr<World::Chunk> &c) {
+        for (auto x = -1; x <= 1; x++) {
+            for (auto y = -1; y <= 1; y++) {
+                for (auto z = -1; z <= 1; z++) {
+                    if (x == 0 && y == 0 && z == 0) continue;
+                    if (World::ChunkOutOfBound(c->GetPosition() + Int3{x, y, z})) continue;
+                    if (!World::ChunkLoaded(c->GetPosition() + Int3{x, y, z})) return false;
+                }
+            }
+        }
+
+        World::rebuiltChunks++;
+        World::updatedChunks++;
+
+        RenderChunk(c.get(), *this);
+        if (Renderer::AdvancedRender) RenderDepthModel(c.get(), *this);
+        return Built = true;
     }
 }

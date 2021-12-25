@@ -75,10 +75,7 @@ namespace World {
     public:
         Chunk(Int3 pos, ChunkData *data, bool isShared = false) noexcept:
                 mPos(pos), mId(GetChunkId(pos)), mLazy(isShared), mData(data),
-                Modified(false), Empty(false), updated(false),
-                renderBuilt(false), loadAnim(0.0) {
-            memset(vertexes, 0, sizeof(vertexes));
-            memset(vbuffer, 0, sizeof(vbuffer));
+                Modified(false), Empty(false), updated(false), loadAnim(0.0) {
             mBounds = getBaseAABB();
         }
 
@@ -86,17 +83,10 @@ namespace World {
 
         [[nodiscard]] Int3 GetPosition() const noexcept { return mPos; }
 
-        bool Empty, updated, renderBuilt, Modified;
-        vtxCount vertexes[4];
-        VBOID vbuffer[4];
+        bool Empty, updated, Modified;
         double loadAnim;
-        bool visible;
 
         [[nodiscard]] chunkid GetId() const noexcept { return mId; }
-
-        void buildRender();
-
-        void destroyRender();
 
         Block GetBlock(const Int3 vec) noexcept { return mData->GetBlock(vec); }
 
@@ -142,6 +132,6 @@ namespace World {
             if (iter != mAttached.end()) mAttached.erase(iter);
         }
 
-        void calcVisible() { visible = TestFrustum.FrustumTest(getRelativeAABB()); }
+        bool calcVisible() { return TestFrustum.FrustumTest(getRelativeAABB()); }
     };
 }

@@ -185,6 +185,15 @@ void Cursor(const Vec3<T> &min, const Vec3<T> &max, F func) noexcept {
                 func(vec);
 }
 
+template<class T, class F>
+void CursorEQ(const Vec3<T> &min, const Vec3<T> &max, F func) noexcept {
+    Vec3<T> vec{};
+    for (vec.X = min.X; vec.X <= max.X; ++vec.X)
+        for (vec.Y = min.Y; vec.Y <= max.Y; ++vec.Y)
+            for (vec.Z = min.Z; vec.Z <= max.Z; ++vec.Z)
+                func(vec);
+}
+
 using Char3 = Vec3<int8_t>;
 using Byte3 = Vec3<uint8_t>;
 using Short3 = Vec3<int16_t>;

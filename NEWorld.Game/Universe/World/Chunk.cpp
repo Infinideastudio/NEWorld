@@ -17,42 +17,6 @@ namespace World {
 
     Chunk::~Chunk() {
         unloadedChunksCount++;
-        destroyRender();
-    }
-
-    void Chunk::buildRender() {
-        for (auto x = -1; x <= 1; x++) {
-            for (auto y = -1; y <= 1; y++) {
-                for (auto z = -1; z <= 1; z++) {
-                    if (x == 0 && y == 0 && z == 0) continue;
-                    if (ChunkOutOfBound(GetPosition() + Int3{x, y, z})) continue;
-                    if (!ChunkLoaded(GetPosition() + Int3{x, y, z})) return;
-                }
-            }
-        }
-
-        rebuiltChunks++;
-        updatedChunks++;
-
-        if (!renderBuilt) {
-            renderBuilt = true;
-            loadAnim = static_cast<float>(GetPosition().Y) * 16.0f + 16.0f;
-        }
-
-        ChunkRenderer::RenderChunk(this);
-        if (Renderer::AdvancedRender) ChunkRenderer::RenderDepthModel(this);
-
-        updated = false;
-    }
-
-    void Chunk::destroyRender() {
-        if (!renderBuilt) return;
-        if (vbuffer[0] != 0) vbuffersShouldDelete.push_back(vbuffer[0]);
-        if (vbuffer[1] != 0) vbuffersShouldDelete.push_back(vbuffer[1]);
-        if (vbuffer[2] != 0) vbuffersShouldDelete.push_back(vbuffer[2]);
-        if (vbuffer[3] != 0) vbuffersShouldDelete.push_back(vbuffer[3]);
-        vbuffer[0] = vbuffer[1] = vbuffer[2] = vbuffer[3] = 0;
-        renderBuilt = false;
     }
 
     BoundingBox Chunk::getBaseAABB() {

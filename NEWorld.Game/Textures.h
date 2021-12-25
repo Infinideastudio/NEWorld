@@ -59,8 +59,6 @@ namespace Textures {
 
     TextureID LoadRGBATexture(std::string Filename, std::string MkFilename);
 
-    TextureID LoadBlock3DTexture(std::string Filename, std::string MkFilename);
-
     void SaveRGBImage(std::string filename, TEXTURE_RGB &image);
 
     void Build2DMipmaps(GLenum format, int w, int h, int level, const ubyte *src);
