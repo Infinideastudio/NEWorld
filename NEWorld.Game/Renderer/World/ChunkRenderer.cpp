@@ -420,8 +420,8 @@ namespace WorldRenderer {
             }
         }
         b0.flush(r.Renders[0].Buffer, r.Renders[0].Count);
-        b0.flush(r.Renders[1].Buffer, r.Renders[1].Count);
-        b0.flush(r.Renders[2].Buffer, r.Renders[2].Count);
+        b1.flush(r.Renders[1].Buffer, r.Renders[1].Count);
+        b2.flush(r.Renders[2].Buffer, r.Renders[2].Count);
     }
 
     bool ChunkRender::TryRebuild(const std::shared_ptr<World::Chunk> &c) {
@@ -440,6 +440,7 @@ namespace WorldRenderer {
 
         RenderChunk(c.get(), *this);
         if (Renderer::AdvancedRender) RenderDepthModel(c.get(), *this);
+        c->updated = false;
         return Built = true;
     }
 }
