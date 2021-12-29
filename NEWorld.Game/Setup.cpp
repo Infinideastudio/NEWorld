@@ -186,7 +186,9 @@ void loadTextures() {
                                             "./Assets/Textures/Player/skinmask_xiaoqiao.bmp");
 
     for (auto gloop = 1; gloop <= 10; gloop++) {
-        const auto path = "./Assets/Textures/Blocks/destroy_" + itos(gloop) + ".bmp";
+        std::string result;
+        result = std::to_string(gloop);
+        const auto path = "./Assets/Textures/Blocks/destroy_" + result + ".bmp";
         DestroyImage[gloop] = Textures::LoadRGBATexture(path, path);
     }
 

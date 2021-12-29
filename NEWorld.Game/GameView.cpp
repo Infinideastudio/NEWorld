@@ -427,9 +427,9 @@ public:
                << (m < 10 ? "0" : "") << m << ":"
                << (s < 10 ? "0" : "") << s
                << " (" << gametime << "/" << gameTimeMax << ")" << std::endl;
-            // TODO(add rendering statistics)
             ss << "load:" << World::chunks.size() << " unload:" << World::unloadedChunks
-               << " render:??" << " update:" << World::updatedChunks;
+               << " render:" << WorldRenderer::chunkBuildRenders
+               << " update:" << World::updatedChunks;
 
 #ifdef NEWORLD_DEBUG_PERFORMANCE_REC
             ss << c_getChunkPtrFromCPA << " CPA requests" << std::endl;

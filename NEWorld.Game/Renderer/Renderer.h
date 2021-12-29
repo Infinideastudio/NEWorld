@@ -21,8 +21,6 @@ namespace Renderer {
     extern unsigned int DepthTexture;
     extern int ActivePipeline;
 
-    void BatchStart(int tc, int cc, int ac) noexcept;
-
     void RenderBufferDirect(VBOID buffer, vtxCount vtxs);
 
     Pipeline& GetPipeline();

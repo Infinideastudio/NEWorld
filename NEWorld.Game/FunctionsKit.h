@@ -27,22 +27,6 @@ inline double rnd() { return static_cast<double>(fastRand()) / static_cast<doubl
 
 inline int RoundInt(double d) { return static_cast<int>(lround(d)); }
 
-inline std::string itos(int i) {
-    std::stringstream ss;
-    ss << i;
-    return ss.str();
-}
-
-inline bool beginWith(const std::string &str, const std::string &begin) {
-    if (str.size() < begin.size()) return false;
-    return str.substr(0, begin.size()) == begin;
-}
-
-inline bool beginWith(std::string_view str, std::string_view begin) {
-    if (str.size() < begin.size()) return false;
-    return str.substr(0, begin.size()) == begin;
-}
-
 void DebugWarning(const std::string &msg);
 
 void DebugError(const std::string &msg);

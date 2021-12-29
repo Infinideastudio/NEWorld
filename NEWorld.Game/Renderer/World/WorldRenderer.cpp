@@ -2,7 +2,8 @@
 #include <queue>
 
 namespace WorldRenderer {
-    int MaxChunkRenders = 1;
+    int MaxChunkRenders = 4;
+    int chunkBuildRenders;
 
     static constexpr auto ccOffset = Int3(7); // offset to a chunk center
 
@@ -20,13 +21,13 @@ namespace WorldRenderer {
         };
         // Sort the update priority list, also update the frustum results
         int invalidated = 0;
-        World::Chunk::setRelativeBase(camera.X, camera.Y, camera.Z, frus);
+        World::Chunk::setRelativeBase(camera.X, camera.Y, camera.Z);
         {
             const auto cp = World::GetChunkPos(position);
             std::priority_queue<SortEntry, temp::vector<SortEntry>, SortCmp> candidate;
             for (auto &entry: mChunks) {
                 if (auto lock = entry.Ref.lock(); lock) {
-                    entry.Visiable = lock->calcVisible();
+                    entry.Visiable = frus.FrustumTest(lock->getRelativeAABB());
                     if (!lock->updated) continue;
                     const auto c = lock->GetPosition();
                     if (ChebyshevDistance(c, cp) > viewdistance) continue;
@@ -41,6 +42,7 @@ namespace WorldRenderer {
                 if (top.Render->TryRebuild(top.Locked)) ++released;
                 candidate.pop();
             }
+            chunkBuildRenders = released;
         }
         // purge the table if there are too many dead items.
         temp::vector<VBOID> toRelease;

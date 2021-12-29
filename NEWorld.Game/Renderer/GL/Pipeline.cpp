@@ -40,7 +40,7 @@ namespace {
             std::getline(input, cur);
             std::string_view lineView{cur};
             if (cur.empty()) continue;
-            if (beginWith(lineView, "#")) { //处理NEWorld预处理器标志
+            if (lineView.starts_with( "#")) { //处理NEWorld预处理器标志
                 line.str(cur);
                 line >> macro;
                 if (macro == "##NEWORLD_SHADER_DEFINES") {

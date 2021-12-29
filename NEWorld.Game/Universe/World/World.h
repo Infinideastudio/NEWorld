@@ -25,7 +25,6 @@ namespace World {
     extern int rebuiltChunks, rebuiltChunksCount;
     extern int updatedChunks, updatedChunksCount;
     extern int unloadedChunks, unloadedChunksCount;
-    extern int chunkBuildRenders;
     extern OrderedList<int, Int3, 64> ChunkLoadList;
     extern OrderedList<int, Chunk*, 64, std::greater> ChunkUnloadList;
 
@@ -78,8 +77,6 @@ namespace World {
     bool chunkUpdated(Int3 vec);
 
     void setChunkUpdated(int x, int y, int z, bool value);
-
-    void sortChunkBuildRenderList(int xpos, int ypos, int zpos);
 
     void sortChunkLoadUnloadList(Int3 pos);
 

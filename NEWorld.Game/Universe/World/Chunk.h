@@ -71,7 +71,6 @@ namespace World {
         BoundingBox mBounds;
         std::vector<std::shared_ptr<PmrBase>> mAttached {};
         static double relBaseX, relBaseY, relBaseZ;
-        static Frustum TestFrustum;
     public:
         Chunk(Int3 pos, ChunkData *data, bool isShared = false) noexcept:
                 mPos(pos), mId(GetChunkId(pos)), mLazy(isShared), mData(data),
@@ -110,11 +109,10 @@ namespace World {
             Modified = true;
         }
 
-        static void setRelativeBase(double x, double y, double z, Frustum &frus) {
+        static void setRelativeBase(double x, double y, double z) {
             relBaseX = x;
             relBaseY = y;
             relBaseZ = z;
-            TestFrustum = frus;
         }
 
         auto RawUnsafe() noexcept { return mData; }
@@ -131,7 +129,5 @@ namespace World {
             auto iter = std::find(mAttached.begin(), mAttached.end(), attachment);
             if (iter != mAttached.end()) mAttached.erase(iter);
         }
-
-        bool calcVisible() { return TestFrustum.FrustumTest(getRelativeAABB()); }
     };
 }

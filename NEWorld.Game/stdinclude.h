@@ -1,5 +1,4 @@
 #pragma once
-#define NERDMODE1
 
 #include <thread>
 #include <mutex>

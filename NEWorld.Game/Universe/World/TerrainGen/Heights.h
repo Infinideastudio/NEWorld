@@ -50,7 +50,7 @@ namespace World::TerrainGen {
         Noise mNoise;
         std::mutex mMutex;
         // TODO(Add a cleanup tick)
-        tsl::hopscotch_map<uint64, std::weak_ptr<Section>> mSections {};
+        tsl::hopscotch_map<uint64_t, std::weak_ptr<Section>> mSections {};
 
         static uint64_t MakeKey(int32_t cx, int32_t cz) noexcept {
             const auto uCx = std::bit_cast<uint32_t>(cx);

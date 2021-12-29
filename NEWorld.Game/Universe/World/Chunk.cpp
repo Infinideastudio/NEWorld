@@ -1,19 +1,8 @@
 #include "Chunk.h"
 #include "World.h"
 
-namespace ChunkRenderer {
-    void RenderChunk(World::Chunk *c);
-
-    void RenderDepthModel(World::Chunk *c);
-}
-
-namespace Renderer {
-    extern bool AdvancedRender;
-}
-
 namespace World {
     double Chunk::relBaseX, Chunk::relBaseY, Chunk::relBaseZ;
-    Frustum Chunk::TestFrustum;
 
     Chunk::~Chunk() {
         unloadedChunksCount++;

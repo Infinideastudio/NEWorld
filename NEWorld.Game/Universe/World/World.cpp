@@ -21,8 +21,6 @@ namespace World {
     int rebuiltChunks, rebuiltChunksCount;
     int updatedChunks, updatedChunksCount;
     int unloadedChunks, unloadedChunksCount;
-    int chunkBuildRenderList[256][2];
-    int chunkBuildRenders;
 
     OrderedList<int, Int3, 64> ChunkLoadList{};
     OrderedList<int, Chunk *, 64, std::greater> ChunkUnloadList{};
@@ -348,8 +346,6 @@ namespace World {
 
         ChunkLoadList.Clear();
         ChunkUnloadList.Clear();
-
-        chunkBuildRenders = 0;
     }
 
     void buildtree(Int3 pos) {

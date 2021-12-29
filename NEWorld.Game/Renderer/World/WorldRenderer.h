@@ -37,4 +37,6 @@ namespace WorldRenderer {
     private:
         std::vector<ChunkRender> mChunks;
     };
+
+    extern int chunkBuildRenders;
 }

@@ -39,12 +39,6 @@ void ApplicationAfterLaunch() {
 }
 #include "Universe/Entity/Entity.h"
 int main() {
-    auto test = MessageBus::Default().Get<NullArg>("TEST");
-    {
-        auto del = test->Listen([](void*, const NullArg&) noexcept { std::cout << "Test Invoke" << std::endl; });
-        test->Send(nullptr, 0);
-	}
-    test->Send(nullptr, 0);
     ApplicationBeforeLaunch();
     windowwidth = DefaultWindowWidth;
     windowheight = DefaultWindowHeight;
