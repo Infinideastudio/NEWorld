@@ -10,7 +10,7 @@ namespace World::TerrainGen {
             Cursor(Int3{0}, Int3{15}, [this](auto p) noexcept {
                 mSkyChunk.SetBlock(p, Blocks::ENV);
                 mSkyChunk.SetBrightness(p, skylight);
-                mLavaChunk.SetBlock(p, Blocks::ENV);
+                mLavaChunk.SetBlock(p, Blocks::LAVA);
                 mLavaChunk.SetBrightness(p, skylight);
             });
         }

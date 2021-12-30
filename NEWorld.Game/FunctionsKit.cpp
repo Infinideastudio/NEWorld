@@ -24,28 +24,6 @@ std::vector<std::string> split(const std::string &str, const std::string &patter
     return ret;
 }
 
-void DebugWarning(const std::string &msg) {
-#ifdef NEWORLD_WIN32
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-    printf("[Debug][Warning]");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    printf("%s\n", msg.c_str());
-#else
-    printf("[Debug][Warning]%s\n", msg.c_str());
-#endif
-}
-
-void DebugError(const std::string &msg) {
-#ifdef NEWORLD_WIN32
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
-    printf("[Debug][Error]");
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    printf("%s\n", msg.c_str());
-#else
-    printf("[Debug][Error]%s\n", msg.c_str());
-#endif
-}
-
 unsigned int MByteToWChar(wchar_t *dst, const char *src, unsigned int n) {
 #ifdef NEWORLD_WIN32
     return MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, src, n, dst, n);

@@ -27,23 +27,6 @@ inline double rnd() { return static_cast<double>(fastRand()) / static_cast<doubl
 
 inline int RoundInt(double d) { return static_cast<int>(lround(d)); }
 
-void DebugWarning(const std::string &msg);
-
-void DebugError(const std::string &msg);
-
-template<class T>
-void conv(const std::string &str, T &ret) {
-    std::stringstream s(str);
-    s >> ret;
-}
-
-template<class T>
-T clamp(T x, T min, T max) {
-    if (x < min) return min;
-    if (x > max) return max;
-    return x;
-}
-
 inline Mutex_t MutexCreate() { return new std::mutex; }
 
 inline void MutexDestroy(Mutex_t _hMutex) { delete _hMutex; }

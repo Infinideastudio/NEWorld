@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include <algorithm>
-#include "Temp/String.h"
+#include <Temp/String.h>
+#include <Common/Logger.h>
 #include "Frustum.h"
 #include "BufferBuilder.h"
 
@@ -63,12 +64,12 @@ namespace Renderer {
 
     void RenderBufferDirect(VBOID buffer, vtxCount vtxs) {
         pipelines[ActivePipeline]->BindVertexBuffer(1, buffer, 0);
-        pipelines[ActivePipeline]->DrawIndexed(vtxs + vtxs/2, 0);
+        pipelines[ActivePipeline]->DrawIndexed(vtxs + vtxs / 2, 0);
     }
 
     Pipeline BuildPipeline(
-            const std::string& vshPath, const std::string& fshPath,
-            int tc, int cc, int ac, bool useAc, const std::vector<std::string>& defines = {}
+            const std::string &vshPath, const std::string &fshPath,
+            int tc, int cc, int ac, bool useAc, const std::vector<std::string> &defines = {}
     ) noexcept {
         constexpr int sof = sizeof(float);
         PipelineBuilder builder{Topology::TriangleList};
@@ -85,13 +86,13 @@ namespace Renderer {
     }
 
     void initShaders() {
-        std::vector<std::string> defines {};
+        std::vector<std::string> defines{};
         sunlightXrot = 30.0f;
         sunlightYrot = 60.0f;
         shadowdist = std::min(MaxShadowDist, viewdistance);
         pipelines = {
                 BuildPipeline("./Assets/Shaders/Main.vsh", "./Assets/Shaders/Main.fsh", 2, 3, 1, true),
-                BuildPipeline("./Assets/Shaders/Shadow.vsh", "./Assets/Shaders/Shadow.fsh", 0,0,0, false),
+                BuildPipeline("./Assets/Shaders/Shadow.vsh", "./Assets/Shaders/Shadow.fsh", 0, 0, 0, false),
                 BuildPipeline("./Assets/Shaders/Depth.vsh", "./Assets/Shaders/Depth.fsh", 0, 0, 0, false, defines),
                 BuildPipeline("./Assets/Shaders/Simple.vsh", "./Assets/Shaders/Simple.fsh", 2, 3, 1, false)
         };
@@ -114,7 +115,7 @@ namespace Renderer {
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, ShadowFBO);
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, DepthTexture, 0);
         if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) != GL_FRAMEBUFFER_COMPLETE_EXT) {
-            DebugError("Frame buffer creation error!");
+            debugstream << "Frame buffer creation error!";
         }
         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
 
@@ -186,7 +187,7 @@ namespace Renderer {
         glViewport(0, 0, windowwidth, windowheight);
     }
 
-    Pipeline& GetPipeline() {
+    Pipeline &GetPipeline() {
         return pipelines[ActivePipeline];
     }
 }

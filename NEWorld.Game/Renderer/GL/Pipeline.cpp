@@ -1,9 +1,9 @@
 #include <fstream>
-#include <iostream>
 #include "Pipeline.h"
 #include "FunctionsKit.h"
-#include "Temp/String.h"
-#include "Temp/OrderedAsscociation.h"
+#include <Temp/String.h>
+#include <Temp/Ordered.h>
+#include <Common/Logger.h>
 #include "Renderer/BufferBuilder.h"
 
 namespace {
@@ -25,8 +25,8 @@ namespace {
             auto uName = std::make_unique<char[]>(max_name_len);
             for (GLint i = 0; i < uniform_count; ++i) {
                 glGetActiveUniform(program, i, max_name_len, &length, &count, &type, uName.get());
-                std::cout << uName.get() << ":"
-                          << glGetUniformLocation(program, uName.get()) << " count:" << count << std::endl;
+                infostream << uName.get() << ":"
+                          << glGetUniformLocation(program, uName.get()) << " count:" << count;
             }
         }
     }
@@ -71,7 +71,7 @@ namespace {
     void CheckErrorShader(GLuint res, const std::string &eMsg) {
         auto st = GL_TRUE;
         glGetShaderiv(res, GL_COMPILE_STATUS, &st);
-        if (st == GL_FALSE) DebugWarning(eMsg); else return;
+        if (st == GL_FALSE) debugstream << eMsg; else return;
         int logLength, charsWritten;
         glGetShaderiv(res, GL_INFO_LOG_LENGTH, &logLength);
         if (logLength > 1) {
@@ -84,7 +84,7 @@ namespace {
     void CheckErrorProgram(GLuint res, const std::string &eMsg) {
         auto st = GL_TRUE;
         glGetProgramiv(res, GL_LINK_STATUS, &st);
-        if (st == GL_FALSE) DebugWarning(eMsg); else return;
+        if (st == GL_FALSE) debugstream << eMsg; else return;
         int logLength, charsWritten;
         glGetProgramiv(res, GL_INFO_LOG_LENGTH, &logLength);
         if (logLength > 1) {
