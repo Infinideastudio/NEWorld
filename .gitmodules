@@ -1,0 +1,3 @@
+[submodule "NEWorld.Base"]
+	path = NEWorld.Base
+	url = https://github.com/Infinideastudio/NEWorld.Base.git
