@@ -28,7 +28,7 @@
 		<BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
 	</UserControl.Resources>
 
-	<Button Width="50" Height="50">
+	<Button Width="44" Height="44">
 		<b:Interaction.Triggers>
 			<ei:DataTrigger Binding="{Binding Selected, ElementName=InventorySlot}" Value="True">
 				<ei:ChangePropertyAction PropertyName="Background" Value="{StaticResource Brush.Background.Selected}" />

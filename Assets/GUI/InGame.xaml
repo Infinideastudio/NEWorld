@@ -52,14 +52,14 @@
 	            Orientation="Horizontal" Margin="0 0 0 50">
 		<WrapPanel.Resources>
 			<Style TargetType="local:InventorySlot">
-				<Setter Property="Margin" Value="5"/>
+				<Setter Property="Margin" Value="2"/>
 			</Style>
 		</WrapPanel.Resources>
 	</StackPanel>
 
 	<!-- Inventory -->
 	<WrapPanel x:Name="Inventory" HorizontalAlignment="Center" Orientation="Horizontal"
-			   VerticalAlignment="Center" ItemWidth="64" ItemHeight="64" Width="640"
+			   VerticalAlignment="Center" ItemWidth="52" ItemHeight="52" Width="520"
 			   Visibility="{Binding BagOpen, Converter={StaticResource BooleanToVisibility}}">
 		<WrapPanel.Resources>
 			<Style TargetType="local:InventorySlot">
@@ -93,7 +93,7 @@
 	<!-- pause menu -->
 	<ViewBox x:Name="Overlay" Stretch="Fill"
 			 Visibility="{Binding GamePaused, Converter={StaticResource BooleanToVisibility}}">
-		<Rectangle Width="100" Height="100" Fill="Black" Opacity="0.25" />
+		<Rectangle Width="100" Height="100" Draft="Black" Opacity="0.25" />
 	</ViewBox>
 
 	<Grid x:Name="PauseMenu"
