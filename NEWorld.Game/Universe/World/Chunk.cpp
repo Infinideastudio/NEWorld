@@ -11,7 +11,7 @@ namespace World {
     BoundingBox Chunk::getBaseAABB() {
         const auto min = Double3(GetPosition() * 16) - Double3(0.5);
         const auto max = Double3(GetPosition() * 16) + Double3(16.0 - 0.5);
-        return BoundingBox{min, max};
+        return BoundingBox{toBvhVec(min), toBvhVec(max)};
     }
 
     Frustum::ChunkBox Chunk::getRelativeAABB() {

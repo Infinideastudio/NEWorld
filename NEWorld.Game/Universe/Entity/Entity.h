@@ -14,9 +14,9 @@ public:
     Entity(Double3 position, Double3 size) : mPosition(position), mSize(size), mVelocity() {}
     virtual ~Entity() = default;
 
-    [[nodiscard]] Vector3 center() const { return mPosition; }
+    [[nodiscard]] Vector3 center() const { return toBvhVec(mPosition); }
     [[nodiscard]] BoundingBox bounding_box() const {
-	    return { mPosition - mSize / 2, mPosition + mSize / 2 };
+	    return { toBvhVec(mPosition - mSize / 2), toBvhVec(mPosition + mSize / 2) };
     }
     [[nodiscard]] BoundingBox movement_bounding_box() const {
         return bounding_box().extend(AABB::Move(bounding_box(), mVelocity));

@@ -14,6 +14,8 @@ using Bvh = bvh::Bvh<Scalar>;
 
 class Entity;
 
+inline Vector3 toBvhVec(const Double3& v) { return {v.X, v.Y, v.Z}; }
+
 class EntityBVH {
 public:
     EntityBVH(const std::vector<std::unique_ptr<Entity>>& entities, bool for_movement = false);
@@ -55,8 +57,8 @@ namespace AABB {
     }
 
     inline BoundingBox Move(BoundingBox box, Double3 direction) {
-        box.min += direction;
-        box.max += direction;
+        box.min += toBvhVec(direction);
+        box.max += toBvhVec(direction);
         return box;
     }
 
