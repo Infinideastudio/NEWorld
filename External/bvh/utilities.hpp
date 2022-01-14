@@ -34,11 +34,16 @@ inline double product_sign(double x, double y) {
     return as<double>(as<uint64_t>(x) ^ (as<uint64_t>(y) & UINT64_C(0x8000000000000000)));
 }
 
+#ifdef _MSC_VER
+#pragma fp_contract(on)
+#else
+#pragma STDC FP_CONTRACT ON
+#endif
+
 inline float fast_multiply_add(float x, float y, float z) {
 #ifdef FP_FAST_FMAF
     return std::fmaf(x, y, z);
 #else
-    #pragma STDC FP_CONTRACT ON
     return x * y + z;
 #endif
 }
@@ -47,7 +52,6 @@ inline double fast_multiply_add(double x, double y, double z) {
 #ifdef FP_FAST_FMA
     return std::fma(x, y, z);
 #else
-    #pragma STDC FP_CONTRACT ON
     return x * y + z;
 #endif
 }

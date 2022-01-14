@@ -10,21 +10,13 @@
 
 #if defined(__GNUC__) || defined(__clang__)
 #define bvh_restrict      __restrict
-#define bvh_always_inline __attribute__((always_inline))
+#define bvh_always_inline [[gnu::always_inline]]
 #elif defined(_MSC_VER)
 #define bvh_restrict      __restrict
-#define bvh_always_inline __forceinline
+#define bvh_always_inline [[msvc::forceinline]]
 #else
 #define bvh_restrict
 #define bvh_always_inline
-#endif
-
-#if defined(__GNUC__) || defined(__clang__)
-#define bvh_likely(x)   __builtin_expect(x, true)
-#define bvh_unlikely(x) __builtin_expect(x, false)
-#else
-#define bvh_likely(x)   x
-#define bvh_unlikely(x) x
 #endif
 
 namespace bvh {
