@@ -29,7 +29,7 @@ RenderProperties PlayerEntity::renderUpdate(const ControlContext& control, bool 
         return getPropertiesForRender(0);
     }
     if (isOnGround()) {
-        //°ë¶×ÌØĞ§
+        //åŠè¹²ç‰¹æ•ˆ
         if (mCurrentJumpSpeed < -0.005) {
             if (mCurrentJumpSpeed <= -(mHeight - 0.5f))
                 mHeightExt = -(mHeight - 0.5f);
@@ -47,7 +47,7 @@ RenderProperties PlayerEntity::renderUpdate(const ControlContext& control, bool 
 
     const auto timeDelta = control.Current.Time - lastUpdate;
 
-    //×ªÍ·£¡ÄãÖÎºÃÁËÎÒ¶àÄêµÄ¾±×µ²¡£¡
+    //è½¬å¤´ï¼ä½ æ²»å¥½äº†æˆ‘å¤šå¹´çš„é¢ˆæ¤ç—…ï¼
     mXLookSpeed -= (control.Current.MousePosition.X - control.Last.MousePosition.X) * mousemove;
     mYLookSpeed += (control.Current.MousePosition.Y - control.Last.MousePosition.Y) * mousemove;
     if (control.KeyPressed(GLFW_KEY_RIGHT))
@@ -63,7 +63,7 @@ RenderProperties PlayerEntity::renderUpdate(const ControlContext& control, bool 
 }
 
 void PlayerEntity::controlUpdate(const ControlContext& control) {
-    //¸üĞÂ·½Ïò
+    //æ›´æ–°æ–¹å‘
     mHeading = fmod(mHeading + mXLookSpeed, 360.0);
     mLookUpDown = std::clamp(mLookUpDown + mYLookSpeed, -90.0, 90.0);
     mXLookSpeed = mYLookSpeed = 0.0;
@@ -77,7 +77,7 @@ void PlayerEntity::controlUpdate(const ControlContext& control) {
         if (mCrossWall || mFlying) mVelocity.Y -= walkspeed / 2;
     }
     mSpeedBoost = control.KeyPressed(GLFW_KEY_F) ? 10 : 1;
-	//ÌøÔ¾
+	//è·³è·ƒ
     ProcessJump();
 }
 
@@ -129,7 +129,7 @@ void PlayerEntity::ProcessJump() {
                 mAirJumps = 0;
             }
             else {
-                //×ÔÓÉÂäÌå¼ÆËã
+                //è‡ªç”±è½ä½“è®¡ç®—
                 mCurrentJumpSpeed -= 0.025;
                 mVelocity.Y = mCurrentJumpSpeed + 0.5 * 0.6 / 900.0;
             }
@@ -150,7 +150,7 @@ void PlayerEntity::ProcessJump() {
 }
 
 void PlayerEntity::HotbarItemSelect(const ControlContext& control) {
-    //ÇĞ»»·½¿é
+    //åˆ‡æ¢æ–¹å—
     if (control.KeyPressed(GLFW_KEY_Z) && mIndexInHand > 0) mIndexInHand--;
     if (control.KeyPressed(GLFW_KEY_X) && mIndexInHand < 9) mIndexInHand++;
     auto deltaScroll = control.Last.MouseScroll - control.Current.MouseScroll;
