@@ -19,6 +19,12 @@ namespace WorldRenderer {
                 return l.Distance > r.Distance;
             }
         };
+        // Pull in the added part
+        {
+            std::lock_guard lk{mMAdd};
+            mChunks.insert(mChunks.end(), mLAdd.begin(), mLAdd.end());
+            mLAdd.clear();
+        }
         // Sort the update priority list, also update the frustum results
         int invalidated = 0;
         World::Chunk::setRelativeBase(camera.X, camera.Y, camera.Z);
