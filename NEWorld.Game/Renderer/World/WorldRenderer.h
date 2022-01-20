@@ -23,6 +23,8 @@ namespace WorldRenderer {
     public:
         void Update(Int3 position, Double3 camera, Frustum &frus);
 
+        void PurgeTable(int invalidated);
+
         auto List(Int3 cPos, int renderDist, bool frus = true) {
             return FrameChunksRenderer(mChunks, cPos, renderDist, frus);
         }

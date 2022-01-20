@@ -45,19 +45,25 @@ namespace WorldRenderer {
             int released = 0;
             while ((released < MaxChunkRenders) && (!candidate.empty())) {
                 auto &top = candidate.top();
-                if (top.Render->TryRebuild(top.Locked)) ++released;
+                if (top.Render->CheckBuild(top.Locked)) ++released;
+                top.Render->Rebuild(top.Locked);
                 candidate.pop();
             }
             chunkBuildRenders = released;
         }
         // purge the table if there are too many dead items.
+        PurgeTable(invalidated);
+    }
+
+    void ChunksRenderer::PurgeTable(int invalidated) {
         temp::vector<VBOID> toRelease;
         if (invalidated * 4 > mChunks.size()) {
             std::vector<ChunkRender> swap;
-            for (auto &entry: mChunks) {
+            for (auto& entry : mChunks) {
                 if (!entry.Ref.expired()) {
                     swap.push_back(std::move(entry));
-                } else if (entry.Built) {
+                }
+                else if (entry.Built) {
                     if (entry.Renders[0].Buffer != 0) toRelease.push_back(entry.Renders[0].Buffer);
                     if (entry.Renders[1].Buffer != 0) toRelease.push_back(entry.Renders[1].Buffer);
                     if (entry.Renders[2].Buffer != 0) toRelease.push_back(entry.Renders[2].Buffer);

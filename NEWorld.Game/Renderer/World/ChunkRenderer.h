@@ -3,6 +3,7 @@
 #include "Definitions.h"
 #include "Textures.h"
 #include "Universe/World/World.h"
+#include "Coro/Coro.h"
 
 namespace WorldRenderer {
     const int delta[6][3] = {{1,  0,  0},
@@ -30,7 +31,9 @@ namespace WorldRenderer {
                 Built{false}, Position(c->GetPosition()),
                 LoadAnim(static_cast<float>(Position.Y) * 16.0f + 16.0f), Ref(c) {}
 
-        bool TryRebuild(const std::shared_ptr<World::Chunk> &c);
+        bool CheckBuild(const std::shared_ptr<World::Chunk>& c);
+
+        void Rebuild(const std::shared_ptr<World::Chunk> &c);
     };
 
     //深度模型的面 | Face in depth model

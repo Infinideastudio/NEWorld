@@ -2,53 +2,54 @@
 #include "Renderer/Renderer.h"
 #include "Universe/World/World.h"
 #include "Renderer/BufferBuilder.h"
+#include "Math/Vector4.h"
+#include "Dispatch.h"
 
 namespace WorldRenderer {
-    using World::getbrightness;
+    class ChunkRenderContext {
+        static constexpr auto MX = 18 * 18;
+        static constexpr auto MY = 18;
+    public:
+        ChunkRenderContext(World::Chunk* chunk) {
+            Block* bF = mBStates;
+            std::uint8_t* lF = mLumin;
+            const auto cPos = chunk->GetPosition() * 16;
+            Cursor(cPos - Int3{ 1 }, cPos + Int3{ 17 }, [&bF, &lF, chunk](const auto& v) {
+                *(bF++) = World::GetBlock(v, Blocks::ROCK, chunk);
+                *(lF++) = World::GetBrightness(v);
+                });
+        }
+
+        void Rebase(int x, int y, int z) noexcept { mBase = (x + 1) * MX + (y + 1) * MY + (z + 1); }
+
+        auto State(int dx, int dy, int dz) noexcept { return mBStates[mBase + dx * MX + dy * MY + dz]; }
+
+        Brightness Lumin(int dx, int dy, int dz) noexcept { return mLumin[mBase + dx * MX + dy * MY + dz]; }
+    private:
+        int mBase{ 0 };
+        Block mBStates[18 * 18 * 18];
+        std::uint8_t mLumin[18 * 18 * 18]{ 0 };
+    };
 
     enum Face {
         Front, Back, Right, Left, Top, Bottom
     };
 
     //TODO(simplify this function)
-    static void renderblock(Renderer::BufferBuilder<>& builder, int x, int y, int z, World::Chunk *chunkptr) {
-        double colors, color1, color2, color3, color4, tcx, tcy, size, EPS = 0.0;
-        const auto[gx, gy, gz] = (chunkptr->GetPosition() * 16 + Int3(x, y, z)).Data;
-        Block blk[7] = {(chunkptr->GetBlock({x, y, z})),
-                        z < 15 ? chunkptr->GetBlock({(x), (y), (z + 1)}) : World::GetBlock({(gx), (gy), (gz + 1)},
-                                                                                           Blocks::ROCK),
-                        z > 0 ? chunkptr->GetBlock({(x), (y), (z - 1)}) : World::GetBlock({(gx), (gy), (gz - 1)},
-                                                                                          Blocks::ROCK),
-                        x < 15 ? chunkptr->GetBlock({(x + 1), (y), (z)}) : World::GetBlock({(gx + 1), (gy), (gz)},
-                                                                                           Blocks::ROCK),
-                        x > 0 ? chunkptr->GetBlock({(x - 1), (y), (z)}) : World::GetBlock({(gx - 1), (gy), (gz)},
-                                                                                          Blocks::ROCK),
-                        y < 15 ? chunkptr->GetBlock({(x), (y + 1), (z)}) : World::GetBlock({(gx), (gy + 1), (gz)},
-                                                                                           Blocks::ROCK),
-                        y > 0 ? chunkptr->GetBlock({(x), (y - 1), (z)}) : World::GetBlock({(gx), (gy - 1), (gz)},
-                                                                                          Blocks::ROCK)};
-
-        Brightness brt[7] = {(chunkptr->GetBrightness({(x), (y), (z)})),
-                             z < 15 ? chunkptr->GetBrightness({(x), (y), (z + 1)}) : World::getbrightness(gx, gy,
-                                                                                                          gz + 1),
-                             z > 0 ? chunkptr->GetBrightness({(x), (y), (z - 1)}) : World::getbrightness(gx, gy,
-                                                                                                         gz - 1),
-                             x < 15 ? chunkptr->GetBrightness({(x + 1), (y), (z)}) : World::getbrightness(gx + 1, gy,
-                                                                                                          gz),
-                             x > 0 ? chunkptr->GetBrightness({(x - 1), (y), (z)}) : World::getbrightness(gx - 1, gy,
-                                                                                                         gz),
-                             y < 15 ? chunkptr->GetBrightness({(x), (y + 1), (z)}) : World::getbrightness(gx, gy + 1,
-                                                                                                          gz),
-                             y > 0 ? chunkptr->GetBrightness({(x), (y - 1), (z)}) : World::getbrightness(gx, gy - 1,
-                                                                                                         gz)};
+    static void renderblock(Renderer::BufferBuilder<>& builder, ChunkRenderContext& ctx, int x, int y, int z) {
+        double tcx, tcy, size, EPS = 0.0;
+        Block blk[7] = { ctx.State(0, 0, 0), ctx.State(0, 0, 1),ctx.State(0, 0, -1),
+            ctx.State(1, 0, 0), ctx.State(-1, 0, 0), ctx.State(0, 1, 0), ctx.State(0, -1, 0) };
+        Brightness brt[7] = { ctx.Lumin(0, 0, 0), ctx.Lumin(0, 0, 1), ctx.Lumin(0, 0, -1),
+            ctx.Lumin(1, 0, 0), ctx.Lumin(-1, 0, 0), ctx.Lumin(0, 1, 0), ctx.Lumin(0, -1, 0) };
 
         size = 1 / 8.0f - EPS;
 
-        if (NiceGrass && blk[0] == Blocks::GRASS &&
-            World::GetBlock({(gx), (gy - 1), (gz + 1)}, Blocks::ROCK, chunkptr) == Blocks::GRASS) {
+        if (NiceGrass && blk[0] == Blocks::GRASS && ctx.State(0, -1, 1) == Blocks::GRASS) {
             tcx = Textures::getTexcoordX(blk[0], 1) + EPS;
             tcy = Textures::getTexcoordY(blk[0], 1) + EPS;
-        } else {
+        }
+        else {
             tcx = Textures::getTexcoordX(blk[0], 2) + EPS;
             tcy = Textures::getTexcoordY(blk[0], 2) + EPS;
         }
@@ -57,47 +58,32 @@ namespace WorldRenderer {
         if (!(BlockInfo(blk[1]).isOpaque() || (blk[1] == blk[0] && !BlockInfo(blk[0]).isOpaque())) ||
             blk[0] == Blocks::LEAF) {
 
-            colors = brt[1];
-            color1 = colors;
-            color2 = colors;
-            color3 = colors;
-            color4 = colors;
+            Double4 col{ double(brt[1]) };
 
-            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) {
-                color1 = (colors + World::getbrightness(gx, gy - 1, gz + 1) + World::getbrightness(gx - 1, gy, gz + 1) +
-                          World::getbrightness(gx - 1, gy - 1, gz + 1)) / 4.0;
-                color2 = (colors + World::getbrightness(gx, gy - 1, gz + 1) + World::getbrightness(gx + 1, gy, gz + 1) +
-                          World::getbrightness(gx + 1, gy - 1, gz + 1)) / 4.0;
-                color3 = (colors + World::getbrightness(gx, gy + 1, gz + 1) + World::getbrightness(gx + 1, gy, gz + 1) +
-                          World::getbrightness(gx + 1, gy + 1, gz + 1)) / 4.0;
-                color4 = (colors + World::getbrightness(gx, gy + 1, gz + 1) + World::getbrightness(gx - 1, gy, gz + 1) +
-                          World::getbrightness(gx - 1, gy + 1, gz + 1)) / 4.0;
-            }
+            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) col = (col + Double4(
+                ctx.Lumin(0, -1, 1) + ctx.Lumin(-1, 0, 1) + ctx.Lumin(-1, -1, 1),
+                ctx.Lumin(0, -1, 1) + ctx.Lumin(1, 0, 1) + ctx.Lumin(1, -1, 1),
+                ctx.Lumin(0, 1, 1) + ctx.Lumin(1, 0, 1) + ctx.Lumin(1, 1, 1),
+                ctx.Lumin(0, 1, 1) + ctx.Lumin(-1, 0, 1) + ctx.Lumin(-1, 1, 1)
+            )) / 4.0;
 
-            color1 /= World::BRIGHTNESSMAX;
-            color2 /= World::BRIGHTNESSMAX;
-            color3 /= World::BRIGHTNESSMAX;
-            color4 /= World::BRIGHTNESSMAX;
-            if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender) {
-                color1 *= 0.5;
-                color2 *= 0.5;
-                color3 *= 0.5;
-                color4 *= 0.5;
-            }
+            col /= World::BRIGHTNESSMAX;
+
+            if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender) col *= 0.5;
             // att, tex, col vert
             builder.put<4>(
-                    0.0f, tcx, tcy, color1, color1, color1, -0.5 + x, -0.5 + y, 0.5 + z,
-                    0.0f, tcx + size, tcy, color2, color2, color2, 0.5 + x, -0.5 + y, 0.5 + z,
-                    0.0f, tcx + size, tcy + size, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
-                    0.0f, tcx, tcy + size, color4, color4, color4, -0.5 + x, 0.5 + y, 0.5 + z
-            );
+                0.0f, tcx, tcy, col.X, col.X, col.X, -0.5 + x, -0.5 + y, 0.5 + z,
+                0.0f, tcx + size, tcy, col.Y, col.Y, col.Y, 0.5 + x, -0.5 + y, 0.5 + z,
+                0.0f, tcx + size, tcy + size, col.Z, col.Z, col.Z, 0.5 + x, 0.5 + y, 0.5 + z,
+                0.0f, tcx, tcy + size, col.W, col.W, col.W, -0.5 + x, 0.5 + y, 0.5 + z
+                );
         }
 
-        if (NiceGrass && blk[0] == Blocks::GRASS &&
-            World::GetBlock({(gx), (gy - 1), (gz - 1)}, Blocks::ROCK, chunkptr) == Blocks::GRASS) {
+        if (NiceGrass && blk[0] == Blocks::GRASS && ctx.State(0, -1, -1) == Blocks::GRASS) {
             tcx = Textures::getTexcoordX(blk[0], 1) + EPS;
             tcy = Textures::getTexcoordY(blk[0], 1) + EPS;
-        } else {
+        }
+        else {
             tcx = Textures::getTexcoordX(blk[0], 2) + EPS;
             tcy = Textures::getTexcoordY(blk[0], 2) + EPS;
         }
@@ -106,47 +92,31 @@ namespace WorldRenderer {
         if (!(BlockInfo(blk[2]).isOpaque() || (blk[2] == blk[0] && !BlockInfo(blk[0]).isOpaque())) ||
             blk[0] == Blocks::LEAF) {
 
-            colors = brt[2];
-            color1 = colors;
-            color2 = colors;
-            color3 = colors;
-            color4 = colors;
+            Double4 col{ double(brt[2]) };
 
-            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) {
-                color1 = (colors + World::getbrightness(gx, gy - 1, gz - 1) + World::getbrightness(gx - 1, gy, gz - 1) +
-                          World::getbrightness(gx - 1, gy - 1, gz - 1)) / 4.0;
-                color2 = (colors + World::getbrightness(gx, gy + 1, gz - 1) + World::getbrightness(gx - 1, gy, gz - 1) +
-                          World::getbrightness(gx - 1, gy + 1, gz - 1)) / 4.0;
-                color3 = (colors + World::getbrightness(gx, gy + 1, gz - 1) + World::getbrightness(gx + 1, gy, gz - 1) +
-                          World::getbrightness(gx + 1, gy + 1, gz - 1)) / 4.0;
-                color4 = (colors + World::getbrightness(gx, gy - 1, gz - 1) + World::getbrightness(gx + 1, gy, gz - 1) +
-                          World::getbrightness(gx + 1, gy - 1, gz - 1)) / 4.0;
-            }
+            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) col = (col + Double4(
+                ctx.Lumin(0, -1, -1) + ctx.Lumin(-1, 0, -1) + ctx.Lumin(-1, -1, -1),
+                ctx.Lumin(0, 1, -1) + ctx.Lumin(-1, 0, -1) + ctx.Lumin(-1, 1, -1),
+                ctx.Lumin(0, 1, -1) + ctx.Lumin(1, 0, -1) + ctx.Lumin(1, 1, -1),
+                ctx.Lumin(0, -1, -1) + ctx.Lumin(1, 0, -1) + ctx.Lumin(1, -1, -1)
+            )) / 4.0;
 
-            color1 /= World::BRIGHTNESSMAX;
-            color2 /= World::BRIGHTNESSMAX;
-            color3 /= World::BRIGHTNESSMAX;
-            color4 /= World::BRIGHTNESSMAX;
-            if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender) {
-                color1 *= 0.5;
-                color2 *= 0.5;
-                color3 *= 0.5;
-                color4 *= 0.5;
-            }
+            col /= World::BRIGHTNESSMAX;
+            if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender) col *= 0.5;
             // att, tex, col vert
             builder.put<4>(
-                    1.0f, tcx + size * 1.0, tcy + size * 0.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
-                    1.0f, tcx + size * 1.0, tcy + size * 1.0, color2, color2, color2, -0.5 + x, 0.5 + y, -0.5 + z,
-                    1.0f, tcx + size * 0.0, tcy + size * 1.0, color3, color3, color3, 0.5 + x, 0.5 + y, -0.5 + z,
-                    1.0f, tcx + size * 0.0, tcy + size * 0.0, color4, color4, color4, 0.5 + x, -0.5 + y, -0.5 + z
-            );
+                1.0f, tcx + size * 1.0, tcy + size * 0.0, col.X, col.X, col.X, -0.5 + x, -0.5 + y, -0.5 + z,
+                1.0f, tcx + size * 1.0, tcy + size * 1.0, col.Y, col.Y, col.Y, -0.5 + x, 0.5 + y, -0.5 + z,
+                1.0f, tcx + size * 0.0, tcy + size * 1.0, col.Z, col.Z, col.Z, 0.5 + x, 0.5 + y, -0.5 + z,
+                1.0f, tcx + size * 0.0, tcy + size * 0.0, col.W, col.W, col.W, 0.5 + x, -0.5 + y, -0.5 + z
+                );
         }
 
-        if (NiceGrass && blk[0] == Blocks::GRASS &&
-            World::GetBlock({(gx + 1), (gy - 1), (gz)}, Blocks::ROCK, chunkptr) == Blocks::GRASS) {
+        if (NiceGrass && blk[0] == Blocks::GRASS && ctx.State(1, -1, 0) == Blocks::GRASS) {
             tcx = Textures::getTexcoordX(blk[0], 1) + EPS;
             tcy = Textures::getTexcoordY(blk[0], 1) + EPS;
-        } else {
+        }
+        else {
             tcx = Textures::getTexcoordX(blk[0], 2) + EPS;
             tcy = Textures::getTexcoordY(blk[0], 2) + EPS;
         }
@@ -155,48 +125,32 @@ namespace WorldRenderer {
         if (!(BlockInfo(blk[3]).isOpaque() || (blk[3] == blk[0] && !BlockInfo(blk[0]).isOpaque())) ||
             blk[0] == Blocks::LEAF) {
 
-            colors = brt[3];
-            color1 = colors;
-            color2 = colors;
-            color3 = colors;
-            color4 = colors;
+            Double4 col{ double(brt[3]) };
 
-            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) {
-                color1 = (colors + World::getbrightness(gx + 1, gy - 1, gz) + World::getbrightness(gx + 1, gy, gz - 1) +
-                          World::getbrightness(gx + 1, gy - 1, gz - 1)) / 4.0;
-                color2 = (colors + World::getbrightness(gx + 1, gy + 1, gz) + World::getbrightness(gx + 1, gy, gz - 1) +
-                          World::getbrightness(gx + 1, gy + 1, gz - 1)) / 4.0;
-                color3 = (colors + World::getbrightness(gx + 1, gy + 1, gz) + World::getbrightness(gx + 1, gy, gz + 1) +
-                          World::getbrightness(gx + 1, gy + 1, gz + 1)) / 4.0;
-                color4 = (colors + World::getbrightness(gx + 1, gy - 1, gz) + World::getbrightness(gx + 1, gy, gz + 1) +
-                          World::getbrightness(gx + 1, gy - 1, gz + 1)) / 4.0;
-            }
+            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)  col = (col + Double4(
+                ctx.Lumin(1, -1, 0) + ctx.Lumin(1, 0, -1) + ctx.Lumin(1, -1, -1),
+                ctx.Lumin(1, 1, 0) + ctx.Lumin(1, 0, -1) + ctx.Lumin(1, 1, -1),
+                ctx.Lumin(1, 1, 0) + ctx.Lumin(1, 0, 1) + ctx.Lumin(1, 1, 1),
+                ctx.Lumin(1, -1, 0) + ctx.Lumin(1, 0, 1) + ctx.Lumin(1, -1, 1)
+            )) / 4.0;
 
-            color1 /= World::BRIGHTNESSMAX;
-            color2 /= World::BRIGHTNESSMAX;
-            color3 /= World::BRIGHTNESSMAX;
-            color4 /= World::BRIGHTNESSMAX;
-            if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender) {
-                color1 *= 0.7;
-                color2 *= 0.7;
-                color3 *= 0.7;
-                color4 *= 0.7;
-            }
+            col /= World::BRIGHTNESSMAX;
+            if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender)  col *= 0.7;
 
             // att, tex, col vert
             builder.put<4>(
-                    2.0f, tcx + size * 1.0, tcy + size * 0.0, color1, color1, color1, 0.5 + x, -0.5 + y, -0.5 + z,
-                    2.0f, tcx + size * 1.0, tcy + size * 1.0, color2, color2, color2, 0.5 + x, 0.5 + y, -0.5 + z,
-                    2.0f, tcx + size * 0.0, tcy + size * 1.0, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
-                    2.0f, tcx + size * 0.0, tcy + size * 0.0, color4, color4, color4, 0.5 + x, -0.5 + y, 0.5 + z
-            );
+                2.0f, tcx + size * 1.0, tcy + size * 0.0, col.X, col.X, col.X, 0.5 + x, -0.5 + y, -0.5 + z,
+                2.0f, tcx + size * 1.0, tcy + size * 1.0, col.Y, col.Y, col.Y, 0.5 + x, 0.5 + y, -0.5 + z,
+                2.0f, tcx + size * 0.0, tcy + size * 1.0, col.Z, col.Z, col.Z, 0.5 + x, 0.5 + y, 0.5 + z,
+                2.0f, tcx + size * 0.0, tcy + size * 0.0, col.W, col.W, col.W, 0.5 + x, -0.5 + y, 0.5 + z
+                );
         }
 
-        if (NiceGrass && blk[0] == Blocks::GRASS &&
-            World::GetBlock({(gx - 1), (gy - 1), (gz)}, Blocks::ROCK, chunkptr) == Blocks::GRASS) {
+        if (NiceGrass && blk[0] == Blocks::GRASS && ctx.State(-1, -1, 0) == Blocks::GRASS) {
             tcx = Textures::getTexcoordX(blk[0], 1) + EPS;
             tcy = Textures::getTexcoordY(blk[0], 1) + EPS;
-        } else {
+        }
+        else {
             tcx = Textures::getTexcoordX(blk[0], 2) + EPS;
             tcy = Textures::getTexcoordY(blk[0], 2) + EPS;
         }
@@ -205,41 +159,25 @@ namespace WorldRenderer {
         if (!(BlockInfo(blk[4]).isOpaque() || (blk[4] == blk[0] && !BlockInfo(blk[0]).isOpaque())) ||
             blk[0] == Blocks::LEAF) {
 
-            colors = brt[4];
-            color1 = colors;
-            color2 = colors;
-            color3 = colors;
-            color4 = colors;
+            Double4 col{ double(brt[4]) };
 
-            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) {
-                color1 = (colors + World::getbrightness(gx - 1, gy - 1, gz) + World::getbrightness(gx - 1, gy, gz - 1) +
-                          World::getbrightness(gx - 1, gy - 1, gz - 1)) / 4.0;
-                color2 = (colors + World::getbrightness(gx - 1, gy - 1, gz) + World::getbrightness(gx - 1, gy, gz + 1) +
-                          World::getbrightness(gx - 1, gy - 1, gz + 1)) / 4.0;
-                color3 = (colors + World::getbrightness(gx - 1, gy + 1, gz) + World::getbrightness(gx - 1, gy, gz + 1) +
-                          World::getbrightness(gx - 1, gy + 1, gz + 1)) / 4.0;
-                color4 = (colors + World::getbrightness(gx - 1, gy + 1, gz) + World::getbrightness(gx - 1, gy, gz - 1) +
-                          World::getbrightness(gx - 1, gy + 1, gz - 1)) / 4.0;
-            }
+            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)  col = (col + Double4(
+                ctx.Lumin(-1, -1, 0) + ctx.Lumin(-1, 0, -1) + ctx.Lumin(-1, -1, -1),
+                ctx.Lumin(-1, -1, 0) + ctx.Lumin(-1, 0, 1) + ctx.Lumin(-1, -1, 1),
+                ctx.Lumin(-1, 1, 0) + ctx.Lumin(-1, 0, 1) + ctx.Lumin(-1, 1, 1),
+                ctx.Lumin(-1, 1, 0) + ctx.Lumin(-1, 0, -1) + ctx.Lumin(-1, 1, -1)
+            )) / 4.0;
 
-            color1 /= World::BRIGHTNESSMAX;
-            color2 /= World::BRIGHTNESSMAX;
-            color3 /= World::BRIGHTNESSMAX;
-            color4 /= World::BRIGHTNESSMAX;
-            if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender) {
-                color1 *= 0.7;
-                color2 *= 0.7;
-                color3 *= 0.7;
-                color4 *= 0.7;
-            }
+            col /= World::BRIGHTNESSMAX;
+            if (blk[0] != Blocks::GLOWSTONE && !Renderer::AdvancedRender)  col *= 0.7;
 
             // att, tex, col vert
             builder.put<4>(
-                    3.0f, tcx + size * 0.0, tcy + size * 0.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
-                    3.0f, tcx + size * 1.0, tcy + size * 0.0, color2, color2, color2, -0.5 + x, -0.5 + y, 0.5 + z,
-                    3.0f, tcx + size * 1.0, tcy + size * 1.0, color3, color3, color3, -0.5 + x, 0.5 + y, 0.5 + z,
-                    3.0f, tcx + size * 0.0, tcy + size * 1.0, color4, color4, color4, -0.5 + x, 0.5 + y, -0.5 + z
-            );
+                3.0f, tcx + size * 0.0, tcy + size * 0.0, col.X, col.X, col.X, -0.5 + x, -0.5 + y, -0.5 + z,
+                3.0f, tcx + size * 1.0, tcy + size * 0.0, col.Y, col.Y, col.Y, -0.5 + x, -0.5 + y, 0.5 + z,
+                3.0f, tcx + size * 1.0, tcy + size * 1.0, col.Z, col.Z, col.Z, -0.5 + x, 0.5 + y, 0.5 + z,
+                3.0f, tcx + size * 0.0, tcy + size * 1.0, col.W, col.W, col.W, -0.5 + x, 0.5 + y, -0.5 + z
+                );
         }
 
         tcx = Textures::getTexcoordX(blk[0], 1);
@@ -249,35 +187,24 @@ namespace WorldRenderer {
         if (!(BlockInfo(blk[5]).isOpaque() || (blk[5] == blk[0] && !BlockInfo(blk[0]).isOpaque())) ||
             blk[0] == Blocks::LEAF) {
 
-            colors = brt[5];
-            color1 = colors;
-            color2 = colors;
-            color3 = colors;
-            color4 = colors;
+            Double4 col{ double(brt[5]) };
 
-            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) {
-                color1 = (color1 + World::getbrightness(gx, gy + 1, gz - 1) + World::getbrightness(gx - 1, gy + 1, gz) +
-                          World::getbrightness(gx - 1, gy + 1, gz - 1)) / 4.0;
-                color2 = (color2 + World::getbrightness(gx, gy + 1, gz + 1) + World::getbrightness(gx - 1, gy + 1, gz) +
-                          World::getbrightness(gx - 1, gy + 1, gz + 1)) / 4.0;
-                color3 = (color3 + World::getbrightness(gx, gy + 1, gz + 1) + World::getbrightness(gx + 1, gy + 1, gz) +
-                          World::getbrightness(gx + 1, gy + 1, gz + 1)) / 4.0;
-                color4 = (color4 + World::getbrightness(gx, gy + 1, gz - 1) + World::getbrightness(gx + 1, gy + 1, gz) +
-                          World::getbrightness(gx + 1, gy + 1, gz - 1)) / 4.0;
-            }
+            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) col = (col + Double4(
+                ctx.Lumin(0, 1, -1) + ctx.Lumin(-1, 1, 0) + ctx.Lumin(-1, 1, -1),
+                ctx.Lumin(0, 1, 1) + ctx.Lumin(-1, 1, 0) + ctx.Lumin(-1, 1, 1),
+                ctx.Lumin(0, 1, 1) + ctx.Lumin(1, 1, 0) + ctx.Lumin(1, 1, 1),
+                ctx.Lumin(0, 1, -1) + ctx.Lumin(1, 1, 0) + ctx.Lumin(1, 1, -1)
+            )) / 4.0;
 
-            color1 /= World::BRIGHTNESSMAX;
-            color2 /= World::BRIGHTNESSMAX;
-            color3 /= World::BRIGHTNESSMAX;
-            color4 /= World::BRIGHTNESSMAX;
+            col /= World::BRIGHTNESSMAX;
 
             // att, tex, col vert
             builder.put<4>(
-                    4.0f, tcx + size * 0.0, tcy + size * 1.0, color1, color1, color1, -0.5 + x, 0.5 + y, -0.5 + z,
-                    4.0f, tcx + size * 0.0, tcy + size * 0.0, color2, color2, color2, -0.5 + x, 0.5 + y, 0.5 + z,
-                    4.0f, tcx + size * 1.0, tcy + size * 0.0, color3, color3, color3, 0.5 + x, 0.5 + y, 0.5 + z,
-                    4.0f, tcx + size * 1.0, tcy + size * 1.0, color4, color4, color4, 0.5 + x, 0.5 + y, -0.5 + z
-            );
+                4.0f, tcx + size * 0.0, tcy + size * 1.0, col.X, col.X, col.X, -0.5 + x, 0.5 + y, -0.5 + z,
+                4.0f, tcx + size * 0.0, tcy + size * 0.0, col.Y, col.Y, col.Y, -0.5 + x, 0.5 + y, 0.5 + z,
+                4.0f, tcx + size * 1.0, tcy + size * 0.0, col.Z, col.Z, col.Z, 0.5 + x, 0.5 + y, 0.5 + z,
+                4.0f, tcx + size * 1.0, tcy + size * 1.0, col.W, col.W, col.W, 0.5 + x, 0.5 + y, -0.5 + z
+                );
         }
 
         tcx = Textures::getTexcoordX(blk[0], 3);
@@ -287,63 +214,52 @@ namespace WorldRenderer {
         if (!(BlockInfo(blk[6]).isOpaque() || (blk[6] == blk[0] && !BlockInfo(blk[0]).isOpaque())) ||
             blk[0] == Blocks::LEAF) {
 
-            colors = brt[6];
-            color1 = colors;
-            color2 = colors;
-            color3 = colors;
-            color4 = colors;
+            Double4 col{ double(brt[6]) };
 
-            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting) {
-                color1 = (colors + World::getbrightness(gx, gy - 1, gz - 1) + World::getbrightness(gx - 1, gy - 1, gz) +
-                          World::getbrightness(gx - 1, gy - 1, gz - 1)) / 4.0;
-                color2 = (colors + World::getbrightness(gx, gy - 1, gz - 1) + World::getbrightness(gx + 1, gy - 1, gz) +
-                          World::getbrightness(gx + 1, gy - 1, gz - 1)) / 4.0;
-                color3 = (colors + World::getbrightness(gx, gy - 1, gz + 1) + World::getbrightness(gx + 1, gy - 1, gz) +
-                          World::getbrightness(gx + 1, gy - 1, gz + 1)) / 4.0;
-                color4 = (colors + World::getbrightness(gx, gy - 1, gz + 1) + World::getbrightness(gx - 1, gy - 1, gz) +
-                          World::getbrightness(gx - 1, gy - 1, gz + 1)) / 4.0;
-            }
+            if (blk[0] != Blocks::GLOWSTONE && SmoothLighting)  col = (col + Double4(
+                ctx.Lumin(0, -1, -1) + ctx.Lumin(-1, -1, 0) + ctx.Lumin(-1, -1, -1),
+                ctx.Lumin(0, -1, -1) + ctx.Lumin(1, -1, 0) + ctx.Lumin(1, -1, -1),
+                ctx.Lumin(0, -1, 1) + ctx.Lumin(1, -1, 0) + ctx.Lumin(1, -1, 1),
+                ctx.Lumin(0, -1, 1) + ctx.Lumin(-1, -1, 0) + ctx.Lumin(-1, -1, 1)
+            )) / 4.0;
 
-            color1 /= World::BRIGHTNESSMAX;
-            color2 /= World::BRIGHTNESSMAX;
-            color3 /= World::BRIGHTNESSMAX;
-            color4 /= World::BRIGHTNESSMAX;
+            col /= World::BRIGHTNESSMAX;
 
             // att, tex, col vert
             builder.put<4>(
-                    5.0f, tcx + size * 1.0, tcy + size * 1.0, color1, color1, color1, -0.5 + x, -0.5 + y, -0.5 + z,
-                    5.0f, tcx + size * 0.0, tcy + size * 1.0, color2, color2, color2, 0.5 + x, -0.5 + y, -0.5 + z,
-                    5.0f, tcx + size * 0.0, tcy + size * 0.0, color3, color3, color3, 0.5 + x, -0.5 + y, 0.5 + z,
-                    5.0f, tcx + size * 1.0, tcy + size * 0.0, color4, color4, color4, -0.5 + x, -0.5 + y, 0.5 + z
-            );
+                5.0f, tcx + size * 1.0, tcy + size * 1.0, col.X, col.X, col.X, -0.5 + x, -0.5 + y, -0.5 + z,
+                5.0f, tcx + size * 0.0, tcy + size * 1.0, col.Y, col.Y, col.Y, 0.5 + x, -0.5 + y, -0.5 + z,
+                5.0f, tcx + size * 0.0, tcy + size * 0.0, col.Z, col.Z, col.Z, 0.5 + x, -0.5 + y, 0.5 + z,
+                5.0f, tcx + size * 1.0, tcy + size * 0.0, col.W, col.W, col.W, -0.5 + x, -0.5 + y, 0.5 + z
+                );
         }
     }
 
-    static void RenderPrimitive_Depth(Renderer::BufferBuilder<>& builder, QuadPrimitive_Depth &p) {
+    static void RenderPrimitive_Depth(Renderer::BufferBuilder<>& builder, QuadPrimitive_Depth& p) {
         const auto x = p.x, y = p.y, z = p.z, length = p.length;
         switch (p.direction) {
-            case 0:
-                return builder.put<4>(x + 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z - 0.5,
-                                          x + 0.5, y + 0.5, z + length + 0.5, x + 0.5, y - 0.5, z + length + 0.5);
-            case 1:
-                return builder.put<4>(x - 0.5, y + 0.5, z - 0.5, x - 0.5, y - 0.5, z - 0.5,
-                                          x - 0.5, y - 0.5, z + length + 0.5, x - 0.5, y + 0.5, z + length + 0.5);
-            case 2:
-                return builder.put<4>(x + 0.5, y + 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
-                                          x - 0.5, y + 0.5, z + length + 0.5, x + 0.5, y + 0.5, z + length + 0.5);
-            case 3:
-                return builder.put<4>(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y - 0.5, z - 0.5,
-                                          x + 0.5, y - 0.5, z + length + 0.5, x - 0.5, y - 0.5, z + length + 0.5);
-            case 4:
-                return builder.put<4>(x - 0.5, y + 0.5, z + 0.5, x - 0.5, y - 0.5, z + 0.5,
-                                          x + length + 0.5, y - 0.5, z + 0.5, x + length + 0.5, y + 0.5, z + 0.5);
-            case 5:
-                return builder.put<4>(x - 0.5, y - 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
-                                          x + length + 0.5, y + 0.5, z - 0.5, x + length + 0.5, y - 0.5, z - 0.5);
+        case 0:
+            return builder.put<4>(x + 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z - 0.5,
+                x + 0.5, y + 0.5, z + length + 0.5, x + 0.5, y - 0.5, z + length + 0.5);
+        case 1:
+            return builder.put<4>(x - 0.5, y + 0.5, z - 0.5, x - 0.5, y - 0.5, z - 0.5,
+                x - 0.5, y - 0.5, z + length + 0.5, x - 0.5, y + 0.5, z + length + 0.5);
+        case 2:
+            return builder.put<4>(x + 0.5, y + 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
+                x - 0.5, y + 0.5, z + length + 0.5, x + 0.5, y + 0.5, z + length + 0.5);
+        case 3:
+            return builder.put<4>(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y - 0.5, z - 0.5,
+                x + 0.5, y - 0.5, z + length + 0.5, x - 0.5, y - 0.5, z + length + 0.5);
+        case 4:
+            return builder.put<4>(x - 0.5, y + 0.5, z + 0.5, x - 0.5, y - 0.5, z + 0.5,
+                x + length + 0.5, y - 0.5, z + 0.5, x + length + 0.5, y + 0.5, z + 0.5);
+        case 5:
+            return builder.put<4>(x - 0.5, y - 0.5, z - 0.5, x - 0.5, y + 0.5, z - 0.5,
+                x + length + 0.5, y + 0.5, z - 0.5, x + length + 0.5, y - 0.5, z - 0.5);
         }
     }
 
-    static void RenderDepthModel(World::Chunk *c, ChunkRender& r) {
+    static void RenderDepthModel(World::Chunk* c, ChunkRender& r) {
         const auto cp = c->GetPosition();
         auto x = 0, y = 0, z = 0;
         QuadPrimitive_Depth cur;
@@ -362,14 +278,14 @@ namespace WorldRenderer {
                         else if (d < 4) x = i, y = j, z = k;
                         else x = k, y = i, z = j;
                         //Get block ID
-                        bl = c->GetBlock({x, y, z});
+                        bl = c->GetBlock({ x, y, z });
                         //Get neighbour ID
                         const auto xx = x + delta[d][0], yy = y + delta[d][1], zz = z + delta[d][2];
-                        const auto[gx, gy, gz] = (cp * 16 + Int3(xx, yy, zz)).Data;
                         if (xx < 0 || xx >= 16 || yy < 0 || yy >= 16 || zz < 0 || zz >= 16) {
-                            neighbour = World::GetBlock({(gx), (gy), (gz)});
-                        } else {
-                            neighbour = c->GetBlock({(xx), (yy), (zz)});
+                            neighbour = World::GetBlock(cp * 16 + Int3(xx, yy, zz));
+                        }
+                        else {
+                            neighbour = c->GetBlock({ (xx), (yy), (zz) });
                         }
                         //Render
                         if (bl == Blocks::ENV || bl == Blocks::GLASS || bl == neighbour && bl != Blocks::LEAF ||
@@ -379,7 +295,8 @@ namespace WorldRenderer {
                                 if (BlockInfo(neighbour).isOpaque()) {
                                     if (cur_l_mx < cur.length) cur_l_mx = cur.length;
                                     cur_l_mx++;
-                                } else {
+                                }
+                                else {
                                     RenderPrimitive_Depth(builder, cur);
                                     valid = false;
                                 }
@@ -389,7 +306,8 @@ namespace WorldRenderer {
                         if (valid) {
                             if (cur_l_mx > cur.length) cur.length = cur_l_mx;
                             cur.length++;
-                        } else {
+                        }
+                        else {
                             valid = true;
                             cur.x = x;
                             cur.y = y;
@@ -406,16 +324,18 @@ namespace WorldRenderer {
         builder.flush(r.Renders[3].Buffer, r.Renders[3].Count);
     }
 
-    static void RenderChunk(World::Chunk *c, ChunkRender& r) {
+    static void RenderChunk(World::Chunk* c, ChunkRender& r) {
         Renderer::BufferBuilder b0{}, b1{}, b2{};
+        auto context = temp::make_unique<ChunkRenderContext>(c);
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 for (int z = 0; z < 16; z++) {
-                    const auto curr = c->GetBlock({x, y, z});
+                    context->Rebase(x, y, z);
+                    const auto curr = context->State(0, 0, 0);
                     if (curr == Blocks::ENV) continue;
-                    if (!BlockInfo(curr).isTranslucent()) renderblock(b0, x, y, z, c);
-                    if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(b1, x, y, z, c);
-                    if (!BlockInfo(curr).isSolid()) renderblock(b2, x, y, z, c);
+                    if (!BlockInfo(curr).isTranslucent()) renderblock(b0, *context, x, y, z);
+                    if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(b1, *context, x, y, z);
+                    if (!BlockInfo(curr).isSolid()) renderblock(b2, *context, x, y, z);
                 }
             }
         }
@@ -424,23 +344,25 @@ namespace WorldRenderer {
         b2.flush(r.Renders[2].Buffer, r.Renders[2].Count);
     }
 
-    bool ChunkRender::TryRebuild(const std::shared_ptr<World::Chunk> &c) {
+    bool ChunkRender::CheckBuild(const std::shared_ptr<World::Chunk>& c) {
         for (auto x = -1; x <= 1; x++) {
             for (auto y = -1; y <= 1; y++) {
                 for (auto z = -1; z <= 1; z++) {
                     if (x == 0 && y == 0 && z == 0) continue;
-                    if (World::ChunkOutOfBound(c->GetPosition() + Int3{x, y, z})) continue;
-                    if (!World::ChunkLoaded(c->GetPosition() + Int3{x, y, z})) return false;
+                    if (World::ChunkOutOfBound(c->GetPosition() + Int3{ x, y, z })) continue;
+                    if (!World::ChunkLoaded(c->GetPosition() + Int3{ x, y, z })) return false;
                 }
             }
         }
+        return true;
+    }
 
+    void ChunkRender::Rebuild(const std::shared_ptr<World::Chunk>& c) {
         World::rebuiltChunks++;
         World::updatedChunks++;
-
         RenderChunk(c.get(), *this);
         if (Renderer::AdvancedRender) RenderDepthModel(c.get(), *this);
         c->updated = false;
-        return Built = true;
+        Built = true;
     }
 }
