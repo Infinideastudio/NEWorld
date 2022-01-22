@@ -4,6 +4,8 @@
 #include <algorithm>
 #include "Definitions.h"
 #include "Temp/Vector.h"
+#include "Coro/Coro.h"
+#include "Dispatch.h"
 
 namespace Renderer {
     enum class BufferType {
@@ -36,6 +38,23 @@ namespace Renderer {
         }
 
         // TODO: this is a temporary method
+        ValueAsync<void> flushAsync(VBOID& buffer, vtxCount& vts) noexcept {
+            vts = static_cast<vtxCount>(mVts);
+            if (mVts != 0) {
+                if (buffer != 0) glDeleteBuffers(1, &buffer);
+                glCreateBuffers(1, &buffer);
+                const auto segmentSize = static_cast<GLsizeiptr>(mSectors.size() * size * sizeof(B));
+                glNamedBufferStorage(buffer, segmentSize, nullptr, GL_MAP_WRITE_BIT);
+                co_await CopyAndRelease(reinterpret_cast<B*>(glMapNamedBufferRange(
+                    buffer, 0, segmentSize,
+                    GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_FLUSH_EXPLICIT_BIT
+                )));
+                glFlushMappedNamedBufferRange(buffer, 0, segmentSize);
+                glUnmapNamedBuffer(buffer);
+            }
+        }
+
+        // TODO: this is a temporary method
         void flush(VBOID &buffer, vtxCount &vts) const noexcept {
             vts = static_cast<vtxCount>(mVts);
             if (mVts != 0) {
@@ -55,6 +74,13 @@ namespace Renderer {
 
     private:
         void make_sector() noexcept { mSectors.emplace_back(temp::make_unique<Array>()); }
+
+        ValueAsync<void> CopyAndRelease(B* target) {
+            co_await SwitchTo(GetSessionDefault());
+            for (auto& s : mSectors) target = std::copy(s->begin(), s->end(), target);
+            mSectors.clear();
+            co_return;
+        }
 
         temp::vector<temp::unique_ptr<Array>> mSectors{};
         ptrdiff_t mTail{0u}, mVts{0u};

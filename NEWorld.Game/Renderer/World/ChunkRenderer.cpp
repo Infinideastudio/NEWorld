@@ -259,7 +259,8 @@ namespace WorldRenderer {
         }
     }
 
-    static void RenderDepthModel(World::Chunk* c, ChunkRender& r) {
+    static ValueAsync<void> RenderDepthModelEvaluate(World::Chunk* c, Renderer::BufferBuilder<>& builder) {
+        co_await SwitchTo(GetSessionDefault());
         const auto cp = c->GetPosition();
         auto x = 0, y = 0, z = 0;
         QuadPrimitive_Depth cur;
@@ -267,7 +268,6 @@ namespace WorldRenderer {
         auto valid = false;
         int cur_l_mx = bl = neighbour = 0;
         //Linear merge for depth model
-        Renderer::BufferBuilder builder{};
         for (auto d = 0; d < 6; d++) {
             cur.direction = d;
             for (auto i = 0; i < 16; i++)
@@ -321,11 +321,18 @@ namespace WorldRenderer {
                     }
                 }
         }
-        builder.flush(r.Renders[3].Buffer, r.Renders[3].Count);
     }
 
-    static void RenderChunk(World::Chunk* c, ChunkRender& r) {
-        Renderer::BufferBuilder b0{}, b1{}, b2{};
+    static ValueAsync<void> RenderDepthModel(World::Chunk* c, ChunkRender& r) {
+        if (Renderer::AdvancedRender) co_return;
+        Renderer::BufferBuilder builder{}; 
+        co_await RenderDepthModelEvaluate(c, builder);
+        co_await builder.flushAsync(r.Renders[3].Buffer, r.Renders[3].Count);
+        co_return;
+    }
+
+    static ValueAsync<void> BuildRenderEvaluate(World::Chunk*& c, Renderer::BufferBuilder<> b[]) {
+        co_await SwitchTo(GetSessionDefault());
         auto context = temp::make_unique<ChunkRenderContext>(c);
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
@@ -333,15 +340,23 @@ namespace WorldRenderer {
                     context->Rebase(x, y, z);
                     const auto curr = context->State(0, 0, 0);
                     if (curr == Blocks::ENV) continue;
-                    if (!BlockInfo(curr).isTranslucent()) renderblock(b0, *context, x, y, z);
-                    if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(b1, *context, x, y, z);
-                    if (!BlockInfo(curr).isSolid()) renderblock(b2, *context, x, y, z);
+                    if (!BlockInfo(curr).isTranslucent()) renderblock(b[0], *context, x, y, z);
+                    if (BlockInfo(curr).isTranslucent() && BlockInfo(curr).isSolid()) renderblock(b[1], *context, x, y, z);
+                    if (!BlockInfo(curr).isSolid()) renderblock(b[2], *context, x, y, z);
                 }
             }
         }
-        b0.flush(r.Renders[0].Buffer, r.Renders[0].Count);
-        b1.flush(r.Renders[1].Buffer, r.Renders[1].Count);
-        b2.flush(r.Renders[2].Buffer, r.Renders[2].Count);
+        co_return;
+    }
+
+    static ValueAsync<void> RenderChunk(World::Chunk* c, ChunkRender& r) {
+        Renderer::BufferBuilder<> b[3]{};
+        co_await BuildRenderEvaluate(c, b);
+        co_await AwaitAll(std::array{
+            b[0].flushAsync(r.Renders[0].Buffer, r.Renders[0].Count),
+            b[1].flushAsync(r.Renders[1].Buffer, r.Renders[1].Count),
+            b[2].flushAsync(r.Renders[2].Buffer, r.Renders[2].Count)
+            });
     }
 
     bool ChunkRender::CheckBuild(const std::shared_ptr<World::Chunk>& c) {
@@ -357,11 +372,10 @@ namespace WorldRenderer {
         return true;
     }
 
-    void ChunkRender::Rebuild(const std::shared_ptr<World::Chunk>& c) {
+    ValueAsync<void> ChunkRender::Rebuild(std::shared_ptr<World::Chunk> c) {
         World::rebuiltChunks++;
         World::updatedChunks++;
-        RenderChunk(c.get(), *this);
-        if (Renderer::AdvancedRender) RenderDepthModel(c.get(), *this);
+        co_await AwaitAll(std::array{ RenderChunk(c.get(), *this), RenderDepthModel(c.get(), *this) });
         c->updated = false;
         Built = true;
     }

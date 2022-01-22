@@ -201,6 +201,7 @@ public:
                 },
                 {xpos, ypos, zpos}, mFrustum
         );
+        MutexUnlock(Mutex);
 
         glFlush();
 
@@ -219,14 +220,15 @@ public:
         if (!DebugShadow) glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_TEXTURE_2D);
 
+        MutexLock(Mutex);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glMultMatrixf(mFrustum.getProjMatrix());
         glMatrixMode(GL_MODELVIEW);
         auto playerChunk = mPlayer->getChunkPosition();
-        auto frameRenderer = mChunksRenderer.List(playerChunk, viewdistance); // currentTime
         MutexUnlock(Mutex);
 
+        auto frameRenderer = mChunksRenderer.List(playerChunk, viewdistance); // currentTime
         glBindTexture(GL_TEXTURE_2D, BlockTextures);
 
         // 渲染层1

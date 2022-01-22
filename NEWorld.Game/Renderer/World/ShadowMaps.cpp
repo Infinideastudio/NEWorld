@@ -27,9 +27,7 @@ namespace ShadowMaps {
         glRotated(Renderer::sunlightYrot, 0.0, 1.0, 0.0);
 
         auto frame = chunksRenderer.List({cx, cy, cz}, Renderer::shadowdist + 1, /*curtime,*/ false);
-        MutexUnlock(Mutex);
         frame.Render(xpos, ypos, zpos, 3);
-        MutexLock(Mutex);
 
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
         glDisableVertexAttribArray(4);
@@ -62,9 +60,7 @@ namespace ShadowMaps {
         glRotated(Renderer::sunlightYrot, 0.0, 1.0, 0.0);
 
         auto frame = chunksRenderer.List({cx, cy, cz}, Renderer::shadowdist + 1, /*curtime,*/ false);
-        MutexUnlock(Mutex);
         frame.Render(xpos, ypos, zpos, 3);
-        MutexLock(Mutex);
 
         glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
         glDisableVertexAttribArray(4);

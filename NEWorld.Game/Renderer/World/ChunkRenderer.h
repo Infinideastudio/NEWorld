@@ -6,17 +6,17 @@
 #include "Coro/Coro.h"
 
 namespace WorldRenderer {
-    const int delta[6][3] = {{1,  0,  0},
+    const int delta[6][3] = { {1,  0,  0},
                              {-1, 0,  0},
                              {0,  1,  0},
                              {0,  -1, 0},
                              {0,  0,  1},
-                             {0,  0,  -1}};
+                             {0,  0,  -1} };
 
 
     struct RenderPair {
-        VBOID Buffer{0};
-        vtxCount Count{0};
+        VBOID Buffer{ 0 };
+        vtxCount Count{ 0 };
     };
 
     struct ChunkRender {
@@ -27,13 +27,13 @@ namespace WorldRenderer {
         RenderPair Renders[4];
         std::weak_ptr<World::Chunk> Ref;
 
-        explicit ChunkRender(const std::shared_ptr<World::Chunk> &c) :
-                Built{false}, Position(c->GetPosition()),
-                LoadAnim(static_cast<float>(Position.Y) * 16.0f + 16.0f), Ref(c) {}
+        explicit ChunkRender(const std::shared_ptr<World::Chunk>& c) :
+            Built{ false }, Position(c->GetPosition()),
+            LoadAnim(static_cast<float>(Position.Y) * 16.0f + 16.0f), Ref(c) {}
 
         bool CheckBuild(const std::shared_ptr<World::Chunk>& c);
 
-        void Rebuild(const std::shared_ptr<World::Chunk> &c);
+        ValueAsync<void> Rebuild(std::shared_ptr<World::Chunk> c);
     };
 
     //深度模型的面 | Face in depth model

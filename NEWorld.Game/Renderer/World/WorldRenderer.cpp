@@ -1,8 +1,9 @@
-#include "WorldRenderer.h"
 #include <queue>
+#include "WorldRenderer.h"
+#include "Conc/BlockingAsContext.h"
 
 namespace WorldRenderer {
-    int MaxChunkRenders = 4;
+    int MaxChunkRenders = 64;
     int chunkBuildRenders;
 
     static constexpr auto ccOffset = Int3(7); // offset to a chunk center
@@ -43,11 +44,18 @@ namespace WorldRenderer {
             }
             // walk the candidates and update max elements
             int released = 0;
-            while ((released < MaxChunkRenders) && (!candidate.empty())) {
-                auto &top = candidate.top();
-                if (top.Render->CheckBuild(top.Locked)) ++released;
-                top.Render->Rebuild(top.Locked);
-                candidate.pop();
+            {
+                BlockingAsContext ctx{};
+                temp::vector<ValueAsync<void>> operations{};
+                while ((released < MaxChunkRenders) && (!candidate.empty())) {
+                    auto& top = candidate.top();
+                    if (top.Render->CheckBuild(top.Locked)) {
+                        ++released;
+                        operations.push_back(top.Render->Rebuild(top.Locked));
+                    }
+                    candidate.pop();
+                }
+                ctx.Await(AwaitAll(std::move(operations)));
             }
             chunkBuildRenders = released;
         }
