@@ -45,9 +45,9 @@ namespace Textures {
 
     ubyte getTextureIndex(Block blockname, ubyte side);
 
-    double getTexcoordX(item item, ubyte side);
+    double getTexcoordX(Item item, ubyte side);
 
-    double getTexcoordY(item item, ubyte side);
+    double getTexcoordY(Item item, ubyte side);
 
     void LoadRGBImage(TEXTURE_RGB &tex, std::string Filename);
 

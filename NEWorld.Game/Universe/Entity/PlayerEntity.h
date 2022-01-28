@@ -5,7 +5,7 @@
 #include "Universe/World/Blocks.h"
 
 struct ItemStack {
-	item item;
+	Item item;
 	uint8_t amount;
 };
 
@@ -23,7 +23,7 @@ public:
 	RenderProperties renderUpdate(const ControlContext& control, bool freeze, double lastUpdate); // called by render thread
 
 	void spawn();
-	bool addItem(item itemName, short amount = 1);
+	bool addItem(Item itemName, short amount = 1);
 	bool placeBlock(Int3 position, Block blockName);
 	void setGameMode(GameMode gameMode);
 	GameMode getGameMode() const noexcept { return mGameMode; }

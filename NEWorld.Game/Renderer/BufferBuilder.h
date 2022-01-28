@@ -79,7 +79,6 @@ namespace Renderer {
             co_await SwitchTo(GetSessionDefault());
             for (auto& s : mSectors) target = std::copy(s->begin(), s->end(), target);
             mSectors.clear();
-            co_return;
         }
 
         temp::vector<temp::unique_ptr<Array>> mSectors{};

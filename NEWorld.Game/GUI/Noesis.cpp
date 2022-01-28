@@ -1,5 +1,6 @@
 #include "Noesis.h"
 
+#define GLEW_NO_GLU
 #include <GL/glew.h>
 #include <NsApp/StyleInteraction.h>
 #include <NsApp/EventTrigger.h>

@@ -72,14 +72,14 @@ namespace Textures {
         }
     }
 
-    double getTexcoordX(item item, ubyte side) {
+    double getTexcoordX(Item item, ubyte side) {
         if (isBlock(item)) //如果为方块
             return (getTextureIndex(item, side) & 7) / 8.0;
         else
             return NULLBLOCK;
     }
 
-    double getTexcoordY(item item, ubyte side) {
+    double getTexcoordY(Item item, ubyte side) {
         if (isBlock(item)) //如果为方块
             return (getTextureIndex(item, side) >> 3) / 8.0;
         else

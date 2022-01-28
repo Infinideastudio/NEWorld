@@ -10,7 +10,7 @@ typedef unsigned char ubyte;
 typedef unsigned char blockprop;
 typedef unsigned char Brightness;
 typedef unsigned int TextureID;
-typedef uint32_t item;
+typedef uint32_t Item;
 typedef unsigned int VBOID;
 typedef int vtxCount;
 typedef uint64_t chunkid;

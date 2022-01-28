@@ -4,9 +4,9 @@
 
 class ItemInfo {
 public:
-    ItemInfo(item itemid, TextureID itemtexture = 0) : id(itemid), texture(itemtexture) {}
+    ItemInfo(Item itemid, TextureID itemtexture = 0) : id(itemid), texture(itemtexture) {}
 
-    item id;
+    Item id;
     TextureID texture;
 };
 
@@ -15,15 +15,15 @@ enum BuiltInItems {
 };
 
 extern ItemInfo itemsinfo[];
-const item theFirstItem = STICK;
+const Item theFirstItem = STICK;
 
 void loadItemsTextures();
 
-inline bool isBlock(item i) {
+inline bool isBlock(Item i) {
     return i < theFirstItem;
 }
 
-inline TextureID getItemTexture(item i) {
+inline TextureID getItemTexture(Item i) {
     if (isBlock(i)) return BlockTextures;
     else return itemsinfo[i - theFirstItem].texture;
 }

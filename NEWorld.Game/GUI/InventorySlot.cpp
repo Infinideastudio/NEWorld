@@ -17,7 +17,7 @@ const Noesis::DependencyProperty* InventorySlot::AmountProperty;
 const Noesis::DependencyProperty* InventorySlot::SelectedProperty;
 
 Noesis::Ptr<Noesis::TextureSource> InventorySlot::CachedBlockTextures;
-std::unordered_map<item, Noesis::Ptr<Noesis::CroppedBitmap>> InventorySlot::CachedItemTextures;
+std::unordered_map<Item, Noesis::Ptr<Noesis::CroppedBitmap>> InventorySlot::CachedItemTextures;
 
 InventorySlot::InventorySlot() {
     Noesis::GUI::LoadComponent(this, "InventorySlot.xaml");
@@ -32,7 +32,7 @@ void InventorySlot::clearCache() {
     CachedItemTextures.clear();
 }
 
-Noesis::ImageSource* InventorySlot::getTextureForItem(item i) {
+Noesis::ImageSource* InventorySlot::getTextureForItem(Item i) {
     if (i == Blocks::ENV) return nullptr;
     // find from cache first
     auto itemTextureIter = CachedItemTextures.find(i);

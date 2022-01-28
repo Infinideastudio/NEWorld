@@ -18,7 +18,7 @@ What you see here is the latest attempt to incrementally clean the codebase whil
 1. C++20
 2. Optimized for performance
 3. Should be cross-platform (although the development is currently focused in Windows)
-4. Depends on OpenGL 4.5, glew, glfw, Noesis GUI.
+4. Depends on OpenGL 4.5, glew, glfw, openal-soft, leveldb, Noesis GUI.
 5. Re-invented wheels
 6. Written for fun!
 

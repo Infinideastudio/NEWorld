@@ -17,8 +17,8 @@ public:
 
     int getAmount() const noexcept { return mQuantity; }
     void setAmount(int value) { mQuantity = value; SetValue<int>(AmountProperty, value); }
-    item getItem() const noexcept { return mItem; }
-    void setItem(item i) {
+    Item getItem() const noexcept { return mItem; }
+    void setItem(Item i) {
         if (mItem == i) return;
 	    mItem = i;
         FindName<Noesis::Image>("ItemTexture")->SetSource(getTextureForItem(i));
@@ -35,11 +35,11 @@ public:
     static void clearCache();
 
 private:
-    static Noesis::ImageSource* getTextureForItem(item i);
+    static Noesis::ImageSource* getTextureForItem(Item i);
     static Noesis::Ptr<Noesis::TextureSource> CachedBlockTextures;
-    static std::unordered_map<item, Noesis::Ptr<Noesis::CroppedBitmap>> CachedItemTextures;
+    static std::unordered_map<Item, Noesis::Ptr<Noesis::CroppedBitmap>> CachedItemTextures;
 
-    item mItem;
+    Item mItem;
     bool mSelected;
     int mQuantity;
 

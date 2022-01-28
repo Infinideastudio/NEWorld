@@ -248,7 +248,7 @@ bool PlayerEntity::placeBlock(Int3 position, Block blockname) {
     return false;
 }
 
-bool PlayerEntity::addItem(item itemname, short amount) {
+bool PlayerEntity::addItem(Item itemname, short amount) {
     const auto InvMaxStack = 255;
     for (auto i = 3; i >= 0; i--) {
         for (auto j = 0; j != 10; j++) {

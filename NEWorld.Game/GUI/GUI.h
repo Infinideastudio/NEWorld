@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Definitions.h"
+#include <memory>
 #include <NsCore/Ptr.h>
 #include <NsGui/IView.h>
-#include "NsGui/Grid.h"
-#include "System/PmrBase.h"
+#include <NsGui/Grid.h>
+#include <System/PmrBase.h>
 
 namespace GUI {
     class FpsCounter {

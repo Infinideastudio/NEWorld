@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Chunk.h"
 #include "Heights.h"
+#include "Universe/World/Chunk.h"
 
 namespace World::TerrainGen {
     class Generate {

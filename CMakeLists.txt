@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(NEWorld)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/NEWorld.Base/CMake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/NEWorld.Base/CMake/Config.cmake)
 
 # Include NEWorld Base Library

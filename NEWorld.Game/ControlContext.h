@@ -20,7 +20,7 @@ public:
 		double MouseScroll{};
 		Double2 MousePosition{};
 		double Time{};
-		std::array<KeyState, GLFW_KEY_LAST> KeyState{};
+		std::array<KeyState, GLFW_KEY_LAST> KeyStates{};
 	};
 
 	ControlContext(GLFWwindow* window) :mWindow(window) {
@@ -48,19 +48,19 @@ public:
 		Current.MiddleMouse = glfwGetMouseButton(mWindow, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS;
 		Current.Time = timer();
 		Current.MouseScroll = MouseScroll;
-		std::copy(KeyStates.begin(), KeyStates.end(), Current.KeyState.begin());
+		std::copy(KeyStates.begin(), KeyStates.end(), Current.KeyStates.begin());
 	}
 
 	[[nodiscard]] bool KeyPressed(int key) const noexcept {
-		return Current.KeyState[key].Pressed;
+		return Current.KeyStates[key].Pressed;
 	}
 
 	[[nodiscard]] bool KeyJustDoublePressed(int key, int intervalInFrames = 8) const noexcept {
 		assert(intervalInFrames <= 1<<15);
 
-		if (!Current.KeyState[key].Pressed || Last.KeyState[key].Pressed) return false;
+		if (!Current.KeyStates[key].Pressed || Last.KeyStates[key].Pressed) return false;
 
-		auto lastPressed = Last.KeyState[key].LastPressedFrame;
+		auto lastPressed = Last.KeyStates[key].LastPressedFrame;
 		if (lastPressed == 0) return false;
 
 		auto currentFrame = mFrameCounter;
@@ -69,7 +69,7 @@ public:
 	}
 
 	[[nodiscard]] bool KeyJustPressed(int key) const noexcept {
-		return Current.KeyState[key].Pressed && !Last.KeyState[key].Pressed;
+		return Current.KeyStates[key].Pressed && !Last.KeyStates[key].Pressed;
 	}
 
 	[[nodiscard]] bool ShouldDo(Action action) {

@@ -82,6 +82,7 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity,
             case GL_DEBUG_SOURCE_OTHER:
                 return "OTHER";
         }
+        return "UNKNOWN";
     }();
 
     auto const type_str = [type]() {
@@ -101,6 +102,7 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity,
             case GL_DEBUG_TYPE_OTHER:
                 return "OTHER";
         }
+        return "UNKNOWN";
     }();
 
     auto const severity_str = [severity]() {
@@ -114,6 +116,7 @@ void message_callback(GLenum source, GLenum type, GLuint id, GLenum severity,
             case GL_DEBUG_SEVERITY_HIGH:
                 return "HIGH";
         }
+        return "UNKNOWN";
     }();
     infostream << src_str << ", " << type_str << ", " << severity_str << ", " << id << ": " << message;
 }
@@ -129,7 +132,9 @@ void setupScreen() {
     GLVersionMinor = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_VERSION_MINOR);
     GLVersionRev = glfwGetWindowAttrib(MainWindow, GLFW_CONTEXT_REVISION);
     //获取OpenGL函数地址
-
+    infostream << "GL Version: " << GLVersionMajor << '.' << GLVersionMinor << '.' << GLVersionRev;
+    infostream << "GL Vendor: " << glGetString(GL_VENDOR);
+    infostream << "GL Renderer: " << glGetString(GL_RENDERER);
     //渲染参数设置
     glViewport(0, 0, windowwidth, windowheight);
     glMatrixMode(GL_PROJECTION);
