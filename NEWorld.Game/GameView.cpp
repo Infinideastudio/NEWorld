@@ -160,7 +160,7 @@ public:
         MutexUnlock(Mutex);
     }
 
-    void gameRender() {
+    ValueAsync<void> gameRender() {
         //画场景
         const auto currentTime = timer();
 
@@ -193,13 +193,13 @@ public:
         mFrustum.MultRotate(static_cast<float>(camera.lookUpDown), 1, 0, 0);
         mFrustum.MultRotate(360.0f - static_cast<float>(camera.heading), 0, 1, 0);
         mFrustum.update();
-        mChunksRenderer.Update(
+        mChunksRenderer.FrustumUpdate({xpos, ypos, zpos}, mFrustum);
+        co_await mChunksRenderer.Update(
                 Int3{
                         RoundInt(mPlayer->getPosition().X),
                         RoundInt(mPlayer->getPosition().Y),
                         RoundInt(mPlayer->getPosition().Z)
-                },
-                {xpos, ypos, zpos}, mFrustum
+                }
         );
         MutexUnlock(Mutex);
 
@@ -347,9 +347,9 @@ public:
         for (auto &entity: mEntities) entity->render();
     }
 
-    void onRender() override {
+    ValueAsync<void> onRender() override {
         MutexLock(Mutex);
-        gameRender();
+        co_await gameRender();
         MutexUnlock(Mutex);
     }
 

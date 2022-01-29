@@ -8,8 +8,12 @@ namespace WorldRenderer {
 
     static constexpr auto ccOffset = Int3(7); // offset to a chunk center
 
+    void ChunksRenderer::FrustumUpdate(Double3 camera, Frustum &frus) {
+        for (auto &entry: mChunks) entry.Visiable = frus.FrustumTest(entry.getRelativeAABB(camera));
+    }
+
     // TODO(make it better, the function is bad)
-    void ChunksRenderer::Update(Int3 position, Double3 camera, Frustum &frus) {
+    ValueAsync<void> ChunksRenderer::Update(Int3 position) {
         struct SortEntry {
             int Distance;
             ChunkRender *Render;
@@ -28,13 +32,11 @@ namespace WorldRenderer {
         }
         // Sort the update priority list, also update the frustum results
         int invalidated = 0;
-        World::Chunk::setRelativeBase(camera.X, camera.Y, camera.Z);
         {
             const auto cp = World::GetChunkPos(position);
             std::priority_queue<SortEntry, temp::vector<SortEntry>, SortCmp> candidate;
             for (auto &entry: mChunks) {
                 if (auto lock = entry.Ref.lock(); lock) {
-                    entry.Visiable = frus.FrustumTest(lock->getRelativeAABB());
                     if (!lock->updated) continue;
                     const auto c = lock->GetPosition();
                     if (ChebyshevDistance(c, cp) > viewdistance) continue;
@@ -45,7 +47,6 @@ namespace WorldRenderer {
             // walk the candidates and update max elements
             int released = 0;
             {
-                BlockingAsContext ctx{};
                 temp::vector<ValueAsync<void>> operations{};
                 while ((released < MaxChunkRenders) && (!candidate.empty())) {
                     auto& top = candidate.top();
@@ -55,7 +56,7 @@ namespace WorldRenderer {
                     }
                     candidate.pop();
                 }
-                ctx.Await(AwaitAll(std::move(operations)));
+                co_await AwaitAll(std::move(operations));
             }
             chunkBuildRenders = released;
         }

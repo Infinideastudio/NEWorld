@@ -87,6 +87,7 @@ public:
             entity->update();
         }
     }
+
     void EntitiesMovement() {
         // movement of entities
         if (mEntities.empty()) return;

@@ -156,8 +156,8 @@ namespace Menus {
             };
         }
 
-        void onRender() override {
-            drawBackground();
+        ValueAsync<void> onRender() override {
+            co_return drawBackground();
         }
 
         void drawBackground() {

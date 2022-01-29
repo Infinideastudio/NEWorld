@@ -6,6 +6,7 @@
 #include <NsGui/IView.h>
 #include <NsGui/Grid.h>
 #include <System/PmrBase.h>
+#include <Coro/Coro.h>
 
 namespace GUI {
     class FpsCounter {
@@ -37,13 +38,13 @@ namespace GUI {
         virtual ~Scene();
 
         void load();
-        void singleLoop();
+        ValueAsync<void> singleLoop();
 
         void requestLeave() noexcept { mShouldLeave = true; }
         bool shouldLeave() const noexcept { return mShouldLeave; }
 
     protected:
-        virtual void onRender() {}
+        virtual ValueAsync<void> onRender() { co_return; }
         virtual void onUpdate() {}
         virtual void onLoad() {}
         virtual void onViewBinding() {}
@@ -54,7 +55,7 @@ namespace GUI {
         FpsCounter mFPS;
 
     private:
-        void render();
+        ValueAsync<void> render();
         void update();
         void loadView();
 

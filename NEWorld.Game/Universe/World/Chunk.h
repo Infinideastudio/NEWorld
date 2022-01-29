@@ -70,7 +70,6 @@ namespace World {
         const Int3 mPos;
         BoundingBox mBounds;
         std::vector<std::shared_ptr<PmrBase>> mAttached {};
-        static double relBaseX, relBaseY, relBaseZ;
     public:
         Chunk(Int3 pos, ChunkData *data, bool isShared = false) noexcept:
                 mPos(pos), mId(GetChunkId(pos)), mLazy(isShared), mData(data),
@@ -109,17 +108,9 @@ namespace World {
             Modified = true;
         }
 
-        static void setRelativeBase(double x, double y, double z) {
-            relBaseX = x;
-            relBaseY = y;
-            relBaseZ = z;
-        }
-
         auto RawUnsafe() noexcept { return mData; }
 
         BoundingBox getBaseAABB();
-
-        Frustum::ChunkBox getRelativeAABB();
 
         void Attach(std::shared_ptr<PmrBase> attachment) {
             mAttached.push_back(std::move(attachment));

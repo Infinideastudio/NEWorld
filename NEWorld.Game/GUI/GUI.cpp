@@ -6,6 +6,7 @@
 #include "Noesis.h"
 #include "System/MessageBus.h"
 #include "Common/Logger.h"
+#include "Conc/BlockingAsContext.h"
 
 namespace GUI {
     static Noesis::Key mapKey(int glfwKey) {
@@ -92,7 +93,7 @@ namespace GUI {
         onUpdate();
     }
 
-    void Scene::render() {
+    ValueAsync<void> Scene::render() {
         mFPS.update();
 
         if (mView) {
@@ -111,8 +112,8 @@ namespace GUI {
             glClearStencil(0);
             glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         }
-        
-        onRender();
+
+        co_await onRender();
 
         if (mView) {
             glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_DEPTH_BUFFER_BIT);
@@ -145,9 +146,9 @@ namespace GUI {
         mView->SetScale(scale);
     }
 
-    void Scene::singleLoop() {
+    ValueAsync<void> Scene::singleLoop() {
         update();
-        render();
+        co_await render();
         glfwSwapBuffers(MainWindow);
         glfwPollEvents();
     }
@@ -195,15 +196,18 @@ namespace GUI {
         glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glDisable(GL_CULL_FACE);
-
-        while (!scenes.empty()) {
-            auto& currentScene = scenes.back();
-            currentScene->singleLoop();
-            if (currentScene->shouldLeave()) GUI::popScene();
-            if (glfwWindowShouldClose(MainWindow)) {
-                clearScenes();
+        BlockingAsContext ctx{};
+        auto fut = []() -> ValueAsync<void> {
+            while (!scenes.empty()) {
+                auto &currentScene = scenes.back();
+                co_await currentScene->singleLoop();
+                if (currentScene->shouldLeave()) GUI::popScene();
+                if (glfwWindowShouldClose(MainWindow)) {
+                    clearScenes();
+                }
             }
-        }
+        };
+        ctx.Await(Await(fut()));
         AppCleanUp();
     }
 }

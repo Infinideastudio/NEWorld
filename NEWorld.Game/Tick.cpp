@@ -13,8 +13,8 @@ std::shared_ptr<TickPipeline> CreateTickPipeline(std::vector<std::shared_ptr<Tic
 
 	struct ComponentHolder {
 		const int ActualDependencyCount{};
-		const std::shared_ptr<TickComponent> Component{};
-		const std::vector<ComponentHolder*> ComponentsToRelease{};
+		std::shared_ptr<TickComponent> Component{};
+		std::vector<ComponentHolder*> ComponentsToRelease{};
 		std::atomic_int AwaitingDependencies{ 0 };
 
 		constexpr ComponentHolder() noexcept = default;
@@ -32,11 +32,11 @@ std::shared_ptr<TickPipeline> CreateTickPipeline(std::vector<std::shared_ptr<Tic
 			co_await Component->Evaluate();
 			temp::vector<ValueAsync<void>> childern{};
 			childern.reserve(ComponentsToRelease.size()); // reserve the max size
-			// decrease the counter for all released component and spawn if necessry
+			// decrease the counter for all released component and spawn if necessary
 			for (auto next : ComponentsToRelease) {
 				if (next->AwaitingDependencies.fetch_sub(1) == 1) childern.push_back(next->Launch());
 			}
-			co_return co_await AwaitAll(std::move(childern));
+			co_await AwaitAll(std::move(childern));
 		}
 	};
 
@@ -79,7 +79,7 @@ std::shared_ptr<TickPipeline> CreateTickPipeline(std::vector<std::shared_ptr<Tic
 			childern.reserve(mComponents.size()); // reserve the exact size
 			// launch all the roots and await for the result
 			for (auto root : mComponentRoots) childern.push_back(root->Launch());
-			co_return co_await AwaitAll(std::move(childern));
+			co_await AwaitAll(std::move(childern));
 		}
 	private:
 		std::vector<ComponentHolder> mComponents{};

@@ -21,7 +21,9 @@ namespace WorldRenderer {
 
     class ChunksRenderer {
     public:
-        void Update(Int3 position, Double3 camera, Frustum &frus);
+        ValueAsync<void> Update(Int3 position);
+
+        void FrustumUpdate(Double3 camera, Frustum &frus);
 
         void PurgeTable(int invalidated);
 

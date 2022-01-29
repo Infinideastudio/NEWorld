@@ -9,5 +9,5 @@ in vOut {
 out vec4 fragment;
 
 void main() {
-	fragment = texture2D(Tex, fTexCrood) * vec4(fShade, 1.0);
+	fragment = texture(Tex, fTexCrood) * vec4(fShade, 1.0);
 }

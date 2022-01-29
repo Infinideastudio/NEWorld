@@ -351,7 +351,7 @@ namespace WorldRenderer {
     static ValueAsync<void> RenderChunk(World::Chunk *c, ChunkRender &r) {
         Renderer::BufferBuilder<> b[3]{};
         co_await BuildRenderEvaluate(c, b);
-        co_await AwaitAll(
+        co_await Await(
                 b[0].flushAsync(r.Renders[0].Buffer, r.Renders[0].Count),
                 b[1].flushAsync(r.Renders[1].Buffer, r.Renders[1].Count),
                 b[2].flushAsync(r.Renders[2].Buffer, r.Renders[2].Count)
@@ -374,7 +374,7 @@ namespace WorldRenderer {
     ValueAsync<void> ChunkRender::Rebuild(std::shared_ptr<World::Chunk> c) {
         World::rebuiltChunks++;
         World::updatedChunks++;
-        co_await AwaitAll(
+        co_await Await(
                 RenderChunk(c.get(), *this),
                 RenderDepthModel(c.get(), *this)
         );
