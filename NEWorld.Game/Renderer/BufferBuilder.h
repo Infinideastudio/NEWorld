@@ -3,8 +3,9 @@
 #include <array>
 #include <algorithm>
 #include "Definitions.h"
-#include "Temp/Vector.h"
-#include "Coro/Coro.h"
+#include <kls/temp/STL.h>
+#include <kls/coroutine/Async.h>
+#include <kls/coroutine/Operation.h>
 #include "Dispatch.h"
 
 namespace Renderer {
@@ -38,7 +39,7 @@ namespace Renderer {
         }
 
         // TODO: this is a temporary method
-        ValueAsync<void> flushAsync(VBOID& buffer, vtxCount& vts) noexcept {
+        kls::coroutine::ValueAsync<void> flushAsync(VBOID& buffer, vtxCount& vts) noexcept {
             vts = static_cast<vtxCount>(mVts);
             if (mVts != 0) {
                 if (buffer != 0) glDeleteBuffers(1, &buffer);
@@ -73,15 +74,15 @@ namespace Renderer {
         }
 
     private:
-        void make_sector() noexcept { mSectors.emplace_back(temp::make_unique<Array>()); }
+        void make_sector() noexcept { mSectors.emplace_back(kls::temp::make_unique<Array>()); }
 
-        ValueAsync<void> CopyAndRelease(B* target) {
-            co_await SwitchTo(GetSessionDefault());
+        kls::coroutine::ValueAsync<void> CopyAndRelease(B* target) {
+            co_await kls::coroutine::SwitchTo(GetSessionDefault());
             for (auto& s : mSectors) target = std::copy(s->begin(), s->end(), target);
             mSectors.clear();
         }
 
-        temp::vector<temp::unique_ptr<Array>> mSectors{};
+        kls::temp::vector<kls::pmr::unique_ptr<Array>> mSectors{};
         ptrdiff_t mTail{0u}, mVts{0u};
     };
 }

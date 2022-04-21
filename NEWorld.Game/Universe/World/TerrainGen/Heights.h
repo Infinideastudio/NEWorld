@@ -1,15 +1,15 @@
 #pragma once
 
-#include "System/PmrBase.h"
 #include "Noise.h"
 #include <bit>
 #include <atomic>
+#include <kls/Object.h>
 #include <tsl/hopscotch_map.h>
 
 namespace World::TerrainGen {
     class Heights {
     public:
-        class Section : public PmrBase {
+        class Section : public kls::PmrBase {
         public:
             void Init(Noise &noise, int cx, int cz) {
                 std::call_once(mLazy, [this, &noise, cx, cz]() {
@@ -39,7 +39,7 @@ namespace World::TerrainGen {
             std::once_flag mLazy{};
         };
 
-        explicit Heights(int seed): mNoise(seed) {}
+        explicit Heights(int seed) : mNoise(seed) {}
 
         std::shared_ptr<Section> Get(int cx, int cz) {
             auto result = GetEntry(cx, cz);
@@ -50,7 +50,7 @@ namespace World::TerrainGen {
         Noise mNoise;
         std::mutex mMutex;
         // TODO(Add a cleanup tick)
-        tsl::hopscotch_map<uint64_t, std::weak_ptr<Section>> mSections {};
+        tsl::hopscotch_map<uint64_t, std::weak_ptr<Section>> mSections{};
 
         static uint64_t MakeKey(int32_t cx, int32_t cz) noexcept {
             const auto uCx = std::bit_cast<uint32_t>(cx);

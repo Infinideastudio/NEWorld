@@ -22,8 +22,8 @@ def bin2h(filein, fileout):
         fo.write("};\n")
 
 def main():
-    targets = list(Path(".").glob("External/Noesis/Src/Packages/App/Theme/Data/Theme/*.xaml"))
-    targets.extend(Path(".").glob("External/Noesis/Src/Packages/App/Theme/Data/Theme/Fonts/*.otf"))
+    targets = list(Path(".").glob("SDK/Src/Packages/App/Theme/Data/Theme/*.xaml"))
+    targets.extend(Path(".").glob("SDK/Src/Packages/App/Theme/Data/Theme/Fonts/*.otf"))
     for p in targets:
         tarp = str(p)+".bin.h"
         print(p, 'to' , tarp)

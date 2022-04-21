@@ -1,14 +1,13 @@
 #include <fstream>
 #include "Pipeline.h"
 #include "FunctionsKit.h"
-#include <Temp/String.h>
-#include <Temp/Ordered.h>
+#include <kls/temp/STL.h>
 #include <Common/Logger.h>
 #include "Renderer/BufferBuilder.h"
 
 namespace {
     auto CollapseDefines(const std::vector<std::string> &defines) noexcept {
-        temp::set<std::string_view> result{};
+        kls::temp::set<std::string_view> result{};
         for (const auto &s: defines) result.insert(s);
         return result;
     }
@@ -31,11 +30,11 @@ namespace {
         }
     }
 
-    temp::string Preprocess(std::string_view text, temp::set<std::string_view> defines) {
-        temp::istringstream input{temp::string(text)};
-        temp::stringstream output{};
-        temp::istringstream line{};
-        temp::string cur, var, macro;
+    kls::temp::string Preprocess(std::string_view text, kls::temp::set<std::string_view> defines) {
+        kls::temp::istringstream input{kls::temp::string(text)};
+        kls::temp::stringstream output{};
+        kls::temp::istringstream line{};
+        kls::temp::string cur, var, macro;
         while (!input.eof()) {
             std::getline(input, cur);
             std::string_view lineView{cur};
@@ -75,7 +74,7 @@ namespace {
         int logLength, charsWritten;
         glGetShaderiv(res, GL_INFO_LOG_LENGTH, &logLength);
         if (logLength > 1) {
-            const auto log = temp::make_unique<GLchar[]>(logLength);
+            const auto log = kls::temp::make_unique<GLchar[]>(logLength);
             glGetShaderInfoLog(res, logLength, &charsWritten, log.get());
             throw std::runtime_error(log.get());
         }
@@ -88,7 +87,7 @@ namespace {
         int logLength, charsWritten;
         glGetProgramiv(res, GL_INFO_LOG_LENGTH, &logLength);
         if (logLength > 1) {
-            const auto log = temp::make_unique<GLchar[]>(logLength);
+            const auto log = kls::temp::make_unique<GLchar[]>(logLength);
             glGetProgramInfoLog(res, logLength, &charsWritten, log.get());
             throw std::runtime_error(log.get());
         }
@@ -104,7 +103,7 @@ namespace {
 
     using GLObject = Renderer::Internal::Object;
 
-    auto MakeProgram(const temp::unordered_map<Renderer::ShaderType, Renderer::GLShader> &stages) {
+    auto MakeProgram(const kls::temp::unordered_map<Renderer::ShaderType, Renderer::GLShader> &stages) {
         auto program = glCreateProgram();
         auto deleter = [](GLObject *ptr) noexcept {
             if (ptr) {
@@ -136,7 +135,7 @@ namespace {
         throw std::runtime_error("Unknown DataType Enum");
     }
 
-    auto MakeVAO(const temp::vector<Renderer::Internal::AttributeSpec> &attributes) {
+    auto MakeVAO(const kls::temp::vector<Renderer::Internal::AttributeSpec> &attributes) {
         GLuint vao;
         glCreateVertexArrays(1, &vao);
         auto deleter = [](GLObject *ptr) noexcept {
@@ -155,7 +154,7 @@ namespace {
         return result;
     }
 
-    auto ZipBinds(GLuint vao, const temp::unordered_map<int, std::pair<int, int>> &binds) {
+    auto ZipBinds(GLuint vao, const kls::temp::unordered_map<int, std::pair<int, int>> &binds) {
         std::vector<int> result{};
         for (auto&&[bind, zip]: binds) {
             if (result.size() <= bind) result.resize(bind + 1, 0);
@@ -256,8 +255,8 @@ namespace {
         std::vector<int> mStrides;
     };
 
-    temp::string LoadFile(const std::string &path) {
-        auto ss = temp::ostringstream{};
+    kls::temp::string LoadFile(const std::string &path) {
+        auto ss = kls::temp::ostringstream{};
         std::ifstream input_file(path);
         if (!input_file.is_open()) {
             throw std::runtime_error("No such file:" + path);

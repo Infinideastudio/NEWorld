@@ -91,7 +91,7 @@ private:
 	GLFWwindow* mWindow;
 	uint16_t mFrameCounter = 1;
 
-	inline static std::shared_ptr<PmrBase> Listener;
+	inline static std::shared_ptr<kls::PmrBase> Listener;
 	inline static double MouseScroll = 0;
 	inline static std::array<KeyState, GLFW_KEY_LAST> KeyStates;
 };

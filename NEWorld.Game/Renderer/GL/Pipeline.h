@@ -1,11 +1,8 @@
 #pragma once
 
-#include <map>
-#include <vector>
 #include <string_view>
 #include "stdinclude.h"
-#include "Temp/Vector.h"
-#include "Temp/Unordered.h"
+#include <kls/temp/STL.h>
 
 namespace Renderer {
     enum class DataType {
@@ -102,9 +99,9 @@ namespace Renderer {
 
     private:
         Topology mTopology;
-        temp::vector<Internal::AttributeSpec> mSpecs;
-        temp::unordered_map<ShaderType, GLShader> mStages;
-        temp::unordered_map<int, std::pair<int, int>> mBindings;
+        kls::temp::vector<Internal::AttributeSpec> mSpecs;
+        kls::temp::unordered_map<ShaderType, GLShader> mStages;
+        kls::temp::unordered_map<int, std::pair<int, int>> mBindings;
     };
 
     GLuint GetDefaultQuadIndex();

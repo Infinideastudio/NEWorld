@@ -160,7 +160,7 @@ public:
         MutexUnlock(Mutex);
     }
 
-    ValueAsync<void> gameRender() {
+    kls::coroutine::ValueAsync<void> gameRender() {
         //画场景
         const auto currentTime = timer();
 
@@ -347,7 +347,7 @@ public:
         for (auto &entity: mEntities) entity->render();
     }
 
-    ValueAsync<void> onRender() override {
+    kls::coroutine::ValueAsync<void> onRender() override {
         MutexLock(Mutex);
         co_await gameRender();
         MutexUnlock(Mutex);

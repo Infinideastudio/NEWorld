@@ -81,7 +81,7 @@ namespace World::TerrainGen {
             return result.release();
         }
 
-        static Chunk* Make(Int3 pos, ChunkData *data, bool isShared, std::shared_ptr<PmrBase> hm) {
+        static Chunk* Make(Int3 pos, ChunkData *data, bool isShared, std::shared_ptr<kls::PmrBase> hm) {
             auto result = new Chunk(pos, data, isShared);
             result->Attach(std::move(hm));
             return result;

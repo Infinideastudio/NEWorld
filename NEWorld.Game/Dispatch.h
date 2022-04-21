@@ -1,5 +1,5 @@
 #pragma once
 
-#include "Conc/Executor.h"
+#include "kls/coroutine/Executor.h"
 
-IExecutor* GetSessionDefault();
+kls::coroutine::IExecutor * GetSessionDefault();

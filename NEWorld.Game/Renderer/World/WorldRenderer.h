@@ -2,8 +2,8 @@
 
 #include "Renderer/Renderer.h"
 #include "ChunkRenderer.h"
-#include <Temp/Vector.h>
-#include <Conc/SpinLock.h>
+#include <kls/temp/STL.h>
+#include <kls/thread/SpinLock.h>
 
 namespace WorldRenderer {
     class FrameChunksRenderer {
@@ -16,12 +16,12 @@ namespace WorldRenderer {
         void Render(double x, double y, double z, int buffer);
 
     private:
-        temp::vector<const ChunkRender *> mFiltered;
+        kls::temp::vector<const ChunkRender *> mFiltered;
     };
 
     class ChunksRenderer {
     public:
-        ValueAsync<void> Update(Int3 position);
+        kls::coroutine::ValueAsync<void> Update(Int3 position);
 
         void FrustumUpdate(Double3 camera, Frustum &frus);
 
@@ -43,7 +43,7 @@ namespace WorldRenderer {
         }
 
     private:
-        Lock<SpinLock> mMAdd;
+        kls::thread::SpinLock mMAdd;
         std::vector<ChunkRender> mLAdd;
         std::vector<ChunkRender> mChunks;
     };

@@ -1,6 +1,6 @@
 #include <queue>
 #include "WorldRenderer.h"
-#include "Conc/BlockingAsContext.h"
+#include <kls/coroutine/Operation.h>
 
 namespace WorldRenderer {
     int MaxChunkRenders = 64;
@@ -13,7 +13,7 @@ namespace WorldRenderer {
     }
 
     // TODO(make it better, the function is bad)
-    ValueAsync<void> ChunksRenderer::Update(Int3 position) {
+    kls::coroutine::ValueAsync<void> ChunksRenderer::Update(Int3 position) {
         struct SortEntry {
             int Distance;
             ChunkRender *Render;
@@ -34,7 +34,7 @@ namespace WorldRenderer {
         int invalidated = 0;
         {
             const auto cp = World::GetChunkPos(position);
-            std::priority_queue<SortEntry, temp::vector<SortEntry>, SortCmp> candidate;
+            std::priority_queue<SortEntry, kls::temp::vector<SortEntry>, SortCmp> candidate;
             for (auto &entry: mChunks) {
                 if (auto lock = entry.Ref.lock(); lock) {
                     if (!lock->updated) continue;
@@ -47,7 +47,7 @@ namespace WorldRenderer {
             // walk the candidates and update max elements
             int released = 0;
             {
-                temp::vector<ValueAsync<void>> operations{};
+                kls::temp::vector<kls::coroutine::ValueAsync<void>> operations{};
                 while ((released < MaxChunkRenders) && (!candidate.empty())) {
                     auto& top = candidate.top();
                     if (top.Render->CheckBuild(top.Locked)) {
@@ -56,7 +56,7 @@ namespace WorldRenderer {
                     }
                     candidate.pop();
                 }
-                co_await AwaitAll(std::move(operations));
+                co_await kls::coroutine::await_all(std::move(operations));
             }
             chunkBuildRenders = released;
         }
@@ -65,7 +65,7 @@ namespace WorldRenderer {
     }
 
     void ChunksRenderer::PurgeTable(int invalidated) {
-        temp::vector<VBOID> toRelease;
+        kls::temp::vector<VBOID> toRelease;
         if (invalidated * 4 > mChunks.size()) {
             std::vector<ChunkRender> swap;
             for (auto& entry : mChunks) {

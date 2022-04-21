@@ -1,6 +1,7 @@
 #include "Tick.h"
 #include <unordered_map>
-#include <Temp/Vector.h>
+#include <kls/temp/STL.h>
+#include <kls/coroutine/Operation.h>
 
 std::shared_ptr<TickPipeline> CreateTickPipeline(std::vector<std::shared_ptr<TickComponent>> c) {
 	struct ComponentHolder;
@@ -27,16 +28,16 @@ std::shared_ptr<TickPipeline> CreateTickPipeline(std::vector<std::shared_ptr<Tic
 			ActualDependencyCount(o.ActualDependencyCount), Component(std::move(o.Component)),
 			ComponentsToRelease(std::move(o.ComponentsToRelease)) {}
 
-		ValueAsync<void> Launch() {
-			co_await Redispatch();
+        kls::coroutine::ValueAsync<void> Launch() {
+			co_await kls::coroutine::Redispatch();
 			co_await Component->Evaluate();
-			temp::vector<ValueAsync<void>> childern{};
+            kls::temp::vector<kls::coroutine::ValueAsync<void>> childern{};
 			childern.reserve(ComponentsToRelease.size()); // reserve the max size
 			// decrease the counter for all released component and spawn if necessary
 			for (auto next : ComponentsToRelease) {
 				if (next->AwaitingDependencies.fetch_sub(1) == 1) childern.push_back(next->Launch());
 			}
-			co_await AwaitAll(std::move(childern));
+			co_await kls::coroutine::await_all(std::move(childern));
 		}
 	};
 
@@ -72,14 +73,14 @@ std::shared_ptr<TickPipeline> CreateTickPipeline(std::vector<std::shared_ptr<Tic
 			}
 		}
 
-		ValueAsync<void> Evaluate() override {
+        kls::coroutine::ValueAsync<void> Evaluate() override {
 			// reset all component counters
 			for (auto& c : mComponents) c.AwaitingDependencies.store(c.ActualDependencyCount);
-			temp::vector<ValueAsync<void>> childern{};
+            kls::temp::vector<kls::coroutine::ValueAsync<void>> childern{};
 			childern.reserve(mComponents.size()); // reserve the exact size
 			// launch all the roots and await for the result
 			for (auto root : mComponentRoots) childern.push_back(root->Launch());
-			co_await AwaitAll(std::move(childern));
+			co_await kls::coroutine::await_all(std::move(childern));
 		}
 	private:
 		std::vector<ComponentHolder> mComponents{};

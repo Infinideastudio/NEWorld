@@ -1,5 +1,4 @@
 # modified from https://github.com/rschurade/Ingnomia
-set(NOESIS_ROOT "External/Noesis" CACHE PATH "Root to the NoesisGui sdk")
 
 find_path(NOESIS_INCLUDE_DIR
 	NAMES

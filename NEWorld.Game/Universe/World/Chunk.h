@@ -4,8 +4,8 @@
 #include "Blocks.h"
 #include "Frustum.h"
 #include <cstring>
+#include <kls/Object.h>
 #include <Math/Vector3.h>
-#include <System/PmrBase.h>
 #include "Data/ChunkStorage.h"
 #include "Universe/Entity/bvh.h"
 
@@ -69,7 +69,7 @@ namespace World {
         chunkid mId;
         const Int3 mPos;
         BoundingBox mBounds;
-        std::vector<std::shared_ptr<PmrBase>> mAttached {};
+        std::vector<std::shared_ptr<kls::PmrBase>> mAttached {};
     public:
         Chunk(Int3 pos, ChunkData *data, bool isShared = false) noexcept:
                 mPos(pos), mId(GetChunkId(pos)), mLazy(isShared), mData(data),
@@ -112,11 +112,11 @@ namespace World {
 
         BoundingBox getBaseAABB();
 
-        void Attach(std::shared_ptr<PmrBase> attachment) {
+        void Attach(std::shared_ptr<kls::PmrBase> attachment) {
             mAttached.push_back(std::move(attachment));
         }
 
-        void Detach(const std::shared_ptr<PmrBase>& attachment) {
+        void Detach(const std::shared_ptr<kls::PmrBase>& attachment) {
             auto iter = std::find(mAttached.begin(), mAttached.end(), attachment);
             if (iter != mAttached.end()) mAttached.erase(iter);
         }

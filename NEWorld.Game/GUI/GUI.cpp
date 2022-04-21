@@ -2,11 +2,10 @@
 #include "GUI.h"
 #include <NsRender/GLFactory.h>
 #include <NoesisPCH.h>
-
 #include "Noesis.h"
 #include "System/MessageBus.h"
 #include "Common/Logger.h"
-#include "Conc/BlockingAsContext.h"
+#include <kls/coroutine/Operation.h>
 
 namespace GUI {
     static Noesis::Key mapKey(int glfwKey) {
@@ -93,7 +92,7 @@ namespace GUI {
         onUpdate();
     }
 
-    ValueAsync<void> Scene::render() {
+    kls::coroutine::ValueAsync<void> Scene::render() {
         mFPS.update();
 
         if (mView) {
@@ -146,7 +145,7 @@ namespace GUI {
         mView->SetScale(scale);
     }
 
-    ValueAsync<void> Scene::singleLoop() {
+    kls::coroutine::ValueAsync<void> Scene::singleLoop() {
         update();
         co_await render();
         glfwSwapBuffers(MainWindow);
@@ -196,8 +195,7 @@ namespace GUI {
         glfwSetInputMode(MainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glDisable(GL_CULL_FACE);
-        BlockingAsContext ctx{};
-        auto fut = []() -> ValueAsync<void> {
+        kls::coroutine::run_blocking([]() -> kls::coroutine::ValueAsync<> {
             while (!scenes.empty()) {
                 auto &currentScene = scenes.back();
                 co_await currentScene->singleLoop();
@@ -206,8 +204,7 @@ namespace GUI {
                     clearScenes();
                 }
             }
-        };
-        ctx.Await(Await(fut()));
+        });
         AppCleanUp();
     }
 }

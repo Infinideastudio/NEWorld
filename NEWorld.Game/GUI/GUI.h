@@ -5,8 +5,8 @@
 #include <NsCore/Ptr.h>
 #include <NsGui/IView.h>
 #include <NsGui/Grid.h>
-#include <System/PmrBase.h>
-#include <Coro/Coro.h>
+#include <kls/Object.h>
+#include <kls/coroutine/Async.h>
 
 namespace GUI {
     class FpsCounter {
@@ -38,13 +38,13 @@ namespace GUI {
         virtual ~Scene();
 
         void load();
-        ValueAsync<void> singleLoop();
+        kls::coroutine::ValueAsync<void> singleLoop();
 
         void requestLeave() noexcept { mShouldLeave = true; }
         bool shouldLeave() const noexcept { return mShouldLeave; }
 
     protected:
-        virtual ValueAsync<void> onRender() { co_return; }
+        virtual kls::coroutine::ValueAsync<void> onRender() { co_return; }
         virtual void onUpdate() {}
         virtual void onLoad() {}
         virtual void onViewBinding() {}
@@ -55,7 +55,7 @@ namespace GUI {
         FpsCounter mFPS;
 
     private:
-        ValueAsync<void> render();
+        kls::coroutine::ValueAsync<void> render();
         void update();
         void loadView();
 
@@ -64,7 +64,7 @@ namespace GUI {
         bool mHasCursor;
         double mEnterTimeInSec;
 
-        std::vector<std::shared_ptr<PmrBase>> mListeners;
+        std::vector<std::shared_ptr<kls::PmrBase>> mListeners;
     };
 
     void pushScene(std::unique_ptr<Scene> scene);

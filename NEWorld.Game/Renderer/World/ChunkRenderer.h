@@ -3,7 +3,7 @@
 #include "Definitions.h"
 #include "Textures.h"
 #include "Universe/World/World.h"
-#include "Coro/Coro.h"
+#include <kls/coroutine/Async.h>
 
 namespace WorldRenderer {
     const int delta[6][3] = { {1,  0,  0},
@@ -35,7 +35,7 @@ namespace WorldRenderer {
 
         bool CheckBuild(const std::shared_ptr<World::Chunk>& c);
 
-        ValueAsync<void> Rebuild(std::shared_ptr<World::Chunk> c);
+        kls::coroutine::ValueAsync<void> Rebuild(std::shared_ptr<World::Chunk> c);
 
         Frustum::ChunkBox getRelativeAABB(const Double3& camera) {
             Frustum::ChunkBox ret{};

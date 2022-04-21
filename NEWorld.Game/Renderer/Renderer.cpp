@@ -1,6 +1,5 @@
 #include "Renderer.h"
 #include <algorithm>
-#include <Temp/String.h>
 #include <Common/Logger.h>
 #include "Frustum.h"
 #include "BufferBuilder.h"

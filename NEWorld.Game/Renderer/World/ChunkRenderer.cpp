@@ -262,8 +262,8 @@ namespace WorldRenderer {
         }
     }
 
-    static ValueAsync<void> RenderDepthModelEvaluate(World::Chunk *c, Renderer::BufferBuilder<> &builder) {
-        co_await SwitchTo(GetSessionDefault());
+    static kls::coroutine::ValueAsync<void> RenderDepthModelEvaluate(World::Chunk *c, Renderer::BufferBuilder<> &builder) {
+        co_await kls::coroutine::SwitchTo(GetSessionDefault());
         const auto cp = c->GetPosition();
         auto x = 0, y = 0, z = 0;
         QuadPrimitive_Depth cur;
@@ -323,16 +323,16 @@ namespace WorldRenderer {
         }
     }
 
-    static ValueAsync<void> RenderDepthModel(World::Chunk *c, ChunkRender &r) {
+    static kls::coroutine::ValueAsync<void> RenderDepthModel(World::Chunk *c, ChunkRender &r) {
         if (Renderer::AdvancedRender) co_return;
         Renderer::BufferBuilder builder{};
         co_await RenderDepthModelEvaluate(c, builder);
         co_await builder.flushAsync(r.Renders[3].Buffer, r.Renders[3].Count);
     }
 
-    static ValueAsync<void> BuildRenderEvaluate(World::Chunk *&c, Renderer::BufferBuilder<> b[]) {
-        co_await SwitchTo(GetSessionDefault());
-        auto context = temp::make_unique<ChunkRenderContext>(c);
+    static kls::coroutine::ValueAsync<void> BuildRenderEvaluate(World::Chunk *&c, Renderer::BufferBuilder<> b[]) {
+        co_await kls::coroutine::SwitchTo(GetSessionDefault());
+        auto context = kls::temp::make_unique<ChunkRenderContext>(c);
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 for (int z = 0; z < 16; z++) {
@@ -348,10 +348,10 @@ namespace WorldRenderer {
         }
     }
 
-    static ValueAsync<void> RenderChunk(World::Chunk *c, ChunkRender &r) {
+    static kls::coroutine::ValueAsync<void> RenderChunk(World::Chunk *c, ChunkRender &r) {
         Renderer::BufferBuilder<> b[3]{};
         co_await BuildRenderEvaluate(c, b);
-        co_await Await(
+        co_await kls::coroutine::awaits(
                 b[0].flushAsync(r.Renders[0].Buffer, r.Renders[0].Count),
                 b[1].flushAsync(r.Renders[1].Buffer, r.Renders[1].Count),
                 b[2].flushAsync(r.Renders[2].Buffer, r.Renders[2].Count)
@@ -371,10 +371,10 @@ namespace WorldRenderer {
         return true;
     }
 
-    ValueAsync<void> ChunkRender::Rebuild(std::shared_ptr<World::Chunk> c) {
+    kls::coroutine::ValueAsync<void> ChunkRender::Rebuild(std::shared_ptr<World::Chunk> c) {
         World::rebuiltChunks++;
         World::updatedChunks++;
-        co_await Await(
+        co_await kls::coroutine::awaits(
                 RenderChunk(c.get(), *this),
                 RenderDepthModel(c.get(), *this)
         );
